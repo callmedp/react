@@ -1,15 +1,16 @@
 from django.db import models
-from users.models import User
+from django.conf import settings
+
 from .config import STATUS, WIDGET_CHOICES, SECTION, COLUMN_TYPE
 # Create your models here.
 
 
 class AbstractCommonModel(models.Model):
-	created_by = models.ForeignKey(User,
+	created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
 		related_name="%(app_label)s_%(class)s_created_by",
         related_query_name="%(app_label)s_%(class)ss",)
 	created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-	last_modified_by = models.ForeignKey(User,
+	last_modified_by = models.ForeignKey(settings.AUTH_USER_MODEL,
 		related_name="%(app_label)s_%(class)s_last_modified_by",
         related_query_name="%(app_label)s_%(class)ss",)
 	last_modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -21,7 +22,7 @@ class AbstractCommonModel(models.Model):
 class PageCategory(AbstractCommonModel):
 	name = models.CharField(max_length=255, unique=True)
 	parent = models.ForeignKey('self', null=True, blank=True)
-	slug = models.SlugField(verbose_name='Slug', unique=True, max_length=200,
+	slug = models.SlugField(verbose_name='Slug', unique=True, max_length=255,
 		help_text=("Used to build the category's URL."))
 	is_active = models.BooleanField(default=False)
 	show_menu = models.BooleanField(default=False)
@@ -33,7 +34,7 @@ class PageCategory(AbstractCommonModel):
 class Tag(AbstractCommonModel):
 	name = models.CharField(max_length=255, unique=True)
 	parent = models.ForeignKey('self', null=True, blank=True)
-	slug = models.SlugField(verbose_name='Slug', unique=True, max_length=200,
+	slug = models.SlugField(verbose_name='Slug', unique=True, max_length=255,
 		help_text=("Used to build the category's URL."))
 	is_active = models.BooleanField(default=False)
 	show_menu = models.BooleanField(default=False)
@@ -70,7 +71,7 @@ class IndexColumn(models.Model):
 
 
 # class ExpertComment(AbstractCommonModel):
-# 	writer = models.ForeignKey(User)
+# 	writer = models.ForeignKey(settings.AUTH_USER_MODEL)
 # 	display_name = models.CharField(max_length=100, null=False, blank=False)
 # 	writer_designation = models.CharField(max_length=255)
 # 	image = models.FileField("Image", max_length=200,
@@ -103,7 +104,7 @@ class Widget(AbstractCommonModel):
 	upload_template = models.FileField(upload_to='templates/includes/cms/',
     	max_length=1024, blank=True, null=True)
 
-	user = models.ForeignKey(User, null=True, blank=True,
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
 		help_text='for user or writer')
 	display_name = models.CharField(max_length=100, null=False, blank=False)
 	writer_designation = models.CharField(max_length=255)
@@ -125,10 +126,10 @@ class Page(AbstractCommonModel):
 		the h2 and other content about the product.')
 	short_desc = models.TextField(null=False, verbose_name="Short Description",
 		blank=True, help_text='Very short description of the page in about 50 \
-		 words (Banner Image description)', default="")
+		 words', default="")
 	parent = models.ForeignKey("self", verbose_name="Parent",
 		null=True, blank=True)
-	slug = models.SlugField(max_length=200, unique=True, null=True, blank=True)
+	slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
 
 	tag = models.ManyToManyField(Tag, verbose_name="Tags",
 		blank=True, help_text='Add the tags to make some relation \
@@ -177,6 +178,9 @@ class Document(models.Model):
 	is_active = models.BooleanField(default=False)
 	priority = models.IntegerField(default=0)
 	page = models.ForeignKey(Page)
+
+	class Meta:
+		ordering = ['-priority', ]
 
 	def __str__(self):
 		return str(self.id)
