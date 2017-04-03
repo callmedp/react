@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-# Create your views here.
+from .models import Page
+
+
+class CMSPageView(TemplateView):
+	model = Page
+	template_name = "cms/cms_page.html"
+
+	def get(self, request, *args, **kwargs):
+		context = super(CMSPageView, self).get(request, *args, **kwargs)
+		return context

@@ -6,12 +6,12 @@ from .config import STATUS, WIDGET_CHOICES, SECTION, COLUMN_TYPE
 
 
 class AbstractCommonModel(models.Model):
-	created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-		related_name="%(app_label)s_%(class)s_created_by",
+	created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+		blank=True, related_name="%(app_label)s_%(class)s_created_by",
         related_query_name="%(app_label)s_%(class)ss",)
 	created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-	last_modified_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-		related_name="%(app_label)s_%(class)s_last_modified_by",
+	last_modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+		blank=True, related_name="%(app_label)s_%(class)s_last_modified_by",
         related_query_name="%(app_label)s_%(class)ss",)
 	last_modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -184,6 +184,19 @@ class Document(models.Model):
 
 	def __str__(self):
 		return str(self.id)
+
+
+class Comment(AbstractCommonModel):
+	page = models.ForeignKey(Page)
+	message = models.TextField(null=False, blank=False)
+	submit_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+	is_published = models.BooleanField(default=False)
+	is_removed = models.BooleanField(default=False)
+	replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
+		blank=True, related_name="comments")
+
+	def __str__(self):
+		return str(self.id) + '_' + str(self.submit_date.date())
 
 
 class PageCounter(models.Model):

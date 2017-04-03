@@ -1,8 +1,8 @@
-from django.conf.urls import url, include
-from django.contrib import admin
+from django.conf.urls import url
+
+from .views import CMSPageView
 
 
 urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
-    # url(r'^cms/', include('cms.urls', namespace='cms'))
+    url(r'^page/$', CMSPageView.as_view(), name='page'),
 ]

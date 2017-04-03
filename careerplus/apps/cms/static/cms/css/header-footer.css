@@ -1,0 +1,520 @@
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+a, a:hover, a:focus {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 33px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+.mb-40 {
+  margin-bottom: 40px;
+}
+
+.no-pad {
+  padding: 0;
+}
+
+/*---------header css---------*/
+.navbar-default {
+  background-color: #2f5da5;
+}
+
+.navbar-nav {
+  min-height: 54px;
+}
+.navbar-nav li .dropdown-menu {
+  border: none;
+  padding: 10px;
+  left: 20px;
+  font-size: 13px;
+  border-radius: 0;
+  min-height: 100%;
+  list-style-type: none;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  background-color: transparent;
+  color: #fff;
+  border-bottom: 4px solid #ffcf26;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #fff;
+}
+
+.navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav > li > a:hover {
+  color: #fff;
+  cursor: pointer;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 20px;
+}
+
+.dropdown-menu > li > a {
+  padding: 8px 20px;
+  font-size: 13px;
+  color: #666;
+}
+.dropdown-menu > li > a:hover {
+  font-size: 13px;
+  color: #666;
+}
+
+.navbar-right > li > a {
+  padding-bottom: 0;
+}
+
+.login-dropdown a:focus {
+  padding-bottom: 15px;
+}
+.login-dropdown .dropdown-menu {
+  min-width: 280px;
+  left: -209px !important;
+}
+.login-dropdown .dropdown-menu li {
+  position: relative;
+}
+.login-dropdown .dropdown-menu li:last-child {
+  border-top: 1px solid #eee;
+  margin-top: 10px;
+}
+.login-dropdown .dropdown-menu li:last-child > a {
+  color: #3f5f94;
+  padding: 10px 20px;
+}
+
+.cart-dropdown a:focus {
+  padding-bottom: 4px;
+}
+.cart-dropdown .dropdown-menu {
+  min-width: 180px;
+  left: -200px !important;
+}
+
+.call-dropdown a:focus {
+  padding-bottom: 7px;
+}
+.call-dropdown .dropdown-menu {
+  min-width: 200px;
+  left: -200px !important;
+}
+
+.jobs-dropdown .dropdown-menu {
+  min-width: 300px;
+}
+
+.courses-dropdown .courses-tabs {
+  padding: 0 !important;
+}
+.courses-dropdown .dropdown-menu {
+  min-width: 630px;
+}
+@media (max-width: 1023px) {
+  .courses-dropdown .dropdown-menu {
+    min-width: 480px;
+  }
+}
+.courses-dropdown .nav-tabs {
+  display: table-cell;
+  float: none;
+  padding: 15px 0 10px 15px;
+  vertical-align: top;
+  min-width: 240px;
+}
+@media (max-width: 1023px) {
+  .courses-dropdown .nav-tabs {
+    min-width: 200px;
+  }
+}
+.courses-dropdown .nav-tabs li {
+  float: none;
+  padding: 8px 10px;
+  margin-right: 0;
+  margin-bottom: 0;
+  border: none;
+}
+.courses-dropdown .nav-tabs li.active {
+  border: none;
+  background-color: #ebebeb;
+}
+.courses-dropdown .nav-tabs li.active a {
+  background-color: #ebebeb;
+  border-radius: 0;
+  border: none;
+}
+.courses-dropdown .nav-tabs li.active:hover {
+  padding: 8px 10px;
+}
+.courses-dropdown .nav-tabs li a {
+  color: #666;
+  font-size: 13px;
+  padding: 0;
+  border: none;
+}
+.courses-dropdown .nav-tabs li a:hover {
+  cursor: pointer;
+  padding: 0;
+  border: none;
+}
+.courses-dropdown .tab-content {
+  display: table-cell;
+  background-color: #ebebeb;
+  padding-right: 10px;
+  padding-left: 15px;
+  min-width: 400px;
+  position: relative;
+}
+@media (max-width: 1023px) {
+  .courses-dropdown .tab-content {
+    min-width: 250px;
+  }
+}
+.courses-dropdown .tab-content ul {
+  list-style-type: none;
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+.courses-dropdown .tab-content ul li {
+  display: block;
+  padding: 8px 10px 8px 10px;
+}
+.courses-dropdown .tab-content ul li:last-child {
+  border-top: 1px solid #eee;
+  position: absolute;
+  left: 25px;
+  bottom: 10px;
+  width: 88%;
+  padding-left: 0;
+}
+.courses-dropdown .tab-content ul li:last-child a {
+  color: #3f5f94;
+  padding: 10px 10px 10px 0;
+}
+.courses-dropdown .tab-content ul li a {
+  color: #666;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/*---------footer css---------*/
+footer {
+  background-color: #dae0e3;
+  padding: 30px 0 0 0;
+  clear: both;
+  display: block;
+  overflow: hidden;
+  margin-top: 50px;
+}
+footer article {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 30px;
+}
+footer article strong {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+footer article a {
+  color: #3f5f94;
+}
+footer .secure-payment {
+  border-radius: 2px;
+  font-size: 15px;
+  color: #333;
+  padding: 5px 15px;
+  background-color: #fff;
+  font-weight: 400;
+  display: inline-block;
+}
+footer .secure-payment .secure-icon {
+  background: url(../images/sprite.svg) no-repeat -591px 0;
+  display: inline-block;
+  float: left;
+  width: 34px;
+  height: 42px;
+  margin-right: 10px;
+}
+footer .secure-payment .secure-text {
+  display: inline-block;
+}
+footer .secure-payment .secure-text strong {
+  font-size: 26px;
+  font-weight: 300;
+  display: block;
+  line-height: 26px;
+}
+footer .payment-options {
+  border-radius: 2px;
+  display: inline-block;
+  float: right;
+  background-color: #fff;
+  padding: 5px 10px;
+}
+footer .payment-options .payment-option-bg {
+  background: url(../images/sprite.svg) no-repeat -282px 0;
+  display: block;
+  width: 299px;
+  height: 37px;
+}
+footer .payment-options .payment-option-txt {
+  display: block;
+  color: #999;
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+footer .footer-links {
+  background-color: #ced6da;
+  font-size: 12px;
+  color: #333;
+  padding: 15px 0 25px 0;
+  display: block;
+  overflow: hidden;
+  clear: both;
+  margin-top: 40px;
+}
+footer .footer-links a, footer .footer-links a:hover {
+  color: #333;
+  margin-right: 10px;
+}
+footer .footer-links span {
+  float: right;
+}
+
+/*--------- all internal page format css---------*/
+.page-header {
+  margin-bottom: 25px;
+}
+.page-header h1 {
+  font-size: 33px;
+  margin: 0;
+}
+
+.col-main {
+  display: table;
+  width: 100%;
+  vertical-align: top;
+}
+
+.col-left {
+  display: table-cell;
+  vertical-align: top;
+  width: 70%;
+  max-width: 850px;
+}
+@media (max-width: 1180px) {
+  .col-left {
+    width: auto;
+    max-width: auto;
+  }
+}
+
+.col-right {
+  width: 100%;
+  vertical-align: top;
+  margin-left: 35px;
+  max-width: 300px;
+}
+@media (max-width: 1180px) {
+  .col-right {
+    width: auto;
+    max-width: auto;
+  }
+}
+
+/*---------form error css---------*/
+.error {
+  font-size: 11px;
+  color: #ff0000;
+  position: absolute;
+  right: 5px;
+  top: 10px;
+}
+
+/*---------button css---------*/
+.login-btn {
+  border-radius: 2px;
+  border: 1px solid #fff;
+  padding: 1px 8px 3px 8px;
+}
+
+.practice-test-button {
+  border-radius: 20px;
+  border: 1px solid #e8e8e8;
+  padding: 7px 20px;
+  font-size: 16px;
+  color: #3f5f94;
+  font-weight: 600;
+  margin: 0 auto;
+  display: table;
+  text-align: center;
+}
+
+.submit-button {
+  background-color: #3f5f94;
+  font-size: 15px;
+  color: #fff;
+  display: block;
+  padding: 7px;
+  border-radius: 0;
+  border: 1px solid #3f5f94;
+  text-align: center;
+  width: 100%;
+}
+.submit-button:hover, .submit-button:focus {
+  background-color: #3f5f94;
+  border: 1px solid #2f5da5;
+  color: #fff;
+}
+
+/*---------icons css---------*/
+.hamburber-icon {
+  width: 12px;
+  height: 11px;
+  display: inline-block;
+  margin-right: 10px;
+  background: url(../images/sprite.svg) no-repeat -888px 0;
+}
+
+.search-icon {
+  width: 24px;
+  height: 22px;
+  background: url(../images/sprite.svg) no-repeat -903px 0;
+  display: inline-block;
+}
+
+.call-icon {
+  width: 23px;
+  height: 23px;
+  background: url(../images/sprite.svg) no-repeat -927px 0;
+  display: inline-block;
+}
+
+.cart-icon {
+  display: inline-block;
+  width: 28px;
+  height: 26px;
+  background: url(../images/sprite.svg) no-repeat -955px 0;
+}
+
+.download-icon {
+  width: 54px;
+  height: 54px;
+  background: url(../images/sprite.svg) no-repeat -284px -41px;
+  display: inline-block;
+}
+
+.sample-download-icon {
+  width: 22px;
+  height: 22px;
+  background: url(../images/sprite.svg) no-repeat -1003px 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.call-service-icon {
+  width: 20px;
+  height: 20px;
+  background: url(../images/sprite.svg) no-repeat -1029px 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.search {
+  padding: 0;
+  width: auto;
+  height: 32px;
+  position: relative;
+  left: 10px;
+  top: -5px;
+}
+
+.search input {
+  position: absolute;
+  width: 0;
+  height: 32px;
+  line-height: 30px;
+  padding: 0 0 0 0;
+  right: 0;
+  border: none;
+  border-radius: 2px;
+  text-indent: 10px;
+  opacity: 0;
+}
+
+.search:hover input, .search input:focus {
+  width: 200px;
+  margin-left: 0px;
+  opacity: 1;
+  transition: all 100ms ease;
+}
+
+.search:hover .search-icon, .search:hover input:focus .search-icon {
+  background: url(../images/sprite.svg) no-repeat -1073px 0;
+  z-index: 999;
+}
+
+.search .search-icon {
+  border: none;
+  z-index: 9;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+/*.btn {
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+}*/
+
+/*# sourceMappingURL=header-footer.css.map */
