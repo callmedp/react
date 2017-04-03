@@ -275,7 +275,7 @@ footer .secure-payment {
   display: inline-block;
 }
 footer .secure-payment .secure-icon {
-  background: url(../images/sprite.svg) no-repeat -591px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -591px 0;
   display: inline-block;
   float: left;
   width: 34px;
@@ -299,7 +299,7 @@ footer .payment-options {
   padding: 5px 10px;
 }
 footer .payment-options .payment-option-bg {
-  background: url(../images/sprite.svg) no-repeat -282px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -282px 0;
   display: block;
   width: 299px;
   height: 37px;
@@ -420,20 +420,20 @@ footer .footer-links span {
   height: 11px;
   display: inline-block;
   margin-right: 10px;
-  background: url(../images/sprite.svg) no-repeat -888px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -888px 0;
 }
 
 .search-icon {
   width: 24px;
   height: 22px;
-  background: url(../images/sprite.svg) no-repeat -903px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -903px 0;
   display: inline-block;
 }
 
 .call-icon {
   width: 23px;
   height: 23px;
-  background: url(../images/sprite.svg) no-repeat -927px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -927px 0;
   display: inline-block;
 }
 
@@ -441,20 +441,20 @@ footer .footer-links span {
   display: inline-block;
   width: 28px;
   height: 26px;
-  background: url(../images/sprite.svg) no-repeat -955px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -955px 0;
 }
 
 .download-icon {
   width: 54px;
   height: 54px;
-  background: url(../images/sprite.svg) no-repeat -284px -41px;
+  background: url(../../images/cms/sprite.svg) no-repeat -284px -41px;
   display: inline-block;
 }
 
 .sample-download-icon {
   width: 22px;
   height: 22px;
-  background: url(../images/sprite.svg) no-repeat -1003px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -1003px 0;
   display: inline-block;
   vertical-align: middle;
 }
@@ -462,7 +462,7 @@ footer .footer-links span {
 .call-service-icon {
   width: 20px;
   height: 20px;
-  background: url(../images/sprite.svg) no-repeat -1029px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -1029px 0;
   display: inline-block;
   vertical-align: middle;
 }
@@ -497,7 +497,7 @@ footer .footer-links span {
 }
 
 .search:hover .search-icon, .search:hover input:focus .search-icon {
-  background: url(../images/sprite.svg) no-repeat -1073px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -1073px 0;
   z-index: 999;
 }
 

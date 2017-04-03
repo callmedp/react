@@ -96,7 +96,7 @@
 }
 .formatting ul li:before {
   content: '';
-  background: url(../images/cms/sprite.svg) no-repeat -991px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -991px 0;
   display: inline-block;
   position: absolute;
   left: -20px;
@@ -177,7 +177,7 @@
   top: 0;
   width: 13px;
   height: 21px;
-  background: url(../../../images/cms/sprite.svg) no-repeat -1053px 0;
+  background: url(../../images/cms/sprite.svg) no-repeat -1053px 0;
   display: inline-block;
 }
 .comments-box .form-group textarea {
@@ -346,7 +346,7 @@
 }
 .register .social-login .facebook {
   border-radius: 2px;
-  background: url(../images/sprite.svg) no-repeat -764px 5px;
+  background: url(../../images/cms/sprite.svg) no-repeat -764px 5px;
   width: 52px;
   height: 35px;
   border: 1px solid #3b5896;
