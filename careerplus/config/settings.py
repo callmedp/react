@@ -19,7 +19,7 @@ DATABASES = {
 
 # Apps specific for this project go here.
 DEV_APPS = [
-
+	
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DEV_APPS
@@ -34,3 +34,4 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
+
