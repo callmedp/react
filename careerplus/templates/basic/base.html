@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block meta_tags %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock meta_tags %}
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %}CMS - Shine Learning{%endblock title%}</title>
+    
+    {% block css %}
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+        <!-- Bootstrap -->
+        <link type="text/css" href="{% static 'console/css/cms/bootstrap.css' %}" rel="stylesheet">
+         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    {% endblock css %}
+   </head>
+
+<body>
+     <!-- navigation bar -->
+    {% include 'basic/navigation.html' %}
+
+<!-- breadcrums -->
+{% block breadcrumb %}
+    <section class="container">
+      <div class="row">
+        <ol class="breadcrumb">
+            <li><a class="active">Home</a></li>
+        </ol>
+      </div> 
+    </section>
+{% endblock breadcrumb %}
+
+<!-- main section start -->
+{% block container %}
+<section class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1>Resume Format For Freshers</h1>
+    </div>
+
+    <!-- page content body start -->
+    <div class="col-main">
+
+    <!-- left content start -->
+      <div class="col-left">
+        <!-- download pdf -->
+        {% include "include/download_pdf.html" %} 
+
+        <!-- Choose and Download Resume -->
+        {% include "include/resume_format_link.html" %}
+
+        <!-- Formatting -->
+        {% include "include/text_format.html" %}
+
+        <!-- Content Writer says -->
+        {% include "include/writer_view.html" %}
+
+        <!-- comment box -->
+        <div class="col-sm-12 comments-box mb-40">
+          <div class="media mb-40">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
+              </a>
+            </div>
+            <div class="media-body">
+              <form>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" placeholder=""></textarea>
+                  <span class="error"></span>
+                </div>
+                <a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm">Login to Comments</a>
+              </form>
+            </div>
+          </div>
+
+          <div class="media mb-40">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
+              </a>
+            </div>
+            <div class="media-body">
+              Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
+              <span class="time">1 hr ago</span>
+            </div>
+          </div>
+
+          <div class="media mb-40">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
+              </a>
+            </div>
+            <div class="media-body">
+              Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
+              <span class="time">1 hr ago</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>  
+    <!-- left content end -->
+
+    <!-- right content start -->
+    <div class="col-right">
+      <!-- shine banner -->
+      {% include "include/shine_ad.html" %} 
+
+      <!-- related -->
+      {% include "include/related_blog.html" %} 
+
+      <!-- request a call -->
+      {% include "include/request_call.html" %}
+      
+
+      <!-- free practice test -->
+      {% include "include/practice_test.html" %}
+
+    </div>
+    <!-- right content end -->
+
+    </div>
+    <!-- page content body end -->
+
+  </div>
+</section>
+<!-- main section end -->
+{% endblock container %}
+
+
+<!-- footer -->
+{% include 'basic/footer.html' %}
+
+{% include 'basic/login_register.html' %}
+  
+    {% block js %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+    </script>
+    <script src="{% static 'console/js/cms/bootstrap.min.js' %}">
+    </script>
+    
+    <script>
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+          });
+        $('.dropdown').hover(function(){ 
+            $('.dropdown-toggle', this).trigger('click'); 
+          });
+    </script>
+    {% endblock js %}
+  </body>
+</html>
