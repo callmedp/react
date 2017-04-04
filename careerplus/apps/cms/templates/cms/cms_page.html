@@ -15,7 +15,7 @@
     <section class="container">
       <div class="row">
         <ol class="breadcrumb">
-            <li><a href='#'>Home</a></li>
+            <li><a href='/'>Home</a></li>
             <li class="active">CMS</li>
         </ol>
       </div> 
@@ -26,7 +26,7 @@
     <section class="container">
       <div class="row">
         <div class="page-header">
-          <h1>Resume Format For Freshers</h1>
+          <h1>{{page_heading}}</h1>
         </div>
 
         <!-- page content body start -->
@@ -34,17 +34,20 @@
 
         <!-- left content start -->
           <div class="col-left">
+           {{ left_widgets|safe|default:'' }}
+           {% comment %}
             <!-- download pdf -->
-            {% include "include/download_pdf.html" %} 
+            {% include "include/download_pdf.html" %}
 
             <!-- Choose and Download Resume -->
-            {% include "include/resume_format_link.html" %}
+            {% include "include/index_widget.html" %}
 
             <!-- Formatting -->
             {% include "include/text_format.html" %}
 
             <!-- Content Writer says -->
             {% include "include/writer_view.html" %}
+            {% endcomment %}
 
             <!-- comment box -->
             <div class="col-sm-12 comments-box mb-40">
@@ -96,6 +99,8 @@
 
         <!-- right content start -->
         <div class="col-right">
+          {{ right_widgets|safe|default:'' }}
+          {% comment %}
           <!-- shine banner -->
           {% include "include/shine_ad.html" %} 
 
@@ -108,6 +113,7 @@
 
           <!-- free practice test -->
           {% include "include/practice_test.html" %}
+          {% endcomment %}
 
         </div>
         <!-- right content end -->

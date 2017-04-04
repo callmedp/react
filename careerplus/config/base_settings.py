@@ -40,6 +40,8 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 # Apps specific for this project go here.
@@ -119,3 +121,13 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+
+CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        # 'height': 300,
+        # 'width': 300,
+    },
+}

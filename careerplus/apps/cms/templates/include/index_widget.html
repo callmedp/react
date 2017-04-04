@@ -1,3 +1,19 @@
+
+<div class="col-sm-12 box-panel mb-40 download-resume">
+  <h2>{{indexer_heading}}</h2>
+  <div class="col-sm-12 col-md-6 no-pad">
+    {% for key, value in column_headings.items %}
+        <h3>{{value}}</h3>
+        <ul>
+        {% for k, v in column_data.key.items %}
+            <li><a href="{{v}}">{{k}}</a></li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+   </div>
+</div>
+
+{% comment %}
 <div class="col-sm-12 box-panel mb-40 download-resume">
   <h2>Choose and Download Resume Format and Samples Written by our Experts</h2>
   <div class="col-sm-12 col-md-6 no-pad">
@@ -23,3 +39,4 @@
     </ul>
   </div>
 </div>
+{% endcomment %}

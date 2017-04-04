@@ -1,5 +1,21 @@
 {% load static %}
 <div class="download-pdf mb-40">
+   {% if download_doc %}
+	  <a href="#">
+	    <img class="img-responsive" src="{{image.url}}" alt="Download Resume">
+	    <span class="download-box">
+	      <figure class="download-icon"></figure>
+	      {{heading}}
+	    </span>
+	  </a>
+  {% endif %}
+</div>
+
+
+
+{% comment %}
+{% load static %}
+<div class="download-pdf mb-40">
   <a href="#">
     <img class="img-responsive" src="{% static 'console/images/cms/download-pdf.jpg' %}" alt="Download Resume">
     <span class="download-box">
@@ -8,3 +24,4 @@
     </span>
   </a>
 </div>
+{% endcomment %}

@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 
+from ckeditor_uploader.fields import RichTextUploadingField
+
+
 from .config import STATUS, WIDGET_CHOICES, SECTION, COLUMN_TYPE
 # Create your models here.
 
@@ -63,7 +66,7 @@ class ColumnHeading(models.Model):
 class IndexColumn(models.Model):
 	indexer = models.ForeignKey(IndexerWidget)
 	column = models.PositiveIntegerField(choices=COLUMN_TYPE)
-	url = models.CharField(max_length=2048)
+	url = models.CharField(max_length=2048, null=True, blank=True)
 	name = models.CharField(max_length=255)
 
 	def __str__(self):
@@ -87,7 +90,7 @@ class IndexColumn(models.Model):
 class Widget(AbstractCommonModel):
 	widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
 	name = models.CharField(max_length=200, null=False, blank=False)
-	template_name = models.CharField(max_length=1024, null=False, blank=False)
+	template_name = models.CharField(max_length=1024, null=True, blank=True)
 	heading = models.CharField(max_length=1024, null=True, blank=True)
 	redirect_url = models.URLField(null=True, blank=True,
 		verbose_name='Re-directing Url',
@@ -95,7 +98,7 @@ class Widget(AbstractCommonModel):
 
 	image = models.FileField("Image", max_length=200, upload_to="images/cms/widget/",
     	blank=True, null=True, help_text='use this for Resume help')
-	image_alt = models.CharField(max_length=100, blank=False)
+	image_alt = models.CharField(max_length=100, null=True, blank=True)
 
 	description = models.TextField(null=True, blank=True)
 	document_upload = models.FileField("Document", max_length=200,
@@ -106,8 +109,11 @@ class Widget(AbstractCommonModel):
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
 		help_text='for user or writer')
-	display_name = models.CharField(max_length=100, null=False, blank=False)
-	writer_designation = models.CharField(max_length=255)
+	display_name = models.CharField(max_length=100, null=True, blank=True)
+	writer_designation = models.CharField(max_length=255, null=True, blank=True)
+
+	iw = models.ForeignKey(IndexerWidget, null=True, blank=True,
+		verbose_name='Indexer Widget')
 
 	is_external = models.BooleanField(default=False)
 	is_pop_up = models.BooleanField(default=False)
@@ -115,6 +121,22 @@ class Widget(AbstractCommonModel):
 
 	def __str__(self):
 		return str(self.id) + str(self.name)
+
+	def get_widget_data(self):
+		data_dict = {}
+		for field in self._meta.fields:
+			data_dict[field.name] = getattr(self, field.name)
+
+		if self.iw:
+			data_dict.update({
+				'indexer_heading': self.iw.heading,
+			})
+			data_dict['column_headings'] = dict(self.iw.columnheading_set.values_list('column', 'name'))
+			data_dict['column_data'] = {}
+			for key, value in data_dict['column_headings'].items():
+				data_dict['column_data'].update({key: dict(self.iw.indexcolumn_set.filter(column=key).values_list('name', 'url'))})
+
+		return data_dict
 
 
 class Page(AbstractCommonModel):
@@ -156,7 +178,7 @@ class Page(AbstractCommonModel):
 	expiry_date = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
-		return str(self.id) + ' ' + self.title
+		return str(self.id) + ' ' + self.title	
 
 
 class PageWidget(AbstractCommonModel):
@@ -168,7 +190,7 @@ class PageWidget(AbstractCommonModel):
 		help_text='determine ranking of widget')
 
 	class Meta:
-		ordering = ['page', '-ranking']
+		ordering = ['section', '-ranking']
 		unique_together = ('page', 'widget')
 
 

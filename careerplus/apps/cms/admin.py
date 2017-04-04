@@ -20,14 +20,16 @@ class TagAdmin(admin.ModelAdmin):
 	raw_id_fields = ('parent', 'created_by', 'last_modified_by')
 
 
-class ColumnHeadingAdmin(admin.StackedInline):
+class ColumnHeadingAdmin(admin.TabularInline):
 	model = ColumnHeading
 	raw_id_fields = ('indexer',)
+	extra = 0
 
 
-class IndexColumnAdmin(admin.StackedInline):
+class IndexColumnAdmin(admin.TabularInline):
 	model = IndexColumn
 	raw_id_fields = ('indexer',)
+	extra = 0
 
 
 class IndexerWidgetAdmin(admin.ModelAdmin):
@@ -35,7 +37,7 @@ class IndexerWidgetAdmin(admin.ModelAdmin):
 	list_filter = ()
 	search_fields = ('name', 'heading', 'id')
 	filter_horizontal = ()
-	inlines = [IndexColumnAdmin, ColumnHeadingAdmin]
+	inlines = [ColumnHeadingAdmin, IndexColumnAdmin]
 	raw_id_fields = ('created_by', 'last_modified_by')
 
 
@@ -45,7 +47,7 @@ class WidgetAdmin(admin.ModelAdmin):
 	list_filter = ('widget_type', )
 	search_fields = ('name', 'heading', 'id')
 	filter_horizontal = ()
-	raw_id_fields = ('created_by', 'last_modified_by', 'user')
+	raw_id_fields = ('created_by', 'last_modified_by', 'user', 'iw')
 
 
 class DocumentAdminInline(admin.StackedInline):
