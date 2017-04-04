@@ -1,5 +1,6 @@
 {% extends "basic/base.html" %}
 {% load static %}
+{% load humanize %}
     
     {% block title %}
     CMS - Shine Learning
@@ -7,7 +8,7 @@
     
     {% block css %}
         {{block.super}}
-        <link type="text/css" href="{% static 'console/css/cms/header-footer.css' %}" rel="stylesheet">
+        
         <link type="text/css" href="{% static 'console/css/cms/cms.css' %}" rel="stylesheet">
     {% endblock css %}
     
@@ -49,6 +50,7 @@
             {% include "include/writer_view.html" %}
             {% endcomment %}
 
+            {% if page_obj.allow_comment %}
             <!-- comment box -->
             <div class="col-sm-12 comments-box mb-40">
               <div class="media mb-40">
@@ -63,36 +65,32 @@
                       <textarea class="form-control" rows="3" placeholder=""></textarea>
                       <span class="error"></span>
                     </div>
-                    <a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm">Login to Comments</a>
+                    <a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm">
+                       {% if user.is_authenticated %} 
+                           Comments
+                       {% else %}
+                           Login to Comments
+                       {% endif %}
+                    </a>
                   </form>
                 </div>
               </div>
-
-              <div class="media mb-40">
-                <div class="media-left">
-                  <a href="#">
-                    <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
-                  </a>
-                </div>
-                <div class="media-body">
-                  Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
-                  <span class="time">1 hr ago</span>
-                </div>
-              </div>
-
-              <div class="media mb-40">
-                <div class="media-left">
-                  <a href="#">
-                    <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
-                  </a>
-                </div>
-                <div class="media-body">
-                  Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
-                  <span class="time">1 hr ago</span>
-                </div>
-              </div>
+              {% for comment in comments %}
+                     <div class="media mb-40">
+                        <div class="media-left">
+                          <a href="#">
+                            <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
+                          </a>
+                        </div>
+                        <div class="media-body">
+                          {{comment.message}}
+                        <span class="time">{{ comment.created_on|naturaltime }}</span>
+                        </div>
+                      </div>
+              {% endfor %}
 
             </div>
+            {% endif %}
 
           </div>  
         <!-- left content end -->

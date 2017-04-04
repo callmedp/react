@@ -212,11 +212,13 @@ class Document(models.Model):
 class Comment(AbstractCommonModel):
 	page = models.ForeignKey(Page)
 	message = models.TextField(null=False, blank=False)
-	submit_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 	is_published = models.BooleanField(default=False)
 	is_removed = models.BooleanField(default=False)
 	replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
 		blank=True, related_name="comments")
+
+	class Meta:
+		ordering = ['-created_on', ]
 
 	def __str__(self):
 		return str(self.id) + '_' + str(self.submit_date.date())

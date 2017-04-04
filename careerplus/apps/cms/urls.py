@@ -4,5 +4,5 @@ from .views import CMSPageView
 
 
 urlpatterns = [
-    url(r'^page/$', CMSPageView.as_view(), name='page'),
+    url(r'^page/(?P<slug>[-\w]+)/$', CMSPageView.as_view(), name='page'),
 ]

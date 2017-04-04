@@ -75,7 +75,7 @@ class PageWidgetAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-	list_display = ('id', 'page', 'created_by', 'submit_date', 'is_published',
+	list_display = ('id', 'page', 'created_by', 'created_on', 'is_published',
 		'is_removed', 'replied_to')
 	list_filter = ()
 	search_fields = ('id', 'message')
@@ -99,3 +99,4 @@ admin.site.register(Widget, WidgetAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(PageWidget, PageWidgetAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(PageCounter, PageCounterAdmin)
