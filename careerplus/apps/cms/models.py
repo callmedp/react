@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
@@ -100,7 +101,7 @@ class Widget(AbstractCommonModel):
     	blank=True, null=True, help_text='use this for Resume help')
 	image_alt = models.CharField(max_length=100, null=True, blank=True)
 
-	description = models.TextField(null=True, blank=True)
+	description = RichTextUploadingField(null=True, blank=True)
 	document_upload = models.FileField("Document", max_length=200,
     	upload_to="documents/cms/widget/", blank=True, null=True)
 
@@ -143,10 +144,10 @@ class Page(AbstractCommonModel):
 	title = models.CharField(max_length=255, null=False, blank=False,
 		verbose_name="Title", help_text='The H1 heading for the page.')
 	category = models.ForeignKey(PageCategory, null=True, blank=False)
-	description = models.TextField(null=False, verbose_name="Description",
+	description = RichTextUploadingField(null=False, verbose_name="Description",
 		blank=True, default="", help_text='The content of the page containing \
 		the h2 and other content about the product.')
-	short_desc = models.TextField(null=False, verbose_name="Short Description",
+	short_desc = RichTextUploadingField(null=False, verbose_name="Short Description",
 		blank=True, help_text='Very short description of the page in about 50 \
 		 words', default="")
 	parent = models.ForeignKey("self", verbose_name="Parent",
