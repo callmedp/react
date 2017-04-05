@@ -24,11 +24,6 @@
   display: block;
 }
 
-.box-panel {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  background-color: #fff;
-}
-
 .download-resume {
   color: #333;
   padding: 25px;
@@ -58,7 +53,7 @@
 }
 .download-resume ul li:before {
   content: '';
-  background: url(../../images/cms/sprite.svg) no-repeat -991px 0;
+  background: url(../../images/cms/sprite.png) no-repeat -582px -50px;
   display: inline-block;
   position: absolute;
   left: -20px;
@@ -96,7 +91,7 @@
 }
 .formatting ul li:before {
   content: '';
-  background: url(../../images/cms/sprite.svg) no-repeat -991px 0;
+  background: url(../../images/cms/sprite.png) no-repeat -582px -50px;
   display: inline-block;
   position: absolute;
   left: -20px;
@@ -162,7 +157,6 @@
 .comments-box {
   font-size: 15px;
   color: #666;
-  margin-top: 100px;
 }
 .comments-box .media-body {
   overflow: visible;
@@ -177,7 +171,7 @@
   top: 0;
   width: 13px;
   height: 21px;
-  background: url(../../images/cms/sprite.svg) no-repeat -1053px 0;
+  background: url(../../images/cms/sprite.png) no-repeat -596px -72px;
   display: inline-block;
 }
 .comments-box .form-group textarea {
@@ -201,6 +195,23 @@
   margin-top: 5px;
 }
 
+.comments-links {
+  padding: 10px;
+  display: block;
+  color: #333;
+  background-color: #f1f1f1;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+.comments-links:hover {
+  color: #333;
+}
+.comments-links:focus {
+  color: #333;
+  overflow: hidden;
+}
+
 .related {
   padding: 20px;
 }
@@ -213,16 +224,6 @@
   line-height: 20px;
   text-decoration: none;
   font-weight: 600;
-}
-
-.heading-right {
-  font-size: 15px;
-  color: #3f5f94;
-  font-weight: 600;
-  border-bottom: 2px solid #3f5f94;
-  margin: 0;
-  padding-bottom: 5px;
-  text-transform: uppercase;
 }
 
 .request-call {
@@ -253,135 +254,6 @@
 
 .practice-test {
   padding: 20px;
-}
-
-/*login signup css*/
-.login-signup-box {
-  -webkit-box-shadow: 0px 0px 21px 3px #ededed;
-  -moz-box-shadow: 0px 0px 21px 3px #ededed;
-  box-shadow: 0px 0px 21px 3px #ededed;
-  position: absolute;
-  right: 15%;
-  top: 100px;
-  width: 320px;
-}
-
-.register {
-  background-color: #fff;
-  font-family: "Open Sans", sans-serif;
-  padding: 20px;
-}
-.register h1 {
-  font-size: 20px;
-  color: #666;
-  display: block;
-  margin-bottom: 20px;
-}
-.register input {
-  border-top: 1px solid #fff;
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #ccc;
-  border-left: 1px solid #fff;
-  border-radius: 0;
-  font-size: 14px;
-  color: #333;
-  padding-left: 0;
-}
-.register .form-check-label {
-  font-size: 13px;
-  color: #666;
-  margin-top: 10px;
-  font-weight: 300;
-}
-.register .form-check-input {
-  vertical-align: sub;
-  margin-right: 3px;
-}
-.register .submit {
-  background-color: #2f5da5;
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  display: block;
-  width: 100%;
-  line-height: 25px;
-  margin: 20px 0 10px 0;
-}
-.register .form-control:focus {
-  border-top: 1px solid #fff;
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #5cb3fd;
-  border-left: 1px solid #fff;
-}
-.register a, .register a:hover {
-  color: #2f5da5;
-  text-decoration: none;
-}
-.register .form-group {
-  position: relative;
-}
-.register .form-group .form-control {
-  box-shadow: none;
-}
-.register small {
-  display: block;
-}
-.register .error {
-  font-size: 11px;
-  color: #ff0000;
-  position: absolute;
-  right: 0;
-  top: 10px;
-}
-.register .social-login {
-  text-align: center;
-  display: block;
-  font-size: 14px;
-  color: #666;
-  margin: 15px 0 15px 0;
-}
-.register .social-login span {
-  display: block;
-  margin-bottom: 15px;
-}
-.register .social-login .facebook {
-  border-radius: 2px;
-  background: url(../../images/cms/sprite.svg) no-repeat -764px 5px;
-  width: 52px;
-  height: 35px;
-  border: 1px solid #3b5896;
-  display: inline-block;
-  text-align: center;
-}
-.register .social-login .twitter {
-  border-radius: 2px;
-  background: url(../../images/cms/sprite.svg) no-repeat -800px 6px;
-  width: 52px;
-  height: 35px;
-  border: 1px solid #3aa9de;
-  display: inline-block;
-  text-align: center;
-  margin-left: 10px;
-}
-.register .social-login .gplus {
-  border-radius: 2px;
-  background: url(../../images/cms/sprite.svg) no-repeat -844px 6px;
-  width: 52px;
-  height: 35px;
-  border: 1px solid #d14635;
-  display: inline-block;
-  text-align: center;
-  margin-left: 10px;
-}
-.register .social-login .linkedin {
-  border-radius: 2px;
-  background: url(../../images/cms/sprite.svg) no-repeat -1100px 4px;
-  width: 52px;
-  height: 35px;
-  border: 1px solid #3aa9de;
-  display: inline-block;
-  text-align: center;
-  margin-left: 10px;
 }
 
 /*# sourceMappingURL=cms.css.map */

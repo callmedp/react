@@ -14,22 +14,29 @@
     
     {% block breadcrumb %}
     <section class="container">
-      <div class="row">
         <ol class="breadcrumb">
             <li><a href='/'>Home</a></li>
             <li class="active">CMS</li>
         </ol>
-      </div> 
     </section>
    {% endblock breadcrumb %}
 
-{% block container %}
+   {% block pageheading %}
     <section class="container">
-      <div class="row">
+        <div class="social-login share-mg">
+            <span class="share">Share on</span>
+            <a class="facebook" href="#"></a>
+            <a class="linkedin" href="#"></a>
+            <a class="gplus" href="#"></a>
+        </div>
         <div class="page-header">
           <h1>{{page_heading}}</h1>
         </div>
+    </section>
+   {% endblock pageheading %}
 
+{% block container %}
+    <section class="container">
         <!-- page content body start -->
         <div class="col-main">
 
@@ -52,7 +59,8 @@
 
             {% if page_obj.allow_comment %}
             <!-- comment box -->
-            <div class="col-sm-12 comments-box mb-40">
+            <div class="col-sm-12 comments-box mb-40 mt-40">
+               <a class="comments-links mb-40" href="#"> <span class="comments-icon mr-10"></span>23 Comments</a>
               <div class="media mb-40">
                 <div class="media-left">
                   <a href="#">
@@ -60,27 +68,27 @@
                   </a>
                 </div>
                 <div class="media-body">
-                  <form>
+                  <form role="form" id="cms_comment_form" method="post" action=''>
+                  {% csrf_token %}
                     <div class="form-group">
-                      <textarea class="form-control" rows="3" placeholder=""></textarea>
+                      <textarea class="form-control" name="message" rows="3" placeholder=""></textarea>
                       <span class="error"></span>
                     </div>
-                    <a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm">
-                       {% if user.is_authenticated %} 
-                           Comments
-                       {% else %}
-                           Login to Comments
-                       {% endif %}
-                    </a>
+                    {% if user.is_authenticated %} 
+                       <input type='submit' class="submit-button" value="Comments">
+                       
+                   {% else %}
+                       <input type='button' class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm" value="Login to Comments">
+                   {% endif %}
                   </form>
                 </div>
               </div>
               {% for comment in comments %}
                      <div class="media mb-40">
                         <div class="media-left">
-                          <a href="#">
+                          <!--a href="#"-->
                             <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
-                          </a>
+                          <!--/a-->
                         </div>
                         <div class="media-body">
                           {{comment.message}}
@@ -88,6 +96,8 @@
                         </div>
                       </div>
               {% endfor %}
+
+              <a href="#" class="comments-links mb-40"> <span class="comments-icon mr-10"></span>Load more Comments</a>
 
             </div>
             {% endif %}
@@ -119,7 +129,17 @@
         </div>
         <!-- page content body end -->
 
-      </div>
     </section>
     <!-- main section end -->
+
+    {% include 'basic/login_register.html' %}
+
 {% endblock container %}
+  
+
+{% block js %}
+   {{ block.super }}
+   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+   <script src="{% static 'console/js/cms/cms.js' %}"></script>
+
+{% endblock js %}

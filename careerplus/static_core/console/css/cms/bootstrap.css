@@ -4783,14 +4783,15 @@ tbody.collapse.in {
 }
 .navbar-brand:after {
   content: '';
-  background: url(../../images/cms/sprite.svg) no-repeat;
+  background: url(../../images/cms/sprite.png) no-repeat;
   background-position: 0 0;
-  width: 270px;
-  height: 80px;
+  width: 287px;
+  height: 90px;
   display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 99;
 }
 .navbar-brand:hover, .navbar-brand:focus {
   text-decoration: none;
@@ -5005,7 +5006,6 @@ tbody.collapse.in {
 
   .navbar-right {
     float: right !important;
-    margin-right: -15px;
   }
   .navbar-right ~ .navbar-right {
     margin-right: 0;
@@ -5179,6 +5179,7 @@ tbody.collapse.in {
   padding: 8px 0;
   list-style: none;
   font-size: 12px;
+  margin-top: 35px;
 }
 .breadcrumb > li {
   display: inline-block;

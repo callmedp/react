@@ -1,9 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
-
 
 from .config import STATUS, WIDGET_CHOICES, SECTION, COLUMN_TYPE
 # Create your models here.
@@ -221,7 +219,7 @@ class Comment(AbstractCommonModel):
 		ordering = ['-created_on', ]
 
 	def __str__(self):
-		return str(self.id) + '_' + str(self.submit_date.date())
+		return str(self.id) + '_' + str(self.created_on.date())
 
 
 class PageCounter(models.Model):

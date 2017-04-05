@@ -30,125 +30,27 @@
 
 <!-- breadcrums -->
 {% block breadcrumb %}
-    <section class="container">
-      <div class="row">
-        <ol class="breadcrumb">
-            <li><a class="active">Home</a></li>
-        </ol>
-      </div> 
-    </section>
+    
 {% endblock breadcrumb %}
+
+{% block pageheading %}
+    
+{% endblock pageheading %}
 
 <!-- main section start -->
 {% block container %}
-<section class="container">
-  <div class="row">
-    <div class="page-header">
-      <h1>Resume Format For Freshers</h1>
-    </div>
 
-    <!-- page content body start -->
-    <div class="col-main">
-
-    <!-- left content start -->
-      <div class="col-left">
-        <!-- download pdf -->
-        {% include "include/download_pdf.html" %} 
-
-        <!-- Choose and Download Resume -->
-        {% include "include/resume_format_link.html" %}
-
-        <!-- Formatting -->
-        {% include "include/text_format.html" %}
-
-        <!-- Content Writer says -->
-        {% include "include/writer_view.html" %}
-
-        <!-- comment box -->
-        <div class="col-sm-12 comments-box mb-40">
-          <div class="media mb-40">
-            <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
-              </a>
-            </div>
-            <div class="media-body">
-              <form>
-                <div class="form-group">
-                  <textarea class="form-control" rows="3" placeholder=""></textarea>
-                  <span class="error"></span>
-                </div>
-                <a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm">Login to Comments</a>
-              </form>
-            </div>
-          </div>
-
-          <div class="media mb-40">
-            <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
-              </a>
-            </div>
-            <div class="media-body">
-              Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
-              <span class="time">1 hr ago</span>
-            </div>
-          </div>
-
-          <div class="media mb-40">
-            <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
-              </a>
-            </div>
-            <div class="media-body">
-              Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
-              <span class="time">1 hr ago</span>
-            </div>
-          </div>
-
-        </div>
-
-      </div>  
-    <!-- left content end -->
-
-    <!-- right content start -->
-    <div class="col-right">
-      <!-- shine banner -->
-      {% include "include/shine_ad.html" %} 
-
-      <!-- related -->
-      {% include "include/related_blog.html" %} 
-
-      <!-- request a call -->
-      {% include "include/request_call.html" %}
-      
-
-      <!-- free practice test -->
-      {% include "include/practice_test.html" %}
-
-    </div>
-    <!-- right content end -->
-
-    </div>
-    <!-- page content body end -->
-
-  </div>
-</section>
-<!-- main section end -->
 {% endblock container %}
 
 
 <!-- footer -->
 {% include 'basic/footer.html' %}
 
-{% include 'basic/login_register.html' %}
-  
     {% block js %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
     </script>
-    <script src="{% static 'console/js/cms/bootstrap.min.js' %}">
+    <script src="{% static 'console/js/bootstrap.min.js' %}">
     </script>
     
     <script>

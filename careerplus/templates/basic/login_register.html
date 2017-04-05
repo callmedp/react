@@ -8,17 +8,17 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h1 class="modal-title" id="myModalLabel">Login</h1>
       </div>
-        <form>
+        <form role="form" method="post" action="{% url "cms:login-to-comment" page_obj.slug %}" >{% csrf_token %}
           <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Username">
+            <input type="text" class="form-control required" name="user_email" aria-describedby="nameHelp" placeholder="email">
             <label class="error"></label>
           </div>
           <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Password">
+            <input type="password" class="form-control required" name="user_password" aria-describedby="passwordHelp" placeholder="Password">
           </div>
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input">
+              <input type="checkbox" class="form-check-input" name="remember_me">
               Remember me
             </label>
           </div>
