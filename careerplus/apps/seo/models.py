@@ -1,6 +1,7 @@
 from django.db import models
 from django.db import IntegrityError
 from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext_lazy as _
 
 
 class AbstractSEO(models.Model):
@@ -12,11 +13,16 @@ class AbstractSEO(models.Model):
     * separator - the character to put in place of spaces and other non url friendly characters, default '-'
 
     """
-    url = models.CharField(max_length=255, blank=True)
-    title = models.CharField(max_length=255, blank=True)
-    description = models.CharField(max_length=500, blank=True)
-    keywords = models.CharField(max_length=255, blank=True)
-    heading = models.CharField(max_length=255, blank=True)
+    url = models.CharField(
+        _('Url'), max_length=255, blank=True)
+    title = models.CharField(
+        _('Title'), max_length=255, blank=True)
+    meta_desc = models.TextField(
+        _('Meta Description'), blank=True, default='')
+    meta_keywords = models.TextField(
+        _('Keywords'), blank=True, default='')
+    heading = models.CharField(
+        _('H1'), max_length=255, blank=True)
     
     class Meta:
         abstract = True
