@@ -1,4 +1,67 @@
 $(function() {
+
+    /*$("#downloadpdf_form").validate({
+                
+        submitHandler:function (form) {
+
+            form.submit();
+        },
+        invalidHandler: function(event, validator){
+            
+            
+        },
+        rules:{
+                name:{
+                    maxlength: 100,
+                },
+                email:{
+                    required:false,
+                    maxlength: 100,
+                },
+                mobile_number:{
+                    required:true,
+                    number: true,
+                    minlength: 5,
+                    maxlength: 15,                    
+                },
+            },
+        messages:{
+                name:{
+                    maxlength: "Maximum 100 characters."
+                },
+                email:{
+                    maxlength: "At most 100 characters"
+                },
+                mobile_number:{
+                    required:"Mobile Number is Mandatory",
+                    number:"Enter only number",
+                    maxlength: "Please enter below 15 digits",
+                    minlength: "Please enter atleast 5 digits"
+                },
+                
+            },
+        highlight:function(element, errorClass) {
+            $(element).siblings('.error').removeClass('hide_error');
+        },
+        unhighlight:function(element, errorClass) {
+            $(element).siblings('.error').addClass('hide_error');    
+        },
+        errorPlacement: function(error, element){
+        
+            $(element).siblings('.error').html(error.text());
+        } 
+    });*/
+
+    $("#id_download").click(function(){
+        $("#id_action").val(1);
+        $("#downloadpdf_form").submit();
+    });
+
+    $("#id_skip").click(function(){
+        $("#id_action").val(0);
+        $("#downloadpdf_form").submit();
+    });
+
 	$("#cms_comment_form").validate({
 		rules: {
 		    message: "required",

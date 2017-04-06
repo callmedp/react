@@ -20,25 +20,31 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h1 class="modal-title" id="myModalLabel">Download as PDF</h1>
       </div>
-        <form>
+        <form role="form" method="post" id="downloadpdf_form" action="{% url "cms:download-pdf" page_obj.slug %}">
+          <div style='display:none'>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+          </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Name">
+            <input type="text" class="form-control" id="user_name" name="name" aria-describedby="nameHelp" placeholder="Name">
             <label class="error"></label>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email">
+            <input type="text" class="form-control" id="id_email" name="email" aria-describedby="emailHelp" placeholder="Email">
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Mobile">
+            <input type="text" class="form-control" id="id_mobile" aria-describedby="emailHelp" name="mobile_number" placeholder="Mobile">
           </div>
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input">
+              <input type="checkbox" name="term_condition" class="form-check-input">
               By downloading this sample, you hereby accept our <a href="#">Terms & Conditions</a>.
             </label>
           </div>
-          <button type="submit" class="btn btn-primary submit">Download</button>
-          <small class="form-text text-muted text-center"><a href="#" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Skip</a></small>
+          <div style='display:none'>
+            <input type='hidden' id="id_action" name='action_type' />
+          </div>
+          <button type="button" id="id_download" class="btn btn-primary submit">Download</button>
+          <small class="form-text text-muted text-center"><a id="id_skip" href="#" data-toggle="modal" data-dismiss="modal">Skip</a></small>
         </form>
       </div>
     </div>

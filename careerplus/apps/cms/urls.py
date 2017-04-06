@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from .views import CMSPageView, LoginToCommentView, LeadManagementView
+from .views import CMSPageView, LoginToCommentView, LeadManagementView,\
+   DownloadPdfView
 
 urlpatterns = [
     url(r'^page/(?P<slug>[-\w]+)/$', CMSPageView.as_view(), name='page'),
@@ -8,5 +9,8 @@ urlpatterns = [
     	name='login-to-comment'),
     url(r'^lead-management/$', LeadManagementView.as_view(),
     	name='lead-management'),
+
+    url(r'^download-pdf/(?P<slug>[-\w]+)/$', DownloadPdfView.as_view(),
+    	name='download-pdf'),
     
 ]

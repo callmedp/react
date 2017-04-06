@@ -21,36 +21,11 @@ class AbstractCommonModel(models.Model):
 		abstract = True
 
 
-class PageCategory(AbstractCommonModel):
-	name = models.CharField(max_length=255, unique=True)
-	parent = models.ForeignKey('self', null=True, blank=True)
-	slug = models.SlugField(verbose_name='Slug', unique=True, max_length=255,
-		help_text=("Used to build the category's URL."))
-	is_active = models.BooleanField(default=False)
-	show_menu = models.BooleanField(default=False)
-
-	def __str__(self):
-		return self.name
-
-
-class Tag(AbstractCommonModel):
-	name = models.CharField(max_length=255, unique=True)
-	parent = models.ForeignKey('self', null=True, blank=True)
-	slug = models.SlugField(verbose_name='Slug', unique=True, max_length=255,
-		help_text=("Used to build the category's URL."))
-	is_active = models.BooleanField(default=False)
-	show_menu = models.BooleanField(default=False)
-
-	def __str__(self):
-		return self.name
-
-
 class IndexerWidget(AbstractCommonModel):
-	name = models.CharField(max_length=100, null=False, blank=False)
 	heading = models.CharField(max_length=255, null=True, blank=True)
 
 	def __str__(self):
-		return '%s' % self.name
+		return str(self.id) + self.heading
 
 
 class ColumnHeading(models.Model):
@@ -72,25 +47,10 @@ class IndexColumn(models.Model):
 		return '%s' % self.name
 
 
-# class ExpertComment(AbstractCommonModel):
-# 	writer = models.ForeignKey(settings.AUTH_USER_MODEL)
-# 	display_name = models.CharField(max_length=100, null=False, blank=False)
-# 	writer_designation = models.CharField(max_length=255)
-# 	image = models.FileField("Image", max_length=200,
-# 		upload_to="images/cms/page/", blank=True, null=True)
-# 	description = models.TextField()
-# 	# page = models.ForeignKey(Page)
-# 	active = models.BooleanField()
-
-# 	def __str__(self):
-# 		return '%s' % self.writer
-
-
 class Widget(AbstractCommonModel):
 	widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
-	name = models.CharField(max_length=200, null=False, blank=False)
-	template_name = models.CharField(max_length=1024, null=True, blank=True)
 	heading = models.CharField(max_length=1024, null=True, blank=True)
+	template_name = models.CharField(max_length=1024, null=True, blank=True)
 	redirect_url = models.URLField(null=True, blank=True,
 		verbose_name='Re-directing Url',
     	help_text='Append http://.')
@@ -100,11 +60,10 @@ class Widget(AbstractCommonModel):
 	image_alt = models.CharField(max_length=100, null=True, blank=True)
 
 	description = RichTextUploadingField(null=True, blank=True)
+
 	document_upload = models.FileField("Document", max_length=200,
     	upload_to="documents/cms/widget/", blank=True, null=True)
 
-	upload_template = models.FileField(upload_to='templates/includes/cms/',
-    	max_length=1024, blank=True, null=True)
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
 		help_text='for user or writer')
@@ -119,7 +78,7 @@ class Widget(AbstractCommonModel):
 	is_active = models.BooleanField(default=False)
 
 	def __str__(self):
-		return str(self.id) + str(self.name)
+		return str(self.id) + str(self.heading)
 
 	def get_widget_data(self):
 		data_dict = {}
@@ -141,22 +100,11 @@ class Widget(AbstractCommonModel):
 class Page(AbstractCommonModel):
 	title = models.CharField(max_length=255, null=False, blank=False,
 		verbose_name="Title", help_text='The H1 heading for the page.')
-	category = models.ForeignKey(PageCategory, null=True, blank=False)
-	description = RichTextUploadingField(null=False, verbose_name="Description",
-		blank=True, default="", help_text='The content of the page containing \
-		the h2 and other content about the product.')
-	short_desc = RichTextUploadingField(null=False, verbose_name="Short Description",
-		blank=True, help_text='Very short description of the page in about 50 \
-		 words', default="")
+
 	parent = models.ForeignKey("self", verbose_name="Parent",
 		null=True, blank=True)
-	slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
 
-	tag = models.ManyToManyField(Tag, verbose_name="Tags",
-		blank=True, help_text='Add the tags to make some relation \
-		between the pages.', related_name="related_tag")
-	related_pages = models.ManyToManyField("self", blank=True,
-		verbose_name='Realted Page')
+	slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
 
 	widgets = models.ManyToManyField(Widget, through='PageWidget',
         verbose_name="Widgets", blank=True)
@@ -166,8 +114,8 @@ class Page(AbstractCommonModel):
 	total_view = models.PositiveIntegerField(default=0)
 	total_download = models.PositiveIntegerField(default=0)
 	total_share = models.PositiveIntegerField(default=0)
-	status = models.PositiveIntegerField(choices=STATUS, default=0)
-	active = models.BooleanField(default=False)
+
+	is_active = models.BooleanField(default=False)
 	show_menu = models.BooleanField(default=False)
 
 	allow_comment = models.BooleanField(default=False)
@@ -177,7 +125,7 @@ class Page(AbstractCommonModel):
 	expiry_date = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
-		return str(self.id) + ' ' + self.title	
+		return str(self.id) + ' ' + self.title
 
 
 class PageWidget(AbstractCommonModel):
