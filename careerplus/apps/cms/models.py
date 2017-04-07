@@ -3,7 +3,7 @@ from django.conf import settings
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
-from .config import STATUS, WIDGET_CHOICES, SECTION, COLUMN_TYPE
+from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
 # Create your models here.
 
 
@@ -63,7 +63,6 @@ class Widget(AbstractCommonModel):
 
 	document_upload = models.FileField("Document", max_length=200,
     	upload_to="documents/cms/widget/", blank=True, null=True)
-
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
 		help_text='for user or writer')
@@ -176,6 +175,7 @@ class PageCounter(models.Model):
 	no_views = models.PositiveIntegerField(default=0)
 	no_downloads = models.PositiveIntegerField(default=0)
 	no_shares = models.PositiveIntegerField(default=0)
+	comment_count = models.PositiveIntegerField(default=0)
 	added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 	modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 

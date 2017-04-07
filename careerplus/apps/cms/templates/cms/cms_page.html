@@ -43,24 +43,11 @@
         <!-- left content start -->
           <div class="col-left">
            {{ left_widgets|safe|default:'' }}
-           {% comment %}
-            <!-- download pdf -->
-            {% include "include/download_pdf.html" %}
-
-            <!-- Choose and Download Resume -->
-            {% include "include/index_widget.html" %}
-
-            <!-- Formatting -->
-            {% include "include/text_format.html" %}
-
-            <!-- Content Writer says -->
-            {% include "include/writer_view.html" %}
-            {% endcomment %}
 
             {% if page_obj.allow_comment %}
             <!-- comment box -->
             <div class="col-sm-12 comments-box mb-40 mt-40">
-               <a class="comments-links mb-40" href="#"> <span class="comments-icon mr-10"></span>23 Comments</a>
+               <a class="comments-links mb-40" id="total_comment"> <span class="comments-icon mr-10"></span>{{total_comment}} Comments</a>
               <div class="media mb-40">
                 <div class="media-left">
                   <a href="#">
@@ -83,6 +70,10 @@
                   </form>
                 </div>
               </div>
+              <div id="page_comment">
+              {{ comment_listing|safe|default:'' }}
+              </div>
+              {% comment %}
               {% for comment in comments %}
                      <div class="media mb-40">
                         <div class="media-left">
@@ -98,6 +89,7 @@
               {% endfor %}
 
               <a href="#" class="comments-links mb-40"> <span class="comments-icon mr-10"></span>Load more Comments</a>
+              {% endcomment %}
 
             </div>
             {% endif %}
@@ -108,20 +100,6 @@
         <!-- right content start -->
         <div class="col-right">
           {{ right_widgets|safe|default:'' }}
-          {% comment %}
-          <!-- shine banner -->
-          {% include "include/shine_ad.html" %} 
-
-          <!-- related -->
-          {% include "include/related_blog.html" %} 
-
-          <!-- request a call -->
-          {% include "include/request_call.html" %}
-          
-
-          <!-- free practice test -->
-          {% include "include/practice_test.html" %}
-          {% endcomment %}
 
         </div>
         <!-- right content end -->

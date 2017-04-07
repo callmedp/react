@@ -55,6 +55,7 @@ $(function() {
     $("#id_download").click(function(){
         $("#id_action").val(1);
         $("#downloadpdf_form").submit();
+        $('#id_download_model').modal('toggle');
     });
 
     $("#id_skip").click(function(){
@@ -129,13 +130,36 @@ $(function() {
 	            success: function(data, textStatus, jqXHR)
 	            {
 	            	alert('Your Query Submitted Successfully.');
+                    window.location.reload();
 	            },
 	            error: function (jqXHR, textStatus, errorThrown)
 	            {
-	                // window.location.reload(); 
+	                window.location.reload(); 
 	            }
 	        }); 
 		}  
+    });
+
+    $('#comment_load_more').click(function(){
+        var formData = $("#loadform").serialize();
+        console.log(formData);
+        $.ajax({
+            url : "/ajax/page/load-more/",
+            type: "GET",
+            data : formData,
+            success: function(data, textStatus, jqXHR)
+            {
+                data = JSON.parse(data);
+                $("#total_comment").remove();
+                $("#load_more").remove();
+                $("#page_comment").append(data.comment_list);
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert("Can't load more comments.");
+            }
+        }); 
+  
     });
 
 });

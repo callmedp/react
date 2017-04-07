@@ -35,6 +35,8 @@ MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 

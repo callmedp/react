@@ -1,25 +1,38 @@
+import datetime
+
 from django.views.generic import View, TemplateView
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.http import Http404
+from django.utils import timezone
 from django.middleware.csrf import get_token
 
 from .models import Page, Comment
+from .mixins import UploadInFile, LoadMoreMixin
 
 
-class CMSPageView(TemplateView):
+class CMSPageView(TemplateView, LoadMoreMixin):
     model = Page
     template_name = "cms/cms_page.html"
     page_obj = None
+    page = 1
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
+        self.page = request.GET.get('page', 1)
         try:
-            self.page_obj = Page.objects.get(slug=slug)
+            self.page_obj = Page.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
+        self.page_obj.total_view += 1
+        self.page_obj.save()
+        today = timezone.now()
+        today_date = datetime.date(day=1, month=today.month, year=today.year)
+        pg_counter, created = self.page_obj.pagecounter_set.get_or_create(count_period=today_date)
+        pg_counter.no_views += 1
+        pg_counter.save()
         context = super(CMSPageView, self).get(request, *args, **kwargs)
         return context
 
@@ -32,6 +45,13 @@ class CMSPageView(TemplateView):
             raise Http404
         if request.user.is_authenticated() and message and self.page_obj:
             Comment.objects.create(created_by=request.user, message=message, page=self.page_obj)
+            self.page_obj.comment_count += 1
+            self.page_obj.save()
+            today = timezone.now()
+            today_date = datetime.date(day=1, month=today.month, year=today.year)
+            pg_counter, created = self.page_obj.pagecounter_set.get_or_create(count_period=today_date)
+            pg_counter.comment_count += 1
+            pg_counter.save()
         return HttpResponseRedirect(
             reverse('cms:page', kwargs={'slug': slug}))
 
@@ -76,7 +96,8 @@ class CMSPageView(TemplateView):
                 context['right_widgets'] += render_to_string('include/' + right.widget.template_name, widget_context)
 
         comments = page_obj.comment_set.filter(is_published=True, is_removed=False)
-        context['comments'] = list(comments)
+        context['comment_listing'] = self.pagination_method(page=self.page, comment_list=comments, page_obj=self.page_obj)
+        context['total_comment'] = comments.count()
         context.update({'user': self.request.user})
         # if self.request.user.is_authenticated():
         #   comment_mod = page_obj.comment_set.filter(created_by=self.request.user,
@@ -99,7 +120,7 @@ class LoginToCommentView(View):
         slug = kwargs.get('slug', None)
         page_obj = None
         try:
-            page_obj = Page.objects.get(slug=slug)
+            page_obj = Page.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
         user_email = request.POST.get('user_email', None)
@@ -113,23 +134,58 @@ class LoginToCommentView(View):
             reverse('cms:page', kwargs={'slug': page_obj.slug}))
 
 
-class LeadManagementView(View):
+class LeadManagementView(View, UploadInFile):
     http_method_names = [u'post', ]
 
     def post(self, request, *args, **kwargs):
+        slug = kwargs.get('slug', None)
+        try:
+            Page.objects.get(slug=slug, is_active=True)
+        except Exception:
+            raise Http404
         data_dict = {}
-        print (request.POST)
-        pass
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        mobile = request.POST.get('mobile_number', '')
+        message = request.POST.get('message', '')
+        term_condition = request.POST.get('term_condition')
+
+        data_dict = {
+            "name": name,
+            "mobile": mobile,
+            "email": email,
+            "message": message,
+            "term_condition": term_condition
+        }
+        self.write_in_file(data_dict=data_dict)
+        return HttpResponse(status=200)
 
 
-class DownloadPdfView(View):
+class DownloadPdfView(View, UploadInFile):
     http_method_names = [u'post', ]
     
     def post(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
         page_obj = None
+        action_type = int(request.POST.get('action_type', '0'))
+        if action_type == 1:
+            name = request.POST.get('name', '')
+            email = request.POST.get('email', '')
+            mobile = request.POST.get('mobile_number', '')
+            message = request.POST.get('message', '')
+            term_condition = request.POST.get('term_condition')
+
+            data_dict = {
+                "name": name,
+                "mobile": mobile,
+                "email": email,
+                "message": message,
+                "term_condition": term_condition
+            }
+            self.write_in_file(data_dict=data_dict)
+
         try:
-            page_obj = Page.objects.get(slug=slug)
+            page_obj = Page.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
 
@@ -143,4 +199,14 @@ class DownloadPdfView(View):
             filename = slug + '.' + extn
             response = HttpResponse(pdf_obj.doc, content_type='text/plain')
             response['Content-Disposition'] = 'attachment; filename=%s' % filename
+            today = timezone.now()
+            today_date = datetime.date(day=1, month=today.month, year=today.year)
+            pg_counter, created = page_obj.pagecounter_set.get_or_create(count_period=today_date)
+            pg_counter.no_downloads += 1
+            pg_counter.save()
+            page_obj.total_download += 1
+            page_obj.save()
             return response
+
+        return HttpResponseRedirect(
+            reverse('cms:page', kwargs={'slug': page_obj.slug}))
