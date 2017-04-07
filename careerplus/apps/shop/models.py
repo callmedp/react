@@ -45,17 +45,10 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_category,
         blank=True, null=True)
-    parent = models.ForeignKey(
-        _('Main Parent'), 'self',
-        on_delete=models.SET_NULL,
-        related_name='parent',
-        null=True)
-    other_parent = models.ManyToManyField(
-        _('Other Parent'),
-        'self', symmetrical=False,
-        on_delete=models.SET_NULL,
-        related_name='other_parent',
-        null=True)
+    # parent = models.ForeignKey(
+    #     'self', _('Main Parent'), null=True, on_delete=models.SET_NULL)
+    # other_parent = models.ManyToManyField(
+    #     'self', _('Other Parent'), symmetrical=False, related_name='otherparent', blank=True,)
     active = models.BooleanField(default=False)
     display_order = models.IntegerField(default=1)
 
@@ -119,6 +112,16 @@ class Attribute(AbstractAutoDate):
         return self.name
 
 
+class Offer(AbstractAutoDate):
+    name = models.CharField(
+        _('Name'), max_length=100)
+    display_text = models.TextField(_('Display Text'), blank=True, default='')
+    active = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.name
+
+
 class Keyword(AbstractAutoDate):
     name = models.CharField(
         _('Name'), max_length=100,
@@ -128,18 +131,22 @@ class Keyword(AbstractAutoDate):
     def __str__(self):
         return self.name
 
+
 class Currency(AbstractAutoDate):
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Name of Currency'))
     value = models.PositiveIntegerField(
-        _('Value'), max_length=100,
-        help_text=_('Integer Value'))
+        _('Value'), help_text=_('Integer Value'))
     # country = models.ManytoManyField()
     exchange_rate = models.DecimalField(
-        _('Exchange'), default=0.0)
+        _('Exchange'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     offset = models.DecimalField(
-        _('Offset'), default=0.0)
+        _('Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     active = models.BooleanField(default=True)
     
     def __str__(self):
@@ -197,55 +204,60 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
 
 class Product(AbstractProduct, ModelMeta):
     avg_rating = models.DecimalField(
-        _('Average Rating'), default=2.5)
+        _('Average Rating'),
+        max_digits=8, decimal_places=2,
+        default=2.5)
     no_review = models.PositiveIntegerField(
         _('No. Of Review'), default=0)
     buy_count = models.PositiveIntegerField(
         _('Buy Count'), default=0)
     keywords = models.ManyToManyField(
-        _('Keywords'), Keyword,
-        on_delete=models.SET_NULL,
-        null=True)
+        Keyword, _('Keywords'),
+        blank=True)
     search_keywords = models.TextField(
         _('Search Keywords'), blank=True, default='')
 
-    siblings = models.ManyToManyField(
-        _('Sibling Products'), 'self',
-        on_delete=models.SET_NULL,
-        symmetrical=True,
-        related_name='siblings',
-        null=True)
-    related = models.ManyToManyField(
-        _('Related Products'), 'self',
-        on_delete=models.SET_NULL,
-        through='RelatedProduct',
-        null=True)
-    childs = models.ManyToManyField(
-        _('Child Products'), 'self',
-        on_delete=models.SET_NULL,
-        through='ChildProduct',
-        null=True)
-    categories = models.ManyToManyField(
-        _('Product Category'),
-        Category,
-        through='ProductCategory',
-        on_delete=models.SET_NULL,
-        null=True)
-    faqs = models.ManyToManyField(
-        _('Product FAQ'), FAQuestion,
-        through='FAQProduct',
-        on_delete=models.SET_NULL,
-        null=True)
-    attributes = models.ManyToManyField(
-        _('Product Attributes'), Attribute,
-        through='ProductAttribute',
-        on_delete=models.SET_NULL,
-        null=True)
-    prices = models.ManyToManyField(
-        _('Product Price'), Currency,
-        through='ProductPrice',
-        on_delete=models.SET_NULL,
-        null=True)
+    # siblings = models.ManyToManyField(
+    #     'self', _('Sibling Products'),
+    #     symmetrical=True, related_name='siblingproduct',
+    #     blank=True)
+    # related = models.ManyToManyField(
+    #     _('Related Products'), 'self',
+    #     on_delete=models.SET_NULL,
+    #     through='RelatedProduct',
+    #     null=True)
+    # childs = models.ManyToManyField(
+    #     _('Child Products'), 'self',
+    #     on_delete=models.SET_NULL,
+    #     through='ChildProduct',
+    #     null=True)
+    # categories = models.ManyToManyField(
+    #     _('Product Category'),
+    #     Category,
+    #     through='ProductCategory',
+    #     on_delete=models.SET_NULL,
+    #     null=True)
+    # offers = models.ManyToManyField(
+    #     _('Product Category'),
+    #     Offer,
+    #     through='ProductOffer',
+    #     on_delete=models.SET_NULL,
+    #     null=True)
+    # faqs = models.ManyToManyField(
+    #     _('Product FAQ'), FAQuestion,
+    #     through='FAQProduct',
+    #     on_delete=models.SET_NULL,
+    #     null=True)
+    # attributes = models.ManyToManyField(
+    #     _('Product Attributes'), Attribute,
+    #     through='ProductAttribute',
+    #     on_delete=models.SET_NULL,
+    #     null=True)
+    # prices = models.ManyToManyField(
+    #     _('Product Price'), Currency,
+    #     through='ProductPrice',
+    #     on_delete=models.SET_NULL,
+    #     null=True)
 
     active = models.BooleanField(default=False)
     _metadata_default = ModelMeta._metadata_default.copy()
@@ -287,11 +299,11 @@ class Product(AbstractProduct, ModelMeta):
 
 
 class ProductArchive(AbstractProduct):
-    originalproduct = models.ForeignKey(
-        _('Original Product'), Product,
-        on_delete=models.SET_NULL,
-        related_name='originalproduct',
-        null=True)
+    # originalproduct = models.ForeignKey(
+    #     _('Original Product'), Product,
+    #     on_delete=models.SET_NULL,
+    #     related_name='originalproduct',
+    #     null=True)
     parent = models.IntegerField(
         _('Parent'),
         blank=True,
@@ -328,11 +340,11 @@ class ProductArchive(AbstractProduct):
 
 
 class ProductScreen(AbstractProduct):
-    linkedproduct = models.ForeignKey(
-        _('Linked Product'), Product,
-        on_delete=models.SET_NULL,
-        related_name='linkedproduct',
-        null=True)
+    # linkedproduct = models.ForeignKey(
+    #     _('Linked Product'), Product,
+    #     on_delete=models.SET_NULL,
+    #     related_name='linkedproduct',
+    #     null=True)
     parent = models.IntegerField(
         _('Parent'),
         blank=True,
@@ -369,18 +381,22 @@ class ProductScreen(AbstractProduct):
 
 
 class RelatedProduct(AbstractAutoDate):
-    primary = models.ForeignKey(
-        _('Primary'),
-        Product, on_delete=models.SET_CASCADE)
-    secondary = models.ForeignKey(
-        _('Secondary'),
-        Product, on_delete=models.SET_CASCADE)
+    # primary = models.ForeignKey(
+    #     _('Primary'),
+    #     Product, on_delete=models.SET_CASCADE)
+    # secondary = models.ForeignKey(
+    #     _('Secondary'),
+    #     Product, on_delete=models.SET_CASCADE)
     type_relation = models.PositiveSmallIntegerField(
         _('Relation'), choices=RELATION_CHOICES, default=0)
     price_offset = models.DecimalField(
-        _('Price Offset'), default=0.0)
+        _('Price Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     price_offset_percent = models.DecimalField(
-        _('% Offset'), default=0.0)
+        _('% Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -388,16 +404,36 @@ class RelatedProduct(AbstractAutoDate):
 
 
 class ChildProduct(AbstractAutoDate):
-    parent = models.ForeignKey(
-        _('Primary'),
-        Product, on_delete=models.SET_CASCADE)
-    child = models.ForeignKey(
-        _('Secondary'),
-        Product, on_delete=models.SET_CASCADE)
+    # parent = models.ForeignKey(
+    #     _('Primary'),
+    #     Product, on_delete=models.SET_CASCADE)
+    # child = models.ForeignKey(
+    #     _('Secondary'),
+    #     Product, on_delete=models.SET_CASCADE)
     price_offset = models.DecimalField(
-        _('Price Offset'), default=0.0)
+        _('Price Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     price_offset_percent = models.DecimalField(
-        _('% Offset'), default=0.0)
+        _('% Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.pk
+
+
+class ProductOffer(AbstractAutoDate):
+    # offer = models.ForeignKey(
+    #     _('Offer'),
+    #     Category, on_delete=models.SET_CASCADE)
+    # product = models.ForeignKey(
+    #     _('Product'),
+    #     Product, on_delete=models.SET_CASCADE)
+    ordering = models.PositiveIntegerField(
+        _('Ordering'),
+        default=1)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -405,12 +441,12 @@ class ChildProduct(AbstractAutoDate):
 
 
 class ProductCategory(AbstractAutoDate):
-    category = models.ForeignKey(
-        _('Category'),
-        Category, on_delete=models.SET_CASCADE)
-    product = models.ForeignKey(
-        _('Product'),
-        Product, on_delete=models.SET_CASCADE)
+    # category = models.ForeignKey(
+    #     _('Category'),
+    #     Category, on_delete=models.SET_CASCADE)
+    # product = models.ForeignKey(
+    #     _('Product'),
+    #     Product, on_delete=models.SET_CASCADE)
     is_main = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
 
@@ -419,12 +455,12 @@ class ProductCategory(AbstractAutoDate):
 
 
 class FAQProduct(AbstractAutoDate):
-    question = models.ForeignKey(
-        _('FAQuestion'),
-        FAQuestion, on_delete=models.SET_CASCADE)
-    product = models.ForeignKey(
-        _('Product'),
-        Product, on_delete=models.SET_CASCADE)
+    # question = models.ForeignKey(
+    #     _('FAQuestion'),
+    #     FAQuestion, on_delete=models.SET_CASCADE)
+    # product = models.ForeignKey(
+    #     _('Product'),
+    #     Product, on_delete=models.SET_CASCADE)
     ordering = models.PositiveIntegerField(
         _('Ordering'),
         default=1)
@@ -435,12 +471,12 @@ class FAQProduct(AbstractAutoDate):
 
 
 class ProductAttribute(AbstractAutoDate):
-    attribute = models.ForeignKey(
-        _('Attribute'),
-        Attribute, on_delete=models.SET_CASCADE)
-    product = models.ForeignKey(
-        _('Product'),
-        Product, on_delete=models.SET_CASCADE)
+    # attribute = models.ForeignKey(
+    #     _('Attribute'),
+    #     Attribute, on_delete=models.SET_CASCADE)
+    # product = models.ForeignKey(
+    #     _('Product'),
+    #     Product, on_delete=models.SET_CASCADE)
     value_text = models.CharField(
         _('Value Text'), max_length=100,
         blank=True)
@@ -455,7 +491,9 @@ class ProductAttribute(AbstractAutoDate):
     value_date = models.DateTimeField(
         _('Value Date'), blank=True, null=True)
     value_decimal = models.DecimalField(
-        _('Value Date'), default=0.0)
+        _('Value Date'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     value_ltext = models.TextField(
         _('Value Large Text'), blank=True, default='')
     
@@ -466,17 +504,22 @@ class ProductAttribute(AbstractAutoDate):
 
 
 class ProductPrice(AbstractAutoDate):
-    currency = models.ForeignKey(
-        _('Currency'),
-        Currency, on_delete=models.SET_CASCADE)
-    product = models.ForeignKey(
-        _('Product'),
-        Product, on_delete=models.SET_CASCADE)
+    # currency = models.ForeignKey(
+    #     _('Currency'),
+    #     Currency, on_delete=models.SET_CASCADE)
+    # product = models.ForeignKey(
+    #     _('Product'),
+    #     Product, on_delete=models.SET_CASCADE)
     value = models.DecimalField(
-        _('Value Price'), default=0.0)
+        _('Value Price'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     fake_value = models.DecimalField(
-        _('Value Fake Price'), default=0.0)
+        _('Value Fake Price'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
     active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.pk
+

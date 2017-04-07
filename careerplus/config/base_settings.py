@@ -49,6 +49,8 @@ LOCAL_APPS = [
     'design',
     'faq',
     'seo',
+    'coupon',
+    'shop'
 
 
 ]
