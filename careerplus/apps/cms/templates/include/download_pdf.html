@@ -1,4 +1,7 @@
 {% load static %}
+<style type="text/css">
+    .hide_error{display: none !important;}
+</style>
 <div class="download-pdf mb-40">
    {% if download_doc %}
 	  <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm3">
@@ -26,25 +29,28 @@
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="user_name" name="name" aria-describedby="nameHelp" placeholder="Name">
-            <label class="error"></label>
+            <span class="error"></span>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="id_email" name="email" aria-describedby="emailHelp" placeholder="Email">
+            <span class="error"></span>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="id_mobile" aria-describedby="emailHelp" name="mobile_number" placeholder="Mobile">
+            <span class="error"></span>
           </div>
           <div class="form-check">
             <label class="form-check-label">
               <input type="checkbox" name="term_condition" class="form-check-input">
               By downloading this sample, you hereby accept our <a href="#">Terms & Conditions</a>.
+              <span class="error"></span>
             </label>
           </div>
           <div style='display:none'>
             <input type='hidden' id="id_action" name='action_type' />
           </div>
-          <button type="button" id="id_download" class="btn btn-primary submit">Download</button>
-          <small class="form-text text-muted text-center"><a id="id_skip" href="#" data-toggle="modal" data-dismiss="modal">Skip</a></small>
+          <button type="button" formnovalidate="formnovalidate" id="id_download" class="btn btn-primary submit">Download</button>
+          <small class="form-text text-muted text-center"><a id="id_skip" href="#" data-toggle="modal" formnovalidate="formnovalidate" data-dismiss="modal">Skip</a></small>
         </form>
       </div>
     </div>
