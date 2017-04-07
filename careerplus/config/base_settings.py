@@ -43,6 +43,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
+    'meta',
 ]
 
 # Apps specific for this project go here.
@@ -50,6 +51,7 @@ LOCAL_APPS = [
     'users',
     'cms',
     'design',
+    'seo',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
