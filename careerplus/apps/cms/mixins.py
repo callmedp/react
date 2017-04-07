@@ -5,6 +5,7 @@ import logging
 from django.utils import timezone
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.middleware.csrf import get_token
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -51,10 +52,11 @@ class UploadInFile(object):
 class LoadMoreMixin(object):
 	def pagination_method(self, page, comment_list, page_obj):
 		paginator = Paginator(comment_list, 1)
+		csrf_token = get_token(self.request)
 		try:
 			comments = paginator.page(page)
 		except PageNotAnInteger:
 			comments = paginator.page(1)
 		except EmptyPage:
 			comments = paginator.page(paginator.num_pages)  # If page is out of range (e.g. 9999), deliver last page of results.
-		return render_to_string('include/load_comment.html', {'comments': comments, "page_obj": page_obj})
+		return render_to_string('include/load_comment.html', {'comments': comments, "page_obj": page_obj, "csrf_token": csrf_token})

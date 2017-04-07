@@ -17,6 +17,9 @@
 {% if comments.has_next %}
 <div id="load_more">
 <form role="form" id="loadform">
+    <div style='display:none'>
+        <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
+    </div>
     <input type="hidden" name="page" value="{{comments.next_page_number}}">
     <input type="hidden" name="slug" value="{{page_obj.slug}}">
 </form>

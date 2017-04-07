@@ -139,13 +139,13 @@ $(function() {
 	        }); 
 		}  
     });
-
-    $('#comment_load_more').click(function(){
+    
+    $(document).on('click', '#comment_load_more', function(event) {
         var formData = $("#loadform").serialize();
         console.log(formData);
         $.ajax({
             url : "/ajax/page/load-more/",
-            type: "GET",
+            type: "POST",
             data : formData,
             success: function(data, textStatus, jqXHR)
             {

@@ -9,10 +9,10 @@ from cms.mixins import LoadMoreMixin
 
 class AjaxCommentLoadMoreView(View, LoadMoreMixin):
 
-	def get(self, request, *args, **kwargs):
+	def post(self, request, *args, **kwargs):
 		if request.is_ajax():
-			slug = request.GET.get('slug', '')
-			page = int(request.GET.get('page', 1))
+			slug = request.POST.get('slug', '')
+			page = int(request.POST.get('page', 1))
 			try:
 				page_obj = Page.objects.get(slug=slug, is_active=True)
 				comments = page_obj.comment_set.filter(is_published=True,
