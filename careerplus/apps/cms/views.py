@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.http import Http404
 from django.utils import timezone
+from django.conf import settings
 from django.middleware.csrf import get_token
 
 from .models import Page, Comment
@@ -80,8 +81,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
                 'csrf_token_value': csrf_token_value
             })
             widget_context.update(left.widget.get_widget_data())
-            if left.widget.template_name:
-                context['left_widgets'] += render_to_string('include/' + left.widget.template_name, widget_context)
+            context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context)
 
         for right in right_widgets:
             widget_context = {}
@@ -92,13 +92,13 @@ class CMSPageView(TemplateView, LoadMoreMixin):
                 'csrf_token_value': csrf_token_value
             })
             widget_context.update(right.widget.get_widget_data())
-            if right.widget.template_name:
-                context['right_widgets'] += render_to_string('include/' + right.widget.template_name, widget_context)
+            context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
 
         comments = page_obj.comment_set.filter(is_published=True, is_removed=False)
         context['comment_listing'] = self.pagination_method(page=self.page, comment_list=comments, page_obj=self.page_obj)
         context['total_comment'] = comments.count()
         context.update({'user': self.request.user})
+        context.update({"hostname": settings.HOST_NAME})
         # if self.request.user.is_authenticated():
         #   comment_mod = page_obj.comment_set.filter(created_by=self.request.user,
         #       is_published=False, is_removed=False)

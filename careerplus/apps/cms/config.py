@@ -9,14 +9,14 @@ STATUS = (
 )
 
 WIDGET_CHOICES = (
-	(3, 'Text article'),
-	(4, 'Resume download'),
-	(6, 'Related blog'),
-	(7, 'Testimonial'),
-	(10, 'Expert section'),
-	(12, 'Call Back'),
-	(15, 'AdLink'),
-	(16, 'Indexer Widget'),
+	(1, 'Text article'),
+	(2, 'Format download'),
+	(3, 'Related blog'),
+	(4, 'Practice Test'),
+	(5, 'Expert section'),
+	(6, 'Call Back'),
+	(7, 'BannerLink'),
+	(8, 'Indexer Widget'),
 )
 
 SECTION = (

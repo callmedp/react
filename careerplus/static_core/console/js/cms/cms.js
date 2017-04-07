@@ -1,15 +1,6 @@
 $(function() {
 
     /*$("#downloadpdf_form").validate({
-                
-        submitHandler:function (form) {
-
-            form.submit();
-        },
-        invalidHandler: function(event, validator){
-            
-            
-        },
         rules:{
                 name:{
                     maxlength: 100,
@@ -24,6 +15,10 @@ $(function() {
                     minlength: 5,
                     maxlength: 15,                    
                 },
+                term_condition:{
+                    required: true,
+                },
+
             },
         messages:{
                 name:{
@@ -139,7 +134,7 @@ $(function() {
 	        }); 
 		}  
     });
-    
+
     $(document).on('click', '#comment_load_more', function(event) {
         var formData = $("#loadform").serialize();
         console.log(formData);

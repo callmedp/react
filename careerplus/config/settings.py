@@ -45,3 +45,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+HOST_NAME = 'http://127.0.0.1:8000'

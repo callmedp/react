@@ -25,9 +25,9 @@
     <section class="container">
         <div class="social-login share-mg">
             <span class="share">Share on</span>
-            <a class="facebook" href="#"></a>
-            <a class="linkedin" href="#"></a>
-            <a class="gplus" href="#"></a>
+            <a class="facebook" href="http://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-slug="{{page_obj.slug}}"></a>
+            <a class="linkedin" target="blank" href="http://www.linkedin.com/shareArticle?mini=true&title={{page_obj.title}}& summary={{page_obj.discription}}&url={{hostname}}{{page_obj.get_absolute_url}}" page-slug="{{page_obj.slug}}"></a>
+            <a class="gplus" page-slug="{{page_obj.slug}}" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}"></a>
         </div>
         <div class="page-header">
           <h1>{{page_heading}}</h1>
@@ -73,24 +73,7 @@
               <div id="page_comment">
               {{ comment_listing|safe|default:'' }}
               </div>
-              {% comment %}
-              {% for comment in comments %}
-                     <div class="media mb-40">
-                        <div class="media-left">
-                          <!--a href="#"-->
-                            <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
-                          <!--/a-->
-                        </div>
-                        <div class="media-body">
-                          {{comment.message}}
-                        <span class="time">{{ comment.created_on|naturaltime }}</span>
-                        </div>
-                      </div>
-              {% endfor %}
-
-              <a href="#" class="comments-links mb-40"> <span class="comments-icon mr-10"></span>Load more Comments</a>
-              {% endcomment %}
-
+              
             </div>
             {% endif %}
 

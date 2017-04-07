@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -95,6 +96,24 @@ class Widget(AbstractCommonModel):
 
 		return data_dict
 
+	def get_template(self):
+		if self.widget_type == 1:
+			return 'text_format.html'
+		elif self.widget_type == 2:
+			return 'download_pdf.html'
+		elif self.widget_type == 3:
+			return 'related_blog.html'
+		elif self.widget_type == 4:
+			return 'practice_test.html'
+		elif self.widget_type == 5:
+			return 'writer_view.html'
+		elif self.widget_type == 6:
+			return 'request_call.html'
+		elif self.widget_type == 7:
+			return 'shine_ad.html'
+		elif self.widget_type == 8:
+			return 'index_widget.html'
+
 
 class Page(AbstractCommonModel):
 	title = models.CharField(max_length=255, null=False, blank=False,
@@ -125,6 +144,9 @@ class Page(AbstractCommonModel):
 
 	def __str__(self):
 		return str(self.id) + ' ' + self.title
+
+	def get_absolute_url(self):
+		return reverse('cms:page', kwargs={'slug': self.slug})
 
 
 class PageWidget(AbstractCommonModel):
