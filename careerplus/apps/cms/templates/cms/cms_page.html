@@ -10,6 +10,7 @@
         {{block.super}}
         
         <link type="text/css" href="{% static 'console/css/cms/cms.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'console/css/cms/extra.css' %}" rel="stylesheet">
     {% endblock css %}
     
     {% block breadcrumb %}
@@ -59,7 +60,7 @@
                   {% csrf_token %}
                     <div class="form-group">
                       <textarea class="form-control" name="message" rows="3" placeholder=""></textarea>
-                      <span class="error"></span>
+                      <span class="error position-error"></span>
                     </div>
                     {% if user.is_authenticated %} 
                        <input type='submit' class="submit-button" value="Comments">

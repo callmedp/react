@@ -19,7 +19,7 @@ class UploadInFile(object):
 			path = data_dict.get('path', '').strip()
 			message = data_dict.get('message', '')
 			today = timezone.now()
-			filename = today.strftime("%Y-%d-%m") + '_lead.csv'
+			filename = today.strftime("%Y-%m-%d") + '_lead.csv'
 			file_dir = settings.LEAD_UPLOAD
 			file_path = file_dir + filename
 			if os.path.exists(file_path):
