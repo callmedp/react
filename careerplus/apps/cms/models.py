@@ -3,9 +3,10 @@ from django.conf import settings
 from django.urls import reverse
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from meta.models import ModelMeta
 
 from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
-# Create your models here.
+from seo.models import AbstractSEO
 
 
 class AbstractCommonModel(models.Model):
@@ -51,7 +52,6 @@ class IndexColumn(models.Model):
 class Widget(AbstractCommonModel):
 	widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
 	heading = models.CharField(max_length=1024, null=True, blank=True)
-	template_name = models.CharField(max_length=1024, null=True, blank=True)
 	redirect_url = models.URLField(null=True, blank=True,
 		verbose_name='Re-directing Url',
     	help_text='Append http://.')
@@ -115,9 +115,9 @@ class Widget(AbstractCommonModel):
 			return 'index_widget.html'
 
 
-class Page(AbstractCommonModel):
-	title = models.CharField(max_length=255, null=False, blank=False,
-		verbose_name="Title", help_text='The H1 heading for the page.')
+class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
+	name = models.CharField(max_length=255, null=False, blank=False,
+		verbose_name="Name", help_text='The H1 heading for the page.')
 
 	parent = models.ForeignKey("self", verbose_name="Parent",
 		null=True, blank=True)
@@ -126,8 +126,6 @@ class Page(AbstractCommonModel):
 
 	widgets = models.ManyToManyField(Widget, through='PageWidget',
         verbose_name="Widgets", blank=True)
-
-	url = models.URLField(blank=True, null=True)
 
 	total_view = models.PositiveIntegerField(default=0)
 	total_download = models.PositiveIntegerField(default=0)
@@ -142,8 +140,37 @@ class Page(AbstractCommonModel):
 	publish_date = models.DateTimeField(null=True, blank=True)
 	expiry_date = models.DateTimeField(null=True, blank=True)
 
+	_metadata_default = ModelMeta._metadata_default.copy()
+	_metadata_default['locale'] = 'dummy_locale'
+
+	_metadata = {
+        'title': 'name',
+        'description': 'get_keywords',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'publish_date',
+        'modified_time': 'last_modified_on',
+        'url': 'get_full_url'
+    }
+
 	def __str__(self):
 		return str(self.id) + ' ' + self.title
+
+	def get_title(self):
+		title = self.title
+		if not self.title:
+			title = self.name
+		return title.strip()
+
+	def get_keywords(self):
+		return self.meta_keywords.strip().split(",")
+
+	def get_description(self):
+		description = self.meta_desc
+		return description.strip()
+
+	def get_full_url(self):
+		return self.build_absolute_uri(self.get_absolute_url())
 
 	def get_absolute_url(self):
 		return reverse('cms:page', kwargs={'slug': self.slug})

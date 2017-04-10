@@ -64,7 +64,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         context['left_widgets'] = ''
         context['right_widgets'] = ''
         context['page_obj'] = page_obj
-        context['page_heading'] = page_obj.title
+        context['page_heading'] = page_obj.name
         download_docs = page_obj.document_set.filter(is_active=True)
         csrf_token_value = get_token(self.request)
         if download_docs.exists():
@@ -99,6 +99,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         context['total_comment'] = comments.count()
         context.update({'user': self.request.user})
         context.update({"hostname": settings.HOST_NAME})
+        context['meta'] = page_obj.as_meta(self.request)
         # if self.request.user.is_authenticated():
         #   comment_mod = page_obj.comment_set.filter(created_by=self.request.user,
         #       is_published=False, is_removed=False)

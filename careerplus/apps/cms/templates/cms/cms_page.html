@@ -1,14 +1,17 @@
 {% extends "basic/base.html" %}
 {% load static %}
 {% load humanize %}
-    
+    {% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+    {%  endblock meta_tags %}
+
     {% block title %}
     CMS - Shine Learning
     {% endblock title %}
     
     {% block css %}
-        {{block.super}}
-        
+        {{block.super}}        
         <link type="text/css" href="{% static 'console/css/cms/cms.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'console/css/cms/extra.css' %}" rel="stylesheet">
     {% endblock css %}
@@ -26,9 +29,9 @@
     <section class="container">
         <div class="social-login share-mg">
             <span class="share">Share on</span>
-            <a class="facebook" target="blank" href="http://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-slug="{{page_obj.slug}}"></a>
-            <a class="linkedin" target="blank" href="http://www.linkedin.com/shareArticle?mini=true&title={{page_obj.title}}& summary={{page_obj.discription}}&url={{hostname}}{{page_obj.get_absolute_url}}" page-slug="{{page_obj.slug}}"></a>
-            <a class="gplus" page-slug="{{page_obj.slug}}" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}"></a>
+            <a id="cms_share" class="facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}"></a>
+            <a id="cms_share" class="linkedin" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&title={{page_obj.title}}& summary={{page_obj.discription}}&url={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}"></a>
+            <a id="cms_share" class="gplus" target="_blank" page-id="{{page_obj.id}}" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}"></a>
         </div>
         <div class="page-header">
           <h1>{{page_heading}}</h1>

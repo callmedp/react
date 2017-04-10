@@ -166,4 +166,21 @@ $(function() {
   
     });
 
+
+    $(document).on('click', '#cms_share', function(event) {
+        // console.log('click');
+        // console.log($(this).attr('page-id'));
+        $.ajax({
+            url: "/ajax/page/cms-share/",
+            type: 'GET',
+            data: {
+              page_id: $(this).attr('page-id'),
+            },
+            success: function(data) {
+                console.log('success');
+            }
+        });
+        
+    });
+
 });

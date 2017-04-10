@@ -56,7 +56,7 @@ class AbstractSEO(models.Model):
             slug = original_slug
             suffix = '%s%s' % (slug_separator, counter)
             if slug_len and len(slug) + len(suffix) > slug_len:
-                slug = slug[:slug_len-len(suffix)]
+                slug = slug[:slug_len - len(suffix)]
             slug = '%s%s' % (slug, suffix)
             counter += 1
 

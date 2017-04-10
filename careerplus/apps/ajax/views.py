@@ -1,8 +1,11 @@
 import json
 import logging
+import datetime
 
 from django.views.generic import View
 from django.http import HttpResponse
+from django.utils import timezone
+
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
 
@@ -22,3 +25,24 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
 				return HttpResponse(json.dumps({'comment_list': comment_list}))
 			except Exception as e:
 				logging.getLogger('error_log').error("%s " % str(e))
+
+
+class CmsShareView(View):
+	
+	def get(self, request, *args, **kwargs):
+		if request.is_ajax():
+			page_id = request.GET.get('page_id')
+			try:
+				obj = Page.objects.get(id=page_id)
+				obj.total_share += 1
+				obj.save()
+				today = timezone.now()
+				today_date = datetime.date(day=1, month=today.month, year=today.year)
+				pg_counter, created = self.page_obj.pagecounter_set.get_or_create(count_period=today_date)
+				pg_counter.no_shares += 1
+				pg_counter.save()
+
+			except:
+				pass
+			data = ["Success"]
+			return HttpResponse(json.dumps(list(data)), content_type="application/json")

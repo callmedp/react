@@ -26,7 +26,7 @@ class IndexerWidgetAdmin(admin.ModelAdmin):
 
 
 class WidgetAdmin(admin.ModelAdmin):
-	list_display = ('id', 'widget_type', 'template_name', 'is_active',
+	list_display = ('id', 'widget_type', 'is_active',
 		'is_external', 'is_pop_up', 'heading', 'redirect_url')
 	list_filter = ('widget_type', )
 	search_fields = ('heading', 'id')
@@ -41,10 +41,10 @@ class DocumentAdminInline(admin.TabularInline):
 
 
 class PageAdmin(admin.ModelAdmin):
-	list_display = ('id', 'title', 'parent', 'slug',
+	list_display = ('id', 'name', 'parent', 'slug',
 		'total_view', 'total_download', 'total_share', 'is_active', 'allow_comment',
 		'comment_count', 'publish_date')
-	search_fields = ('id', 'title', 'slug')
+	search_fields = ('id', 'name', 'slug')
 	filter_horizontal = ('widgets', )
 	raw_id_fields = ('parent', 'created_by', 'last_modified_by')
 	inlines = [DocumentAdminInline]
