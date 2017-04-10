@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Admin Console </title>
+
+    <!-- Bootstrap -->
+    <link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
+    <!-- Font Awesome -->
+    <link href="{% static "/packages/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet" type="text/css">
+    <!-- NProgress -->
+    <link href="{% static "/packages/nprogress/nprogress.css"  %}" rel="stylesheet" type="text/css">
+    <!-- Animate.css -->
+    <link href="{% static "/packages/animate.css/animate.min.css"  %}" rel="stylesheet" type="text/css">
+    
+    <!-- Custom Theme Style -->
+    <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+      .login-error .js-error{
+          display:block; /*opacity: 1 !important;*/
+          color: rgba(255, 0, 0, 0.8);
+        }
+      .js-error{
+        display:none;
+        /*opacity: 0;*/
+        float: left;
+      }
+      .login-error .formfield{
+        box-shadow: 0 1px 0 #fff,0 -2px 5px rgba(244, 67, 54, 0.35) inset !important;
+        border: 1px solid #F44336 !important;
+        color: #F44336 !important;
+      }
+        
+    </style>
+  </head>
+
+  <body class="login">
+    <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
+
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+          <section class="login_content">
+            <form id="loginform" method="post" ".">
+              <h1>Console Login </h1>
+              {% if messages %}
+                    {% for message in messages %}
+
+                    <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                    {{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+              {% csrf_token %}
+              <div>
+                <input type="text" class="form-control formfield" placeholder="Username"  name="username" 
+                maxlength="60"/>
+                <p class="js-error"></p>
+              </div>
+              <div>
+                <input type="password" class="form-control formfield" placeholder="Password" name="password" maxlength="20" />
+                <p class="js-error"></p>
+              </div>
+              <div class="clearfix"></div>
+              <div>
+                <button class="btn btn-default submit" type="submit" >Log in</button>
+                <a class="reset_pass" href="#">Forgot your password?</a>
+              </div>
+
+              
+              {% comment %}
+                <div class="separator">
+                <p class="change_link">New to site?
+                  <a href="#signup" class="to_register"> Create Account </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+                
+              </div>
+              {% endcomment %}
+        
+            </form>
+          </section>
+        </div>
+      {% comment %}
+          
+        <div id="register" class="animate form registration_form">
+          <section class="login_content">
+            <form>
+              <h1>Create Account</h1>
+              <div>
+                <input type="text" class="form-control" placeholder="Username" required="" />
+              </div>
+              <div>
+                <input type="email" class="form-control" placeholder="Email" required="" />
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="Password" required="" />
+              </div>
+              <div>
+                <a class="btn btn-default submit" href="index.html">Submit</a>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">Already a member ?
+                  <a href="#signin" class="to_register"> Log in </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
+                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+        {% endcomment %}
+        
+      </div>
+    </div>
+    <!-- jQuery -->
+    <script type="text/javascript" src="{% static "packages/jquery/dist/jquery.min.js" %}"></script>
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="{% static "packages/bootstrap/js/bootstrap.min.js" %}"></script>
+    <!-- Validate -->
+    <script type="text/javascript" src="{% static "packages/jquery-validate/js/jquery.validate.min.js" %}"></script>
+    
+    
+    <script type="text/javascript">
+    $(function(){
+      $("#loginform").validate({
+    
+              rules:{
+                  username:{
+                          required:true,
+                          maxlength: 60,
+                      },
+                  password:{
+                          required:true,
+                          maxlength: 20,
+                      },
+                      
+                  },
+              messages:{
+                  username:{
+                          required: "Please enter Username",
+                          maxlength: "At most 60 characters"
+                      },
+                  password:{
+                          required: "Please enter Password",
+                          maxlength: "At most 20 characters"
+                      },
+                  
+              },
+              highlight:function(element, errorClass) {
+                   $(element).parent().addClass('login-error');
+              },
+              unhighlight:function(element, errorClass) {
+                  $(element).parent().removeClass('login-error');
+              },
+              errorPlacement: function(error, element) {
+                element.siblings('.js-error').html(error.text());
+               
+             }
+
+          });
+        });
+
+
+    </script>
+    
+
+    
+  </body>
+</html>
+

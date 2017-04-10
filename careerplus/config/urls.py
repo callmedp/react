@@ -21,6 +21,7 @@ urlpatterns = []
 
 urlpatterns += [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^console/', include('console.urls', namespace='console')),
     url(r'^design/', include('design.urls', namespace='design')),
 
 ] + static(
