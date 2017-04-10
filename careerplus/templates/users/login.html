@@ -1,0 +1,106 @@
+{% extends "basic/base.html" %}
+{% block title %}
+        Login
+{% endblock title %}
+{% block css_section %}
+        {{block.super}}
+{% endblock css_section %}
+{% block pagecontainer %}
+
+
+<div class="row">
+        <div class="col-lg-12">
+            {% if messages %}
+                {% for message in messages %}
+                <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!-- /.col-lg-12 -->
+</div>
+
+<div class="container">
+    <header class="login-bg">
+      <div class="login-bg-txt">
+        <figure class="login-icon1"></figure>
+          <strong>1 Lacs+</strong>
+            Satisfied users
+      </div>
+      <div class="login-bg-txt">
+        <figure class="login-icon2"></figure>
+          <strong>300+</strong>
+            Courses
+      </div>
+      <div class="login-bg-txt">
+        <figure class="login-icon3"></figure>
+          <strong>500+</strong>
+            Professional resumes delivered
+      </div>
+    </header>
+</div>
+      
+    
+
+<div class="register">
+<h1>Login</h1>
+  <form action="." method="post">
+  {% csrf_token %}
+    {% for field in form %}
+      {% if field.errors %}
+          <div class="form-group error">  
+              {{ field }}
+              <p class="text-danger">
+                  {% for error in  field.errors %}{{ error }}{% endfor %}
+              </p>
+              </div>
+          </div>
+      {% else %}
+          <div class="form-group">
+              {{ field }}
+          </div>
+      {% endif %}
+    {% endfor %}
+    <div class="form-check">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" name="remember_me"
+        value="Remember me">Remember me
+      </label>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
+    <div class="social-login">
+      <span>or login with</span>
+      <a class="facebook" href="#"></a>
+      <a class="twitter" href="#"></a>
+      <a class="gplus" href="#"></a>
+    </div>
+    <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'create-user' %}">Register Now</a></small>
+  </form>
+</div>
+<!-- footer -->
+<footer>
+    <div class="container">
+      <article>
+        <strong>Disclaimer</strong>
+Careerplus is the Trade Mark of HT Media and the services associated with it are only provided through the website Shine.com. You are advised to be cautious of calls/emails asking for payment from other web sites that claim to offer similar services under the name of careeerplus.shine.com. We have no associates or agents other than the partner sites that have been specifically named on the homepage of the website careerplus.shine.com Any specific advice or replies to queries in any part of the Site is/are the personal opinion of such experts/consultants/persons and are not subscribed to by this Site. HT Media neither endorses nor offers any judgement or warranty and accepts no responsibility or liability for the authenticity/availability of any of the goods/services/or for any damage, loss or harm, direct or consequential or any violation of local or international laws that may be incurred by your visit and/or transaction/s on these sites. We also recommend that you visit Security Guidelines and Terms and Conditions before availing the services.The information mentioned about salary increase is based on the internal research by the experts in the relevant domain in HT Media Limited. The said information is merely illustration of probability in increase and no guarantee is being provided by the company for the same. User agree and undertakes to comply with additional Terms and conditions, <a href="#">click here</a>
+      </article>
+      <div class="secure-payment">
+        <figure class="secure-icon"></figure>
+        <span class="secure-text"><strong>100% Secure Payment</strong>
+        All major credit & debit cards accepted</span>
+      </div>
+      <div class="payment-options">
+        <figure class="payment-option-txt">Payment options</figure>
+        <span class="payment-option-bg"></span>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <div class="container">
+        <a href="#">About Us</a> <a href="#">Partners</a> <a href="#">Privacy Policy</a> <a href="#">Terms & Condition</a> <a href="#">Contact us</a>
+        <span>Copyright © 2017 HT Media Limited.</span>
+      </div>
+    </div>
+    
+</footer>
+{% endblock pagecontainer %}

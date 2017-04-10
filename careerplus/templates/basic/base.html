@@ -1,0 +1,66 @@
+{% spaceless %}
+{% load static %}
+    <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            {% block meta_tags %}
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                
+            {% endblock meta_tags %}
+            <title>{% block title %}Register{%endblock title%}</title>
+
+            {% block css_section %}
+                <!-- Bootstrap Core CSS -->
+                <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+                <!-- Custom CSS -->
+                <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+
+                <!-- Custom Fonts -->
+                <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+                
+                <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+                <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+                <!--[if lt IE 9]>
+                    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+                <![endif]-->
+            {% endblock css_section %}
+                
+        </head>
+
+        <body>
+        {% block maincontainer %}
+            
+            <div id="wrapper">
+
+                {% include "basic/navigation.html" %}
+
+                    <!-- Page Content -->
+                    <div id="page-wrapper">
+                        {% block pagecontainer %}
+                        
+                        {% endblock pagecontainer %}
+            
+                    </div>
+                    <!-- /#page-wrapper -->
+            </div>
+            <!-- /#wrapper -->
+        {% endblock maincontainer %}
+        
+        {% block js_section %}
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+            <script src="{% static 'js/bootstrap.min.js' %}"></script>
+            <!-- Bootstrap Core JavaScript -->
+
+            <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+        
+        {% endblock js_section %}
+        
+        </body>
+
+    </html>
+{% endspaceless %}

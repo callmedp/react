@@ -47,10 +47,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
     name = models.CharField(_('Name'), max_length=100)
+    username = models.CharField(
+        max_length=200, blank=True, null=True)
 
     email = models.EmailField(
         _('email address'),
         max_length=200, unique=True, blank=False)
+
+    contact_number = models.CharField(max_length=15, blank=True, null=True)
 
     is_staff = models.BooleanField(
         _('staff status'), default=False,

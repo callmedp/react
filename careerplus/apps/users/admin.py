@@ -67,7 +67,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('email',)
     list_filter = ()
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'password', 'contact_number')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
