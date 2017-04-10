@@ -184,7 +184,7 @@ class DownloadPdfView(View, UploadInFile):
             }
             self.write_in_file(data_dict=data_dict)
 
-        if action_type == 2:
+        elif action_type == 2:
             user = request.user
 
             data_dict = {
