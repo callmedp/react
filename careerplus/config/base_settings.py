@@ -52,6 +52,7 @@ LOCAL_APPS = [
     'cms',
     'design',
     'seo',
+    'ajax',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

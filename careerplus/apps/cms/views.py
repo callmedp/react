@@ -169,17 +169,28 @@ class DownloadPdfView(View, UploadInFile):
         slug = kwargs.get('slug', None)
         page_obj = None
         action_type = int(request.POST.get('action_type', '0'))
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        mobile = request.POST.get('mobile_number', '')
+        message = request.POST.get('message', '')
+        term_condition = request.POST.get('term_condition')
         if action_type == 1:
-            name = request.POST.get('name', '')
-            email = request.POST.get('email', '')
-            mobile = request.POST.get('mobile_number', '')
-            message = request.POST.get('message', '')
-            term_condition = request.POST.get('term_condition')
-
             data_dict = {
                 "name": name,
                 "mobile": mobile,
                 "email": email,
+                "message": message,
+                "term_condition": term_condition
+            }
+            self.write_in_file(data_dict=data_dict)
+
+        if action_type == 2:
+            user = request.user
+
+            data_dict = {
+                "name": user.name,
+                "mobile": mobile,
+                "email": user.email,
                 "message": message,
                 "term_condition": term_condition
             }

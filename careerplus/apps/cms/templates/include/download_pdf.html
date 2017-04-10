@@ -1,8 +1,8 @@
 {% load static %}
 <div class="download-pdf mb-40">
    {% if download_doc %}
-	  <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm3">
-	    <img class="img-responsive" src="{{image.url}}" alt="Download Resume">
+	  <a href="#" id="id_download_button" >
+	    <img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}">
 	    <span class="download-box">
 	      <figure class="download-icon"></figure>
 	      {{heading}}

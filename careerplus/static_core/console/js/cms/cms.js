@@ -1,10 +1,31 @@
 $(function() {
 
+    $('#id_download_button').click(function(){
+        $.ajax({
+            url : "/ajax/login-status/",
+            type: "GET",
+            data : { action: 'login_status'},
+            success: function(data, textStatus, jqXHR)
+            {
+                if (data.status == 1) {
+                    $("#id_action").val(2);   // action for login -user
+                    $("#downloadpdf_form").submit();
+                }
+                else{
+                    $('#id_download_model').modal("show");
+                }
+
+                console.log(data.status);
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+            }
+        });  
+    });
+
     
-    //$("#id_download").click(function(){
     $(document).on('click', '#id_download', function(event) {
-        $("#id_action").val(1);
-        console.log("hello");
+        $("#id_action").val(1);  //action on download button
         $("#downloadpdf_form").validate({
 
             rules:{
@@ -57,14 +78,15 @@ $(function() {
         });
         if ( $("#downloadpdf_form").valid()) {
             $("#downloadpdf_form").submit();
+            $("#downloadpdf_form")[0].reset();
             $('#id_download_model').modal('toggle');
-            $("#downloadpdf_form").reset();
         }
     });
 
     $("#id_skip").click(function(){
-        $("#id_action").val(0);
+        $("#id_action").val(0);   // action on skip button
         $("#downloadpdf_form").submit();
+        $("#downloadpdf_form")[0].reset();
     });
 
 	$("#cms_comment_form").validate({
