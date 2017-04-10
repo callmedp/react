@@ -19,7 +19,7 @@ from .choices import (
     PRODUCT_CHOICES,
     FLOW_CHOICES,
     EXP_CHOICES,
-    ATTRIBUTES_CHOICES,
+    ATTRIBUTE_CHOICES,
     RELATION_CHOICES)
 
 
@@ -136,10 +136,12 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 class CategoryRelationship(AbstractAutoDate):
     related_from = models.ForeignKey(
         Category,
+        verbose_name=_('From'),
         related_name='from_category',
         on_delete=models.CASCADE)
     related_to = models.ForeignKey(
         Category,
+        verbose_name=_('To'),
         related_name='to_category',
         on_delete=models.CASCADE)
     relation = models.PositiveSmallIntegerField(
@@ -150,8 +152,8 @@ class CategoryRelationship(AbstractAutoDate):
 
     def __str__(self):
         return _("%(pri)s to '%(sec)s'") % {
-            'pri': self.from_category,
-            'sec': self.to_category}
+            'pri': self.related_from,
+            'sec': self.related_to}
 
 
 class Attribute(AbstractAutoDate):
@@ -162,7 +164,8 @@ class Attribute(AbstractAutoDate):
         _('Display Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
     type_attribute = models.PositiveSmallIntegerField(
-        _('Type'), choices=ATTRIBUTES_CHOICES, default=0)
+        _('Type'), choices=ATTRIBUTE_CHOICES, default=0)
+    required = models.BooleanField(_('Required'), default=False)
     is_visible = models.BooleanField(default=True)
     is_multiple = models.BooleanField(default=True)
     is_searchable = models.BooleanField(default=True)
@@ -241,6 +244,8 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
+    type_entity = models.PositiveSmallIntegerField(
+        _('Entity'), choices=ENTITY_CHOICES, default=0)
     type_product = models.PositiveSmallIntegerField(
         _('Type'), choices=PRODUCT_CHOICES, default=0)
     type_flow = models.PositiveSmallIntegerField(
@@ -278,6 +283,8 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Duration In Days'), default=0)
     experience = models.PositiveSmallIntegerField(
         _('Experience'), choices=EXP_CHOICES, default=0)
+    requires_delivery = models.BooleanField(_("Requires delivery?"),
+                                            default=True)
 
     class Meta:
         abstract = True
@@ -295,19 +302,24 @@ class Product(AbstractProduct, ModelMeta):
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
-    # siblings = models.ManyToManyField(
-    #     'self', verbose_name=_('Sibling Products'),
-    #     symmetrical=True, blank=True)
-    # related = models.ManyToManyField(
-    #     'self', verbose_name=_('Related Products'),
-    #     through='RelatedProduct',
-    #     symmetrical=False,
-    #     blank=True)
-    # childs = models.ManyToManyField(
-    #     _('Child Products'), 'self',
-    #     on_delete=models.SET_NULL,
-    #     through='ChildProduct',
-    #     null=True)
+    siblings = models.ManyToManyField(
+        'self', verbose_name=_('Sibling Products'),
+        related_name='siblingproduct+',
+        symmetrical=True, blank=True)
+    related = models.ManyToManyField(
+        'self',
+        through='RelatedProduct',
+        related_name='relatedproduct+',
+        through_fields=('primary', 'secondary'),
+        verbose_name=_('Related Product'),
+        symmetrical=False, blank=True)
+    combo = models.ManyToManyField(
+        'self',
+        through='ChildProduct',
+        related_name='comboproduct+',
+        through_fields=('father', 'children'),
+        verbose_name=_('Child Product'),
+        symmetrical=False, blank=True)
     categories = models.ManyToManyField(
         'shop.Category',
         verbose_name=_('Product Category'),
@@ -467,52 +479,65 @@ class ProductScreen(AbstractProduct):
         return self.name
 
 
-# # class RelatedProduct(AbstractAutoDate):
-# #     primary = models.ForeignKey(
-# #         Product,
-# #         verbose_name=_('Primary'),
-# #         related_name='primaryrelation',
-# #         on_delete=models.CASCADE)
-# #     secondary = models.ForeignKey(
-# #         Product,
-# #         verbose_name=_('Secondary'),
-# #         related_name='secondaryrelation',
-# #         on_delete=models.CASCADE)
-# #     type_relation = models.PositiveSmallIntegerField(
-# #         _('Relation'), choices=RELATION_CHOICES, default=0)
-# #     price_offset = models.DecimalField(
-# #         _('Price Offset'),
-# #         max_digits=8, decimal_places=2,
-# #         default=0.0)
-# #     price_offset_percent = models.DecimalField(
-# #         _('% Offset'),
-# #         max_digits=8, decimal_places=2,
-# #         default=0.0)
-# #     active = models.BooleanField(default=True)
+class RelatedProduct(AbstractAutoDate):
+    primary = models.ForeignKey(
+        Product,
+        related_name='primaryproduct',
+        on_delete=models.CASCADE)
+    secondary = models.ForeignKey(
+        Product,
+        related_name='secondaryproduct',
+        on_delete=models.CASCADE)
+    sort_order = models.PositiveIntegerField(
+        _('Sort Order'), default=1)
+    price_offset = models.DecimalField(
+        _('Price Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
+    price_offset_percent = models.DecimalField(
+        _('% Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
+    active = models.BooleanField(default=True)
+    type_relation = models.PositiveSmallIntegerField(
+        _('Relation'), choices=RELATION_CHOICES, default=0)
+    ranking = models.PositiveSmallIntegerField(
+        _('Ranking'), default=0,
+        help_text=_('Determines order of the products. A product with a higher'
+                    ' value will appear before one with a lower ranking.'))
 
-# #     def __str__(self):
-# #         return self.pk
+    
+    def __str__(self):
+        return _("%(pri)s to '%(sec)s'") % {
+            'pri': self.primary,
+            'sec': self.secondary}
 
 
-# # class ChildProduct(AbstractAutoDate):
-# #     # parent = models.ForeignKey(
-# #     #     _('Primary'),
-# #     #     Product, on_delete=models.SET_CASCADE)
-# #     # child = models.ForeignKey(
-# #     #     _('Secondary'),
-# #     #     Product, on_delete=models.SET_CASCADE)
-# #     price_offset = models.DecimalField(
-# #         _('Price Offset'),
-# #         max_digits=8, decimal_places=2,
-# #         default=0.0)
-# #     price_offset_percent = models.DecimalField(
-# #         _('% Offset'),
-# #         max_digits=8, decimal_places=2,
-# #         default=0.0)
-# #     active = models.BooleanField(default=True)
+class ChildProduct(AbstractAutoDate):
+    father = models.ForeignKey(
+        Product,
+        related_name='parentproduct',
+        on_delete=models.CASCADE)
+    children = models.ForeignKey(
+        Product,
+        related_name='childrenproduct',
+        on_delete=models.CASCADE)
+    sort_order = models.PositiveIntegerField(
+        _('Sort Order'), default=1)
+    price_offset = models.DecimalField(
+        _('Price Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
+    price_offset_percent = models.DecimalField(
+        _('% Offset'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
+    active = models.BooleanField(default=True)
 
-# #     def __str__(self):
-# #         return self.pk
+    def __str__(self):
+        return _("%(pri)s to '%(sec)s'") % {
+            'pri': self.father,
+            'sec': self.children}
 
 
 class ProductOffer(AbstractAutoDate):

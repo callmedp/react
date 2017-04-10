@@ -1,17 +1,22 @@
+from django.utils.translation import ugettext_lazy as _
+
 RELATION_CHOICES = (
     (0, 'Default'),
     (1, 'UpSell'),
     (2, 'Recommendation'),
     (3, 'CrossSell'),)
 
-ATTRIBUTES_CHOICES = (
-    (0, 'Text'),
-    (1, 'Integer'),
-    (2, 'Datetime'),
-    (3, 'Decimal'),
-    (4, 'Large Text'),
-    (5, 'Image'),
-    (6, 'File'),)
+ATTRIBUTE_CHOICES = (
+    (0, _("Text")),
+    (1, _("Integer")),
+    (2, _("True / False")),
+    (3, _("Float")),
+    (4, _("Rich Text")),
+    (5, _("Date")),
+    (6, _("Option")),
+    (7, _("Entity")),
+    (8, _("File")),
+    (9, _("Image")),)
 
 ENTITY_CHOICES = (
     (0, 'Default'),
