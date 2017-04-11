@@ -74,3 +74,24 @@ class User(AbstractBaseUser, PermissionsMixin):
             Returns the short name for the user.
         """
         return self.name
+
+
+class UserEmail(models.Model):
+    """
+    This is to record of all emails sent to a user.
+    """
+    user = models.ForeignKey(User, related_name='emails',
+                             verbose_name=_("User"))
+    subject = models.TextField(_('Subject'), max_length=255)
+    body_text = models.TextField(_("Body Text"))
+    body_html = models.TextField(_("Body HTML"), blank=True)
+    date_sent = models.DateTimeField(_("Date Sent"), auto_now_add=True)
+
+    class Meta:
+        abstract = True
+        verbose_name = _('Email')
+        verbose_name_plural = _('Emails')
+
+    def __str__(self):
+        return _(u"Email to %(user)s with subject '%(subject)s'") % {
+            'user': self.user.get_username(), 'subject': self.subject}

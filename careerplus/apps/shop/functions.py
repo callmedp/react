@@ -36,3 +36,8 @@ def get_upload_path_product_banner(instance, filename):
 def get_upload_path_product_file(instance, filename):
     return "product_file/{pr_id}/{filename}".format(
         pr_id=instance.id, filename=get_file_name(filename))
+
+
+def get_upload_path_vendor(instance, filename):
+    return "vendor/{ven_id}/{filename}".format(
+        ven_id=instance.id, filename=get_file_name(filename))
