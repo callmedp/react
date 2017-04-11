@@ -6,15 +6,15 @@ from django.contrib.auth.models import AnonymousUser
 from .models import Page, Widget
 from .views import CMSPageView
 
+User = get_user_model()
+
 
 class TestsPage(TestCase):
 	# fixtures = ['test.json']
 
 	def setUp(self):
-		# Every test needs a client.
 		self.client = Client()
 		self.factory = RequestFactory()
-		User = get_user_model()
 		self.user = User.objects.create_user(
 			email='test@gmail.com', password='test@123')
 
@@ -65,4 +65,6 @@ class TestsPage(TestCase):
 	def test_post_page_view(self):
 		page = Page.objects.create(name='Resume For Experience', slug='resume-for-experience', is_active=True)
 		response = self.client.post(page.get_absolute_url(), {"message": "hello test", })
+		comment_length = len(page.comment_set.all())
+		self.assertEqual(comment_length, 0)
 		self.assertRedirects(response, '/cms/page/resume-for-experience/')  # status code for redirection
