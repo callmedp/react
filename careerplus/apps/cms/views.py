@@ -41,7 +41,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         message = request.POST.get('message', '')
         slug = kwargs.get('slug', None)
         try:
-            self.page_obj = Page.objects.get(slug=slug)
+            self.page_obj = Page.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
         if request.user.is_authenticated() and message and self.page_obj:

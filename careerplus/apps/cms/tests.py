@@ -2,10 +2,15 @@ from django.test import TestCase
 
 from .models import Page, Widget
 from django.urls import reverse
+from django.test import Client
 
 
 class TestsPage(TestCase):
 	# fixtures = ['test.json']
+
+	def setUp(self):
+		# Every test needs a client.
+		self.client = Client()
 
 	def test_get_template_method(self):
 		widget = Widget(widget_type=1)
@@ -43,6 +48,11 @@ class TestsPage(TestCase):
 		self.assertIs('is_active' in data.keys(), True)
 
 	def test_get_page_view(self):
-		page = Page(name='Resume For Freshers', slug='resume-for-freshers', is_active=True)
-		response = self.client.get(reverse('cms:page', kwargs={'slug': 'resume-for-freshers'}))
+		page = Page.objects.create(name='Resume For Experience', slug='resume-for-experience', is_active=True)
+		response = self.client.get(page.get_absolute_url())
 		self.assertEqual(response.status_code, 200)
+
+	def test_post_page_view(self):
+		page = Page.objects.create(name='Resume For Experience', slug='resume-for-experience', is_active=True)
+		response = self.client.post(page.get_absolute_url(), {"message": "hello test", })
+		self.assertEqual(response.status_code, 302)  # status code for redirection
