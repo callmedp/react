@@ -1,7 +1,7 @@
 {% load static %}
 <div class="download-pdf mb-40">
    {% if download_doc %}
-	  <a href="#" id="id_download_button" >
+	  <a id="id_download_button" href="{{download_doc.get_url}}" pop-up="{{download_pop_up}}">
 	    <img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}">
 	    <span class="download-box">
 	      <figure class="download-icon"></figure>

@@ -40,6 +40,9 @@ LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
+DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
+DOWNLOAD_URL = '/download/'
+
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
