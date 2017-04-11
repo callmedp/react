@@ -1,8 +1,10 @@
-from django.test import TestCase
+from django.test import TestCase, Client, RequestFactory
+from django.urls import reverse
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 
 from .models import Page, Widget
-from django.urls import reverse
-from django.test import Client
+from .views import CMSPageView
 
 
 class TestsPage(TestCase):
@@ -11,6 +13,10 @@ class TestsPage(TestCase):
 	def setUp(self):
 		# Every test needs a client.
 		self.client = Client()
+		self.factory = RequestFactory()
+		User = get_user_model()
+		self.user = User.objects.create_user(
+			email='test@gmail.com', password='test@123')
 
 	def test_get_template_method(self):
 		widget = Widget(widget_type=1)
@@ -51,8 +57,12 @@ class TestsPage(TestCase):
 		page = Page.objects.create(name='Resume For Experience', slug='resume-for-experience', is_active=True)
 		response = self.client.get(page.get_absolute_url())
 		self.assertEqual(response.status_code, 200)
+		# request = self.factory.get(page.get_absolute_url())
+		# request.user = AnonymousUser()
+		# response = CMSPageView.as_view()(request)
+		# self.assertEqual(response.status_code, 200)
 
 	def test_post_page_view(self):
 		page = Page.objects.create(name='Resume For Experience', slug='resume-for-experience', is_active=True)
 		response = self.client.post(page.get_absolute_url(), {"message": "hello test", })
-		self.assertEqual(response.status_code, 302)  # status code for redirection
+		self.assertRedirects(response, '/cms/page/resume-for-experience/')  # status code for redirection

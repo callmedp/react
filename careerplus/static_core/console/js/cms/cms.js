@@ -1,6 +1,5 @@
 $(function() {
 
-    // $('#id_download_button').click(function(){
     $(document).on('click', '#id_download_button', function(event) {
         event.preventDefault();
         var pop_up = $(this).attr('pop-up');
@@ -17,36 +16,6 @@ $(function() {
         }
     });
 
-    // $("#id_skip").click(function(){
-    //     $("#id_action").val(0);   // action on skip button
-    //     $("#downloadpdf_form").submit();
-    //     $("#downloadpdf_form")[0].reset();
-    // });
-
-    /*$('#id_download_button').click(function(){
-        $.ajax({
-            url : "/ajax/login-status/",
-            type: "GET",
-            data : { action: 'login_status'},
-            success: function(data, textStatus, jqXHR)
-            {
-                if (data.status == 1) {
-                    console.log("hello");
-                    $("#id_action").val(2);   // action for login -user
-                    $("#downloadpdf_form").submit();
-                }
-                else{
-                    $('#id_download_model').modal("show");
-                }
-
-                console.log(data.status);
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-            }
-        });  
-    });
-*/
     
     $(document).on('click', '#id_download', function(event) {
         event.preventDefault();
