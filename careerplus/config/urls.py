@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^console/', include('console.urls', namespace='console')),
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^skillpage/', include('skillpage.urls', namespace='skillpage')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),

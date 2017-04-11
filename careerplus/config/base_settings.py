@@ -51,9 +51,13 @@ LOCAL_APPS = [
     'users',
     'cms',
     'design',
+    'faq',
     'seo',
     'ajax',
     'skillpage',
+    'console',
+    'coupon',
+    'shop',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
