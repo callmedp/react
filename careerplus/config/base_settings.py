@@ -53,6 +53,7 @@ LOCAL_APPS = [
     'design',
     'seo',
     'ajax',
+    'skillpage',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
