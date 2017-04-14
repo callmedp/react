@@ -5187,10 +5187,10 @@ tbody.collapse.in {
 .breadcrumb > li + li:before {
   content: "-";
   padding: 0 5px;
-  color: #ccc;
+  color: #999;
 }
 .breadcrumb > .active {
-  color: #777777;
+  color: #999;
 }
 
 .pagination {

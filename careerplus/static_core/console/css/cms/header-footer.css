@@ -1,8 +1,7 @@
-
 body {
   font-family: "Open Sans", sans-serif;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 300;
   padding-top: 53px;
 }
 
@@ -11,7 +10,7 @@ a, a:hover, a:focus {
 }
 
 h1 {
-  font-size: 33px;
+  font-size: 30px;
 }
 
 h2 {
@@ -490,6 +489,32 @@ footer .footer-links span {
   }
 }
 
+.request-call {
+  padding: 20px;
+}
+.request-call .form-control {
+  border-radius: 0;
+  border: 1px solid #e1e1e1;
+  color: #e1e1e1;
+  font-size: 13px;
+}
+.request-call .form-group {
+  position: relative;
+}
+.request-call .call-service {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  text-transform: uppercase;
+}
+.request-call .call-service strong {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2f5da5;
+  display: block;
+  margin: 10px 0 0 0;
+}
+
 /*---------form error css---------*/
 .error {
   font-size: 11px;
@@ -539,6 +564,27 @@ footer .footer-links span {
   font-size: 15px;
   font-weight: 600;
   color: #3f5f94 !important;
+}
+
+.load-more {
+  padding: 10px;
+  display: block;
+  color: #333;
+  background-color: #f1f1f1;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+.load-more:hover {
+  color: #333;
+}
+.load-more:focus {
+  color: #333;
+  overflow: hidden;
+}
+
+.anchor-color {
+  color: #3f5f94;
 }
 
 /*---------icons css---------*/
@@ -668,7 +714,163 @@ footer .footer-links span {
   vertical-align: sub;
 }
 
+.jobs-growth-icon {
+  width: 38px;
+  height: 37px;
+  background: url(../../images/cms/sprite.png) no-repeat -679px -45px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.career-growth-icon {
+  width: 42px;
+  height: 41px;
+  background: url(../../images/cms/sprite.png) no-repeat -726px -45px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.certification-icon {
+  width: 15px;
+  height: 22px;
+  background: url(../../images/cms/sprite.png) no-repeat -770px -45px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.jobs-icon {
+  width: 18px;
+  height: 16px;
+  background: url(../../images/cms/sprite.png) no-repeat -727px -87px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.orange-rating-icon {
+  width: 14px;
+  height: 15px;
+  background: url(../../images/cms/sprite.png) no-repeat -710px -87px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.grey-rating-icon {
+  width: 14px;
+  height: 15px;
+  background: url(../../images/cms/sprite.png) no-repeat -695px -87px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.review-icon {
+  width: 25px;
+  height: 23px;
+  background: url(../../images/cms/sprite.png) no-repeat -288px -91px;
+  display: inline-block;
+  vertical-align: sub;
+  margin-right: 5px;
+}
+
+.bought-icon {
+  width: 23px;
+  height: 26px;
+  background: url(../../images/cms/sprite.png) no-repeat -316px -91px;
+  display: inline-block;
+  vertical-align: sub;
+  margin-right: 5px;
+}
+
+.course-jobs-icon {
+  width: 27px;
+  height: 22px;
+  background: url(../../images/cms/sprite.png) no-repeat -343px -90px;
+  display: inline-block;
+  vertical-align: sub;
+  margin-right: 5px;
+}
+
+.email-icon {
+  width: 17px;
+  height: 13px;
+  background: url(../../images/cms/sprite.png) no-repeat -750px -88px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.calling-icon {
+  width: 17px;
+  height: 17px;
+  background: url(../../images/cms/sprite.png) no-repeat -770px -88px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.test-icon {
+  width: 25px;
+  height: 24px;
+  background: url(../../images/cms/sprite.png) no-repeat -375px -90px;
+  display: inline-block;
+  vertical-align: inherit;
+}
+
+/*---------reviews css---------*/
+.reviews {
+  font-size: 15px;
+  color: #666;
+  position: relative;
+}
+.reviews h2 {
+  color: #333;
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+.reviews ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.reviews ul li {
+  display: block;
+  padding: 20px;
+  margin: 0 0 25px 0;
+}
+.reviews ul li .rating-review-box {
+  display: block;
+  color: #999;
+}
+.reviews ul li .rating-review-box strong {
+  font-weight: 600;
+  margin-left: 5px;
+}
+.reviews ul li .rating-review-box b {
+  font-weight: 600;
+  margin-left: 10px;
+  font-size: 14px;
+  color: #3f5f94;
+}
+.reviews ul li .editor {
+  font-size: 13px;
+}
+.reviews ul li article {
+  margin: 10px 0;
+}
+.reviews ul li .review-heading {
+  font-size: 18px;
+  color: #3f5f94;
+  display: block;
+  font-weight: 600;
+}
+.reviews .write-review {
+  position: absolute;
+  right: 0;
+  top: 95px;
+}
+
 /*---------margin padding css---------*/
+.mt-0 {
+  margin-top: 0;
+}
+
 .mt-5 {
   margin-top: 5px;
 }
@@ -721,6 +923,10 @@ footer .footer-links span {
   margin-bottom: 40px;
 }
 
+.ml-30 {
+  margin-left: 30px;
+}
+
 .ml-20 {
   margin-left: 20px;
 }
@@ -731,6 +937,10 @@ footer .footer-links span {
 
 .mr-20 {
   margin-right: 20px;
+}
+
+.mtm-20 {
+  margin-top: -20px !important;
 }
 
 .no-pad {

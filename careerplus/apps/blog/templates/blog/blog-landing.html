@@ -1,0 +1,252 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% load humanize %}
+    {% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+    {%  endblock meta_tags %}
+
+    {% block title %}
+       Blogs
+    {% endblock title %}
+    
+    {% block css %}
+        {{block.super}}     
+        <link type="text/css" href="{% static 'console/css/blog/blog.css' %}" rel="stylesheet">
+        
+    {% endblock css %}
+
+    {% block blogtrending %}
+        <header class="carousel-bgcolor pr mb-40">
+          <div class="container">
+              <div class="blog-carousel">
+                <strong>Trending articles</strong>
+                  <div class="carousel slide row" id="myCarousel">
+                      <div class="carousel-inner">
+                      {% for cat in categories %}
+                           {% with cat.primary_category.all.first as art %}
+                           {% if art %}
+                            <div class="item {% if forloop.counter == 1 %} active {% endif %}">
+                              <div class="col-sm-4">
+                                <a href="#">
+                                  <img src="{{art.image.url}}" class="img-responsive" alt="{{cat.name}}" height="271px" width="360px">
+                                    <div class="caption-bg-txt">
+                                      <span class="caption-heading">{{cat.name}}</span>
+                                        <div class="txt-bottom">
+                                         {{art.name}}
+                                        <div class="clearfix mt-5">
+                                          <span class="view-forward"><span class="view-icon1"></span>{{art.no_views}}</span>
+                                          <span class="editor">{{art.user.name}}, {{art.publish_date.date }}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </a>
+                              </div>
+                            </div>
+                            {% endif %}
+                            {% endwith %}
+                      {% endfor %}
+
+                        {% comment %}
+                        <div class="item active">
+                          <div class="col-sm-4">
+                            <a href="#">
+                              <img src="images/blog-carousel1.jpg" class="img-responsive">
+                                <div class="caption-bg-txt">
+                                  <span class="caption-heading">Managment</span>
+                                    <div class="txt-bottom">
+                                      Career management: Defining the process and purpose
+                                    <div class="clearfix mt-5">
+                                      <span class="view-forward"><span class="view-icon1"></span> 21</span>
+                                      <span class="editor">Ajay Mishra, 03 Nov 2016</span>
+                                    </div>
+                                  </div>
+                                </div>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div class="col-sm-4">
+                            <a href="#">
+                              <img src="images/blog-carousel2.jpg" class="img-responsive">
+                                <div class="caption-bg-txt">
+                                  <span class="caption-heading">Interview</span>
+                                    <div class="txt-bottom">
+                                      Career management: Defining the process and purpose
+                                    <div class="clearfix mt-5">
+                                      <span class="view-forward"><span class="view-icon1"></span> 21</span>
+                                      <span class="editor">Ajay Mishra, 03 Nov 2016</span>
+                                    </div>
+                                  </div>
+                                </div>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div class="col-sm-4">
+                            <a href="#">
+                              <img src="images/blog-carousel3.jpg" class="img-responsive">
+                                <div class="caption-bg-txt">
+                                  <span class="caption-heading">marketing</span>
+                                    <div class="txt-bottom">
+                                      Career management: Defining the process and purpose
+                                    <div class="clearfix mt-5">
+                                      <span class="view-forward"><span class="view-icon1"></span> 21</span>
+                                      <span class="editor">Ajay Mishra, 03 Nov 2016</span>
+                                    </div>
+                                  </div>
+                                </div>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div class="col-sm-4">
+                            <a href="#">
+                              <img src="images/blog-carousel1.jpg" class="img-responsive">
+                                <div class="caption-bg-txt">
+                                  <span class="caption-heading">Managment</span>
+                                    <div class="txt-bottom">
+                                      Career management: Defining the process and purpose
+                                    <div class="clearfix mt-5">
+                                      <span class="view-forward"><span class="view-icon1"></span> 21</span>
+                                      <span class="editor">Akshay Mishra, 03 Nov 2016</span>
+                                    </div>
+                                  </div>
+                                </div>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div class="col-sm-4">
+                            <a href="#">
+                              <img src="images/blog-carousel2.jpg" class="img-responsive">
+                                <div class="caption-bg-txt">
+                                  <span class="caption-heading">Interview</span>
+                                    <div class="txt-bottom">
+                                      Career management: Defining the process and purpose
+                                    <div class="clearfix mt-5">
+                                      <span class="view-forward"><span class="view-icon1"></span> 21</span>
+                                      <span class="editor">Ajay Mishra, 03 Nov 2016</span>
+                                    </div>
+                                  </div>
+                                </div>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div class="col-sm-4">
+                            <a href="#">
+                              <img src="images/blog-carousel3.jpg" class="img-responsive">
+                                <div class="caption-bg-txt">
+                                  <span class="caption-heading">marketing</span>
+                                    <div class="txt-bottom">
+                                      Career management: Defining the process and purpose
+                                    <div class="clearfix mt-5">
+                                      <span class="view-forward"><span class="view-icon1"></span> 21</span>
+                                      <span class="editor">Ajay Mishra, 03 Nov 2016</span>
+                                    </div>
+                                  </div>
+                                </div>
+                            </a>
+                          </div>
+                        </div>
+                        {% endcomment %}
+                      </div>
+                    </div>
+              </div>
+          </div>
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev"><i class="left-arrow"></i></a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next"><i class="right-arrow"></i></a>  
+        </header>
+    {% endblock blogtrending %}
+    
+    {% block breadcrumb %}
+        
+    {% endblock breadcrumb %}
+
+   {% block pageheading %}
+       <section class="container">
+          <div class="page-header">
+            <h1 class="blog-heading">Top articles</h1>
+          </div>
+        </section>
+   {% endblock pageheading %}
+
+{% block container %}
+    <!-- main section start -->
+    <section class="container">
+
+        <!-- page content body start -->
+        <div class="row">
+
+        <!-- left content start -->
+          <div class="col-md-9 col-sm-12" id="category_container">
+          {{article_list}}
+
+          </div>  
+        <!-- left content end -->
+
+        <!-- right content start -->
+        <div class="col-md-3 col-sm-12">
+
+          <!-- related -->
+          <div class="categories box-panel mb-40">
+            <h2 class="heading-right">Categories</h2>
+            <ul>
+                {% for cat in categories %}
+                <li>
+                   <a href="#">{{cat.name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="{% url "blog:blog-landing" %}" class="view-article text-right db mt-10">View more</a>
+          </div>
+
+        </div>
+        <!-- right content end -->
+
+        </div>
+        <!-- page content body end -->
+
+    </section>
+    <!-- main section end -->
+
+{% endblock container %}
+  
+
+{% block js %}
+   {{ block.super }}
+   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+   <script src="{% static 'console/js/blog/blog-landing.js' %}"></script>
+
+   <script type="text/javascript">
+    $('.nav-tabs > li > a').hover(function() {
+        $(this).tab('show');
+      });
+    $('.dropdown').hover(function(){ 
+        $('.dropdown-toggle', this).trigger('click'); 
+      });
+    </script>
+
+    <script type="text/javascript">
+      $('#myCarousel').carousel({
+        interval: 10000
+      })
+
+      $('.carousel .item').each(function(){
+        var next = $(this).next();
+        if (!next.length) {
+          next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+        
+        if (next.next().length>0) {
+          next.next().children(':first-child').clone().appendTo($(this));
+        }
+        else {
+          $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+        }
+      });
+    </script>
+
+{% endblock js %}

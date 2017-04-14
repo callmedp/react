@@ -34,6 +34,7 @@ DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -53,6 +54,7 @@ LOCAL_APPS = [
     'design',
     'seo',
     'ajax',
+    'blog',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

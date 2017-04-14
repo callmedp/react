@@ -166,7 +166,6 @@ $(function() {
 
     $(document).on('click', '#comment_load_more', function(event) {
         var formData = $("#loadform").serialize();
-        console.log(formData);
         $.ajax({
             url : "/ajax/page/load-more/",
             type: "POST",
@@ -182,8 +181,7 @@ $(function() {
             {
                 alert("Can't load more comments.");
             }
-        }); 
-  
+        });   
     });
 
 

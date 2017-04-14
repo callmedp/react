@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block meta_tags %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock meta_tags %}
+
+    <title>{% block title %}HT LEARN! | {% endblock title %}</title>
+
+    {% block css %}
+
+    <!-- Bootstrap -->
+    <link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
+    <!-- Font Awesome -->
+    <link href="{% static "/packages/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet" type="text/css">
+    <!-- NProgress -->
+    <link href="{% static "/packages/nprogress/nprogress.css"  %}" rel="stylesheet" type="text/css">
+    <!-- iCheck -->
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    
+    <!-- bootstrap-progressbar -->
+    <link href="{% static "/packages/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css"  %}" rel="stylesheet" type="text/css">
+    
+    <!-- JQVMap -->
+    <link href="{% static "/packages/jqvmap/dist/jqvmap.min.css"  %}" rel="stylesheet" type="text/css">
+
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static "/packages/bootstrap-daterangepicker/daterangepicker.css"  %}" rel="stylesheet" type="text/css">
+
+    <!-- Custom Theme Style -->
+    <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
+
+    {% endblock css %}
+  </head>
+
+  <body class="nav-md">
+
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="/static/console/images/img.jpg" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>John Doe</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            {% block sidebar %}
+                <!-- sidebar menu -->
+                {% include 'admin/sidebar.html' %}
+                <!-- /sidebar menu -->
+            {% endblock sidebar %}
+
+            
+            {% block menufooter %}
+                <!-- /menu footer buttons -->
+                {% include 'admin/menufooter.html' %}
+                <!-- /menu footer buttons -->
+            {% endblock menufooter %}
+            
+
+          </div>
+        </div>
+
+        {% block navigation %}
+           <!-- top navigation -->
+           {% include 'admin/navigation.html' %}
+           <!-- /top navigation -->
+        {% endblock navigation %}
+
+        {% block pagecontent %}
+            <!-- page content -->
+            
+            <!-- /page content -->
+        {% endblock pagecontent %}
+
+        {% block footer %}
+            <!-- footer content -->
+            {% include 'admin/footer.html' %}
+            <!-- /footer content -->
+        {% endblock footer %}
+      </div>
+    </div>
+
+    {% block js %}
+    <!-- jQuery -->
+    <script type="text/javascript" src="{% static "packages/jquery/dist/jquery.min.js" %}"></script>
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="{% static "packages/bootstrap/js/bootstrap.min.js" %}"></script>
+    <!-- FastClick -->
+    <script type="text/javascript" src="{% static "packages/fastclick/lib/fastclick.js" %}"></script>
+    <!-- NProgress -->
+    <script type="text/javascript" src="{% static "packages/nprogress/nprogress.js" %}"></script>
+    <!-- Chart.js -->
+    <script type="text/javascript" src="{% static "packages/Chart.js/dist/Chart.min.js" %}"></script>
+    <!-- gauge.js -->
+    <script type="text/javascript" src="{% static "packages/gauge.js/dist/gauge.min.js" %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script type="text/javascript" src="{% static "packages/bootstrap-progressbar/bootstrap-progressbar.min.js" %}"></script>
+    
+    <!-- iCheck -->
+    <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+    
+    <!-- Skycons -->
+    <script type="text/javascript" src="{% static "packages/skycons/skycons.js" %}"></script>
+    <!-- Flot -->
+    <script type="text/javascript" src="{% static "packages/Flot/jquery.flot.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/Flot/jquery.flot.pie.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/Flot/jquery.flot.time.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/Flot/jquery.flot.stack.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/Flot/jquery.flot.resize.js" %}"></script>
+    
+    
+    <!-- Flot plugins -->
+    <script type="text/javascript" src="{% static "packages/flot.orderbars/js/jquery.flot.orderBars.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/flot-spline/js/jquery.flot.spline.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/flot.curvedlines/curvedLines.js" %}"></script>
+    <!-- DateJS -->
+    <script type="text/javascript" src="{% static "packages/DateJS/build/date.js" %}"></script>
+    
+    <!-- JQVMap -->
+    
+    <script type="text/javascript" src="{% static "packages/jqvmap/dist/jquery.vmap.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/jqvmap/dist/maps/jquery.vmap.world.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/jqvmap/examples/js/jquery.vmap.sampledata.js" %}"></script>
+    
+    <!-- bootstrap-daterangepicker -->
+    <script type="text/javascript" src="{% static "packages/moment/min/moment.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "packages/bootstrap-daterangepicker/daterangepicker.js" %}"></script>
+    <!-- Custom Theme Scripts -->
+    <script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script>
+
+    {% endblock js %}
+
+  </body>
+</html>

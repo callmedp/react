@@ -1,6 +1,8 @@
 from django.conf.urls import url
 
 from .views import AjaxCommentLoadMoreView, CmsShareView, CheckLoginStatus
+
+
 urlpatterns = [
     url(r'^page/load-more/$',
     	AjaxCommentLoadMoreView.as_view(), name='comment-load-more'),

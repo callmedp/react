@@ -1,0 +1,38 @@
+{% load static %}
+
+{% for key, values in article_list.items %}
+<div class="box-panel article-listing mb-40">
+    <h2>{{ key.name }}</h2>
+    {% for article in values %}
+    <div class="media">
+      <a title="Government Jobs" href="#">
+        {% if article.image %}
+        <figure class="media-left">
+          <img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113">
+        </figure>
+        {% endif %}
+        <div class="media-body">
+          <h3 class="media-heading">{{article.name}}</h3>
+          <article>{{article.content|safe|truncatewords:60}}</article>
+          <span class="view-forward"><figure class="forward-icon"></figure> {{article.no_comment}} <figure class="view-icon ml-20"></figure> {{article.no_views}}</span>
+          <span class="editor">{{article.user.name}}, {{article.publish_date.date}}</span>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+    <a href="#" class="view-article text-right db mt-20">View all articles</a>
+</div> 
+{% endfor %}
+
+{% if page_obj.has_next %}
+{% comment %}
+<p id="loading">
+    <img src="{% static 'console/images/blog/loading.gif' %}" alt="Loading…" />
+</p>
+{% endcomment %}
+<div id="load_more">
+    <div style='display:none'>
+    <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
+    </div>
+</div>
+{% endif %}
