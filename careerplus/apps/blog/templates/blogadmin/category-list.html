@@ -74,6 +74,7 @@
                     </th-->
                     <th class="column-title">Id </th>
                     <th class="column-title">Name</th>
+                    <th class="column-title">Slug</th>
                     <th class="column-title">Status</th>
                     <th class="column-title">Priority</th>
                     <th class="bulk-actions" colspan="7">
@@ -90,6 +91,7 @@
                     </td-->
                     <td class=" ">{{obj.id}}</td>
                     <td class=" "><a href="{% url "blog:blog-category-update" obj.pk %}">{{obj.name}}</a></td>
+                    <td class=" ">{{obj.slug}}</td>
                     <td class=" ">{{obj.is_active}}</td>
                     <td class=" ">{{obj.priority}}</td>
                     </td>

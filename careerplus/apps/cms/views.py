@@ -38,7 +38,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         return context
 
     def post(self, request, *args, **kwargs):
-        message = request.POST.get('message', '')
+        message = request.POST.get('message', '').strip()
         slug = kwargs.get('slug', None)
         try:
             self.page_obj = Page.objects.get(slug=slug, is_active=True)

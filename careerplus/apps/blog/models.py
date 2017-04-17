@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.urls import reverse
 
 from meta.models import ModelMeta
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -70,11 +71,43 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	publish_date = models.DateTimeField(null=True, blank=True)
 	expiry_date = models.DateTimeField(null=True, blank=True)
 
+	_metadata_default = ModelMeta._metadata_default.copy()
+	_metadata_default['locale'] = 'dummy_locale'
+
+	_metadata = {
+        'title': 'title',
+        'description': 'get_keywords',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'publish_date',
+        'modified_time': 'last_modified_on',
+        'url': 'get_full_url'
+    }
+
 	class Meta:
 		ordering = ['-score', '-publish_date']
 
 	def __str__(self):
 		return str(self.id) + '_' + self.name
+
+	def get_title(self):
+		title = self.title
+		if not self.title:
+			title = self.name
+		return title.strip()
+
+	def get_keywords(self):
+		return self.meta_keywords.strip().split(",")
+
+	def get_description(self):
+		description = self.meta_desc
+		return description.strip()
+
+	def get_full_url(self):
+		return self.build_absolute_uri(self.get_absolute_url())
+
+	def get_absolute_url(self):
+		return reverse('blog:articles-deatil', kwargs={'slug': self.slug})
 
 	def update_score(self):
 		score = Decimal(self.no_views) * Decimal(0.9)
@@ -86,3 +119,15 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	def get_status(self):
 		statusD = dict(STATUS)
 		return statusD.get(self.status)
+
+
+class Comment(AbstractCommonModel):
+	blog = models.ForeignKey(Blog)
+	message = models.TextField(null=False, blank=False)
+	is_published = models.BooleanField(default=False)
+	is_removed = models.BooleanField(default=False)
+	replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
+		blank=True, related_name="comments")
+
+	def __str__(self):
+		return str(self.id) + '_' + str(self.created_on.date())

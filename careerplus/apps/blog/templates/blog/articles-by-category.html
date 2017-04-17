@@ -1,0 +1,39 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% load humanize %}
+    {% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+    {%  endblock meta_tags %}
+
+    {% block title %}
+       Blogs
+    {% endblock title %}
+    
+    {% block css %}
+        {{block.super}}     
+        
+    {% endblock css %}
+
+    
+    {% block breadcrumb %}
+        
+    {% endblock breadcrumb %}
+
+   {% block pageheading %}
+       <section class="container">
+          <div class="page-header">
+            <h1 class="blog-heading">Articles</h1>
+          </div>
+        </section>
+   {% endblock pageheading %}
+
+{% block container %}
+    
+
+{% endblock container %}
+  
+
+{% block js %}
+   {{ block.super }}
+{% endblock js %}

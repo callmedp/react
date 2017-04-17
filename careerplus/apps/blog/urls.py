@@ -1,14 +1,23 @@
 from django.conf.urls import url
 
-from .views import BlogLandingPageView, BlogLandingAjaxView
+from .views import BlogLandingPageView, BlogLandingAjaxView,\
+    BlogCategoryListView, BlogDetailView
+
 from .adminview import TagAddFormView, CategoryAddFormView, BlogAddFormView,\
     TagListView, TagUpdateView, CategoryListView, CategoryUpdateView,\
     BlogListView, BlogUpdateView
 
 urlpatterns = [
     url(r'^$', BlogLandingPageView.as_view(), name='blog-landing'),
+
     url(r'^category-wise-loading/$', BlogLandingAjaxView.as_view(),
     	name='blog-landing-load'),
+
+    url(r'^category/(?P<slug>[-\w]+)/$', BlogCategoryListView.as_view(),
+        name='articles-by-category'),
+
+    url(r'^detail/(?P<slug>[-\w]+)/$',
+        BlogDetailView.as_view(), name='articles-deatil'),
 
     url(r'^admin/tag-add/$', TagAddFormView.as_view(),
     	name='blog-tag-add'),

@@ -173,7 +173,6 @@ class CategoryListView(ListView, PaginationMixin):
 				queryset = queryset.filter(Q(name__icontains=self.query))
 		except:
 			pass
-		queryset = queryset.select_related('user', 'p_cat')
 		return queryset
 
 
