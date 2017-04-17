@@ -40,8 +40,10 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	name = models.CharField(('Name'), max_length=200, blank=False,
 		help_text=("Set title for blog."))
-	p_cat = models.ForeignKey(Category, related_name='primary_category', blank=False, null=False)
-	sec_cat = models.ManyToManyField(Category, related_name='secondary_category', blank=True)
+	p_cat = models.ForeignKey(Category, related_name='primary_category',
+		blank=False, null=False)
+	sec_cat = models.ManyToManyField(Category, related_name='secondary_category',
+		blank=True)
 	slug = models.SlugField(('Slug'), unique=True, max_length=255,
 		blank=True, null=True, help_text=("Used to build the tag's URL."))
 	image = models.FileField("Image", max_length=200, upload_to="images/blog/",
@@ -50,12 +52,12 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	content = RichTextUploadingField(default="", blank=True, null=True,
 		help_text=("content for blog."))
 	tags = models.ManyToManyField(Tag, blank=True)
-	sites = models.ManyToManyField(Site, related_name='related_sites',
+	sites = models.ManyToManyField(Site, blank=True, related_name='related_sites',
 		help_text=("sites where blog published."))
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
 		help_text='for user or writer')
-	writer_name = models.CharField(max_length=100, blank=True, null=True)
+	
 	status = models.PositiveIntegerField(choices=STATUS, default=0)
 	allow_comment = models.BooleanField(default=False)
 
@@ -80,3 +82,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 		score = Decimal(round(score, 2))
 		self.score = score
 		self.save()
+
+	def get_status(self):
+		statusD = dict(STATUS)
+		return statusD.get(self.status)
