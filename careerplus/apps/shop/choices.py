@@ -18,7 +18,7 @@ ATTRIBUTE_CHOICES = (
     (8, _("File")),
     (9, _("Image")),)
 
-ENTITY_CHOICES = (
+SERVICE_CHOICES = (
     (0, 'Default'),
     (1, 'Writing Services'),
     (2, 'Job Assistance Services'),

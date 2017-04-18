@@ -2,6 +2,8 @@ from django.db import models
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes import fields
+from django.contrib.contenttypes.models import ContentType
 
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
@@ -14,7 +16,7 @@ from .functions import (
     get_upload_path_product_image,
     get_upload_path_product_file,)
 from .choices import (
-    ENTITY_CHOICES,
+    SERVICE_CHOICES,
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
@@ -30,8 +32,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
-    type_entity = models.PositiveSmallIntegerField(
-        _('Entity'), choices=ENTITY_CHOICES, default=0)
+    type_service = models.PositiveSmallIntegerField(
+        _('Entity'), choices=SERVICE_CHOICES, default=0)
     type_level = models.PositiveSmallIntegerField(
         _('Level'), choices=CATEGORY_CHOICES, default=0)
     description = models.TextField(
@@ -132,6 +134,12 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             from_category__relation=0, from_category__related_to=self,
             is_main_parent=True)
 
+    def has_children(self):
+        return self.get_num_children() > 0
+
+    def get_num_children(self):
+        return self.get_childrens().count()
+
 
 class CategoryRelationship(AbstractAutoDate):
     related_from = models.ForeignKey(
@@ -156,7 +164,62 @@ class CategoryRelationship(AbstractAutoDate):
             'sec': self.related_to}
 
 
+class Entity(AbstractAutoDate, AbstractSEO):
+    name = models.CharField(
+        _('Name'), max_length=100,
+        help_text=_('Unique name going to decide the slug'))
+    slug = models.CharField(
+        _('Slug'), unique=True,
+        max_length=100, help_text=_('Unique slug'))
+    
+    class Meta:
+        ordering = ['name']
+        verbose_name = _("Product class")
+        verbose_name_plural = _("Product classes")
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def has_attributes(self):
+        return self.attributes.exists()
+
+
+class AttributeOptionGroup(models.Model):
+    name = models.CharField(_('Name'), max_length=128)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('Attribute option group')
+        verbose_name_plural = _('Attribute option groups')
+
+    @property
+    def option_summary(self):
+        options = [o.option for o in self.options.all()]
+        return ", ".join(options)
+
+
+class AttributeOption(models.Model):
+    group = models.ForeignKey(
+        'shop.AttributeOptionGroup', related_name='options',
+        verbose_name=_("Group"))
+    option = models.CharField(_('Option'), max_length=255)
+
+    def __str__(self):
+        return self.option
+
+    class Meta:
+        unique_together = ('group', 'option')
+        verbose_name = _('Attribute option')
+        verbose_name_plural = _('Attribute options')
+
+
 class Attribute(AbstractAutoDate):
+    entity = models.ForeignKey(
+        'shop.Entity', related_name='attributes', blank=True,
+        null=True, verbose_name=_("Entity"))
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
@@ -174,6 +237,10 @@ class Attribute(AbstractAutoDate):
     is_filterable = models.BooleanField(default=True)
     is_sortable = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
+    option_group = models.ForeignKey(
+        'shop.AttributeOptionGroup', blank=True, null=True,
+        verbose_name=_("Option Group"),
+        help_text=_('Select an option group if using type "Option"'))
     attributeproducts = models.ManyToManyField(
         'shop.Product',
         verbose_name=_('Attribute Product'),
@@ -185,20 +252,20 @@ class Attribute(AbstractAutoDate):
         return self.name
 
 
-class Offer(AbstractAutoDate):
-    name = models.CharField(
-        _('Name'), max_length=100)
-    display_text = models.TextField(_('Display Text'), blank=True, default='')
-    active = models.BooleanField(default=True)
-    offerproducts = models.ManyToManyField(
-        'shop.Product',
-        verbose_name=_('Offer Product'),
-        through='ProductOffer',
-        through_fields=('offer', 'product'),
-        blank=True)
+# class Offer(AbstractAutoDate):
+#     name = models.CharField(
+#         _('Name'), max_length=100)
+#     display_text = models.TextField(_('Display Text'), blank=True, default='')
+#     active = models.BooleanField(default=True)
+#     offerproducts = models.ManyToManyField(
+#         'shop.Product',
+#         verbose_name=_('Offer Product'),
+#         through='ProductOffer',
+#         through_fields=('offer', 'product'),
+#         blank=True)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 class Keyword(AbstractAutoDate):
@@ -232,10 +299,10 @@ class Currency(AbstractAutoDate):
         max_digits=8, decimal_places=2,
         default=0.0)
     active = models.BooleanField(default=True)
-    
+
     def __str__(self):
         return self.name
-    
+
 
 class AbstractProduct(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
@@ -244,8 +311,8 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
-    type_entity = models.PositiveSmallIntegerField(
-        _('Entity'), choices=ENTITY_CHOICES, default=0)
+    type_service = models.PositiveSmallIntegerField(
+        _('Entity'), choices=SERVICE_CHOICES, default=0)
     type_product = models.PositiveSmallIntegerField(
         _('Type'), choices=PRODUCT_CHOICES, default=0)
     type_flow = models.PositiveSmallIntegerField(
@@ -262,6 +329,8 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_product_image,
         blank=True, null=True)
+    image_alt = models.CharField(
+        _('Image Alt'), blank=True, max_length=100)
     video_url = models.CharField(
         _('Video Url'), blank=True, max_length=200)
     flow_image = models.ImageField(
@@ -302,6 +371,12 @@ class Product(AbstractProduct, ModelMeta):
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
+    entity = models.ForeignKey(
+        'shop.Entity', related_name='entityproducts', blank=True,
+        null=True, verbose_name=_("Product Entity"))
+    structure = models.ForeignKey(
+        'faq.Topic', related_name='topicproducts', blank=True,
+        null=True, verbose_name=_("Product Structure"))
     siblings = models.ManyToManyField(
         'self', verbose_name=_('Sibling Products'),
         related_name='siblingproduct+',
@@ -332,12 +407,12 @@ class Product(AbstractProduct, ModelMeta):
         through='ProductKeyword',
         through_fields=('product', 'keyword'),
         blank=True)
-    offers = models.ManyToManyField(
-        'shop.Offer',
-        verbose_name=_('Product Offer'),
-        through='ProductOffer',
-        through_fields=('product', 'offer'),
-        blank=True)
+    # offers = models.ManyToManyField(
+    #     'shop.Offer',
+    #     verbose_name=_('Product Offer'),
+    #     through='ProductOffer',
+    #     through_fields=('product', 'offer'),
+    #     blank=True)
     faqs = models.ManyToManyField(
         FAQuestion,
         verbose_name=_('Product FAQ'),
@@ -394,6 +469,10 @@ class Product(AbstractProduct, ModelMeta):
     def get_absolute_url(self):
         return reverse('product-detail', kwargs={'slug': self.slug})
 
+    @property
+    def has_attributes(self):
+        return self.attributes.exists()
+
 
 class ProductArchive(AbstractProduct):
     originalproduct = models.ForeignKey(
@@ -402,30 +481,48 @@ class ProductArchive(AbstractProduct):
         on_delete=models.SET_NULL,
         related_name='originalproduct',
         null=True)
-    parent = models.IntegerField(
-        _('Parent'),
+    entity = models.CharField(
+        _('Product Entity'),
         blank=True,
-        null=True)
+        max_length=20)
+
     siblings = models.CharField(
-        _('Siblings'),
+        _('Siblings Product'),
         blank=True,
-        max_length=255)
-    back_nav = models.IntegerField(
-        _('Back Navigation'),
+        max_length=100)
+    related = models.CharField(
+        _('Related Product'),
         blank=True,
-        null=True)
-    main_nav = models.CharField(
-        _('Main Category'),
+        max_length=100)
+    combo = models.CharField(
+        _('Child Product'),
         blank=True,
-        max_length=255)
-    sub_nav = models.CharField(
-        _('Sub Category'),
+        max_length=100)
+    categories = models.CharField(
+        _('Product Category'),
         blank=True,
-        max_length=255)
+        max_length=100)
+    keywords = models.CharField(
+        _('Product Keyword'),
+        blank=True,
+        max_length=100)
+    offers = models.CharField(
+        _('Product Offer'),
+        blank=True,
+        max_length=100)
     faqs = models.CharField(
-        _('FAQ'),
+        _('Product Structure'),
         blank=True,
-        max_length=255)
+        max_length=100)
+    attributes = models.CharField(
+        _('Product Attributes'),
+        blank=True,
+        max_length=100)
+    prices = models.CharField(
+        _('Product Prices'),
+        blank=True,
+        max_length=100)
+    
 
     class Meta:
         verbose_name = _('Product Archive')
@@ -444,31 +541,48 @@ class ProductScreen(AbstractProduct):
         on_delete=models.SET_NULL,
         related_name='linkedproduct',
         null=True)
-    parent = models.IntegerField(
-        _('Parent'),
+    entity = models.CharField(
+        _('Product Entity'),
         blank=True,
-        null=True)
-    siblings = models.CharField(
-        _('Siblings'),
-        blank=True,
-        max_length=255)
-    back_nav = models.IntegerField(
-        _('Back Navigation'),
-        blank=True,
-        null=True)
-    main_nav = models.CharField(
-        _('Main Category'),
-        blank=True,
-        max_length=255)
-    sub_nav = models.CharField(
-        _('Sub Category'),
-        blank=True,
-        max_length=255)
-    faqs = models.CharField(
-        _('FAQ'),
-        blank=True,
-        max_length=255)
+        max_length=20)
 
+    siblings = models.CharField(
+        _('Siblings Product'),
+        blank=True,
+        max_length=100)
+    related = models.CharField(
+        _('Related Product'),
+        blank=True,
+        max_length=100)
+    combo = models.CharField(
+        _('Child Product'),
+        blank=True,
+        max_length=100)
+    categories = models.CharField(
+        _('Product Category'),
+        blank=True,
+        max_length=100)
+    keywords = models.CharField(
+        _('Product Keyword'),
+        blank=True,
+        max_length=100)
+    offers = models.CharField(
+        _('Product Offer'),
+        blank=True,
+        max_length=100)
+    faqs = models.CharField(
+        _('Product Structure'),
+        blank=True,
+        max_length=100)
+    attributes = models.CharField(
+        _('Product Attributes'),
+        blank=True,
+        max_length=100)
+    prices = models.CharField(
+        _('Product Prices'),
+        blank=True,
+        max_length=100)
+    
     class Meta:
         verbose_name = _('Product Screen')
         verbose_name_plural = _('Product Screens ')
@@ -506,7 +620,6 @@ class RelatedProduct(AbstractAutoDate):
         help_text=_('Determines order of the products. A product with a higher'
                     ' value will appear before one with a lower ranking.'))
 
-    
     def __str__(self):
         return _("%(pri)s to '%(sec)s'") % {
             'pri': self.primary,
@@ -540,25 +653,25 @@ class ChildProduct(AbstractAutoDate):
             'sec': self.children}
 
 
-class ProductOffer(AbstractAutoDate):
-    offer = models.ForeignKey(
-        Offer,
-        verbose_name=_('Offer'),
-        related_name='offers',
-        on_delete=models.CASCADE)
-    product = models.ForeignKey(
-        Product,
-        verbose_name=_('Product'),
-        related_name='offerproducts',
-        on_delete=models.CASCADE)
-    active = models.BooleanField(default=True)
-    off_order = models.PositiveIntegerField(
-        _('Offer Order'), default=1)
+# class ProductOffer(AbstractAutoDate):
+#     offer = models.ForeignKey(
+#         Offer,
+#         verbose_name=_('Offer'),
+#         related_name='offers',
+#         on_delete=models.CASCADE)
+#     product = models.ForeignKey(
+#         Product,
+#         verbose_name=_('Product'),
+#         related_name='offerproducts',
+#         on_delete=models.CASCADE)
+#     active = models.BooleanField(default=True)
+#     off_order = models.PositiveIntegerField(
+#         _('Offer Order'), default=1)
 
-    def __str__(self):
-        return _("%(product)s to '%(offer)s'") % {
-            'product': self.product,
-            'offer': self.offer}
+#     def __str__(self):
+#         return _("%(product)s to '%(offer)s'") % {
+#             'product': self.product,
+#             'offer': self.offer}
 
 
 class ProductKeyword(AbstractAutoDate):
@@ -657,6 +770,22 @@ class ProductAttribute(AbstractAutoDate):
         default=0.0)
     value_ltext = models.TextField(
         _('Value Large Text'), blank=True, default='')
+    value_option = models.ForeignKey(
+        'shop.AttributeOption', blank=True, null=True,
+        verbose_name=_("Value option"))
+    value_file = models.FileField(
+        upload_to=get_upload_path_product_file, max_length=255,
+        blank=True, null=True)
+    value_image = models.ImageField(
+        upload_to=get_upload_path_product_image, max_length=255,
+        blank=True, null=True)
+    value_entity = fields.GenericForeignKey(
+        'entity_content_type', 'entity_object_id')
+    entity_content_type = models.ForeignKey(
+        ContentType, null=True, blank=True, editable=False)
+    entity_object_id = models.PositiveIntegerField(
+        null=True, blank=True, editable=False)
+
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -691,4 +820,29 @@ class ProductPrice(AbstractAutoDate):
             'product': self.product,
             'currency': self.currency}
 
-    
+
+class ProductExtraInfo(models.Model):
+    """
+    Model to add any extra information to a Product.
+    """
+    info_type = models.CharField(
+        max_length=256,
+        verbose_name=_('Type'),
+    )
+
+    product = models.ForeignKey(
+        'shop.Product',
+        verbose_name=_('Product'),
+    )
+
+    # GFK 'content_object'
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = fields.GenericForeignKey('content_type', 'object_id')
+
+    class Meta:
+        ordering = ['info_type']
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.product, self.type)
+

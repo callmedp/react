@@ -3,8 +3,6 @@ from decimal import Decimal
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from django.conf.settings import AUTH_USER_MODEL
-
 
 class ProductRecord(models.Model):
     """
@@ -37,7 +35,16 @@ class UserRecord(models.Model):
     A record of a user's activity.
     """
 
-    user = models.OneToOneField(AUTH_USER_MODEL, verbose_name=_("User"))
+    user_name = models.CharField(
+        max_length=100,
+        verbose_name=_("User Name"),)
+    user_email = models.CharField(
+        max_length=100,
+        verbose_name=_("User Email"),)
+    user_id = models.CharField(
+        max_length=100,
+        verbose_name=_("User ID"),)
+
 
     # Updated using browsing stats
     num_product_views = models.PositiveIntegerField(
@@ -48,8 +55,6 @@ class UserRecord(models.Model):
     # Updated using order stats
     num_orders = models.PositiveIntegerField(
         _('Orders'), default=0, db_index=True)
-    num_order_lines = models.PositiveIntegerField(
-        _('Order Lines'), default=0, db_index=True)
     num_order_items = models.PositiveIntegerField(
         _('Order Items'), default=0, db_index=True)
     total_spent = models.DecimalField(_('Total Spent'), decimal_places=2,
@@ -64,7 +69,15 @@ class UserRecord(models.Model):
 
 class UserProductView(models.Model):
 
-    user = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_("User"))
+    user_name = models.CharField(
+        max_length=100,
+        verbose_name=_("User Name"),)
+    user_email = models.CharField(
+        max_length=100,
+        verbose_name=_("User Email"),)
+    user_id = models.CharField(
+        max_length=100,
+        verbose_name=_("User ID"),)
     product = models.ForeignKey('shop.Product', verbose_name=_("Product"))
 
     class Meta:
@@ -78,7 +91,15 @@ class UserProductView(models.Model):
 
 class UserSearch(models.Model):
 
-    user = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_("User"))
+    user_name = models.CharField(
+        max_length=100,
+        verbose_name=_("User Name"),)
+    user_email = models.CharField(
+        max_length=100,
+        verbose_name=_("User Email"),)
+    user_id = models.CharField(
+        max_length=100,
+        verbose_name=_("User ID"),)
     query = models.CharField(_("Search term"), max_length=255, db_index=True)
 
     class Meta:

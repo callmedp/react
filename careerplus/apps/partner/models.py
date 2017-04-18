@@ -2,9 +2,13 @@ from django.db import models
 
 from django.utils.translation import ugettext_lazy as _
 from seo.models import AbstractSEO, AbstractAutoDate
-from django.conf.settings import AUTH_USER_MODEL
+from django.conf import settings
 from meta.models import ModelMeta
 from shop.functions import get_upload_path_vendor
+from geolocation.models import (
+    Country,
+    State,
+    City,)
 
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -20,9 +24,24 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     mobile = models.CharField(
         _('Mobile Number'), blank=True,
         max_length=20, help_text=_('Mobile Number'))
-    # country = models.ForeignKey()
-    # state = models.ForeignKey()
-    # city = models.ForeignKey()
+    country = models.ForeignKey(
+        Country,
+        verbose_name=_('Country'),
+        on_delete=models.SET_NULL,
+        related_name='partnercountry',
+        null=True)
+    state = models.ForeignKey(
+        State,
+        verbose_name=_('State'),
+        on_delete=models.SET_NULL,
+        related_name='partnerstate',
+        null=True)
+    city = models.ForeignKey(
+        City,
+        verbose_name=_('City'),
+        on_delete=models.SET_NULL,
+        related_name='partnercity',
+        null=True)
     address = models.TextField(
         _('Address'), blank=True,
         default='', help_text=_('Address'))
@@ -35,10 +54,13 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     pan = models.CharField(
         _('PAN No.'), blank=True,
         max_length=20, help_text=_('PAN No.'))
-    employee = models.ManyToManyField(
-        AUTH_USER_MODEL,
+    website = models.CharField(
+        _('Website.'), blank=True,
+        max_length=20, help_text=_('Website'))
+    employees = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
         through='VendorHierarchy',
-        through_fields=('vendee', 'user'),
+        through_fields=('vendee', 'employee'),
         verbose_name=_('Vendor Hierarchy'),
         blank=True)
 
@@ -60,7 +82,7 @@ class VendorHierarchy(AbstractAutoDate):
         related_name='vendorset',
         on_delete=models.CASCADE)
     employee = models.ForeignKey(
-        Vendor,
+        settings.AUTH_USER_MODEL,
         verbose_name=_('Employee'),
         related_name='employees',
         on_delete=models.CASCADE)
