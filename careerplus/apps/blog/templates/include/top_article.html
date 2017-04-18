@@ -1,4 +1,5 @@
 {% load static %}
+{% load thumbnail %}
 
 {% for key, values in article_list.items %}
 <div class="box-panel article-listing mb-40">
@@ -8,7 +9,10 @@
       <a title="Government Jobs" href="#">
         {% if article.image %}
         <figure class="media-left">
-          <img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113">
+          {% thumbnail article.image "171x113" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{article.image_alt}}">
+          {% endthumbnail %}
+          <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
         </figure>
         {% endif %}
         <div class="media-body">

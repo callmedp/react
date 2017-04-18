@@ -88,10 +88,31 @@ $(function() {
         window.open(href, '_blank'); 
     });
 
+    $.validator.addMethod("custom_message",
+        function(value, element) {
+            if($('#id_message').val().trim()){
+            
+                return true;
+            
+            }
+            return false;
+    });
+
 	$("#cms_comment_form").validate({
 		rules: {
-		    message: "required",
+		    message: {
+                required: true,
+                custom_message: true,
+                maxlength: 200
+            },
 		},
+        messages:{
+            message:{
+                required: "Message is Mandatory.",
+                maxlength: "Maximum 200 characters.",
+                custom_message: "Message is Mandatory."
+            },
+        },
 		highlight:function(element, errorClass) {
 		        $(element).siblings('.error').removeClass('hide_error');
 		},

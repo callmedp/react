@@ -45,6 +45,7 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'meta',
+    'sorl.thumbnail',
 ]
 
 # Apps specific for this project go here.

@@ -64,7 +64,7 @@
                   <form role="form" id="cms_comment_form" method="post" action=''>
                   {% csrf_token %}
                     <div class="form-group">
-                      <textarea class="form-control" name="message" rows="3" placeholder=""></textarea>
+                      <textarea class="form-control" id="id_message" name="message" rows="3" placeholder=""></textarea>
                       <span class="error position-error"></span>
                     </div>
                     {% if user.is_authenticated %} 

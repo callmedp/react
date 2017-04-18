@@ -14,7 +14,7 @@ $(document).ready(function() {
 				data = "?page="+ page;
 				//console.log(data);
 				$.ajax({
-					url: "/blog/category-wise-loading/" + data,
+					url: "/article/category-wise-loading/" + data,
 					dataType: "html",
 					success: function(html) {
 						$("#load_more").remove();

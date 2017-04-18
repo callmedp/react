@@ -3,6 +3,8 @@ from django.http import HttpResponseForbidden, Http404
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 
+from meta.views import Meta
+
 from .mixins import BlogMixin, PaginationMixin
 
 from .models import Category, Blog
@@ -125,7 +127,23 @@ class BlogLandingPageView(TemplateView, BlogMixin):
 			'article_list': article_list
 		})
 
+		context.update(self.get_breadcrumb_data())
+		context.update(self.get_meta_details())
 		return context
+
+	def get_breadcrumb_data(self):
+		breadcrumbs = []
+		breadcrumbs.append({"url": '/', "name": "Home"})
+		breadcrumbs.append({"url": None, "name": "Career Guidance"})
+		data = {"breadcrumbs": breadcrumbs}
+		return data
+
+	def get_meta_details(self):
+		meta = Meta(
+		    title="Career Guidance & Advice – Articles @ Learning.Shine",
+		    description='Planning to change career - Get advice and tips for better growth. Read latest articles for interview preparation, competitive exams, government jobs, resume writing tips & other career guidance at learning.shine',
+		)
+		return {"meta": meta}
 
 
 class BlogLandingAjaxView(ListView, BlogMixin):

@@ -1,13 +1,14 @@
 {% extends "basic/base.html" %}
 {% load static %}
 {% load humanize %}
+{% load thumbnail %}
     {% block meta_tags %}
         {{block.super}}
         {% include 'meta/meta.html' %}
     {%  endblock meta_tags %}
 
     {% block title %}
-       Blogs
+       Career Guidance & Advice – Articles @ Learning.Shine
     {% endblock title %}
     
     {% block css %}
@@ -30,7 +31,10 @@
                               <div class="col-sm-4">
                                 <a href="#">
                                  {% if art.image %}
-                                  <img src="{{art.image.url}}" class="img-responsive" alt="{{cat.name}}" height="271px" width="360px">
+                                  {% thumbnail art.image "360x271" crop="center" as im %}
+                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                                 {% endthumbnail %}
+                                  <!--img src="{{art.image.url}}" class="img-responsive" alt="{{cat.name}}" height="271px" width="360px"-->
                                   {% endif %}
                                     <div class="caption-bg-txt">
                                       <span class="caption-heading">{{cat.name}}</span>
@@ -59,6 +63,17 @@
     {% endblock blogtrending %}
     
     {% block breadcrumb %}
+        <section class="container">
+            <ol class="breadcrumb">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </section>
         
     {% endblock breadcrumb %}
 
@@ -114,7 +129,6 @@
 
 {% block js %}
    {{ block.super }}
-   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
    <script src="{% static 'console/js/blog/blog-landing.js' %}"></script>
 
    <script type="text/javascript">
