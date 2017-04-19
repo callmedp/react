@@ -14,4 +14,3 @@ class DesignPage(View):
         context.update({'test': 'TEST'})
         return render_to_response(
             self.template_name, context)
-

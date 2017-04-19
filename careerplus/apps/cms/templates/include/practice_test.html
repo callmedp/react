@@ -1,0 +1,21 @@
+{% load static %}
+<div class="practice-test box-panel mb-40">
+	<h2 class="heading-right">{{heading}}</h2>
+	<figure class="mt-20 mb-20">
+	  <img src="{{image.url}}" class="img-responsive" alt="Practice Test">
+	</figure>
+	<a class="practice-test-button" href="{{redirect_url}}">Take practice test</a>
+</div> 
+
+
+
+{% comment %}
+{% load static %}
+<div class="practice-test box-panel mb-40">
+	<h2 class="heading-right">free practice test</h2>
+	<figure class="mt-20 mb-20">
+	  <img src="{% static 'console/images/cms/practice-test.jpg' %}" class="img-responsive" alt="Practice Test">
+	</figure>
+	<a class="practice-test-button" href="#">Take practice test</a>
+</div> 
+{% endcomment %}

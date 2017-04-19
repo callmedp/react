@@ -1,0 +1,218 @@
+from django import forms
+from django.contrib.sites.models import Site
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+
+from ckeditor.widgets import CKEditorWidget
+
+from .models import Tag, Category, Blog
+from .config import STATUS
+
+User = get_user_model()
+
+
+class BlogAddForm(forms.ModelForm):
+    name = forms.CharField(label=("Name*:"), max_length=85,
+    	widget=forms.TextInput(
+    	attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    slug = forms.SlugField(label=("Slug:"), max_length=90,
+    	widget=forms.TextInput(
+    		attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    image = forms.FileField(label=("Image:"), max_length=100, required=False)
+
+    image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
+    	required=False, widget=forms.TextInput(
+    	attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    content = forms.CharField(required=True, widget=CKEditorWidget())
+
+    p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
+    	queryset=Category.objects.filter(is_active=True),
+    	empty_label="Select Category", required=True,
+        to_field_name='name', widget=forms.Select(
+        attrs={'class': 'form-control', 'required': True}))
+
+    sec_cat = forms.ModelMultipleChoiceField(label=("Secondary Category:"),
+    	queryset=Category.objects.filter(is_active=True),
+        to_field_name='name', widget=forms.SelectMultiple(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    tags = forms.ModelMultipleChoiceField(label=("Tags:"),
+    	queryset=Tag.objects.filter(is_active=True),
+        to_field_name='name', widget=forms.SelectMultiple(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    sites = forms.ModelMultipleChoiceField(label=("Sites:"),
+    	queryset=Site.objects.all(), widget=forms.SelectMultiple(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    user = forms.ModelChoiceField(label=("Writer:"),
+    	queryset=User.objects.filter(is_active=True, is_staff=True),
+    	empty_label="Select Writer", required=True,
+        to_field_name='name', widget=forms.Select(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    status = forms.ChoiceField(
+            choices=STATUS, initial=0, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12',
+                'required': True}))
+
+    allow_comment = forms.BooleanField(label=("Allow Comment:"),
+    	required=False, widget=forms.CheckboxInput())
+
+    # publish_date = forms.DateTimeField(label=("Publish Date:"),
+    # 	required=False, input_formats='%Y-%m-%d', help_text='eg- 2017-03-31',
+    # 	widget=forms.DateTimeInput())
+
+    class Meta:
+        model = Blog
+        fields = ['name', 'slug', 'image', 'image_alt', 'p_cat', 'content',
+	        'sec_cat', 'tags', 'sites', 'user', 'allow_comment',
+	        'status']
+        widgets = {
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(BlogAddForm, self).__init__(*args, **kwargs)
+        self.fields['slug'].required = False
+        self.fields['tags'].required = False
+        self.fields['sec_cat'].required = False
+        self.fields['sites'].required = False
+
+    def clean(self):
+    	fields = ['name', 'slug']
+    	for field in fields:
+    		try:
+    			val = self.cleaned_data.get(field).strip()
+    			self.cleaned_data[field] = val
+    		except:
+    			continue
+    	status = self.cleaned_data.get('status')
+    	if status == '1':
+
+    		if not self.cleaned_data.get('image'):
+    			raise forms.ValidationError('Image is reqired',
+    				code='image-error', )
+    		if self.cleaned_data.get('image') and not self.cleaned_data.get('image_alt'):
+    			raise forms.ValidationError('Image alt is reqired',
+    				code='image-alt error', )
+    	return super(BlogAddForm, self).clean()
+
+    def save(self, commit=True):
+    	blog = super(BlogAddForm, self).save(commit=False)
+    	if self.cleaned_data.get('status') == '1':
+    		blog.publish_date = timezone.now()
+    	if commit:
+    		blog.save()
+    	return blog
+
+
+class TagAddForm(forms.ModelForm):
+    name = forms.CharField(label=("Tag*:"), max_length=70,
+    	widget=forms.TextInput(
+    	attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    slug = forms.SlugField(label=("Slug:"), max_length=80,
+    	widget=forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    is_active = forms.BooleanField(label=("Active:"),
+    	widget=forms.CheckboxInput())
+
+    priority = forms.IntegerField(label=("Priority:"), initial=0,
+    	widget=forms.NumberInput(
+    		attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    class Meta:
+        model = Tag
+        fields = ['name', 'slug', 'is_active', 'priority']
+        widgets = {
+        }
+        labels = {
+            'name': ('Tag*:'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TagAddForm, self).__init__(*args, **kwargs)
+        self.fields['slug'].required = False
+        self.fields['is_active'].required = False
+
+    def clean(self):
+        fields_to_clean = ['name', 'slug']
+        for field in fields_to_clean:
+            try:
+                value = self.cleaned_data.get(field).strip()
+                self.cleaned_data[field] = value
+            except:
+                continue
+        return super(TagAddForm, self).clean()
+
+
+class CategoryAddForm(forms.ModelForm):
+    name = forms.CharField(label=("Category*:"), max_length=70,
+    	widget=forms.TextInput(
+    	attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    slug = forms.SlugField(label=("Slug:"), max_length=80,
+    	widget=forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    is_active = forms.BooleanField(label=("Active:"),
+    	widget=forms.CheckboxInput())
+
+    priority = forms.IntegerField(label=("Priority:"), initial=0,
+    	widget=forms.NumberInput(
+    		attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    class Meta:
+        model = Category
+        fields = ['name', 'slug', 'is_active', 'priority']
+        widgets = {
+        }
+        labels = {
+            'name': ('Category*:'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryAddForm, self).__init__(*args, **kwargs)
+        self.fields['slug'].required = False
+        self.fields['is_active'].required = False
+
+    def clean(self):
+        fields_to_clean = ['name', 'slug']
+        for field in fields_to_clean:
+            try:
+                value = self.cleaned_data.get(field).strip()
+                self.cleaned_data[field] = value
+            except:
+                continue
+        return super(CategoryAddForm, self).clean()
+
+
+class ArticleFilterForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleFilterForm, self).__init__(*args, **kwargs)
+
+        qs = User.objects.filter(is_staff=True)
+        NEWSTATUS = ((-1, 'Select Status'),) + STATUS
+
+        self.fields['user'] = forms.ModelChoiceField(label=("Writer:"),
+            queryset=qs,
+            to_field_name='pk',
+            widget=forms.Select(
+                attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+        self.fields['status'] = forms.ChoiceField(label=("Status:"),
+            choices=NEWSTATUS, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
+        self.fields['p_cat'] = forms.ModelChoiceField(label=("Category"),
+            queryset=Category.objects.all(),
+            to_field_name='pk',
+            widget=forms.Select(
+                attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    class Meta:
+        model = Blog
+        fields = ['user', 'status', 'p_cat']

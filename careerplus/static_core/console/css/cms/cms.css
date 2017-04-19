@@ -1,0 +1,259 @@
+.download-pdf {
+  clear: both;
+  position: relative;
+  display: block;
+}
+.download-pdf a {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+.download-pdf .download-box {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 185px;
+  height: 70px;
+}
+.download-pdf .download-box figure {
+  margin: 0 auto;
+  display: block;
+}
+
+.download-resume {
+  color: #333;
+  padding: 25px;
+}
+.download-resume h2 {
+  font-size: 19px;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+.download-resume h3 {
+  font-size: 15px;
+  background-color: #e5e5e5;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: inline-block;
+}
+.download-resume ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+.download-resume ul li {
+  display: block;
+  font-size: 14px;
+  margin: 5px 0 10px 0;
+  position: relative;
+}
+.download-resume ul li:before {
+  content: '';
+  background: url(../../images/cms/sprite.png) no-repeat -582px -50px;
+  display: inline-block;
+  position: absolute;
+  left: -20px;
+  top: 7px;
+  width: 8px;
+  height: 9px;
+}
+.download-resume ul li a {
+  color: #3f5f94;
+}
+.download-resume ul li a:hover {
+  color: #2f5da5;
+}
+
+.formatting {
+  color: #333;
+  padding: 25px;
+}
+.formatting h2 {
+  font-size: 16px;
+  color: #333;
+  margin: 30px 0 15px 0;
+  font-weight: 600;
+}
+.formatting ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+.formatting ul li {
+  display: block;
+  font-size: 14px;
+  margin: 5px 0 10px 0;
+  position: relative;
+}
+.formatting ul li:before {
+  content: '';
+  background: url(../../images/cms/sprite.png) no-repeat -582px -50px;
+  display: inline-block;
+  position: absolute;
+  left: -20px;
+  top: 7px;
+  width: 8px;
+  height: 9px;
+}
+.formatting ul li a {
+  color: #3f5f94;
+}
+.formatting ul li a:hover {
+  color: #2f5da5;
+}
+.formatting article {
+  font-size: 16px;
+}
+
+.writer-comments {
+  padding: 25px;
+}
+.writer-comments h2 {
+  font-size: 19px;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+.writer-comments article {
+  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
+  display: block;
+  font-size: 15px;
+  font-weight: 300;
+  padding: 15px 0;
+}
+.writer-comments article strong {
+  font-weight: 400;
+  display: block;
+  margin: 20px 0 3px 0;
+}
+.writer-comments article strong:first-child {
+  margin-top: 0;
+}
+.writer-comments .media-body {
+  font-size: 16px;
+  font-weight: 300;
+}
+.writer-comments .media-body strong {
+  font-size: 22px;
+  font-weight: 400;
+  display: block;
+  margin: 0;
+}
+.writer-comments .sample-resume {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  display: table;
+  margin: 15px auto 0 auto;
+}
+.writer-comments .sample-resume span {
+  margin-left: 5px;
+}
+
+.comments-box {
+  font-size: 15px;
+  color: #666;
+}
+.comments-box .media-body {
+  overflow: visible;
+}
+.comments-box .form-group {
+  position: relative;
+}
+.comments-box .form-group:before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 0;
+  width: 13px;
+  height: 21px;
+  background: url(../../images/cms/sprite.png) no-repeat -596px -72px;
+  display: inline-block;
+}
+.comments-box .form-group textarea {
+  box-shadow: none;
+}
+.comments-box .form-control {
+  border: 1px solid #e5e5e5;
+  border-radius: 0;
+}
+.comments-box .submit-button {
+  display: inline-table;
+  float: right;
+  width: auto;
+  padding: 7px 15px;
+  border-radius: 2px;
+}
+.comments-box .time {
+  display: block;
+  color: #999;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.comments-links {
+  padding: 10px;
+  display: block;
+  color: #333;
+  background-color: #f1f1f1;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+.comments-links:hover {
+  color: #333;
+}
+.comments-links:focus {
+  color: #333;
+  overflow: hidden;
+}
+
+.related {
+  padding: 20px;
+}
+.related .media {
+  margin-top: 20px;
+}
+.related .media .media-body {
+  font-size: 15px;
+  color: #666;
+  line-height: 20px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.request-call {
+  padding: 20px;
+}
+.request-call .form-control {
+  border-radius: 0;
+  border: 1px solid #e1e1e1;
+  color: #e1e1e1;
+  font-size: 13px;
+}
+.request-call .form-group {
+  position: relative;
+}
+.request-call .call-service {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  text-transform: uppercase;
+}
+.request-call .call-service strong {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2f5da5;
+  display: block;
+  margin: 10px 0 0 0;
+}
+
+.practice-test {
+  padding: 20px;
+}
+
+/*# sourceMappingURL=cms.css.map */

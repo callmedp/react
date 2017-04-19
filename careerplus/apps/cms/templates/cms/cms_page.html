@@ -1,0 +1,112 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% load humanize %}
+    {% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+    {%  endblock meta_tags %}
+
+    {% block title %}
+    CMS - Shine Learning
+    {% endblock title %}
+    
+    {% block css %}
+        {{block.super}}        
+        <link type="text/css" href="{% static 'console/css/cms/cms.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'console/css/cms/extra.css' %}" rel="stylesheet">
+    {% endblock css %}
+    
+    {% block breadcrumb %}
+    <section class="container">
+        <ol class="breadcrumb">
+            <li><a href='/'>Home</a></li>
+            <li class="active">CMS</li>
+        </ol>
+    </section>
+   {% endblock breadcrumb %}
+
+   {% block pageheading %}
+    <section class="container">
+        <div class="social-login share-mg">
+            <span class="share">Share on</span>
+            <a id="cms_share" class="facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}"></a>
+
+            <a id="cms_share" class="linkedin" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&title={{page_obj.title}}& summary={{page_obj.discription}}&url={{hostname}}{{page_obj.get_absolute_url}}&source={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}"></a>
+
+            <a id="cms_share" class="gplus" target="_blank" page-id="{{page_obj.id}}" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}"></a>
+        </div>
+        <div class="page-header">
+          <h1>{{page_heading}}</h1>
+        </div>
+    </section>
+   {% endblock pageheading %}
+
+{% block container %}
+    <section class="container">
+        <!-- page content body start -->
+        <div class="col-main">
+
+        <!-- left content start -->
+          <div class="col-left">
+           {{ left_widgets|safe|default:'' }}
+
+            {% if page_obj.allow_comment %}
+            <!-- comment box -->
+            <div class="col-sm-12 comments-box mb-40 mt-40">
+               <a class="comments-links mb-40" id="total_comment"> <span class="comments-icon mr-10"></span>{{total_comment}} Comments</a>
+              <div class="media mb-40">
+                <div class="media-left">
+                  <a href="#">
+                    <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="shine">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <form role="form" id="cms_comment_form" method="post" action=''>
+                  {% csrf_token %}
+                    <div class="form-group">
+                      <textarea class="form-control" id="id_message" name="message" rows="3" placeholder=""></textarea>
+                      <span class="error position-error"></span>
+                    </div>
+                    {% if user.is_authenticated %} 
+                       <input type='submit' class="submit-button" value="Comments">
+                       
+                   {% else %}
+                       <input type='button' class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm" value="Login to Comments">
+                   {% endif %}
+                  </form>
+                </div>
+              </div>
+              <div id="page_comment">
+              {{ comment_listing|safe|default:'' }}
+              </div>
+              
+            </div>
+            {% endif %}
+
+          </div>  
+        <!-- left content end -->
+
+        <!-- right content start -->
+        <div class="col-right">
+          {{ right_widgets|safe|default:'' }}
+
+        </div>
+        <!-- right content end -->
+
+        </div>
+        <!-- page content body end -->
+
+    </section>
+    <!-- main section end -->
+
+    {% include 'basic/login_register.html' %}
+
+{% endblock container %}
+  
+
+{% block js %}
+   {{ block.super }}
+   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+   <script src="{% static 'console/js/cms/cms.js' %}"></script>
+
+{% endblock js %}

@@ -4,6 +4,8 @@ from .base_settings import *  # noqa
 DEBUG = True
 
 ALLOWED_HOSTS = []
+SITE_ID = 1
+SITE_DOMAIN = '127.0.0.1:8000'
 
 # Database
 DATABASES = {
@@ -19,20 +21,40 @@ DATABASES = {
 
 # Apps specific for this project go here.
 DEV_APPS = [
+<<<<<<< HEAD
+=======
+    'debug_toolbar'
+>>>>>>> blog
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DEV_APPS
+
+DEV_MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
+DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
+DOWNLOAD_URL = '/download/'
+
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
+
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+HOST_NAME = 'http://127.0.0.1:8000'
 
 META_SITE_PROTOCOL = 'https'
 META_SITE_DOMAIN = 'learning.shine.com'

@@ -75,6 +75,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.name
 
+    def get_full_name(self):
+        """
+            Returns the short name for the user.
+        """
+        return self.name
+
 
 # class UserEmail(models.Model):
 #     """
