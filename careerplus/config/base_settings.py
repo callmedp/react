@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'meta',
-    'cities_light'
+    'cities_light',
     'sorl.thumbnail',
 ]
 

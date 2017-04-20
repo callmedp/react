@@ -23,6 +23,13 @@ class CategoryAdmin(admin.ModelAdmin):
 class AttributeInline(admin.TabularInline):
     model = models.ProductAttribute
     raw_id_fields = ['attribute', 'product']
+    fk_name = 'product'
+    extra = 1
+
+class FAQuestionInline(admin.TabularInline):
+    model = models.FAQProduct
+    raw_id_fields = ['question', 'product']
+    fk_name = 'product'
     extra = 1
 
 
@@ -31,6 +38,17 @@ class RelatedProductInline(admin.TabularInline):
     fk_name = 'primary'
     raw_id_fields = ['primary', 'secondary']
     extra = 1
+
+
+class OptionInline(admin.TabularInline):
+    model = models.AttributeOption
+    fk_name = 'group'
+    raw_id_fields = ['group']
+    extra = 1
+
+
+class OptionGroupAdmin(admin.ModelAdmin):
+    inlines = [OptionInline]
 
 
 class ChildProductInline(admin.TabularInline):
@@ -42,11 +60,13 @@ class ChildProductInline(admin.TabularInline):
 
 class CategoryInline(admin.TabularInline):
     model = models.ProductCategory
+    fk_name = 'product'
     extra = 1
 
 
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [AttributeInline, CategoryInline, RelatedProductInline, ChildProductInline]
+    inlines = [AttributeInline, CategoryInline, RelatedProductInline, ChildProductInline,
+        FAQuestionInline]
     prepopulated_fields = {"slug": ("name",)}
     
 #     def get_queryset(self, request):
@@ -71,6 +91,8 @@ admin.site.register(models.Attribute)
 admin.site.register(models.Keyword)
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.Currency)
+admin.site.register(models.Entity)
+admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)
 
 

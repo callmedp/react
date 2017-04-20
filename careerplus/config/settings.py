@@ -21,10 +21,7 @@ DATABASES = {
 
 # Apps specific for this project go here.
 DEV_APPS = [
-<<<<<<< HEAD
-=======
     'debug_toolbar'
->>>>>>> blog
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DEV_APPS

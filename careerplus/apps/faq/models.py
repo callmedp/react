@@ -3,6 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.query import QuerySet
 from seo.models import AbstractAutoDate
 
+from ckeditor.fields import RichTextField
+
 
 class FAQuestionQuerySet(QuerySet):
     def active(self):
@@ -29,8 +31,8 @@ class FAQuestion(AbstractAutoDate):
 
     text = models.TextField(
         _('question'), help_text=_('The actual question itself.'))
-    answer = models.TextField(
-        _('answer'), blank=True, help_text=_('The answer text.'))
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
     status = models.IntegerField(
         _('status'),
         choices=STATUS_CHOICES,
@@ -59,8 +61,10 @@ class Chapter(AbstractAutoDate):
     heading = models.CharField(_('chapter'), max_length=255)
     parent = models.ForeignKey(
         'self', verbose_name=_('parentchapter'),
-        related_name='parentheading')
-    answer = models.TextField(_('answer'))
+        related_name='parentheading', null=True, blank=True)
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
+    
     ordering = models.PositiveSmallIntegerField(
         _('ordering'), blank=True,
         help_text=_(u'An integer used to order the chapter \
@@ -73,13 +77,13 @@ class Chapter(AbstractAutoDate):
         verbose_name_plural = _('chapters')
 
     def __str__(self):
-        return self.chapter
+        return self.heading
 
 
 class Topic(AbstractAutoDate):
     name = models.CharField(_('name'), max_length=255)
-    description = models.TextField(
-        _('description'), blank=True,
+    description = RichTextField(
+        verbose_name=_('description'), blank=True,
         help_text=_('A short description of this topic.'))
     chapters = models.ManyToManyField(
         Chapter,
@@ -113,4 +117,4 @@ class TopicChapter(AbstractAutoDate):
     def __str__(self):
         return _("%(top)s to '%(cp)s'") % {
             'top': self.topic,
-            'ch': self.chapter}
+            'cp': self.chapter}

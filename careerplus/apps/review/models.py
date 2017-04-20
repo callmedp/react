@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext, ugettext_lazy as _
 from seo.models import AbstractAutoDate
+from ckeditor.fields import RichTextField
 
 DEFAULT_CHOICES = (
     ('5', '5'),
@@ -28,7 +29,7 @@ class Review(AbstractAutoDate):
     reviewed_item = fields.GenericForeignKey('content_type', 'object_id')
     user_name = models.CharField(
         max_length=100,
-        verbose_name=_("User Email"),)
+        verbose_name=_("User Name"),)
     user_email = models.CharField(
         max_length=100,
         verbose_name=_("User Email"),)
@@ -36,7 +37,7 @@ class Review(AbstractAutoDate):
         max_length=100,
         verbose_name=_("User ID"),)
 
-    content = models.TextField(
+    content = RichTextField(
         max_length=1024,
         verbose_name=_('Content'),
         blank=True,

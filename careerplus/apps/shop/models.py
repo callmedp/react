@@ -5,6 +5,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 
+from ckeditor.fields import RichTextField
+
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from faq.models import FAQuestion
@@ -36,8 +38,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         _('Entity'), choices=SERVICE_CHOICES, default=0)
     type_level = models.PositiveSmallIntegerField(
         _('Level'), choices=CATEGORY_CHOICES, default=0)
-    description = models.TextField(
-        _('Description'), blank=True, default='')
+    description = RichTextField(
+        verbose_name=_('Description'), blank=True, default='')
     banner = models.ImageField(
         _('Banner'), upload_to=get_upload_path_category,
         blank=True, null=True)
@@ -336,16 +338,18 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     flow_image = models.ImageField(
         _('Delivery Flow Image'), upload_to=get_upload_path_product_image,
         blank=True, null=True)
-    email_cc = models.TextField(
-        _('Email_CC ID'), blank=True, default='')
-    about = models.TextField(
-        _('About Product'), blank=True, default='')
-    description = models.TextField(
-        _('Description Product'), blank=True, default='')
-    buy_shine = models.TextField(
-        _('Why Buy From Shine'), blank=True, default='')
-    mail_desc = models.TextField(
-        _('Welcome Mail Description'), blank=True, default='')
+    email_cc = RichTextField(
+        verbose_name=_('Email CC'), blank=True, default='')
+    about = RichTextField(
+        verbose_name=_('About Product'), blank=True, default='')
+    description = RichTextField(
+        verbose_name=_('Description Product'), blank=True, default='')
+    buy_shine = RichTextField(
+        verbose_name=_('What you will get'), blank=True, default='')
+    mail_desc = RichTextField(
+        verbose_name=_('Welcome Mail Description'), blank=True, default='')
+    call_desc = RichTextField(
+        verbose_name=_('Welcome Call Description'), blank=True, default='')
     duration_months = models.IntegerField(
         _('Duration In Months'), default=0)
     duration_days = models.IntegerField(
@@ -377,10 +381,13 @@ class Product(AbstractProduct, ModelMeta):
     structure = models.ForeignKey(
         'faq.Topic', related_name='topicproducts', blank=True,
         null=True, verbose_name=_("Product Structure"))
-    siblings = models.ManyToManyField(
-        'self', verbose_name=_('Sibling Products'),
-        related_name='siblingproduct+',
-        symmetrical=True, blank=True)
+    variation = models.ManyToManyField(
+        'self',
+        through='VariationProduct',
+        related_name='variationproduct+',
+        through_fields=('main', 'sibling'),
+        verbose_name=_('Variation Product'),
+        symmetrical=False, blank=True)
     related = models.ManyToManyField(
         'self',
         through='RelatedProduct',
@@ -593,6 +600,25 @@ class ProductScreen(AbstractProduct):
         return self.name
 
 
+class VariationProduct(AbstractAutoDate):
+    main = models.ForeignKey(
+        Product,
+        related_name='mainproduct',
+        on_delete=models.CASCADE)
+    sibling = models.ForeignKey(
+        Product,
+        related_name='siblingproduct',
+        on_delete=models.CASCADE)
+    sort_order = models.PositiveIntegerField(
+        _('Sort Order'), default=1)
+    active = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return _("%(pri)s to '%(sec)s'") % {
+            'pri': self.main,
+            'sec': self.sibling}
+
+
 class RelatedProduct(AbstractAutoDate):
     primary = models.ForeignKey(
         Product,
@@ -768,8 +794,8 @@ class ProductAttribute(AbstractAutoDate):
         _('Value Date'),
         max_digits=8, decimal_places=2,
         default=0.0)
-    value_ltext = models.TextField(
-        _('Value Large Text'), blank=True, default='')
+    value_ltext = RichTextField(
+        verbose_name=_('Value Large Text'), blank=True, default='')
     value_option = models.ForeignKey(
         'shop.AttributeOption', blank=True, null=True,
         verbose_name=_("Value option"))
