@@ -29,7 +29,7 @@
                            {% if art %}
                             <div class="item {% if forloop.counter == 1 %} active {% endif %}">
                               <div class="col-sm-4">
-                                <a href="#">
+                                <a href="{% url "blog:articles-deatil" art.slug %}">
                                  {% if art.image %}
                                   {% thumbnail art.image "360x271" crop="center" as im %}
                                     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
@@ -108,7 +108,7 @@
             <ul>
                 {% for cat in categories %}
                 <li>
-                   <a href="#">{{cat.name}}</a>
+                   <a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a>
                 </li>
                 {% endfor %}
             </ul>

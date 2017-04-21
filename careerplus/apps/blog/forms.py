@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from ckeditor.widgets import CKEditorWidget
 
-from .models import Tag, Category, Blog
+from .models import Tag, Category, Blog, Comment
 from .config import STATUS
 
 User = get_user_model()
@@ -32,7 +32,7 @@ class BlogAddForm(forms.ModelForm):
     	queryset=Category.objects.filter(is_active=True),
     	empty_label="Select Category", required=True,
         to_field_name='name', widget=forms.Select(
-        attrs={'class': 'form-control', 'required': True}))
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     sec_cat = forms.ModelMultipleChoiceField(label=("Secondary Category:"),
     	queryset=Category.objects.filter(is_active=True),
@@ -216,3 +216,36 @@ class ArticleFilterForm(forms.ModelForm):
     class Meta:
         model = Blog
         fields = ['user', 'status', 'p_cat']
+
+
+class CommentForm(forms.ModelForm):
+
+    message = forms.CharField(label=("Message*:"), max_length=200,
+        required=True, widget=forms.Textarea(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    is_published = forms.BooleanField(label=("Published:"),
+        widget=forms.CheckboxInput())
+
+    is_removed = forms.BooleanField(label=("Removed:"),
+        widget=forms.CheckboxInput())
+
+    class Meta:
+        model = Comment
+        fields = ['message', 'is_published', 'is_removed']
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['is_published'].required = False
+        self.fields['is_removed'].required = False
+
+
+    def clean(self):
+        fields_to_clean = ['message', ]
+        for field in fields_to_clean:
+            try:
+                value = self.cleaned_data.get(field).strip()
+                self.cleaned_data[field] = value
+            except:
+                continue
+        return super(CommentForm, self).clean()

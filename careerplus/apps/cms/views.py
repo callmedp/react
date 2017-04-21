@@ -17,8 +17,10 @@ from .mixins import UploadInFile, LoadMoreMixin
 class CMSPageView(TemplateView, LoadMoreMixin):
     model = Page
     template_name = "cms/cms_page.html"
-    page_obj = None
-    page = 1
+
+    def __init__(self):
+        self.page_obj = None
+        self.page = 1
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)

@@ -27,6 +27,8 @@ SECRET_KEY = 'g58#1(xdr&s%t@$erwjosc@nuiuy4j)9#g+*jhr#m1o6c)zws7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+TEMPLATE_DEBUG = False  # django sorl required
+
 ALLOWED_HOSTS = []
 
 # Application definition

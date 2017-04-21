@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from .views import AjaxCommentLoadMoreView, CmsShareView, CheckLoginStatus
+from .views import AjaxCommentLoadMoreView, CmsShareView,\
+   ArticleShareView, ArticleCommentView
 
 
 urlpatterns = [
@@ -10,7 +11,10 @@ urlpatterns = [
     url(r'^page/cms-share/$',
     	CmsShareView.as_view(), name='cms-share'),
 
-    url(r'^login-status/$',
-    	CheckLoginStatus.as_view(), name='login-status'),
-    
+    url(r'^article-share/$',
+    	ArticleShareView.as_view(), name='article-share'),
+
+    url(r'^article-comment/$',
+    	ArticleCommentView.as_view(), name='article-comment-post'),
+
 ]
