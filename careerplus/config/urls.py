@@ -24,13 +24,16 @@ urlpatterns = [
     url(r'^console/', include('console.urls', namespace='console')),
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^skillpage/', include('skillpage.urls', namespace='skillpage')),
+    url(r'^article/', include('blog.urls', namespace='blog')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
-) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+) + static(
+    settings.STATIC_URL, document_root=settings.STATIC_ROOT
+) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT)
 
 
 if settings.DEBUG:

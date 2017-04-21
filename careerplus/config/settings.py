@@ -4,6 +4,8 @@ from .base_settings import *  # noqa
 DEBUG = True
 
 ALLOWED_HOSTS = []
+SITE_ID = 1
+SITE_DOMAIN = '127.0.0.1:8000'
 
 # Database
 DATABASES = {
@@ -39,6 +41,9 @@ LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
+DOWNLOAD_URL = '/download/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 

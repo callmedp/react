@@ -1,11 +1,22 @@
-from django.test import TestCase
+from django.test import TestCase, Client, RequestFactory
+from django.urls import reverse
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 
 from .models import Page, Widget
-from django.urls import reverse
+from .views import CMSPageView
+
+User = get_user_model()
 
 
 class TestsPage(TestCase):
 	# fixtures = ['test.json']
+
+	def setUp(self):
+		self.client = Client()
+		self.factory = RequestFactory()
+		self.user = User.objects.create_user(
+			email='test@gmail.com', password='test@123')
 
 	def test_get_template_method(self):
 		widget = Widget(widget_type=1)
@@ -43,6 +54,17 @@ class TestsPage(TestCase):
 		self.assertIs('is_active' in data.keys(), True)
 
 	def test_get_page_view(self):
-		page = Page(name='Resume For Freshers', slug='resume-for-freshers', is_active=True)
-		response = self.client.get(reverse('cms:page', kwargs={'slug': 'resume-for-freshers'}))
+		page = Page.objects.create(name='Resume For Experience', slug='resume-for-experience', is_active=True)
+		response = self.client.get(page.get_absolute_url())
 		self.assertEqual(response.status_code, 200)
+		# request = self.factory.get(page.get_absolute_url())
+		# request.user = AnonymousUser()
+		# response = CMSPageView.as_view()(request)
+		# self.assertEqual(response.status_code, 200)
+
+	def test_post_page_view(self):
+		page = Page.objects.create(name='Resume For Experience', slug='resume-for-experience', is_active=True)
+		response = self.client.post(page.get_absolute_url(), {"message": "hello test", })
+		comment_length = len(page.comment_set.all())
+		self.assertEqual(comment_length, 0)
+		self.assertRedirects(response, '/cms/page/resume-for-experience/')  # status code for redirection

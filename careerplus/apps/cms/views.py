@@ -38,10 +38,10 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         return context
 
     def post(self, request, *args, **kwargs):
-        message = request.POST.get('message', '')
+        message = request.POST.get('message', '').strip()
         slug = kwargs.get('slug', None)
         try:
-            self.page_obj = Page.objects.get(slug=slug)
+            self.page_obj = Page.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
         if request.user.is_authenticated() and message and self.page_obj:
@@ -65,6 +65,12 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         context['right_widgets'] = ''
         context['page_obj'] = page_obj
         context['page_heading'] = page_obj.name
+        user = self.request.user
+        if user.is_authenticated():
+            download_pop_up = "no"
+        else:
+            download_pop_up = "yes"
+
         download_docs = page_obj.document_set.filter(is_active=True)
         csrf_token_value = get_token(self.request)
         if download_docs.exists():
@@ -78,7 +84,9 @@ class CMSPageView(TemplateView, LoadMoreMixin):
                 'page_obj': page_obj,
                 'widget': left.widget,
                 'download_doc': download_doc,
-                'csrf_token_value': csrf_token_value
+                'csrf_token_value': csrf_token_value,
+                'user': user,
+                'download_pop_up': download_pop_up,
             })
             widget_context.update(left.widget.get_widget_data())
             context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context)
@@ -89,7 +97,9 @@ class CMSPageView(TemplateView, LoadMoreMixin):
                 'page_obj': page_obj,
                 'widget': left.widget,
                 'download_doc': download_doc,
-                'csrf_token_value': csrf_token_value
+                'csrf_token_value': csrf_token_value,
+                'user': user,
+                'download_pop_up': download_pop_up,
             })
             widget_context.update(right.widget.get_widget_data())
             context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
@@ -97,7 +107,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         comments = page_obj.comment_set.filter(is_published=True, is_removed=False)
         context['comment_listing'] = self.pagination_method(page=self.page, comment_list=comments, page_obj=self.page_obj)
         context['total_comment'] = comments.count()
-        context.update({'user': self.request.user})
+        context.update({'user': user})
         context.update({"hostname": settings.HOST_NAME})
         context['meta'] = page_obj.as_meta(self.request)
         # if self.request.user.is_authenticated():
@@ -186,39 +196,20 @@ class DownloadPdfView(View, UploadInFile):
 
         elif action_type == 2:
             user = request.user
-
-            data_dict = {
-                "name": user.name,
-                "mobile": mobile,
-                "email": user.email,
-                "message": message,
-                "term_condition": term_condition
-            }
-            self.write_in_file(data_dict=data_dict)
+            if user.is_authenticated():
+                data_dict = {
+                    "name": user.name,
+                    "mobile": mobile,
+                    "email": user.email,
+                    "message": message,
+                    "term_condition": term_condition
+                }
+                self.write_in_file(data_dict=data_dict)
 
         try:
             page_obj = Page.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
-
-        try:
-            pdf_obj = page_obj.document_set.filter(is_active=True)[0]
-        except:
-            pdf_obj = None
-
-        if pdf_obj and pdf_obj.doc:
-            extn = pdf_obj.doc.name.split('.')[-1]
-            filename = slug + '.' + extn
-            response = HttpResponse(pdf_obj.doc, content_type='text/plain')
-            response['Content-Disposition'] = 'attachment; filename=%s' % filename
-            today = timezone.now()
-            today_date = datetime.date(day=1, month=today.month, year=today.year)
-            pg_counter, created = page_obj.pagecounter_set.get_or_create(count_period=today_date)
-            pg_counter.no_downloads += 1
-            pg_counter.save()
-            page_obj.total_download += 1
-            page_obj.save()
-            return response
 
         return HttpResponseRedirect(
             reverse('cms:page', kwargs={'slug': page_obj.slug}))

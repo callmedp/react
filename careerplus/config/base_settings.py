@@ -34,6 +34,7 @@ DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -44,6 +45,7 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'meta',
+    'sorl.thumbnail',
 ]
 
 # Apps specific for this project go here.
@@ -59,6 +61,7 @@ LOCAL_APPS = [
     'coupon',
     'partner',
     'shop',
+    'blog',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -134,10 +137,13 @@ STATICFILES_FINDERS = (
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-        # 'height': 300,
-        # 'width': 300,
+        'height': 400,
+        'width': 700,
+        # 'removePlugins': 'stylesheetparser',
+        # 'extraPlugins': 'codesnippet',
     },
 }

@@ -1,12 +1,15 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.core.files.storage import FileSystemStorage
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from meta.models import ModelMeta
 
 from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
 from seo.models import AbstractSEO
+
+my_store = FileSystemStorage(location='careerplus/download/')
 
 
 class AbstractCommonModel(models.Model):
@@ -191,7 +194,7 @@ class PageWidget(AbstractCommonModel):
 
 class Document(models.Model):
 	doc = models.FileField("Document", max_length=200,
-		upload_to="documents/cms/page/", null=False, blank=False)
+		storage=my_store, null=False, blank=False)
 	is_active = models.BooleanField(default=False)
 	priority = models.IntegerField(default=0)
 	page = models.ForeignKey(Page)
@@ -201,6 +204,12 @@ class Document(models.Model):
 
 	def __str__(self):
 		return str(self.id)
+
+	def get_url(self):
+		if self.doc:
+			filename = self.doc.name
+			url = '/download/' + filename
+			return url
 
 
 class Comment(AbstractCommonModel):
