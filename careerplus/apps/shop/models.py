@@ -8,6 +8,8 @@ from django.core.urlresolvers import reverse
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from faq.models import FAQuestion
+from partner.models import Vendor
+from ckeditor.fields import RichTextField
 
 from .functions import (
     get_upload_path_category,
@@ -36,13 +38,18 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         _('Entity'), choices=ENTITY_CHOICES, default=0)
     type_level = models.PositiveSmallIntegerField(
         _('Level'), choices=CATEGORY_CHOICES, default=0)
-    description = models.TextField(
-        _('Description'), blank=True, default='')
+    description = RichTextField(null=True, blank=True)
+    # description = models.TextField(
+    #     _('Description'), blank=True, default='')
+    video_link = models.CharField(
+        _('Video Link'), blank=True, max_length=200)
+    career_outcomes = models.CharField(max_length=500, null=True,
+        blank=True, help_text='semi-colon(;) separated designations, e.g. Project Engineer; Software Engineer; ...')
     banner = models.ImageField(
         _('Banner'), upload_to=get_upload_path_category,
         blank=True, null=True)
-    image = models.ImageField(
-        _('Image'), upload_to=get_upload_path_category,
+    graph_image = models.ImageField(
+        _('Graph Image'), upload_to=get_upload_path_category,
         blank=True, null=True)
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_category,
@@ -97,7 +104,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
-        return reverse('category-listing', kwargs={'slug': self.slug})
+        return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug})
 
     def add_relationship(self, category, relation=0):
         relationship, created = CategoryRelationship.objects.get_or_create(
@@ -134,6 +141,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             from_category__relation=0, from_category__related_to=self,
             is_main_parent=True)
 
+    def split_career_outcomes(self):
+        return self.career_outcomes.split(';')
+    
 
 class CategoryRelationship(AbstractAutoDate):
     related_from = models.ForeignKey(
@@ -304,6 +314,11 @@ class Product(AbstractProduct, ModelMeta):
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
+    vendor = models.ForeignKey(
+        Vendor,
+        related_name='provider',
+        on_delete=models.CASCADE,
+        null=True)
     siblings = models.ManyToManyField(
         'self', verbose_name=_('Sibling Products'),
         related_name='siblingproduct+',
@@ -383,6 +398,41 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
+
+    def get_rating(self):
+        rating_ls = []
+        if int(self.avg_rating) == 1:
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('grey-rating-icon')
+            rating_ls.append('grey-rating-icon')
+            rating_ls.append('grey-rating-icon')
+            rating_ls.append('grey-rating-icon')
+        elif int(self.avg_rating) == 2:
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('grey-rating-icon')
+            rating_ls.append('grey-rating-icon')
+            rating_ls.append('grey-rating-icon')
+        elif int(self.avg_rating) == 3:
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('grey-rating-icon')
+            rating_ls.append('grey-rating-icon')
+        elif int(self.avg_rating) == 4:
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('grey-rating-icon')
+        elif int(self.avg_rating) == 5:
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+            rating_ls.append('orange-rating-icon')
+
+        return rating_ls
 
     def get_description(self):
         description = self.meta_desc

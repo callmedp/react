@@ -2,12 +2,14 @@ import json
 import logging
 import datetime
 
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.http import HttpResponse
 from django.utils import timezone
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
+from shop.models import Category
 
 
 class AjaxCommentLoadMoreView(View, LoadMoreMixin):
@@ -60,3 +62,29 @@ class CheckLoginStatus(View):
 				else:
 					data['status'] = 0
 				return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class AjaxProductLoadMoreView(TemplateView):
+    template_name = 'include/load_product.html'
+
+    def get(self, request, *args, **kwargs):
+        return super(AjaxProductLoadMoreView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AjaxProductLoadMoreView, self).get_context_data(**kwargs)
+        slug = self.request.GET.get('slug', '')
+        page = int(self.request.GET.get('page', 1))
+        try:
+            page_obj = Category.objects.get(slug=slug, active=True)
+            products = page_obj.product_set.all()
+            paginator = Paginator(products, 2)
+            try:
+                products = paginator.page(page)
+            except PageNotAnInteger:
+                products = paginator.page(1)
+            except EmptyPage:
+                products = 0
+            context.update({'products': products, 'page':page, 'slug':slug})
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+        return context

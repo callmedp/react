@@ -57,6 +57,7 @@ LOCAL_APPS = [
     'skillpage',
     'console',
     'coupon',
+    'partner',
     'shop',
 ]
 

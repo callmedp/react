@@ -1,0 +1,44 @@
+{% load static %}
+{% for product in products %}
+    <li class="box-panel">
+    	<a title="{{product.name}}" href="#">
+            <div class="media">
+            	<div class="media-left">
+                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.name}}">
+            	</div>
+            	<div class="media-body">
+                	<div class="certification-jobs-box">
+                  		<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
+                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
+                	</div>
+                	<h3 class="listing-heading">{{product.name}}</h3>
+
+	                <div class="rating-review-box">
+	                    <span class="{{product.get_rating.0}}"></span>
+	                    <span class="{{product.get_rating.1}}"></span>
+	                    <span class="{{product.get_rating.2}}"></span>
+	                    <span class="{{product.get_rating.3}}"></span>
+	                    <span class="{{product.get_rating.4}}"></span>
+	                    <strong>{{product.avg_rating |floatformat:1}}/5</strong> | 21 ratings <b>{{product.no_review}} reviews</b>
+	                </div> 
+
+	                <div class="providers">
+	                   Providers
+	                   <span>{{product.vendor.name}}</span>
+	                </div>
+
+	                <div class="pricing-box">
+	                   Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
+	                </div>
+
+              	</div>
+            </div>
+      	</a>
+    </li>
+{% endfor %}
+{% if products.has_next %}
+<input type="hidden" name="page" 
+value="{{products.next_page_number}}" id="page_id">
+<input type="hidden" name="slug" value="{{slug}}" 
+id="slug_id">
+{% endif %}

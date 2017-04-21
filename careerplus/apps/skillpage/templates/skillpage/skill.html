@@ -9,362 +9,255 @@
 {% endblock css %}
 {% block pageheading %}
 	<header class="skill-header">
-	  <div class="container">
-	    <!-- breadcrums -->
-	    <ol class="breadcrumb mt-30">
-	      <li><a href="#">Home</a></li>
-	      <li class="active">Skill</li>
-	    </ol>
-	    <div class="skill-caption">
-	      <h1>Six Sigma certification <br> programs</h1>
-	      <strong>Green Belt    |    Black Belt     |       Six Sigma Master</strong>
-	      <div class="provider">
-	      Provider <img src="{% static 'console/images/skillpage/vskills-logo.jpg' %}" alt="V Skills" class="img-responsive">
-	      <img src="{% static 'console/images/skillpage/aspiration-logo.jpg' %}" alt="Aspiration" class="img-responsive">
-	      <img src="{% static 'console/images/skillpage/iact-logo.jpg' %}" alt="IACT" class="img-responsive">
-	      <img src="{% static 'console/images/skillpage/skill-soft-logo.jpg' %}" alt="Skillsoft" class="img-responsive">
-	      </div>
-	    </div>
-	  </div>
+		<div class="container">
+		<!-- breadcrums -->
+			<ol class="breadcrumb mt-30">
+			  <li><a href="/">Home</a></li>
+			  <li class="active">{{category_obj.name}}</li>
+			</ol>
+			<div class="skill-caption">
+				<h1>{{category_obj.name}} <br> programs</h1>
+				<strong>
+				{{prod.4}}    |    {{prod.5}}     |       {{prod.6}}
+				</strong>
+				<div class="provider">
+					Provider
+					<img src="{{prod.5.vendor.icon.url}}" alt="V Skills" 
+					class="img-responsive">
+					<img src="{% static 'console/images/skillpage/aspiration-logo.jpg' %}" alt="Aspiration" class="img-responsive">
+					<img src="{% static 'console/images/skillpage/iact-logo.jpg' %}" alt="IACT" class="img-responsive">
+					<img src="{% static 'console/images/skillpage/skill-soft-logo.jpg' %}" alt="Skillsoft" class="img-responsive">
+				</div>
+			</div>
+		</div>
 	</header>
 {% endblock pageheading %}
 {% block container %}
-	<section class="container">
+<section class="container">
+    <!-- page content body start -->
+	<div class="row">
+	<!-- left content start -->
+		<div class="col-md-9 col-sm-12">
 
-	    <!-- page content body start -->
-	    <div class="row">
+		    <div class="about-course-links mb-40">
+			    <a title="About course" class="active" href="#">About course</a> 
+			    <a title="Importance in Market" href="#market">Importance in Market</a>
+			    <a title="Courses" href="#programs">Courses</a>
+			    <a title="Reviews" href="#reviews">Reviews</a>
+		    </div>
 
-	    <!-- left content start -->
-	      <div class="col-md-9 col-sm-12">
+		    <div class="about-course-text mb-40">
+				<div class="row">
+					<article class="col-sm-12">
+						{% if category_obj.video_link %}
+						    <div class="pull-right col-sm-6">
+						        <iframe width="560" height="315" 
+						        	src="{{category_obj.video_link}}" frameborder="0" allowfullscreen>	
+						        </iframe>
+						    </div>
+						{% endif %}
+						{{category_obj.description | safe}}
+					</article>
+				</div>
+		    </div>
 
-	        <div class="about-course-links mb-40"><a title="About course" class="active" href="#">About course</a> <a title="Importance in Market" href="#market">Importance in Market</a> <a title="Courses" href="#programs">Courses</a> <a title="Reviews" href="#reviews">Reviews</a> </div>
+		    <!-- Career Outcomes -->
+		    <div class="career-outcomes mb-40">
+		    	<h2>Career Outcomes</h2>
+		        <ul class="box-panel">
+		            {% for career_outcome in career_outcomes %}
+		            	<li>{{career_outcome}}</li>
+		            {% endfor %}
+		        </ul>
+		    </div>
 
-	        <div class="about-course-text mb-40">
-	          <div class="row">
-	            <article class="col-sm-12">
-	            <div class="pull-right col-sm-6">
-	            <iframe width="560" height="315" src="https://www.youtube.com/embed/JoHdCsQAaNY" frameborder="0" allowfullscreen></iframe>
-	            </div>
-	            <p>The term “Six Sigma” was originated by a Motorola engineer - Bill Smith and Six Sigma is a federally registered trademark of Motorola. He defined that Six Sigma is a practice which involves various systematic and rigorous tools for getting close to “Zero Defects”.</p>
+			<!-- Importance in Market -->
+			<div id="market" class="importance-market clearfix mb-40 scroll">
+				<h2>Importance in Market</h2>
+			    <div class="col-sm-6 box-panel">
+			    	<figure>
+			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
+			    	</figure>
+			    </div>
+				<div class="col-sm-6 market-growth">
+					<div class="col-sm-12 box-panel">
+						<div class="media">
+						    <div class="media-left media-middle">
+						    	<span class="jobs-growth-icon"></span>
+						    </div>
+						    <div class="media-body">
+						    	<strong>{{api_data.job_count}}</strong>
+						      	jobs in the market demanding this skill
+						    </div>
+						</div>
+						<div class="media">
+							<div class="media-left media-middle">
+						    	<span class="career-growth-icon"></span>
+						    </div>
+						    <div class="media-body">
+						    	<strong>Only 10%</strong>
+						      	candidates are six sigma certified
+						    </div>
+						</div>
+					</div>
 
-	            <p>Six Sigma is a data driven methodology which is applied with an objective of eliminating the waste and inefficiency and achieving total customer satisfaction.  Lesser defects leads to yield improvement and higher yields means enhanced customer experience; this further leads to less cost of operation.</p>
+				    <div class="col-sm-12 box-panel mt-20 job-require">
+				    	<strong>Jobs require this skill in different functional area
+				    	</strong>
+				    	<a href="https://www.shine.com/job-search/quotes-six-sigma-quotes-jobs?farea={{api_data.jFArea.0.0}}" target="_blank">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})</a> | <a href="https://www.shine.com/job-search/quotes-six-sigma-quotes-jobs?farea={{api_data.jFArea.1.0}}" target="_blank">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})</a> | <a href="https://www.shine.com/job-search/quotes-six-sigma-quotes-jobs?farea={{api_data.jFArea.2.0}}" target="_blank">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})</a>  
+				    </div>
 
-	            <p>Deploying Six Sigma within an organization is a big footstep and involves many activities. One has to plan a route, define objective, stick to what is feasible, preparing leaders, creating Six Sigma organization, training the organization and working <div class="collapse" id="collapseContent">
-	            <p><strong>Why should one take this certific,ate?</strong>
-	            It is used to develop knowledge, skills and competencies in the field of Logistics & Supply Chain Management so as to learn different aspects of logistics including purchase, operations, warehouse, transportation and supply chain management. This certificate assists one in understanding logistics and supply chain management globally</p>
+			    </div>
 
+			</div>
 
-	            <p><strong>Who will benefit from taking this certification?</strong>
-	            Aspirants seeking professional careers in Logistics & Supply Chain Management benefiting individuals involved in operations, warehousing, transportation, SCM & Third party Logistics Providers.</p>
-	            </div>
-	            <a class="collapse-content" role="button" data-toggle="collapse" href="#collapseContent" aria-expanded="false" aria-controls="collapseContent"></a>
-	            </p>      
-	            
-	          </article>
+		    <!-- certification programs listing -->
+		    <div id="programs" class="listing-box mb-40 scroll">
+		    	<h2>Six Sigma Certification Programs</h2>
+		    	<ul class="listing" id="product_list">
+		    		{% for product in products %}
+				        <li class="box-panel">
+				        	<a title="{{product.name}}" href="#">
+					            <div class="media">
+					            	<div class="media-left">
+					                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.name}}">
+					            	</div>
+					            	<div class="media-body">
+					                	<div class="certification-jobs-box">
+					                  		<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
+					                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
+					                	</div>
+					                	<h3 class="listing-heading">{{product.name}}</h3>
 
-	         </div>
-	        </div>
+						                <div class="rating-review-box">
+						                    <span class="{{product.get_rating.0}}"></span>
+						                    <span class="{{product.get_rating.1}}"></span>
+						                    <span class="{{product.get_rating.2}}"></span>
+						                    <span class="{{product.get_rating.3}}"></span>
+						                    <span class="{{product.get_rating.4}}"></span>
+						                    <strong>{{product.avg_rating |floatformat:1}}/5</strong> | 21 ratings <b>{{product.no_review}} reviews</b>
+						                </div> 
 
-	        <!-- Career Outcomes -->
-	        <div class="career-outcomes mb-40">
-	          <h2>Career Outcomes</h2>
-	            <ul class="box-panel">
-	              <li>Assistant Manager</li>
-	              <li>Production Engineer</li>
-	              <li>Production Manager</li>
-	              <li>Quality Engineer</li>
-	              <li>Quality Engineer</li>
-	            </ul>
-	        </div>
+						                <div class="providers">
+						                   Providers
+						                   <span>{{product.vendor.name}}</span>
+						                </div>
 
-	        <!-- Importance in Market -->
-	        <div id="market" class="importance-market clearfix mb-40 scroll">
-	          <h2>Importance in Market</h2>
-	            <div class="col-sm-6 box-panel">
-	              <figure>
-	                <img src="{% static 'console/images/skillpage/market-graph.jpg' %}" alt="Importance in Market" class="img-responsive">
-	              </figure>
-	            </div>
+						                <div class="pricing-box">
+						                   Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
+						                </div>
 
-	            <div class="col-sm-6 market-growth">
-	            <div class="col-sm-12 box-panel">
-	              <div class="media">
-	                <div class="media-left media-middle">
-	                  <span class="jobs-growth-icon"></span>
-	                </div>
-	                <div class="media-body">
-	                  <strong>5538</strong>
-	                  jobs in the market demanding this skill
-	                </div>
-	              </div>
-	              <div class="media">
-	                <div class="media-left media-middle">
-	                  <span class="career-growth-icon"></span>
-	                </div>
-	                <div class="media-body">
-	                  <strong>Only 10%</strong>
-	                  candidates are six sigma certified
-	                </div>
-	              </div>
-	            </div>
+					              	</div>
+					            </div>
+				          	</a>
+				        </li>
+			    	{% endfor %}
+		      	</ul>
+                <div id="prod_load_more">
+			      	
+	      		<input type="hidden" name="page" 
+	      		value="{{products.next_page_number}}" id="page_id">
+	      		<input type="hidden" name="slug" value="{{slug}}" 
+	      		id="slug_id">
+			      	
+			    <a id="product_load_more" class="load-more"> Load more</a>
+		      	</div>
 
-	            <div class="col-sm-12 box-panel mt-20 job-require">
-	              <strong>Jobs require this skill in different functional area</strong>
-	              <a href="#">Operations (50)</a> | <a href="#">Production (100)</a> | <a href="#">Quality (200)</a>  
-	            </div>
+		    </div>
+		    <!-- Reviews -->
+		    <div id="reviews" class="reviews mb-40 scroll">
+		    	<h2>Reviews</h2>
+		      	<a href="#" class="write-review">Write a review</a>
+		        	<ul>
+		          		<li class="box-panel">
+		            		<span class="review-heading">Excelent!</a></span>
+				            <div class="rating-review-box">
+				                <span class="orange-rating-icon"></span>
+				                <span class="orange-rating-icon"></span>
+				                <span class="orange-rating-icon"></span>
+				                <span class="grey-rating-icon"></span>
+				                <span class="grey-rating-icon"></span>
+				                <strong>3.9/5</strong>
+				            </div>
+		            		<article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time
+		            		</article>
+		            		<span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
+		          		</li>
+		          		<li class="box-panel">
+		            		<span class="review-heading">Excelent!</a></span>
+		            		<div class="rating-review-box">
+			                	<span class="orange-rating-icon"></span>
+			                	<span class="orange-rating-icon"></span>
+			                	<span class="orange-rating-icon"></span>
+			                	<span class="grey-rating-icon"></span>
+			                	<span class="grey-rating-icon"></span>
+			                	<strong>3.9/5</strong>
+		            		</div>
+		            		<article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time
+		            		</article>
+		            		<span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
+		          		</li>
+		          		<li class="box-panel">
+		            		<span class="review-heading">Excelent!</a></span>
+		            		<div class="rating-review-box">
+		                		<span class="orange-rating-icon"></span>
+		                		<span class="orange-rating-icon"></span>
+		                		<span class="orange-rating-icon"></span>
+		                		<span class="grey-rating-icon"></span>
+		                		<span class="grey-rating-icon"></span>
+		                		<strong>3.9/5</strong>
+		            		</div>
+		            		<article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time
+		            		</article>
+		            		<span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
+		          		</li>
+		        	</ul>
+		        <a href="#" class="load-more"> Load more</a>
+		    </div>
+		</div>  
+		<!-- left content end -->
 
-	            </div>
+		<!-- right content start -->
+		<div class="col-md-3 col-sm-12">
 
-	        </div>
+		   <!-- request a call -->
+		  	<div class="request-call query-form-right box-panel mt-40 cleafix">
+		    	<h2 class="heading-right">HAVE A QUERY?</h2>
+		      	<form class="mt-20" role="form" id="queryform">{% csrf_token %}
 
-	        <!-- certification programs listing -->
-	        <div id="programs" class="listing-box mb-40 scroll">
-	          <h2>Six Sigma Certification Programs</h2>
-	          <ul class="listing">
-	            <li class="box-panel">
-	              <a title="Resume / Visual Resume / LinkedIn" href="#">
-	                <div class="media">
-	                  <div class="media-left">
-	                      <img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="Resume / Visual Resume / LinkedIn">
-	                  </div>
-	                  <div class="media-body">
-	                    <div class="certification-jobs-box">
-	                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-	                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-	                    </div>
-
-	                    <h3 class="listing-heading">Resume / Visual Resume / LinkedIn</h3>
-
-	                    <div class="rating-review-box">
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-	                    </div> 
-
-	                    <div class="providers">
-	                       Providers
-	                       <span>Career Plus</span>
-	                    </div>
-
-	                    <div class="pricing-box">
-	                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-	                    </div>
-
-	                  </div>
-	                </div>
-	              </a>
-	            </li>
-	            <li class="box-panel">
-	              <a title="Background Verification" href="#">
-	                <div class="media">
-	                  <div class="media-left">
-	                      <img class="media-object" src="{% static 'console/images/skillpage/listing-logo2.jpg' %}" alt="Resume / Visual Resume / LinkedIn">
-	                  </div>
-	                  <div class="media-body">
-	                    <div class="certification-jobs-box">
-	                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-	                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-	                    </div>
-
-	                    <h3 class="listing-heading">Background Verification</h3>
-
-	                    <div class="rating-review-box">
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-	                    </div> 
-
-	                    <div class="providers">
-	                       Providers
-	                       <span>Softskills</span>
-	                       <span>Vskills</span>
-	                       <span>IATC</span>
-	                       <span>Grey Campus</span>
-	                    </div>
-
-	                    <div class="pricing-box">
-	                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-	                    </div>
-
-	                  </div>
-	                </div>
-	              </a>
-	            </li>
-	            <li class="box-panel">
-	              <a title="The Complete Career Package" href="#">
-	                <div class="media">
-	                  <div class="media-left">
-	                      <img class="media-object" src="{% static 'console/images/skillpage/listing-logo3.jpg' %}" alt="Resume / Visual Resume / LinkedIn">
-	                  </div>
-	                  <div class="media-body">
-	                    <div class="certification-jobs-box">
-	                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-	                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-	                    </div>
-
-	                    <h3 class="listing-heading">The Complete Career Package</h3>
-
-	                    <div class="rating-review-box">
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-	                    </div> 
-
-	                    <div class="providers">
-	                       Providers
-	                       <span>Resume showcase</span>
-	                       <span>LinkedIn Profile</span>
-	                    </div>
-
-	                    <div class="pricing-box">
-	                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-	                    </div>
-
-	                  </div>
-	                </div>
-	              </a>
-	            </li>
-	            <li class="box-panel">
-	              <a title="Featured Profile" href="#">
-	                <div class="media">
-	                  <div class="media-left">
-	                      <img class="media-object" src="{% static 'console/images/skillpage/listing-logo4.jpg' %}" alt="Resume / Visual Resume / LinkedIn">
-	                  </div>
-	                  <div class="media-body">
-	                    <div class="certification-jobs-box">
-	                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-	                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-	                    </div>
-
-	                    <h3 class="listing-heading">Featured Profile</h3>
-
-	                    <div class="rating-review-box">
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="orange-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <span class="grey-rating-icon"></span>
-	                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-	                    </div> 
-
-
-	                    <div class="pricing-box">
-	                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-	                    </div>
-
-	                  </div>
-	                </div>
-	              </a>
-	            </li>
-
-	          </ul>
-
-	          <a href="#" class="load-more"> Load more</a>
-
-	        </div>
-
-
-	        <!-- Reviews -->
-	        <div id="reviews" class="reviews mb-40 scroll">
-	          <h2>Reviews</h2>
-	          <a href="#" class="write-review">Write a review</a>
-	            <ul>
-	              <li class="box-panel">
-	                <span class="review-heading">Excelent!</a></span>
-	                <div class="rating-review-box">
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="grey-rating-icon"></span>
-	                    <span class="grey-rating-icon"></span>
-	                    <strong>3.9/5</strong>
-	                </div>
-	                <article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time</article>
-	                <span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
-	              </li>
-	              <li class="box-panel">
-	                <span class="review-heading">Excelent!</a></span>
-	                <div class="rating-review-box">
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="grey-rating-icon"></span>
-	                    <span class="grey-rating-icon"></span>
-	                    <strong>3.9/5</strong>
-	                </div>
-	                <article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time</article>
-	                <span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
-	              </li>
-	              <li class="box-panel">
-	                <span class="review-heading">Excelent!</a></span>
-	                <div class="rating-review-box">
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="orange-rating-icon"></span>
-	                    <span class="grey-rating-icon"></span>
-	                    <span class="grey-rating-icon"></span>
-	                    <strong>3.9/5</strong>
-	                </div>
-	                <article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time</article>
-	                <span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
-	              </li>
-	            </ul>
-
-	            <a href="#" class="load-more"> Load more</a>
-
-	        </div>
-
-	        
-
-
-
-	      </div>  
-	    <!-- left content end -->
-
-	    <!-- right content start -->
-	    <div class="col-md-3 col-sm-12">
-
-	       <!-- request a call -->
-	      <div class="request-call query-form-right box-panel mt-40 cleafix">
-	        <h2 class="heading-right">HAVE A QUERY?</h2>
-	          <form class="mt-20">
-	            <div class="form-group">
-	              <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
-	              <span class="error"></span>
-	            </div>
-	            <div class="form-group">
-	              <input type="text" class="form-control" id="exampleInputMobile" placeholder="Mobile">
-	            </div>
-	            <div class="form-group">
-	              <textarea class="form-control" rows="3" placeholder="Message"></textarea>
-	            </div>
-	            <button type="submit" class="submit-button">Submit</button>
-	          </form>
-	          <div class="call-service">
-	            <strong>
-	              <span class="call-service-icon"></span>
-	              0124-395 5001
-	            </strong>
-	            9am to 7pm ist monday-saturday
-	          </div>
-	      </div> 
-
-
-
-	    </div>
-	    <!-- right content end -->
-
-	    </div>
-	    <!-- page content body end -->
-
-	</section>
+		        	<div class="form-group">
+		          		<input type="text" class="form-control" name="name" placeholder="Name">
+		          		<span class="error position-error"></span>
+		        	</div>
+		        	<div class="form-group">
+		          		<input type="text" class="form-control" name="mobile_no" placeholder="Mobile">
+		          		<span class="error position-error"></span>
+		        	</div>
+		        	<div class="form-group">
+						<textarea class="form-control" rows="3" placeholder="Message" 
+						name="message_box"></textarea>
+						<span class="error position-error"></span>
+		    		</div>
+		        	<button type="button" id="id_query" class="submit-button">
+		        	Submit</button>
+		      	</form>
+		      	<div class="call-service">
+		        	<strong>
+		        		<span class="call-service-icon"></span>
+		          			0124-395 5001
+		        	</strong>
+		        	9am to 7pm ist monday-saturday
+		      	</div>
+		  	</div> 
+		</div>
+	<!-- right content end -->
+	</div>
+	<!-- page content body end -->
+</section>
 {% endblock container %}
+{% block js %}
+   {{ block.super }}
+   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+   <script src="{% static 'console/js/skillpage/skillpage.js' %}"></script>
+
+{% endblock js %}
