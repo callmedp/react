@@ -27,15 +27,19 @@
     {{article.content|safe}}
   </article>
 
+ {% with article.tags.all as tags %}
   {% if tags %}
   <!-- Tagged in box -->
   <div class="tagged-in mt-40">
     <strong>Tagged in</strong>
       {% for tag in tags %}
-            <span><a href="#">{{tag.name}}</a></span>
+            {% if tag.is_active %}
+            <span><a href="{% url "blog:articles-by-tag" tag.slug %}">{{tag.name}}</a></span>
+            {% endif %}
       {% endfor %}
   </div>
   {% endif %}
+{% endwith %}
 
   
   {% if article.allow_comment %}

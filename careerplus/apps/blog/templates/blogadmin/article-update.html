@@ -7,6 +7,7 @@
 
 {% block title %} Edit Article {% endblock title %}
 
+
 {% block css %}
     {{block.super}}
     <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
@@ -26,6 +27,10 @@
           <button type="button" class="btn btn-primary">Add Category</button></a>
           <a href="{% url "blog:blog-tag-add" %}">
           <button type="button" class="btn btn-primary">Add Tag</button></a>
+          {% if object.status == 1 %}
+            <a href="{% url "blog:articles-deatil" object.slug %}">
+               <button type="button" class="btn btn-primary">View on Site</button></a>
+          {% endif %}
       </div>
     </div>
 

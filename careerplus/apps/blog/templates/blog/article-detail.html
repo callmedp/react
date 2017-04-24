@@ -45,87 +45,8 @@
 
     <!-- left content start -->
       <div class="col-md-9 col-sm-12" id="related-container">
-
-       {{detail_article}}
-
-      {% comment %}
-      <!-- content start -->
-      <div class="blog-detail-content">
-
-      <!-- page heading -->
-      <div class="page-header">
-        <h1>{{object.name}}</h1>
-        <div class="editor-comments-views">
-          <span>{{object.user.name}}, {{object.publish_date.date}}</span>
-          <span><a><figure class="comment-small-icon"></figure> <strong>{{object.no_comment}}</strong> comments</a></span>
-          <span><figure class="view-icon"></figure> <strong>{{object.no_views}}</strong></span>
-        </div>
-        <div class="social-login">
-          <a class="share-txt" href="#"><strong>{{object.no_shares}}</strong> <small>Shares</small></a>
-          <a class="facebook" target="_blank" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{object.get_absolute_url}}" article-slug="{{object.slug}}"></a>
-
-          <a class="linkedin" id="article_share" target="_blank" article-slug="{{object.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url={{SITEDOMAIN}}{{object.get_absolute_url}}&title={{meta.title}}&summary={{meta.description}}&source={{SITEDOMAIN}}/"></a>
-
-          <a class="gplus" id="article_share" target="_blank" article-slug="{{object.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{object.get_absolute_url}}"></a>
-        </div>
-      </div>
-
-      <article>
-        {{object.content|safe}}
-      </article>
-
-      {% if tags %}
-      <!-- Tagged in box -->
-      <div class="tagged-in mt-40">
-        <strong>Tagged in</strong>
-          {% for tag in tags %}
-	            <span><a href="#">{{tag.name}}</a></span>
-          {% endfor %}
-      </div>
-      {% endif %}
-
-      
-      {% if object.allow_comment %}
-      <!-- comment box -->
-        <div class="comments-box mb-40 mt-40">
-          <a class="comments-links mb-40" id="total_comment"> <span class="comments-icon mr-10"></span>{{object.no_comment}} Comments</a>
-
-          <div id="comment-hide" style="display:none">
-
-          <div class="media mb-40">
-            <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="{% static 'console/images/cms/user-pic.jpg' %}" alt="username">
-              </a>
-            </div>
-            <div class="media-body">
-              <form id="blog-comment-form">{% csrf_token %}
-                <div class="form-group">
-                  <textarea class="form-control" id="id_comment" name="message" rows="3" placeholder=""></textarea>
-                  <span class="error"></span>
-                  <input type="hidden" id="id_slug" name="slug" value="{{object.slug}}">
-                </div>
-                <input type='button' class="submit-button" login-status="{{login_status}}" id="comment-submit"  value="Submit">
-              </form>
-            </div>
-          </div>
-
-          <div id="page_comment">
-              {{ comment_list|safe|default:'' }}
-          </div>
-
-          </div><!-- page comment-hide-->
-
-        </div>
-
-        {% endif %}
-
-      </div>
-      <!-- content end -->
-
-      {{related_articles}}
-
-      {% endcomment %}   
+        {{detail_article}}
+        {{scroll_article}}
 
     </div>  
     <!-- left content end -->

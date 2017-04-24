@@ -15,7 +15,7 @@ from django.db.models import Q
 from meta.views import Meta
 
 from .mixins import BlogMixin, PaginationMixin, LoadCommentMixin
-from .models import Category, Blog
+from .models import Category, Blog, Tag
 
 
 class LoginToCommentView(View):
@@ -68,7 +68,6 @@ class BlogDetailView(DetailView, BlogMixin):
         categories = Category.objects.filter(is_active=True)
         blog = context['object']
         p_cat = blog.p_cat
-        tags = blog.tags.filter(is_active=True)
         articles = p_cat.primary_category.filter(status=1)
         pop_aricles = articles[: 5]
         articles = articles.order_by('-publish_date')
@@ -78,23 +77,31 @@ class BlogDetailView(DetailView, BlogMixin):
             "categories": categories,
             "pop_articles": pop_aricles,
             "recent_articles": articles[: 5],
-            "tags": tags,
-            "allow_comment": blog.allow_comment,
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = self.article.as_meta(self.request)
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
+        main_obj = Blog.objects.filter(slug=blog.slug, status=1)
+        detail_obj = self.scrollPagination(
+                paginated_by=self.paginated_by, page=self.page,
+                object_list=main_obj)
 
-        article_list = Blog.objects.filter(Q(slug=blog.slug) | Q(p_cat=p_cat, status=1)).order_by('-score')
+        context.update({
+            "detail_article": render_to_string('include/detail-article-list.html',
+                {"page_obj": detail_obj,
+                "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        })
 
+        article_list = Blog.objects.filter(p_cat=p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1).order_by('-publish_date')
+        article_list = article_list.exclude(slug=blog.slug)
 
         page_obj = self.scrollPagination(
         		paginated_by=self.paginated_by, page=self.page,
         		object_list=article_list)
 
         context.update({
-        	"detail_article": render_to_string('include/detail-article-list.html',
+        	"scroll_article": render_to_string('include/detail-article-list.html',
         		{"page_obj": page_obj,
         		"slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
         })
@@ -132,9 +139,6 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         	raise Http404
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
-
-    def post(self, request, *args, **kwargs):
-        pass
         
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -185,6 +189,81 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
     	breadcrumbs.append({"url": None, "name": self.cat_obj.name})
     	data = {"breadcrumbs": breadcrumbs}
     	return data
+
+
+class BlogTagListView(TemplateView, PaginationMixin):
+    template_name = "blog/articles-by-tag.html"
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 1
+        self.tag_obj = None
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        try:
+            self.active_tab = int(request.GET.get('tab', 0))
+        except:
+            self.active_tab = 0
+        try:
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+        except Exception:
+            raise Http404
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+        categories = Category.objects.filter(is_active=True)
+        article_list = tag_obj.blog_set.filter(status=1)
+        article_list = article_list.order_by('-publish_date')
+
+        paginator = Paginator(article_list, self.paginated_by)
+        if self.active_tab == 0:
+            page_data = self.pagination(paginator, self.page)
+        else:
+            page_data = self.pagination(paginator, 1)
+        context.update({
+            "recent_page": page_data.get('page'),
+            "recent_end": page_data.get('page_end'),
+            "recent_middle": page_data.get('middle'),
+            "recent_begin": page_data.get('begin'),
+            "recent_articles": article_list[:5]
+        })
+
+        article_list = article_list.order_by('-score', '-publish_date')
+        paginator = Paginator(article_list, self.paginated_by)
+        if self.active_tab == 1:
+            page_data = self.pagination(paginator, self.page)
+        else:
+            page_data = self.pagination(paginator, 1)
+        context.update({
+            "pop_page": page_data.get('page'),
+            "pop_end": page_data.get('page_end'),
+            "pop_middle": page_data.get('middle'),
+            "pop_begin": page_data.get('begin'),
+            "pop_articles": article_list[: 5]
+        })
+        context.update({
+            "tag": tag_obj,
+            "categories": categories,
+            "active_tab": self.active_tab,
+            "left_tab": 0,
+            "right_tab": 1,
+        })
+        context.update(self.get_breadcrumb_data())
+        context['meta'] = tag_obj.as_meta(self.request)
+        return context
+    
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": reverse('blog:blog-landing'), "name": "Career Guidance"})
+        breadcrumbs.append({"url": None, "name": self.tag_obj.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
 
 
 class BlogLandingPageView(TemplateView, BlogMixin):
@@ -315,20 +394,19 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        article_list = Blog.objects.filter(Q(p_cat=self.blog.p_cat, status=1))
-        # article_list = article_list.exclude(pk=self.blog.pk)
-        article_list = article_list.order_by('-score')
+
+        article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
+        article_list = article_list.exclude(slug=self.blog.slug)
 
         page_obj = self.scrollPagination(
-        		paginated_by=self.paginated_by, page=self.page,
-        		object_list=article_list)
+                paginated_by=self.paginated_by, page=self.page,
+                object_list=article_list)
 
         context.update({
-        	"page_obj": page_obj,
-        	"slug": self.blog.slug,
-        	"SITEDOMAIN": settings.SITE_DOMAIN
-        })
-        
+                "page_obj": page_obj,
+                "slug": self.blog.slug, 
+                "SITEDOMAIN": settings.SITE_DOMAIN})
+
         return context
 
 

@@ -1,7 +1,11 @@
+import re
+
 from django.db import models
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django.urls import reverse
+# from django.utils.safestring import mark_safe
+
 
 from meta.models import ModelMeta
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -73,8 +77,47 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 	is_active = models.BooleanField(default=False)
 	priority = models.IntegerField(default=0)
 
+	_metadata_default = ModelMeta._metadata_default.copy()
+	_metadata_default['locale'] = 'dummy_locale'
+
+	_metadata = {
+        'title': 'get_title',
+        'description': 'get_description',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'publish_date',
+        'modified_time': 'last_modified_on',
+        'url': 'get_full_url'
+    }
+
 	def __str__(self):
 		return self.name
+
+	def save(self, *args, **kwargs):
+		if not self.title:
+			self.title = self.name + ' – Career Articles @ Learning.Shine'
+		if not self.meta_desc:
+			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
+		super(Tag, self).save(*args, **kwargs)
+
+	def get_title(self):
+		title = self.title
+		if not self.title:
+			title = self.name
+		return title.strip()
+
+	def get_keywords(self):
+		return self.meta_keywords.strip().split(",")
+
+	def get_description(self):
+		description = self.meta_desc
+		return description.strip()
+
+	def get_full_url(self):
+		return self.build_absolute_uri(self.get_absolute_url())
+
+	def get_absolute_url(self):
+		return reverse('blog:articles-by-tag', kwargs={'slug': self.slug})
 
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
@@ -133,7 +176,9 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 		if not self.title:
 			self.title = self.name + ' – Learning.Shine'
 		if not self.meta_desc:
-			self.meta_desc = 'Read Article on ' + self.name + '.' + self.content[:300]
+			# desc = mark_safe(self.content)
+			desc = re.sub(re.compile('<.*?>'), '', self.content)
+			self.meta_desc = 'Read Article on ' + self.name + '.' + desc[:200]
 		super(Blog, self).save(*args, **kwargs)
 
 	def get_title(self):

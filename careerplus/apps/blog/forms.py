@@ -31,7 +31,7 @@ class BlogAddForm(forms.ModelForm):
     p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
     	queryset=Category.objects.filter(is_active=True),
     	empty_label="Select Category", required=True,
-        to_field_name='name', widget=forms.Select(
+        to_field_name='pk', widget=forms.Select(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     sec_cat = forms.ModelMultipleChoiceField(label=("Secondary Category:"),
@@ -51,7 +51,7 @@ class BlogAddForm(forms.ModelForm):
     user = forms.ModelChoiceField(label=("Writer:"),
     	queryset=User.objects.filter(is_active=True, is_staff=True),
     	empty_label="Select Writer", required=True,
-        to_field_name='name', widget=forms.Select(
+        to_field_name='pk', widget=forms.Select(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     status = forms.ChoiceField(
@@ -70,8 +70,13 @@ class BlogAddForm(forms.ModelForm):
         model = Blog
         fields = ['name', 'slug', 'image', 'image_alt', 'p_cat', 'content',
 	        'sec_cat', 'tags', 'sites', 'user', 'allow_comment',
-	        'status']
+	        'status', 'url', 'title', 'meta_desc', 'meta_keywords']
+
         widgets = {
+            'url': forms.URLInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'title': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'meta_desc': forms.Textarea(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '300'}),
+            'meta_keywords': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '150'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -126,11 +131,14 @@ class TagAddForm(forms.ModelForm):
 
     class Meta:
         model = Tag
-        fields = ['name', 'slug', 'is_active', 'priority']
+        fields = ['name', 'slug', 'is_active', 'priority', 'url',
+            'title', 'meta_desc', 'meta_keywords']
+
         widgets = {
-        }
-        labels = {
-            'name': ('Tag*:'),
+            'url': forms.URLInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'title': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'meta_desc': forms.Textarea(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '300'}),
+            'meta_keywords': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '150'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -166,17 +174,20 @@ class CategoryAddForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        fields = ['name', 'slug', 'is_active', 'priority']
+        fields = ['name', 'slug', 'is_active', 'priority', 'url',
+            'title', 'meta_desc', 'meta_keywords']
         widgets = {
-        }
-        labels = {
-            'name': ('Category*:'),
+            'url': forms.URLInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'title': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'meta_desc': forms.Textarea(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '300'}),
+            'meta_keywords': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '150'}),
         }
 
     def __init__(self, *args, **kwargs):
         super(CategoryAddForm, self).__init__(*args, **kwargs)
         self.fields['slug'].required = False
         self.fields['is_active'].required = False
+
 
     def clean(self):
         fields_to_clean = ['name', 'slug']

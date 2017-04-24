@@ -69,9 +69,9 @@
               <table class="table table-striped jambo_table bulk_action">
                 <thead>
                   <tr class="headings">
-                    <th>
+                    <!--th>
                       <input type="checkbox" id="check-all" class="flat">
-                    </th>
+                    </th-->
                     <th class="column-title">Id</th>
                     <th class="column-title">Message </th>
                     <th class="column-title">Published</th>
@@ -85,9 +85,9 @@
                 <tbody>
                   {% for obj in page %}
                   <tr class="even pointer">
-                    <td class="a-center ">
+                    <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
-                    </td>
+                    </td-->
                     <td class=" "><a href="{% url "blog:blog-comment-update" obj.pk %}">{{obj.id}}</a></td>
                     <td class=" ">{{obj.message}}</td>
                     <td class=" ">{{obj.is_published}}</td>
