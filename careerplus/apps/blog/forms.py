@@ -20,7 +20,7 @@ class BlogAddForm(forms.ModelForm):
     	widget=forms.TextInput(
     		attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    image = forms.FileField(label=("Image:"), max_length=100, required=False)
+    image = forms.FileField(label=("Image:"), max_length=255, required=False)
 
     image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
     	required=False, widget=forms.TextInput(
@@ -55,9 +55,9 @@ class BlogAddForm(forms.ModelForm):
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     status = forms.ChoiceField(
-            choices=STATUS, initial=0, widget=forms.Select(attrs={
-                'class': 'form-control col-md-7 col-xs-12',
-                'required': True}))
+        choices=STATUS, initial=0, widget=forms.Select(attrs={
+            'class': 'form-control col-md-7 col-xs-12',
+            'required': True}))
 
     allow_comment = forms.BooleanField(label=("Allow Comment:"),
     	required=False, widget=forms.CheckboxInput())
@@ -95,6 +95,7 @@ class BlogAddForm(forms.ModelForm):
     		except:
     			continue
     	status = self.cleaned_data.get('status')
+
     	if status == '1':
 
     		if not self.cleaned_data.get('image'):
@@ -107,7 +108,7 @@ class BlogAddForm(forms.ModelForm):
 
     def save(self, commit=True):
     	blog = super(BlogAddForm, self).save(commit=False)
-    	if self.cleaned_data.get('status') == '1':
+    	if self.cleaned_data.get('status') == '1' and int(self.cleaned_data.get('status')) != self.initial.get('status'):
     		blog.publish_date = timezone.now()
     	if commit:
     		blog.save()

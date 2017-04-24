@@ -21,7 +21,6 @@
       <div class="title_left">
         <h3>Articles</h3>
       </div>
-
       <form class="form-group" method="GET" action="{% url 'blog:blog-article-list' %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
@@ -96,6 +95,8 @@
         </div>
         {% endfor %}
     {% endif %}
+
+    {{ form.non_field_errors }}
 
     <div class="clearfix"></div>
     

@@ -43,6 +43,7 @@
         </div>
         {% endfor %}
     {% endif %}
+    {{ form.non_field_errors }}
 
 
     <div class="clearfix"></div>
@@ -62,7 +63,7 @@
           <div class="x_content">
             <br />
 
-            <form id="tag-add-form" method="post" data-parsley-validate class="form-horizontal form-label-left" action="." >{% csrf_token %}
+            <form id="article-update-form" method="post" data-parsley-validate class="form-horizontal form-label-left" action="." enctype='multipart/form-data' >{% csrf_token %}
                 {{ form.media }}
 	            <fieldset>
                     {% for field in form %}

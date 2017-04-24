@@ -33,6 +33,9 @@ class CommentUpdateView(UpdateView):
 		if form.is_valid():
 			try:
 				# form.save()
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
 				messages.add_message(request, messages.SUCCESS,
 					'Comment %s Updated Successfully.' % (self.object.id))
 				return self.form_valid(form)
@@ -103,7 +106,9 @@ class BlogUpdateView(UpdateView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
 				messages.add_message(request, messages.SUCCESS,
 					'Blog %s Updated Successfully.' % (self.object.id))
 				return self.form_valid(form)
@@ -206,7 +211,10 @@ class CategoryUpdateView(UpdateView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				# form.save()
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
 				messages.add_message(request, messages.SUCCESS,
 					'Category %s Updated Successfully.' % (self.object.id))
 				return self.form_valid(form)
@@ -275,7 +283,9 @@ class TagUpdateView(UpdateView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
 				messages.add_message(request, messages.SUCCESS,
 					'Tag Updated Successfully.')
 				return self.form_valid(form)
@@ -374,7 +384,11 @@ class TagAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				tag = form.save()
+				if request.user.is_authenticated():
+					tag.created_by = request.user
+					tag.last_modified_by = request.user
+					tag.save()
 				messages.add_message(request, messages.SUCCESS, 'Tag Created Successfully.')
 				return self.form_valid(form)
 			except:
@@ -403,7 +417,11 @@ class CategoryAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				category = form.save()
+				if request.user.is_authenticated():
+					category.created_by = request.user
+					category.last_modified_by = request.user
+					category.save()
 				messages.add_message(request, messages.SUCCESS, 'Category Created Successfully.')
 				return self.form_valid(form)
 			except:
