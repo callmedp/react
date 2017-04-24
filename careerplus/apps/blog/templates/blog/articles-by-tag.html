@@ -74,7 +74,7 @@
                     <div class="media-body">
                       <h3 class="media-heading">{{obj.name}}</h3>
                       <article>{{obj.content|striptags|safe|truncatechars:300}}</article>
-                      <span class="view-forward"><figure class="forward-icon"></figure> {{obj.no_comment}} <figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
+                      <span class="view-forward"><figure class="forward-icon"></figure> {{obj.comment_moderated}} <figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
                       <span class="editor">{{obj.user.name}}, {{obj.publish_date.date}}</span>
                     </div>
                   </a>
@@ -149,7 +149,7 @@
                     <div class="media-body">
                       <h3 class="media-heading">{{obj.name}}</h3>
                       <article>{{obj.content|striptags|safe|truncatechars:300}}</article>
-                      <span class="view-forward"><figure class="forward-icon"></figure>{{obj.no_comment}}<figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
+                      <span class="view-forward"><figure class="forward-icon"></figure>{{obj.comment_moderated}}<figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
                       <span class="editor">{{obj.user.name}}, {{obj.publish_date.date}}</span>
                     </div>
                   </a>

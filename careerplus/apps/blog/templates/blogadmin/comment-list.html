@@ -73,7 +73,8 @@
                       <input type="checkbox" id="check-all" class="flat">
                     </th-->
                     <th class="column-title">Id</th>
-                    <th class="column-title">Message </th>
+                    <th class="column-title">Message</th>
+                    <th class="column-title">Article</th>
                     <th class="column-title">Published</th>
                     <th class="column-title">Removed</th>
                     <th class="bulk-actions" colspan="7">
@@ -90,6 +91,7 @@
                     </td-->
                     <td class=" "><a href="{% url "blog:blog-comment-update" obj.pk %}">{{obj.id}}</a></td>
                     <td class=" ">{{obj.message}}</td>
+                    <td class=" ">{{obj.blog}}</td>
                     <td class=" ">{{obj.is_published}}</td>
                     <td class=" ">{{obj.is_removed}}</td>
                     </td>

@@ -145,6 +145,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	allow_comment = models.BooleanField(default=False)
 
 	no_comment = models.PositiveIntegerField(default=0)
+	comment_moderated = models.PositiveIntegerField(default=0)
 	no_views = models.PositiveIntegerField(default=0)
 	no_shares = models.PositiveIntegerField(default=0)
 	score = models.DecimalField(max_digits=10, default=0,

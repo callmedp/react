@@ -10,7 +10,7 @@
     <h1>{{article.name}}</h1>
     <div class="editor-comments-views">
       <span>{{article.user.name}}, {{article.publish_date.date}}</span>
-      <span><a><figure class="comment-small-icon"></figure> <strong>{{article.no_comment}}</strong> comments</a></span>
+      <span><a><figure class="comment-small-icon"></figure> <strong>{{article.comment_moderated}}</strong> comments</a></span>
       <span><figure class="view-icon"></figure> <strong>{{article.no_views}}</strong></span>
     </div>
     <div class="social-login">
@@ -45,7 +45,7 @@
   {% if article.allow_comment %}
   <!-- comment box -->
     <div class="comments-box mb-40 mt-40">
-      <a class="comments-links mb-40" onclick="openCommentBox('{{article.id}}')" id="total_comment{{article.id}}"> <span class="comments-icon mr-10"></span>{{article.no_comment}} Comments</a>
+      <a class="comments-links mb-40" onclick="openCommentBox('{{article.id}}')" id="total_comment{{article.id}}"> <span class="comments-icon mr-10"></span>{{article.comment_moderated}} Comments</a>
 
       <div id="comment-box{{article.id}}" >
 

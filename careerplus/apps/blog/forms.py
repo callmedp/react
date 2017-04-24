@@ -188,7 +188,6 @@ class CategoryAddForm(forms.ModelForm):
         self.fields['slug'].required = False
         self.fields['is_active'].required = False
 
-
     def clean(self):
         fields_to_clean = ['name', 'slug']
         for field in fields_to_clean:
@@ -229,7 +228,7 @@ class ArticleFilterForm(forms.ModelForm):
         fields = ['user', 'status', 'p_cat']
 
 
-class CommentForm(forms.ModelForm):
+class CommentUpdateForm(forms.ModelForm):
 
     message = forms.CharField(label=("Message*:"), max_length=200,
         required=True, widget=forms.Textarea(
@@ -246,10 +245,9 @@ class CommentForm(forms.ModelForm):
         fields = ['message', 'is_published', 'is_removed']
 
     def __init__(self, *args, **kwargs):
-        super(CommentForm, self).__init__(*args, **kwargs)
+        super(CommentUpdateForm, self).__init__(*args, **kwargs)
         self.fields['is_published'].required = False
         self.fields['is_removed'].required = False
-
 
     def clean(self):
         fields_to_clean = ['message', ]
@@ -259,4 +257,14 @@ class CommentForm(forms.ModelForm):
                 self.cleaned_data[field] = value
             except:
                 continue
-        return super(CommentForm, self).clean()
+        return super(CommentUpdateForm, self).clean()
+
+    def save(self, commit=True):
+        comment = super(CommentUpdateForm, self).save(commit=False)
+        blog = comment.blog
+        if self.cleaned_data.get('is_published'):
+            blog.comment_moderated += 1
+            blog.save()
+        if commit:
+            comment.save()
+        return comment

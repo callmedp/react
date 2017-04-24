@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 from .forms import TagAddForm, CategoryAddForm, BlogAddForm, ArticleFilterForm,\
-    CommentForm
+    CommentUpdateForm
 from .models import Tag, Category, Blog, Comment
 from .mixins import PaginationMixin
 
@@ -14,7 +14,7 @@ class CommentUpdateView(UpdateView):
 	template_name = 'blogadmin/comment-update.html'
 	success_url = "/article/admin/comment-to-moderate/"
 	http_method_names = [u'get', u'post']
-	form_class = CommentForm
+	form_class = CommentUpdateForm
 
 	def get(self, request, *args, **kwargs):
 		self.object = self.get_object()
@@ -32,12 +32,12 @@ class CommentUpdateView(UpdateView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				# form.save()
 				messages.add_message(request, messages.SUCCESS,
-					'Comment Updated Successfully.')
+					'Comment %s Updated Successfully.' % (self.object.id))
 				return self.form_valid(form)
 			except:
-				messages.add_message(request, messages.ERROR, 'Comment Not Updated.')
+				messages.add_message(request, messages.ERROR, 'Comment %s Not Updated.' % (self.object.id))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
