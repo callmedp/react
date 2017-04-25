@@ -36,12 +36,12 @@ class BlogAddForm(forms.ModelForm):
 
     sec_cat = forms.ModelMultipleChoiceField(label=("Secondary Category:"),
     	queryset=Category.objects.filter(is_active=True),
-        to_field_name='name', widget=forms.SelectMultiple(
+        to_field_name='pk', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     tags = forms.ModelMultipleChoiceField(label=("Tags:"),
     	queryset=Tag.objects.filter(is_active=True),
-        to_field_name='name', widget=forms.SelectMultiple(
+        to_field_name='pk', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     sites = forms.ModelMultipleChoiceField(label=("Sites:"),

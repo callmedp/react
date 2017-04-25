@@ -291,13 +291,12 @@ class BlogLandingPageView(TemplateView, BlogMixin):
 			top_articles = p.primary_category.filter(status=1)
 			if top_articles.count() > 3:
 				top_articles = top_articles[: 3]
-			elif top_articles.exists():
+			else:
 				top_articles = top_articles
 
-			if top_articles:
-				article_list.update({
-					p: list(top_articles),
-				})
+			article_list.update({
+				p: list(top_articles),
+			})
 
 		article_list = render_to_string('include/top_article.html',
 			{'page_obj': page_obj, 'article_list': article_list})
