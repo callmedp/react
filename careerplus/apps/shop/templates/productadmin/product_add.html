@@ -1,0 +1,112 @@
+{% extends "myadmin/base.html" %}
+{% load static %}
+
+{% block meta_tags %}
+   {{block.super}}
+{% endblock meta_tags %}
+
+{% block title %} Add Skill Page {% endblock title %}
+
+{% block css %}
+    {{block.super}}
+    <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
+{% endblock css %}
+
+
+{% block pagecontent %}
+
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Add Skill Page</h3>
+        
+      </div>
+      {% if messages %}
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade in col-lg-12" {% endif %} role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            {{message}}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {{ form.non_field_errors }}
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Skill Page Add Form</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <br />
+
+            <form id="tag-add-form" method="post" enctype="multipart/form-data" data-parsley-validate class="form-horizontal form-label-left" action="." >{% csrf_token %}
+                {{ form.media }}
+	            <fieldset>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <div class="form-group error">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
+                                <div class="col-md-6 col-sm-6 col-xs-12">{{ field }}
+                                    <p class="text-danger">
+                                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <br/>
+                    {% endfor %}
+                </fieldset>
+	              <div class="form-group">
+	                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+	                  <center><button type="submit" class="btn btn-success">Submit</button></center>
+	                </div>
+	            </div>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- /page content -->
+    
+{% endblock pagecontent %}
+
+
+{% block js %}
+    {{block.super}}
+    <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+    <script src="{% static 'console/js/myadmin/jquery-formset.js' %}"></script>
+    <script type="text/javascript">
+        jQuery.each($("select[multiple]"), function () {
+          // "Locations" can be any label you want
+          SelectFilter.init(this.id, this.name, 0, "/media/");
+         });
+    </script>
+    
+{% endblock js %}

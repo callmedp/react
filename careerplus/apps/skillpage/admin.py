@@ -1,25 +1,25 @@
 from django.contrib import admin
-from shop.models import Category, Product
+from shop.models import Category, Product, ProductCategory
 from partner.models import Vendor
 
 
-class ProductInline(admin.TabularInline):
+class CategoryProductInline(admin.TabularInline):
+    model = ProductCategory
+    fk_name = 'category'
+    raw_id_fields = ['category', 'product']
+    extra = 1
 
-    model = Category.categoryproducts.through
 
 class CategoryAdmin(admin.ModelAdmin):
-	list_display = ('id', 'name', 'video_link', 'active')
-	search_fields = ('id', 'name', 'slug')
-	inlines = (
-       ProductInline,
-    )
+    inlines = [CategoryProductInline]
 
 
 class ProductAdmin(admin.ModelAdmin):
-	pass
+    pass
+
 
 class VendorAdmin(admin.ModelAdmin):
-	pass
+    pass
 
 
 admin.site.register(Category, CategoryAdmin)

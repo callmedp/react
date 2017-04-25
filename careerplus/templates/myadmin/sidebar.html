@@ -13,6 +13,22 @@
 				</ul>
 			</li>
 
+			<li><a><i class="fa fa-edit"></i> Skill <span class="fa fa-chevron-down"></span></a>
+				<ul class="nav child_menu">
+				    <li><a href="{% url "skillpage:skill-add" %}">
+				    Add Skill Page</a></li>
+				    <li><a href="{% url "skillpage:skill-list" %}">Skill List</a></li>
+				</ul>
+			</li>
+			<li><a><i class="fa fa-edit"></i> Product <span class="fa fa-chevron-down"></span></a>
+				<ul class="nav child_menu">
+				    <li><a href="{% url "shop:product-add" %}">
+				    Add Product</a></li>
+				    <li><a href="{% url "shop:product-list" %}">
+				    Product List</a></li>
+				</ul>
+			</li>
+
 			<li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu">
 					<li><a href="index.html">Dashboard</a></li>

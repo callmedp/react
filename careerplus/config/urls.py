@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^skillpage/', include('skillpage.urls', namespace='skillpage')),
     url(r'^article/', include('blog.urls', namespace='blog')),
+    url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
