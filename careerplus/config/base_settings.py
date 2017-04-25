@@ -133,7 +133,7 @@ STATICFILES_FINDERS = (
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
+CKEDITOR_JQUERY_URL = 'shinelearning/js/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
