@@ -42,8 +42,8 @@ class CommentUpdateView(UpdateView):
 				messages.add_message(request, messages.SUCCESS,
 					'Comment %s Updated Successfully.' % (self.object.id))
 				return valid_form
-			except:
-				messages.add_message(request, messages.ERROR, 'Comment %s Not Updated.' % (self.object.id))
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Comment %s Not Updated. due to %s' % (self.object.id, str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -137,11 +137,13 @@ class BlogUpdateView(UpdateView):
 				obj = form.save(commit=False)
 				if request.user.is_authenticated():
 					obj.last_modified_by = request.user
+
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS,
 					'Blog %s Updated Successfully.' % (self.object.id))
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Blog %s Not Updated.' % (self.object.id))
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -243,11 +245,13 @@ class CategoryUpdateView(UpdateView):
 				obj = form.save(commit=False)
 				if request.user.is_authenticated():
 					obj.last_modified_by = request.user
+
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS,
 					'Category %s Updated Successfully.' % (self.object.id))
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Category Not Updated.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Category %s Not Updated. Due to %s' % (self.object.id, str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -314,11 +318,12 @@ class TagUpdateView(UpdateView):
 				obj = form.save(commit=False)
 				if request.user.is_authenticated():
 					obj.last_modified_by = request.user
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS,
 					'Tag Updated Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Tag Not Updated.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Tag %s Not Updated. Due to %s' % (self.object.id, str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -379,15 +384,16 @@ class BlogAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				blog = form.save()
+				blog = form.save(commit=False)
 				if request.user.is_authenticated():
 					blog.created_by = request.user
 					blog.last_modified_by = request.user
 					blog.save()
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS, 'Blog Created Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Blog Not Created.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Blog Not Created. Due to %s' % (str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -412,15 +418,16 @@ class TagAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				tag = form.save()
+				tag = form.save(commit=False)
 				if request.user.is_authenticated():
 					tag.created_by = request.user
 					tag.last_modified_by = request.user
 					tag.save()
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS, 'Tag Created Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Tag Not Created.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Tag Not Created. Due to %s' % (str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -445,14 +452,15 @@ class CategoryAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				category = form.save()
+				category = form.save(commit=False)
 				if request.user.is_authenticated():
 					category.created_by = request.user
 					category.last_modified_by = request.user
 					category.save()
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS, 'Category Created Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Category Not Created.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Category Not Created. Due to %s' % (str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
