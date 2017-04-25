@@ -260,16 +260,6 @@ class CommentUpdateForm(forms.ModelForm):
                 continue
         return super(CommentUpdateForm, self).clean()
 
-    def save(self, commit=True):
-        comment = super(CommentUpdateForm, self).save(commit=False)
-        blog = comment.blog
-        if self.cleaned_data.get('is_published'):
-            blog.comment_moderated += 1
-            blog.save()
-        if commit:
-            comment.save()
-        return comment
-
 
 class CommentActionForm(forms.Form):
 	ACTION_STATUS = (

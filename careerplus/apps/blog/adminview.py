@@ -36,6 +36,10 @@ class CommentUpdateView(UpdateView):
 			try:
 				# form.save()
 				obj = form.save(commit=False)
+				if obj.is_published:
+					blog = obj.blog
+					blog.comment_moderated += 1
+					blog.save()
 				if request.user.is_authenticated():
 					obj.last_modified_by = request.user
 				valid_form = self.form_valid(form)
@@ -88,6 +92,9 @@ class CommentListView(ListView, PaginationMixin):
 				for obj in comment_objs:
 					obj.is_published = True
 					obj.save()
+					blog = obj.blog
+					blog.comment_moderated += 1
+					blog.save()
 				messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments are published.')
 			elif action_type == 2:
 				for obj in comment_objs:
