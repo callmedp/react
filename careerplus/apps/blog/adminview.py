@@ -146,6 +146,7 @@ class BlogUpdateView(UpdateView):
 					obj.last_modified_by = request.user
 
 				valid_form = self.form_valid(form)
+				form.save_m2m()
 				messages.add_message(request, messages.SUCCESS,
 					'Blog %s Updated Successfully.' % (self.object.id))
 				return valid_form
@@ -397,6 +398,7 @@ class BlogAddFormView(FormView):
 					blog.last_modified_by = request.user
 					blog.save()
 				valid_form = self.form_valid(form)
+				form.save_m2m()
 				messages.add_message(request, messages.SUCCESS, 'Blog Created Successfully.')
 				return valid_form
 			except Exception as e:
