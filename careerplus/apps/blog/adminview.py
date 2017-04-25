@@ -2,9 +2,11 @@ from django.views.generic import FormView, ListView, UpdateView
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 from .forms import TagAddForm, CategoryAddForm, BlogAddForm, ArticleFilterForm,\
-    CommentUpdateForm
+    CommentUpdateForm, CommentActionForm
 from .models import Tag, Category, Blog, Comment
 from .mixins import PaginationMixin
 
@@ -36,9 +38,10 @@ class CommentUpdateView(UpdateView):
 				obj = form.save(commit=False)
 				if request.user.is_authenticated():
 					obj.last_modified_by = request.user
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS,
 					'Comment %s Updated Successfully.' % (self.object.id))
-				return self.form_valid(form)
+				return valid_form
 			except:
 				messages.add_message(request, messages.ERROR, 'Comment %s Not Updated.' % (self.object.id))
 				return self.form_invalid(form)
@@ -66,10 +69,35 @@ class CommentListView(ListView, PaginationMixin):
 		context = super(self.__class__, self).get_context_data(**kwargs)
 		paginator = Paginator(context['comment_list'], self.paginated_by)
 		context.update(self.pagination(paginator, self.page))
+		alert = messages.get_messages(self.request)
 		context.update({
 			"query": self.query,
+			"action_form": CommentActionForm(),
+			"messages": alert,
 		})
 		return context
+
+	def post(self, request, *args, **kwargs):
+		try:
+			comment_list = request.POST.getlist('table_records', [])
+			action_type = int(request.POST.get('action_type', '0'))
+			comment_objs = Comment.objects.filter(id__in=comment_list)
+			if action_type == 0:
+				messages.add_message(request, messages.ERROR, 'Please select valid action first')
+			elif action_type == 1:
+				for obj in comment_objs:
+					obj.is_published = True
+					obj.save()
+				messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments are published.')
+			elif action_type == 2:
+				for obj in comment_objs:
+					obj.is_removed = True
+					obj.save()
+				messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments removed.')
+		except Exception as e:
+			messages.add_message(request, messages.ERROR, str(e))
+
+		return HttpResponseRedirect(reverse('blog:blog-comment-moderate'))
 
 	def get_queryset(self):
 		queryset = super(self.__class__, self).get_queryset()

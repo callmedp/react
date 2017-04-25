@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from .models import Tag, Category, Blog, Comment
 from .config import STATUS
@@ -16,17 +16,17 @@ class BlogAddForm(forms.ModelForm):
     	widget=forms.TextInput(
     	attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    slug = forms.SlugField(label=("Slug:"), max_length=90,
+    slug = forms.SlugField(label=("Slug:"), max_length=100,
     	widget=forms.TextInput(
     		attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    image = forms.FileField(label=("Image:"), max_length=255, required=False)
+    image = forms.FileField(label=("Image:"), max_length=200, required=False)
 
     image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
     	required=False, widget=forms.TextInput(
     	attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    content = forms.CharField(required=True, widget=CKEditorWidget())
+    content = forms.CharField(label=("Content*:"), required=True, widget=CKEditorUploadingWidget())
 
     p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
     	queryset=Category.objects.filter(is_active=True),
@@ -269,3 +269,16 @@ class CommentUpdateForm(forms.ModelForm):
         if commit:
             comment.save()
         return comment
+
+
+class CommentActionForm(forms.Form):
+	ACTION_STATUS = (
+		(0, "Select Action"),
+		(1, "Mark Published"),
+		(2, "Mark Removed"),
+	)
+
+	action = forms.ChoiceField(
+        choices=ACTION_STATUS, initial=0, required=True, widget=forms.Select(attrs={
+            'class': 'form-control col-md-7 col-xs-12',
+            'required': True}))
