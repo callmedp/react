@@ -1,10 +1,10 @@
+from decimal import Decimal
 from django.db import models
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
-
 from ckeditor.fields import RichTextField
 
 from seo.models import AbstractSEO, AbstractAutoDate
@@ -24,7 +24,9 @@ from .choices import (
     FLOW_CHOICES,
     EXP_CHOICES,
     ATTRIBUTE_CHOICES,
-    RELATION_CHOICES)
+    RELATION_CHOICES,
+    COURSE_TYPE_CHOICES,
+    MODE_CHOICES)
 
 
 class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -99,7 +101,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
-        return reverse('category-listing', kwargs={'slug': self.slug})
+        return '/' #reverse('category-listing', kwargs={'slug': self.slug})
 
     def add_relationship(self, category, relation=0):
         relationship, created = CategoryRelationship.objects.get_or_create(
@@ -134,7 +136,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_main_parent(self):
         return self.related_to.filter(
             from_category__relation=0, from_category__related_to=self,
-            is_main_parent=True)
+            from_category__is_main_parent=True)
 
     def has_children(self):
         return self.get_num_children() > 0
@@ -356,8 +358,16 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Duration In Days'), default=0)
     experience = models.PositiveSmallIntegerField(
         _('Experience'), choices=EXP_CHOICES, default=0)
-    requires_delivery = models.BooleanField(_("Requires delivery?"),
-                                            default=True)
+    requires_delivery = models.BooleanField(
+        _("Requires delivery?"),
+        default=True)
+    certification = models.BooleanField(
+        _("Give Certification"),
+        default=True)
+    study_mode = models.PositiveSmallIntegerField(
+        _('Study Mode'), choices=MODE_CHOICES, default=0)
+    course_type = models.PositiveSmallIntegerField(
+        _('Course Type'), choices=COURSE_TYPE_CHOICES, default=0)
 
     class Meta:
         abstract = True
@@ -372,6 +382,8 @@ class Product(AbstractProduct, ModelMeta):
         _('No. Of Review'), default=0)
     buy_count = models.PositiveIntegerField(
         _('Buy Count'), default=0)
+    num_jobs = models.PositiveIntegerField(
+        _('Num Jobs'), default=0)
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
@@ -395,7 +407,7 @@ class Product(AbstractProduct, ModelMeta):
         through_fields=('primary', 'secondary'),
         verbose_name=_('Related Product'),
         symmetrical=False, blank=True)
-    combo = models.ManyToManyField(
+    childs = models.ManyToManyField(
         'self',
         through='ChildProduct',
         related_name='comboproduct+',
@@ -414,6 +426,10 @@ class Product(AbstractProduct, ModelMeta):
         through='ProductKeyword',
         through_fields=('product', 'keyword'),
         blank=True)
+    vendor = models.ForeignKey(
+        'partner.Vendor', related_name='productvendor', blank=True,
+        null=True, verbose_name=_("Product Vendor"))
+    
     # offers = models.ManyToManyField(
     #     'shop.Offer',
     #     verbose_name=_('Product Offer'),
@@ -461,6 +477,17 @@ class Product(AbstractProduct, ModelMeta):
     def __str__(self):
         return self.name
 
+    @property
+    def category_slug(self):
+        prod_cat = self.categories.filter(
+                productcategories__is_main=True,
+                productcategories__active=True)
+        if prod_cat:
+            prod_cat = prod_cat[0].slug
+        else:
+            prod_cat = None
+        return prod_cat
+
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
 
@@ -474,7 +501,23 @@ class Product(AbstractProduct, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
-        return reverse('product-detail', kwargs={'slug': self.slug})
+        return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': self.category_slug, 'pk': self.pk})
+
+    def get_ratings(self):
+        pure_rating = int(self.avg_rating)
+        decimal_part = self.avg_rating - pure_rating
+        final_score = ['*' for i in range(pure_rating)]
+        rest_part = int(Decimal(5.0) - self.avg_rating)
+        res_decimal_part = Decimal(5.0) - self.avg_rating - Decimal(rest_part)
+        if decimal_part >= 0.75:
+            final_score.append("*")
+        elif decimal_part >= 0.25:
+            final_score.append("+")
+        if res_decimal_part >= 0.75:
+            final_score.append('-')
+        for i in range(rest_part):
+            final_score.append('-')
+        return final_score
 
     @property
     def has_attributes(self):
@@ -492,7 +535,6 @@ class ProductArchive(AbstractProduct):
         _('Product Entity'),
         blank=True,
         max_length=20)
-
     siblings = models.CharField(
         _('Siblings Product'),
         blank=True,
@@ -501,7 +543,7 @@ class ProductArchive(AbstractProduct):
         _('Related Product'),
         blank=True,
         max_length=100)
-    combo = models.CharField(
+    childs = models.CharField(
         _('Child Product'),
         blank=True,
         max_length=100)
@@ -561,7 +603,7 @@ class ProductScreen(AbstractProduct):
         _('Related Product'),
         blank=True,
         max_length=100)
-    combo = models.CharField(
+    childs = models.CharField(
         _('Child Product'),
         blank=True,
         max_length=100)
@@ -704,12 +746,12 @@ class ProductKeyword(AbstractAutoDate):
     keyword = models.ForeignKey(
         Keyword,
         verbose_name=_('Keyword'),
-        related_name='keywords',
+        related_name='productkeywords',
         on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product,
         verbose_name=_('Product'),
-        related_name='keywordproducts',
+        related_name='productkeywords',
         on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
     weight = models.PositiveIntegerField(
@@ -725,12 +767,12 @@ class ProductCategory(AbstractAutoDate):
     category = models.ForeignKey(
         Category,
         verbose_name=_('Category'),
-        related_name='categories',
+        related_name='productcategories',
         on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product,
         verbose_name=_('Product'),
-        related_name='categoryproducts',
+        related_name='productcategories',
         on_delete=models.CASCADE)
     is_main = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
@@ -749,12 +791,12 @@ class FAQProduct(AbstractAutoDate):
     question = models.ForeignKey(
         FAQuestion,
         verbose_name=_('FAQuestion'),
-        related_name='faquestions',
+        related_name='productfaqs',
         on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product,
         verbose_name=_('Product'),
-        related_name='questionproducts',
+        related_name='productfaqs',
         on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
     question_order = models.PositiveIntegerField(
@@ -770,12 +812,12 @@ class ProductAttribute(AbstractAutoDate):
     attribute = models.ForeignKey(
         Attribute,
         verbose_name=_('Attribute'),
-        related_name='attributes',
+        related_name='productattributes',
         on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product,
         verbose_name=_('Product'),
-        related_name='attributeproducts',
+        related_name='productattributes',
         on_delete=models.CASCADE)
     value_text = models.CharField(
         _('Value Text'), max_length=100,
@@ -833,12 +875,12 @@ class ProductPrice(AbstractAutoDate):
     currency = models.ForeignKey(
         Currency,
         verbose_name=_('Currency'),
-        related_name='prices',
+        related_name='productprices',
         on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product,
         verbose_name=_('Product'),
-        related_name='priceproducts',
+        related_name='productprices',
         on_delete=models.CASCADE)
 
     def __str__(self):

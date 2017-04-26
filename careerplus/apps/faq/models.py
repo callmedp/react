@@ -104,11 +104,11 @@ class Topic(AbstractAutoDate):
 class TopicChapter(AbstractAutoDate):
     topic = models.ForeignKey(
         Topic,
-        related_name='topics',
+        related_name='topicchapters',
         on_delete=models.CASCADE)
     chapter = models.ForeignKey(
         Chapter,
-        related_name='chapters',
+        related_name='topicchapters',
         on_delete=models.CASCADE)
     sort_order = models.PositiveIntegerField(
         _('Sort Order'), default=1)

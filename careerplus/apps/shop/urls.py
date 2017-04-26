@@ -2,5 +2,6 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    # url(r'^(?P<html>[a-z\-\.1-90\_]+)$', DesignPage.as_view(), name='test'),
+    url(r'^reviews/(?P<product_pk>[\w-]+)/$',
+        views.ProductReviewListView.as_view(), name='product-review'),
 ]

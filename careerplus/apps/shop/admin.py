@@ -24,6 +24,7 @@ class AttributeInline(admin.TabularInline):
     model = models.ProductAttribute
     raw_id_fields = ['attribute', 'product']
     fk_name = 'product'
+    exclude = ('value_ltext',)
     extra = 1
 
 class FAQuestionInline(admin.TabularInline):
@@ -37,6 +38,13 @@ class RelatedProductInline(admin.TabularInline):
     model = models.RelatedProduct
     fk_name = 'primary'
     raw_id_fields = ['primary', 'secondary']
+    extra = 1
+
+
+class VariationProductInline(admin.TabularInline):
+    model = models.VariationProduct
+    fk_name = 'main'
+    raw_id_fields = ['main', 'sibling']
     extra = 1
 
 
@@ -65,8 +73,8 @@ class CategoryInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [AttributeInline, CategoryInline, RelatedProductInline, ChildProductInline,
-        FAQuestionInline]
+    inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
+        FAQuestionInline, AttributeInline,]
     prepopulated_fields = {"slug": ("name",)}
     
 #     def get_queryset(self, request):

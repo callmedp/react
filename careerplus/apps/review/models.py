@@ -1,4 +1,5 @@
 from django.conf import settings
+from decimal import Decimal
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -136,6 +137,35 @@ class Review(AbstractAutoDate):
         total_average, category_averages = self.get_averages(
             max_value=max_value)
         return category_averages
+
+    def get_ratings(self):
+        pure_rating = int(self.average_rating)
+        decimal_part = self.average_rating - pure_rating
+        final_score = ['*' for i in range(pure_rating)]
+        rest_part = int(5.0 - self.average_rating)
+        res_decimal_part = 5.0 - self.average_rating - rest_part
+        if decimal_part >= 0.75:
+            final_score.append("*")
+        elif decimal_part >= 0.25:
+            final_score.append("+")
+        if res_decimal_part >= 0.75:
+            final_score.append('-')
+        for i in range(rest_part):
+            final_score.append('-')
+        return final_score
+
+    def get_remarks(self):
+        remarks= ''
+        if self.average_rating >= 4.0:
+            remarks = "Excellent!"
+        elif self.average_rating >= 3.0:
+            remarks = "Good!"
+        elif self.average_rating >= 2.0:
+            remarks = "Average!"
+        else:
+            remarks = "Bad!"
+
+        return remarks
 
 
 class RatingCategory(AbstractAutoDate):

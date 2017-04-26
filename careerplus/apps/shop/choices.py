@@ -72,3 +72,17 @@ EXP_CHOICES = (
     (10, 'Flow 10'),
     (11, 'Flow 11'),
     (12, 'Flow 12'),)
+
+
+COURSE_TYPE_CHOICES = (
+    (0, 'Default'),
+    (1, 'Basic'),
+    (2, 'Intermediate'),
+    (3, 'Expert'),)
+
+
+MODE_CHOICES = (
+    (0, 'Default'),
+    (1, 'Online'),
+    (2, 'Classroom'),
+    (3, 'Online + Classroom'),)
