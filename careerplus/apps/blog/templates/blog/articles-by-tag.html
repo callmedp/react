@@ -219,18 +219,23 @@
 
     <!-- right content start -->
     <div class="col-md-3 col-sm-12 mt-45">
-
+      
+      {% if categories %}
       <!-- Categories -->
       <div class="categories box-panel mb-40">
         <h2 class="heading-right">Categories</h2>
         <ul>
         {% for cat in categories %}
+            {% if cat.primary_category.all %}
             <li><a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a></li>
+            {% endif %}
         {% endfor %}
         </ul>
         <a href="{% url "blog:blog-landing" %}" class="view-article text-right db mt-10">View more</a>
       </div>
+      {% endif %}
 
+      {% if pop_articles %}
       <!-- Popular & Recent -->
       <div class="recent-popular-tabs box-panel mb-40">
         <ul role="tablist">
@@ -287,8 +292,7 @@
         </div>
         
       </div>
-
-
+      {% endif %}
 
     </div>
     <!-- right content end -->

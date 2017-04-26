@@ -2,6 +2,7 @@
 {% load thumbnail %}
 
 {% for key, values in article_list.items %}
+{% if values %}
 <div class="box-panel article-listing mb-40">
     <h2>{{ key.name }}</h2>
     {% for article in values %}
@@ -26,6 +27,7 @@
     {% endfor %}
     <a href="{% url "blog:articles-by-category" key.slug %}" class="view-article text-right db mt-20">View all articles</a>
 </div> 
+{% endif %}
 {% endfor %}
 
 {% if page_obj.has_next %}

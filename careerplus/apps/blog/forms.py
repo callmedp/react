@@ -32,7 +32,8 @@ class BlogAddForm(forms.ModelForm):
     	required=False, widget=forms.TextInput(
     	attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-	content = forms.CharField(label=("Content*:"), required=True, widget=CKEditorUploadingWidget())
+	content = forms.CharField(label=("Content*:"), required=True,
+		widget=CKEditorUploadingWidget())
 
 	p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
     	queryset=Category.objects.filter(is_active=True),

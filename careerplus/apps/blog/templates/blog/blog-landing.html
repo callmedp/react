@@ -101,19 +101,23 @@
 
         <!-- right content start -->
         <div class="col-md-3 col-sm-12">
-
+          
+          {% if categories %}
           <!-- related -->
           <div class="categories box-panel mb-40">
             <h2 class="heading-right">Categories</h2>
             <ul>
                 {% for cat in categories %}
-                <li>
-                   <a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a>
-                </li>
+                   {% if cat.primary_category.all %}
+                    <li>
+                       <a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a>
+                    </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
             <a href="{% url "blog:blog-landing" %}" class="view-article text-right db mt-10">View more</a>
           </div>
+          {% endif %}
 
         </div>
         <!-- right content end -->

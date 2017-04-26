@@ -119,6 +119,7 @@ class BlogDetailView(DetailView, BlogMixin):
 
         article_list = Blog.objects.filter(p_cat=p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
+        article_list = article_list.distinct()
 
         page_obj = self.scrollPagination(
         		paginated_by=self.paginated_by, page=self.page,
@@ -424,6 +425,7 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
 
         article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=self.blog.slug)
+        article_list = article_list.distinct()
 
         page_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,

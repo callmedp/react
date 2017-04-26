@@ -1,5 +1,5 @@
 ul.parsley-errors-list {
     list-style: none;
-    color: #E74C3C;
+    color: red;
     padding-left: 0;
 }
