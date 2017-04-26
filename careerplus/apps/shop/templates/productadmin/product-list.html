@@ -22,7 +22,7 @@
         <h3>Products</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url 'blog:blog-category-list' %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url 'shop:product-list' %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -82,7 +82,7 @@
                 </thead>
 
                 <tbody>
-                  {% for obj in object_list %}
+                  {% for obj in page %}
                   <tr class="even pointer">
                     <td class=" ">
                       <input type="checkbox" class="flat" name="table_records">
