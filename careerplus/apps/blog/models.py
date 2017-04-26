@@ -203,7 +203,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 		return self.build_absolute_uri(self.get_absolute_url())
 
 	def get_absolute_url(self):
-		return reverse('blog:articles-deatil', kwargs={'slug': self.slug})
+		return reverse('blog:articles-deatil', kwargs={'slug': self.slug, 'pk': self.pk})
 
 	def update_score(self):
 		score = Decimal(self.no_views) * Decimal(0.9)

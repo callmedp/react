@@ -4,7 +4,9 @@ from django.views.generic import (
 	DetailView,
 	View)
 
-from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
+from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect,\
+	HttpResponsePermanentRedirect
+from django.utils.http import urlquote
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login
 from django.core.paginator import Paginator
@@ -47,25 +49,49 @@ class BlogDetailView(DetailView, BlogMixin):
     	self.paginated_by = 1
     	self.page = 1
 
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        slug = self.kwargs.get('slug')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if pk is not None:
+            queryset = queryset.filter(pk=pk, status=1)
+        elif slug is not None:
+        	queryset = queryset.filter(slug=slug)
+        try:
+        	obj = queryset.get()
+        except:
+            raise Http404
+        return obj
+
+    def redirect_if_necessary(self, current_path, article):
+        expected_path = article.get_absolute_url()
+        if expected_path != urlquote(current_path):
+            return HttpResponsePermanentRedirect(expected_path)
+        return None
+
     def get(self, request, *args, **kwargs):
         self.slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
-        self.article = self.get_object()
-        try:
-            self.article = Blog.objects.get(slug=self.slug, status=1)
-        except Exception:
-            raise Http404
-
-        self.article.no_views += 1
-        self.article.update_score()
-        self.article.save()
+        self.object = self.get_object()
+        # try:
+        #     self.article = Blog.objects.get(slug=self.slug, status=1)
+        # except Exception:
+        #     raise Http404
+        self.object.no_views += 1
+        self.object.update_score()
+        self.object.save()
+        redirect = self.redirect_if_necessary(request.path, self.object)
+        if redirect:
+        	return redirect
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         categories = Category.objects.filter(is_active=True)
-        blog = context['object']
+        blog = self.object
         p_cat = blog.p_cat
         articles = p_cat.primary_category.filter(status=1).exclude(pk=blog.pk)
         pop_aricles = articles[: 5]
@@ -78,7 +104,6 @@ class BlogDetailView(DetailView, BlogMixin):
             "recent_articles": articles[: 5],
         })
         context.update(self.get_breadcrumb_data())
-        context['meta'] = self.article.as_meta(self.request)
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
         main_obj = Blog.objects.filter(slug=blog.slug, status=1)
@@ -111,8 +136,8 @@ class BlogDetailView(DetailView, BlogMixin):
     	breadcrumbs = []
     	breadcrumbs.append({"url": '/', "name": "Home"})
     	breadcrumbs.append({"url": reverse('blog:blog-landing'), "name": "Career Guidance"})
-    	breadcrumbs.append({"url": reverse('blog:articles-by-category', kwargs={'slug': self.article.p_cat.slug}), "name": self.article.p_cat.name})
-    	breadcrumbs.append({"url": None, "name": self.article.name})
+    	breadcrumbs.append({"url": reverse('blog:articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
+    	breadcrumbs.append({"url": None, "name": self.object.display_name})
     	data = {"breadcrumbs": breadcrumbs}
     	return data
 

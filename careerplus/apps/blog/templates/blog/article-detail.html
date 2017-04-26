@@ -77,7 +77,7 @@
           <div role="tabpanel" class="tab-pane active" id="popular">
             {% for art in pop_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
@@ -87,7 +87,7 @@
                     </figure>
               {% endif %}
                 <div class="media-body">
-                  {{art.name}}
+                  {{art.display_name}}
                 </div>
               </a>
             </div>
@@ -99,7 +99,7 @@
           <div role="tabpanel" class="tab-pane" id="recent">
             {% for art in recent_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
                 {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
@@ -109,7 +109,7 @@
                     </figure>
               {% endif %}
                 <div class="media-body">
-                  {{art.name}}
+                  {{art.display_name}}
                 </div>
               </a>
             </div>

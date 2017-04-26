@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^load-more-comment/$', LoadMoreCommentView.as_view(),
         name='article-load-more-comment'),
 
-    url(r'^(?P<slug>[-\w]+)/$',
+    url(r'^(?P<slug>[-\w]+)/(?P<pk>\d+)/$',
         BlogDetailView.as_view(), name='articles-deatil'),
 
     url(r'^login-to-comment/(?P<slug>[-\w]+)/$',

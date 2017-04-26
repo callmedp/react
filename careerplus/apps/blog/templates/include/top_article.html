@@ -6,7 +6,7 @@
     <h2>{{ key.name }}</h2>
     {% for article in values %}
     <div class="media">
-      <a title="Government Jobs" href="{% url "blog:articles-deatil" article.slug %}">
+      <a title="Government Jobs" href="{% url "blog:articles-deatil" article.slug article.pk %}">
         {% if article.image %}
         <figure class="media-left">
           {% thumbnail article.image "171x113" crop="center" as im %}
@@ -16,7 +16,7 @@
         </figure>
         {% endif %}
         <div class="media-body">
-          <h3 class="media-heading">{{article.name}}</h3>
+          <h3 class="media-heading">{{article.display_name}}</h3>
           <article>{{article.content|striptags|safe|truncatechars:300}}</article>
           <span class="view-forward"><figure class="forward-icon"></figure> {{article.comment_moderated}} <figure class="view-icon ml-20"></figure> {{article.no_views}}</span>
           <span class="editor">{{article.user.name}}, {{article.publish_date.date}}</span>
