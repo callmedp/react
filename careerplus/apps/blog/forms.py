@@ -12,107 +12,106 @@ User = get_user_model()
 
 
 class BlogAddForm(forms.ModelForm):
-    name = forms.CharField(label=("Name*:"), max_length=85,
+
+	display_name = forms.CharField(label=("Display Name:"), required=False,
+		max_length=85, widget=forms.TextInput(
+    	attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+	name = forms.CharField(label=("Name*:"), required=True, max_length=85,
+		help_text='enter name for slug generation.',
     	widget=forms.TextInput(
     	attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    slug = forms.SlugField(label=("Slug:"), max_length=100,
+	slug = forms.SlugField(label=("Slug:"), max_length=100,
     	widget=forms.TextInput(
     		attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    image = forms.FileField(label=("Image:"), max_length=200, required=False)
+	image = forms.FileField(label=("Image:"), max_length=200, required=False)
 
-    image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
+	image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
     	required=False, widget=forms.TextInput(
     	attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    content = forms.CharField(label=("Content*:"), required=True, widget=CKEditorUploadingWidget())
+	content = forms.CharField(label=("Content*:"), required=True, widget=CKEditorUploadingWidget())
 
-    p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
+	p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
     	queryset=Category.objects.filter(is_active=True),
     	empty_label="Select Category", required=True,
         to_field_name='pk', widget=forms.Select(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    sec_cat = forms.ModelMultipleChoiceField(label=("Secondary Category:"),
+	sec_cat = forms.ModelMultipleChoiceField(label=("Secondary Category:"),
     	queryset=Category.objects.filter(is_active=True),
         to_field_name='name', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    tags = forms.ModelMultipleChoiceField(label=("Tags:"),
+	tags = forms.ModelMultipleChoiceField(label=("Tags:"),
     	queryset=Tag.objects.filter(is_active=True),
         to_field_name='name', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    sites = forms.ModelMultipleChoiceField(label=("Sites:"),
+	sites = forms.ModelMultipleChoiceField(label=("Sites:"),
     	queryset=Site.objects.all(), widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    user = forms.ModelChoiceField(label=("Writer:"),
+	user = forms.ModelChoiceField(label=("Writer:"),
     	queryset=User.objects.filter(is_active=True, is_staff=True),
     	empty_label="Select Writer", required=True,
         to_field_name='pk', widget=forms.Select(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    status = forms.ChoiceField(
+	status = forms.ChoiceField(
         choices=STATUS, initial=0, widget=forms.Select(attrs={
             'class': 'form-control col-md-7 col-xs-12',
             'required': True}))
 
-    allow_comment = forms.BooleanField(label=("Allow Comment:"),
+	allow_comment = forms.BooleanField(label=("Allow Comment:"),
     	required=False, widget=forms.CheckboxInput())
 
-    # publish_date = forms.DateTimeField(label=("Publish Date:"),
-    # 	required=False, input_formats='%Y-%m-%d', help_text='eg- 2017-03-31',
-    # 	widget=forms.DateTimeInput())
-
-    class Meta:
-        model = Blog
-        fields = ['name', 'slug', 'image', 'image_alt', 'p_cat', 'content',
-	        'sec_cat', 'tags', 'sites', 'user', 'allow_comment',
-	        'status', 'url', 'title', 'meta_desc', 'meta_keywords']
-
-        widgets = {
+	class Meta:
+		model = Blog
+		fields = ['display_name', 'name', 'slug', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'sites', 'user', 'allow_comment',
+			'status', 'url', 'title', 'meta_desc', 'meta_keywords']
+		widgets = {
             'url': forms.URLInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
             'title': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
             'meta_desc': forms.Textarea(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '300'}),
             'meta_keywords': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '150'}),
         }
+	
+	def __init__(self, *args, **kwargs):
+		super(BlogAddForm, self).__init__(*args, **kwargs)
+		self.fields['slug'].required = False
+		self.fields['tags'].required = False
+		self.fields['sec_cat'].required = False
+		self.fields['sites'].required = False
 
-    def __init__(self, *args, **kwargs):
-        super(BlogAddForm, self).__init__(*args, **kwargs)
-        self.fields['slug'].required = False
-        self.fields['tags'].required = False
-        self.fields['sec_cat'].required = False
-        self.fields['sites'].required = False
+	def clean(self):
+		fields = ['name', 'slug']
+		for field in fields:
+			try:
+				val = self.cleaned_data.get(field).strip()
+				self.cleaned_data[field] = val
+			except:
+				continue
+		status = self.cleaned_data.get('status')
 
-    def clean(self):
-    	fields = ['name', 'slug']
-    	for field in fields:
-    		try:
-    			val = self.cleaned_data.get(field).strip()
-    			self.cleaned_data[field] = val
-    		except:
-    			continue
-    	status = self.cleaned_data.get('status')
-
-    	if status == '1':
-
-    		if not self.cleaned_data.get('image'):
-    			raise forms.ValidationError('Image is reqired',
+		if status == '1':
+			if not self.cleaned_data.get('image'):
+				raise forms.ValidationError('Image is reqired',
     				code='image-error', )
-    		if self.cleaned_data.get('image') and not self.cleaned_data.get('image_alt'):
-    			raise forms.ValidationError('Image alt is reqired',
+			if self.cleaned_data.get('image') and not self.cleaned_data.get('image_alt'):
+				raise forms.ValidationError('Image alt is reqired',
     				code='image-alt error', )
-    	return super(BlogAddForm, self).clean()
+		return super(BlogAddForm, self).clean()
 
-    def save(self, commit=True):
-    	blog = super(BlogAddForm, self).save(commit=False)
-    	if self.cleaned_data.get('status') == '1' and int(self.cleaned_data.get('status')) != self.initial.get('status'):
-    		blog.publish_date = timezone.now()
-    	if commit:
-    		blog.save()
-    	return blog
+	def save(self, commit=True):
+		blog = super(BlogAddForm, self).save(commit=False)
+		if self.cleaned_data.get('status') == '1' and int(self.cleaned_data.get('status')) != self.initial.get('status'):
+			blog.publish_date = timezone.now()
+		if commit:
+			blog.save()
+		return blog
 
 
 class TagAddForm(forms.ModelForm):

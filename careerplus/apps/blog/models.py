@@ -121,8 +121,10 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
-	name = models.CharField(('Name'), max_length=200, blank=False,
+	display_name = models.CharField(('Name'), max_length=200, blank=True,
 		help_text=("Set title for blog."))
+	name = models.CharField(('Name'), max_length=200, blank=False,
+		help_text=("Set name for slug generation."))
 	p_cat = models.ForeignKey(Category, related_name='primary_category',
 		blank=False, null=False)
 	sec_cat = models.ManyToManyField(Category, related_name='secondary_category',
@@ -180,6 +182,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 			# desc = mark_safe(self.content)
 			desc = re.sub(re.compile('<.*?>'), '', self.content)
 			self.meta_desc = 'Read Article on ' + self.name + '.' + desc[:200]
+		if not self.display_name:
+			self.display_name = self.name
 		super(Blog, self).save(*args, **kwargs)
 
 	def get_title(self):

@@ -10,7 +10,6 @@ from django.contrib.auth import authenticate, login
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.conf import settings
-from django.db.models import Q
 
 from meta.views import Meta
 
@@ -68,7 +67,7 @@ class BlogDetailView(DetailView, BlogMixin):
         categories = Category.objects.filter(is_active=True)
         blog = context['object']
         p_cat = blog.p_cat
-        articles = p_cat.primary_category.filter(status=1)
+        articles = p_cat.primary_category.filter(status=1).exclude(pk=blog.pk)
         pop_aricles = articles[: 5]
         articles = articles.order_by('-publish_date')
         
@@ -123,7 +122,7 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
 
     def __init__(self):
     	self.page = 1
-    	self.paginated_by = 1
+    	self.paginated_by = 10
     	self.cat_obj = None
 
     def get(self, request, *args, **kwargs):
@@ -144,9 +143,13 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
         categories = Category.objects.filter(is_active=True)
-        article_list = Blog.objects.filter(Q(sec_cat__in=[cat_obj.pk], status=1) | Q(p_cat=cat_obj, status=1))   #| Blog.objects.filter(p_cat=cat_obj, status=1)
+        article_list = Blog.objects.filter(status=1)
+        top_5_pop = article_list[: 5]
         article_list = article_list.order_by('-publish_date')
-        paginator = Paginator(article_list, self.paginated_by)
+        top_5_recent = article_list[: 5]
+        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1).order_by('-publish_date')
+
+        paginator = Paginator(main_articles, self.paginated_by)
         if self.active_tab == 0:
         	page_data = self.pagination(paginator, self.page)
         else:
@@ -156,10 +159,10 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
             "recent_end": page_data.get('page_end'),
             "recent_middle": page_data.get('middle'),
             "recent_begin": page_data.get('begin'),
-            "recent_articles": article_list[:5]
+            "recent_articles": top_5_recent
         })
-        article_list = article_list.order_by('-score', '-publish_date')
-        paginator = Paginator(article_list, self.paginated_by)
+        main_articles = main_articles.order_by('-score', '-publish_date')
+        paginator = Paginator(main_articles, self.paginated_by)
         if self.active_tab == 1:
         	page_data = self.pagination(paginator, self.page)
         else:
@@ -169,7 +172,7 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
             "pop_end": page_data.get('page_end'),
             "pop_middle": page_data.get('middle'),
             "pop_begin": page_data.get('begin'),
-            "pop_articles": article_list[: 5]
+            "pop_articles": top_5_pop,
         })
         context.update({
             "category": cat_obj,
@@ -196,7 +199,7 @@ class BlogTagListView(TemplateView, PaginationMixin):
 
     def __init__(self):
         self.page = 1
-        self.paginated_by = 1
+        self.paginated_by = 10
         self.tag_obj = None
 
     def get(self, request, *args, **kwargs):

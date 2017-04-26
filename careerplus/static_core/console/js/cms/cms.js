@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function() {
 
     $(document).on('click', '#id_download_button', function(event) {
         event.preventDefault();
@@ -126,24 +126,24 @@ $(function() {
 
     $('#callback_form').validate({
         rules:{
-                name:{
-                	required: true,
-                    maxlength: 80,
-                },
-                mobile_number:{
-                    required: true,
-                    number: true,
-                    minlength: 5,
-                    maxlength: 15,                        
-                },
-                message_box:{
-                	required: true,
-                	maxlength: 500,
-                },
+            name:{
+                required: true,
+                maxlength: 80,
             },
+            mobile_number:{
+                required: true,
+                number: true,
+                minlength: 5,
+                maxlength: 15,                        
+            },
+            message_box:{
+                required: true,
+                maxlength: 300,
+            },
+        },
         messages:{
             name:{
-            	required: "Name is Mandatory.",
+                required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters.",
             },
             mobile_number:{
@@ -152,7 +152,29 @@ $(function() {
                 maxlength: "Please enter below 15 digits",
                 minlength: "Please enter atleast 5 digits",
             },
+            message_box:{
+                required: "Message is required.",
+                maxlength: "Enter less than 300 characters.",
+            },
             
+        },
+        submitHandler: function(form) {
+            console.log("hii");
+            var formData = $("#callback_form").serialize();
+            console.log(formData);
+            $.ajax({
+                url : "/cms/lead-management/",
+                type: "POST",
+                data : formData,
+                success: function(data, textStatus, jqXHR)
+                {
+                    alert('Your Query Submitted Successfully.');
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    window.location.reload(); 
+                }
+            });  
         },
         highlight:function(element, errorClass) {
             $(element).siblings('.error').removeClass('hide_error'); 
@@ -163,27 +185,12 @@ $(function() {
         errorPlacement: function(error, element){
             $(element).siblings('.error').html(error.text());
         } 
-	});
-
-	
-	$('#id_callback').click(function(){
-		if ( $("#callback_form").valid()) {
-			var formData = $("#callback_form").serialize();
-			$.ajax({
-	            url : "/cms/lead-management/",
-	            type: "POST",
-	            data : formData,
-	            success: function(data, textStatus, jqXHR)
-	            {
-	            	alert('Your Query Submitted Successfully.');
-	            },
-	            error: function (jqXHR, textStatus, errorThrown)
-	            {
-	                window.location.reload(); 
-	            }
-	        }); 
-		}  
     });
+
+     $('#id_callback').click(function() {
+        $("#callback_form").valid();
+    });
+
 
     $(document).on('click', '#comment_load_more', function(event) {
         var formData = $("#loadform").serialize();

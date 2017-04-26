@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.views.generic import View, TemplateView
 from django.template.loader import render_to_string
@@ -171,7 +172,8 @@ class LeadManagementView(View, UploadInFile):
             "term_condition": term_condition
         }
         self.write_in_file(data_dict=data_dict)
-        return HttpResponse(status=200)
+        data = {"status": 1, }
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class DownloadPdfView(View, UploadInFile):
