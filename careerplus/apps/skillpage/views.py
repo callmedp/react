@@ -25,11 +25,12 @@ class SkillPageView(TemplateView, SkillPageMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         context['category_obj'] = self.category_obj
         slug = kwargs.get('slug', '')
+        page = self.request.GET.get('page', 1)
         context['api_data'] = self.get_job_count_and_fuctionan_area(slug)
         context['career_outcomes'] = self.category_obj.split_career_outcomes()
         prod_lists = self.category_obj.categoryproducts.all()
         context['prod'] = prod_lists
-        context['page'] = self.page
+        context['page'] = page
         context['slug'] = slug 
 
         paginator = Paginator(prod_lists, 2)
