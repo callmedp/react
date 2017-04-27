@@ -1,6 +1,6 @@
 .skill-header {
   clear: both;
-  background: url(../../images/skillpage/skill-header-bg.jpg) no-repeat center top;
+  background: url(../images/skill-header-bg.jpg) no-repeat center top;
   background-size: cover;
   overflow: hidden;
   display: block;
@@ -107,7 +107,7 @@
   content: '';
   width: 15px;
   height: 11px;
-  background: url(../../images/skillpage/sprite.png) no-repeat -677px -88px;
+  background: url(../images/sprite.png) no-repeat -677px -88px;
   display: inline-block;
   vertical-align: middle;
   margin-right: 7px;
@@ -262,58 +262,6 @@
 }
 .listing .pricing-box .discount {
   color: #45b34e;
-}
-
-.reviews {
-  font-size: 15px;
-  color: #666;
-  position: relative;
-}
-.reviews h2 {
-  color: #333;
-  font-size: 26px;
-  margin-bottom: 15px;
-}
-.reviews ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.reviews ul li {
-  display: block;
-  padding: 20px;
-  margin: 0 0 25px 0;
-}
-.reviews ul li .rating-review-box {
-  display: block;
-  color: #999;
-}
-.reviews ul li .rating-review-box strong {
-  font-weight: 600;
-  margin-left: 5px;
-}
-.reviews ul li .rating-review-box b {
-  font-weight: 600;
-  margin-left: 10px;
-  font-size: 14px;
-  color: #3f5f94;
-}
-.reviews ul li .editor {
-  font-size: 13px;
-}
-.reviews ul li article {
-  margin: 10px 0;
-}
-.reviews ul li .review-heading {
-  font-size: 18px;
-  color: #3f5f94;
-  display: block;
-  font-weight: 600;
-}
-.reviews .write-review {
-  position: absolute;
-  right: 0;
-  top: 95px;
 }
 
 .query-form-right h2 {

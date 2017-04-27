@@ -1,20 +1,33 @@
 {% extends "basic/base.html" %}
 {% load static %}
+
+{% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+{%  endblock meta_tags %}
+
 {% block title %}
-    Skill Page - Shine Learning
+    {{category_obj.title}} Certification - Shine Learning
 {% endblock title %}
 {% block css %}
         {{block.super}}        
   <link type="text/css" href="{% static 'console/css/skillpage/skill.css' %}" rel="stylesheet">
 {% endblock css %}
+
 {% block pageheading %}
 	<header class="skill-header">
 		<div class="container">
 		<!-- breadcrums -->
 			<ol class="breadcrumb mt-30">
-			  <li><a href="/">Home</a></li>
-			  <li class="active">{{category_obj.name}}</li>
-			</ol>
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li><a href='{{bread.url}}'>{{bread.name}}
+                        </a></li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
 			<div class="skill-caption">
 				<h1>{{category_obj.name}} <br> programs</h1>
 				<strong>
@@ -41,12 +54,12 @@
 	<!-- left content start -->
 		<div class="col-md-9 col-sm-12">
 
-		    <div class="about-course-links mb-40">
-			    <a title="About course" class="active" href="#">About course</a> 
-			    <a title="Importance in Market" href="#market">Importance in Market</a>
-			    <a title="Courses" href="#programs">Courses</a>
-			    <a title="Reviews" href="#reviews">Reviews</a>
-		    </div>
+			<div class="about-course-links mb-40">
+	        	<a title="About course" class="active" href="#">About course</a> 
+	        	<a title="Importance in Market" href="#market">Importance in Market</a>
+	        	<a title="Courses" href="#programs">Courses</a>
+	        	<a title="Reviews" href="#reviews">Reviews</a>
+	        </div>
 
 		    <div class="about-course-text mb-40">
 				<div class="row">

@@ -1,6 +1,13 @@
 from django.contrib import admin
-from shop.models import Category, Product, ProductCategory
+from shop.models import Category, Product, ProductCategory, CategoryRelationship
 from partner.models import Vendor
+
+
+class CategoryRelationshipInline(admin.TabularInline):
+    model = CategoryRelationship
+    fk_name = 'related_from'
+    raw_id_fields = ['related_from', 'related_to']
+    extra = 1
 
 
 class CategoryProductInline(admin.TabularInline):
@@ -11,7 +18,7 @@ class CategoryProductInline(admin.TabularInline):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    inlines = [CategoryProductInline]
+    inlines = [CategoryRelationshipInline, CategoryProductInline]
 
 
 class ProductAdmin(admin.ModelAdmin):
