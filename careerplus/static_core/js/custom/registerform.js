@@ -3,35 +3,33 @@ $().ready(function() {
         submitHandler: function(form) {     
         },
         rules: {
-                name:{ required:true,},
-                contact_number: { required:true,},
                 email:{
                     required:true,
                     email:true
                 },
-                password1:{
+                raw_password:{
                     required:true,
                     minlength:6,
-                    maxlength: 10,
+                    maxlength: 15,
+                },
+                cell_phone:{
+                    required:true,
+                    number: true,
+                    minlength: 10,
+                    maxlength: 15,
                 },                
         },
         messages:{
-            first_name:{ required:"Please enter username",},
-            contact_number:{required:"Please provide 10 digit number"},
             email: { required:"Please enter a valid email address",},
-            password1:{
+            raw_password:{
                 required: "Please provide a password",
             },
+            cell_phone:{
+                required:"Mobile Number is Mandatory",
+                number:"Enter only number",
+                maxlength: "Please enter below 15 digits",
+                minlength: "Please enter atleast 10 digits",
+            },
         },
-        highlight:function(element, errorClass) {
-                $(element).parent().addClass('error');
-            },
-        unhighlight:function(element, errorClass) {
-                $(element).parent().removeClass('error');    
-            },
-        errorPlacement: function(error, element){
-            
-                // $(element).siblings('.js_id_error').html(error.text());
-            } 
     });
 });

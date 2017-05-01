@@ -19,13 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from users.views import (CreateUserView, LoginView, LogoutView,
-    DashboardView,)
+    DashboardView, RegistrationApiView, LoginApiView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^', include('users.urls', namespace='users')),
-    url(r'^$', CreateUserView.as_view(), name='create-user'),
-    url(r'^login/$', LoginView.as_view(), name='login'),
+    # url(r'^$', CreateUserView.as_view(), name='create-user'),
+    url(r'^$', RegistrationApiView.as_view(), name='create-user'),
+    url(r'^login/$', LoginApiView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
 
