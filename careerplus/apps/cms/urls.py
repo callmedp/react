@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from .views import CMSPageView, LoginToCommentView, LeadManagementView,\
    DownloadPdfView
@@ -14,5 +14,6 @@ urlpatterns = [
 
     url(r'^download-pdf/(?P<slug>[-\w]+)/$', DownloadPdfView.as_view(),
     	name='download-pdf'),
-    
+
+    url(r'^api/', include('cms.api.urls', namespace='api')),
 ]

@@ -1,0 +1,29 @@
+{% extends "myadmin/base.html" %}
+{% load static %}
+
+{% block meta_tags %}
+   {{block.super}}
+{% endblock meta_tags %}
+
+{% block title %} Article-Comment-List {% endblock title %}
+
+{% block css %}
+    {{block.super}}
+{% endblock css %}
+
+
+{% block pagecontent %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+	{% include partial_template %}
+</div>
+<!-- /page content -->
+
+{% endblock pagecontent %}
+
+
+{% block js %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
+{% endblock js %}

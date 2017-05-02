@@ -1,0 +1,13 @@
+{% load rest_framework %}
+
+<html><body>
+
+<h1>Pages - {{ page.name }}</h1>
+
+<form action="{% url 'console:cms:pages:page-detail' pk=page.pk %}" method="PUT">
+    {% csrf_token %}
+    {% render_form serializer template_pack='rest_framework/horizontal' %}
+    <input type="submit" value="Save">
+</form>
+
+</body></html>
