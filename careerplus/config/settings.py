@@ -57,6 +57,7 @@ META_SITE_PROTOCOL = 'https'
 META_SITE_DOMAIN = 'learning.shine.com'
 META_SITE_TYPE = 'Website'
 META_SITE_NAME = 'ShineLearning'
+META_USE_SITES = False
 META_DEFAULT_KEYWORDS = ['E-Learning', 'Skills', 'Resume', 'India']
 META_USE_OG_PROPERTIES = True
 META_USE_TWITTER_PROPERTIES = True

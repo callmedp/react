@@ -88,6 +88,36 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def __str__(self):
         return self.name
 
+    @property
+    def get_level(self):
+        return dict(CATEGORY_CHOICES).get(self.type_level)
+
+    def save(self, *args, **kwargs):
+        if not self.url:
+            self.url = self.get_full_url()
+        if self.name:
+            if not self.title:
+                self.title = self.name
+            if not self.heading:
+                self.heading = self.name
+            if not self.image_alt:
+                self.image_alt = self.name
+        if self.description:
+            if not self.meta_desc:
+                self.meta_desc = self.get_meta_desc(self.description)
+                
+        super(Category, self).save(*args, **kwargs)
+    
+    def get_meta_desc(self, description=''):
+        if description:
+            try:
+                import re
+                cleanr = re.compile('<.*?>')
+                cleantext = re.sub(cleanr, '', description)
+            except:
+                cleantext = ''
+        return cleantext
+
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
 
@@ -98,7 +128,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return description.strip()
 
     def get_full_url(self):
-        return self.build_absolute_uri(self.get_absolute_url())
+        return self.get_absolute_url()
 
     def get_absolute_url(self):
         return '/' #reverse('category-listing', kwargs={'slug': self.slug})
@@ -144,6 +174,41 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_num_children(self):
         return self.get_childrens().count()
 
+    def create_icon(self):
+        if not self.image:
+            return
+        from PIL import Image
+        from io import BytesIO
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        import os
+
+        THUMBNAIL_SIZE = (100, 100)
+        DJANGO_TYPE = None
+
+        if self.image.name.endswith(".jpg"):
+            DJANGO_TYPE = 'image/jpeg'
+            PIL_TYPE = 'jpeg'
+            FILE_EXTENSION = 'jpg'
+        elif self.image.name.endswith(".png"):
+            DJANGO_TYPE = 'image/png'
+            PIL_TYPE = 'png'
+            FILE_EXTENSION = 'png'
+        else:
+            return
+        image = Image.open(BytesIO(self.image.read()))
+        image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
+
+        temp_handle = BytesIO()
+        image.save(temp_handle, PIL_TYPE)
+        temp_handle.seek(0)
+
+        suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
+                temp_handle.read(), content_type=DJANGO_TYPE)
+        self.icon.save(
+            '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
+            suf,
+        )
+        return
 
 class CategoryRelationship(AbstractAutoDate):
     related_from = models.ForeignKey(
