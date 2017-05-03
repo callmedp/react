@@ -1,15 +1,59 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from cms.api.core.mixins import PageViewMixin, CommentViewMixin  
+from cms.api.core.mixins import IndexerWidgetViewMixin, ColumnHeadingViewMixin, IndexColumnViewMixin, WidgetViewMixin,\
+	PageViewMixin, PageWidgetViewMixin, CommentViewMixin, DocumentViewMixin, PageCounterViewMixin
+
 
 # TODO: Will MODIFY these viewsets AFTERWARDS to limit the end point required.
-class PageViewSet(PageViewMixin, ModelViewSet):
+class IndexerWidgetViewSet(IndexerWidgetViewMixin, ReadOnlyModelViewSet):
+    """
+        CRUD Viewset for `IndexerWidget` model.
+    """
+
+
+class ColumnHeadingViewSet(ColumnHeadingViewMixin, ReadOnlyModelViewSet):
+    """
+        CRUD Viewset for `ColumnHeading` model.
+    """
+
+
+class IndexColumnViewSet(IndexColumnViewMixin, ReadOnlyModelViewSet):
+    """
+        CRUD Viewset for `IndexColumn` model.
+    """
+
+
+class WidgetViewSet(WidgetViewMixin, ReadOnlyModelViewSet):
+    """
+        CRUD Viewset for `Widget` model.
+    """
+
+
+class PageViewSet(PageViewMixin, ReadOnlyModelViewSet):
     """
         CRUD Viewset for `Page` model.
     """
 
 
-class CommentViewSet(CommentViewMixin, ModelViewSet):
+class PageWidgetViewSet(PageWidgetViewMixin, ReadOnlyModelViewSet):
+    """
+        CRUD Viewset for `PageWidget` model.
+    """
+
+
+class CommentViewSet(CommentViewMixin, ReadOnlyModelViewSet):
     """
         CRUD ViewSet for `Comment` model.
+    """
+
+
+class DocumentViewSet(DocumentViewMixin, ReadOnlyModelViewSet):
+    """
+        CRUD ViewSet for `Document` model.
+    """
+
+
+class PageCounterViewSet(PageCounterViewMixin, ReadOnlyModelViewSet):
+    """
+        CRUD ViewSet for `PageCounter` model.
     """
