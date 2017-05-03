@@ -13,7 +13,7 @@
               </span>
             </div>
           </div>
-          <a class="col-md-3 col-sm-3 col-xs-3 pull-right" href="{% url 'console:cms:pages:page-add' %}">Add a new Page</a>
+          <a class="col-md-3 col-sm-3 col-xs-3 pull-right" href="{% url 'console:cms:pages:page-add' %}" data-pjax='.right_col'>Add a new Page</a>
         </div>
     </form>
   </div>
@@ -141,3 +141,11 @@
 
   </div>
 </div>
+
+{% block js %}
+  {% if doing_partial %}
+    <script type="text/javascript">
+        $('.right_col form>div>a[data-pjax]').pjax();
+    </script>
+  {% endif %}
+{% endblock js %}

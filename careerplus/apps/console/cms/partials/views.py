@@ -19,7 +19,7 @@ class ListPartialMixin(object):
             serializer = self.get_serializer(page, many=True)
         else:
             serializer = self.get_serializer(queryset, many=True)
-        return Response(data={'page': serializer.data, 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
+        return Response(data={'page': serializer.data, 'partial_template': self.partial_template_name, 'doing_partial': request.META.get('HTTP_X_PJAX')}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
 
 
 class PageListPartial(ListPartialMixin, PageViewMixin, ListAPIView):
@@ -37,7 +37,6 @@ class PageDetailPartial(PageViewMixin, APIView):
     template_name = partial_template_name = 'cms/partials/page-detail-partial.html'
 
     def get(self, request, pk):
-        import pdb; pdb.set_trace()
         page = get_object_or_404(Page, pk=pk)
         serializer = PageSerializer(page)
         return Response(data={'serializer': serializer, 'page': page, 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)

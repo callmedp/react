@@ -27,6 +27,6 @@
     {{block.super}}
     <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
 	<script type="text/javascript">
-		$('ul.nav.child_menu li a[data-pjax]').pjax();
+		$('ul.nav.child_menu>li>a[data-pjax],.right_col form>div>a[data-pjax]').pjax();
 	</script>
 {% endblock js %}
