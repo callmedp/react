@@ -13,7 +13,13 @@
 					<li><a href="{% url "blog:blog-comment-moderate" %}">Comment Moderation List</a></li>
 				</ul>
 			</li>
-
+			<li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
+				<ul class="nav child_menu">
+				    <li><a href="{% url "console:cms:pages:page-list" %}" data-pjax='.right_col'>Page</a></li>
+				    <li><a href="{% url "console:cms:pages:page-list" %}" data-pjax='.right_col'>Moderate Comments</a></li>
+				    <li><a href="{% url "console:cms:pages:page-list" %}" data-pjax='.right_col'>Page Widgets</a></li>
+				</ul>
+			</li>
 			<li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu">
 					<li><a href="index.html">Dashboard</a></li>

@@ -3,7 +3,7 @@
     <div class="title_left">
       <h3>Pages</h3>
     </div>
-    <form class="form-group" method="GET" action="{% url 'blog:blog-category-list' %}" id="filter-tables">
+    <form class="form-group" method="GET" action="{% url 'console:cms:pages:page-list' %}" id="filter-tables">
         <div class="title_right">
           <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
@@ -13,6 +13,7 @@
               </span>
             </div>
           </div>
+          <a class="col-md-3 col-sm-3 col-xs-3 pull-right" href="{% url 'console:cms:pages:page-add' %}">Add a new Page</a>
         </div>
     </form>
   </div>
@@ -43,7 +44,14 @@
                     <!--th>
                       <input type="checkbox" id="check-all" class="flat">
                     </th-->
+                    <th class="column-title">ID </th>
                     <th class="column-title">Name </th>
+                    <th class="column-title">Slug </th>
+                    <th class="column-title">URL </th>
+                    <th class="column-title">Active </th>
+                    <th class="column-title">Created By </th>
+                    <th class="column-title">Total Sample Downloaded </th>
+                    <th class="column-title">Total Sample Shared </th>
                     <th class="bulk-actions" colspan="7">
                         <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                     </th>
@@ -56,7 +64,14 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
+                    <td class=" ">{{obj.id}}</td>
                     <td class=" ">{{obj.name}}</td>
+                    <td class=" ">{{obj.slug}}</td>
+                    <td class=" ">{{obj.url}}</td>
+                    <td class=" ">{{obj.is_active}}</td>
+                    <td class=" ">{{obj.created_by}}</td>
+                    <td class=" ">{{obj.total_download}}</td>
+                    <td class=" ">{{obj.total_share}}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -120,9 +135,9 @@
                 </div>
                 {% endblock %}
                 </div>
-                </div>
-                </div>
-                </div>
+              </div>
+              </div>
+              </div>
 
   </div>
 </div>
