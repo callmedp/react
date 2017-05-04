@@ -84,12 +84,12 @@ class DetailPartialMixin(object):
         if hasattr(self, 'success_list_redirect') and self.success_list_redirect:
             return redirect(self.success_list_redirect)
         elif hasattr(self, 'success_detail_redirect') and self.success_detail_redirect:
-            return redirect(self.success_detail_redirect, pk=serializer.data.id)
+            return redirect(self.success_detail_redirect, pk=serializer.data.get('id'))
         else:
             return Response(data={'serializer': 'serializer', 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name , status=status.HTTP_200_OK, headers=headers)
 
     def post(self, request, *args, **kwargs):
-        return self.update(self, request, *args, **kwargs)
+        return self.update(request, *args, **kwargs)
 
 
 class IndexerWidgetDetailPartial(DetailPartialMixin, IndexerWidgetViewMixin, RetrieveUpdateAPIView):
@@ -158,12 +158,11 @@ class AddPartialMixin(object):
         if not serializer.is_valid():
             return Response(data={'serializer': serializer, 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
         self.perform_create(serializer)
-        import pdb; pdb.set_trace()
         headers = self.get_success_headers(serializer.data)
         if hasattr(self, 'success_list_redirect') and self.success_list_redirect:
             return redirect(self.success_list_redirect)
         elif hasattr(self, 'success_detail_redirect') and self.success_detail_redirect:
-            return redirect(self.success_detail_redirect, pk=serializer.data.id)
+            return redirect(self.success_detail_redirect, pk=serializer.data.get('id'))
         else:
             return Response(data={'serializer': 'serializer', 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name , status=status.HTTP_201_CREATED, headers=headers)
 
