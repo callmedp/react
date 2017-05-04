@@ -1,9 +1,32 @@
 from django.conf.urls import url
-from .views import PageListPartial, CommentListPartial, PageDetailPartial, PageAddPartial
+from . import views
 
 urlpatterns = [
-	url(r'^page/$', PageListPartial.as_view(), name='page-list-partial'),
-	url(r'^comment/$', CommentListPartial.as_view(), name='comment-list-partial'),
-	url(r'^page/(?P<pk>\d+)/$', PageDetailPartial.as_view(), name='page-detail-partial'),
-	url(r'^page/(?P<pk>\d+)/add/$', PageAddPartial.as_view(), name='page-add-partial'),
+	url(r'^indexerwidget/$', views.IndexerWidgetListPartial.as_view(), name='indexerwidget-list-partial'),
+	url(r'^columnheading/$', views.ColumnHeadingListPartial.as_view(), name='columnheading-list-partial'),
+	url(r'^indexcolumn/$', views.IndexColumnListPartial.as_view(), name='indexcolumn-list-partial'),
+	url(r'^widget/$', views.WidgetListPartial.as_view(), name='widget-list-partial'),
+	url(r'^page/$', views.PageListPartial.as_view(), name='page-list-partial'),
+	url(r'^pagewidget/$', views.PageWidgetListPartial.as_view(), name='pagewidget-list-partial'),
+	url(r'^document/$', views.DocumentListPartial.as_view(), name='document-list-partial'),
+	url(r'^comment/$', views.CommentListPartial.as_view(), name='comment-list-partial'),
+	url(r'^pagecounter/$', views.PageCounterListPartial.as_view(), name='pagecounter-list-partial'),
+	url(r'^indexerwidget/(?P<pk>\d+)/$', views.IndexerWidgetDetailPartial.as_view(), name='indexerwidget-detail-partial'),
+	url(r'^columnheading/(?P<pk>\d+)/$', views.ColumnHeadingDetailPartial.as_view(), name='columnheading-detail-partial'),
+	url(r'^indexcolumn/(?P<pk>\d+)/$', views.IndexColumnDetailPartial.as_view(), name='indexcolumn-detail-partial'),
+	url(r'^widget/(?P<pk>\d+)/$', views.WidgetDetailPartial.as_view(), name='widget-detail-partial'),
+	url(r'^page/(?P<pk>\d+)/$', views.PageDetailPartial.as_view(), name='page-detail-partial'),
+	url(r'^pagewidget/(?P<pk>\d+)/$', views.PageWidgetDetailPartial.as_view(), name='pagewidget-detail-partial'),
+	url(r'^document/(?P<pk>\d+)/$', views.DocumentDetailPartial.as_view(), name='document-detail-partial'),
+	url(r'^comment/(?P<pk>\d+)/$', views.CommentDetailPartial.as_view(), name='comment-detail-partial'),
+	url(r'^pagecounter/(?P<pk>\d+)/$', views.PageCounterDetailPartial.as_view(), name='pagecounter-detail-partial'),
+	url(r'^indexerwidget/(?P<pk>\d+)/add/$', views.IndexerWidgetAddPartial.as_view(), name='indexerwidget-add-partial'),
+	url(r'^columnheading/(?P<pk>\d+)/add/$', views.ColumnHeadingAddPartial.as_view(), name='columnheading-add-partial'),
+	url(r'^indexcolumn/(?P<pk>\d+)/add/$', views.IndexColumnAddPartial.as_view(), name='indexcolumn-add-partial'),
+	url(r'^widget/(?P<pk>\d+)/add/$', views.WidgetAddPartial.as_view(), name='widget-add-partial'),
+	url(r'^page/(?P<pk>\d+)/add/$', views.PageAddPartial.as_view(), name='page-add-partial'),
+	url(r'^pagewidget/(?P<pk>\d+)/add/$', views.PageWidgetAddPartial.as_view(), name='pagewidget-add-partial'),
+	url(r'^document/(?P<pk>\d+)/add/$', views.DocumentAddPartial.as_view(), name='document-add-partial'),
+	url(r'^comment/(?P<pk>\d+)/add/$', views.CommentAddPartial.as_view(), name='comment-add-partial'),
+	url(r'^pagecounter/(?P<pk>\d+)/add/$', views.PageCounterAddPartial.as_view(), name='pagecounter-add-partial'),
 ]

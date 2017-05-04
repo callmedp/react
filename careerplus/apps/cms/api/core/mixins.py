@@ -81,6 +81,18 @@ class PageWidgetViewMixin(object):
     pagination_class = PageNumberPagination
 
 
+class DocumentViewMixin(object):
+
+    queryset = models.Document.objects.all()
+    serializer_class = serializers.DocumentSerializer
+    filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
+    filter_fields = ('page', 'is_active', 'priority')
+    search_fields = ('page','^page__name')
+    order_fields = ('id', 'is_active', 'priority', 'page')
+    ordering = ('-id')
+    pagination_class = PageNumberPagination
+
+
 # TODO: decide terminology on confict in page num and page attr
 class CommentViewMixin(object):
 
@@ -90,18 +102,6 @@ class CommentViewMixin(object):
     filter_fields = ('page', 'is_published', 'is_removed')
     search_fields = ('page','^page__name', 'message', '=publish_date')
     order_fields = ('id', 'page', 'is_published', 'is_removed')
-    ordering = ('-id')
-    pagination_class = PageNumberPagination
-
-
-class DocumentViewMixin(object):
-
-    queryset = models.Document.objects.all()
-    serializer_class = serializers.DocumentSerializer
-    filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
-    filter_fields = ('page', 'is_active', 'priority')
-    search_fields = ('page','^page__name')
-    order_fields = ('id', 'is_active', 'priority', 'page')
     ordering = ('-id')
     pagination_class = PageNumberPagination
 

@@ -1,10 +1,32 @@
 from django.conf.urls import url
-from .views import PageListView, PageDetailView, PageAddView, CommentListView
+from .import views
 
 urlpatterns = [
-	url(r'^page/$', PageListView.as_view(), name='page-list'),
-	url(r'^page/$', PageListView.as_view(), name='page-list'),
-	url(r'^comment/$', CommentListView.as_view(), name='comment-list'),
-	url(r'^page/add/$', PageAddView.as_view(), name='page-add'),
-	url(r'^page/(?P<pk>\d+)/$', PageDetailView.as_view(), name='page-detail'),
+	url(r'^indexerwidget/$', views.IndexerWidgetListView.as_view(), name='indexerwidget-list'),
+	url(r'^columnheading/$', views.ColumnHeadingListView.as_view(), name='columnheading-list'),
+	url(r'^indexcolumn/$', views.IndexColumnListView.as_view(), name='indexcolumn-list'),
+	url(r'^widget/$', views.WidgetListView.as_view(), name='widget-list'),
+	url(r'^page/$', views.PageListView.as_view(), name='page-list'),
+	url(r'^pagewidget/$', views.PageWidgetListView.as_view(), name='pagewidget-list'),
+	url(r'^document/$', views.DocumentListView.as_view(), name='document-list'),
+	url(r'^comment/$', views.CommentListView.as_view(), name='comment-list'),
+	url(r'^pagecounter/$', views.PageCounterListView.as_view(), name='pagecounter-list'),
+	url(r'^indexerwidget/add$', views.IndexerWidgetAddView.as_view(), name='indexerwidget-add'),
+	url(r'^columnheading/add$', views.ColumnHeadingAddView.as_view(), name='columnheading-add'),
+	url(r'^indexcolumn/add$', views.IndexColumnAddView.as_view(), name='indexcolumn-add'),
+	url(r'^widget/add$', views.WidgetAddView.as_view(), name='widget-add'),
+	url(r'^page/add$', views.PageAddView.as_view(), name='page-add'),
+	url(r'^pagewidget/add$', views.PageWidgetAddView.as_view(), name='pagewidget-add'),
+	url(r'^document/add$', views.DocumentAddView.as_view(), name='document-add'),
+	url(r'^comment/add$', views.CommentAddView.as_view(), name='comment-add'),
+	url(r'^pagecounter/add$', views.PageCounterAddView.as_view(), name='pagecounter-add'),
+	url(r'^indexerwidget/(?P<pk>\d+)/$', views.IndexerWidgetDetailView.as_view(), name='indexerwidget-detail'),
+	url(r'^columnheading/(?P<pk>\d+)/$', views.ColumnHeadingDetailView.as_view(), name='columnheading-detail'),
+	url(r'^indexcolumn/(?P<pk>\d+)/$', views.IndexColumnDetailView.as_view(), name='indexcolumn-detail'),
+	url(r'^widget/(?P<pk>\d+)/$', views.WidgetDetailView.as_view(), name='widget-detail'),
+	url(r'^page/(?P<pk>\d+)/$', views.PageDetailView.as_view(), name='page-detail'),
+	url(r'^pagewidget/(?P<pk>\d+)/$', views.PageWidgetDetailView.as_view(), name='pagewidget-detail'),
+	url(r'^document/(?P<pk>\d+)/$', views.DocumentDetailView.as_view(), name='document-detail'),
+	url(r'^comment/(?P<pk>\d+)/$', views.CommentDetailView.as_view(), name='comment-detail'),
+	url(r'^pagecounter/(?P<pk>\d+)/$', views.PageCounterDetailView.as_view(), name='pagecounter-detail'),
 ]
