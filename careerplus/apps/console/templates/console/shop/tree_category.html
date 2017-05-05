@@ -1,31 +1,9 @@
+{% extends "console/base_console.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {% block meta %}
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <!-- Meta, title, CSS, favicons, etc. -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-    {% endblock meta %}
-    {% block title %}
-      <title>ShineLearning</title>
-  
-    {% endblock title %}
-    {% block css_block %}
-      <!-- Bootstrap -->
-      <link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
-      <!-- Font Awesome -->
-      <link href="{% static "/packages/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet" type="text/css">
-      <!-- NProgress -->
-      <link href="{% static "/packages/nprogress/nprogress.css"  %}" rel="stylesheet" type="text/css">
 
-      <!-- Custom Theme Style -->
-      <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
-
-      <style type="text/css">
+{% block css_block %}
+  {{ block.super }}
+  <style type="text/css">
 
         .label {
           display: inline;
@@ -104,177 +82,94 @@
 
       </style>
       
-    {% endblock css_block %}
-    </head>
+{% endblock css_block %}
 
-  <body class="nav-md">
-    {% block container %}
-      
-    <div class="container body">
-      <div class="main_container">
-        {% block sidebar %}
-          <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="{% url 'console:dashboard' %}" class="site_title"><i class="fa fa-home"></i> <span>ShineLearning</span></a>
-            </div>
 
-            <div class="clearfix"></div>
-            {% block sidebar_quickinfo %}
-              <!-- menu profile quick info -->
-              <div class="profile clearfix">
-                <div class="profile_pic">
-                  <img src="/static/console/images/user.png" alt="..." class="img-circle profile_img">
-                </div>
-                <div class="profile_info">
-                  <span>Welcome,</span>
-                  <h2>
-                  {% if request.user.name %}
-                    {{request.user.name}}
-                  {% else %}
-                    {{request.user.email}}
-                  {% endif %}
-                  </h2>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-              <!-- /menu profile quick info -->
-  
-            {% endblock sidebar_quickinfo %}
-            
-            <br />
-            {% block sidebar_menu %}
-              {% include "console/sidebar.html" %}
-            {% endblock sidebar_menu %}
-            {% block sidebar_footer %}
-              <!-- /menu footer buttons -->
-              <div class="sidebar-footer hidden-small">
-                <a data-toggle="tooltip" data-placement="top" title="Logout" href="{% url 'console:logout' %}">
-                  <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                </a>
-              </div>
-              <!-- /menu footer buttons -->  
-            {% endblock sidebar_footer %}
-            
-          </div>
+{% block pagecontent %}
+  <!-- page content -->
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3></h3>
         </div>
 
-        {% endblock sidebar %}
-        {% block top_bar %}
-          {% include "console/top_bar.html" %}
-        {% endblock top_bar %}
+      </div>
 
-        <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3></h3>
-              </div>
+      <div class="clearfix"></div>
 
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Category Tree</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
             </div>
-
-            <div class="clearfix"></div>
-
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Category Tree</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                      {% if level1 %}
-                        
-                        <div class="tree">
-                          <ul>
-                            {% for l1 in level1 %}
-                              <li>
-                                  <span class="label label-default"><i class="fa fa-minus-square"></i> {{l1.name}}</span>{% if l1.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
-                                  {% if l1.childrens %}
-                                      
-                                    <ul>
-                                        {% for l2 in l1.childrens %}
+            <div class="x_content">
+                {% if level1 %}
+                  
+                  <div class="tree">
+                    <ul>
+                      {% for l1 in level1 %}
+                        <li>
+                            <span class="label label-default"><i class="fa fa-minus-square"></i> {{l1.name}}</span>{% if l1.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                            {% if l1.childrens %}
+                                
+                              <ul>
+                                  {% for l2 in l1.childrens %}
+                                    
+                                    <li>
+                                      <span class="label label-primary" ><i class="fa fa-minus-square"></i> {{l2.name}}</span> {% if l2.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                        {% if l2.childrens %}
                                           
-                                          <li>
-                                            <span class="label label-primary" ><i class="fa fa-minus-square"></i> {{l2.name}}</span> {% if l2.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
-                                              {% if l2.childrens %}
-                                                
-                                                <ul>
-                                                  {% for l3 in l2.childrens %}
-                                                    
-                                                    <li>
-                                                      <span class="label label-success"><i class="fa fa-minus-square"></i> {{l3.name}}</span> {% if l3.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
-                                                        {% if l3.childrens %}
-                                                          <ul>
-                                                              {% for l4 in l3.childrens  %}
-                                                                <li>
-                                                                  <span class="label label-info"><i class="fa fa-minus-square"></i> {{l4.name}}</span> {% if l4.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
-                                                                </li>
-                                                              {% endfor %}
-                                                          </ul>
-                                                        {% endif %}
-                                                      </li>
-                                                  {% endfor %}
-                                                </ul>
-                                              {% endif %}
-                                          </li>
-                                        {% endfor %}
-                                      </ul>
-                                    {% endif %}
-                                </li>
-                              {% endfor %}
-                          </ul>
-                      </div>
-                    {% endif %}
-                      
-                  </div>
+                                          <ul>
+                                            {% for l3 in l2.childrens %}
+                                              
+                                              <li>
+                                                <span class="label label-success"><i class="fa fa-minus-square"></i> {{l3.name}}</span> {% if l3.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                                  {% if l3.childrens %}
+                                                    <ul>
+                                                        {% for l4 in l3.childrens  %}
+                                                          <li>
+                                                            <span class="label label-info"><i class="fa fa-minus-square"></i> {{l4.name}}</span> {% if l4.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                                          </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                  {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                          </ul>
+                                        {% endif %}
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              {% endif %}
+                          </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-              </div>
+              {% endif %}
+                
             </div>
           </div>
         </div>
-        <!-- /page content -->
-
-        
-        {% block footer %}
-          <!-- footer content -->
-          <footer>
-            <div class="pull-right">
-              A Unit of <a href="https://shine.com">Shine</a>
-            </div>
-            <div class="clearfix"></div>
-          </footer>
-          <!-- /footer content -->
-      {% endblock footer %}
-        
       </div>
     </div>
-    {% endblock container %}
-    
-    {% block js_block %}
-      <!-- jQuery -->
-      <script type="text/javascript" src="{% static "packages/jquery/dist/jquery.min.js" %}"></script>
-      <!-- Bootstrap -->
-      <script type="text/javascript" src="{% static "packages/bootstrap/js/bootstrap.min.js" %}"></script>
-      <!-- FastClick -->
-      <script type="text/javascript" src="{% static "packages/fastclick/lib/fastclick.js" %}"></script>
-      <!-- NProgress -->
-      <script type="text/javascript" src="{% static "packages/nprogress/nprogress.js" %}"></script>
-      <!-- Parsley Validate Scripts -->
-      <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-      
-      
-      <!-- Custom Theme Scripts -->
-      <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
-      
+  </div>
+  <!-- /page content -->
 
-  
-    {% endblock js_block %}
-    
-  </body>
-</html>
+{% endblock pagecontent %}
+        
+        
+      
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <!-- Custom Theme Scripts -->
+  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
+{% endblock js_block %}

@@ -1,512 +1,414 @@
+{% extends "console/base_console.html" %}
 {% load static %}
 {% load humanize %}
 {% load console_tags %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {% block meta %}
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <!-- Meta, title, CSS, favicons, etc. -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block css_block %}
+  {{ block.super }}
+  <!-- Switchery -->
+  <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}" rel="stylesheet" type="text/css">
+
+  <style type="text/css">
+      ul.parsley-errors-list {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+      ul.errorlist {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+      .empty-form{
+        display: none;
+      }
   
-    {% endblock meta %}
-    {% block title %}
-      <title>ShineLearning</title>
-  
-    {% endblock title %}
-    {% block css_block %}
-      <!-- Bootstrap -->
-      <link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
-      <!-- Font Awesome -->
-      <link href="{% static "/packages/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet" type="text/css">
-      <!-- NProgress -->
-      <link href="{% static "/packages/nprogress/nprogress.css"  %}" rel="stylesheet" type="text/css">
-      <!-- Custom Theme Style -->
-      <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
-      <!-- Switchery -->
-      <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}" rel="stylesheet" type="text/css">
+      </style>
+                
+{% endblock css_block %}
 
-      <style type="text/css">
-          ul.parsley-errors-list {
-              list-style: none;
-              color: #fff;
-              padding-left: 0;
-          }
-          ul.errorlist {
-              list-style: none;
-              color: #fff;
-              padding-left: 0;
-          }
-          .empty-form{
-            display: none;
-          }
-      
-          </style>
-                    
-    {% endblock css_block %}
-    </head>
-
-  <body class="nav-md">
-    {% block container %}
-      
-    <div class="container body">
-      <div class="main_container">
-        {% block sidebar %}
-          <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="{% url 'console:dashboard' %}" class="site_title"><i class="fa fa-home"></i> <span>ShineLearning</span></a>
-            </div>
-
-            <div class="clearfix"></div>
-            {% block sidebar_quickinfo %}
-              <!-- menu profile quick info -->
-              <div class="profile clearfix">
-                <div class="profile_pic">
-                  <img src="/static/console/images/user.png" alt="..." class="img-circle profile_img">
-                </div>
-                <div class="profile_info">
-                  <span>Welcome,</span>
-                  <h2>
-                  {% if request.user.name %}
-                    {{request.user.name}}
-                  {% else %}
-                    {{request.user.email}}
-                  {% endif %}
-                  </h2>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-              <!-- /menu profile quick info -->
-  
-            {% endblock sidebar_quickinfo %}
-            
-            <br />
-            {% block sidebar_menu %}
-              {% include "console/sidebar.html" %}
-            {% endblock sidebar_menu %}
-            {% block sidebar_footer %}
-              <!-- /menu footer buttons -->
-              <div class="sidebar-footer hidden-small">
-                <a data-toggle="tooltip" data-placement="top" title="Logout" href="{% url 'console:logout' %}">
-                  <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                </a>
-              </div>
-              <!-- /menu footer buttons -->  
-            {% endblock sidebar_footer %}
-            
-          </div>
-        </div>
-
-        {% endblock sidebar %}
-        {% block top_bar %}
-          {% include "console/top_bar.html" %}
-        {% endblock top_bar %}
-        
+{% block pagecontent %}
         <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3></h3>
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3></h3>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
               </div>
+            {% endfor %}
+        {% endif %}
 
-            </div>
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                {% if messages %}
-                    {% for message in messages %}
+      </div>
+    </div>
+    
 
-                      <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
-                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <div class="clearfix"></div>
 
-                      {{ message }}
-                      </div>
-                    {% endfor %}
-                {% endif %}
-
-              </div>
-            </div>
-            
-
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-bookmark"></i> Change Category</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              
+            </ul>
             <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
 
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><i class="fa fa-bookmark"></i> Change Category</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
+            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+              <ul id="myTab1" class="nav nav-tabs bar_tabs right" role="tablist">
+                <li role="presentation" class="active"><a href="#tab_content11" id="home-tabb" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Main</a>
+                </li>
 
-                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                      <ul id="myTab1" class="nav nav-tabs bar_tabs right" role="tablist">
-                        <li role="presentation" class="active"><a href="#tab_content11" id="home-tabb" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Main</a>
-                        </li>
+                <li role="presentation" class=""><a href="#tab_content22" role="tab" id="profile-tabb" data-toggle="tab" aria-controls="profile" aria-expanded="false">SEO</a>
+                </li>
+                
+                <li role="presentation" class=""><a href="#tab_content33" role="tab" id="profile-tabb3" data-toggle="tab" aria-controls="profile" aria-expanded="false">Skillpage</a>
+                </li>
+              </ul>
+              <div id="myTabContent2" class="tab-content">
+                
+                <div role="tabpanel" class="tab-pane fade active in" id="tab_content11" aria-labelledby="home-tab">
+                  <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-form">
+                    {{form.media}}
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                      <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        {{form.non_field_errors}}
+                      </div>
+                    {% endif %}
 
-                        <li role="presentation" class=""><a href="#tab_content22" role="tab" id="profile-tabb" data-toggle="tab" aria-controls="profile" aria-expanded="false">SEO</a>
-                        </li>
-                        
-                        <li role="presentation" class=""><a href="#tab_content33" role="tab" id="profile-tabb3" data-toggle="tab" aria-controls="profile" aria-expanded="false">Skillpage</a>
-                        </li>
-                      </ul>
-                      <div id="myTabContent2" class="tab-content">
-                        
-                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content11" aria-labelledby="home-tab">
-                          <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-form">
-                            {{form.media}}
-                            {% csrf_token %}
-                            {% if form.non_field_errors %}
-                              <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                {{form.non_field_errors}}
-                              </div>
-                            {% endif %}
-
-                            <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Modified</label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                <label style="padding-top:8px;">{{object.modified|naturaltime}}</label>
-                              </div>
-                            </div>
-
-
-                            <div class="item form-group {% if form.active.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.active.id_for_label }}">Active <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.active}}
-                              </div>
-                              <div class="alert">{{form.active.errors}}</div>
-                            </div>
-
-                            
-                            <div class="item form-group {% if form.name.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.name.id_for_label }}">Name <span class="required">*</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.name}}
-                              </div>
-                              <div class="alert">{{form.name.errors}}</div>
-                            </div>
-
-                            <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Slug</label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                <label style="padding-top:8px;">{{object.slug}}</label>
-                              </div>
-                            </div>
-
-                            <div class="item form-group {% if form.type_service.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_service.id_for_label }}">Entity <span class="required">*</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.type_service}}
-                              </div>
-                              <div class="alert">{{form.type_service.errors}}</div>
-                            </div>
-
-                            <div class="item form-group {% if form.type_level.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_level.id_for_label }}">Level <span class="required">*</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.type_level}}
-                              </div>
-                              <div class="alert">{{form.type_level.errors}}</div>
-                            </div>
-
-                            <div class="item form-group {% if form.description.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.description.id_for_label }}">Description <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.description}}
-                              </div>
-                              <div class="alert">{{form.description.errors}}</div>
-                            </div>
-
-                            <div class="item form-group {% if form.banner.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.banner.id_for_label }}">Banner <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.banner}}
-                              </div>
-                              <div class="alert">{{form.banner.errors}}</div>
-                            </div>
-
-                            <div class="item form-group {% if form.image.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.image.id_for_label }}">Image <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.image}}
-                              </div>
-                              <div class="alert">{{form.image.errors}}</div>
-                            </div>
-
-                            <div class="item form-group {% if form.icon.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.icon.id_for_label }}">Icon <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.icon}}
-                              </div>
-                              <div class="alert">{{form.icon.errors}}</div>
-                            </div>
-
-                            <div class="item form-group {% if form.display_order.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.display_order.id_for_label }}">Display Order <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{form.display_order}}
-                              </div>
-                              <div class="alert">{{form.display_order.errors}}</div>
-                            </div>
-
-                            <input type="hidden" name="category" value="{{object.pk}}">
-                            <input type="hidden" name="slug" value="main">
-                            
-                            <div class="ln_solid"></div>
-                            <div class="form-group">
-                              <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                                <button type="submit" class="btn btn-success">Submit</button>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                        
-                        <div role="tabpanel" class="tab-pane fade" id="tab_content22" aria-labelledby="profile-tab">
-                          <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-seo-form">
-                            {% csrf_token %}
-                            
-                            {% if seo_form.non_field_errors %}
-                              <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                {{seo_form.non_field_errors}}
-                              </div>
-                            {% endif %}
-
-                            <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Url</label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                <a href="{{object.url}}" style="padding-top:8px;">{{object.url}}</a>
-                              </div>
-                            </div>
-
-                            <div class="item form-group {% if seo_form.title.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.title.id_for_label }}">Title <span class="required">*</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{seo_form.title}}
-                              </div>
-                              <div class="alert">{{seo_form.title.errors}}</div>
-                            </div>
-
-                            <div class="item form-group {% if seo_form.meta_desc.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_desc.id_for_label }}">Meta Description <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{seo_form.meta_desc}}
-                              </div>
-                              <div class="alert">{{seo_form.meta_desc.errors}}</div>
-                            </div>
-                            
-                            <div class="item form-group {% if seo_form.meta_keywords.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_keywords.id_for_label }}">Meta Keywords <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{seo_form.meta_keywords}}
-                              </div>
-                              <div class="alert">{{seo_form.meta_keywords.errors}}</div>
-                            </div>
-                            
-                            <div class="item form-group {% if seo_form.heading.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.heading.id_for_label }}">Heading <span class="required">*</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{seo_form.heading}}
-                              </div>
-                              <div class="alert">{{seo_form.heading.errors}}</div>
-                            </div>
-                            
-                            <div class="item form-group {% if seo_form.image_alt.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.image_alt.id_for_label }}">Image Alt <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{seo_form.image_alt}}
-                              </div>
-                              <div class="alert">{{seo_form.image_alt.errors}}</div>
-                            </div>
-                            
-                            <input type="hidden" name="category" value="{{object.pk}}">
-                            <input type="hidden" name="slug" value="seo">
-                            <div class="ln_solid"></div>
-                            <div class="form-group">
-                              <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                                <button type="submit" class="btn btn-success">Submit</button>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                        
-                        <div role="tabpanel" class="tab-pane fade" id="tab_content33" aria-labelledby="profile-tab">
-                       </div>
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Modified</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <label style="padding-top:8px;">{{object.modified|naturaltime}}</label>
                       </div>
                     </div>
 
-                  </div>
-                </div>
-                {% if relationship_formset  %}
-                  
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><i class="fa fa-thumb-tack"></i> Add/Change Category Parents</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
-                      <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-seo-form">
-                            {% csrf_token %}
-                            {{ relationship_formset.management_form }}
-                        {% if relationship_formset.non_form_errors %}
-                          <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                            </button>
-                            {{ relationship_formset.non_form_errors }}
-                          </div>
-                        {% endif %}
-                      <div class="inter-related-parent-div">    
-                      {% for inline_admin_form in relationship_formset.forms %}
-                      <div class="panel {% if forloop.last %} {% endif %}">
-                        <a class="panel-heading collapsed" role="tab" id="heading{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapse{{forloop.counter}}">
-                          {% if  inline_admin_form|get_instance %}
-                          <h4 class="panel-title">Category Relationships:&nbsp;{{inline_admin_form|get_instance}}</h4>
 
-                          {% else %}
-                          <h4 class="panel-title">Category Relationships: Add New
-                          </h4>{% endif %}
-
-                            
-                        </a>
-                        <div id="collapse{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
-                          <div class="panel-body">
-                              {% if  inline_admin_form.DELETE %}
-                                <div class="pull-left">
-                                  {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
-                                  </label>
-                                  
-                                </div>
-                                </br>
-                                  <div class="clearfix"></div>
-                              {% endif %}
-
-                              {% for hidden in inline_admin_form.hidden_fields %}
-                                  {{ hidden }}
-                              {% endfor %}
-                          
-                              <div class="item form-group {% if inline_admin_form.related_to.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.related_to.id_for_label }}">Related To <span class="required">*</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{inline_admin_form.related_to}}
-                              </div>
-                              <div class="alert">{{inline_admin_form.related_to.errors}}</div>
-                            </div>
-                            
-                            <div class="item form-group {% if inline_admin_form.relation.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.relation.id_for_label }}">Relation <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{inline_admin_form.relation}}
-                              </div>
-                              <div class="alert">{{inline_admin_form.relation.errors}}</div>
-                            </div>
-                            
-                            <div class="item form-group {% if inline_admin_form.sort_order.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">Sort Order <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{inline_admin_form.sort_order}}
-                              </div>
-                              <div class="alert">{{inline_admin_form.sort_order.errors}}</div>
-                            </div>
-                            
-
-                            <div class="item form-group {% if inline_admin_form.is_main_parent.errors %}bad{% endif %}">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.is_main_parent.id_for_label }}">Main Parent <span class="required"></span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{inline_admin_form.is_main_parent}}
-                              </div>
-                              <div class="alert">{{inline_admin_form.is_main_parent.errors}}</div>
-                            </div>
-                          </div>
-                        </div>
+                    <div class="item form-group {% if form.active.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.active.id_for_label }}">Active <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.active}}
                       </div>
-                      {% endfor %}
+                      <div class="alert">{{form.active.errors}}</div>
+                    </div>
+
+                    
+                    <div class="item form-group {% if form.name.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.name.id_for_label }}">Name <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.name}}
                       </div>
-                     
+                      <div class="alert">{{form.name.errors}}</div>
+                    </div>
 
-                      <input type="hidden" name="category" value="{{object.pk}}">
-                        <input type="hidden" name="slug" value="relation">
-                        <div class="ln_solid"></div>
-                        <div class="form-group">
-                          <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                          </div>
-                        </div>
-                      
-                      </form>
-                    </div>  
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Slug</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <label style="padding-top:8px;">{{object.slug}}</label>
+                      </div>
+                    </div>
 
-                  </div>
+                    <div class="item form-group {% if form.type_service.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_service.id_for_label }}">Entity <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.type_service}}
+                      </div>
+                      <div class="alert">{{form.type_service.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if form.type_level.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_level.id_for_label }}">Level <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.type_level}}
+                      </div>
+                      <div class="alert">{{form.type_level.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if form.description.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.description.id_for_label }}">Description <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.description}}
+                      </div>
+                      <div class="alert">{{form.description.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if form.banner.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.banner.id_for_label }}">Banner <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.banner}}
+                      </div>
+                      <div class="alert">{{form.banner.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if form.image.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.image.id_for_label }}">Image <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.image}}
+                      </div>
+                      <div class="alert">{{form.image.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if form.icon.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.icon.id_for_label }}">Icon <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.icon}}
+                      </div>
+                      <div class="alert">{{form.icon.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if form.display_order.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.display_order.id_for_label }}">Display Order <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{form.display_order}}
+                      </div>
+                      <div class="alert">{{form.display_order.errors}}</div>
+                    </div>
+
+                    <input type="hidden" name="category" value="{{object.pk}}">
+                    <input type="hidden" name="slug" value="main">
+                    
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              {% endif %}
+                
+                <div role="tabpanel" class="tab-pane fade" id="tab_content22" aria-labelledby="profile-tab">
+                  <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-seo-form">
+                    {% csrf_token %}
+                    
+                    {% if seo_form.non_field_errors %}
+                      <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        {{seo_form.non_field_errors}}
+                      </div>
+                    {% endif %}
+
+                    <div class="item form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Url</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <a href="{{object.url}}" style="padding-top:8px;">{{object.url}}</a>
+                      </div>
+                    </div>
+
+                    <div class="item form-group {% if seo_form.title.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.title.id_for_label }}">Title <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{seo_form.title}}
+                      </div>
+                      <div class="alert">{{seo_form.title.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if seo_form.meta_desc.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_desc.id_for_label }}">Meta Description <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{seo_form.meta_desc}}
+                      </div>
+                      <div class="alert">{{seo_form.meta_desc.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if seo_form.meta_keywords.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_keywords.id_for_label }}">Meta Keywords <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{seo_form.meta_keywords}}
+                      </div>
+                      <div class="alert">{{seo_form.meta_keywords.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if seo_form.heading.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.heading.id_for_label }}">Heading <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{seo_form.heading}}
+                      </div>
+                      <div class="alert">{{seo_form.heading.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if seo_form.image_alt.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.image_alt.id_for_label }}">Image Alt <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{seo_form.image_alt}}
+                      </div>
+                      <div class="alert">{{seo_form.image_alt.errors}}</div>
+                    </div>
+                    
+                    <input type="hidden" name="category" value="{{object.pk}}">
+                    <input type="hidden" name="slug" value="seo">
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                
+                <div role="tabpanel" class="tab-pane fade" id="tab_content33" aria-labelledby="profile-tab">
+               </div>
+              </div>
             </div>
+
           </div>
-
+        </div>
+        {% if relationship_formset  %}
           
-        </div>
-        </div>
-        <!-- /page content -->
-      {% block footer %}
-          <!-- footer content -->
-          <footer>
-            <div class="pull-right">
-              A Unit of <a href="https://shine.com">Shine</a>
-            </div>
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i> Add/Change Category Parents</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
             <div class="clearfix"></div>
-          </footer>
-          <!-- /footer content -->
-      {% endblock footer %}
-        
-      </div>
-    </div>
-    {% endblock container %}
-    
-    {% block js_block %}
-      <!-- jQuery -->
-      <script type="text/javascript" src="{% static "packages/jquery/dist/jquery.min.js" %}"></script>
-      <!-- Bootstrap -->
-      <script type="text/javascript" src="{% static "packages/bootstrap/js/bootstrap.min.js" %}"></script>
-      <!-- FastClick -->
-      <script type="text/javascript" src="{% static "packages/fastclick/lib/fastclick.js" %}"></script>
-      <!-- NProgress -->
-      <script type="text/javascript" src="{% static "packages/nprogress/nprogress.js" %}"></script>
+          </div>
+          <div class="x_content">
+            <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+              <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-seo-form">
+                    {% csrf_token %}
+                    {{ relationship_formset.management_form }}
+                {% if relationship_formset.non_form_errors %}
+                  <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    {{ relationship_formset.non_form_errors }}
+                  </div>
+                {% endif %}
+              <div class="inter-related-parent-div">    
+              {% for inline_admin_form in relationship_formset.forms %}
+              <div class="panel {% if forloop.last %} {% endif %}">
+                <a class="panel-heading collapsed" role="tab" id="heading{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapse{{forloop.counter}}">
+                  {% if  inline_admin_form|get_instance %}
+                  <h4 class="panel-title">Category Relationships:&nbsp;{{inline_admin_form|get_instance}}</h4>
 
-      <!-- Parsley Validate Scripts -->
+                  {% else %}
+                  <h4 class="panel-title">Category Relationships: Add New
+                  </h4>{% endif %}
+
+                    
+                </a>
+                <div id="collapse{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                  <div class="panel-body">
+                      {% if  inline_admin_form.DELETE %}
+                        <div class="pull-left">
+                          {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                          </label>
+                          
+                        </div>
+                        </br>
+                          <div class="clearfix"></div>
+                      {% endif %}
+
+                      {% for hidden in inline_admin_form.hidden_fields %}
+                          {{ hidden }}
+                      {% endfor %}
+                  
+                      <div class="item form-group {% if inline_admin_form.related_to.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.related_to.id_for_label }}">Related To <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.related_to}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.related_to.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.relation.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.relation.id_for_label }}">Relation <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.relation}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.relation.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.sort_order.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">Sort Order <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.sort_order}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.sort_order.errors}}</div>
+                    </div>
+                    
+
+                    <div class="item form-group {% if inline_admin_form.is_main_parent.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.is_main_parent.id_for_label }}">Main Parent <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.is_main_parent}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.is_main_parent.errors}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              </div>
+             
+
+              <input type="hidden" name="category" value="{{object.pk}}">
+                <input type="hidden" name="slug" value="relation">
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                  </div>
+                </div>
+              
+              </form>
+            </div>  
+
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  
+</div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
       <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
       
       <!-- Switchery -->
@@ -516,7 +418,5 @@
       <!-- Custom Theme Scripts -->
       <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
       
-    {% endblock js_block %}
-    
-  </body>
-</html>
+
+{% endblock js_block %}

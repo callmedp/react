@@ -20,4 +20,7 @@ urlpatterns += [
     url(r'^categoryrelationship/list/$',
         shop_view.ListCategoryRelationView.as_view(),
         name='category-relation-list'),
+    url(r'^product/add/$',
+        shop_view.AddProductView.as_view(), name='product-add'),
+    
 ]
