@@ -7,12 +7,12 @@
         <ul class="nav child_menu">
           <li><a href="{% url 'console:category-add' %}">Add Category</a></li>
           <li><a href="{% url 'console:category-list' %}">Category Listing</a></li>
-          </ul>
+          <li><a href="{% url 'console:category-relation-list' %}">CategoryRelationship Listing</a></li>
+        </ul>
       </li>
       <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-          <li><a href="e_commerce.html">Add Product</a></li>
-          <li><a href="projects.html">Product Listing</a></li>
+          <li><a href="{% url 'console:product-add' %}">Add Product</a></li>
           </ul>
       </li>
 

@@ -382,9 +382,9 @@ if (typeof NProgress != 'undefined') {
 	   
 	  /* VALIDATOR */
 
-	  function init_category_add () {
-	  	if($('#add-category-form').length > 0){
-		  	window.Parsley.addValidator('notdefault', {
+	  function init_category_parsley(){
+
+	  		window.Parsley.addValidator('notdefault', {
 			  validateString: function(value) {
 			  	return "0" != value;
 			  },
@@ -422,16 +422,20 @@ if (typeof NProgress != 'undefined') {
 			    en: 'This file should not be larger than %s Kb',
 			  }
 			});
+		
+		  	
+	  };
 
-			
-		  	var parsleyConfig = {
+	  function init_category_add() {
+	  	if($('#add-category-form').length > 0){
+	  		var parsleyConfig = {
 		        errorsContainer: function(parsleyField) {
 		            var $errfield = parsleyField.$element.parent().siblings('.alert');
 		            return $errfield;
 		        },
 		    };
 			
-			$('#add-category-form').parsley(parsleyConfig).on('field:validated', function() {
+		  	$('#add-category-form').parsley(parsleyConfig).on('field:validated', function() {
 				if (this.validationResult === true) {
 			      this.$element.closest('.item').removeClass('bad');
 
@@ -444,16 +448,79 @@ if (typeof NProgress != 'undefined') {
 	  };
 	   
 	  
-		
-		
+	  function init_category_change() {
+
+	  	if($('#change-category-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+	  		$('#change-category-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  
+	  
+	  function init_category_seo_change() {
+	  	if($('#change-category-seo-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+			$('#change-category-seo-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});/*.on('form:submit', function() {
+			    console.log('error');
+	  		    return false; // Don't submit form for this demo
+			  });*/
+		};	  
+	  	
+	  };
+
+		function init_tree_cat() {
+	      $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+		    $('.tree li.parent_li > span').on('click', function (e) {
+		        var children = $(this).parent('li.parent_li').find(' > ul > li');
+		        if (children.is(":visible")) {
+		            children.hide('fast');
+		            $(this).attr('title', 'Expand this branch').find(' > i').addClass('fa-plus-square').removeClass('fa-minus-square');
+		        } else {
+		            children.show('fast');
+		            $(this).attr('title', 'Collapse this branch').find(' > i').addClass('fa-minus-square').removeClass('fa-plus-square');
+		        }
+		        e.stopPropagation();
+		    });
+		};	
 	   
 	$(document).ready(function() {
 				
 		init_sidebar();
 		init_InputMask();
 		init_TagsInput();
+		init_category_parsley();
 		init_category_add();
-				
+		init_category_change();
+		init_category_seo_change();
+		init_tree_cat();
+		
 	});	
 
 

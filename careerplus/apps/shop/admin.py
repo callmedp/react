@@ -2,7 +2,7 @@ from django.contrib import admin
 from . import models
 
 
-class CategoryRelationshipInline(admin.TabularInline):
+class CategoryRelationshipInline(admin.StackedInline):
     model = models.CategoryRelationship
     fk_name = 'related_from'
     raw_id_fields = ['related_from', 'related_to']
@@ -26,6 +26,7 @@ class AttributeInline(admin.TabularInline):
     fk_name = 'product'
     exclude = ('value_ltext',)
     extra = 1
+
 
 class FAQuestionInline(admin.TabularInline):
     model = models.FAQProduct

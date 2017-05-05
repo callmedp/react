@@ -86,7 +86,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         get_latest_by = 'created'
 
     def __str__(self):
-        return self.name
+
+        return self.name + '(' + self.get_level + ')'
 
     @property
     def get_level(self):
@@ -147,24 +148,48 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             relation=relation).delete()
         return
 
-    def get_relationships(self, relation):
+    def get_relationships(self):
         return self.related_to.filter(
-            to_category__relation=relation,
             to_category__related_from=self)
 
     def get_related_to(self, relation):
-        return self.related_to.filter(
-            from_category__relation=relation,
+        return self.category_set.filter(
             from_category__related_to=self)
 
     def get_parent(self):
-        return self.get_relationships(0)
+        if self.type_level in [0, 1]:
+            return []
+        elif self.type_level == 2:
+            return self.related_to.filter(
+                to_category__related_from=self,
+                type_level=1)
+        elif self.type_level == 3:
+            return self.related_to.filter(
+                to_category__related_from=self,
+                type_level=2)
+        elif self.type_level == 4:
+            return self.related_to.filter(
+                to_category__related_from=self,
+                type_level=3)
+        return []
 
     def get_childrens(self):
-        return self.get_related_to(0)
+        if self.type_level == 1:
+            return self.category_set.filter(
+                from_category__related_to=self,
+                type_level=2)
+        elif self.type_level == 2:
+            return self.category_set.filter(
+                from_category__related_to=self,
+                type_level=3)
+        elif self.type_level == 3:
+            return self.category_set.filter(
+                from_category__related_to=self,
+                type_level=4)
+        return []
 
     def get_main_parent(self):
-        return self.related_to.filter(
+        return self.category_set.filter(
             from_category__relation=0, from_category__related_to=self,
             from_category__is_main_parent=True)
 

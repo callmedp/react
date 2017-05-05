@@ -33,7 +33,7 @@ CATEGORY_CHOICES = (
     (1, 'Level 1'),
     (2, 'Level 2'),
     (3, 'Level 3'),
-    (3, 'Level 4'),)
+    (4, 'Level 4'),)
 
 PRODUCT_CHOICES = (
     (0, 'Simple'),
