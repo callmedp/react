@@ -48,6 +48,8 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 			self.title = self.name + ' – Career Articles @ Learning.Shine'
 		if not self.meta_desc:
 			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
 		super(Category, self).save(*args, **kwargs)
 
 	def get_title(self):
@@ -104,6 +106,8 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 			self.title = self.name + ' – Career Articles @ Learning.Shine'
 		if not self.meta_desc:
 			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
 		super(Tag, self).save(*args, **kwargs)
 
 	def get_title(self):
@@ -190,7 +194,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 			self.meta_desc = 'Read Article on ' + self.name + '.' + desc[:200]
 		if not self.display_name:
 			self.display_name = self.name
-		self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
 		super(Blog, self).save(*args, **kwargs)
 
 	def get_title(self):

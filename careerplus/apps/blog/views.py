@@ -58,7 +58,7 @@ class BlogDetailView(DetailView, BlogMixin):
         if pk is not None:
             queryset = queryset.filter(pk=pk, status=1)
         elif slug is not None:
-        	queryset = queryset.filter(slug=slug)
+        	queryset = queryset.filter(slug=slug, status=1)
         try:
         	obj = queryset.get()
         except:
@@ -119,7 +119,7 @@ class BlogDetailView(DetailView, BlogMixin):
 
         article_list = Blog.objects.filter(p_cat=p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
-        article_list = article_list.distinct()
+        article_list = article_list.distinct().select_related('user').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
         		paginated_by=self.paginated_by, page=self.page,
@@ -174,7 +174,7 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         article_list = article_list.order_by('-publish_date')
         top_5_recent = article_list[: 5]
         main_articles = Blog.objects.filter(p_cat=cat_obj, status=1) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1)
-        main_articles = main_articles.order_by('-publish_date').distinct()
+        main_articles = main_articles.order_by('-publish_date').distinct().select_related('user')
 
         paginator = Paginator(main_articles, self.paginated_by)
         if self.active_tab == 0:
@@ -425,7 +425,7 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
 
         article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=self.blog.slug)
-        article_list = article_list.distinct()
+        article_list = article_list.distinct().select_related('user').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,

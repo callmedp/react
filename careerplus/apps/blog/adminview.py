@@ -200,7 +200,7 @@ class BlogListView(ListView, PaginationMixin):
 		queryset = super(self.__class__, self).get_queryset()
 		try:
 			if self.query:
-				queryset = queryset.filter(Q(name__icontains=self.query)|
+				queryset = queryset.filter(Q(name__icontains=self.query) |
 					Q(slug__icontains=self.query))
 		except:
 			pass
