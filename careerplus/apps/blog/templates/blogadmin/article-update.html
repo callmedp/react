@@ -28,7 +28,7 @@
           <a href="{% url "blog:blog-tag-add" %}">
           <button type="button" class="btn btn-primary">Add Tag</button></a>
           {% if object.status == 1 %}
-            <a href="{% url "blog:articles-deatil" object.slug object.pk %}">
+            <a href="{% url "blog:articles-deatil" slug=object.slug pk=object.pk %}">
                <button type="button" class="btn btn-primary">View on Site</button></a>
           {% endif %}
       </div>

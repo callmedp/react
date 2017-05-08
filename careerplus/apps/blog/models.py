@@ -69,6 +69,12 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 	def get_absolute_url(self):
 		return reverse('blog:articles-by-category', kwargs={'slug': self.slug})
 
+	def article_exists(self):
+		q = self.primary_category.filter(status=1) | self.secondary_category.filter(status=1)
+		if q.exists():
+			return True
+		return False
+
 
 class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 	name = models.CharField(max_length=255, null=False, blank=False, unique=True)
@@ -184,6 +190,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 			self.meta_desc = 'Read Article on ' + self.name + '.' + desc[:200]
 		if not self.display_name:
 			self.display_name = self.name
+		self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
 		super(Blog, self).save(*args, **kwargs)
 
 	def get_title(self):

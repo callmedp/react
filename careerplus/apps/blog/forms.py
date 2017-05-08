@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.conf import settings
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
@@ -86,6 +87,9 @@ class BlogAddForm(forms.ModelForm):
 		self.fields['tags'].required = False
 		self.fields['sec_cat'].required = False
 		self.fields['sites'].required = False
+		self.fields['slug'].widget.attrs['readonly'] = True
+		# self.fields['slug'].widget.attrs['disabled'] = 'disabled'
+		self.fields['url'].widget.attrs['readonly'] = True
 
 	def clean(self):
 		fields = ['name', 'slug']
@@ -146,6 +150,8 @@ class TagAddForm(forms.ModelForm):
         super(TagAddForm, self).__init__(*args, **kwargs)
         self.fields['slug'].required = False
         self.fields['is_active'].required = False
+        self.fields['slug'].widget.attrs['readonly'] = True
+        self.fields['url'].widget.attrs['readonly'] = True
 
     def clean(self):
         fields_to_clean = ['name', 'slug']
@@ -188,6 +194,8 @@ class CategoryAddForm(forms.ModelForm):
         super(CategoryAddForm, self).__init__(*args, **kwargs)
         self.fields['slug'].required = False
         self.fields['is_active'].required = False
+        self.fields['slug'].widget.attrs['readonly'] = True
+        self.fields['url'].widget.attrs['readonly'] = True
 
     def clean(self):
         fields_to_clean = ['name', 'slug']

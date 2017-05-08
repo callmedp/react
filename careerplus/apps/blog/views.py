@@ -173,7 +173,8 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         top_5_pop = article_list[: 5]
         article_list = article_list.order_by('-publish_date')
         top_5_recent = article_list[: 5]
-        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1).order_by('-publish_date')
+        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1)
+        main_articles = main_articles.order_by('-publish_date').distinct()
 
         paginator = Paginator(main_articles, self.paginated_by)
         if self.active_tab == 0:
@@ -324,8 +325,8 @@ class BlogLandingPageView(TemplateView, BlogMixin):
 				top_articles = top_articles
 
 			article_list.update({
-				p: list(top_articles),
-			})
+    			p: top_articles.select_related('p_cat', 'user'),
+    		})
 
 		article_list = render_to_string('include/top_article.html',
 			{'page_obj': page_obj, 'article_list': article_list})
@@ -382,9 +383,8 @@ class BlogLandingAjaxView(ListView, BlogMixin):
         	elif top_articles.exists():
         		top_articles = top_articles
 
-        if top_articles:
         	article_list.update({
-        		p: list(top_articles),
+        		p: top_articles.select_related('p_cat', 'user'),
         	})
         context.update({
         	"page_obj": page_obj,
@@ -433,7 +433,7 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
 
         context.update({
                 "page_obj": page_obj,
-                "slug": self.blog.slug, 
+                "slug": self.blog.slug,
                 "SITEDOMAIN": settings.SITE_DOMAIN})
 
         return context

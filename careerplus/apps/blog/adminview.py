@@ -223,7 +223,7 @@ class BlogListView(ListView, PaginationMixin):
 		except:
 			pass
 
-		return queryset
+		return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by')
 
 
 class CategoryUpdateView(UpdateView):

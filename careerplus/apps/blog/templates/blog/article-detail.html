@@ -60,7 +60,7 @@
         <h2 class="heading-right">Categories</h2>
         <ul>
         {% for cat in categories %}
-           {% if cat.primary_category.all %}
+           {% if cat.article_exists %}
            <li><a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a></li>
            {% endif %}
         {% endfor %}
