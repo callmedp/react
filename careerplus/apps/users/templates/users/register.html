@@ -1,0 +1,78 @@
+{% extends "basic/base.html" %}
+    {%load static%}
+    {% block title %}
+        Register
+    {% endblock title %}
+    {% block css_section %}
+        {{block.super}}
+    {% endblock css_section %}    
+    {% block pagecontainer %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% if messages %}
+                {% for message in messages %}
+                <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+        <!-- /.row -->
+    <div class="container">
+      <header class="login-bg">
+        <div class="login-bg-txt">
+          <figure class="login-icon1"></figure>
+            <strong>1 Lacs+</strong>
+              Satisfied users
+        </div>
+        <div class="login-bg-txt">
+          <figure class="login-icon2"></figure>
+            <strong>300+</strong>
+              Courses
+        </div>
+        <div class="login-bg-txt">
+          <figure class="login-icon3"></figure>
+            <strong>500+</strong>
+              Professional resumes delivered
+        </div>
+      </header>
+    </div>
+    <div class="register">
+    <h1>Register</h1>
+      <form action="." method="post" id="register_form">
+       {% csrf_token %}
+       <fieldset>
+          {% for field in form %}
+              {% if field.errors %}
+                      {{ field }}
+                      <p>
+                         {% for error in  field.errors %}{{ error }}{% endfor %}
+                      </p>
+              {% else %}
+                  <div class="control-group"> 
+                    {{ field }}
+                    <p class="text-danger js_id_error"></p>  
+                  </div>
+              {% endif %}
+          {% endfor %}     
+       </fieldset>
+       <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" value="">
+            I agree to Terms & conditions
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <small class="form-text text-muted text-center mt-4">Already have an account? <a href="{% url 'login' %}">Login Now</a></small>
+      </form>
+  </div>
+<footer>
+  {% include "basic/footer.html" %} 
+</footer>
+{% endblock pagecontainer %}
+{% block js_section %}
+    {{block.super}}
+    {# // <script src="{% static 'js/custom/registerform.js' %}"></script> #}
+{% endblock js_section %} 
+    

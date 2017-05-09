@@ -48,6 +48,7 @@ THIRD_PARTY_APPS = [
     'ckeditor_uploader',
     'meta',
     'sorl.thumbnail',
+    'cities_light',
 ]
 
 # Apps specific for this project go here.

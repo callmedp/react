@@ -52,6 +52,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         _('email address'),
         max_length=200, unique=True, blank=False)
 
+    contact_number = models.CharField(max_length=15, blank=True, null=True)
+
     is_staff = models.BooleanField(
         _('staff status'), default=False,
         help_text=_(
