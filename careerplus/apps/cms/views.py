@@ -4,7 +4,7 @@ import json
 from django.views.generic import View, TemplateView
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.urls import reverse
 from django.http import Http404
 from django.utils import timezone
@@ -76,11 +76,13 @@ class CMSPageView(TemplateView, LoadMoreMixin):
 
         download_docs = page_obj.document_set.filter(is_active=True)
         csrf_token_value = get_token(self.request)
+        download_doc = None
         if download_docs.exists():
             download_doc = download_docs[0]
             context.update({
                 'download_doc': download_doc
             })
+
         for left in left_widgets:
             widget_context = {}
             widget_context.update({
@@ -152,28 +154,27 @@ class LeadManagementView(View, UploadInFile):
     http_method_names = [u'post', ]
 
     def post(self, request, *args, **kwargs):
-        slug = kwargs.get('slug', None)
-        try:
-            Page.objects.get(slug=slug, is_active=True)
-        except Exception:
-            raise Http404
-        data_dict = {}
-        name = request.POST.get('name', '')
-        email = request.POST.get('email', '')
-        mobile = request.POST.get('mobile_number', '')
-        message = request.POST.get('message', '')
-        term_condition = request.POST.get('term_condition')
+        if request.is_ajax():
+            data_dict = {}
+            name = request.POST.get('name', '')
+            email = request.POST.get('email', '')
+            mobile = request.POST.get('mobile_number', '')
+            message = request.POST.get('message', '')
+            term_condition = request.POST.get('term_condition')
+            path = request.path
 
-        data_dict = {
-            "name": name,
-            "mobile": mobile,
-            "email": email,
-            "message": message,
-            "term_condition": term_condition
-        }
-        self.write_in_file(data_dict=data_dict)
-        data = {"status": 1, }
-        return HttpResponse(json.dumps(data), content_type="application/json")
+            data_dict = {
+                "name": name,
+                "mobile": mobile,
+                "email": email,
+                "message": message,
+                "path": path,
+                "term_condition": term_condition
+            }
+            self.write_in_file(data_dict=data_dict)
+            data = {"status": 1, }
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
 
 
 class DownloadPdfView(View, UploadInFile):

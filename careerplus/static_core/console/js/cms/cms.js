@@ -125,6 +125,24 @@ $(document).ready(function() {
     });
 
     $('#callback_form').validate({
+        // submitHandler: function(form) {
+        //     console.log("hii");
+        //     var formData = $("#callback_form").serialize();
+        //     console.log(formData);
+        //     $.ajax({
+        //         url : "/cms/lead-management/",
+        //         type: "POST",
+        //         data : formData,
+        //         success: function(data, textStatus, jqXHR)
+        //         {
+        //             alert('Your Query Submitted Successfully.');
+        //         },
+        //         error: function (jqXHR, textStatus, errorThrown)
+        //         {
+        //             window.location.reload(); 
+        //         }
+        //     });  
+        // },
         rules:{
             name:{
                 required: true,
@@ -158,24 +176,6 @@ $(document).ready(function() {
             },
             
         },
-        submitHandler: function(form) {
-            console.log("hii");
-            var formData = $("#callback_form").serialize();
-            console.log(formData);
-            $.ajax({
-                url : "/cms/lead-management/",
-                type: "POST",
-                data : formData,
-                success: function(data, textStatus, jqXHR)
-                {
-                    alert('Your Query Submitted Successfully.');
-                },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
-                    window.location.reload(); 
-                }
-            });  
-        },
         highlight:function(element, errorClass) {
             $(element).siblings('.error').removeClass('hide_error'); 
         },
@@ -187,8 +187,24 @@ $(document).ready(function() {
         } 
     });
 
-     $('#id_callback').click(function() {
-        $("#callback_form").valid();
+    $('#id_callback').click(function() {
+        flag = $("#callback_form").valid();
+        if (flag){
+            var formData = $("#callback_form").serialize();
+            $.ajax({
+                url : "/cms/lead-management/",
+                type: "POST",
+                data : formData,
+                success: function(data, textStatus, jqXHR)
+                {
+                    alert('Your Query Submitted Successfully.');
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Something went wrong. Try again later.');
+                }
+            });
+        }
     });
 
 

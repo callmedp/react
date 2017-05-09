@@ -1,7 +1,7 @@
 <div class="request-call box-panel mb-40 cleafix">
     <h2 class="heading-right">request a call</h2>
         </style>
-      <form class="mt-20" role="form" id="callback_form">
+      <form class="mt-20" role="form" id="callback_form" >
         <div style='display:none'>
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
         </div>
@@ -17,8 +17,9 @@
           <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
           <span class="error position-error"></span>
         </div>
-        <button type="button" id="id_callback"  class="submit-button">Message</button>
+        
       </form>
+      <button type="button" id="id_callback"  class="submit-button">Message</button>
       <div class="call-service">
         <strong>
           <span class="call-service-icon"></span>

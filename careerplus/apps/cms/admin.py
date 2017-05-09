@@ -30,7 +30,7 @@ class WidgetAdmin(admin.ModelAdmin):
 		'is_external', 'is_pop_up', 'heading', 'redirect_url')
 	list_filter = ('widget_type', )
 	search_fields = ('heading', 'id')
-	filter_horizontal = ()
+	filter_horizontal = ('related_article', )
 	raw_id_fields = ('created_by', 'last_modified_by', 'user', 'iw')
 
 
