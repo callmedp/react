@@ -9,6 +9,7 @@ router.register(r'indexcolumn', views.IndexColumnViewSet)
 router.register(r'widget', views.WidgetViewSet)
 router.register(r'page', views.PageViewSet)
 router.register(r'pagewidget', views.PageWidgetViewSet)
+router.register(r'document', views.DocumentViewSet)
 router.register(r'comment', views.CommentViewSet)
 router.register(r'pagecounter', views.PageCounterViewSet)
 

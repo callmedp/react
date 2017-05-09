@@ -81,7 +81,8 @@ class Widget(AbstractCommonModel):
 	is_active = models.BooleanField(default=False)
 
 	def __str__(self):
-		return str(self.id) + str(self.heading)
+		# return str(self.id) + str(self.heading)
+		return 'Widget #' + str(self.id) + ' with type ' + str(dict(WIDGET_CHOICES).get(self.widget_type))
 
 	def get_widget_data(self):
 		data_dict = {}
@@ -157,7 +158,8 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
     }
 
 	def __str__(self):
-		return str(self.id) + ' ' + self.title
+		# return str(self.id) + ' ' + self.title
+		return str(self.name)
 
 	def get_title(self):
 		title = self.title
@@ -180,6 +182,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class PageWidget(AbstractCommonModel):
+	
 	page = models.ForeignKey(Page)
 	widget = models.ForeignKey(Widget)
 	section = models.CharField(choices=SECTION, max_length=255,
@@ -188,8 +191,14 @@ class PageWidget(AbstractCommonModel):
 		help_text='determine ranking of widget')
 
 	class Meta:
+		auto_created = True
 		ordering = ['section', '-ranking']
 		unique_together = ('page', 'widget')
+
+
+	def __str__(self):
+		# return str(self.id) + ' ' + self.title
+		return 'Widget #' + str(self.widget.id) + ' with type ' + dict(WIDGET_CHOICES).get(self.widget.widget_type)
 
 
 class Document(models.Model):

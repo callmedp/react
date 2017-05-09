@@ -1,11 +1,11 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from cms.api.core.mixins import IndexerWidgetViewMixin, ColumnHeadingViewMixin, IndexColumnViewMixin, WidgetViewMixin,\
 	PageViewMixin, PageWidgetViewMixin, DocumentViewMixin, CommentViewMixin, PageCounterViewMixin
 
 
 # TODO: Will MODIFY these viewsets AFTERWARDS to limit the end point required.
-class IndexerWidgetViewSet(IndexerWidgetViewMixin, ReadOnlyModelViewSet):
+class IndexerWidgetViewSet(IndexerWidgetViewMixin, ModelViewSet):
     """
         CRUD Viewset for `IndexerWidget` model.
     """
@@ -29,7 +29,7 @@ class WidgetViewSet(WidgetViewMixin, ReadOnlyModelViewSet):
     """
 
 
-class PageViewSet(PageViewMixin, ReadOnlyModelViewSet):
+class PageViewSet(PageViewMixin, ModelViewSet):
     """
         CRUD Viewset for `Page` model.
     """
