@@ -22,5 +22,8 @@ urlpatterns += [
         name='category-relation-list'),
     url(r'^product/add/$',
         shop_view.AddProductView.as_view(), name='product-add'),
-    
+    url(r'^faq/add/$',
+        shop_view.AddFaqView.as_view(), name='faquestion-add'),
+    url(r'^chapter/add/$',
+        shop_view.AddChapterView.as_view(), name='chapter-add'),
 ]

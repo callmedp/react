@@ -365,6 +365,29 @@ if (typeof NProgress != 'undefined') {
 			}
 			
 	    };
+
+
+
+
+	    /* SMART WIZARD */
+		
+		function init_SmartWizard() {
+			
+			if( typeof ($.fn.smartWizard) === 'undefined'){ return; }
+			console.log('init_SmartWizard');
+			
+			$('#wizard').smartWizard();
+
+			/*$('#wizard_verticle').smartWizard({
+			  transitionEffect: 'slide'
+			});*/
+
+			$('.buttonNext').addClass('btn btn-success');
+			$('.buttonPrevious').addClass('btn btn-primary');
+			$('.buttonFinish').addClass('btn btn-default');
+			
+		};
+	   
    
 	
 		/* INPUT MASK */
@@ -509,6 +532,69 @@ if (typeof NProgress != 'undefined') {
 		        e.stopPropagation();
 		    });
 		};	
+
+	function init_faq_add() {
+	  	if($('#add-faq-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#add-faq-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+
+	  function init_chapter_add() {
+	  	if($('#add-chapter-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#add-chapter-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  
+	  function init_topic_add() {
+	  	if($('#add-topic-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#add-topic-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
 	   
 	$(document).ready(function() {
 				
@@ -520,7 +606,10 @@ if (typeof NProgress != 'undefined') {
 		init_category_change();
 		init_category_seo_change();
 		init_tree_cat();
-		
+		init_SmartWizard();
+		init_faq_add();
+		init_chapter_add();
+		init_topic_add();
 	});	
 
 

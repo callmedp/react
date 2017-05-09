@@ -23,10 +23,7 @@ SERVICE_CHOICES = (
     (1, 'Writing Services'),
     (2, 'Job Assistance Services'),
     (3, 'Courses'),
-    (4, 'Other Services'),
-    (5, 'Test Preparation'),
-    (6, 'Blog'),
-    (7, 'CMS'),)
+    (4, 'Other Services'),)
 
 CATEGORY_CHOICES = (
     (0, 'Default'),

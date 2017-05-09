@@ -88,9 +88,6 @@ class ProductAdmin(admin.ModelAdmin):
 #                 'attribute_values__attribute'))
 
 
-
-
-
 class ProductExtraInfoAdmin(admin.ModelAdmin):
     list_display = ['info_type', 'product', 'content_object']
 
@@ -100,7 +97,6 @@ admin.site.register(models.Attribute)
 admin.site.register(models.Keyword)
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.Currency)
-admin.site.register(models.Entity)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)
 

@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.query import QuerySet
-from seo.models import AbstractAutoDate
 
+from seo.models import AbstractAutoDate
+from partner.models import Vendor
 from ckeditor.fields import RichTextField
 
 
@@ -43,6 +44,10 @@ class FAQuestion(AbstractAutoDate):
         _('sort order'), default=0,
         help_text=_('The order you would like the question to be displayed.'))
 
+    vendor = models.ForeignKey(
+        Vendor,
+        related_name='question_vendor',
+        null=True, blank=True)
     objects = FAQuestionManager()
     
     class Meta:
@@ -66,10 +71,15 @@ class Chapter(AbstractAutoDate):
         verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
     
     ordering = models.PositiveSmallIntegerField(
-        _('ordering'), blank=True,
+        _('ordering'), default=1,
         help_text=_(u'An integer used to order the chapter \
             amongst others related to the same chapter. If not given this \
             chapter will be last in the list.'))
+
+    vendor = models.ForeignKey(
+        Vendor,
+        related_name='chapter_vendor',
+        null=True, blank=True)
     
     class Meta:
         ordering = ('heading',)
@@ -79,42 +89,3 @@ class Chapter(AbstractAutoDate):
     def __str__(self):
         return self.heading
 
-
-class Topic(AbstractAutoDate):
-    name = models.CharField(_('name'), max_length=255)
-    description = RichTextField(
-        verbose_name=_('description'), blank=True,
-        help_text=_('A short description of this topic.'))
-    chapters = models.ManyToManyField(
-        Chapter,
-        verbose_name=_('Topic Chapter'),
-        through='TopicChapter',
-        through_fields=('topic', 'chapter'),
-        blank=True)
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = _('topic')
-        verbose_name_plural = _('topics')
-
-    def __str__(self):
-        return self.name
-
-
-class TopicChapter(AbstractAutoDate):
-    topic = models.ForeignKey(
-        Topic,
-        related_name='topicchapters',
-        on_delete=models.CASCADE)
-    chapter = models.ForeignKey(
-        Chapter,
-        related_name='topicchapters',
-        on_delete=models.CASCADE)
-    sort_order = models.PositiveIntegerField(
-        _('Sort Order'), default=1)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return _("%(top)s to '%(cp)s'") % {
-            'top': self.topic,
-            'cp': self.chapter}

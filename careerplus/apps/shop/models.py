@@ -9,7 +9,7 @@ from ckeditor.fields import RichTextField
 
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
-from faq.models import FAQuestion
+from faq.models import FAQuestion, Chapter
 
 from .functions import (
     get_upload_path_category,
@@ -37,7 +37,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
     type_service = models.PositiveSmallIntegerField(
-        _('Entity'), choices=SERVICE_CHOICES, default=0)
+        _('Service'), choices=SERVICE_CHOICES, default=0)
     type_level = models.PositiveSmallIntegerField(
         _('Level'), choices=CATEGORY_CHOICES, default=0)
     description = RichTextField(
@@ -258,27 +258,6 @@ class CategoryRelationship(AbstractAutoDate):
             'sec': self.related_to}
 
 
-class Entity(AbstractAutoDate, AbstractSEO):
-    name = models.CharField(
-        _('Name'), max_length=100,
-        help_text=_('Unique name going to decide the slug'))
-    slug = models.CharField(
-        _('Slug'), unique=True,
-        max_length=100, help_text=_('Unique slug'))
-    
-    class Meta:
-        ordering = ['name']
-        verbose_name = _("Product class")
-        verbose_name_plural = _("Product classes")
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def has_attributes(self):
-        return self.attributes.exists()
-
-
 class AttributeOptionGroup(models.Model):
     name = models.CharField(_('Name'), max_length=128)
 
@@ -311,9 +290,8 @@ class AttributeOption(models.Model):
 
 
 class Attribute(AbstractAutoDate):
-    entity = models.ForeignKey(
-        'shop.Entity', related_name='attributes', blank=True,
-        null=True, verbose_name=_("Entity"))
+    type_service = models.PositiveSmallIntegerField(
+        _('Service'), choices=SERVICE_CHOICES, default=0)
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
@@ -346,32 +324,10 @@ class Attribute(AbstractAutoDate):
         return self.name
 
 
-# class Offer(AbstractAutoDate):
-#     name = models.CharField(
-#         _('Name'), max_length=100)
-#     display_text = models.TextField(_('Display Text'), blank=True, default='')
-#     active = models.BooleanField(default=True)
-#     offerproducts = models.ManyToManyField(
-#         'shop.Product',
-#         verbose_name=_('Offer Product'),
-#         through='ProductOffer',
-#         through_fields=('offer', 'product'),
-#         blank=True)
-
-#     def __str__(self):
-#         return self.name
-
-
 class Keyword(AbstractAutoDate):
     name = models.CharField(
         _('Name'), max_length=100, unique=True)
     active = models.BooleanField(default=True)
-    keyproducts = models.ManyToManyField(
-        'shop.Product',
-        verbose_name=_('Keyword Product'),
-        through='ProductKeyword',
-        through_fields=('keyword', 'product'),
-        blank=True)
 
     def __str__(self):
         return self.name
@@ -406,7 +362,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
     type_service = models.PositiveSmallIntegerField(
-        _('Entity'), choices=SERVICE_CHOICES, default=0)
+        _('Service'), choices=SERVICE_CHOICES, default=0)
     type_product = models.PositiveSmallIntegerField(
         _('Type'), choices=PRODUCT_CHOICES, default=0)
     type_flow = models.PositiveSmallIntegerField(
@@ -477,12 +433,6 @@ class Product(AbstractProduct, ModelMeta):
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
-    entity = models.ForeignKey(
-        'shop.Entity', related_name='entityproducts', blank=True,
-        null=True, verbose_name=_("Product Entity"))
-    structure = models.ForeignKey(
-        'faq.Topic', related_name='topicproducts', blank=True,
-        null=True, verbose_name=_("Product Structure"))
     variation = models.ManyToManyField(
         'self',
         through='VariationProduct',
@@ -513,19 +463,17 @@ class Product(AbstractProduct, ModelMeta):
     keywords = models.ManyToManyField(
         'shop.Keyword',
         verbose_name=_('Product Keyword'),
-        through='ProductKeyword',
-        through_fields=('product', 'keyword'),
+        related_name='productkeyword',
         blank=True)
     vendor = models.ForeignKey(
         'partner.Vendor', related_name='productvendor', blank=True,
         null=True, verbose_name=_("Product Vendor"))
-    
-    # offers = models.ManyToManyField(
-    #     'shop.Offer',
-    #     verbose_name=_('Product Offer'),
-    #     through='ProductOffer',
-    #     through_fields=('product', 'offer'),
-    #     blank=True)
+    chapters = models.ManyToManyField(
+        Chapter,
+        verbose_name=_('Product Structure'),
+        through='ProductChapter',
+        through_fields=('product', 'chapter'),
+        blank=True)
     faqs = models.ManyToManyField(
         FAQuestion,
         verbose_name=_('Product FAQ'),
@@ -621,10 +569,6 @@ class ProductArchive(AbstractProduct):
         on_delete=models.SET_NULL,
         related_name='originalproduct',
         null=True)
-    entity = models.CharField(
-        _('Product Entity'),
-        blank=True,
-        max_length=20)
     siblings = models.CharField(
         _('Siblings Product'),
         blank=True,
@@ -680,11 +624,6 @@ class ProductScreen(AbstractProduct):
         on_delete=models.SET_NULL,
         related_name='linkedproduct',
         null=True)
-    entity = models.CharField(
-        _('Product Entity'),
-        blank=True,
-        max_length=20)
-
     siblings = models.CharField(
         _('Siblings Product'),
         blank=True,
@@ -830,27 +769,6 @@ class ChildProduct(AbstractAutoDate):
 #         return _("%(product)s to '%(offer)s'") % {
 #             'product': self.product,
 #             'offer': self.offer}
-
-
-class ProductKeyword(AbstractAutoDate):
-    keyword = models.ForeignKey(
-        Keyword,
-        verbose_name=_('Keyword'),
-        related_name='productkeywords',
-        on_delete=models.CASCADE)
-    product = models.ForeignKey(
-        Product,
-        verbose_name=_('Product'),
-        related_name='productkeywords',
-        on_delete=models.CASCADE)
-    active = models.BooleanField(default=True)
-    weight = models.PositiveIntegerField(
-        _('Weight'), default=1)
-
-    def __str__(self):
-        return _("%(product)s to '%(keyword)s'") % {
-            'product': self.product,
-            'keyword': self.keyword}
 
 
 class ProductCategory(AbstractAutoDate):
@@ -1003,3 +921,22 @@ class ProductExtraInfo(models.Model):
 
     def __str__(self):
         return '{0} - {1}'.format(self.product, self.type)
+
+
+class ProductChapter(AbstractAutoDate):
+    product = models.ForeignKey(
+        Product,
+        related_name='productstructure',
+        on_delete=models.CASCADE)
+    chapter = models.ForeignKey(
+        Chapter,
+        related_name='productstructure',
+        on_delete=models.CASCADE)
+    sort_order = models.PositiveIntegerField(
+        _('Sort Order'), default=1)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return _("%(top)s to '%(cp)s'") % {
+            'top': self.product,
+            'cp': self.chapter}

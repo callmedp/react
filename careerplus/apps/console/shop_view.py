@@ -15,6 +15,7 @@ from .shop_form import (
     ChangeCategorySEOForm,
     CategoryRelationshipForm,
     RelationshipInlineFormSet)
+from faq.forms import AddFaqForm, AddChapterForm
 
 @Decorate(check_permission('shop.add_category'))
 class AddCategoryView(FormView):
@@ -277,9 +278,9 @@ class ListCategoryRelationView(TemplateView):
 @Decorate(check_permission('shop.add_product'))
 class AddProductView(FormView):
     form_class = AddCategoryForm
-    # template_name = 'console/shop/add_category.html'
-    # http_method_names = ['get', 'post']
-    # success_url = reverse_lazy('console:category-add')
+    template_name = 'console/shop/add_product.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:product-add')
 
     def get(self, request, *args, **kwargs):
         return super(AddProductView, self).get(
@@ -305,3 +306,102 @@ class AddProductView(FormView):
     #         "Your submission has not been saved. Try again."
     #     )
     #     return super(AddCategoryView, self).form_invalid(form)
+
+
+@Decorate(check_permission('faq.add_faquestion'))
+class AddFaqView(FormView):
+    form_class = AddFaqForm
+    template_name = 'console/shop/add_faq.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:faquestion-add')
+
+    def get(self, request, *args, **kwargs):
+        return super(AddFaqView, self).get(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddFaqView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a faq"
+        )
+        return super(AddFaqView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your submission has not been saved. Try again."
+        )
+        return super(AddFaqView, self).form_invalid(form)
+
+
+@Decorate(check_permission('faq.add_chapter'))
+class AddChapterView(FormView):
+    form_class = AddChapterForm
+    template_name = 'console/shop/add_chapter.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:chapter-add')
+
+    def get(self, request, *args, **kwargs):
+        return super(AddChapterView, self).get(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddChapterView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a Chapter"
+        )
+        return super(AddChapterView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your submission has not been saved. Try again."
+        )
+        return super(AddChapterView, self).form_invalid(form)
+
+
+# @Decorate(check_permission('faq.add_topic'))
+# class AddTopicView(FormView):
+#     form_class = AddTopicForm
+#     template_name = 'console/shop/add_topic.html'
+#     http_method_names = ['get', 'post']
+#     success_url = reverse_lazy('console:topic-add')
+
+#     def get(self, request, *args, **kwargs):
+#         return super(AddTopicView, self).get(
+#             request, *args, **kwargs)
+
+#     def get_context_data(self, **kwargs):
+#         context = super(AddTopicView, self).get_context_data(**kwargs)
+#         alert = messages.get_messages(self.request)
+#         context.update({'messages': alert})
+#         return context
+
+#     def form_valid(self, form):
+#         form.save()
+#         messages.success(
+#             self.request,
+#             "You have successfully added a topic"
+#         )
+#         return super(AddTopicView, self).form_valid(form)
+
+#     def form_invalid(self, form):
+#         messages.error(
+#             self.request,
+#             "Your submission has not been saved. Try again."
+#         )
+#         return super(AddTopicView, self).form_invalid(form)
