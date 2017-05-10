@@ -5,7 +5,7 @@
         <div style='display:none'>
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
         </div>
-        <div class="form-group">
+        <div class="form-group error">
           <input type="text" class="form-control" name="name" placeholder="Name">
           <span class="error position-error"></span>
         </div>
@@ -28,3 +28,39 @@
         9am to 7pm ist monday-saturday
       </div>
 </div> 
+
+
+{% comment %}
+
+<div class="request-call box-panel mb-40 cleafix">
+        <h2 class="heading-right">request a call</h2>
+          <form class="mt-20">
+            <div class="form-group error">
+              <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
+              <span class="error-txt">Please enter your name</span>
+            </div>
+            <div class="form-group">
+              <div class="country-code">
+                <div class="custom-select">
+                  <select class="form-control">
+                    <option>+91</option>
+                    <option>+91</option>
+                  </select>
+                </div>
+                <input type="text" class="form-control" placeholder="Mobile">
+              </div>
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" rows="1" placeholder="Message"></textarea>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+          </form>
+          <div class="call-service">
+            <strong>
+              <span class="call-service-icon"></span>
+              0124-395 5001
+            </strong>
+            9am to 7pm ist monday-saturday
+          </div>
+      </div> 
+{% endcomment %}

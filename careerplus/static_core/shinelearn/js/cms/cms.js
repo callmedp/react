@@ -124,6 +124,33 @@ $(document).ready(function() {
 		} 
     });
 
+    $('#comment_submit').click(function() {
+        flag = $("#cms_comment_form").valid();
+        console.log(flag);
+        if (flag){
+            var formData = $("#cms_comment_form").serialize();
+            var page_slug = $('#page_slug').val();
+            console.log(page_slug);
+            $.ajax({
+                url : "/cms/page/" + page_slug + "/",
+                type: "POST",
+                data : formData,
+                success: function(data, textStatus, jqXHR)
+                {
+                    $('#cms_comment_form')[0].reset();
+                    alert('Thank you for sharing your opinion, your comment will be posted post moderation.');
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Something went wrong. Try again later.');
+                }
+            });
+        }
+    });
+
+
+
+
     $('#callback_form').validate({
         // submitHandler: function(form) {
         //     console.log("hii");

@@ -53,7 +53,7 @@
 }
 .download-resume ul li:before {
   content: '';
-  background: url(../../images/cms/sprite.png) no-repeat -582px -50px;
+  background: url(../../images/common/sprite.png) no-repeat -582px -50px;
   display: inline-block;
   position: absolute;
   left: -20px;
@@ -91,7 +91,7 @@
 }
 .formatting ul li:before {
   content: '';
-  background: url(../../images/cms/sprite.png) no-repeat -582px -50px;
+  background: url(../../images/common/sprite.png) no-repeat -582px -50px;
   display: inline-block;
   position: absolute;
   left: -20px;
@@ -171,7 +171,7 @@
   top: 0;
   width: 13px;
   height: 21px;
-  background: url(../../images/cms/sprite.png) no-repeat -596px -72px;
+  background: url(../../images/common/sprite.png) no-repeat -596px -72px;
   display: inline-block;
 }
 .comments-box .form-group textarea {
@@ -224,32 +224,6 @@
   line-height: 20px;
   text-decoration: none;
   font-weight: 600;
-}
-
-.request-call {
-  padding: 20px;
-}
-.request-call .form-control {
-  border-radius: 0;
-  border: 1px solid #e1e1e1;
-  color: #e1e1e1;
-  font-size: 13px;
-}
-.request-call .form-group {
-  position: relative;
-}
-.request-call .call-service {
-  font-size: 11px;
-  color: #999;
-  text-align: center;
-  text-transform: uppercase;
-}
-.request-call .call-service strong {
-  font-size: 18px;
-  font-weight: 600;
-  color: #2f5da5;
-  display: block;
-  margin: 10px 0 0 0;
 }
 
 .practice-test {
