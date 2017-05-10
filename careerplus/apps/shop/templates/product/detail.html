@@ -1,0 +1,299 @@
+{% extends "basic/base.html" %}
+{% load static %}
+
+{% block css_section %}
+  {{block.super}}
+  <link type="text/css" href="{% static "/shinelearn/css/product/detail.css" %}" rel="stylesheet">
+  
+{% endblock css_section %}
+    
+
+{% block pageheading %}
+    <!-- header -->
+    <header>
+      <div class="detail-course-header">
+        <div class="container">
+        {% block breadcrumb %}
+          {% include "product/partials/breadcrumb.html" %}
+        {% endblock breadcrumb %}
+          <div class="course-caption">
+            
+            <div class="course-caption-img">
+              <img src="{{prd_img}}" alt="{{prd_img_alt}}">
+            </div>
+
+            <div class="course-caption-content">
+              <h1>{{prd_H1}}</h1>
+              {% include "product/partials/packagediv.html" %}
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="container pr">
+        <div class="course-caption-bottom">
+          <div class="visible-onscroll hidden">
+            <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
+          </div>
+          {% include "product/partials/reviewnjob.html" %}
+        </div>   
+
+        <!-- right fixed content start -->
+        <div class="col-sm-5 col-md-4  price-box">
+        <div class="box-panel enrol-cart">
+          <strong>Rs. 4000/-</strong>
+          <strike>Rs. 4000/-</strike>
+          <small>  5% off</small>
+          <span class="clearfix db"></span>
+          <a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enrol now</a>
+          <a href="#" class="add-cart">Add to cart</a>
+          <div class="query-call">
+          <a href="#"><figure class="email-icon"></figure> Have a query?</a>
+          <a><figure class="calling-icon"></figure> 0124-395 5001</a>
+          </div>
+        </div>
+
+        <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
+           
+        </div>
+    <!-- right fixed content end -->
+
+      </div>
+
+    </header>
+
+  
+{% endblock pageheading %}
+
+{% block container %}
+  <!-- main section start -->
+<section class="container-fluid">
+
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+    <ul class="detail-page">
+    <!-- About course container -->
+    <li>
+    <section class="container">
+      {% if prd_desc %}
+        <div class="row">
+          <div class="col-sm-12 col-md-8">
+            {{prd_desc|safe}}
+          </div>
+        </div>
+      {% endif %}
+      
+      {% include "product/partials/product_child.html" %}
+      {% include "product/partials/product_options.html" %}
+      {% include "product/partials/frequentlybought.html" %}
+      
+    </section>  
+
+    <!-- About course container -->
+    <section class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-8 pr">
+          <div id="about-course" class="detail-course-links scroll">
+          <a title="About Six Sigma" class="active" href="#course">About Six Sigma</a>
+          <a title="What’ll you get" href="#get">What’ll you get</a>
+          <a title="Courses" href="#programs">Program structure</a>
+          <a title="Delivery flow" href="#delivery">Delivery flow</a>
+          <a title="FAQ" href="#faq">FAQ</a> <a title="Review" href="#review">Review</a>
+          </div>
+        </div>
+      </div>
+    </section>    
+    </li>
+    
+    {% if prd_about %}
+      <!-- About six course container -->
+      <li>
+        <section class="container">
+          <div class="row">
+            <div id="course" class="col-sm-12 col-md-8 scroll">
+              {{prd_about|safe}}
+            </div>
+          </div>
+        </section>      
+      </li>
+    {% endif %}
+    
+    {% if prd_uget %}
+      
+      <!-- What’ll you get container -->
+      <li>
+        <section class="container">
+          <div class="row">
+            <div id="get" class="col-sm-12 col-md-8 scroll">
+            {{prd_uget|safe}}
+            </div>
+          </div>      
+        </section>      
+      </li>
+    {% endif %}
+    
+
+    {% include "product/partials/program_structure.html" %}
+    
+    {% include "product/partials/delivery_flow.html" %}
+    
+    {% include "product/partials/faq.html" %}
+    
+    {% include "product/partials/reviews.html" %}
+    
+    {% include "product/partials/recommended_prd.html" %}
+    
+    
+    </ul>  
+    <!-- left content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+
+
+
+{% endblock container %}
+
+
+
+
+  
+
+<!--modals-->
+<!--login-->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Login</h1>
+      </div>
+        <form>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Username">
+            <label class="error"></label>
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Password">
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input">
+              Remember me
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary submit">Login</button>
+          <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
+          <div class="social-login">
+            <span>or login with</span>
+            <a class="facebook" href="#"></a>
+            <a class="linkedin" href="#"></a>
+            <a class="gplus" href="#"></a>
+          </div>
+          <small class="form-text text-muted text-center">Don’t have an account yet? <a href="register.html" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>  
+
+<!--signup-->
+<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Register</h1>
+      </div>
+        <form>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Name">
+            <label class="error"></label>
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Mobile No.">
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input">
+              I agree to Terms & conditions
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary submit">Register</button>
+          <div class="social-login">
+            <span>or Register with</span>
+            <a class="facebook" href="#"></a>
+            <a class="linkedin" href="#"></a>
+            <a class="gplus" href="#"></a>
+          </div>
+          <small class="form-text text-muted text-center mt-4">Already have an account? <a href="login.html" data-toggle="modal" data-target=".bs-example-modal-sm" data-dismiss="modal">Login Now</a></small>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>  
+
+
+{% block js_section %}
+  {{block.super}} 
+  <script type="text/javascript">
+  function LoadMoreProductReview(pv_id) {
+      if (processing) {
+          return false;
+      }
+      else{    
+        if (pv_id) {
+          try{
+            let page, elem;
+            elem = document.getElementById("id_review_page");
+            try {
+                elem.value = parseInt(elem.value) + 1;
+            } catch (_error) {
+              i = _error;
+              elem.value = 2;
+            }
+            page = document.getElementById("id_review_page").value;
+            processing = true;
+            $.ajax({
+                url: '/shop/reviews/' + encodeURIComponent(pv_id) + '/?pg=' + encodeURIComponent(page),
+                dataType: 'html',
+                success: function(html) {
+                    $('#loadmorereviewbtn').remove();
+                    
+                    $('#id_review_list').append(html);
+                    
+               },
+               complete: function(response){
+                    return processing = false;
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
+        catch(e){
+          alert("Invalid Page");
+        }
+        }
+      }
+    };
+    var processing = false;
+  
+
+  </script> 
+     
+{% endblock js_section %}

@@ -1,0 +1,27 @@
+<div class="main-package">
+  <div class="main-package-content">
+    <span>Experience</span>
+    <strong>{{prd_variation}}</strong>
+    <p>Starting at <small>Rs. 4000/-</small></p>
+  </div>
+
+  <div class="main-package-arrow"></div>
+</div>
+<!-- main package start end-->
+{% if variations  %}
+  
+<!-- other package start -->
+<div class="other-package-box">
+  <span>Other packages</span>
+  {% for var in variations %}
+    
+  <a href="{{var.url}}" class="other-package">
+    <p>Experience
+    <strong>{{var.label}}</strong></p>
+  </a>
+  {% endfor %}
+  
+</div>
+{% endif %}
+
+<!-- other package end -->

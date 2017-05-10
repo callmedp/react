@@ -1,0 +1,35 @@
+ <!-- Select products (optional) -->
+<div class="row">
+  <div class="select-product col-sm-12 col-md-8 mb-40">
+    <h2 class="detail-heading">Select products (optional)</h2>
+      <ul>
+        <li class="selected">
+          <label><input class="input" type="checkbox"> Education Verification</label> 
+          <strong>Rs. 1350/-</strong>
+        </li>
+        <li>
+          <label><input class="input" type="checkbox"> Emplyment verification</label> 
+          <strong>Rs. 700/-</strong>
+        </li>
+      </ul>
+  </div>
+</div>
+{% if countries %}
+  
+<!-- Select countries (optional) -->
+<div class="row">
+  <div class="select-country col-sm-12 col-md-8 mb-40">
+    <h2 class="detail-heading">Select countries (optional)</h2>
+      <ul>
+        {% for country in countries %}
+          
+        <li>
+          <label><input class="input" value='{{country.id}}' type="checkbox"> {{country.name}}</label> 
+        </li>
+        {% endfor %}
+        
+      </ul>
+  </div>
+</div>
+
+{% endif %}

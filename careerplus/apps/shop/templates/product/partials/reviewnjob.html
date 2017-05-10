@@ -1,0 +1,39 @@
+<ul>
+  <li>
+    <div class="rating-review-box">
+      {% for star in prd_rating_star %}
+        {% if star == "*" %}
+          <figure class="orange-rating-icon"></figure>
+        {% elif star == "+" %}
+          x
+        {% elif star == "-" %}
+          <figure class="grey-rating-icon"></figure>
+        {% endif %}
+      {% endfor %}
+        <strong>{{prd_rating}}/5</strong>  {{prd_num_rating}} ratings
+      
+    </div> 
+  </li>
+  <li>
+   <a href="#">
+    <figure class="review-icon"></figure>
+    <span><strong class="anchor-color">{{prd_num_rating}}</strong> reviews</span>
+   </a> 
+  </li>
+  <li>
+    <figure class="bought-icon"></figure>
+    <span><strong>{{prd_num_bought}}</strong> people bought</span>
+  </li>
+  <li>
+   <a href="#">
+    <figure class="course-jobs-icon"></figure>
+    <span><strong class="anchor-color">{{prd_num_jobs}}</strong> Jobs available</span>
+   </a> 
+  </li>
+  {% if prd_cert %}
+    <li>
+      <figure class="certification-icon"></figure>
+      <span>Certification</span>
+    </li>
+  {% endif %}
+</ul>
