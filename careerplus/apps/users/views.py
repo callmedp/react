@@ -8,7 +8,7 @@ from django.http import (HttpResponse,
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView
 from django.core.urlresolvers import reverse
-from cities_light.models import Country
+# from cities_light.models import Country
 
 from .forms import UserCreateForm, LoginForm, RegistrationForm, LoginApiForm
 from .mixins import RegistrationLoginApi

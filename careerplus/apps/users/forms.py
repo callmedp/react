@@ -1,7 +1,7 @@
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from django import forms
-from cities_light.models import Country
+# from cities_light.models import Country
 from django.db.models import Q
 
 from .models import User
@@ -72,8 +72,8 @@ class LoginApiForm(forms.Form):
 
 
 class RegistrationForm(forms.Form):
-    country_choices = [(m.id, m.name + '-'+ '('+ m.phone + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk
+    # country_choices = [(m.id, m.name + '-'+ '('+ m.phone + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    # indian_obj = Country.objects.filter(name='India', phone='91')[0].pk
 
     email = forms.CharField(
         max_length=30, required=True, widget=forms.TextInput(
@@ -86,8 +86,8 @@ class RegistrationForm(forms.Form):
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile No.'}), max_length=10)
 
-    country_code = forms.ChoiceField(label=("Country:"), required=True,
-        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
+    # country_code = forms.ChoiceField(label=("Country:"), required=True,
+    #     choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
 
     vendor_id = forms.CharField(
         max_length=30, required=True,

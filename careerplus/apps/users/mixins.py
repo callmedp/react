@@ -1,7 +1,7 @@
 import requests
 import json
 
-from cities_light.models import Country
+# from cities_light.models import Country
 
 
 class RegistrationLoginApi(object):
