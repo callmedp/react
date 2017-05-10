@@ -1,0 +1,257 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+    {% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+    {%  endblock meta_tags %}
+
+    {% block title %}
+       Round One : Job Referral from Top Companies, Employee Referral Program
+    {% endblock title %}
+    
+    {% block css %}
+        {{block.super}}
+        <link type="text/css" href="{% static 'console/css/microsite/roundone.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'console/css/microsite/multiple-select.css' %}" rel="stylesheet">
+    {% endblock css %}
+
+   {% block pageheading %}
+      <header class="roundone-header">
+        <div class="container">
+          <div class="call-us">Call us at 0124-3955001</div>
+          <!-- breadcrums -->
+          <ol class="breadcrumb mt-30">
+            <li><a href="#">Home</a></li>
+            <li class="active">roundone</li>
+          </ol>
+          <div class="roundone-caption">
+            <h1>Get Chance to Earn Job Referral <br> Employee Referral Program</h1>
+            <div class="">
+              <form class="form-inline" id="roundone_search" method="POST">
+                {% csrf_token %}
+                <div class="form-group custom-select">
+                <select class="form-control" id="id_search_location" 
+                multiple="multiple" name="locationlist[]">
+                  {% for location in location_list %}
+                      <option value="{{location}}">{{location}}</option>
+                  {% endfor %}
+                </select>
+                  
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Job title, keyword or company name" name="keyword">
+                </div>
+                <button type="button" class="find-jobs-btn btn" onclick="onClickRoundOneSearch();">Find jobs</button>
+                <span class="powered-by">Powered by</span>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+   {% endblock pageheading %}
+
+{% block container %}
+
+<!-- main section start -->
+<section class="container-fluid">
+
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+
+    <!-- How it works start -->
+    <h2 class="text-center text-uppercase ro-heading">How it works</h2>
+    <ul class="how-it-works">
+      <li>
+        <figure class="request-referral-icon"></figure>
+        <strong>Request a Referral</strong>
+        <article>Search 10,000+ jobs and request referrals from employees in those companies and departments.</article>
+      </li>
+      <li>
+        <figure class="speak-referrer-icon"></figure>
+        <strong>Speak with the Referrer</strong>
+        <article>We'll schedule a phone call between you and your referrer once they accept your referral request.</article>
+      </li>
+      <li>
+        <figure class="get-referred-icon"></figure>
+        <strong>Get Referred</strong>
+        <article>Prove your merit on the phone, and earn a referral.</article>
+      </li>
+      <li>
+        <figure class="interview-call-icon"></figure>
+        <strong>Get an interview call!</strong>
+        <article>Job referrals from Round One increase your chance of getting hired by ten times!</article>
+      </li>
+    </ul>
+
+
+    <!-- Why referrals start -->
+    <section class="container why-referrals text-center">
+      <h2 class="ro-heading">Why referrals over traditional approach</h2>
+
+      <div class="media">
+        <div class="media-left">
+          <figure class="referrals1-icon"></figure>
+        </div>
+        <div class="media-body media-middle">
+          More chances to get the job
+        </div>
+      </div>
+
+      <div class="media">
+        <div class="media-left">
+          <figure class="referrals2-icon"></figure>
+        </div>
+        <div class="media-body media-middle">
+          Faster to get interview call
+        </div>
+      </div>
+
+      <div class="media">
+        <div class="media-left">
+          <figure class="referrals3-icon"></figure>
+        </div>
+        <div class="media-body media-middle">
+          Fortune 500 companies available
+        </div>
+      </div>
+
+      <div class="media">
+        <div class="media-left">
+          <figure class="referrals4-icon"></figure>
+        </div>
+        <div class="media-body media-middle">
+          Quick feedback from referrers
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- job referrals start -->
+    <section class="container-fluid job-referrals-box">
+    <ul class="col-sm-6 col-md-6">
+      <li>
+        <strong>Get job referrals</strong>
+        Speak to all the referrers that accept your request over the next 6 months!
+      </li>
+      <li>
+        <strong>Speak to your referrers</strong>
+        Speak with referrers over the phone. Over 80% of conversations result in referrals
+      </li>
+      <li>
+        <strong>Receive feedback</strong>
+        After your call, referrers will provide written feedback on strengths, weaknesses and referral result.
+      </li>
+    </ul>
+
+    <div class="col-sm-5 col-md-4">
+      <div class="rotate">
+        <div class="job-referrals-banner">
+          Round One
+          <strong>job referral</strong>
+          <span>Rs.2999/-</span>
+          <a href="#">Buy now</a>
+        </div>
+      </div>
+      
+    </div>
+    </section>
+
+    <!-- Testimonials start -->
+    <section class="container testimonials">
+      <h2 class="text-center text-uppercase ro-heading">Testimonials</h2>
+
+      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+          {% for testimonial_q in testimonial_qs %}
+            {% if testimonial_q.name_of_user == "Sonali Yadav" %}
+              <div class="item active">
+                <img src="{{testimonial_q.image.url}}" alt="Shine" width="100" height="100">
+                <div class="carousel-caption">              
+                  {{testimonial_q.review|striptags}}
+                  <strong>"{{testimonial_q.name_of_user|striptags}}"</strong>
+                </div>
+              </div>
+            {% else %}
+              <div class="item">
+                <img src="{{testimonial_q.image.url}}" alt="Shine" width="100" height="100">
+                <div class="carousel-caption">
+                  {{testimonial_q.review|striptags}}
+                  <strong>"{{testimonial_q.name_of_user}}"</strong>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        </a>
+      </div>
+    </section>
+
+    <!-- faqs start -->
+    <div class="tp-bdr-faq"></div>
+    <section class="container">
+      <h2 class="text-center text-uppercase ro-heading">faqs</h2>
+        <div class="faq">
+            <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            {% for fag_q in faq_qs %}
+            {% if forloop.counter == 1 %}
+              <li class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne{{ forloop.counter }}">
+                  <h3 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne{{ forloop.counter }}">
+                      {{fag_q.question|striptags}} 
+                    </a>
+                  </h3>
+                </div>
+                <div id="collapseOne{{ forloop.counter }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne{{ forloop.counter }}">
+                  <div class="panel-body">
+                    {{fag_q.answer|striptags}} 
+                  </div>
+                </div>
+              </li>
+            {% else %}
+            <li class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne{{ forloop.counter }}">
+                  <h3 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne{{ forloop.counter }}">
+                      {{fag_q.question|striptags}} 
+                    </a>
+                  </h3>
+                </div>
+                <div id="collapseOne{{ forloop.counter }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne{{ forloop.counter }}">
+                  <div class="panel-body">
+                    {{fag_q.answer|striptags}} 
+                  </div>
+                </div>
+              </li>
+            {% endif %}
+            {% endfor %}
+            </ul>
+          </div>
+    </section>
+       
+    <!-- left content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+{% include 'basic/footer.html' %}
+{% endblock container %}
+{% block js %}
+   {{ block.super }} 
+    <script src="{% static 'console/js/microsite/multiple-select.js' %}">
+    </script>
+    <script src="{% static 'console/js/microsite/roundone.js' %}"></script>
+{% endblock js %}

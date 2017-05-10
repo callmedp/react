@@ -16,15 +16,21 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
+from filebrowser.sites import site
 from django.conf.urls.static import static
 
 urlpatterns = [
+    url(r'^grappelli/', include('grappelli.urls')),
+    url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^article/', include('blog.urls', namespace='blog')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    # partner url
+    url(r'^partner/', include('microsite.urls')),
+
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
