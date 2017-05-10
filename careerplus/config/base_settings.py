@@ -62,6 +62,8 @@ LOCAL_APPS = [
     'coupon',
     'partner',
     'shop',
+    'cart',
+    'order',
     'ajax',
     'blog',
 ]
