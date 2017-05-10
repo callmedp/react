@@ -100,7 +100,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
-                'widget': left.widget,
+                'widget': right.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
                 'user': user,

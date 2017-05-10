@@ -1,20 +1,20 @@
 {% extends "basic/base.html" %}
 {% load static %}
 {% load humanize %}
-    {% block meta_tags %}
+    {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_tags %}
+    {%  endblock meta_html %}
 
     {% block title %}
     CMS - Shine Learning
     {% endblock title %}
     
-    {% block css %}
+    {% block css_section %}
         {{block.super}}        
-        <link type="text/css" href="{% static 'console/css/cms/cms.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'console/css/cms/extra.css' %}" rel="stylesheet">
-    {% endblock css %}
+        <link type="text/css" href="{% static 'shinelearn/css/cms/cms.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/cms/extra.css' %}" rel="stylesheet">
+    {% endblock css_section %}
     
     {% block breadcrumb %}
     <section class="container">
@@ -104,9 +104,9 @@
 {% endblock container %}
   
 
-{% block js %}
+{% block js_section %}
    {{ block.super }}
-   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
-   <script src="{% static 'console/js/cms/cms.js' %}"></script>
+   <!--script src="{% static 'console/js/jquery.validate.js' %}"></script-->
+   <script src="{% static 'shinelearn/js/cms/cms.js' %}"></script>
 
-{% endblock js %}
+{% endblock js_section %}
