@@ -18,22 +18,19 @@ ATTRIBUTE_CHOICES = (
     (8, _("File")),
     (9, _("Image")),)
 
-ENTITY_CHOICES = (
+SERVICE_CHOICES = (
     (0, 'Default'),
     (1, 'Writing Services'),
     (2, 'Job Assistance Services'),
     (3, 'Courses'),
-    (4, 'Other Services'),
-    (5, 'Test Preparation'),
-    (6, 'Blog'),
-    (7, 'CMS'),)
+    (4, 'Other Services'),)
 
 CATEGORY_CHOICES = (
     (0, 'Default'),
     (1, 'Level 1'),
     (2, 'Level 2'),
     (3, 'Level 3'),
-    (3, 'Level 4'),)
+    (4, 'Level 4'),)
 
 PRODUCT_CHOICES = (
     (0, 'Simple'),
@@ -72,3 +69,17 @@ EXP_CHOICES = (
     (10, 'Flow 10'),
     (11, 'Flow 11'),
     (12, 'Flow 12'),)
+
+
+COURSE_TYPE_CHOICES = (
+    (0, 'Default'),
+    (1, 'Basic'),
+    (2, 'Intermediate'),
+    (3, 'Expert'),)
+
+
+MODE_CHOICES = (
+    (0, 'Default'),
+    (1, 'Online'),
+    (2, 'Classroom'),
+    (3, 'Online + Classroom'),)

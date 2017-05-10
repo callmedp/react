@@ -2,22 +2,25 @@ from django.views.generic import FormView, ListView, UpdateView
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
-from .forms import TagAddForm, CategoryAddForm, BlogAddForm, ArticleFilterForm
-from .models import Tag, Category, Blog
+from .forms import TagAddForm, CategoryAddForm, BlogAddForm, ArticleFilterForm,\
+    CommentUpdateForm, CommentActionForm
+from .models import Tag, Category, Blog, Comment
 from .mixins import PaginationMixin
 
 
-class BlogUpdateView(UpdateView):
-	model = Blog
-	template_name = 'blogadmin/article-update.html'
-	success_url = "/blog/admin/articles/"
+class CommentUpdateView(UpdateView):
+	model = Comment
+	template_name = 'blogadmin/comment-update.html'
+	success_url = "/article/admin/comment-to-moderate/"
 	http_method_names = [u'get', u'post']
-	form_class = BlogAddForm
+	form_class = CommentUpdateForm
 
 	def get(self, request, *args, **kwargs):
 		self.object = self.get_object()
-		return super(self.__class__, self).get(request, *args, **kwargs)
+		return super(self.__class__, self).get(request, args, **kwargs)
 
 	def get_context_data(self, **kwargs):
 		context = super(self.__class__, self).get_context_data(**kwargs)
@@ -31,12 +34,124 @@ class BlogUpdateView(UpdateView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				# form.save()
+				obj = form.save(commit=False)
+				if obj.is_published:
+					blog = obj.blog
+					blog.comment_moderated += 1
+					blog.save()
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
+				valid_form = self.form_valid(form)
+				messages.add_message(request, messages.SUCCESS,
+					'Comment %s Updated Successfully.' % (self.object.id))
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Comment %s Not Updated. due to %s' % (self.object.id, str(e)))
+				return self.form_invalid(form)
+		return self.form_invalid(form)
+
+
+class CommentListView(ListView, PaginationMixin):
+
+	context_object_name = 'comment_list'
+	template_name = 'blogadmin/comment-list.html'
+	model = Comment
+	http_method_names = [u'get', u'post']
+
+	def __init__(self):
+		self.page = 1
+		self.paginated_by = 50
+		self.query = ''
+
+	def get(self, request, *args, **kwargs):
+		self.page = request.GET.get('page', 1)
+		self.query = request.GET.get('query', '')
+		return super(self.__class__, self).get(request, args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		paginator = Paginator(context['comment_list'], self.paginated_by)
+		context.update(self.pagination(paginator, self.page))
+		alert = messages.get_messages(self.request)
+		context.update({
+			"query": self.query,
+			"action_form": CommentActionForm(),
+			"messages": alert,
+		})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		try:
+			comment_list = request.POST.getlist('table_records', [])
+			action_type = int(request.POST.get('action_type', '0'))
+			comment_objs = Comment.objects.filter(id__in=comment_list)
+			if action_type == 0:
+				messages.add_message(request, messages.ERROR, 'Please select valid action first')
+			elif action_type == 1:
+				for obj in comment_objs:
+					obj.is_published = True
+					obj.save()
+					blog = obj.blog
+					blog.comment_moderated += 1
+					blog.save()
+				messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments are published.')
+			elif action_type == 2:
+				for obj in comment_objs:
+					obj.is_removed = True
+					obj.save()
+				messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments removed.')
+		except Exception as e:
+			messages.add_message(request, messages.ERROR, str(e))
+
+		return HttpResponseRedirect(reverse('blog:blog-comment-moderate'))
+
+	def get_queryset(self):
+		queryset = super(self.__class__, self).get_queryset()
+		queryset = queryset.filter(is_published=False, is_removed=False)
+		try:
+			if self.query:
+				queryset = queryset.filter(Q(message__icontains=self.query))
+		except:
+			pass
+		return queryset
+
+
+class BlogUpdateView(UpdateView):
+	model = Blog
+	template_name = 'blogadmin/article-update.html'
+	success_url = "/article/admin/articles/"
+	http_method_names = [u'get', u'post']
+	form_class = BlogAddForm
+
+	def get(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		context = super(self.__class__, self).get(request, *args, **kwargs)
+		return context
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		alert = messages.get_messages(self.request)
+		context.update({
+			'messages': alert})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		form = self.get_form()
+		if form.is_valid():
+			try:
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
+
+				valid_form = self.form_valid(form)
+				form.save_m2m()
 				messages.add_message(request, messages.SUCCESS,
 					'Blog %s Updated Successfully.' % (self.object.id))
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Blog %s Not Updated.' % (self.object.id))
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -47,10 +162,12 @@ class BlogListView(ListView, PaginationMixin):
 	template_name = 'blogadmin/article-list.html'
 	model = Blog
 	http_method_names = [u'get', u'post']
-	page = 1
-	paginated_by = 50
-	query = ''
-	sel_status, sel_p_cat, sel_writer = '-1', '', ''
+
+	def __init__(self):
+		self.page = 1
+		self.paginated_by = 50
+		self.query = ''
+		self.sel_status, self.sel_p_cat, self.sel_writer = '-1', '', ''
 
 	def get(self, request, *args, **kwargs):
 		self.page = request.GET.get('page', 1)
@@ -83,7 +200,7 @@ class BlogListView(ListView, PaginationMixin):
 		queryset = super(self.__class__, self).get_queryset()
 		try:
 			if self.query:
-				queryset = queryset.filter(Q(name__icontains=self.query)|
+				queryset = queryset.filter(Q(name__icontains=self.query) |
 					Q(slug__icontains=self.query))
 		except:
 			pass
@@ -106,13 +223,13 @@ class BlogListView(ListView, PaginationMixin):
 		except:
 			pass
 
-		return queryset
+		return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by')
 
 
 class CategoryUpdateView(UpdateView):
 	model = Category
 	template_name = 'blogadmin/category-update.html'
-	success_url = "/blog/admin/categories/"
+	success_url = "/article/admin/categories/"
 	http_method_names = [u'get', u'post']
 	form_class = CategoryAddForm
 
@@ -132,12 +249,17 @@ class CategoryUpdateView(UpdateView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				# form.save()
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
+
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS,
 					'Category %s Updated Successfully.' % (self.object.id))
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Category Not Updated.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Category %s Not Updated. Due to %s' % (self.object.id, str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -148,9 +270,11 @@ class CategoryListView(ListView, PaginationMixin):
 	template_name = 'blogadmin/category-list.html'
 	model = Category
 	http_method_names = [u'get', u'post']
-	page = 1
-	paginated_by = 50
-	query = ''
+
+	def __init__(self):
+		self.page = 1
+		self.paginated_by = 50
+		self.query = ''
 
 	def get(self, request, *args, **kwargs):
 		self.page = request.GET.get('page', 1)
@@ -179,13 +303,13 @@ class CategoryListView(ListView, PaginationMixin):
 class TagUpdateView(UpdateView):
 	model = Tag
 	template_name = 'blogadmin/tag-update.html'
-	success_url = "/blog/admin/tags/"
+	success_url = "/article/admin/tags/"
 	http_method_names = [u'get', u'post']
 	form_class = TagAddForm
 
 	def get(self, request, *args, **kwargs):
 		self.object = self.get_object()
-		return super(TagUpdateView, self).get(request, *args, **kwargs)
+		return super(self.__class__, self).get(request, args, **kwargs)
 
 	def get_context_data(self, **kwargs):
 		context = super(self.__class__, self).get_context_data(**kwargs)
@@ -199,12 +323,15 @@ class TagUpdateView(UpdateView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS,
 					'Tag Updated Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Tag Not Updated.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Tag %s Not Updated. Due to %s' % (self.object.id, str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
@@ -215,9 +342,11 @@ class TagListView(ListView, PaginationMixin):
 	template_name = 'blogadmin/tag-list.html'
 	model = Tag
 	http_method_names = [u'get', u'post']
-	page = 1
-	paginated_by = 50
-	query = ''
+
+	def __init__(self):
+		self.page = 1
+		self.paginated_by = 50
+		self.query = ''
 
 	def get(self, request, *args, **kwargs):
 		self.page = request.GET.get('page', 1)
@@ -245,7 +374,7 @@ class TagListView(ListView, PaginationMixin):
 
 class BlogAddFormView(FormView):
 	template_name = "blogadmin/article-add.html"
-	success_url = "/blog/admin/article-add/"
+	success_url = "/article/admin/article-add/"
 	http_method_names = [u'get', u'post']
 	form_class = BlogAddForm
 
@@ -263,22 +392,24 @@ class BlogAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				blog = form.save()
+				blog = form.save(commit=False)
 				if request.user.is_authenticated():
 					blog.created_by = request.user
 					blog.last_modified_by = request.user
 					blog.save()
+				valid_form = self.form_valid(form)
+				form.save_m2m()
 				messages.add_message(request, messages.SUCCESS, 'Blog Created Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Blog Not Created.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Blog Not Created. Due to %s' % (str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
 
 class TagAddFormView(FormView):
 	template_name = "blogadmin/tag-add.html"
-	success_url = "/blog/admin/tag-add/"
+	success_url = "/article/admin/tag-add/"
 	http_method_names = [u'get', u'post']
 	form_class = TagAddForm
 
@@ -296,18 +427,23 @@ class TagAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				tag = form.save(commit=False)
+				if request.user.is_authenticated():
+					tag.created_by = request.user
+					tag.last_modified_by = request.user
+					tag.save()
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS, 'Tag Created Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Tag Not Created.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Tag Not Created. Due to %s' % (str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
 
 class CategoryAddFormView(FormView):
 	template_name = "blogadmin/category-add.html"
-	success_url = "/blog/admin/category-add/"
+	success_url = "/article/admin/category-add/"
 	http_method_names = [u'get', u'post']
 	form_class = CategoryAddForm
 
@@ -325,10 +461,15 @@ class CategoryAddFormView(FormView):
 		form = self.get_form()
 		if form.is_valid():
 			try:
-				form.save()
+				category = form.save(commit=False)
+				if request.user.is_authenticated():
+					category.created_by = request.user
+					category.last_modified_by = request.user
+					category.save()
+				valid_form = self.form_valid(form)
 				messages.add_message(request, messages.SUCCESS, 'Category Created Successfully.')
-				return self.form_valid(form)
-			except:
-				messages.add_message(request, messages.ERROR, 'Category Not Created.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Category Not Created. Due to %s' % (str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)

@@ -11,3 +11,10 @@ urlpatterns = [
     url(r'^admin/product/(?P<pk>\d+)/change/$', ProductUpdateView.as_view(),
     	name='product-update'),
 ]
+
+from . import views
+
+urlpatterns = [
+    url(r'^reviews/(?P<product_pk>[\w-]+)/$',
+        views.ProductReviewListView.as_view(), name='product-review'),
+]

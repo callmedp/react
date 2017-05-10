@@ -20,7 +20,7 @@
     <section class="container">
         <ol class="breadcrumb">
             <li><a href='/'>Home</a></li>
-            <li class="active">CMS</li>
+            <li class="active">{{page_heading}}</li>
         </ol>
     </section>
    {% endblock breadcrumb %}
@@ -68,10 +68,10 @@
                       <span class="error position-error"></span>
                     </div>
                     {% if user.is_authenticated %} 
-                       <input type='submit' class="submit-button" value="Comments">
+                       <input type='submit' class="submit-button" value="Submit">
                        
                    {% else %}
-                       <input type='button' class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm" value="Login to Comments">
+                       <input type='button' class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">
                    {% endif %}
                   </form>
                 </div>

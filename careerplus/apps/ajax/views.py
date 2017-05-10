@@ -3,13 +3,50 @@ import logging
 import datetime
 
 from django.views.generic import View, TemplateView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
 from shop.models import Category
+from blog.models import Blog, Comment
+
+
+class ArticleCommentView(View):
+	def post(self, request, *args, **kwargs):
+		status = 0
+		if request.is_ajax():
+			try:
+				message = request.POST.get('message').strip()
+				slug = request.POST.get('slug').strip()
+				blog = Blog.objects.get(slug=slug)
+				if request.user.is_authenticated() and message:
+					Comment.objects.create(blog=blog, message=message, created_by=request.user)
+					status = 1
+					blog.no_comment += 1
+					blog.save()
+			except:
+				pass
+			data = {"status": status}
+			return HttpResponse(json.dumps(data), content_type="application/json")
+		else:
+			return HttpResponseForbidden
+
+
+class ArticleShareView(View):
+	def get(self, request, *args, **kwargs):
+		if request.is_ajax():
+			article_slug = request.GET.get('article_slug')
+			try:
+				obj = Blog.objects.get(slug=article_slug)
+				obj.no_shares += 1
+				obj.update_score()
+				obj.save()
+			except:
+				pass
+			data = {"status": "success"}
+			return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class AjaxCommentLoadMoreView(View, LoadMoreMixin):

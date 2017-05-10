@@ -1,7 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.query import QuerySet
+
 from seo.models import AbstractAutoDate
+from partner.models import Vendor
+from ckeditor.fields import RichTextField
 
 
 class FAQuestionQuerySet(QuerySet):
@@ -21,35 +24,30 @@ class FAQuestionManager(models.Manager):
 
 
 class FAQuestion(AbstractAutoDate):
-    
-    STATUS_CHOICES = ((2, _('Active')),
-        (1, _('Inactive')), (0, _('Moderation')),)
+
+    STATUS_CHOICES = (
+        (2, _('Active')),
+        (1, _('Inactive')),
+        (0, _('Moderation')),)
 
     text = models.TextField(
         _('question'), help_text=_('The actual question itself.'))
-    answer = models.TextField(
-        _('answer'), blank=True, help_text=_('The answer text.'))
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
     status = models.IntegerField(
         _('status'),
         choices=STATUS_CHOICES,
         default=0,
         help_text=_("Only questions with their status set to 'Active' will be "
                     "displayed."))
-    protected = models.BooleanField(
-        _('is protected'),
-        default=False,
-        help_text=_("Set true if this question is only visible by authenticated users."))
     sort_order = models.IntegerField(
         _('sort order'), default=0,
         help_text=_('The order you would like the question to be displayed.'))
 
-    # created_by = models.ForeignKey(
-    #     User, verbose_name=_('created by'),
-    #     null=True, related_name="+")
-    # updated_by = models.ForeignKey(
-    #     User, verbose_name=_('updated by'),
-    #     null=True, related_name="+")  
-    
+    vendor = models.ForeignKey(
+        Vendor,
+        related_name='question_vendor',
+        null=True, blank=True)
     objects = FAQuestionManager()
     
     class Meta:
@@ -62,4 +60,32 @@ class FAQuestion(AbstractAutoDate):
 
     def is_active(self):
         return self.status == 2
+
+
+class Chapter(AbstractAutoDate):
+    heading = models.CharField(_('chapter'), max_length=255)
+    parent = models.ForeignKey(
+        'self', verbose_name=_('parentchapter'),
+        related_name='parentheading', null=True, blank=True)
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
+    
+    ordering = models.PositiveSmallIntegerField(
+        _('ordering'), default=1,
+        help_text=_(u'An integer used to order the chapter \
+            amongst others related to the same chapter. If not given this \
+            chapter will be last in the list.'))
+
+    vendor = models.ForeignKey(
+        Vendor,
+        related_name='chapter_vendor',
+        null=True, blank=True)
+    
+    class Meta:
+        ordering = ('heading',)
+        verbose_name = _('chapter')
+        verbose_name_plural = _('chapters')
+
+    def __str__(self):
+        return self.heading
 

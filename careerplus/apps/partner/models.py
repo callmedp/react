@@ -5,6 +5,10 @@ from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
 from meta.models import ModelMeta
 from shop.functions import get_upload_path_vendor
+from geolocation.models import (
+    Country,
+    State,
+    City,)
 
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -20,9 +24,24 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     mobile = models.CharField(
         _('Mobile Number'), blank=True,
         max_length=20, help_text=_('Mobile Number'))
-    # country = models.ForeignKey()
-    # state = models.ForeignKey()
-    # city = models.ForeignKey()
+    country = models.ForeignKey(
+        Country,
+        verbose_name=_('Country'),
+        on_delete=models.SET_NULL,
+        related_name='partnercountry',
+        null=True)
+    state = models.ForeignKey(
+        State,
+        verbose_name=_('State'),
+        on_delete=models.SET_NULL,
+        related_name='partnerstate',
+        null=True)
+    city = models.ForeignKey(
+        City,
+        verbose_name=_('City'),
+        on_delete=models.SET_NULL,
+        related_name='partnercity',
+        null=True)
     address = models.TextField(
         _('Address'), blank=True,
         default='', help_text=_('Address'))
@@ -35,7 +54,10 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     pan = models.CharField(
         _('PAN No.'), blank=True,
         max_length=20, help_text=_('PAN No.'))
-    employee = models.ManyToManyField(
+    website = models.CharField(
+        _('Website.'), blank=True,
+        max_length=20, help_text=_('Website'))
+    employees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through='VendorHierarchy',
         through_fields=('vendee', 'employee'),

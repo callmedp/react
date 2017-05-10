@@ -6,8 +6,9 @@ from django.core.files.storage import FileSystemStorage
 from ckeditor_uploader.fields import RichTextUploadingField
 from meta.models import ModelMeta
 
-from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
 from seo.models import AbstractSEO
+
+from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
 
 my_store = FileSystemStorage(location='careerplus/download/')
 
@@ -52,6 +53,9 @@ class IndexColumn(models.Model):
 		return '%s' % self.name
 
 
+from blog.models import Blog
+
+
 class Widget(AbstractCommonModel):
 	widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
 	heading = models.CharField(max_length=1024, null=True, blank=True)
@@ -76,6 +80,8 @@ class Widget(AbstractCommonModel):
 	iw = models.ForeignKey(IndexerWidget, null=True, blank=True,
 		verbose_name='Indexer Widget')
 
+	related_article = models.ManyToManyField(Blog, blank=True)
+
 	is_external = models.BooleanField(default=False)
 	is_pop_up = models.BooleanField(default=False)
 	is_active = models.BooleanField(default=False)
@@ -87,6 +93,13 @@ class Widget(AbstractCommonModel):
 		data_dict = {}
 		for field in self._meta.fields:
 			data_dict[field.name] = getattr(self, field.name)
+
+		if self.widget_type == 3:
+			related_arts = self.related_article.filter(status=1)
+			related_arts = related_arts[: 5]
+			data_dict.update({
+				"related_arts": related_arts,
+			})
 
 		if self.iw:
 			data_dict.update({

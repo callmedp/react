@@ -1,0 +1,46 @@
+<!-- Reviews container -->
+{% if prd_rv_page == 1 %}
+  
+<li>
+<section class="container">
+  <div class="row">
+    <div id="review" class="col-sm-12 col-md-8 reviews mb-40 scroll">
+      <h2>Reviews</h2>
+          <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
+          <ul id="id_review_list">
+{% endif %}
+          
+          {% for review in prd_review_list %}
+            <li class="box-panel">
+              <span class="review-heading">{{review.get_remarks}}</span>
+              <div class="rating-review-box">
+                  {% for star in review.get_ratings %}
+                    {% if star == "*" %}
+                      <figure class="orange-rating-icon"></figure>
+                    {% elif star == "+" %}
+                      x
+                    {% elif star == "-" %}
+                      <figure class="grey-rating-icon"></figure>
+                    {% endif %}
+                  {% endfor %}
+                  
+                  <strong>{{review.average_rating|floatformat:"1"}}/5</strong>
+              </div>
+              <article>{{review.content|safe}}</article>
+              <span class="editor">By <a>{{review.user_name}}</a>, {{review.created|date:"M d, Y" }}</span>
+            </li>
+          {% endfor %}
+          {% if prd_review_list.has_next %}
+            
+            <a style="cursor:pointer;text-decoration:none;"onclick="LoadMoreProductReview({{product.id}})" class="load-more" id="loadmorereviewbtn"> Load more</a>
+          {% endif %}
+{% if prd_rv_page == 1 %}
+
+            </ul>
+          
+          
+      </div>
+  </div>      
+</section>      
+</li>
+{%endif%}

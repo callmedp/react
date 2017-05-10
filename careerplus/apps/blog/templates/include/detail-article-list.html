@@ -1,0 +1,70 @@
+{% load static %}
+{% load humanize %}
+
+{% for article in page_obj %}
+<!-- content start -->
+  <div class="blog-detail-content">
+
+  <!-- page heading -->
+  <div class="page-header">
+    <h1>{{article.display_name}}</h1>
+    <div class="editor-comments-views">
+      <span>{{article.user.name}}, {{article.publish_date.date}}</span>
+      <span><a><figure class="comment-small-icon"></figure> <strong>{{article.comment_moderated}}</strong> comments</a></span>
+      <span><figure class="view-icon"></figure> <strong>{{article.no_views}}</strong></span>
+    </div>
+    <div class="social-login">
+      <a class="share-txt" href="#"><strong>{{article.no_shares}}</strong> <small>Shares</small></a>
+      <a class="facebook" target="_blank" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{article.get_absolute_url}}" article-slug="{{article.slug}}"></a>
+
+      <a class="linkedin" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url={{SITEDOMAIN}}{{article.get_absolute_url}}&title={{article.title}}&summary={{article.meta_desc}}&source={{SITEDOMAIN}}/"></a>
+
+      <a class="gplus" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{article.get_absolute_url}}"></a>
+    </div>
+  </div>
+
+  <article>
+    {{article.content|safe}}
+  </article>
+
+ {% with article.tags.all as tags %}
+  {% if tags %}
+  <!-- Tagged in box -->
+  <div class="tagged-in mt-40">
+    <strong>Tagged in</strong>
+      {% for tag in tags %}
+            {% if tag.is_active %}
+            <span><a href="{% url "blog:articles-by-tag" tag.slug %}">{{tag.name}}</a></span>
+            {% endif %}
+      {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+  
+  {% if article.allow_comment %}
+  <!-- comment box -->
+    <div class="comments-box mb-40 mt-40">
+      <a class="comments-links mb-40" role="button" onclick="openCommentBox('{{article.id}}')" id="total_comment{{article.id}}"> <span class="comments-icon mr-10"></span>{{article.comment_moderated}} Comments</a>
+
+      <div id="comment-box{{article.id}}" >
+
+      </div><!-- page comment-hide-->
+
+    </div>
+
+    {% endif %}
+
+  </div>
+  <!-- content end -->
+{% endfor %}
+
+
+{% if page_obj.has_next %}
+<div id="load_more" style='display:none'>
+    <div>
+    <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
+    <input type="hidden" id="pg_slug" name="slug" value="{{slug}}">
+    </div>
+</div>
+{% endif %}

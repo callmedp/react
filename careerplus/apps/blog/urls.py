@@ -1,11 +1,13 @@
 from django.conf.urls import url
 
 from .views import BlogLandingPageView, BlogLandingAjaxView,\
-    BlogCategoryListView, BlogDetailView
+    BlogCategoryListView, BlogDetailView, BlogDetailAjaxView,\
+    LoginToCommentView, ShowCommentBoxView, LoadMoreCommentView,\
+    BlogTagListView
 
 from .adminview import TagAddFormView, CategoryAddFormView, BlogAddFormView,\
     TagListView, TagUpdateView, CategoryListView, CategoryUpdateView,\
-    BlogListView, BlogUpdateView
+    BlogListView, BlogUpdateView, CommentListView, CommentUpdateView
 
 urlpatterns = [
     url(r'^$', BlogLandingPageView.as_view(), name='blog-landing'),
@@ -13,11 +15,34 @@ urlpatterns = [
     url(r'^category-wise-loading/$', BlogLandingAjaxView.as_view(),
     	name='blog-landing-load'),
 
-    url(r'^category/(?P<slug>[-\w]+)/$', BlogCategoryListView.as_view(),
+    url(r'^categories/(?P<slug>[-\w]+)/$', BlogCategoryListView.as_view(),
         name='articles-by-category'),
 
-    url(r'^detail/(?P<slug>[-\w]+)/$',
+    url(r'^tags/(?P<slug>[-\w]+)/$', BlogTagListView.as_view(),
+        name='articles-by-tag'),
+
+    url(r'^ajax/article-detail-loading/$', BlogDetailAjaxView.as_view(),
+        name='article-detail-loading'),
+
+    url(r'^show-comment-box/$', ShowCommentBoxView.as_view(),
+        name='article-show-comment-box'),
+
+    url(r'^load-more-comment/$', LoadMoreCommentView.as_view(),
+        name='article-load-more-comment'),
+
+    url(r'^(?P<slug>[-\w]+)/(?P<pk>\d+)/$',
         BlogDetailView.as_view(), name='articles-deatil'),
+
+    url(r'^login-to-comment/(?P<slug>[-\w]+)/$',
+        LoginToCommentView.as_view(), name='login-to-comment'),
+
+
+    url(r'^admin/comment-to-moderate/$', CommentListView.as_view(),
+        name='blog-comment-moderate'),
+
+    url(r'^admin/comment-to-moderate/(?P<pk>\d+)/change/$', CommentUpdateView.as_view(),
+        name='blog-comment-update'),
+
 
     url(r'^admin/tag-add/$', TagAddFormView.as_view(),
     	name='blog-tag-add'),

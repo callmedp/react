@@ -1,7 +1,11 @@
+import re
+
 from django.db import models
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django.urls import reverse
+# from django.utils.safestring import mark_safe
+
 
 from meta.models import ModelMeta
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -20,11 +24,58 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 	is_active = models.BooleanField(default=False)
 	priority = models.IntegerField(default=0)
 
+	_metadata_default = ModelMeta._metadata_default.copy()
+	_metadata_default['locale'] = 'dummy_locale'
+
+	_metadata = {
+        'title': 'get_title',
+        'description': 'get_description',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'publish_date',
+        'modified_time': 'last_modified_on',
+        'url': 'get_full_url'
+    }
+
 	class Meta:
 		ordering = ['-priority']
 
 	def __str__(self):
 		return self.name
+
+	def save(self, *args, **kwargs):
+		if not self.title:
+			self.title = self.name + ' – Career Articles @ Learning.Shine'
+		if not self.meta_desc:
+			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+		super(Category, self).save(*args, **kwargs)
+
+	def get_title(self):
+		title = self.title
+		if not self.title:
+			title = self.name
+		return title.strip()
+
+	def get_keywords(self):
+		return self.meta_keywords.strip().split(",")
+
+	def get_description(self):
+		description = self.meta_desc
+		return description.strip()
+
+	def get_full_url(self):
+		return self.build_absolute_uri(self.get_absolute_url())
+
+	def get_absolute_url(self):
+		return reverse('blog:articles-by-category', kwargs={'slug': self.slug})
+
+	def article_exists(self):
+		q = self.primary_category.filter(status=1) | self.secondary_category.filter(status=1)
+		if q.exists():
+			return True
+		return False
 
 
 class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
@@ -34,13 +85,56 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 	is_active = models.BooleanField(default=False)
 	priority = models.IntegerField(default=0)
 
+	_metadata_default = ModelMeta._metadata_default.copy()
+	_metadata_default['locale'] = 'dummy_locale'
+
+	_metadata = {
+        'title': 'get_title',
+        'description': 'get_description',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'publish_date',
+        'modified_time': 'last_modified_on',
+        'url': 'get_full_url'
+    }
+
 	def __str__(self):
 		return self.name
 
+	def save(self, *args, **kwargs):
+		if not self.title:
+			self.title = self.name + ' – Career Articles @ Learning.Shine'
+		if not self.meta_desc:
+			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+		super(Tag, self).save(*args, **kwargs)
+
+	def get_title(self):
+		title = self.title
+		if not self.title:
+			title = self.name
+		return title.strip()
+
+	def get_keywords(self):
+		return self.meta_keywords.strip().split(",")
+
+	def get_description(self):
+		description = self.meta_desc
+		return description.strip()
+
+	def get_full_url(self):
+		return self.build_absolute_uri(self.get_absolute_url())
+
+	def get_absolute_url(self):
+		return reverse('blog:articles-by-tag', kwargs={'slug': self.slug})
+
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
-	name = models.CharField(('Name'), max_length=200, blank=False,
+	display_name = models.CharField(('Name'), max_length=200, blank=True,
 		help_text=("Set title for blog."))
+	name = models.CharField(('Name'), max_length=200, blank=False,
+		help_text=("Set name for slug generation."))
 	p_cat = models.ForeignKey(Category, related_name='primary_category',
 		blank=False, null=False)
 	sec_cat = models.ManyToManyField(Category, related_name='secondary_category',
@@ -63,6 +157,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	allow_comment = models.BooleanField(default=False)
 
 	no_comment = models.PositiveIntegerField(default=0)
+	comment_moderated = models.PositiveIntegerField(default=0)
 	no_views = models.PositiveIntegerField(default=0)
 	no_shares = models.PositiveIntegerField(default=0)
 	score = models.DecimalField(max_digits=10, default=0,
@@ -75,8 +170,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	_metadata_default['locale'] = 'dummy_locale'
 
 	_metadata = {
-        'title': 'title',
-        'description': 'get_keywords',
+        'title': 'get_title',
+        'description': 'get_description',
         'og_description': 'get_description',
         'keywords': 'get_keywords',
         'published_time': 'publish_date',
@@ -89,6 +184,19 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 	def __str__(self):
 		return str(self.id) + '_' + self.name
+
+	def save(self, *args, **kwargs):
+		if not self.title:
+			self.title = self.name + ' – Learning.Shine'
+		if not self.meta_desc:
+			# desc = mark_safe(self.content)
+			desc = re.sub(re.compile('<.*?>'), '', self.content)
+			self.meta_desc = 'Read Article on ' + self.name + '.' + desc[:200]
+		if not self.display_name:
+			self.display_name = self.name
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+		super(Blog, self).save(*args, **kwargs)
 
 	def get_title(self):
 		title = self.title
@@ -107,7 +215,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 		return self.build_absolute_uri(self.get_absolute_url())
 
 	def get_absolute_url(self):
-		return reverse('blog:articles-deatil', kwargs={'slug': self.slug})
+		return reverse('blog:articles-deatil', kwargs={'slug': self.slug, 'pk': self.pk})
 
 	def update_score(self):
 		score = Decimal(self.no_views) * Decimal(0.9)
@@ -128,6 +236,9 @@ class Comment(AbstractCommonModel):
 	is_removed = models.BooleanField(default=False)
 	replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
 		blank=True, related_name="comments")
+
+	class Meta:
+		ordering = ['-created_on', ]
 
 	def __str__(self):
 		return str(self.id) + '_' + str(self.created_on.date())

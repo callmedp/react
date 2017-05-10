@@ -1,9 +1,11 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.template.loader import render_to_string
+from django.middleware.csrf import get_token
 
 
 class BlogMixin(object):
 	def scrollPagination(self, paginated_by=3, page=1, object_list=None):
-		data = {}
+		# data = {}
 		paginator = Paginator(object_list, paginated_by)
 		try:
 			page_obj = paginator.page(page)
@@ -11,21 +13,19 @@ class BlogMixin(object):
 			page_obj = paginator.page(1)
 		except EmptyPage:
 			page_obj = paginator.page(paginator.num_pages)  # for out range deliver last page
+		return page_obj
 
-		article_list = {}
-		for p in page_obj:
-			top_articles = p.primary_category.filter(status=1)
-			if top_articles.count() > 3:
-				top_articles = top_articles[: 3]
-			elif top_articles.exists():
-				top_articles = top_articles
 
-			if top_articles:
-				article_list.update({
-					p: list(top_articles),
-				})
-		data.update({'page_obj': page_obj, 'article_list': article_list})
-		return data
+class LoadCommentMixin(object):
+	def pagination_loadmore(self, page, paginated_by, comment_list):
+		paginator = Paginator(comment_list, paginated_by)
+		try:
+			comments = paginator.page(page)
+		except PageNotAnInteger:
+			comments = paginator.page(1)
+		except EmptyPage:
+			comments = paginator.page(paginator.num_pages)  # If page is out of range (e.g. 9999), deliver last page of results.
+		return comments
 
 
 class PaginationMixin(object):

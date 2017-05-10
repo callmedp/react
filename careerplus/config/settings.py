@@ -3,7 +3,7 @@ from .base_settings import *  # noqa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 SITE_ID = 1
 SITE_DOMAIN = '127.0.0.1:8000'
 
@@ -57,6 +57,7 @@ META_SITE_PROTOCOL = 'https'
 META_SITE_DOMAIN = 'learning.shine.com'
 META_SITE_TYPE = 'Website'
 META_SITE_NAME = 'ShineLearning'
+META_USE_SITES = False
 META_DEFAULT_KEYWORDS = ['E-Learning', 'Skills', 'Resume', 'India']
 META_USE_OG_PROPERTIES = True
 META_USE_TWITTER_PROPERTIES = True
@@ -72,3 +73,8 @@ META_TWITTER_SITE = '@FooBlag'
 META_TWITTER_AUTHOR = '@FooBlag'
 META_GPLUS_TYPE = 'Website'
 META_GPLUS_AUTHOR = '+FooBar'
+
+
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+CITIES_LIGHT_APP_NAME = 'geolocation'

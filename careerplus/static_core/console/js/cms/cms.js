@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function() {
 
     $(document).on('click', '#id_download_button', function(event) {
         event.preventDefault();
@@ -54,7 +54,7 @@ $(function() {
                 mobile_number:{
                     required:"Mobile Number is Mandatory",
                     number:"Enter only number",
-                    maxlength: "Please enter below 15 digits",
+                    maxlength: "Please enter less than 15 digits",
                     minlength: "Please enter atleast 5 digits"
                 },
                 
@@ -125,25 +125,43 @@ $(function() {
     });
 
     $('#callback_form').validate({
+        // submitHandler: function(form) {
+        //     console.log("hii");
+        //     var formData = $("#callback_form").serialize();
+        //     console.log(formData);
+        //     $.ajax({
+        //         url : "/cms/lead-management/",
+        //         type: "POST",
+        //         data : formData,
+        //         success: function(data, textStatus, jqXHR)
+        //         {
+        //             alert('Your Query Submitted Successfully.');
+        //         },
+        //         error: function (jqXHR, textStatus, errorThrown)
+        //         {
+        //             window.location.reload(); 
+        //         }
+        //     });  
+        // },
         rules:{
-                name:{
-                	required: true,
-                    maxlength: 80,
-                },
-                mobile_number:{
-                    required: true,
-                    number: true,
-                    minlength: 5,
-                    maxlength: 15,                        
-                },
-                message_box:{
-                	required: true,
-                	maxlength: 500,
-                },
+            name:{
+                required: true,
+                maxlength: 80,
             },
+            mobile_number:{
+                required: true,
+                number: true,
+                minlength: 5,
+                maxlength: 15,                        
+            },
+            message_box:{
+                required: true,
+                maxlength: 300,
+            },
+        },
         messages:{
             name:{
-            	required: "Name is Mandatory.",
+                required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters.",
             },
             mobile_number:{
@@ -151,6 +169,10 @@ $(function() {
                 number:"Enter only number",
                 maxlength: "Please enter below 15 digits",
                 minlength: "Please enter atleast 5 digits",
+            },
+            message_box:{
+                required: "Message is required.",
+                maxlength: "Enter less than 300 characters.",
             },
             
         },
@@ -163,27 +185,28 @@ $(function() {
         errorPlacement: function(error, element){
             $(element).siblings('.error').html(error.text());
         } 
-	});
-
-	
-	$('#id_callback').click(function(){
-		if ( $("#callback_form").valid()) {
-			var formData = $("#callback_form").serialize();
-			$.ajax({
-	            url : "/cms/lead-management/",
-	            type: "POST",
-	            data : formData,
-	            success: function(data, textStatus, jqXHR)
-	            {
-	            	alert('Your Query Submitted Successfully.');
-	            },
-	            error: function (jqXHR, textStatus, errorThrown)
-	            {
-	                window.location.reload(); 
-	            }
-	        }); 
-		}  
     });
+
+    $('#id_callback').click(function() {
+        flag = $("#callback_form").valid();
+        if (flag){
+            var formData = $("#callback_form").serialize();
+            $.ajax({
+                url : "/cms/lead-management/",
+                type: "POST",
+                data : formData,
+                success: function(data, textStatus, jqXHR)
+                {
+                    alert('Your Query Submitted Successfully.');
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Something went wrong. Try again later.');
+                }
+            });
+        }
+    });
+
 
     $(document).on('click', '#comment_load_more', function(event) {
         var formData = $("#loadform").serialize();

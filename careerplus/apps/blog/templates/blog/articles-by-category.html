@@ -1,36 +1,328 @@
 {% extends "basic/base.html" %}
 {% load static %}
 {% load humanize %}
+{% load thumbnail %}
     {% block meta_tags %}
         {{block.super}}
         {% include 'meta/meta.html' %}
     {%  endblock meta_tags %}
 
     {% block title %}
-       Blogs
+       {{category.name}} – Career Articles @ Learning.Shine
     {% endblock title %}
     
     {% block css %}
-        {{block.super}}     
-        
+        {{block.super}}  
+        <link type="text/css" href="{% static 'console/css/blog/blog.css' %}" rel="stylesheet"> 
     {% endblock css %}
 
     
     {% block breadcrumb %}
-        
+        <section class="container">
+            <ol class="breadcrumb">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </section>
     {% endblock breadcrumb %}
 
    {% block pageheading %}
        <section class="container">
-          <div class="page-header">
-            <h1 class="blog-heading">Articles</h1>
-          </div>
+            <div class="page-header">
+                <h1>{{category.name}}</h1>
+            </div>
         </section>
    {% endblock pageheading %}
 
 {% block container %}
-    
+    <!-- main section start -->
+<section class="container">
 
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+      <div class="col-md-9 col-sm-12">
+
+      <ul class="recently-popularity-tabs" role="tablist">
+        <li role="presentation"  class="{% if active_tab == 0 %} active {% endif %}"><a href="#recently" aria-controls="recently" role="tab" data-toggle="tab">Recent</a></li>
+
+        <li role="presentation" class="{% if active_tab == 1 %} active {% endif %}" ><a href="#popularity" aria-controls="popularity" role="tab" data-toggle="tab">Popularity</a></li>
+      </ul>
+
+      <div class="tab-content">
+
+        <!-- Recently tab content -->
+        <div role="tabpanel" class="tab-pane {% if active_tab == 0 %} active {% endif %}" id="recently">
+          {% for obj in recent_page %}
+              <div class="box-panel article-listing mb-30">
+                <div class="media">
+                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
+                   {% if obj.image %}
+                    <figure class="media-left">
+                      {% thumbnail obj.image "171x113" crop="center" as im %}
+                            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
+                      {% endthumbnail %}
+                      <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
+                    </figure>
+                    {% endif %}
+                    <div class="media-body">
+                      <h3 class="media-heading">{{obj.display_name}}</h3>
+                      <article>{{obj.content|striptags|safe|truncatechars:300}}</article>
+                      <span class="view-forward"><figure class="forward-icon"></figure> {{obj.comment_moderated}} <figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
+                      <span class="editor">{{obj.user.name}}, {{obj.publish_date.date}}</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+          {% endfor %}
+           
+          <!-- Recently tab pagination -->
+          {% block main_pagination %}
+                {% if recent_page %}
+                    <nav class="text-center" aria-label="Page navigation">
+                        <ul class="pagination">
+                        {% if recent_page.has_previous %}
+                            <li class="paginate_button previous">
+                                <a href="?page={{ recent_page.previous_page_number }}&tab={{left_tab}}" >prev</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in recent_begin %}
+                            <li class="paginate_button {% ifequal recent_page.number page_number %} active disable {% endifequal %} ">
+                                <a href="?page={{ page_number }}&tab={{left_tab}}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if recent_middle %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in recent_middle %}
+                                <li class="paginate_button {% ifequal recent_page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}&tab={{left_tab}}" >{{ page_number }}</a>
+                                    
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if recent_end %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in recent_end %}
+                                <li class="paginate_button {% ifequal recent_page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}&tab={{left_tab}}" >{{ page_number }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if recent_page.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?page={{ recent_page.next_page_number }}&tab={{left_tab}}" >next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                  </nav>
+               {% endif %}
+
+            {% endblock main_pagination %}
+     
+          <!--nav class="text-center" aria-label="Page navigation">
+            <ul class="pagination">
+              <li>
+                <a class="hidden" href="#" aria-label="Previous">
+                  <span aria-hidden="true">Previous</span>
+                </a>
+              </li>
+              <li class="active"><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav-->
+        </div>
+        <!-- Recently tab content end -->
+
+        <!-- popularity tab content -->
+        <div role="tabpanel" class="tab-pane {% if active_tab == 1 %} active {% endif %}" id="popularity">
+           {% for obj in pop_page %}
+               <div class="box-panel article-listing mb-30">
+                <div class="media">
+                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
+                  {% if obj.image %}
+                    <figure class="media-left">
+                      {% thumbnail obj.image "171x113" crop="center" as im %}
+                            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
+                      {% endthumbnail %}
+                      <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
+                    </figure>
+                    {% endif %}
+                    <div class="media-body">
+                      <h3 class="media-heading">{{obj.display_name}}</h3>
+                      <article>{{obj.content|striptags|safe|truncatechars:300}}</article>
+                      <span class="view-forward"><figure class="forward-icon"></figure>{{obj.comment_moderated}}<figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
+                      <span class="editor">{{obj.user.name}}, {{obj.publish_date.date}}</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+          {% endfor %}
+
+
+          <!-- start popular pagination -->
+            {% if pop_page %}
+                <nav class="text-center" aria-label="Page navigation">
+                    <ul class="pagination">
+                    {% if pop_page.has_previous %}
+                        <li class="paginate_button previous">
+                            <a href="?page={{ pop_page.previous_page_number }}&tab={{right_tab}}" >prev</a>
+                        </li>
+                    {% endif %}
+
+                    {% for page_number in pop_begin %}
+                        <li class="paginate_button {% ifequal pop_page.number page_number %} active disable {% endifequal %} ">
+                            <a href="?page={{ page_number }}&tab={{right_tab}}" >{{ page_number }}</a>
+                        </li>
+                    {% endfor %}
+
+                    {% if pop_middle %}
+                        <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                        {% for page_number in pop_middle %}
+                            <li class="paginate_button {% ifequal pop_page.number page_number %} active disable {% endifequal %}">
+                                <a href="?page={{ page_number }}&tab={{right_tab}}">{{ page_number }}</a>
+                                
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if pop_end %}
+                        <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                        {% for page_number in pop_end %}
+                            <li class="paginate_button {% ifequal pop_page.number page_number %} active disable {% endifequal %}">
+                                <a href="?page={{ page_number }}&tab={{right_tab}}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if pop_page.has_next %}
+                        <li class="paginate_button next">
+                            <a href="?page={{ pop_page.next_page_number }}&tab={{right_tab}}" >next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+              </nav>
+           {% endif %}
+           <!-- popular pagination end -->
+          
+        </div>
+        <!-- popularity tab content end -->
+
+      </div>
+      
+
+      
+
+
+
+
+      </div>  
+    <!-- left content end -->
+
+    <!-- right content start -->
+    <div class="col-md-3 col-sm-12 mt-45">
+
+      {% if categories %}
+      <!-- Categories -->
+      <div class="categories box-panel mb-40">
+        <h2 class="heading-right">Categories</h2>
+        <ul>
+        {% for cat in categories %}
+            {% if cat.article_exists %}
+            <li><a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        <a href="{% url "blog:blog-landing" %}" class="view-article text-right db mt-10">View more</a>
+      </div>
+      {% endif %}
+
+      {% if pop_articles %}
+      <!-- Popular & Recent -->
+      <div class="recent-popular-tabs box-panel mb-40">
+        <ul role="tablist">
+         <li role="presentation" class="active"><h2><a href="#popular" aria-controls="popular" role="tab" data-toggle="tab">Popular</a></h2></li>
+         <li role="presentation" class=""><h2><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent</a></h2></li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Popular tab -->
+          <div role="tabpanel" class="tab-pane active" id="popular">
+
+            {% for art in pop_articles %}
+            <div class="media">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
+              {% if art.image %}
+                    <figure class="media-left">
+                      {% thumbnail art.image "98x64" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                      {% endthumbnail %}
+                      <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
+                    </figure>
+                {% endif %}
+                <div class="media-body">
+                  {{art.display_name}}
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+
+          </div>
+
+          <!-- recent tab -->
+          <div role="tabpanel" class="tab-pane" id="recent">
+
+            {% for art in recent_articles %}
+            <div class="media">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
+              {% if art.image %}
+                    <figure class="media-left">
+                      {% thumbnail art.image "98x64" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                      {% endthumbnail %}
+                      <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
+                    </figure>
+              {% endif %}
+                <div class="media-body">
+                  {{art.display_name}}
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+            
+          </div>
+        </div>
+        
+      </div>
+      {% endif %}
+
+
+
+    </div>
+    <!-- right content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
 {% endblock container %}
   
 

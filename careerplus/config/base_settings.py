@@ -27,6 +27,8 @@ SECRET_KEY = 'g58#1(xdr&s%t@$erwjosc@nuiuy4j)9#g+*jhr#m1o6c)zws7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+TEMPLATE_DEBUG = False  # django sorl required
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -45,7 +47,9 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'meta',
+    'cities_light',
     'sorl.thumbnail',
+    'requests'
 ]
 
 # Apps specific for this project go here.
@@ -57,10 +61,14 @@ LOCAL_APPS = [
     'seo',
     'ajax',
     'skillpage',
+    'review',
+    'geolocation',
     'console',
     'coupon',
     'partner',
     'shop',
+    'cart',
+    'order',
     'blog',
 ]
 
@@ -137,7 +145,7 @@ STATICFILES_FINDERS = (
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
+CKEDITOR_JQUERY_URL = 'shinelearning/js/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
