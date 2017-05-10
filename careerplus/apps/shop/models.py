@@ -56,6 +56,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     graph_image = models.ImageField(
         _('Graph Image'), upload_to=get_upload_path_category,
         blank=True, null=True)
+    image = models.ImageField(
+        _('Image'), upload_to=get_upload_path_category,
+        blank=True, null=True)
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_category,
         blank=True, null=True)
@@ -142,6 +145,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_absolute_url(self):
         # return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug})
         # return '/' #reverse('category-listing', kwargs={'slug': self.slug})
+        return
 
     def add_relationship(self, category, relation=0):
         relationship, created = CategoryRelationship.objects.get_or_create(
