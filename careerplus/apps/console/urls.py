@@ -26,4 +26,11 @@ urlpatterns += [
         shop_view.AddFaqView.as_view(), name='faquestion-add'),
     url(r'^chapter/add/$',
         shop_view.AddChapterView.as_view(), name='chapter-add'),
+    url(r'^keyword/add/$',
+        shop_view.AddKeywordView.as_view(), name='keyword-add'),
+    url(r'^attribute/add/$',
+        shop_view.AddAttributeView.as_view(), name='attribute-add'),
+    url(r'^attributeoption/add/$',
+        shop_view.AddAttributeOptionView.as_view(), name='attributeoption-add'),
+       
 ]

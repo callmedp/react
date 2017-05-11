@@ -475,3 +475,5 @@ class ChangeCategorySkillForm(forms.ModelForm):
         category = super(ChangeCategorySkillForm, self).save(
             commit=True, *args, **kwargs)
         return category
+
+

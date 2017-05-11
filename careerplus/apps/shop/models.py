@@ -14,6 +14,7 @@ from meta.models import ModelMeta
 from partner.models import Vendor
 from ckeditor.fields import RichTextField
 from faq.models import FAQuestion, Chapter
+from geolocation.models import Country, Currency
 
 from .functions import (
     get_upload_path_category,
@@ -282,6 +283,11 @@ class CategoryRelationship(AbstractAutoDate):
             'pri': self.related_from,
             'sec': self.related_to}
 
+    class Meta:
+        unique_together = ('related_from', 'related_to')
+        verbose_name = _('Relationship')
+        verbose_name_plural = _('Relationships')
+
 
 class AttributeOptionGroup(models.Model):
     name = models.CharField(_('Name'), max_length=128)
@@ -357,26 +363,6 @@ class Keyword(AbstractAutoDate):
     def __str__(self):
         return self.name
 
-
-class Currency(AbstractAutoDate):
-    name = models.CharField(
-        _('Name'), max_length=100,
-        help_text=_('Name of Currency'))
-    value = models.PositiveIntegerField(
-        _('Value'), help_text=_('Integer Value'))
-    # country = models.ManytoManyField()
-    exchange_rate = models.DecimalField(
-        _('Exchange'),
-        max_digits=8, decimal_places=2,
-        default=0.0)
-    offset = models.DecimalField(
-        _('Offset'),
-        max_digits=8, decimal_places=2,
-        default=0.0)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
 
 
 class AbstractProduct(AbstractAutoDate, AbstractSEO):
@@ -458,6 +444,11 @@ class Product(AbstractProduct, ModelMeta):
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
+    countries = models.ManyToManyField(
+        Country,
+        verbose_name=_('Country Available'),
+        related_name='countryavailable',
+        blank=True)
     variation = models.ManyToManyField(
         'self',
         through='VariationProduct',
@@ -749,6 +740,11 @@ class VariationProduct(AbstractAutoDate):
             'pri': self.main,
             'sec': self.sibling}
 
+    class Meta:
+        unique_together = ('main', 'sibling')
+        verbose_name = _('Product Variation')
+        verbose_name_plural = _('Product Variations')
+
 
 class RelatedProduct(AbstractAutoDate):
     primary = models.ForeignKey(
@@ -808,7 +804,6 @@ class ChildProduct(AbstractAutoDate):
         return _("%(pri)s to '%(sec)s'") % {
             'pri': self.father,
             'sec': self.children}
-
 
 # class ProductOffer(AbstractAutoDate):
 #     offer = models.ForeignKey(

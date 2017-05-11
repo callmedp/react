@@ -623,16 +623,15 @@ if (typeof NProgress != 'undefined') {
 	  	
 	  };
 	  
-	  function init_topic_add() {
-	  	if($('#add-topic-form').length > 0){
+	  function init_keyword_add() {
+	  	if($('#add-keyword-form').length > 0){
 	  		var parsleyConfig = {
 		        errorsContainer: function(parsleyField) {
 		            var $errfield = parsleyField.$element.parent().siblings('.alert');
 		            return $errfield;
 		        },
 		    };
-			
-		  	$('#add-topic-form').parsley(parsleyConfig).on('field:validated', function() {
+			$('#add-keyword-form').parsley(parsleyConfig).on('field:validated', function() {
 				if (this.validationResult === true) {
 			      this.$element.closest('.item').removeClass('bad');
 
@@ -662,7 +661,8 @@ if (typeof NProgress != 'undefined') {
 		init_SmartWizard();
 		init_faq_add();
 		init_chapter_add();
-		init_topic_add();
+		init_keyword_add();
+
 	});	
 
 

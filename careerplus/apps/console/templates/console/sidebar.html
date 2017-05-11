@@ -12,13 +12,16 @@
       </li>
       <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-          <li><a href="{% url 'console:product-add' %}">Add Product</a></li>
+          <li><a href="{% url 'console:product-add' %}">Product</a></li>
+          <li><a href="{% url 'console:attributeoption-add' %}">Attribute Option</a></li>
+          <li><a href="{% url 'console:attribute-add' %}">Attribute</a></li>
           </ul>
       </li>
-      <li><a><i class="fa fa-edit"></i> Content <span class="fa fa-chevron-down"></span></a>
+      <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
           <li><a href="{% url 'console:faquestion-add' %}">Faq</a></li>
           <li><a href="{% url 'console:chapter-add' %}">Chapter</a></li>
+          <li><a href="{% url 'console:keyword-add' %}">Keyword</a></li>
           </ul>
       </li>
 

@@ -15,7 +15,10 @@ from .shop_form import (
     ChangeCategorySEOForm,
     CategoryRelationshipForm,
     RelationshipInlineFormSet,
-    ChangeCategorySkillForm)
+    ChangeCategorySkillForm,)
+from shop.forms import (
+    AddKeywordForm, AddAttributeOptionForm,
+    AddAttributeForm)
 from faq.forms import AddFaqForm, AddChapterForm
 
 @Decorate(check_permission('shop.add_category'))
@@ -398,34 +401,99 @@ class AddChapterView(FormView):
         return super(AddChapterView, self).form_invalid(form)
 
 
-# @Decorate(check_permission('faq.add_option'))
-# class AddTopicView(FormView):
-#     form_class = AddTopicForm
-#     template_name = 'console/shop/add_topic.html'
-#     http_method_names = ['get', 'post']
-#     success_url = reverse_lazy('console:topic-add')
+@Decorate(check_permission('shop.add_keyword'))
+class AddKeywordView(FormView):
+    form_class = AddKeywordForm
+    template_name = 'console/shop/add_keyword.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:keyword-add')
 
-#     def get(self, request, *args, **kwargs):
-#         return super(AddTopicView, self).get(
-#             request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        return super(AddKeywordView, self).get(
+            request, *args, **kwargs)
 
-#     def get_context_data(self, **kwargs):
-#         context = super(AddTopicView, self).get_context_data(**kwargs)
-#         alert = messages.get_messages(self.request)
-#         context.update({'messages': alert})
-#         return context
+    def get_context_data(self, **kwargs):
+        context = super(AddKeywordView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
 
-#     def form_valid(self, form):
-#         form.save()
-#         messages.success(
-#             self.request,
-#             "You have successfully added a topic"
-#         )
-#         return super(AddTopicView, self).form_valid(form)
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a Keyword"
+        )
+        return super(AddKeywordView, self).form_valid(form)
 
-#     def form_invalid(self, form):
-#         messages.error(
-#             self.request,
-#             "Your submission has not been saved. Try again."
-#         )
-#         return super(AddTopicView, self).form_invalid(form)
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your submission has not been saved. Try again."
+        )
+        return super(AddKeywordView, self).form_invalid(form)
+
+
+@Decorate(check_permission('shop.add_attributeoption'))
+class AddAttributeOptionView(FormView):
+    form_class = AddAttributeOptionForm
+    template_name = 'console/shop/add_attribute_option.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:attributeoption-add')
+
+    def get(self, request, *args, **kwargs):
+        return super(AddAttributeOptionView, self).get(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddAttributeOptionView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a Keyword"
+        )
+        return super(AddAttributeOptionView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your submission has not been saved. Try again."
+        )
+        return super(AddAttributeOptionView, self).form_invalid(form)
+
+@Decorate(check_permission('shop.add_attribute'))
+class AddAttributeView(FormView):
+    form_class = AddAttributeForm
+    template_name = 'console/shop/add_attribute.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:attributeoption-add')
+
+    def get(self, request, *args, **kwargs):
+        return super(AddAttributeView, self).get(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddAttributeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a Keyword"
+        )
+        return super(AddAttributeView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your submission has not been saved. Try again."
+        )
+        return super(AddAttributeView, self).form_invalid(form)
