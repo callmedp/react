@@ -437,7 +437,7 @@ class AddKeywordView(FormView):
 @Decorate(check_permission('shop.add_attributeoption'))
 class AddAttributeOptionView(FormView):
     form_class = AddAttributeOptionForm
-    template_name = 'console/shop/add_attribute_option.html'
+    template_name = 'console/shop/add_attributeoption.html'
     http_method_names = ['get', 'post']
     success_url = reverse_lazy('console:attributeoption-add')
 

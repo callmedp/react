@@ -643,6 +643,28 @@ if (typeof NProgress != 'undefined') {
 	  	
 	  };
 
+	  function init_attribute_add() {
+	  	if($('#add-attribute-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#add-attribute-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  
+
 	   
 	   
 	$(document).ready(function() {
@@ -662,6 +684,7 @@ if (typeof NProgress != 'undefined') {
 		init_faq_add();
 		init_chapter_add();
 		init_keyword_add();
+		init_attribute_add();
 
 	});	
 
