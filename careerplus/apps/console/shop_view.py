@@ -14,7 +14,8 @@ from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
     ChangeCategorySEOForm,
     CategoryRelationshipForm,
-    RelationshipInlineFormSet)
+    RelationshipInlineFormSet,
+    ChangeCategorySkillForm)
 from faq.forms import AddFaqForm, AddChapterForm
 
 @Decorate(check_permission('shop.add_category'))
@@ -104,6 +105,8 @@ class ChangeCategoryView(DetailView):
             instance=self.get_object())
         seo_change_form = ChangeCategorySEOForm(
             instance=self.get_object())
+        skill_change_form = ChangeCategorySkillForm(
+            instance=self.get_object())
         if self.object.type_level in [2, 3, 4]:
             relationship_formset = CategoryRelationshipFormSet(
                 instance=self.get_object(),
@@ -112,7 +115,8 @@ class ChangeCategoryView(DetailView):
         context.update({
             'messages': alert,
             'form': main_change_form,
-            'seo_form': seo_change_form})
+            'seo_form': seo_change_form,
+            'skill_form': skill_change_form})
         return context
 
     def post(self, request, *args, **kwargs):
@@ -160,6 +164,26 @@ class ChangeCategoryView(DetailView):
                             messages.error(
                                 self.request,
                                 "Category SEO Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_category.html"
+                                ], context)
+                    elif slug == 'skill':
+                        form = ChangeCategorySkillForm(
+                            request.POST, request.FILES, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Category Skill Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:category-change', kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'skill_form': form})
+                            messages.error(
+                                self.request,
+                                "Category Skill Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_category.html"

@@ -358,7 +358,7 @@ if (typeof NProgress != 'undefined') {
 			  
 			if(typeof $.fn.tagsInput !== 'undefined'){	
 			 
-			$('#tags_1').tagsInput({
+			$('#id_career_outcomes').tagsInput({
 			  width: 'auto'
 			});
 			
@@ -518,6 +518,54 @@ if (typeof NProgress != 'undefined') {
 	  	
 	  };
 
+	  function init_category_relation_change() {
+	  	if($('#change-category-relation-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+			$('#change-category-relation-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});/*.on('form:submit', function() {
+			    console.log('error');
+	  		    return false; // Don't submit form for this demo
+			  });*/
+		};	  
+	  	
+	  };
+
+	function init_category_skill_change() {
+		  	if($('#change-category-skill-form').length > 0){
+		  		var parsleyConfig = {
+			        errorsContainer: function(parsleyField) {
+			            var $errfield = parsleyField.$element.parent().siblings('.alert');
+			            return $errfield;
+			        },
+			    };
+				
+				$('#change-category-skill-form').parsley(parsleyConfig).on('field:validated', function() {
+					if (this.validationResult === true) {
+				      this.$element.closest('.item').removeClass('bad');
+
+				    } else {
+				      this.$element.closest('.item').addClass('bad');
+				    }
+				});/*.on('form:submit', function() {
+				    console.log('error');
+		  		    return false; // Don't submit form for this demo
+				  });*/
+			};	  
+		  	
+		  };
+
 		function init_tree_cat() {
 	      $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
 		    $('.tree li.parent_li > span').on('click', function (e) {
@@ -595,6 +643,8 @@ if (typeof NProgress != 'undefined') {
 		};	  
 	  	
 	  };
+
+	   
 	   
 	$(document).ready(function() {
 				
@@ -605,6 +655,9 @@ if (typeof NProgress != 'undefined') {
 		init_category_add();
 		init_category_change();
 		init_category_seo_change();
+		init_category_relation_change();
+		init_category_skill_change();
+		
 		init_tree_cat();
 		init_SmartWizard();
 		init_faq_add();

@@ -25,13 +25,11 @@ class AddCategoryForm(forms.ModelForm):
         self.fields['type_level'].widget.attrs['class'] = form_class
         self.fields['type_level'].widget.attrs['data-parsley-notdefault'] = ''
         
-        self.fields['description'].widget.attrs['class'] = form_class
-
         self.fields['image'].widget.attrs['class'] = form_class
         self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 100
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
-        self.fields['image'].widget.attrs['required'] = 'required'
-        self.fields['image'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        # self.fields['image'].widget.attrs['required'] = 'required'
+        # self.fields['image'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         
         self.fields['banner'].widget.attrs['class'] = form_class
         self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 300
@@ -40,7 +38,7 @@ class AddCategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ('name', 'type_service', 'type_level',
-            'description', 'banner', 'image')
+            'banner', 'image')
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -75,6 +73,18 @@ class AddCategoryForm(forms.ModelForm):
                 "This field is required.")
         return level
 
+    def clean_banner(self):
+        file = self.files.get('banner', '')
+        if file:
+            if file._size > 500 * 1024:
+                raise forms.ValidationError(
+                    "Image file is too large ( > 200kb ).")
+        else:
+            pass
+            # raise forms.ValidationError(
+            #     "Could not read the uploaded image.")
+        return file
+
     def clean_image(self):
         file = self.files.get('image', '')
         if file:
@@ -82,8 +92,9 @@ class AddCategoryForm(forms.ModelForm):
                 raise forms.ValidationError(
                     "Image file is too large ( > 200kb ).")
         else:
-            raise forms.ValidationError(
-                "Could not read the uploaded image.")
+            pass
+            # raise forms.ValidationError(
+            #     "Could not read the uploaded image.")
         return file
 
     def save(self, commit=True, *args, **kwargs):
@@ -114,18 +125,18 @@ class ChangeCategoryForm(forms.ModelForm):
         self.fields['type_level'].widget.attrs['class'] = form_class
         self.fields['type_level'].widget.attrs['data-parsley-notdefault'] = ''
         
-        self.fields['description'].widget.attrs['class'] = form_class
+        # self.fields['description'].widget.attrs['class'] = form_class
 
-        self.fields['image'].widget.attrs['class'] = form_class
+        self.fields['image'].widget.attrs['class'] = form_class + ' clearimg'
         self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 100
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
         
-        self.fields['banner'].widget.attrs['class'] = form_class
+        self.fields['banner'].widget.attrs['class'] = form_class + ' clearimg'
         self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 300
         self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
 
 
-        self.fields['icon'].widget.attrs['class'] = form_class
+        self.fields['icon'].widget.attrs['class'] = form_class + ' clearimg'
         self.fields['icon'].widget.attrs['data-parsley-max-file-size'] = 100
         self.fields['icon'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
     
@@ -138,7 +149,7 @@ class ChangeCategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ('name', 'type_service', 'type_level',
-            'description', 'banner', 'image', 'icon', 'active', 'display_order')
+            'banner', 'image', 'icon', 'active', 'display_order')
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -276,7 +287,6 @@ class ChangeCategorySEOForm(forms.ModelForm):
 
 
 
-
 class CategoryRelationshipForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -382,3 +392,86 @@ class RelationshipInlineFormSet(forms.BaseInlineFormSet):
                         code='double_main'
                     )
         return
+
+
+class ChangeCategorySkillForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeCategorySkillForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+
+        self.fields['is_skill'].widget.attrs['class'] = 'js-switch'
+        self.fields['is_skill'].widget.attrs['data-switchery'] = 'true'
+        self.fields['description'].widget.attrs['class'] = form_class
+        self.fields['graph_image'].widget.attrs['class'] = form_class + ' clearimg'
+        self.fields['graph_image'].widget.attrs['data-parsley-max-file-size'] = 500
+        self.fields['graph_image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        
+
+        self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
+        self.fields['video_link'].widget.attrs['class'] = form_class
+        self.fields['video_link'].widget.attrs['maxlength'] = 80
+        self.fields['video_link'].widget.attrs['placeholder'] = 'Add video url'
+        self.fields['video_link'].widget.attrs['data-parsley-type'] = 'url'
+        self.fields['video_link'].widget.attrs['required'] = "required"
+        
+        self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 100]"
+        self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
+        
+    class Meta:
+        model = Category
+        fields = (
+            'is_skill', 'description', 'video_link',
+            'career_outcomes', 'graph_image')
+
+    def clean(self):
+        super(ChangeCategorySkillForm, self).clean()
+    
+    def clean_description(self):
+        desc = self.cleaned_data.get('description', '')
+        if desc:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return desc
+
+    def clean_career_outcomes(self):
+        outcome = self.cleaned_data.get('career_outcomes', '')
+        if outcome:
+            if len(outcome) < 4 or len(outcome) > 400:
+                raise forms.ValidationError(
+                    "Name should be between 4-400 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return outcome
+
+    def clean_graph_image(self):
+        file = self.files.get('graph_image', '')
+        if file:
+            if file._size > 200 * 1024:
+                raise forms.ValidationError(
+                    "Image file is too large ( > 200kb ).")
+        else:
+            pass
+            # raise forms.ValidationError(
+            #     "Could not read the uploaded image.")
+        return file
+
+    def clean_video_link(self):
+        link = self.cleaned_data.get('video_link', '')
+        if link:
+            from django.core.validators import URLValidator
+            val = URLValidator()
+            val('https://' + link.strip())
+        else:
+            raise forms.ValidationError(
+                "This is required.")
+        return link
+
+    def save(self, commit=True, *args, **kwargs):
+        category = super(ChangeCategorySkillForm, self).save(
+            commit=True, *args, **kwargs)
+        return category

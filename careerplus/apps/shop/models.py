@@ -46,13 +46,19 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         _('Level'), choices=CATEGORY_CHOICES, default=0)
     video_link = models.CharField(
         _('Video Link'), blank=True, max_length=200)
-    career_outcomes = models.CharField(max_length=500, null=True,
-        blank=True, help_text='semi-colon(;) separated designations, e.g. Project Engineer; Software Engineer; ...')
+    career_outcomes = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Project Engineer; Software Engineer; ...')
     description = RichTextField(
         verbose_name=_('Description'), blank=True, default='')
     banner = models.ImageField(
         _('Banner'), upload_to=get_upload_path_category,
         blank=True, null=True)
+    is_skill = models.BooleanField(
+        _('Is Skill'),
+        default=False)
     graph_image = models.ImageField(
         _('Graph Image'), upload_to=get_upload_path_category,
         blank=True, null=True)
@@ -144,9 +150,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def get_absolute_url(self):
         # return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug})
-        # return '/' #reverse('category-listing', kwargs={'slug': self.slug})
-        return
-
+        return '/' #reverse('category-listing', kwargs={'slug': self.slug})
+        
     def add_relationship(self, category, relation=0):
         relationship, created = CategoryRelationship.objects.get_or_create(
             related_from=self,
