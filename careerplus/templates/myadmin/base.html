@@ -14,24 +14,34 @@
 
     {% block css %}
 
+    
     <!-- Bootstrap -->
     <link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
+
     <!-- Font Awesome -->
     <link href="{% static "/packages/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet" type="text/css">
+
+
     <!-- NProgress -->
     <link href="{% static "/packages/nprogress/nprogress.css"  %}" rel="stylesheet" type="text/css">
+
+    {% comment %}
     <!-- iCheck -->
     <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
     
     <!-- bootstrap-progressbar -->
     <link href="{% static "/packages/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css"  %}" rel="stylesheet" type="text/css">
     
+
     <!-- JQVMap -->
     <link href="{% static "/packages/jqvmap/jqvmap.min.css"  %}" rel="stylesheet" type="text/css">
+    
 
     <!-- bootstrap-daterangepicker -->
     <link href="{% static "/packages/bootstrap-daterangepicker/daterangepicker.css"  %}" rel="stylesheet" type="text/css">
+    {% endcomment %}
 
+    
     <!-- Custom Theme Style -->
     <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
      
@@ -105,7 +115,7 @@
     </div>
 
     {% block js %}
-    <!-- jQuery -->
+
     <script type="text/javascript" src="{% static "packages/jquery/jquery.min.js" %}"></script>
     <!-- Bootstrap -->
     <script type="text/javascript" src="{% static "packages/bootstrap/js/bootstrap.min.js" %}"></script>
@@ -113,6 +123,13 @@
     <script type="text/javascript" src="{% static "packages/fastclick/fastclick.js" %}"></script>
     <!-- NProgress -->
     <script type="text/javascript" src="{% static "packages/nprogress/nprogress.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script>
+
+
+    {% comment %}
+
+    <!-- jQuery -->
+    
     <!-- Chart.js -->
     <!--script type="text/javascript" src="{% static "packages/Chart.js/dist/Chart.min.js" %}"></script-->
     <!-- gauge.js -->
@@ -155,6 +172,7 @@
     
     <!-- Custom Theme Scripts -->
     <script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script>
+    {% endcomment %}
 
     {% endblock js %}
 

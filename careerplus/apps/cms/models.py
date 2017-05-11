@@ -165,7 +165,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 	_metadata_default['locale'] = 'dummy_locale'
 
 	_metadata = {
-        'title': 'title',
+        'title': 'get_title',
         'description': 'get_keywords',
         'og_description': 'get_description',
         'keywords': 'get_keywords',
