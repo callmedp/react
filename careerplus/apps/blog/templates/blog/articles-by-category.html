@@ -2,19 +2,19 @@
 {% load static %}
 {% load humanize %}
 {% load thumbnail %}
-    {% block meta_tags %}
+    {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_tags %}
+    {%  endblock meta_html %}
 
     {% block title %}
        {{category.name}} – Career Articles @ Learning.Shine
     {% endblock title %}
     
-    {% block css %}
-        {{block.super}}  
-        <link type="text/css" href="{% static 'console/css/blog/blog.css' %}" rel="stylesheet"> 
-    {% endblock css %}
+    {% block css_section %}
+        {{block.super}} 
+        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet"> 
+    {% endblock css_section %}
 
     
     {% block breadcrumb %}
@@ -326,6 +326,6 @@
 {% endblock container %}
   
 
-{% block js %}
+{% block js_section %}
    {{ block.super }}
-{% endblock js %}
+{% endblock js_section %}

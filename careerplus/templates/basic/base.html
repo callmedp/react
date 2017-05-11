@@ -13,9 +13,9 @@
         {% endblock django_meta %}
     
     {% endblock meta_html %}
-    {% block title %}
-            <title>Shine Learning</title>      
-    {% endblock title %}
+    
+    <title> {% block title %}Shine Learning{% endblock title %}</title>   
+
     {% block canonical_url %}
       
     {% endblock canonical_url %}
@@ -53,12 +53,13 @@
     
     {% endblock blogtrending %}
 
+    <!-- breadcrums -->
+    {% block breadcrumb %}
+          
+    {% endblock breadcrumb %}
     
     {% block pageheading %}
-      <!-- breadcrums -->
-      {% block breadcrumb %}
-          
-      {% endblock breadcrumb %}
+      
     
     {% endblock pageheading %}
 
@@ -76,9 +77,9 @@
     {% block js_section %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="{% static 'shinelearning/js/jquery.min.js' %}"></script>
-    <script src="{% static 'console/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
     
     <script>
         $('.nav-tabs > li > a').hover(function() {

@@ -86,8 +86,13 @@ class Widget(AbstractCommonModel):
 	is_pop_up = models.BooleanField(default=False)
 	is_active = models.BooleanField(default=False)
 
+
 	def __str__(self):
-		return str(self.id) + str(self.heading)
+		return str(self.id) + '_' + str(self.get_widget_type())
+
+	def get_widget_type(self):
+		widgetDict = dict(WIDGET_CHOICES)
+		return widgetDict.get(self.widget_type)
 
 	def get_widget_data(self):
 		data_dict = {}
@@ -122,11 +127,11 @@ class Widget(AbstractCommonModel):
 		elif self.widget_type == 4:
 			return 'practice_test.html'
 		elif self.widget_type == 5:
-			return 'writer_view.html'
+			return 'expert_section.html'
 		elif self.widget_type == 6:
 			return 'request_call.html'
 		elif self.widget_type == 7:
-			return 'shine_ad.html'
+			return 'banner_ad.html'
 		elif self.widget_type == 8:
 			return 'index_widget.html'
 
@@ -160,7 +165,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 	_metadata_default['locale'] = 'dummy_locale'
 
 	_metadata = {
-        'title': 'title',
+        'title': 'get_title',
         'description': 'get_keywords',
         'og_description': 'get_description',
         'keywords': 'get_keywords',
@@ -170,7 +175,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
     }
 
 	def __str__(self):
-		return str(self.id) + ' ' + self.title
+		return str(self.id) + '_' + self.name
 
 	def get_title(self):
 		title = self.title
@@ -201,7 +206,7 @@ class PageWidget(AbstractCommonModel):
 		help_text='determine ranking of widget')
 
 	class Meta:
-		ordering = ['section', '-ranking']
+		ordering = ['section', 'ranking']
 		unique_together = ('page', 'widget')
 
 
