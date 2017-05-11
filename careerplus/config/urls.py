@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from users.views import (LogoutView,
-    DashboardView, RegistrationApiView, LoginApiView)
+    DashboardView, RegistrationApiView, LoginApiView, LogoutApiView)
 from shop.views import ProductDetailView
 urlpatterns = []
 
@@ -44,9 +44,10 @@ urlpatterns += [
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^$', RegistrationApiView.as_view(), name='create-user'),
+    url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
-    url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    # url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

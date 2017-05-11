@@ -124,7 +124,6 @@ class RegistrationApiView(FormView):
         return super(self.__class__, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        errer_list = []
         form = self.get_form()
         user_resp = RegistrationLoginApi().user_registration(request)
 
@@ -139,11 +138,6 @@ class RegistrationApiView(FormView):
             return HttpResponseRedirect(reverse('login'))
 
         elif user_resp['response'] == 'form_error':
-            for k, v in user_resp.items():
-                if v == 'form_error':
-                    pass
-                else:
-                    messages.add_message(self.request, messages.SUCCESS, ''.join(v))
             return render(self.request, self.template_name, {'form': form})
 
 
@@ -161,6 +155,7 @@ class LoginApiView(FormView):
         remember_me = self.request.POST.get('remember_me', None)
         login_resp = RegistrationLoginApi().user_login(self.request)
         if login_resp['response'] == 'login_user':
+            self.request.session['candidate_id'] = login_resp['candidate_id']
             if remember_me:
                 self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
             return HttpResponseRedirect(self.success_url)
@@ -176,3 +171,11 @@ class LoginApiView(FormView):
             return HttpResponseRedirect(self.success_url)
         else:
             return super(LoginApiView, self).dispatch(request, *args, **kwargs)
+
+
+class LogoutApiView(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        request.session.flush()
+        return HttpResponseRedirect(reverse('register'))
+

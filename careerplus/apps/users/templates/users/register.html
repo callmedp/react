@@ -5,8 +5,13 @@
     {% endblock title %}
     {% block css_section %}
         {{block.super}}
+        <style type="text/css">
+          .error {
+                color: red;
+          } 
+        </style>
     {% endblock css_section %}    
-    {% block pagecontainer %}
+    {% block container %}
 
     <div class="row">
         <div class="col-lg-12">
@@ -19,60 +24,73 @@
         <!-- /.col-lg-12 -->
     </div>
         <!-- /.row -->
-    <div class="container">
-      <header class="login-bg">
-        <div class="login-bg-txt">
-          <figure class="login-icon1"></figure>
-            <strong>1 Lacs+</strong>
-              Satisfied users
-        </div>
-        <div class="login-bg-txt">
-          <figure class="login-icon2"></figure>
-            <strong>300+</strong>
-              Courses
-        </div>
-        <div class="login-bg-txt">
-          <figure class="login-icon3"></figure>
-            <strong>500+</strong>
-              Professional resumes delivered
-        </div>
-      </header>
+    <!-- main section start -->
+<div class="container pr">
+  <header class="login-page-bg">
+    <div class="login-bg-txt">
+      <figure class="login-icon1"></figure>
+        <strong>1 Lacs+</strong>
+          Satisfied users
     </div>
-    <div class="register">
-    <h1>Register</h1>
-      <form action="." method="post" id="register_form">
-       {% csrf_token %}
-       <fieldset>
+    <div class="login-bg-txt">
+      <figure class="login-icon2"></figure>
+        <strong>300+</strong>
+          Courses
+    </div>
+    <div class="login-bg-txt">
+      <figure class="login-icon3"></figure>
+        <strong>500+</strong>
+          Professional resumes delivered
+    </div>
+  </header>
+
+  <!-- login form start -->
+  <div class="register login-signup-box">
+  <div>
+    <h1 class="modal-title">Register</h1>
+  </div>
+    <form method="post" id="register_form">
+    {% csrf_token %}
+      <fieldset>
           {% for field in form %}
               {% if field.errors %}
+                  <div class="form-group error">  
                       {{ field }}
-                      <p>
-                         {% for error in  field.errors %}{{ error }}{% endfor %}
-                      </p>
+                    <span class="error-txt">
+                      {% for error in  field.errors %}{{ error }}{% endfor %}
+                    </span>
+                  </div>
               {% else %}
-                  <div class="control-group"> 
-                    {{ field }}
-                    <p class="text-danger js_id_error"></p>  
+                  <div class="form-group">
+                      {{ field }}
+                      <span class="error-txt"></span>
                   </div>
               {% endif %}
-          {% endfor %}     
-       </fieldset>
-       <div class="form-check">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" value="">
-            I agree to Terms & conditions
-          </label>
-        </div>
-        <button type="submit" class="btn btn-primary">Register</button>
-        <small class="form-text text-muted text-center mt-4">Already have an account? <a href="{% url 'login' %}">Login Now</a></small>
-      </form>
+          {% endfor %}
+      </fieldset>
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="term_conditions">
+          I agree to Terms & conditions
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary submit">Register</button>
+      <div class="social-login">
+        <span>or Register with</span>
+        <a class="facebook" href="#"></a>
+        <a class="linkedin" href="#"></a>
+        <a class="gplus" href="#"></a>
+      </div>
+      <small class="form-text text-muted text-center mt-4">Already have an account? <a href="{% url 'login' %}">Login Now</a></small>
+    </form>
   </div>
-<footer>
-  {% include "basic/footer.html" %} 
-</footer>
-{% endblock pagecontainer %}
+  <!-- login form end -->
+
+</div>
+<!-- main section end -->
+{% endblock container %}
 {% block js_section %}
     {{block.super}}
-    {# // <script src="{% static 'js/custom/registerform.js' %}"></script> #}
+    <script src="{% static 'shinelearn/js/users/registration.js' %}"></script>
 {% endblock js_section %} 
     
