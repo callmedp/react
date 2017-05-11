@@ -9,6 +9,7 @@
 
 {% block css %}
     {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
 {% endblock css %}
 
 
@@ -208,6 +209,7 @@
 
 {% block js %}
     {{block.super}}
+    <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
     <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
 {% endblock js %}
 

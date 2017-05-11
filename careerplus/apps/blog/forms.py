@@ -33,7 +33,7 @@ class BlogAddForm(forms.ModelForm):
     	required=False, widget=forms.TextInput(
     	attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-	content = forms.CharField(label=("Content*:"), required=True,
+	content = forms.CharField(label=("Content*:"),
 		widget=CKEditorUploadingWidget())
 
 	p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
@@ -87,9 +87,13 @@ class BlogAddForm(forms.ModelForm):
 		self.fields['tags'].required = False
 		self.fields['sec_cat'].required = False
 		self.fields['sites'].required = False
+		self.fields['content'].required = True
 		self.fields['slug'].widget.attrs['readonly'] = True
 		# self.fields['slug'].widget.attrs['disabled'] = 'disabled'
 		self.fields['url'].widget.attrs['readonly'] = True
+		self.fields['image'].widget.attrs['class'] = "form-control col-md-7 col-xs-12"
+		self.fields['image'].widget.attrs['data-parsley-file-size-max'] = "[200, kb]"
+		self.fields['image'].widget.attrs['data-parsley-file-mimetype'] = "[jpeg, png, jpg, svg]"
 
 	def clean(self):
 		fields = ['name', 'slug']
