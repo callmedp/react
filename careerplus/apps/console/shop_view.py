@@ -471,7 +471,7 @@ class AddAttributeView(FormView):
     form_class = AddAttributeForm
     template_name = 'console/shop/add_attribute.html'
     http_method_names = ['get', 'post']
-    success_url = reverse_lazy('console:attributeoption-add')
+    success_url = reverse_lazy('console:attribute-add')
 
     def get(self, request, *args, **kwargs):
         return super(AddAttributeView, self).get(
