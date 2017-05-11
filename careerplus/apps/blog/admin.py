@@ -8,6 +8,15 @@ class BlogAdmin(admin.ModelAdmin):
 	search_fields = ('id', 'name')
 	filter_horizontal = ('tags', 'sec_cat')
 	raw_id_fields = ('created_by', 'last_modified_by', 'p_cat', 'user')
+	prepopulated_fields = {"slug": ("name",)}
+
+
+class CategoryAdmin(admin.ModelAdmin):
+	list_display = ('id', 'name', 'is_active', 'priority')
+	list_filter = ('is_active', )
+	search_fields = ('id', 'name')
+	filter_horizontal = ()
+	raw_id_fields = ('created_by', 'last_modified_by')
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -16,6 +25,7 @@ class TagAdmin(admin.ModelAdmin):
 	search_fields = ('id', 'name')
 	filter_horizontal = ()
 	raw_id_fields = ('created_by', 'last_modified_by')
+	prepopulated_fields = {"slug": ("name",)}
 
 
 admin.site.register(Category)

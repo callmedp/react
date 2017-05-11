@@ -74,8 +74,9 @@ class CategoryInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
-        FAQuestionInline, AttributeInline,]
+        FAQuestionInline, AttributeInline, ]
     prepopulated_fields = {"slug": ("name",)}
     
 #     def get_queryset(self, request):
