@@ -39,6 +39,12 @@
           {% include "product/partials/reviewnjob.html" %}
         </div>   
 
+        <!--hidden form -->
+        <div style="display: none">
+            <form method="POST" id="addToCartForm" > {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{object.id}}">
+            </form>
+        </div>
         <!-- right fixed content start -->
         <div class="col-sm-5 col-md-4  price-box">
         <div class="box-panel enrol-cart">
@@ -47,12 +53,13 @@
           <small>  5% off</small>
           <span class="clearfix db"></span>
           <a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enrol now</a>
-          <a href="#" class="add-cart">Add to cart</a>
+          <a role="button" class="add-cart" onclick="addToCart('{{object.id}}')">Add to cart</a>
           <div class="query-call">
           <a href="#"><figure class="email-icon"></figure> Have a query?</a>
           <a><figure class="calling-icon"></figure> 0124-395 5001</a>
           </div>
         </div>
+
 
         <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
            
@@ -250,6 +257,7 @@
 
 {% block js_section %}
   {{block.super}} 
+  <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
   <script type="text/javascript">
   function LoadMoreProductReview(pv_id) {
       if (processing) {

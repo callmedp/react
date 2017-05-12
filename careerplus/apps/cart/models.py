@@ -16,6 +16,7 @@ class Cart(AbstractAutoDate):
         null=True,
         max_length=255,
         verbose_name=_("Owner Email"))
+    session_id = models.CharField(max_length=255, null=True, blank=True)
     status = models.PositiveSmallIntegerField(
         _("Status"),
         default=0, choices=STATUS_CHOICES)
@@ -46,10 +47,9 @@ class Cart(AbstractAutoDate):
     
     def __str__(self):
         return _(
-            u"%(status)s cart (owner: %(owner)s, lines: %(num_lines)d)") \
+            u"%(status)s cart (owner: %(owner)s)") \
             % {'status': self.status,
-               'owner': self.owner,
-               'num_lineitems': self.num_lineitems}
+               'owner': self.owner_id}
 
 
 class LineItem(AbstractAutoDate):
