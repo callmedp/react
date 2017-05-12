@@ -1,15 +1,22 @@
+from collections import OrderedDict
+
 from django.views.generic import (
     FormView, TemplateView, ListView, DetailView)
-from collections import OrderedDict
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
-from shop.models import Category, CategoryRelationship
 from .decorators import Decorate, check_permission
-from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.core.paginator import Paginator
+from django.db.models import Q
+
+
+from blog.mixins import PaginationMixin
+from shop.models import (
+    Category, Keyword,
+    Attribute, AttributeOptionGroup)
+
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
     ChangeCategorySEOForm,
@@ -20,6 +27,7 @@ from shop.forms import (
     AddKeywordForm, AddAttributeOptionForm,
     AddAttributeForm)
 from faq.forms import AddFaqForm, AddChapterForm
+from faq.models import FAQuestion, Chapter
 
 @Decorate(check_permission('shop.add_category'))
 class AddCategoryView(FormView):
@@ -52,29 +60,6 @@ class AddCategoryView(FormView):
             "Your submission has not been saved. Try again."
         )
         return super(AddCategoryView, self).form_invalid(form)
-
-
-@Decorate(check_permission('shop.change_category'))
-class ListCategoryView(ListView):
-    model = Category
-    template_name = 'console/shop/list_category.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        return super(ListCategoryView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(ListCategoryView, self).get(request, args, **kwargs)
-
-    def get_queryset(self):
-        qs = super(ListCategoryView, self).get_queryset()
-        return qs
-
-    def get_context_data(self, **kwargs):
-        context = super(ListCategoryView, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        context.update({'messages': alert})
-        return context
-
 
 
 class ChangeCategoryView(DetailView):
@@ -497,3 +482,296 @@ class AddAttributeView(FormView):
             "Your submission has not been saved. Try again."
         )
         return super(AddAttributeView, self).form_invalid(form)
+
+
+
+@Decorate(check_permission('shop.change_category'))
+class ListCategoryView(ListView, PaginationMixin):
+    model = Category
+    context_object_name = 'category_list'
+    template_name = 'console/shop/list_category.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListCategoryView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListCategoryView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListCategoryView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListCategoryView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['category_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('faq.change_faquestion'))
+class ListFaqView(ListView, PaginationMixin):
+    model = FAQuestion
+    context_object_name = 'faq_list'
+    template_name = 'console/shop/list_faq.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListFaqView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListFaqView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListFaqView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(text__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListFaqView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['faq_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('shop.change_category'))
+class ListCategoryView(ListView, PaginationMixin):
+    model = Category
+    context_object_name = 'category_list'
+    template_name = 'console/shop/list_category.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListCategoryView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListCategoryView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListCategoryView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListCategoryView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['category_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('faq.change_chapter'))
+class ListChapterView(ListView, PaginationMixin):
+    model = Chapter
+    context_object_name = 'chapter_list'
+    template_name = 'console/shop/list_chapter.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListChapterView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListChapterView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListChapterView, self).get_queryset()
+        queryset = queryset.filter(parent__isnull=True)
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(heading__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListChapterView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['chapter_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('shop.change_keyword'))
+class ListKeywordView(ListView, PaginationMixin):
+    model = Keyword
+    context_object_name = 'keyword_list'
+    template_name = 'console/shop/list_keyword.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListKeywordView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListKeywordView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListKeywordView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListKeywordView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['keyword_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('shop.change_attribute'))
+class ListAttributeView(ListView, PaginationMixin):
+    model = Attribute
+    context_object_name = 'attribute_list'
+    template_name = 'console/shop/list_attribute.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListAttributeView, self).dispatch(
+            request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListAttributeView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListAttributeView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListAttributeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['attribute_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('shop.change_attribute'))
+class ListAttributeOptionGroupView(ListView, PaginationMixin):
+    model = AttributeOptionGroup
+    context_object_name = 'optgrp_list'
+    template_name = 'console/shop/list_attributeoption.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListAttributeOptionGroupView, self).dispatch(
+            request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListAttributeOptionGroupView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListAttributeOptionGroupView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListAttributeOptionGroupView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['optgrp_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+

@@ -335,7 +335,7 @@ class RelationshipInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
         super(RelationshipInlineFormSet, self).clean()
         if any(self.errors):
-            return 
+            return
         parents = []
         main_parent = []
         duplicates = False
