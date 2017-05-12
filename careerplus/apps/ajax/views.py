@@ -21,12 +21,13 @@ class ArticleCommentView(View):
 				message = request.POST.get('message').strip()
 				slug = request.POST.get('slug').strip()
 				blog = Blog.objects.get(slug=slug)
-				if request.user.is_authenticated() and message:
-					Comment.objects.create(blog=blog, message=message, created_by=request.user)
+				if request.session.get('candidate_id') and message:
+					Comment.objects.create(blog=blog, message=message, candidate_id=request.session.get('candidate_id'))
 					status = 1
 					blog.no_comment += 1
 					blog.save()
-			except:
+			except Exception as e:
+				logging.getLogger('error_log').error("%s " % str(e))
 				pass
 			data = {"status": status}
 			return HttpResponse(json.dumps(data), content_type="application/json")
@@ -121,7 +122,7 @@ class AjaxProductLoadMoreView(TemplateView):
                 products = paginator.page(1)
             except EmptyPage:
                 products = 0
-            context.update({'products': products, 'page':page, 'slug':slug})
+            context.update({'products': products, 'page': page, 'slug': slug})
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
         return context

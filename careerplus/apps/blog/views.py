@@ -1,43 +1,77 @@
+import json
+
 from django.views.generic import (
 	TemplateView,
 	ListView,
 	DetailView,
 	View)
 
-from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect,\
-	HttpResponsePermanentRedirect
+from django.http import HttpResponseForbidden, Http404,\
+	HttpResponsePermanentRedirect, HttpResponse
 from django.utils.http import urlquote
 from django.template.loader import render_to_string
-from django.contrib.auth import authenticate, login
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.conf import settings
 
 from meta.views import Meta
 
+from shine.core import ShineCandidateDetail
+from users.forms import LoginApiForm, RegistrationForm
+from users.mixins import RegistrationLoginApi
+
 from .mixins import BlogMixin, PaginationMixin, LoadCommentMixin
 from .models import Category, Blog, Tag
 
 
-class LoginToCommentView(View):
+class LoginToCommentView(View, RegistrationLoginApi, ShineCandidateDetail):
     http_method_names = [u'post', ]
 
     def post(self, request, *args, **kwargs):
-        slug = kwargs.get('slug', None)
-        obj = None
-        try:
-        	obj = Blog.objects.get(slug=slug, status=1)
-        except Exception:
-            raise Http404
-        user_email = request.POST.get('user_email', None)
-        user_password = request.POST.get('user_password', None)
-        remember_me = request.POST.get('remember_me')
-        user = authenticate(username=user_email, password=user_password)
-        if user is not None:
-            login(request, user)
+    	if request.is_ajax():
+    		form = LoginApiForm(request.POST)
+    		login_resp = {}
+    		if form.is_valid():
+    			remember_me = request.POST.get('remember_me')
+    			login_resp = self.user_login(self.request)
+    			if login_resp['response'] == 'login_user':
+    				resp_status = self.get_status_detail(email=None, shine_id=login_resp['candidate_id'])
+    				self.request.session.update(resp_status)
+    				if remember_me:
+	    				self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+    			elif login_resp['response'] == 'error_pass':
+    				login_resp['error_message'] = login_resp.get("non_field_errors")[0]
+    		else:
+    			login_resp['response'] = 'form_validation_error'
+    		return HttpResponse(json.dumps(login_resp), content_type="application/json")
+    	return HttpResponseForbidden()
 
-        return HttpResponseRedirect(
-            reverse('blog:articles-deatil', kwargs={'slug': obj.slug}))
+
+class RegisterToCommentView(View, RegistrationLoginApi, ShineCandidateDetail):
+    http_method_names = [u'post', ]
+
+    def post(self, request, *args, **kwargs):
+    	if request.is_ajax():
+    		form = RegistrationForm(request.POST)
+    		user_resp = {}
+    		if form.is_valid():
+    			user_resp = self.user_registration(request)
+    			if user_resp['response'] == 'new_user':
+    				resp = RegistrationLoginApi().user_login(request)
+    				if resp['response'] == 'login_user':
+    					resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
+    					request.session.update(resp_status)
+
+    			elif user_resp['response'] == 'exist_user':
+    				pass
+
+    			elif user_resp['response'] == 'form_error':
+    				pass
+    		else:
+    			user_resp['response'] = 'form_validation_error'
+    		return HttpResponse(json.dumps(user_resp), content_type="application/json")
+
+    	return HttpResponseForbidden()
 
 
 class BlogDetailView(DetailView, BlogMixin):
@@ -129,6 +163,11 @@ class BlogDetailView(DetailView, BlogMixin):
         	"scroll_article": render_to_string('include/detail-article-list.html',
         		{"page_obj": page_obj,
         		"slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        })
+
+        context.update({
+        	"loginform": LoginApiForm(),
+        	"registerform": RegistrationForm()
         })
 
         return context
@@ -474,7 +513,9 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
 		comment_list = render_to_string('include/article-load-comment.html',
 			comment_load_context)
 
-		if self.request.user.is_authenticated():
+		# import ipdb; ipdb.set_trace()
+
+		if self.request.session.get('candidate_id'):
 			login_status = 1
 		else:
 			login_status = 0

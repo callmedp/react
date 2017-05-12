@@ -85,11 +85,12 @@ class RegistrationForm(forms.Form):
         max_length=16, required=True, widget=forms.PasswordInput(
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
 
+    country_code = forms.ChoiceField(label=("Country:"), required=True,
+        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control custom-select country-code'}), initial=indian_obj)
+
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile No.'}), max_length=10)
 
-    country_code = forms.ChoiceField(label=("Country:"), required=True,
-        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
 
     vendor_id = forms.CharField(
         max_length=30, required=True,
