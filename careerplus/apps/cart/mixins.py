@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from .models import Cart, LineItem
 
 
@@ -10,6 +12,7 @@ class CartMixin(object):
                 LineItem.objects.create(cart=tocart, product=item.product)
             item.delete()
         fromcart.status = 1
+        fromcart.date_merged = timezone.now()
         fromcart.save()
 
     def updateCart(self, cart_obj, product):
