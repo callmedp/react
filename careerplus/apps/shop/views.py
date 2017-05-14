@@ -230,12 +230,12 @@ class ProductDetailView(DetailView, ProductInformationMixin):
         ctx.update(self.get_breadcrumbs(product, cat_slug))
         ctx.update(self.get_info(self.object))
         ctx.update(self.get_variation(product))
-        ctx.update(self.get_program_structure(product))
+        # ctx.update(self.get_program_structure(product))
         ctx.update(self.get_faq(product))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_combos(product))
         ctx.update(self.get_childs(product))
-        ctx.update(self.get_countries(product))
+        # ctx.update(self.get_countries(product))
         ctx.update(self.get_reviews(product, 1))
         return ctx
 

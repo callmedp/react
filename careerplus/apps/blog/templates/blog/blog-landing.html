@@ -2,20 +2,19 @@
 {% load static %}
 {% load humanize %}
 {% load thumbnail %}
-    {% block meta_tags %}
+    {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_tags %}
+    {%  endblock meta_html %}
 
     {% block title %}
        Career Guidance & Advice – Articles @ Learning.Shine
     {% endblock title %}
     
-    {% block css %}
-        {{block.super}}     
-        <link type="text/css" href="{% static 'console/css/blog/blog.css' %}" rel="stylesheet">
-        
-    {% endblock css %}
+    {% block css_section %}
+        {{block.super}}
+        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet">        
+    {% endblock css_section %}
 
     {% block blogtrending %}
         <header class="carousel-bgcolor pr mb-40">
@@ -74,10 +73,10 @@
                 {% endfor %}
             </ol>
         </section>
-        
     {% endblock breadcrumb %}
 
    {% block pageheading %}
+
        <section class="container">
           <div class="page-header">
             <h1 class="blog-heading">Top articles</h1>
@@ -131,9 +130,10 @@
 {% endblock container %}
   
 
-{% block js %}
+{% block js_section %}
    {{ block.super }}
-   <script src="{% static 'console/js/blog/blog-landing.js' %}"></script>
+   <script src="{% static 'shinelearn/js/blog/blog-landing.js' %}"></script>
+   <!--script src="{% static 'console/js/blog/blog-landing.js' %}"></script-->
 
    <script type="text/javascript">
     $('.nav-tabs > li > a').hover(function() {
@@ -165,4 +165,4 @@
       });
     </script>
 
-{% endblock js %}
+{% endblock js_section %}

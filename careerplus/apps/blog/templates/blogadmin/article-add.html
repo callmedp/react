@@ -97,6 +97,7 @@
 {% block js %}
     {{block.super}}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
     <script type="text/javascript">
         jQuery.each($("select[multiple]"), function () {
           // "Locations" can be any label you want

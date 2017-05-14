@@ -41,23 +41,27 @@ class CMSPageView(TemplateView, LoadMoreMixin):
         return context
 
     def post(self, request, *args, **kwargs):
-        message = request.POST.get('message', '').strip()
-        slug = kwargs.get('slug', None)
-        try:
-            self.page_obj = Page.objects.get(slug=slug, is_active=True)
-        except Exception:
-            raise Http404
-        if request.user.is_authenticated() and message and self.page_obj:
-            Comment.objects.create(created_by=request.user, message=message, page=self.page_obj)
-            self.page_obj.comment_count += 1
-            self.page_obj.save()
-            today = timezone.now()
-            today_date = datetime.date(day=1, month=today.month, year=today.year)
-            pg_counter, created = self.page_obj.pagecounter_set.get_or_create(count_period=today_date)
-            pg_counter.comment_count += 1
-            pg_counter.save()
-        return HttpResponseRedirect(
-            reverse('cms:page', kwargs={'slug': slug}))
+        if request.is_ajax():
+            data_dict = {"status": 0, }
+            message = request.POST.get('message', '').strip()
+            slug = kwargs.get('slug', None)
+            try:
+                self.page_obj = Page.objects.get(slug=slug, is_active=True)
+            except Exception:
+                raise Http404
+            if request.user.is_authenticated() and message and self.page_obj:
+                Comment.objects.create(created_by=request.user, message=message, page=self.page_obj)
+                self.page_obj.comment_count += 1
+                self.page_obj.save()
+                today = timezone.now()
+                today_date = datetime.date(day=1, month=today.month, year=today.year)
+                pg_counter, created = self.page_obj.pagecounter_set.get_or_create(count_period=today_date)
+                pg_counter.comment_count += 1
+                pg_counter.save()
+                data_dict['status'] = 1
+
+            return HttpResponse(json.dumps(data_dict), content_type="application/json")
+        return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
         context = super(CMSPageView, self).get_context_data(**kwargs)
@@ -100,7 +104,7 @@ class CMSPageView(TemplateView, LoadMoreMixin):
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
-                'widget': left.widget,
+                'widget': right.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
                 'user': user,

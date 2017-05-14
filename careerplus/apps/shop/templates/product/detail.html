@@ -7,15 +7,15 @@
   
 {% endblock css_section %}
     
+{% block breadcrumb %}
+    {% include "product/partials/breadcrumb.html" %}
+{% endblock breadcrumb %}
 
 {% block pageheading %}
     <!-- header -->
     <header>
       <div class="detail-course-header">
         <div class="container">
-        {% block breadcrumb %}
-          {% include "product/partials/breadcrumb.html" %}
-        {% endblock breadcrumb %}
           <div class="course-caption">
             
             <div class="course-caption-img">

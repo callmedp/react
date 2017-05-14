@@ -354,6 +354,14 @@ class Attribute(AbstractAutoDate):
     def __str__(self):
         return self.name
 
+    @property
+    def get_entity(self):
+        return dict(SERVICE_CHOICES).get(self.type_service)
+
+    @property
+    def get_type(self):
+        return dict(ATTRIBUTE_CHOICES).get(self.type_attribute)
+
 
 class Keyword(AbstractAutoDate):
     name = models.CharField(

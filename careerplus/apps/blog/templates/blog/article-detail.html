@@ -2,20 +2,20 @@
 {% load static %}
 {% load humanize %}
 {% load thumbnail %}
-    {% block meta_tags %}
+    {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_tags %}
+    {%  endblock meta_html %}
 
     {% block title %}
        Blog Detail- Shine Learning
     {% endblock title %}
     
-    {% block css %}
+    {% block css_section %}
         {{block.super}}
-        <link type="text/css" href="{% static 'console/css/blog/blog.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'console/css/blog/custom.css' %}" rel="stylesheet">
-    {% endblock css %}
+        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/blog/custom.css' %}" rel="stylesheet">
+    {% endblock css_section %}
 
     
     {% block breadcrumb %}
@@ -222,10 +222,8 @@
 {% endblock container %}
   
 
-{% block js %}
+{% block js_section %}
    {{ block.super }}
    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-   <!--script src="{% static 'console/js/jquery.validate.js' %}"></script-->
-   <script src="{% static 'console/js/blog/blog-detail.js' %}"></script>
-
-{% endblock js %}
+   <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+{% endblock js_section %}

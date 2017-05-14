@@ -96,6 +96,123 @@
                 <div class="alert">{{form.name.errors}}</div>
               </div>
 
+              <div class="item form-group {% if form.display_name.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.display_name.id_for_label }}"> Attribute Display Name <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.display_name}}
+                </div>
+                <div class="alert">{{form.display_name.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.type_service.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_service.id_for_label }}"> Entity<span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.type_service}}
+                </div>
+                <div class="alert">{{form.type_service.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.type_attribute.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_attribute.id_for_label }}"> Type Value <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.type_attribute}}
+                </div>
+                <div class="alert">{{form.type_attribute.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.option_group.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.option_group.id_for_label }}"> Option Group <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.option_group}}
+                </div>
+                <div class="alert">{{form.option_group.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.active.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.active.id_for_label }}"> Active <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.active}}
+                </div>
+                <div class="alert">{{form.active.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_sortable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_sortable.id_for_label }}"> Is Sortable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_sortable}}
+                </div>
+                <div class="alert">{{form.is_sortable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_filterable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_filterable.id_for_label }}"> Is Filterable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_filterable}}
+                </div>
+                <div class="alert">{{form.is_filterable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_indexable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_indexable.id_for_label }}"> Is Indexable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_indexable}}
+                </div>
+                <div class="alert">{{form.is_indexable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_comparable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_comparable.id_for_label }}"> Is Comparable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_comparable}}
+                </div>
+                <div class="alert">{{form.is_comparable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_visible.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_visible.id_for_label }}"> Is Visible? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_visible}}
+                </div>
+                <div class="alert">{{form.is_visible.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_multiple.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_multiple.id_for_label }}"> Is Multiple? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_multiple}}
+                </div>
+                <div class="alert">{{form.is_multiple.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_searchable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_searchable.id_for_label }}"> Is Searchable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_searchable}}
+                </div>
+                <div class="alert">{{form.is_searchable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.required.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.required.id_for_label }}"> Required? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.required}}
+                </div>
+                <div class="alert">{{form.required.errors}}</div>
+              </div>
+
               <div class="ln_solid"></div>
               <div class="form-group">
                 <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">

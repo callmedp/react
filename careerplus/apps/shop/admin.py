@@ -73,10 +73,17 @@
 #     extra = 1
 
 
+
 # class ProductAdmin(admin.ModelAdmin):
 #     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
 #         FAQuestionInline, AttributeInline,]
 #     prepopulated_fields = {"slug": ("name",)}
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
+        FAQuestionInline, AttributeInline, ]
+    prepopulated_fields = {"slug": ("name",)}
     
 #     def get_queryset(self, request):
 #         qs = super(ProductAdmin, self).get_queryset(request)
