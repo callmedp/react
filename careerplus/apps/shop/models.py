@@ -150,8 +150,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
-        # return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug})
-        return '/' #reverse('category-listing', kwargs={'slug': self.slug})
+        return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug, 'pk': self.pk})
+        # return '/' #reverse('category-listing', kwargs={'slug': self.slug})
         
     def add_relationship(self, category, relation=0):
         relationship, created = CategoryRelationship.objects.get_or_create(
@@ -215,7 +215,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
 
     def split_career_outcomes(self):
-        return self.career_outcomes.split(';')
+        return self.career_outcomes.split(',')
     
 
     def has_children(self):

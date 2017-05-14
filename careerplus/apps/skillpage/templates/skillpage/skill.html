@@ -1,18 +1,19 @@
 {% extends "basic/base.html" %}
 {% load static %}
 
-{% block meta_tags %}
+{% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
-{%  endblock meta_tags %}
+{%  endblock meta_html %}
 
 {% block title %}
-    {{category_obj.title}} Certification - Shine Learning
+ 
 {% endblock title %}
-{% block css %}
-        {{block.super}}        
-  <link type="text/css" href="{% static 'console/css/skillpage/skill.css' %}" rel="stylesheet">
-{% endblock css %}
+{% block css_section %}
+        {{block.super}} 
+  <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" 
+  rel="stylesheet">       
+{% endblock css_section %}
 
 {% block pageheading %}
 	<header class="skill-header">
@@ -36,8 +37,8 @@
 				<div class="provider">
 					Provider
 					{% if prod.5.vendor.icon %}
-					<img src="{{prod.5.vendor.icon.url}}" alt="V Skills" 
-					class="img-responsive">
+						<img src="{{prod.5.vendor.icon.url}}" alt="V Skills" 
+						class="img-responsive">
 					{% endif %}
 					<img src="{% static 'console/images/skillpage/aspiration-logo.jpg' %}" alt="Aspiration" class="img-responsive">
 					<img src="{% static 'console/images/skillpage/iact-logo.jpg' %}" alt="IACT" class="img-responsive">
@@ -139,7 +140,8 @@
 					            	</div>
 					            	<div class="media-body">
 					                	<div class="certification-jobs-box">
-					                  		<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
+					                  		<span class="certification-jobs"><figure class="certification-icon">
+					                  		</figure> Certification</span>
 					                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
 					                	</div>
 					                	<h3 class="listing-heading">{{product.name}}</h3>
@@ -166,6 +168,8 @@
 					            </div>
 				          	</a>
 				        </li>
+				        <a href="javascript:void();" id="product_load_more" class="load-more"> Load more</a>
+		      	
 			    	{% endfor %}
 		      	</ul>
                 <div id="prod_load_more">
@@ -175,15 +179,15 @@
 	      		<input type="hidden" name="slug" value="{{slug}}" 
 	      		id="slug_id">
 			    {% endif %} 	
-			    <a id="product_load_more" class="load-more"> Load more</a>
-		      	</div>
+			    </div>
 
 		    </div>
 		    <!-- Reviews -->
 		    <div id="reviews" class="reviews mb-40 scroll">
 		    	<h2>Reviews</h2>
 		      	<a href="#" class="write-review">Write a review</a>
-		        	<ul>
+		        	<ul id="review_list">
+		        	{% for page_review in page_reviews %}
 		          		<li class="box-panel">
 		            		<span class="review-heading">Excelent!</a></span>
 				            <div class="rating-review-box">
@@ -194,85 +198,73 @@
 				                <span class="grey-rating-icon"></span>
 				                <strong>3.9/5</strong>
 				            </div>
-		            		<article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time
+		            		<article>
+		            		{{page_review.content | safe}}
 		            		</article>
-		            		<span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
+		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
-		          		<li class="box-panel">
-		            		<span class="review-heading">Excelent!</a></span>
-		            		<div class="rating-review-box">
-			                	<span class="orange-rating-icon"></span>
-			                	<span class="orange-rating-icon"></span>
-			                	<span class="orange-rating-icon"></span>
-			                	<span class="grey-rating-icon"></span>
-			                	<span class="grey-rating-icon"></span>
-			                	<strong>3.9/5</strong>
-		            		</div>
-		            		<article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time
-		            		</article>
-		            		<span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
-		          		</li>
-		          		<li class="box-panel">
-		            		<span class="review-heading">Excelent!</a></span>
-		            		<div class="rating-review-box">
-		                		<span class="orange-rating-icon"></span>
-		                		<span class="orange-rating-icon"></span>
-		                		<span class="orange-rating-icon"></span>
-		                		<span class="grey-rating-icon"></span>
-		                		<span class="grey-rating-icon"></span>
-		                		<strong>3.9/5</strong>
-		            		</div>
-		            		<article>Quick Number Skills, Accuracy and Effective Time Management Help a Great Deal, Says Sanuj Mittal – CAT Topper! Quick Number Skills, Accuracy and Effective Time
-		            		</article>
-		            		<span class="editor">By <a href="">Ajay Mishra</a>, 03 Nov 2016</span>
-		          		</li>
+		          		<a href="javascript:void();" id="review_load_more" class="load-more"> Load more</a>
+		          	{% endfor %}
 		        	</ul>
-		        <a href="#" class="load-more"> Load more</a>
+		        	<div id="revi_load_more">
+					    {% if page_reviews.has_next %} 	
+			      		<input type="hidden" name="page" 
+			      		value="{{page_reviews.next_page_number}}" id="page_id1">
+			      		<input type="hidden" name="slug" value="{{slug}}" 
+	      				id="slug_id1">
+					    {% endif %} 	
+			      	</div>
 		    </div>
 		</div>  
 		<!-- left content end -->
 
 		<!-- right content start -->
+		
 		<div class="col-md-3 col-sm-12">
 
-		   <!-- request a call -->
-		  	<div class="request-call query-form-right box-panel mt-40 cleafix">
-		    	<h2 class="heading-right">HAVE A QUERY?</h2>
-		      	<form class="mt-20" role="form" id="queryform">{% csrf_token %}
-
-		        	<div class="form-group">
-		          		<input type="text" class="form-control" name="name" placeholder="Name">
-		          		<span class="error position-error"></span>
-		        	</div>
-		        	<div class="form-group">
-		          		<input type="text" class="form-control" name="mobile_no" placeholder="Mobile">
-		          		<span class="error position-error"></span>
-		        	</div>
-		        	<div class="form-group">
-						<textarea class="form-control" rows="3" placeholder="Message" 
-						name="message_box"></textarea>
-						<span class="error position-error"></span>
-		    		</div>
-		        	<button type="button" id="id_query" class="submit-button">
-		        	Submit</button>
-		      	</form>
-		      	<div class="call-service">
-		        	<strong>
-		        		<span class="call-service-icon"></span>
-		          			0124-395 5001
-		        	</strong>
-		        	9am to 7pm ist monday-saturday
-		      	</div>
-		  	</div> 
+			<!-- request a call -->
+	<div class="request-call box-panel mb-40 cleafix">
+    <h2 class="heading-right">request a call</h2>
+        </style>
+      <form class="mt-20" role="form" id="callback_form" >
+        <div style='display:none'>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="name" placeholder="Name">
+          <span class="error position-error"></span>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
+          <span class="error position-error"></span>
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
+          <span class="error position-error"></span>
+        </div>
+        
+      </form>
+      <button type="button" id="id_callback"  class="submit-button">
+      Message
+      </button>
+      <div class="call-service">
+        <strong>
+          <span class="call-service-icon"></span>
+          0124-395 5001
+        </strong>
+        9am to 7pm ist monday-saturday
+      </div>
+</div> 
 		</div>
+		<!-- request a call --> 
 	<!-- right content end -->
 	</div>
 	<!-- page content body end -->
 </section>
 {% endblock container %}
-{% block js %}
+{% block js_section %}
    {{ block.super }}
    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
-   <script src="{% static 'console/js/skillpage/skillpage.js' %}"></script>
+   <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
 
-{% endblock js %}
+{% endblock js_section %}

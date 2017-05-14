@@ -63,6 +63,7 @@ $(function() {
 
     $(document).on('click', '#product_load_more', function(event) {
         var page = parseInt($("#page_id").val());
+        $("#product_load_more").hide();
         $.ajax({
             url: "/ajax/product/load-more/",
             data : {"page": page, "slug": $("#slug_id").val()},
@@ -82,21 +83,21 @@ $(function() {
   
     });
     $(document).on('click', '#review_load_more', function(event) {
-        alert("sdsaddas");
-        var page = parseInt($("#page_id").val());
+        var page = parseInt($("#page_id1").val());
+        $("#review_load_more").hide();
         $.ajax({
             url: "/ajax/review/load-more/",
-            data : {"page": page, "slug": $("#slug_id").val()},
+            data : {"page": page, "slug": $("#slug_id1").val()},
             success: function(data, textStatus, jqXHR)
             {
-                document.getElementById("page_id").value = Number(page)+1;
+                document.getElementById("page_id1").value = Number(page)+1;
                 $('html,body').animate({scrollTop: $("#review_load_more").offset().top},500);
-                $("#product_list").append(data);       
+                $("#review_list").append(data);       
                 
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
-                $("#prod_load_more").remove();
+                $("#revi_load_more").remove();
                 alert("Can't load more comments.");
             }
         }); 

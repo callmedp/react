@@ -3226,7 +3226,7 @@ input[type="search"] {
   }
 }
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .radio,
@@ -4783,7 +4783,7 @@ tbody.collapse.in {
 }
 .navbar-brand:after {
   content: '';
-  background: url(../../images/sprite.png) no-repeat;
+  background: url(../../images/common/sprite.png) no-repeat;
   background-position: 0 0;
   width: 287px;
   height: 90px;
