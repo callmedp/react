@@ -79,7 +79,7 @@
 						{% if category_obj.video_link %}
 						    <div class="pull-right col-sm-6">
 						        <iframe width="560" height="315" 
-						        	src="{{category_obj.video_link}}" frameborder="0" allowfullscreen>	
+						        	src="{{url}}" frameborder="0" allowfullscreen>	
 						        </iframe>
 						    </div>
 						{% endif %}
@@ -181,7 +181,8 @@
 					            </div>
 				          	</a>
 				        </li>
-				        <a href="javascript:void();" id="product_load_more" class="load-more"> Load more</a>
+				        <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> 
+				        Load more</a>
 		      	
 			    	{% endfor %}
 		      	</ul>
@@ -216,7 +217,7 @@
 		            		</article>
 		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
-		          		<a href="javascript:void();" id="review_load_more" class="load-more"> Load more</a>
+		          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview"> Load more</a>
 		          	{% endfor %}
 		        	</ul>
 		        	<div id="revi_load_more">

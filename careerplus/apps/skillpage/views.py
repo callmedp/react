@@ -39,8 +39,8 @@ class SkillPageView(DetailView, SkillPageMixin):
         return None
 
     def get(self, request, *args, **kwargs):
-        slug = kwargs.get('slug', None)
-        pk = kwargs.get('pk', None)
+        slug = self.kwargs.get('slug', None)
+        pk = self.kwargs.get('pk', None)
         self.object = self.get_object()
         redirect = self.redirect_if_necessary(request.path, self.object)
 
@@ -57,7 +57,7 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        slug = kwargs.get('slug', '')
+        slug = self.kwargs.get('slug', '')
         page = self.request.GET.get('page', 1)
         api_data = self.get_job_count_and_fuctionan_area(slug)
         career_outcomes = self.object.split_career_outcomes()
@@ -92,7 +92,8 @@ class SkillPageView(DetailView, SkillPageMixin):
             "slug": slug,
             "category_obj": self.object,
             "products": products,
-            "page_reviews":page_reviews
+            "page_reviews":page_reviews,
+            'url': 'https://' + self.object.video_link
         })
         context.update(self.get_breadcrumb_data())
         return context

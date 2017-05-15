@@ -469,7 +469,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
         # else:
         #     raise forms.ValidationError(
         #         "This is required.")
-        link = 'https://' + link.strip()    
+        # link = 'https://' + link.strip()    
         return link
 
     def save(self, commit=True, *args, **kwargs):
