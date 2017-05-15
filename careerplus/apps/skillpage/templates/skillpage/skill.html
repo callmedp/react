@@ -36,13 +36,24 @@
 				</strong>
 				<div class="provider">
 					Provider
-					{% if prod.5.vendor.icon %}
-						<img src="{{prod.5.vendor.icon.url}}" alt="V Skills" 
+					{% if prod.0.vendor.icon %}
+						<img src="{{prod.0.vendor.icon.url}}" alt="V Skills" 
 						class="img-responsive">
 					{% endif %}
+					{% if prod.1.vendor.icon %}
+						<img src="{{prod.1.vendor.icon.url}}" alt="V Skills" 
+						class="img-responsive">
+					{% endif %}
+					{% if prod.2.vendor.icon %}
+						<img src="{{prod.2.vendor.icon.url}}" alt="V Skills" 
+						class="img-responsive">
+					{% endif %}
+					<!--
 					<img src="{% static 'console/images/skillpage/aspiration-logo.jpg' %}" alt="Aspiration" class="img-responsive">
 					<img src="{% static 'console/images/skillpage/iact-logo.jpg' %}" alt="IACT" class="img-responsive">
 					<img src="{% static 'console/images/skillpage/skill-soft-logo.jpg' %}" alt="Skillsoft" class="img-responsive">
+					-->
+					
 				</div>
 			</div>
 		</div>
@@ -220,13 +231,13 @@
 
 		<!-- right content start -->
 		
-		<div class="col-md-3 col-sm-12">
+	<div class="col-md-3 col-sm-12">
 
 			<!-- request a call -->
 	<div class="request-call box-panel mb-40 cleafix">
     <h2 class="heading-right">request a call</h2>
         </style>
-      <form class="mt-20" role="form" id="callback_form" >
+      <form class="mt-20" role="form" id="queryform" >
         <div style='display:none'>
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
         </div>
@@ -244,7 +255,7 @@
         </div>
         
       </form>
-      <button type="button" id="id_callback"  class="submit-button">
+      <button type="button" id="id_query"  class="submit-button">
       Message
       </button>
       <div class="call-service">
@@ -254,7 +265,7 @@
         </strong>
         9am to 7pm ist monday-saturday
       </div>
-</div> 
+	</div> 
 		</div>
 		<!-- request a call --> 
 	<!-- right content end -->

@@ -5,7 +5,7 @@ $(function() {
                 	required: true,
                     maxlength: 80,
                 },
-                mobile_no:{
+                mobile_number:{
                     required: true,
                     number: true,
                     minlength: 5,
@@ -21,7 +21,7 @@ $(function() {
             	required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters.",
             },
-            mobile_no:{
+            mobile_number:{
                 required:"Mobile Number is Mandatory",
                 number:"Enter only number",
                 maxlength: "Please enter below 15 digits",
@@ -76,7 +76,7 @@ $(function() {
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
-                $("#prod_load_more").remove();
+                // $("#prod_load_more").remove();
                 alert("Can't load more comments.");
             }
         }); 
@@ -97,7 +97,7 @@ $(function() {
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
-                $("#revi_load_more").remove();
+                // $("#revi_load_more").remove();
                 alert("Can't load more comments.");
             }
         }); 
