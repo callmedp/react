@@ -123,7 +123,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 self.image_alt = self.name
         if self.description:
             if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description)
+                self.meta_desc = self.get_meta_desc(self.description.strip())
                 
         super(Category, self).save(*args, **kwargs)
     

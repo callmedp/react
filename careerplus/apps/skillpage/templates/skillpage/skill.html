@@ -100,12 +100,14 @@
 
 			<!-- Importance in Market -->
 			<div id="market" class="importance-market clearfix mb-40 scroll">
+			    {% if category_obj.graph_image %}
 				<h2>Importance in Market</h2>
 			    <div class="col-sm-6 box-panel">
 			    	<figure>
 			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
 			    	</figure>
 			    </div>
+			    {% endif %} 
 				<div class="col-sm-6 market-growth">
 					<div class="col-sm-12 box-panel">
 						<div class="media">

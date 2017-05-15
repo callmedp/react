@@ -21,7 +21,7 @@ class SkillPageView(TemplateView, SkillPageMixin):
 
         try:
             self.category_obj = Category.objects.prefetch_related('categoryproducts').get(
-                pk=pk, active=True, is_skill=True)
+                pk=pk, active=True, is_skill=True, slug=slug)
         except Exception:
             raise Http404
 
@@ -75,7 +75,7 @@ class SkillPageView(TemplateView, SkillPageMixin):
         breadcrumbs.append({
             "url": reverse('skillpage:skill-page-listing',
             kwargs={'slug': self.category_obj.slug, 'pk':self.category_obj.pk}),
-           "name": self.category_obj.get_main_parent()[0].name,
+           "name": self.category_obj.get_main_parent()[0].name if self.category_obj.get_main_parent() else None,
         })
         breadcrumbs.append({"url": None, "name": self.category_obj.name})
         data = {"breadcrumbs": breadcrumbs}
