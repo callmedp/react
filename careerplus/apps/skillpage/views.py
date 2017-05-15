@@ -53,15 +53,19 @@ class SkillPageView(DetailView, SkillPageMixin):
             return redirect
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
-        # return super(self.__class__, self).get(request, *args, **kwargs)
-
+        
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+
         slug = self.kwargs.get('slug', '')
         page = self.request.GET.get('page', 1)
+
         api_data = self.get_job_count_and_fuctionan_area(slug)
+
         career_outcomes = self.object.split_career_outcomes()
+
         prod_lists = self.object.categoryproducts.all()
+        
         prod_id_list = self.object.categoryproducts.values_list('id', flat=True)
         prod_reviews = Review.objects.filter(id__in=prod_id_list)
         
