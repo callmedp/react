@@ -28,23 +28,24 @@ class LoginToCommentView(View, RegistrationLoginApi, ShineCandidateDetail):
     http_method_names = [u'post', ]
 
     def post(self, request, *args, **kwargs):
-    	if request.is_ajax():
-    		form = LoginApiForm(request.POST)
-    		login_resp = {}
-    		if form.is_valid():
-    			remember_me = request.POST.get('remember_me')
-    			login_resp = self.user_login(self.request)
-    			if login_resp['response'] == 'login_user':
-    				resp_status = self.get_status_detail(email=None, shine_id=login_resp['candidate_id'])
-    				self.request.session.update(resp_status)
-    				if remember_me:
-	    				self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
-    			elif login_resp['response'] == 'error_pass':
-    				login_resp['error_message'] = login_resp.get("non_field_errors")[0]
-    		else:
-    			login_resp['response'] = 'form_validation_error'
-    		return HttpResponse(json.dumps(login_resp), content_type="application/json")
-    	return HttpResponseForbidden()
+        if request.is_ajax():
+            form = LoginApiForm(request.POST)
+            login_resp = {}
+            if form.is_valid():
+                remember_me = request.POST.get('remember_me')
+                login_resp = self.user_login(self.request)
+                if login_resp['response'] == 'login_user':
+                	resp_status = self.get_status_detail(email=None, shine_id=login_resp['candidate_id'])
+                	if resp_status:
+                		self.request.session.update(resp_status)
+                	if remember_me:
+                		self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                elif login_resp['response'] == 'error_pass':
+                	login_resp['error_message'] = login_resp.get("non_field_errors")[0]
+            else:
+            	login_resp['response'] = 'form_validation_error'
+            return HttpResponse(json.dumps(login_resp), content_type="application/json")
+        return HttpResponseForbidden()
 
 
 class RegisterToCommentView(View, RegistrationLoginApi, ShineCandidateDetail):

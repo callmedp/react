@@ -4,8 +4,8 @@ $(document).ready(function() {
         event.preventDefault();
         var pop_up = $(this).attr('pop-up');
         var href = $(this).attr('href');
-        console.log(pop_up);
-        console.log(href);
+        // console.log(pop_up);
+        // console.log(href);
         if (pop_up == "no") {
             $("#id_action").val(2);   // action for login -user
             $("#downloadpdf_form").submit();
@@ -225,6 +225,7 @@ $(document).ready(function() {
                 success: function(data, textStatus, jqXHR)
                 {
                     alert('Your Query Submitted Successfully.');
+                    $('#callback_form')[0].reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown)
                 {

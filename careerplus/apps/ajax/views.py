@@ -88,19 +88,6 @@ class CmsShareView(View):
 			return HttpResponse(json.dumps(list(data)), content_type="application/json")
 
 
-class CheckLoginStatus(View):
-	
-	def get(self, request, *args, **kwargs):
-		if request.is_ajax():
-			action = request.GET.get('action', '')
-			if action == 'login_status':
-				data = {}
-				if request.user.is_authenticated():
-					data['status'] = 1
-				else:
-					data['status'] = 0
-				return HttpResponse(json.dumps(data), content_type="application/json")
-
 
 class AjaxProductLoadMoreView(TemplateView):
     template_name = 'include/load_product.html'

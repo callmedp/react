@@ -33,8 +33,19 @@
             <span class="error position-error"></span>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="id_mobile" aria-describedby="emailHelp" name="mobile_number" placeholder="Mobile">
-            <span class="error position-error"></span>
+            <div class="country-code">
+              <div class="custom-select">
+                <select class="form-control" name="country_code">
+                  {% for country in country_choices %}
+                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.1}}</option>
+                  {% endfor %}
+                  <!--option>+91</option>
+                  <option>+91</option-->
+                </select>
+              </div>
+              <input type="text" id="id_mobile" name="mobile_number" class="form-control modal-form-control" placeholder="Mobile">
+              <span class="error position-error"></span>
+            </div>
           </div>
           <div class="form-group">
             
@@ -56,17 +67,3 @@
     </div>
   </div>
 </div>  
-
-
-{% comment %}
-{% load static %}
-<div class="download-pdf mb-40">
-  <a href="#">
-    <img class="img-responsive" src="{% static 'console/images/cms/download-pdf.jpg' %}" alt="Download Resume">
-    <span class="download-box">
-      <figure class="download-icon"></figure>
-      Download as PDF
-    </span>
-  </a>
-</div>
-{% endcomment %}

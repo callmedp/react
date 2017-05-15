@@ -232,6 +232,7 @@ class Document(models.Model):
 
 class Comment(AbstractCommonModel):
 	page = models.ForeignKey(Page)
+	candidate_id = models.CharField(max_length=255, null=True)
 	message = models.TextField(null=False, blank=False)
 	is_published = models.BooleanField(default=False)
 	is_removed = models.BooleanField(default=False)

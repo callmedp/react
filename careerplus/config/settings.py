@@ -51,8 +51,6 @@ WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-HOST_NAME = 'http://127.0.0.1:8000'
-
 META_SITE_PROTOCOL = 'https'
 META_SITE_DOMAIN = 'learning.shine.com'
 META_SITE_TYPE = 'Website'
