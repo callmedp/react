@@ -10,9 +10,9 @@
  
 {% endblock title %}
 {% block css_section %}
-        {{block.super}} 
-  <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" 
-  rel="stylesheet">       
+        {{block.super}}  
+  <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" rel="stylesheet">
+  <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">       
 {% endblock css_section %}
 
 {% block pageheading %}
@@ -183,8 +183,10 @@
 					            </div>
 				          	</a>
 				        </li>
+				        {% if products.has_next %}
 				        <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> 
 				        Load more</a>
+				        {% endif %}
 		      	
 			    	{% endfor %}
 		      	</ul>
@@ -220,7 +222,9 @@
 		            		</article>
 		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
+		          		{% if page_reviews.has_next %}
 		          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview"> Load more</a>
+		          		{% endif %}
 		          	{% endfor %}
 		        	</ul>
 		        	<div id="revi_load_more">

@@ -25,7 +25,7 @@ $(function() {
                 required:"Mobile Number is Mandatory",
                 number:"Enter only number",
                 maxlength: "Please enter below 15 digits",
-                minlength: "Please enter atleast 5 digits",
+                minlength: "Please enter atleast 10 digits",
             },
             
         },
