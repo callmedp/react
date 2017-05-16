@@ -108,7 +108,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         breadcrumbs.append({
             "url": reverse('skillpage:skill-page-listing',
             kwargs={'slug': self.object.slug, 'pk':self.object.pk}),
-           "name": self.object.get_main_parent()[0].name if self.object.get_main_parent() else '',
+           "name": self.object.get_parent()[0].name if self.object.get_parent() else '',
         })
         breadcrumbs.append({"url": None, "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
