@@ -413,7 +413,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
         self.fields['video_link'].widget.attrs['maxlength'] = 80
         self.fields['video_link'].widget.attrs['placeholder'] = 'Add video url'
         self.fields['video_link'].widget.attrs['data-parsley-type'] = 'url'
-        # self.fields['video_link'].widget.attrs['required'] = "required"
+        self.fields['video_link'].help_text = "Please add Video url without https/http"
         
         self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 100]"

@@ -61,14 +61,17 @@ class SkillPageView(DetailView, SkillPageMixin):
         page = self.request.GET.get('page', 1)
 
         api_data = self.get_job_count_and_fuctionan_area(slug)
-
         career_outcomes = self.object.split_career_outcomes()
-
-        prod_lists = self.object.categoryproducts.all()
         
+        prod_lists = self.object.categoryproducts.all()
         prod_id_list = self.object.categoryproducts.values_list('id', flat=True)
         prod_reviews = Review.objects.filter(id__in=prod_id_list)
-        
+
+        try:
+            prod_lists[0]
+        except Exception:
+            raise Http404
+
         prod_page = Paginator(prod_lists, 1)
 
         try:
