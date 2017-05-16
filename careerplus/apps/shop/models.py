@@ -113,7 +113,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return dict(CATEGORY_CHOICES).get(self.type_level)
 
     def save(self, *args, **kwargs):
-        if not self.url:
+        if not self.url and self.pk:
             self.url = self.get_full_url()
         if self.name:
             if not self.title:
@@ -151,8 +151,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
-        # return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug})
-        return '/' #reverse('category-listing', kwargs={'slug': self.slug})
+        if self.pk:
+            return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug, 'pk': self.pk})
         
     def add_relationship(self, category, relation=0):
         relationship, created = CategoryRelationship.objects.get_or_create(
@@ -216,7 +216,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
 
     def split_career_outcomes(self):
-        return self.career_outcomes.split(';')
+        return self.career_outcomes.split(',')
     
 
     def has_children(self):

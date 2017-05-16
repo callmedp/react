@@ -5,7 +5,7 @@ $(function() {
                 	required: true,
                     maxlength: 80,
                 },
-                mobile_no:{
+                mobile_number:{
                     required: true,
                     number: true,
                     minlength: 5,
@@ -21,7 +21,7 @@ $(function() {
             	required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters.",
             },
-            mobile_no:{
+            mobile_number:{
                 required:"Mobile Number is Mandatory",
                 number:"Enter only number",
                 maxlength: "Please enter below 15 digits",
@@ -63,6 +63,7 @@ $(function() {
 
     $(document).on('click', '#product_load_more', function(event) {
         var page = parseInt($("#page_id").val());
+        $("#product_load_more").hide();
         $.ajax({
             url: "/ajax/product/load-more/",
             data : {"page": page, "slug": $("#slug_id").val()},
@@ -75,28 +76,28 @@ $(function() {
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
-                $("#prod_load_more").remove();
+                // $("#prod_load_more").remove();
                 alert("Can't load more comments.");
             }
         }); 
   
     });
     $(document).on('click', '#review_load_more', function(event) {
-        alert("sdsaddas");
-        var page = parseInt($("#page_id").val());
+        var page = parseInt($("#page_id1").val());
+        $("#review_load_more").hide();
         $.ajax({
             url: "/ajax/review/load-more/",
-            data : {"page": page, "slug": $("#slug_id").val()},
+            data : {"page": page, "slug": $("#slug_id1").val()},
             success: function(data, textStatus, jqXHR)
             {
-                document.getElementById("page_id").value = Number(page)+1;
+                document.getElementById("page_id1").value = Number(page)+1;
                 $('html,body').animate({scrollTop: $("#review_load_more").offset().top},500);
-                $("#product_list").append(data);       
+                $("#review_list").append(data);       
                 
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
-                $("#prod_load_more").remove();
+                // $("#revi_load_more").remove();
                 alert("Can't load more comments.");
             }
         }); 
