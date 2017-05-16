@@ -15,7 +15,8 @@ from django.db.models import Q
 from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
-    Attribute, AttributeOptionGroup)
+    Attribute, AttributeOptionGroup,
+    Product)
 
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
@@ -24,9 +25,18 @@ from .shop_form import (
     RelationshipInlineFormSet,
     ChangeCategorySkillForm,)
 from shop.forms import (
-    AddKeywordForm, AddAttributeOptionForm,
-    AddAttributeForm)
-from faq.forms import AddFaqForm, AddChapterForm
+    AddKeywordForm,
+    AddAttributeOptionForm,
+    AddAttributeForm, AddProductForm,
+    ChangeProductForm,
+    ChangeProductSEOForm,
+    ChangeProductAttributeForm,
+    ChangeProductOperationForm)
+
+from faq.forms import (
+    AddFaqForm,
+    AddChapterForm,
+    ChangeFaqForm)
 from faq.models import FAQuestion, Chapter
 
 @Decorate(check_permission('shop.add_category'))
@@ -52,6 +62,7 @@ class AddCategoryView(FormView):
             self.request,
             "You have successfully added a catagory"
         )
+        self.success_url = reverse_lazy('console:category-list')
         return super(AddCategoryView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -124,7 +135,7 @@ class ChangeCategoryView(DetailView):
                             messages.success(
                                 self.request,
                                 "Category Object Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:category-change', kwargs={'pk': obj.pk}))
+                            return HttpResponseRedirect(reverse('console:category-list',))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -144,7 +155,7 @@ class ChangeCategoryView(DetailView):
                             messages.success(
                                 self.request,
                                 "Category SEO Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:category-change', kwargs={'pk': obj.pk}))
+                            return HttpResponseRedirect(reverse('console:category-list',))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -164,7 +175,7 @@ class ChangeCategoryView(DetailView):
                             messages.success(
                                 self.request,
                                 "Category Skill Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:category-change', kwargs={'pk': obj.pk}))
+                            return HttpResponseRedirect(reverse('console:category-list',))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -202,7 +213,7 @@ class ChangeCategoryView(DetailView):
                                 messages.success(
                                     self.request,
                                     "Category Relationship changed Successfully")
-                                return HttpResponseRedirect(reverse('console:category-change', kwargs={'pk': obj.pk}))
+                                return HttpResponseRedirect(reverse('console:category-change',kwargs={'pk': obj.pk}))
                             else:
                                 context = self.get_context_data()
                                 if formset:
@@ -287,38 +298,6 @@ class ListCategoryRelationView(TemplateView):
         return context
 
 
-@Decorate(check_permission('shop.add_product'))
-class AddProductView(FormView):
-    form_class = AddCategoryForm
-    template_name = 'console/shop/add_product.html'
-    http_method_names = ['get', 'post']
-    success_url = reverse_lazy('console:product-add')
-
-    def get(self, request, *args, **kwargs):
-        return super(AddProductView, self).get(
-            request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(AddProductView, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        context.update({'messages': alert})
-        return context
-
-    # def form_valid(self, form):
-    #     form.save()
-    #     messages.success(
-    #         self.request,
-    #         "You have successfully added a catagory"
-    #     )
-    #     return super(AddCategoryView, self).form_valid(form)
-
-    # def form_invalid(self, form):
-    #     messages.error(
-    #         self.request,
-    #         "Your submission has not been saved. Try again."
-    #     )
-    #     return super(AddCategoryView, self).form_invalid(form)
-
 
 @Decorate(check_permission('faq.add_faquestion'))
 class AddFaqView(FormView):
@@ -343,6 +322,7 @@ class AddFaqView(FormView):
             self.request,
             "You have successfully added a faq"
         )
+        self.success_url = reverse_lazy('console:faquestion-list')
         return super(AddFaqView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -376,6 +356,7 @@ class AddChapterView(FormView):
             self.request,
             "You have successfully added a Chapter"
         )
+        self.success_url = reverse_lazy('console:chapter-list')
         return super(AddChapterView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -409,6 +390,7 @@ class AddKeywordView(FormView):
             self.request,
             "You have successfully added a Keyword"
         )
+        self.success_url = reverse_lazy('console:keyword-list')
         return super(AddKeywordView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -440,8 +422,9 @@ class AddAttributeOptionView(FormView):
         form.save()
         messages.success(
             self.request,
-            "You have successfully added a Keyword"
+            "You have successfully added a attribute option group"
         )
+        self.success_url = reverse_lazy('console:attributeoption-list')
         return super(AddAttributeOptionView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -472,8 +455,9 @@ class AddAttributeView(FormView):
         form.save()
         messages.success(
             self.request,
-            "You have successfully added a Keyword"
+            "You have successfully added a attribute"
         )
+        self.success_url = reverse_lazy('console:attribute-list')
         return super(AddAttributeView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -775,3 +759,418 @@ class ListAttributeOptionGroupView(ListView, PaginationMixin):
         return context
 
 
+class ChangeAttributeView(DetailView):
+    template_name = 'console/shop/change_attribute.html'
+    model = Attribute
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ChangeAttributeView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ChangeAttributeView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(ChangeAttributeView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangeAttributeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        main_change_form = AddAttributeForm(
+            instance=self.get_object())
+        context.update({
+            'messages': alert,
+            'form': main_change_form})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                attr = int(request.POST.get('attribute'))
+                if obj == attr:
+                    obj = self.object = self.get_object()
+                    form = None
+                    form = AddAttributeForm(
+                        request.POST, instance=obj)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(
+                            self.request,
+                            "Attribute Changed Successfully")
+                        return HttpResponseRedirect(reverse('console:attribute-list',))
+                    else:
+                        context = self.get_context_data()
+                        if form:
+                            context.update({'form': form})
+                        messages.error(
+                            self.request,
+                            "Attribute Object Change Failed, Changes not Saved")
+                        return TemplateResponse(
+                            request, [
+                                "console/shop/change_attribute.html"
+                            ], context)
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:attribute-change', kwargs={'pk': attr}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:attribute-change', kwargs={'pk': attr}))
+        return HttpResponseBadRequest()
+
+
+class ChangeFaqView(DetailView):
+    template_name = 'console/shop/change_faq.html'
+    model = FAQuestion
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ChangeFaqView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ChangeFaqView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(ChangeFaqView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangeFaqView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        main_change_form = ChangeFaqForm(
+            instance=self.get_object())
+        context.update({
+            'messages': alert,
+            'form': main_change_form})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                faq = int(request.POST.get('faq'))
+                if obj == faq:
+                    obj = self.object = self.get_object()
+                    form = None
+                    form = ChangeFaqForm(
+                        request.POST, instance=obj)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(
+                            self.request,
+                            "FAQ Changed Successfully")
+                        return HttpResponseRedirect(reverse('console:faquestion-list',))
+                    else:
+                        context = self.get_context_data()
+                        if form:
+                            context.update({'form': form})
+                        messages.error(
+                            self.request,
+                            "FAQ Object Change Failed, Changes not Saved")
+                        return TemplateResponse(
+                            request, [
+                                "console/shop/change_faq.html"
+                            ], context)
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:faquestion-change', kwargs={'pk': faq}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:faquestion-change', kwargs={'pk': faq}))
+        return HttpResponseBadRequest()
+
+
+class ChangeKeywordView(DetailView):
+    template_name = 'console/shop/change_keyword.html'
+    model = Keyword
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ChangeKeywordView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ChangeKeywordView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(ChangeKeywordView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangeKeywordView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        main_change_form = AddKeywordForm(
+            instance=self.get_object())
+        context.update({
+            'messages': alert,
+            'form': main_change_form})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                key = int(request.POST.get('keyword'))
+                if obj == key:
+                    obj = self.object = self.get_object()
+                    form = None
+                    form = AddKeywordForm(
+                        request.POST, instance=obj)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(
+                            self.request,
+                            "Keyword Changed Successfully")
+                        return HttpResponseRedirect(reverse('console:keyword-list',))
+                    else:
+                        context = self.get_context_data()
+                        if form:
+                            context.update({'form': form})
+                        messages.error(
+                            self.request,
+                            "Keyword Object Change Failed, Changes not Saved")
+                        return TemplateResponse(
+                            request, [
+                                "console/shop/change_keyword.html"
+                            ], context)
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:keyword-change', kwargs={'pk': key}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:keyword-change', kwargs={'pk': key}))
+        return HttpResponseBadRequest()
+
+
+
+@Decorate(check_permission('shop.change_product'))
+class ListProductView(ListView, PaginationMixin):
+    model = Product
+    context_object_name = 'product_list'
+    template_name = 'console/shop/list_product.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListProductView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListProductView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListProductView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListProductView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['product_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('shop.add_product'))
+class AddProductView(FormView):
+    form_class = AddProductForm
+    template_name = 'console/shop/add_product.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:product-add')
+
+    def get(self, request, *args, **kwargs):
+        return super(AddProductView, self).get(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddProductView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a product"
+        )
+        self.success_url = reverse_lazy('console:product-list')
+        return super(AddProductView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your submission has not been saved. Try again."
+        )
+        return super(AddProductView, self).form_invalid(form)
+
+
+class ChangeProductView(DetailView):
+    template_name = 'console/shop/change_product.html'
+    model = Product
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ChangeProductView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ChangeProductView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(ChangeProductView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangeProductView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        main_change_form = ChangeProductForm(
+            instance=self.get_object())
+        seo_change_form = ChangeProductSEOForm(
+            instance=self.get_object())
+        attr_change_form = ChangeProductAttributeForm(
+            instance=self.get_object())
+        op_change_form = ChangeProductOperationForm(
+            instance=self.get_object())
+        context.update({
+            'messages': alert,
+            'form': main_change_form,
+            'seo_form': seo_change_form,
+            'attr_form': attr_change_form,
+            'op_form': op_change_form})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST or self.request.FILES:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                prd = int(request.POST.get('product'))
+                if obj == prd:
+                    obj = self.object = self.get_object()
+                    slug = request.POST.get('slug', None)
+                    form = None
+                    if slug == 'main':
+                        form = ChangeProductForm(
+                            request.POST, request.FILES, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Product Object Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-list',))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'form': form})
+                            messages.error(
+                                self.request,
+                                "Product Object Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'seo':
+                        form = ChangeProductSEOForm(
+                            request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Product SEO Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-list',))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'seo_form': form})
+                            messages.error(
+                                self.request,
+                                "Product SEO Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'operation':
+                        form = ChangeProductOperationForm(
+                            request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Product Operation Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-list',))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'op_form': form})
+                            messages.error(
+                                self.request,
+                                "Product Operation Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'attribute':
+                        form = ChangeProductAttributeForm(
+                            request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Product Attribute Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-list',))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'attr_form': form})
+                            messages.error(
+                                self.request,
+                                "Product Attribute Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:product-change', kwargs={'pk': prd}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:product-change', kwargs={'pk': prd}))
+        return HttpResponseBadRequest()
+
+    

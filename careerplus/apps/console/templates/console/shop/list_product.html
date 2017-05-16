@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Keyword Listing</title>
+  <title>Product Listing</title>
 {% endblock title %}
 
 {% block pagecontent %}
@@ -13,10 +13,10 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Keywords</h3>
+        <h3>Products</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:keyword-list" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:product-list" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -32,8 +32,8 @@
 
     <div class="row top_tiles">
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:keyword-add" %}">
-          <i class="fa fa-edit"></i> Add New Keyword</a>
+        <a class="btn btn-app" href="{% url "console:product-add" %}">
+          <i class="fa fa-edit"></i> Add New Product</a>
       </div>
     </div>
 
@@ -78,7 +78,9 @@
                 <thead>
                   <tr class="headings">
                     <th class="column-title"># </th>
-                    <th class="column-title">Keyword</th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Icon</th>
+                    <th class="column-title">Type</th>
                     <th class="column-title">#Edit</th>
                     </tr>
                 </thead>
@@ -94,7 +96,23 @@
                     <small>Modified {{obj.modified|naturaltime}}</small>
                   </td>
                   <td>
-                    <a href="{% url "console:keyword-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                    <ul class="list-inline">
+                      <li>
+                        {% if obj.icon %}
+                          <img src="{{obj.icon.url}}" class="avatar" alt="{{obj.image_alt}}">
+                        {% elif obj.image %}
+                          {% thumbnail obj.image "100x100" crop="center" as im %}
+                            <img src="{{ im.url }}" class="avatar" >
+                          {% endthumbnail %}  
+                        {% endif %}
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs">{{obj.get_type}}</button>
+                  </td>
+                  <td>
+                    <a href="{% url "console:product-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                   </td>
                 </tr>
                 {% endfor %}

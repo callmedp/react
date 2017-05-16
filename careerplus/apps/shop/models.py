@@ -31,7 +31,8 @@ from .choices import (
     ATTRIBUTE_CHOICES,
     RELATION_CHOICES,
     COURSE_TYPE_CHOICES,
-    MODE_CHOICES)
+    MODE_CHOICES,
+    BG_CHOICES)
 
 
 class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -395,6 +396,8 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_product_icon,
         blank=True, null=True)
+    image_bg = models.PositiveSmallIntegerField(
+        _('Icon Background'), choices=BG_CHOICES, default=0)
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_product_image,
         blank=True, null=True)
@@ -539,6 +542,31 @@ class Product(AbstractProduct, ModelMeta):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if self.name:
+            if not self.title:
+                self.title = self.name
+            if not self.heading:
+                self.heading = self.name
+            if not self.image_alt:
+                self.image_alt = self.name
+        if self.description:
+            if not self.meta_desc:
+                self.meta_desc = self.get_meta_desc(self.description)
+                
+        super(Product, self).save(*args, **kwargs)
+
+    def get_meta_desc(self, description=''):
+        if description:
+            try:
+                import re
+                cleanr = re.compile('<.*?>')
+                cleantext = re.sub(cleanr, '', description)
+            except:
+                cleantext = ''
+        return cleantext
+
+
     @property
     def category_slug(self):
         prod_cat = self.categories.filter(
@@ -552,6 +580,43 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
+
+    def create_icon(self):
+        if not self.image:
+            return
+        from PIL import Image
+        from io import BytesIO
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        import os
+
+        THUMBNAIL_SIZE = (100, 100)
+        DJANGO_TYPE = None
+
+        if self.image.name.endswith(".jpg"):
+            DJANGO_TYPE = 'image/jpeg'
+            PIL_TYPE = 'jpeg'
+            FILE_EXTENSION = 'jpg'
+        elif self.image.name.endswith(".png"):
+            DJANGO_TYPE = 'image/png'
+            PIL_TYPE = 'png'
+            FILE_EXTENSION = 'png'
+        else:
+            return
+        image = Image.open(BytesIO(self.image.read()))
+        image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
+
+        temp_handle = BytesIO()
+        image.save(temp_handle, PIL_TYPE)
+        temp_handle.seek(0)
+
+        suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
+                temp_handle.read(), content_type=DJANGO_TYPE)
+        self.icon.save(
+            '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
+            suf,
+        )
+        return
+
 
     def get_rating(self):
         rating_ls = []
@@ -619,6 +684,11 @@ class Product(AbstractProduct, ModelMeta):
     @property
     def has_attributes(self):
         return self.attributes.exists()
+
+    @property
+    def get_type(self):
+        return dict(PRODUCT_CHOICES).get(self.type_product)
+
 
 
 class ProductArchive(AbstractProduct):

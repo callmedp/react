@@ -4,7 +4,7 @@
 {% load console_tags %}
 
 {% block title %}
-  <title>Add Attributes</title>
+  <title>Change Attributes</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -67,7 +67,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Add Attribute<small>(add new product attribute.)</small></h2>
+            <h2>Change Attribute<small>(change product attribute.)</small></h2>
 
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -113,6 +113,8 @@
                 </div>
                 <div class="alert">{{form.type_service.errors}}</div>
               </div>
+              <input type="hidden" name="attribute" value="{{object.pk}}">
+              
 
               <div class="item form-group {% if form.type_attribute.errors %}bad{% endif %}">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_attribute.id_for_label }}"> Type Value <span class="required"></span>

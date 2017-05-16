@@ -30,7 +30,7 @@ class AddCategoryForm(forms.ModelForm):
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
         # self.fields['image'].widget.attrs['required'] = 'required'
         # self.fields['image'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        
+
         self.fields['banner'].widget.attrs['class'] = form_class
         self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 300
         self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
