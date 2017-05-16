@@ -122,8 +122,8 @@ class SkillQueryLead(View, UploadInFile):
     def post(self, request, *args, **kwargs):
         data_dict = {}
         name = request.POST.get('name', '')
-        mobile = request.POST.get('mobile_no', '')
-        message = request.POST.get('message', '')
+        mobile = request.POST.get('mobile_number', '')
+        message = request.POST.get('message_box', '')
 
         data_dict = {
             "name": name,
