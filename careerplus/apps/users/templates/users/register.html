@@ -51,26 +51,38 @@
   </div>
     <form method="post" id="register_form">
     {% csrf_token %}
-      <fieldset>
-          {% for field in form %}
-              {% if field.errors %}
-                  <div class="form-group error">  
-                      {{ field }}
-                    <span class="error-txt">
-                      {% for error in  field.errors %}{{ error }}{% endfor %}
-                    </span>
-                  </div>
+      <div class="form-group {% if form.email.errors %}error{% endif %}">
+        {{ form.email }}
+        <span class="error-txt">{{ form.email.errors }}</span>
+      </div>
+      <div class="form-group {% if form.email.errors %}error{% endif %}">
+        {{ form.raw_password }}
+        <span class="error-txt">{{ form.raw_password.errors }}</span>
+      </div>
+      <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
+        <div class="country-code">
+          <div class="custom-select">
+            <select class="form-control" name="country_code">
+              {% for pk, code in form.country_code.field.choices %}
+              {% if pk == 105 and code == '91' %}
+                <option value="{{pk}}" selected>{{code}}</option>
               {% else %}
-                  <div class="form-group">
-                      {{ field }}
-                      <span class="error-txt"></span>
-                  </div>
+                <option value="{{pk}}">{{code}}</option>
               {% endif %}
-          {% endfor %}
-      </fieldset>
+              {% endfor %}
+            </select>
+          </div>
+          {{form.cell_phone}}
+          <span class="error-txt">{{form.cell_phone.errors}}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        {{ form.vendor_id }}
+      </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input type="checkbox" class="form-check-input" name="term_conditions">
+          <input type="checkbox" class="form-check-input" 
+          name="term_conditions">
           I agree to Terms & conditions
         </label>
       </div>

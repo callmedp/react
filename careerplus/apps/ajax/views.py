@@ -1,6 +1,7 @@
 import json
 import logging
 import datetime
+import requests
 
 from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
@@ -12,6 +13,7 @@ from cms.mixins import LoadMoreMixin
 from shop.models import Category
 from blog.models import Blog, Comment
 from review.models import Review
+from users.mixins import RegistrationLoginApi
 
 
 class ArticleCommentView(View):
@@ -142,3 +144,14 @@ class AjaxReviewLoadMoreView(TemplateView):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
         return context
+
+
+class EmailExistView(View):
+	def get(self, request, *args, **kwargs):
+		if request.is_ajax():
+			email = request.GET.get('email')
+			try:
+				data = RegistrationLoginApi().check_email_exist(email)
+			except:
+				pass
+			return HttpResponse(json.dumps(data), content_type="application/json")

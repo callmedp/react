@@ -1,4 +1,12 @@
 $().ready(function() {
+    $.validator.addMethod("email_account", function(value, element) {
+        $.get("/ajax/email-exist/", {email:$("#id_email").val() }, function(msg){
+           {
+              if(msg.exists == "false")
+                 return false;  
+              return true;
+           }
+        })}, "User have No account");
     $("#login_form").validate({
         submitHandler: function(form) {
             $("#login_form").submit();   
@@ -6,7 +14,9 @@ $().ready(function() {
         rules: {
                 email:{
                     required:true,
-                    email:true
+                    email:true,
+                    email_account:$("#id_email").val()
+
                 },
                 password:{
                     required:true,

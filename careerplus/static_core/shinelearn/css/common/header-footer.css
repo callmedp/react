@@ -1287,11 +1287,7 @@ footer .footer-links span {
 }
 
 .login-page-bg {
-<<<<<<< HEAD
   background: url(../../images/common/login-bg.jpg) no-repeat 0 0;
-=======
-  background: url(../images/login-bg.jpg) no-repeat 0 0;
->>>>>>> c7c971212d1cf74e7f2b04058475bbe9bad073d1
   width: 100%;
   height: 357px;
   background-size: cover;

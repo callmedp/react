@@ -3,7 +3,7 @@ from django.conf.urls import url
 
 from .views import AjaxCommentLoadMoreView, CmsShareView,\
    ArticleShareView, ArticleCommentView,\
-   AjaxProductLoadMoreView, AjaxReviewLoadMoreView
+   AjaxProductLoadMoreView, AjaxReviewLoadMoreView, EmailExistView
 
 urlpatterns = [
     url(r'^page/load-more/$',
@@ -23,5 +23,8 @@ urlpatterns = [
 
     url(r'^article-comment/$',
     	ArticleCommentView.as_view(), name='article-comment-post'),
+
+    url(r'^email-exist/$',
+        EmailExistView.as_view(), name='email-exist'),
 
 ]
