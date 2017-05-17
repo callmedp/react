@@ -11,6 +11,7 @@ from cms.models import Page
 from cms.mixins import LoadMoreMixin
 from shop.models import Category
 from blog.models import Blog, Comment
+from review.models import Review
 
 
 class ArticleCommentView(View):
@@ -102,14 +103,42 @@ class AjaxProductLoadMoreView(TemplateView):
         try:
             page_obj = Category.objects.get(slug=slug, active=True)
             products = page_obj.product_set.all()
-            paginator = Paginator(products, 2)
+            paginator = Paginator(products, 1)
             try:
                 products = paginator.page(page)
             except PageNotAnInteger:
                 products = paginator.page(1)
             except EmptyPage:
+            	# products=paginator.page(paginator.num_pages)
                 products = 0
             context.update({'products': products, 'page': page, 'slug': slug})
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+        return context
+
+
+class AjaxReviewLoadMoreView(TemplateView):
+    template_name = 'include/load_review.html'
+
+    def get(self, request, *args, **kwargs):
+        return super(AjaxReviewLoadMoreView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AjaxReviewLoadMoreView, self).get_context_data(**kwargs)
+        slug = self.request.GET.get('slug', '')
+        page = int(self.request.GET.get('page', 1))
+        try:
+            page_obj = Category.objects.get(slug=slug, active=True)
+            prod_id_list = page_obj.product_set.values_list('id', flat=True)
+            prod_reviews = Review.objects.filter(id__in=prod_id_list)
+            paginator = Paginator(prod_reviews, 1)
+            try:
+                page_reviews = paginator.page(page)
+            except PageNotAnInteger:
+                page_reviews = paginator.page(1)
+            except EmptyPage:
+                page_reviews = 0
+            context.update({'page_reviews': page_reviews, 'page':page, 'slug':slug})
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
         return context

@@ -83,3 +83,14 @@ MODE_CHOICES = (
     (1, 'Online'),
     (2, 'Classroom'),
     (3, 'Online + Classroom'),)
+
+
+BG_COLOR = { 0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
+    4: "#a69cba", 5: "#8cb3f6", 6: "#9ac7e5", 7: "#ad9c7f",
+    8: "#80d7ff", 9: "#a48e96", 10: "#b4e4fc", 11: "#d7ccc8",
+    12: "#a3e77d", 13: "#ebdcc9", 14: "#9fdbd6", 15: "#a19f9c",
+    16: "#deae9e", 17: "#73a4d4", 18: "#cba5bf", 19: "#9099c6",
+    20: "#d9bee7", 21: "#cddb3a", 22: "#81c783", 23: "#afbec6",
+    24: "#cdac98", 25: "#c5cbe9", 26: "#d5d5d5", 27: "#e39b71"
+}
+BG_CHOICES = tuple(BG_COLOR.items())

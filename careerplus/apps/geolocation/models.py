@@ -6,8 +6,22 @@ from cities_light.receivers import connect_default_signals
 from django.db import models
 from seo.models import AbstractAutoDate
 
+CURRENCY_SYMBOL = (
+    (0, 'Rs.'),
+    (1, '$'),
+    (2, 'AED'),
+    (3, 'GBP'),)
 
-class Country(AbstractCountry):
+
+class Currency(AbstractAutoDate):
+    name = models.CharField(
+        _('Name'), max_length=100,
+        help_text=_('Name of Currency'))
+    value = models.PositiveIntegerField(
+        _('Symbol'),
+        help_text=_('Symbol'),
+        choices=CURRENCY_SYMBOL,
+        default=0)
     exchange_rate = models.DecimalField(
         _('Exchange'),
         max_digits=8, decimal_places=2,
@@ -16,6 +30,19 @@ class Country(AbstractCountry):
         _('Offset'),
         max_digits=8, decimal_places=2,
         default=0.0)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Country(AbstractCountry):
+    currency = models.ForeignKey(
+        Currency,
+        verbose_name=_('Currency'),
+        on_delete=models.SET_NULL,
+        related_name='countrycurrency',
+        null=True)
     active = models.BooleanField(
         default=True)
 

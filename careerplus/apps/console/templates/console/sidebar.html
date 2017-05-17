@@ -5,21 +5,24 @@
     <ul class="nav side-menu">
       <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-          <li><a href="{% url 'console:category-add' %}">Add Category</a></li>
-          <li><a href="{% url 'console:category-list' %}">Category Listing</a></li>
-          <li><a href="{% url 'console:category-relation-list' %}">CategoryRelationship Listing</a></li>
+          <li><a href="{% url 'console:category-list' %}">Category</a></li>
+          <li><a href="{% url 'console:category-relation-list' %}">Category Relationship</a></li>
         </ul>
       </li>
       <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-          <li><a href="{% url 'console:product-add' %}">Add Product</a></li>
-          </ul>
+          <li><a href="{% url 'console:product-list' %}">Product</a></li>
+          <li><a href="{% url 'console:attributeoption-list' %}">Attribute Option</a></li>
+          <li><a href="{% url 'console:attribute-list' %}">Attribute</a>
+          </li>
+        </ul>
       </li>
-      <li><a><i class="fa fa-edit"></i> Content <span class="fa fa-chevron-down"></span></a>
+      <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-          <li><a href="{% url 'console:faquestion-add' %}">Faq</a></li>
-          <li><a href="{% url 'console:chapter-add' %}">Chapter</a></li>
-          </ul>
+          <li><a href="{% url 'console:faquestion-list' %}">Faq</a></li>
+          <li><a href="{% url 'console:chapter-list' %}">Chapter</a></li>
+          <li><a href="{% url 'console:keyword-list' %}">Keyword</a></li>
+        </ul>
       </li>
 
                         
