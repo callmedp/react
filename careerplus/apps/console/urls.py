@@ -27,7 +27,9 @@ urlpatterns += [
         shop_view.ListProductView.as_view(), name='product-list'),
     url(r'^product/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeProductView.as_view(), name='product-change'),
-    
+    url(r'^product/structurechange/(?P<pk>[\d]+)/$', shop_view.ChangeProductStructureView.as_view(), name='productstructure-change'),
+    url(r'^product/pricechange/(?P<pk>[\d]+)/$', shop_view.ChangeProductPriceView.as_view(), name='productprice-change'),
+            
 
     url(r'^faq/add/$',
         shop_view.AddFaqView.as_view(), name='faquestion-add'),

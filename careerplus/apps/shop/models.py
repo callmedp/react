@@ -373,7 +373,6 @@ class Keyword(AbstractAutoDate):
         return self.name
 
 
-
 class AbstractProduct(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
         _('Name'), max_length=100,
@@ -570,8 +569,8 @@ class Product(AbstractProduct, ModelMeta):
     @property
     def category_slug(self):
         prod_cat = self.categories.filter(
-                productcategories__is_main=True,
-                productcategories__active=True)
+            productcategories__is_main=True,
+            productcategories__active=True)
         if prod_cat:
             prod_cat = prod_cat[0].slug
         else:
@@ -688,7 +687,6 @@ class Product(AbstractProduct, ModelMeta):
     @property
     def get_type(self):
         return dict(PRODUCT_CHOICES).get(self.type_product)
-
 
 
 class ProductArchive(AbstractProduct):
@@ -927,6 +925,11 @@ class ProductCategory(AbstractAutoDate):
             'product': self.product,
             'category': self.category}
 
+    class Meta:
+        unique_together = ('product', 'category')
+        verbose_name = _('Product Category')
+        verbose_name_plural = _('Product Categories')
+
 
 class FAQProduct(AbstractAutoDate):
     question = models.ForeignKey(
@@ -947,6 +950,12 @@ class FAQProduct(AbstractAutoDate):
         return _("%(product)s to '%(question)s'") % {
             'product': self.product,
             'question': self.question}
+
+    class Meta:
+        unique_together = ('product', 'question')
+        verbose_name = _('Product FAQ')
+        ordering = ('-question_order', 'pk')
+        verbose_name_plural = _('Product FAQs')
 
 
 class ProductAttribute(AbstractAutoDate):
@@ -1029,6 +1038,13 @@ class ProductPrice(AbstractAutoDate):
             'product': self.product,
             'currency': self.currency}
 
+    class Meta:
+        unique_together = ('product', 'currency')
+        verbose_name = _('Product Currency')
+        ordering = ('pk',)
+        verbose_name_plural = _('Product Currencies')
+
+
 class ProductExtraInfo(models.Model):
     """
     Model to add any extra information to a Product.
@@ -1072,3 +1088,9 @@ class ProductChapter(AbstractAutoDate):
         return _("%(top)s to '%(cp)s'") % {
             'top': self.product,
             'cp': self.chapter}
+    
+    class Meta:
+        unique_together = ('product', 'chapter')
+        verbose_name = _('Product Chapter')
+        ordering = ('-sort_order', 'pk')
+        verbose_name_plural = _('Product Chapters')

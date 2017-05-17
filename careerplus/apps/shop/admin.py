@@ -74,10 +74,10 @@ class CategoryInline(admin.TabularInline):
 
 
 
-# class ProductAdmin(admin.ModelAdmin):
-#     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
-#         FAQuestionInline, AttributeInline,]
-#     prepopulated_fields = {"slug": ("name",)}
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
+        FAQuestionInline, AttributeInline,]
+    prepopulated_fields = {"slug": ("name",)}
 
 # class ProductAdmin(admin.ModelAdmin):
 #     list_display = ['id', 'name']
@@ -95,10 +95,9 @@ class CategoryInline(admin.TabularInline):
 #                 'attribute_values__attribute'))
 
 
-# class ProductExtraInfoAdmin(admin.ModelAdmin):
-#     list_display = ['info_type', 'product', 'content_object']
-class ProductAdmin(admin.ModelAdmin):
-    pass
+class ProductExtraInfoAdmin(admin.ModelAdmin):
+    list_display = ['info_type', 'product', 'content_object']
+
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute)

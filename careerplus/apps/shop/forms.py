@@ -2,9 +2,11 @@ from django import forms
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
-from shop.models import Keyword, AttributeOptionGroup, AttributeOption, Attribute, Product
+from shop.models import Keyword, AttributeOptionGroup, AttributeOption, Attribute, Product, Category, ProductCategory, ProductChapter, FAQProduct
 from partner.models import Vendor
 from shop.choices import BG_CHOICES
+
+
 class AddKeywordForm(forms.ModelForm):
 
     class Meta:
@@ -685,3 +687,219 @@ class ChangeProductOperationForm(forms.ModelForm):
         product = super(ChangeProductOperationForm, self).save(
             commit=True, *args, **kwargs)
         return product
+
+
+
+class ProductCategoryForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductCategoryForm, self).__init__(*args, **kwargs)
+        # if obj:
+        #     qs = Category.objects.all()
+        #     if obj.type_ == 0 or obj.type_level == 1:
+        #         qs = qs.none()
+        #     elif obj.type_level == 2:
+        #         qs = qs.filter(type_level=1)
+        #     elif obj.type_level == 3:
+        #         qs = qs.filter(type_level=2)
+        #     elif obj.type_level == 4:
+        #         qs = qs.filter(type_level=3)
+            # self.fields['related_to'].queryset = qs
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['category'].widget.attrs['class'] = form_class
+        self.fields['category'].required=True        
+        self.fields['prd_order'].widget.attrs['class'] = form_class
+        self.fields['cat_order'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        
+        self.fields['is_main'].widget.attrs['class'] = 'js-switch'
+        self.fields['is_main'].widget.attrs['data-switchery'] = 'true'
+        
+    class Meta:
+        model = ProductCategory
+        fields = (
+            'category', 'prd_order', 'cat_order', 'active',
+            'is_main')
+
+    def clean(self):
+        super(ProductCategoryForm, self).clean()
+
+
+    def clean_category(self):
+        category = self.cleaned_data.get('category', None)
+        if category:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return category
+
+
+class CategoryInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(CategoryInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        categories = []
+        main_category = []
+        duplicates = False
+        duplicates_main = False
+        for form in self.forms:
+            if form.cleaned_data:
+                category = form.cleaned_data['category']
+                is_main = form.cleaned_data['is_main']
+                product = form.cleaned_data['product']
+                if category in categories:
+                    duplicates = True
+                categories.append(category)
+
+                if is_main:
+                    if main_category:
+                        duplicates_main = True
+                    main_category.append(category)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Relationships must be unique.',
+                        code='duplicate_parent'
+                    )
+
+                if duplicates_main:
+                    raise forms.ValidationError(
+                        'Main parent must be Unique',
+                        code='double_main'
+                    )
+        return
+
+
+class ProductStructureForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductStructureForm, self).__init__(*args, **kwargs)
+        # if obj:
+        #     qs = Category.objects.all()
+        #     if obj.type_ == 0 or obj.type_level == 1:
+        #         qs = qs.none()
+        #     elif obj.type_level == 2:
+        #         qs = qs.filter(type_level=1)
+        #     elif obj.type_level == 3:
+        #         qs = qs.filter(type_level=2)
+        #     elif obj.type_level == 4:
+        #         qs = qs.filter(type_level=3)
+            # self.fields['related_to'].queryset = qs
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['chapter'].widget.attrs['class'] = form_class
+        self.fields['chapter'].required = True        
+        self.fields['sort_order'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        
+    class Meta:
+        model = ProductChapter
+        fields = (
+            'chapter', 'sort_order', 'active',)
+
+    def clean(self):
+        super(ProductStructureForm, self).clean()
+
+
+    def clean_chapter(self):
+        chapter = self.cleaned_data.get('chapter', None)
+        if chapter:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return chapter
+
+
+class ChapterInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(ChapterInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        chapters = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                chapter = form.cleaned_data['chapter']
+                product = form.cleaned_data['product']
+                if chapter in chapters:
+                    duplicates = True
+                chapters.append(chapter)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Relationships must be unique.',
+                        code='duplicate_parent'
+                    )
+
+        return
+
+
+class ProductFAQForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductFAQForm, self).__init__(*args, **kwargs)
+        # if obj:
+        #     qs = Category.objects.all()
+        #     if obj.type_ == 0 or obj.type_level == 1:
+        #         qs = qs.none()
+        #     elif obj.type_level == 2:
+        #         qs = qs.filter(type_level=1)
+        #     elif obj.type_level == 3:
+        #         qs = qs.filter(type_level=2)
+        #     elif obj.type_level == 4:
+        #         qs = qs.filter(type_level=3)
+            # self.fields['related_to'].queryset = qs
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['question'].widget.attrs['class'] = form_class
+        self.fields['question'].required = True        
+        self.fields['question_order'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        
+    class Meta:
+        model = FAQProduct
+        fields = (
+            'question', 'question_order', 'active',)
+
+    def clean(self):
+        super(ProductFAQForm, self).clean()
+
+
+    def clean_question(self):
+        question = self.cleaned_data.get('question', None)
+        if question:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return question
+
+
+class FAQInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(FAQInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        questions = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                question = form.cleaned_data['question']
+                product = form.cleaned_data['product']
+                if question in questions:
+                    duplicates = True
+                questions.append(question)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Relationships must be unique.',
+                        code='duplicate_parent'
+                    )
+        return

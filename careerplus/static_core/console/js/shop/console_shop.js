@@ -663,6 +663,32 @@ if (typeof NProgress != 'undefined') {
 		};	  
 	  	
 	  };
+
+	function init_category_product_change() {
+	  	if($('#change-category-product-form').length > 0){
+	  		console.log('check');
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+			$('#change-category-product-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});/*.on('form:submit', function() {
+			    console.log('error');
+	  		    return false; // Don't submit form for this demo
+			  });*/
+		};	  
+	  	
+	  };
+
 	
 	function init_product_add() {
 	  	if($('#add-product-form').length > 0){
@@ -754,7 +780,47 @@ if (typeof NProgress != 'undefined') {
 				$('#id_image_bg').colorselector();
 
 		}; 
-	   
+
+	function init_product_structure_change() {
+	  	if($('#change-product-structure-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-structure-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  function init_product_faq_change() {
+	  	if($('#change-product-faq-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-faq-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  }; 
 	   
 	   
 	$(document).ready(function() {
@@ -780,6 +846,10 @@ if (typeof NProgress != 'undefined') {
 		init_product_change();
 		init_product_seo_change();
 		init_product_attr_change();
+		init_category_product_change();
+
+		init_product_structure_change();
+		init_product_faq_change();
 
 
 	});	

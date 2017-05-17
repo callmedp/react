@@ -334,8 +334,6 @@ class CategoryRelationshipForm(forms.ModelForm):
 class RelationshipInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
         super(RelationshipInlineFormSet, self).clean()
-        if any(self.errors):
-            return
         parents = []
         main_parent = []
         duplicates = False
@@ -391,6 +389,8 @@ class RelationshipInlineFormSet(forms.BaseInlineFormSet):
                         'Main parent must be Unique',
                         code='double_main'
                     )
+        if any(self.errors):
+            return
         return
 
 
