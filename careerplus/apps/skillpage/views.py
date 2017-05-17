@@ -7,6 +7,7 @@ from django.utils.http import urlquote
 from shop.models import Category
 from cms.mixins import UploadInFile
 from review.models import Review
+from partner.models import Vendor
 from .mixins import SkillPageMixin
 
 # Create your views here.
@@ -23,9 +24,9 @@ class SkillPageView(DetailView, SkillPageMixin):
             queryset = self.get_queryset()
 
         if pk is not None:
-            queryset = queryset.filter(pk=pk, active=True, is_skill=True)
+            queryset = queryset.prefetch_related('categoryproducts').filter(pk=pk, active=True, is_skill=True)
         elif slug is not None:
-            queryset = queryset.filter(slug=slug, active=True, is_skill=True)
+            queryset = queryset.prefetch_related('categoryproducts').filter(slug=slug, active=True, is_skill=True)
         try:
             obj = queryset.get()
         except:
@@ -62,8 +63,14 @@ class SkillPageView(DetailView, SkillPageMixin):
 
         api_data = self.get_job_count_and_fuctionan_area(slug)
         career_outcomes = self.object.split_career_outcomes()
-        
         prod_lists = self.object.categoryproducts.all()
+        top_3_prod, top_4_vendors = None, None
+        try:    
+            top_3_prod = self.object.categoryproducts.all().order_by('-productcategories__prd_order')[0:3]
+            top_4_vendors = Vendor.objects.all()[0:4]
+        except:
+            pass
+
         prod_id_list = self.object.categoryproducts.values_list('id', flat=True)
         prod_reviews = Review.objects.filter(id__in=prod_id_list)
 
@@ -98,6 +105,8 @@ class SkillPageView(DetailView, SkillPageMixin):
             "page": page,
             "slug": slug,
             "category_obj": self.object,
+            "top_3_prod": top_3_prod,
+            "top_4_vendors": top_4_vendors,
             "products": products,
             "page_reviews":page_reviews,
             'url': 'https://' + self.object.video_link

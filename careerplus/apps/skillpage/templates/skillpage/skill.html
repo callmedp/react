@@ -31,32 +31,43 @@
             </ol>
 			<div class="skill-caption">
 				<h1>{{category_obj.name}} <br> programs</h1>
-				{% if prod.0 or  prod.1 or prod.2 %}
-				<strong>
-				{{prod.0}}    |    {{prod.1}}     |       {{prod.2}}
-				</strong>
+					<strong>
+					{% if top_3_prod.0 %}
+					    <a href="#">{{top_3_prod.0.name}}</a>  
+					{% endif %}
+
+					{% if top_3_prod.1 %}
+					                                  |    
+						<a href="#">{{top_3_prod.1.name}}</a>    
+					{% endif %}
+					{% if top_3_prod.2 %}
+					                                   |
+						<a href="#">{{top_3_prod.2.name}}</a>
+					{% endif %}
+					</strong>
+				{% if top_4_vendors %}
+					<div class="provider">
+					       Provider
+					   {% for top_4_vendor in top_4_vendors %}    
+						{% if forloop.counter == 1 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 2 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 3 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 4 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% endfor %}
+					</div>
 				{% endif %}
-				<div class="provider">
-					{% if prod.0.vendor.icon %}
-					    Provider
-						<img src="{{prod.0.vendor.icon.url}}" 
-						alt="V Skills" class="img-responsive">
-					{% endif %}
-					{% if prod.1.vendor.icon %}
-						<img src="{{prod.1.vendor.icon.url}}" 
-						alt="V Skills" class="img-responsive">
-					{% endif %}
-					{% if prod.2.vendor.icon %}
-						<img src="{{prod.2.vendor.icon.url}}" 
-						alt="V Skills" class="img-responsive">
-					{% endif %}
-					<!--
-					<img src="{% static 'console/images/skillpage/aspiration-logo.jpg' %}" alt="Aspiration" class="img-responsive">
-					<img src="{% static 'console/images/skillpage/iact-logo.jpg' %}" alt="IACT" class="img-responsive">
-					<img src="{% static 'console/images/skillpage/skill-soft-logo.jpg' %}" alt="Skillsoft" class="img-responsive">
-					-->
-					
-				</div>
 			</div>
 		</div>
 	</header>
