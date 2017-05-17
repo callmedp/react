@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Cart, LineItem
+from .models import Cart, LineItem, ShippingDetail
 
 
 class CartAdmin(admin.ModelAdmin):
@@ -12,3 +12,4 @@ class LineitemAdmin(admin.ModelAdmin):
 
 admin.site.register(Cart, CartAdmin)
 admin.site.register(LineItem, LineitemAdmin)
+admin.site.register(ShippingDetail)

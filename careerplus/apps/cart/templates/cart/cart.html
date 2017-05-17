@@ -41,9 +41,9 @@
 {% block container %}
     <section class="container mt-53">
 
+        {% if cart_items %}
         <!-- page content body start -->
         <div class="row">
-
         <!-- left content start -->
         <div class="col-sm-9">
           <div class="cart">
@@ -53,26 +53,34 @@
               <li class="col-sm-2"><span class="cart-heading">Price</span></li>
               <li class="col-sm-2 col-md-1"></li>
             </ul>
-            <!-- item 1 -->
-            <ul>
-              <li class="col-sm-5 col-md-6">
-                <span class="cart-sub-heading">Six Sigma green belt</span>
-                <span class="provided-by">Provided by <a href="#">Vskills</a></span>
-              </li>
-              <li class="col-sm-3">
-                <span class="custom-select">
-                  <select class="form-control">
-                    <option>Normal</option>
-                  </select>
-                </span>
-              </li>
-              <li class="col-sm-2">
-                <strong>Rs. 7499/-</strong>
-              </li>
-              <li class="col-sm-2 col-md-1">
-                <a href="#">Remove</a>
-              </li>
-            </ul>
+
+            {% for item in cart_items %}
+                <!-- item 1 -->
+                <ul>
+                    <li class="col-sm-5 col-md-6">
+                        <span class="cart-sub-heading">{{item.product.name}}</span>
+                        <span class="provided-by">Provided by <a href="#">Vskills</a></span>
+                    </li>
+                    <li class="col-sm-3">
+                        <span class="custom-select">
+                            <select class="form-control">
+                                <option>Normal</option>
+                            </select>
+                        </span>
+                    </li>
+                    <li class="col-sm-2">
+                        <strong>Rs. 7499/-</strong>
+                    </li>
+                    <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                        <input type="hidden" name="line_item" value="{{item.id}}">
+                        <li class="col-sm-2 col-md-1">
+                            <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
+                        </li>
+                    </form>
+                </ul>
+            {% endfor %}
+
+            {% comment %}
             <!-- item 2 -->
             <ul class="bdr-tp">
               <li class="col-sm-5 col-md-6">
@@ -140,17 +148,19 @@
                 <a href="#">Remove</a>
               </li>
             </ul>
+            {% endcomment %}
           </div>
 
         </div>
         <!-- left content end -->
+        
 
         <!-- right content start -->
           <div class="col-sm-3 payment-summary-tab">
           <div class="box-panel checkout-box">
             Amount Payable
             <strong>Rs. 31486/-</strong>
-            <a href="#">Proceed to checkout</a>
+            <a href="{% url "cart:payment-login" %}">Proceed to checkout</a>
           </div>
 
           <!-- secure payment -->
@@ -166,6 +176,7 @@
 
         </div>
         <!-- page content body end -->
+        {% endif %}
 
     </section>
     <!-- main section end -->
@@ -174,9 +185,11 @@
 
 {% block js_section %}
    {{ block.super }}
+   <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
    <script type="text/javascript">
       function toggler(divId) {
           $("#" + divId).toggle();
       }
     </script>
+
 {% endblock js_section %}

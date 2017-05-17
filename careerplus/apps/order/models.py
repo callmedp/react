@@ -3,40 +3,56 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from .choices import STATUS_CHOICES
+from .choices import STATUS_CHOICES, SITE_CHOICES
+
 
 class Order(AbstractAutoDate):
     number = models.CharField(
         _("Order number"), max_length=128, db_index=True, unique=True)
 
-    site = models.CharField(
-        _("Site"), max_length=128)
+    site = models.PositiveSmallIntegerField(default=0, choices=SITE_CHOICES)
 
     cart = models.ForeignKey(
         'cart.Cart', verbose_name=_("Cart"),
         null=True, blank=True, on_delete=models.SET_NULL)
 
-    customer_id = models.CharField(
+    # custome information
+    candidate_id = models.CharField(
         null=True,
         max_length=255,
         verbose_name=_("Customer ID"))
-    cutomer_email = models.CharField(
+
+    email = models.CharField(
         null=True,
         max_length=255,
         verbose_name=_("Customer Email"))
-    # address = models.ForeignKey(
-    #     'Address', null=True, blank=True,
-    #     verbose_name=_("Address"),
-    #     on_delete=models.SET_NULL)
+
+    first_name = models.CharField(max_length=255, null=True,
+        verbose_name=_("First Name"))
+
+    last_name = models.CharField(max_length=255, null=True,
+        verbose_name=_("Last Name"))
+
+    country_code = models.CharField(max_length=15, null=True,
+        verbose_name=_("Country Code"))
+
+    mobile = models.CharField(max_length=15, null=True)
+
+    address = models.CharField(max_length=255, null=True, blank=True)
+
+    pincode = models.CharField(max_length=15, null=True, blank=True)
+    state = models.CharField(max_length=255, null=True, blank=True)
+
+    country = models.CharField(max_length=200, null=True, blank=False)
 
     # currency = models.CharField(
     #     _("Currency"), max_length=12,)
     total_incl_tax = models.DecimalField(
-        _("Order total (inc. tax)"), decimal_places=2, max_digits=12)
+        _("Order total (inc. tax)"), decimal_places=2, max_digits=12, default=0)
     total_excl_tax = models.DecimalField(
-        _("Order total (excl. tax)"), decimal_places=2, max_digits=12)
+        _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
 
-    status = models.PositiveSmallIntegerField(default=0, choices= STATUS_CHOICES)
+    status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
     date_placed = models.DateTimeField(db_index=True)
 
     class Meta:
@@ -68,17 +84,17 @@ class OrderItem(models.Model):
         _("Quantity"), default=1)
 
     oi_price_incl_tax = models.DecimalField(
-        _("Price (inc. tax)"), decimal_places=2, max_digits=12)
+        _("Price (inc. tax)"), decimal_places=2, max_digits=12, default=0)
     oi_price_excl_tax = models.DecimalField(
-        _("Price (excl. tax)"), decimal_places=2, max_digits=12)
+        _("Price (excl. tax)"), decimal_places=2, max_digits=12, default=0)
 
     # Price information before discounts are applied
     oi_price_before_discounts_incl_tax = models.DecimalField(
         _("Price before discounts (inc. tax)"),
-        decimal_places=2, max_digits=12)
+        decimal_places=2, max_digits=12, default=0)
     oi_price_before_discounts_excl_tax = models.DecimalField(
         _("Price before discounts (excl. tax)"),
-        decimal_places=2, max_digits=12)
+        decimal_places=2, max_digits=12, default=0)
 
     # Normal site price for item (without discounts)
     unit_price_incl_tax = models.DecimalField(
@@ -87,7 +103,7 @@ class OrderItem(models.Model):
     unit_price_excl_tax = models.DecimalField(
         _("Unit Price (excl. tax)"), decimal_places=2, max_digits=12,
         blank=True, null=True)
-    
+
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -102,4 +118,3 @@ class OrderItem(models.Model):
             title = _('<missing product>')
         return _("Product '%(name)s', quantity '%(qty)s'") % {
             'name': title, 'qty': self.quantity}
-

@@ -1,10 +1,14 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+
+from seo.models import AbstractAutoDate
+from geolocation.models import Country
+
 from .managers import OpenBasketManager, SavedBasketManager
 from .choices import STATUS_CHOICES
-from seo.models import AbstractAutoDate
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 
 
 class Cart(AbstractAutoDate):
@@ -22,6 +26,7 @@ class Cart(AbstractAutoDate):
         default=0, choices=STATUS_CHOICES)
     # vouchers = models.ManyToManyField(
     #     'coupon.Voucher', verbose_name=_("Vouchers"), blank=True)
+    is_submitted = models.BooleanField(default=False)
     date_merged = models.DateTimeField(
         _("Date merged"), null=True, blank=True)
     date_submitted = models.DateTimeField(
@@ -88,3 +93,61 @@ class LineItem(AbstractAutoDate):
                                  'product_id': self.product.pk,
                                  'quantity': self.quantity}
 
+
+class ShippingDetail(models.Model):
+    """
+    Always Editable Candidate Shipping Detail
+    """
+    country_choices = [(m.id, m.phone + '-' + '(' + m.name + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    indian_obj = Country.objects.filter(name='India', phone='91')[0].id
+
+    CHOICE_COUNTRY = [(m.id, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    default_country = Country.objects.filter(name='India', phone='91')[0].id
+
+    candidate_id = models.CharField(
+        null=False,
+        blank=False,
+        unique=True,
+        max_length=255,
+        verbose_name=_("Candidate Id"))
+
+    first_name = models.CharField(max_length=255, null=True, blank=True,
+        verbose_name=_("First Name"))
+    last_name = models.CharField(max_length=255, null=True, blank=True,
+        verbose_name=_("Last Name"))
+
+    email = models.EmailField(max_length=255, null=True, blank=False)
+
+    country_code = models.PositiveIntegerField(choices=country_choices,
+        default=indian_obj, null=True, blank=False,
+        verbose_name=_("Country Code"))
+
+    mobile = models.CharField(max_length=15, null=True, blank=False)
+
+    address = models.CharField(max_length=255, null=True, blank=True)
+
+    pincode = models.CharField(max_length=15, null=True, blank=True)
+
+    city = models.CharField(max_length=255, null=True, blank=True)
+
+    state = models.CharField(max_length=255, null=True, blank=True)
+
+    country = models.PositiveIntegerField(choices=CHOICE_COUNTRY,
+        default=default_country, null=True, blank=False)
+
+    landmark = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.candidate_id
+
+    def get_country_code(self):
+        try:
+            country = Country.objects.get(id=self.country_code)
+            return country.phone
+        except:
+            pass
+        return ''
+
+    def get_country(self):
+        country_dict = dict(self.CHOICE_COUNTRY)
+        return country_dict.get(self.country)

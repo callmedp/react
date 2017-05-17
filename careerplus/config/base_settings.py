@@ -66,6 +66,7 @@ LOCAL_APPS = [
     'console',
     'coupon',
     'partner',
+    'payment',
     'shop',
     'cart',
     'order',
@@ -155,3 +156,6 @@ CKEDITOR_CONFIGS = {
         # 'extraPlugins': 'codesnippet',
     },
 }
+
+
+CART_MAX_LIMIT = 5
