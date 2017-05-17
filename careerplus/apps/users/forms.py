@@ -75,7 +75,7 @@ class LoginApiForm(forms.Form):
 
 class RegistrationForm(forms.Form):
     country_choices = [(m.id, m.name + '-'+ '('+ m.phone + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk
+    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None 
 
     email = forms.EmailField(
         max_length=30, required=True, widget=forms.TextInput(
