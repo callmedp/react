@@ -413,7 +413,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
         self.fields['video_link'].widget.attrs['maxlength'] = 80
         self.fields['video_link'].widget.attrs['placeholder'] = 'Add video url'
         self.fields['video_link'].widget.attrs['data-parsley-type'] = 'url'
-        self.fields['video_link'].widget.attrs['required'] = "required"
+        self.fields['video_link'].help_text = "Please add Video url without https/http"
         
         self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 100]"
@@ -466,12 +466,14 @@ class ChangeCategorySkillForm(forms.ModelForm):
             from django.core.validators import URLValidator
             val = URLValidator()
             val('https://' + link.strip())
-        else:
-            raise forms.ValidationError(
-                "This is required.")
+        # else:
+        #     raise forms.ValidationError(
+        #         "This is required.")
+        # link = 'https://' + link.strip()    
         return link
 
     def save(self, commit=True, *args, **kwargs):
+
         category = super(ChangeCategorySkillForm, self).save(
             commit=True, *args, **kwargs)
         return category

@@ -10,9 +10,9 @@
  
 {% endblock title %}
 {% block css_section %}
-        {{block.super}} 
-  <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" 
-  rel="stylesheet">       
+        {{block.super}}  
+  <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" rel="stylesheet">
+  <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">       
 {% endblock css_section %}
 
 {% block pageheading %}
@@ -31,30 +31,43 @@
             </ol>
 			<div class="skill-caption">
 				<h1>{{category_obj.name}} <br> programs</h1>
-				<strong>
-				{{prod.0}}    |    {{prod.1}}     |       {{prod.2}}
-				</strong>
-				<div class="provider">
-					Provider
-					{% if prod.0.vendor.icon %}
-						<img src="{{prod.0.vendor.icon.url}}" alt="V Skills" 
-						class="img-responsive">
+					<strong>
+					{% if top_3_prod.0 %}
+					    <a href="#">{{top_3_prod.0.name}}</a>  
 					{% endif %}
-					{% if prod.1.vendor.icon %}
-						<img src="{{prod.1.vendor.icon.url}}" alt="V Skills" 
-						class="img-responsive">
+
+					{% if top_3_prod.1 %}
+					                                  |    
+						<a href="#">{{top_3_prod.1.name}}</a>    
 					{% endif %}
-					{% if prod.2.vendor.icon %}
-						<img src="{{prod.2.vendor.icon.url}}" alt="V Skills" 
-						class="img-responsive">
+					{% if top_3_prod.2 %}
+					                                   |
+						<a href="#">{{top_3_prod.2.name}}</a>
 					{% endif %}
-					<!--
-					<img src="{% static 'console/images/skillpage/aspiration-logo.jpg' %}" alt="Aspiration" class="img-responsive">
-					<img src="{% static 'console/images/skillpage/iact-logo.jpg' %}" alt="IACT" class="img-responsive">
-					<img src="{% static 'console/images/skillpage/skill-soft-logo.jpg' %}" alt="Skillsoft" class="img-responsive">
-					-->
-					
-				</div>
+					</strong>
+				{% if top_4_vendors %}
+					<div class="provider">
+					       Provider
+					   {% for top_4_vendor in top_4_vendors %}    
+						{% if forloop.counter == 1 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 2 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 3 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 4 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% endfor %}
+					</div>
+				{% endif %}
 			</div>
 		</div>
 	</header>
@@ -79,7 +92,7 @@
 						{% if category_obj.video_link %}
 						    <div class="pull-right col-sm-6">
 						        <iframe width="560" height="315" 
-						        	src="{{category_obj.video_link}}" frameborder="0" allowfullscreen>	
+						        	src="{{url}}" frameborder="0" allowfullscreen>	
 						        </iframe>
 						    </div>
 						{% endif %}
@@ -101,11 +114,13 @@
 			<!-- Importance in Market -->
 			<div id="market" class="importance-market clearfix mb-40 scroll">
 				<h2>Importance in Market</h2>
+				{% if category_obj.graph_image %}
 			    <div class="col-sm-6 box-panel">
 			    	<figure>
 			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
 			    	</figure>
 			    </div>
+			    {% endif %} 
 				<div class="col-sm-6 market-growth">
 					<div class="col-sm-12 box-panel">
 						<div class="media">
@@ -179,7 +194,10 @@
 					            </div>
 				          	</a>
 				        </li>
-				        <a href="javascript:void();" id="product_load_more" class="load-more"> Load more</a>
+				        {% if products.has_next %}
+				        <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> 
+				        Load more</a>
+				        {% endif %}
 		      	
 			    	{% endfor %}
 		      	</ul>
@@ -194,6 +212,7 @@
 
 		    </div>
 		    <!-- Reviews -->
+		    {% if page_reviews %}
 		    <div id="reviews" class="reviews mb-40 scroll">
 		    	<h2>Reviews</h2>
 		      	<a href="#" class="write-review">Write a review</a>
@@ -214,7 +233,9 @@
 		            		</article>
 		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
-		          		<a href="javascript:void();" id="review_load_more" class="load-more"> Load more</a>
+		          		{% if page_reviews.has_next %}
+		          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview"> Load more</a>
+		          		{% endif %}
 		          	{% endfor %}
 		        	</ul>
 		        	<div id="revi_load_more">
@@ -226,6 +247,7 @@
 					    {% endif %} 	
 			      	</div>
 		    </div>
+		    {% endif %}
 		</div>  
 		<!-- left content end -->
 
@@ -239,19 +261,19 @@
         </style>
       <form class="mt-20" role="form" id="queryform" >
         <div style='display:none'>
-            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
         </div>
         <div class="form-group">
           <input type="text" class="form-control" name="name" placeholder="Name">
-          <span class="error position-error"></span>
+          <span class="error position-error" style="color:red"></span>
         </div>
         <div class="form-group">
           <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
-          <span class="error position-error"></span>
+          <span class="error position-error" style="color:red"></span>
         </div>
         <div class="form-group">
           <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
-          <span class="error position-error"></span>
+          <span class="error position-error" style="color:red"></span>
         </div>
         
       </form>

@@ -325,10 +325,11 @@
                     </div>
 
                     <div class="item form-group {% if skill_form.video_link.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.video_link.id_for_label }}">Video Url <span class="required">*</span>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.video_link.id_for_label }}">Video Url 
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         {{skill_form.video_link}}
+                        {{ skill_form.video_link.help_text }}
                       </div>
                       <div class="alert">{{skill_form.video_link.errors}}</div>
                     </div>
