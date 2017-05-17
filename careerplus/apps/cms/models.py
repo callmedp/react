@@ -159,7 +159,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 	def __str__(self):
 		# return str(self.id) + ' ' + self.title
-		return str(self.name)
+		return 'Page #' + str(self.id) + ' - ' + str(self.name if isinstance(self.name, str) else '')
 
 	def get_title(self):
 		title = self.title
@@ -233,7 +233,8 @@ class Comment(AbstractCommonModel):
 		ordering = ['-created_on', ]
 
 	def __str__(self):
-		return str(self.id) + '_' + str(self.created_on.date())
+		# return str(self.id) + '_' + str(self.created_on.date())
+		return 'Comment #' + str(self.id) + ' - ' + str(self.message[:12] if isinstance(self.message, str) else '')
 
 
 class PageCounter(models.Model):

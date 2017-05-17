@@ -34,7 +34,9 @@
      </script>
     <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
 	<script type="text/javascript">
-    $('.input-group.date').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+    $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+    $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+    $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
 		$('ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
 	</script>
 {% endblock js %}
