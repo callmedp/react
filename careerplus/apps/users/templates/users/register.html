@@ -62,15 +62,7 @@
       <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
         <div class="country-code">
           <div class="custom-select">
-            <select class="form-control" name="country_code">
-              {% for pk, code in form.country_code.field.choices %}
-              {% if pk == 105 and code == '91' %}
-                <option value="{{pk}}" selected>{{code}}</option>
-              {% else %}
-                <option value="{{pk}}">{{code}}</option>
-              {% endif %}
-              {% endfor %}
-            </select>
+            {{form.country_code}}
           </div>
           {{form.cell_phone}}
           <span class="error-txt">{{form.cell_phone.errors}}</span>
