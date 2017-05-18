@@ -110,7 +110,7 @@
   content: '';
   width: 15px;
   height: 11px;
-  background: url(../../images/skill/sprite.png) no-repeat -677px -88px;
+  background: url(../images/sprite.png) no-repeat -677px -88px;
   display: inline-block;
   vertical-align: middle;
   margin-right: 7px;

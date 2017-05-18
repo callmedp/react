@@ -15,11 +15,20 @@
                 	<h3 class="listing-heading">{{product.name}}</h3>
 
 	                <div class="rating-review-box">
-	                    <span class="{{product.get_rating.0}}"></span>
-	                    <span class="{{product.get_rating.1}}"></span>
-	                    <span class="{{product.get_rating.2}}"></span>
-	                    <span class="{{product.get_rating.3}}"></span>
-	                    <span class="{{product.get_rating.4}}"></span>
+	                    {% for rating in product.get_ratings %}
+                          {% if rating == "*" %}
+                            <figure class="full-star">
+                            </figure>
+                          {% endif %}
+                          {% if rating == "+" %}
+                            <figure class="half-star">  
+                            </figure>
+                          {% endif %}
+                          {% if rating == "-" %}
+                            <figure class="blank-star"> 
+                            </figure>
+                          {% endif %}
+                      {% endfor %}
 	                    <strong>{{product.avg_rating |floatformat:1}}/5</strong> | 21 ratings <b>{{product.no_review}} reviews</b>
 	                </div> 
 

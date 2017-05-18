@@ -836,6 +836,17 @@ footer .footer-links span {
   color: #fff;
 }
 
+.cart-message {
+  margin: 10px 0 0 0;
+  font-size: 13px;
+}
+.cart-message .cart-success {
+  color: #82ca9c;
+}
+.cart-message .cart-error {
+  color: #ff0000;
+}
+
 /*---------icons css---------*/
 .hamburber-icon {
   width: 12px;
@@ -1003,7 +1014,7 @@ footer .footer-links span {
   vertical-align: sub;
 }
 
-.orange-rating-icon {
+.full-star {
   width: 14px;
   height: 15px;
   background: url(../../images/common/sprite.png) no-repeat -710px -87px;
@@ -1011,7 +1022,15 @@ footer .footer-links span {
   vertical-align: sub;
 }
 
-.grey-rating-icon {
+.half-star {
+  width: 14px;
+  height: 15px;
+  background: url(../../images/common/sprite.png) no-repeat -601px -160px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.blank-star {
   width: 14px;
   height: 15px;
   background: url(../../images/common/sprite.png) no-repeat -695px -87px;
@@ -1287,7 +1306,7 @@ footer .footer-links span {
 }
 
 .login-page-bg {
-  background: url(../../images/common/login-bg.jpg) no-repeat 0 0;
+  background: url(../images/login-bg.jpg) no-repeat 0 0;
   width: 100%;
   height: 357px;
   background-size: cover;
@@ -1525,6 +1544,10 @@ footer .footer-links span {
   padding: 0;
 }
 
+.pt-0 {
+  padding-top: 0 !important;
+}
+
 .db {
   display: block;
 }
@@ -1539,6 +1562,31 @@ footer .footer-links span {
 
 .vatb {
   vertical-align: text-bottom;
+}
+
+/*course logo colors*/
+.color1 {
+  background-color: #56a0e1;
+}
+
+.color2 {
+  background-color: #b7ace9;
+}
+
+.color3 {
+  background-color: #81bb64;
+}
+
+.color4 {
+  background-color: #e5b647;
+}
+
+.color5 {
+  background-color: #e58e8c;
+}
+
+.color6 {
+  background-color: #c8c04a;
 }
 
 /*# sourceMappingURL=header-footer.css.map */
