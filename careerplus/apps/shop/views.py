@@ -13,43 +13,31 @@ from review.models import Review
 
 class ProductInformationMixin(object):
 
-    def get_breadcrumbs(self, product, category_slug):
+    def get_breadcrumbs(self, product, category):
         breadcrumbs = []
         breadcrumbs.append(
             OrderedDict({
                 'label': 'Home',
                 'url': '/',
                 'active': True}))
-        try:
-            prod_cat = Category.objects.get(slug=category_slug)
-        except Category.DoesNotExist:
-            prod_cat = product.categories.filter(
-                productcategories__is_main=True,
-                productcategories__active=True)
-            if prod_cat:
-                prod_cat = prod_cat[0]
-            else:
-                prod_cat = None
-        if prod_cat:
-            main_cat = prod_cat.related_to.filter(
-                to_category__relation=0, to_category__related_from=prod_cat,
-                to_category__is_main_parent=True)
+        if category:
+            parent = category.get_parent()
 
-            if main_cat:
+            if parent:
                 breadcrumbs.append(
                     OrderedDict({
-                        'label': main_cat[0].name,
-                        'url': main_cat[0].get_absolute_url(),
+                        'label': parent[0].name,
+                        'url': parent[0].get_absolute_url(),
                         'active': True}))
-                breadcrumbs.append(
-                    OrderedDict({
-                        'label': prod_cat.name,
-                        'url': prod_cat.get_absolute_url(),
-                        'active': True}))
-                breadcrumbs.append(
-                    OrderedDict({
-                        'label': product.name,
-                        'active': None}))
+            breadcrumbs.append(
+                OrderedDict({
+                    'label': category.name,
+                    'url': category.get_absolute_url(),
+                    'active': True}))
+        breadcrumbs.append(
+            OrderedDict({
+                'label': product.name,
+                'active': None}))
         return {
             'breadcrumbs': breadcrumbs
         }
@@ -66,6 +54,7 @@ class ProductInformationMixin(object):
         info = {}
         info['prd_img'] = product.image.url
         info['prd_img_alt'] = product.image_alt
+        info['prd_img_bg'] = product.get_bg
         info['prd_H1'] = product.heading if product.heading else product.name
         info['prd_about'] = product.about
         info['prd_desc'] = product.description
@@ -74,20 +63,22 @@ class ProductInformationMixin(object):
         info['prd_num_rating'] = product.no_review
         info['prd_num_bought'] = product.buy_count
         info['prd_num_jobs'] = product.num_jobs
+        info['prd_vendor'] = product.vendor.name
         info['prd_rating_star'] = product.get_ratings()
+        info['prd_video'] = product.video_url
+        
         return info
 
     def get_program_structure(self, product):
         structure = {
             'prd_program_struct': False
         }
-        topic = product.structure
-        topic_chapter_list = topic.chapters.filter(
-            topicchapters__active=True).order_by('topicchapters__sort_order')
-        if topic_chapter_list:
+        chapter_list = product.chapters.filter(
+            productstructure__active=True).order_by('productstructure__sort_order')
+        if chapter_list:
             structure.update({
                 'prd_program_struct': True,
-                'topic_chap_list': topic_chapter_list
+                'chap_list': chapter_list
             })
         return structure
 
@@ -106,12 +97,12 @@ class ProductInformationMixin(object):
 
     def get_recommendation(self, product):
         recommendation = {
-            'prd_recommend': True,
+            'prd_recommend': False,
         }
         recommended_list = product.related.filter(
             secondaryproduct__active=True,
             secondaryproduct__type_relation=2)
-        if recommendation:
+        if recommended_list:
             recommendation.update({
                 'prd_recommend': True,
                 'recommended_list': recommended_list
@@ -203,19 +194,20 @@ class ProductDetailView(DetailView, ProductInformationMixin):
     http_method_names = ['get', 'post']
 
     model = Product
-    _view_signal = None
-    # # Whether to redirect to the URL with the right path
-    _enforce_paths = True
-    # # Whether to redirect child products to their parent's URL
-    # __enforce_parent__ = True
-
+    
     def __init__(self, *args, **kwargs):
         # _view_signal = product_viewed
+        self.category = None
+        self._view_signal = None
+        # # Whether to redirect to the URL with the right path
+        self._enforce_paths = True
+        # # Whether to redirect child products to their parent's URL
+        self._enforce_parent = True
 
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
-        return ['product/detail.html']
+        return ['product/detail1.html']
 
     def get_object(self, queryset=None):
         if hasattr(self, 'object'):
@@ -226,15 +218,15 @@ class ProductDetailView(DetailView, ProductInformationMixin):
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.object
-        cat_slug = kwargs.get('cat_slug', None)
-        ctx.update(self.get_breadcrumbs(product, cat_slug))
-        ctx.update(self.get_info(self.object))
-        ctx.update(self.get_variation(product))
-        # ctx.update(self.get_program_structure(product))
+        category = self.category
+        ctx.update(self.get_breadcrumbs(product, category))
+        ctx.update(self.get_info(product))
+        # ctx.update(self.get_variation(product))
+        ctx.update(self.get_program_structure(product))
         ctx.update(self.get_faq(product))
         ctx.update(self.get_recommendation(product))
-        ctx.update(self.get_combos(product))
-        ctx.update(self.get_childs(product))
+        # ctx.update(self.get_combos(product))
+        # ctx.update(self.get_childs(product))
         # ctx.update(self.get_countries(product))
         ctx.update(self.get_reviews(product, 1))
         return ctx
@@ -244,21 +236,35 @@ class ProductDetailView(DetailView, ProductInformationMixin):
     #         sender=self, product=product, user=request.user, request=request,
     #         response=response)
 
-    def redirect_if_necessary(self, current_path, product):
-        # if self.enforce_parent and product.is_child:
-        #     return HttpResponsePermanentRedirect(
-        #         product.parent.get_absolute_url())
-
+    def redirect_if_necessary(self, current_path, product, cat_slug=None):
         if self._enforce_paths:
-            expected_path = product.get_absolute_url()
+            expected_path = product.get_absolute_url(cat_slug)
             if expected_path != urlquote(current_path):
                 return HttpResponsePermanentRedirect(expected_path)
-
+    
+    def return_http404(self, product):
+        if not product:
+            return True
+        if not self.category:
+            return True
+        if product.var_child:
+            return True
+        if product.is_virtual:
+            return True
+        return False
+    
     def get(self, request, **kwargs):
         self.object = product = self.get_object()
-        redirect = self.redirect_if_necessary(request.path, product)
-        if redirect is not None:
-            return redirect
+        if product:
+            self.category = category = product.verify_category(kwargs.get('cat_slug', None))
+
+        HTTP404 = self.return_http404(product)
+        if HTTP404:
+            raise Http404
+        redirection = self.redirect_if_necessary(
+            request.path, product, category)
+        if redirection is not None:
+            return redirection
 
         response = super(ProductDetailView, self).get(request, **kwargs)
         # self.send_signal(request, response, product)

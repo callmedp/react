@@ -125,9 +125,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         if self.description:
             if not self.meta_desc:
                 self.meta_desc = self.get_meta_desc(self.description)
-                
         super(Category, self).save(*args, **kwargs)
-    
+
     def get_meta_desc(self, description=''):
         if description:
             try:
@@ -555,6 +554,42 @@ class Product(AbstractProduct, ModelMeta):
                 
         super(Product, self).save(*args, **kwargs)
 
+    @property
+    def var_child(self, *args, **kwargs):
+        return self.type_product == 2
+
+    @property
+    def var_parent(self, *args, **kwargs):
+        return self.type_product == 1
+
+    @property
+    def is_combo(self, *args, **kwargs):
+        return self.type_product == 3
+
+    @property
+    def is_virtual(self, *args, **kwargs):
+        return self.type_product == 4
+
+    @property
+    def is_course(self, *args, **kwargs):
+        return self.type_service == 3
+
+    @property
+    def is_writing(self, *args, **kwargs):
+        return self.type_service == 1
+
+    @property
+    def is_service(self, *args, **kwargs):
+        return self.type_service == 2
+
+    @property
+    def is_others(self, *args, **kwargs):
+        return self.type_service == 4
+
+    @property
+    def get_bg(self, *args, **kwargs):
+        return dict(BG_CHOICES).get(self.image_bg)
+
     def get_meta_desc(self, description=''):
         if description:
             try:
@@ -568,14 +603,49 @@ class Product(AbstractProduct, ModelMeta):
 
     @property
     def category_slug(self):
-        prod_cat = self.categories.filter(
+        main_prod_cat = self.categories.filter(
             productcategories__is_main=True,
             productcategories__active=True)
-        if prod_cat:
-            prod_cat = prod_cat[0].slug
+        if main_prod_cat:
+            return main_prod_cat[0]
         else:
-            prod_cat = None
-        return prod_cat
+            prod_cat = self.categories.filter(
+                productcategories__is_main=False,
+                productcategories__active=True)
+            if prod_cat:
+                return prod_cat[0]
+        return None
+
+    def verify_category(self, cat_slug=None):
+        try:
+            prod_cat = self.categories.filter(
+                slug=cat_slug,
+                active=True)
+            if prod_cat:
+                return prod_cat[0]
+            else:
+                return self.category_slug
+        except:
+            pass
+        return None
+
+    def get_full_url(self):
+        return self.build_absolute_uri(self.get_absolute_url())
+
+    def get_absolute_url(self, prd_slug=None, cat_slug=None):
+        if cat_slug:
+            pass
+        else:
+            cat_slug = self.category_slug
+        cat_slug = cat_slug.slug if cat_slug else None
+        if self.is_course: 
+            return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        elif self.is_writing:
+            return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        elif self.is_service:
+            return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        else:
+            return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
 
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
@@ -658,12 +728,7 @@ class Product(AbstractProduct, ModelMeta):
             description = self.description
         return description.strip()
 
-    def get_full_url(self):
-        return self.build_absolute_uri(self.get_absolute_url())
-
-    def get_absolute_url(self):
-        return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': self.category_slug, 'pk': self.pk})
-
+    
     def get_ratings(self):
         pure_rating = int(self.avg_rating)
         decimal_part = self.avg_rating - pure_rating

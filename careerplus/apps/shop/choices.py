@@ -33,12 +33,13 @@ CATEGORY_CHOICES = (
     (4, 'Level 4'),)
 
 PRODUCT_CHOICES = (
-    (0, 'Simple'),
-    (1, 'Configurable'),
-    (2, 'Combo'),
-    (3, 'Virtual/Services'),
-    (4, 'Bundle'),
-    (5, 'Downloadable'),)
+    (0, 'Standalone/Simple'),
+    (1, 'Variable-Parent'),
+    (2, 'Variable-Child'),
+    (3, 'Combo'),
+    (4, 'No-Direct-Sell/Virtual'),
+    (5, 'Bundle'),
+    (6, 'Downloadable'),)
 
 FLOW_CHOICES = (
     (0, 'Default'),

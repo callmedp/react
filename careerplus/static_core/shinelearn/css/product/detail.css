@@ -22,6 +22,10 @@ header {
   display: table-cell;
   padding-right: 20px;
 }
+.course-caption .course-caption-img figure {
+  width: 100px;
+  height: 100px;
+}
 .course-caption .course-caption-content {
   vertical-align: middle;
   display: table-cell;
@@ -45,6 +49,7 @@ header {
   display: inline-block;
   background: url(../../images/sprite.png) no-repeat -770px -71px;
   margin: 0 auto;
+  z-index: 999;
 }
 .course-caption .main-package .main-package-img {
   display: table-cell;
@@ -122,9 +127,15 @@ header {
   font-weight: 600;
 }
 
+.course-caption-bottom {
+  background-color: #fff;
+  position: relative;
+  z-index: 99;
+  border-bottom: 1px solid #f1f1f1;
+}
 .course-caption-bottom ul {
   list-style-type: none;
-  margin: 20px 0;
+  margin: 15px 0;
   padding: 0;
 }
 .course-caption-bottom ul li {
@@ -165,36 +176,40 @@ header {
   clear: both;
 }
 
-.detail-page {
+.detail-box {
   list-style-type: none;
-  margin: 0;
-  padding: 0;
   font-size: 16px;
   color: #333;
+  clear: both;
 }
-.detail-page > li:nth-child(1n+1) {
+.detail-box:nth-child(1n+1) {
   background-color: #fff;
+  border-bottom: 50px solid transparent;
 }
-.detail-page > li:nth-child(2n+2) {
+.detail-box:nth-child(2n+2) {
   background-color: #f6f7f9;
+  border-bottom: 50px solid transparent;
 }
-.detail-page li {
+.detail-box.bt-none {
+  border-top: 0 solid transparent;
+}
+.detail-box li {
   display: block;
   padding: 50px 0;
 }
-.detail-page article {
+.detail-box article {
   margin-bottom: 30px;
 }
-.detail-page iframe {
+.detail-box iframe {
   margin-bottom: 30px;
 }
-.detail-page h2 {
+.detail-box h2 {
   font-size: 30px;
   font-weight: 600;
   color: #333;
   margin: 0 0 20px 0;
 }
-.detail-page .detail-heading {
+.detail-box .detail-heading {
   font-size: 18px;
   font-weight: 600;
   color: #333;
@@ -245,7 +260,7 @@ header {
 
 .select-product {
   font-size: 13px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 .select-product ul {
   list-style-type: none;
@@ -261,7 +276,6 @@ header {
   padding: 13px;
   font-size: 13px;
   position: relative;
-  z-index: 9;
 }
 .select-product ul li:hover, .select-product ul li:focus, .select-product ul li:visited, .select-product ul li.selected {
   background-color: #fff;
@@ -286,7 +300,7 @@ header {
 
 .select-country {
   font-size: 13px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 .select-country ul {
   list-style-type: none;
@@ -302,7 +316,6 @@ header {
   padding: 13px;
   font-size: 13px;
   position: relative;
-  z-index: 9;
 }
 .select-country ul li:hover, .select-country ul li:focus, .select-country ul li:visited .select-country ul li.selected {
   background-color: #fff;
@@ -373,6 +386,7 @@ header {
 .program-structure .panel-title > a {
   display: block;
   position: relative;
+  color: #666;
 }
 .program-structure .panel-title > a:after {
   content: "";
@@ -449,11 +463,24 @@ header {
   margin-left: 10px;
 }
 
-.price-box {
-  position: absolute;
-  top: -130px;
+.pos-fixed {
+  position: fixed;
   right: 0;
   z-index: 999;
+}
+
+.price-box {
+  position: fixed;
+  right: 6%;
+  z-index: 9999;
+  top: 130px;
+  width: 400px;
+}
+@media (max-width: 1190px) {
+  .price-box {
+    width: 320px;
+    right: 2%;
+  }
 }
 
 .enrol-cart {
@@ -742,9 +769,9 @@ header {
   margin-top: 0;
 }
 .listing .media .media-left {
-  padding-right: 12px;
+  border-spacing: 0 12px 0 0;
 }
-.listing .media .media-left img {
+.listing .media .media-left figure {
   width: 125px;
   height: 125px;
 }
@@ -780,15 +807,14 @@ header {
   border-bottom: 1px solid #d8d8d8;
   display: block;
   font-weight: 600;
-  position: absolute;
-  bottom: -50px;
-  left: 15px;
-  right: 0;
+  background-color: #fff;
+  position: relative;
+  z-index: 999;
 }
 .detail-course-links a {
   color: #333;
   margin-left: 4%;
-  padding: 9px 0 10px 0;
+  padding: 15px 0 5px 0;
   display: inline-block;
   line-height: 40px;
 }
@@ -803,16 +829,16 @@ header {
   }
 }
 .detail-course-links a:first-child {
-  margin-left: 0;
+  margin-left: -15px;
 }
 .detail-course-links a.active {
   border-bottom: 3px solid #3f5f94;
-  padding: 9px 0;
+  padding: 9px 0 5px 0;
 }
 
 .scroll {
-  margin-top: -65px;
-  padding-top: 75px;
+  margin-top: -50px;
+  padding-top: 60px;
 }
 
 /*sticky menu css*/
@@ -820,7 +846,8 @@ header {
   display: block;
   font-size: 11px;
   color: #333;
-  padding-top: 10px;
+  padding-top: 20px;
+  margin-bottom: -10px;
 }
 .visible-onscroll strong {
   font-size: 20px;
@@ -832,4 +859,24 @@ header {
   color: #3f5f94;
 }
 
+.goTop {
+  position: fixed;
+  top: 70px;
+  height: 55px;
+  z-index: 1;
+}
+
+.recomend-product-bg {
+  background-color: #f6f7f9 !important;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+}
+
+#faq:before, #review:before, #delivery:before, #programs:before, #get:before, #course:before {
+  padding-top: 60px;
+  display: block;
+  content: "";
+}
+
 /*# sourceMappingURL=detail.css.map */
+

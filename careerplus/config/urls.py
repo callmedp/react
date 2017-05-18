@@ -29,12 +29,13 @@ urlpatterns = []
 urlpatterns += [
     url(r'^courses/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+).html$',
         ProductDetailView.as_view(), name='course-detail'),
-
-    # url(r'^writing-services/(?P<cat_slug>[\w-])/(?P<prd_slug>[\w-])?$',
-    #     ProductDetailView.as_view(), name='resume-detail'),
-    # url(r'^job-assistance/(?P<cat_slug>[\w-])/(?P<prd_slug>[\w-])?$',
-    #     ProductDetailView.as_view(), name='job-assist-detail'),
-]
+    url(r'^writing-services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+).html$',
+        ProductDetailView.as_view(), name='resume-detail'),
+    url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+).html$',
+        ProductDetailView.as_view(), name='job-assist-detail'),
+    url(r'^other-products/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+).html$',
+        ProductDetailView.as_view(), name='other-detail'),
+]   
 
 urlpatterns += [
 
