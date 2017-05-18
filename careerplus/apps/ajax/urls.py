@@ -2,8 +2,8 @@ from django.conf.urls import url
 
 
 from .views import AjaxCommentLoadMoreView, CmsShareView,\
-    ArticleShareView, ArticleCommentView,\
-    AjaxProductLoadMoreView
+   ArticleShareView, ArticleCommentView,\
+   AjaxProductLoadMoreView, AjaxReviewLoadMoreView, EmailExistView
 
 urlpatterns = [
     url(r'^page/load-more/$',
@@ -14,11 +14,17 @@ urlpatterns = [
 
     url(r'^product/load-more/$',
         AjaxProductLoadMoreView.as_view(), name='product-load-more'),
+
+    url(r'^review/load-more/$',
+        AjaxReviewLoadMoreView.as_view(), name='review-load-more'),
     
     url(r'^article-share/$',
     	ArticleShareView.as_view(), name='article-share'),
 
     url(r'^article-comment/$',
     	ArticleCommentView.as_view(), name='article-comment-post'),
+
+    url(r'^email-exist/$',
+        EmailExistView.as_view(), name='email-exist'),
 
 ]

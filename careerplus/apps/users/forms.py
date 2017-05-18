@@ -74,8 +74,8 @@ class LoginApiForm(forms.Form):
 
 
 class RegistrationForm(forms.Form):
-    country_choices = [(m.id, m.name + '-'+ '('+ m.phone + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk
+    country_choices = [(m.id, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None
 
     email = forms.EmailField(
         max_length=30, required=True, widget=forms.TextInput(
@@ -101,6 +101,7 @@ class RegistrationForm(forms.Form):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['vendor_id'].initial = '12345'
         self.fields['vendor_id'].widget = forms.HiddenInput()
+        # self.fields['country_code'].initial = [(self.indian_obj.pk,self.indian_obj.phone)]
 
     def clean_raw_password(self):
         min_password_length = 6

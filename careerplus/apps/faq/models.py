@@ -61,8 +61,16 @@ class FAQuestion(AbstractAutoDate):
     def is_active(self):
         return self.status == 2
 
+    @property
+    def get_status(self):
+        return dict(self.STATUS_CHOICES).get(self.status)
 
 class Chapter(AbstractAutoDate):
+    STATUS_CHOICES = (
+        (2, _('Active')),
+        (1, _('Inactive')),
+        (0, _('Moderation')),)
+
     heading = models.CharField(_('chapter'), max_length=255)
     parent = models.ForeignKey(
         'self', verbose_name=_('parentchapter'),
@@ -75,7 +83,12 @@ class Chapter(AbstractAutoDate):
         help_text=_(u'An integer used to order the chapter \
             amongst others related to the same chapter. If not given this \
             chapter will be last in the list.'))
-
+    status = models.IntegerField(
+        _('status'),
+        choices=STATUS_CHOICES,
+        default=0,
+        help_text=_("Only questions with their status set to 'Active' will be "
+                    "displayed."))
     vendor = models.ForeignKey(
         Vendor,
         related_name='chapter_vendor',
@@ -88,4 +101,8 @@ class Chapter(AbstractAutoDate):
 
     def __str__(self):
         return self.heading
+
+    @property
+    def get_status(self):
+        return dict(self.STATUS_CHOICES).get(self.status)
 
