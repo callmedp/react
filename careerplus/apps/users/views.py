@@ -8,7 +8,7 @@ from django.http import (HttpResponse,
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView
 from django.core.urlresolvers import reverse
-# from cities_light.models import Country
+from shine.core import ShineToken, ShineCandidateDetail
 
 from .forms import UserCreateForm, LoginForm, RegistrationForm, LoginApiForm
 from .mixins import RegistrationLoginApi
@@ -124,14 +124,22 @@ class RegistrationApiView(FormView):
         return super(self.__class__, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        errer_list = []
         form = self.get_form()
         user_resp = RegistrationLoginApi().user_registration(request)
 
         if user_resp['response'] == 'new_user':
             resp = RegistrationLoginApi().user_login(request)
-
+            
             if resp['response'] == 'login_user':
+                client_token = ShineToken().get_client_token()
+
+                headers = {
+                    "User-Access-Token": resp['access_token'],
+                    "Client-Access-Token": client_token,
+                    "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
+                }
+                resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
+                request.session.update(resp_status)
                 return HttpResponseRedirect(reverse('dashboard'))
 
         elif user_resp['response'] == 'exist_user':
@@ -139,11 +147,6 @@ class RegistrationApiView(FormView):
             return HttpResponseRedirect(reverse('login'))
 
         elif user_resp['response'] == 'form_error':
-            for k, v in user_resp.items():
-                if v == 'form_error':
-                    pass
-                else:
-                    messages.add_message(self.request, messages.SUCCESS, ''.join(v))
             return render(self.request, self.template_name, {'form': form})
 
 
@@ -161,6 +164,17 @@ class LoginApiView(FormView):
         remember_me = self.request.POST.get('remember_me', None)
         login_resp = RegistrationLoginApi().user_login(self.request)
         if login_resp['response'] == 'login_user':
+
+            client_token = ShineToken().get_client_token()
+            headers = {
+                "User-Access-Token": login_resp['access_token'],
+                "Client-Access-Token": client_token,
+                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
+            }
+
+            resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
+            self.request.session.update(resp_status)
+
             if remember_me:
                 self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
             return HttpResponseRedirect(self.success_url)
@@ -176,3 +190,11 @@ class LoginApiView(FormView):
             return HttpResponseRedirect(self.success_url)
         else:
             return super(LoginApiView, self).dispatch(request, *args, **kwargs)
+
+
+class LogoutApiView(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        request.session.flush()
+        return HttpResponseRedirect(reverse('register'))
+

@@ -92,8 +92,9 @@ class BlogAddForm(forms.ModelForm):
 		# self.fields['slug'].widget.attrs['disabled'] = 'disabled'
 		self.fields['url'].widget.attrs['readonly'] = True
 		self.fields['image'].widget.attrs['class'] = "form-control col-md-7 col-xs-12"
-		self.fields['image'].widget.attrs['data-parsley-file-size-max'] = "[200, kb]"
-		self.fields['image'].widget.attrs['data-parsley-file-mimetype'] = "[jpeg, png, jpg, svg]"
+		# self.fields['image'].widget.attrs['data-parsley-file-size-max'] = "[200, kb]"
+		self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = "image/jpeg, image/png"
+		# self.fields['image'].widget.attrs['data-parsley-file-mimetype'] = "[jpeg, png, jpg, svg]"
 
 	def clean(self):
 		fields = ['name', 'slug']

@@ -1,10 +1,12 @@
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import validate_email
 from django import forms
-# from cities_light.models import Country
+from geolocation.models import Country
 from django.db.models import Q
 
 from .models import User
+from .mixins import RegistrationLoginApi
 
 mobile_validators = RegexValidator(r'^[0-9]{10,15}$', 'Only numeric character required and length should be 10 and 15.')
 
@@ -72,10 +74,10 @@ class LoginApiForm(forms.Form):
 
 
 class RegistrationForm(forms.Form):
-    # country_choices = [(m.id, m.name + '-'+ '('+ m.phone + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    # indian_obj = Country.objects.filter(name='India', phone='91')[0].pk
+    country_choices = [(m.id, m.name + '-'+ '('+ m.phone + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk
 
-    email = forms.CharField(
+    email = forms.EmailField(
         max_length=30, required=True, widget=forms.TextInput(
             attrs={'placeholder': 'Email', 'class': 'form-control'}))
 
@@ -83,11 +85,12 @@ class RegistrationForm(forms.Form):
         max_length=16, required=True, widget=forms.PasswordInput(
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
 
+    country_code = forms.ChoiceField(label=("Country:"), required=True,
+        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control custom-select country-code'}), initial=indian_obj)
+
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile No.'}), max_length=10)
 
-    # country_code = forms.ChoiceField(label=("Country:"), required=True,
-    #     choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
 
     vendor_id = forms.CharField(
         max_length=30, required=True,
@@ -98,3 +101,13 @@ class RegistrationForm(forms.Form):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['vendor_id'].initial = '12345'
         self.fields['vendor_id'].widget = forms.HiddenInput()
+
+    def clean_raw_password(self):
+        min_password_length = 6
+        max_password_length = 15
+        password1 = self.cleaned_data.get('raw_password')
+        if len(password1) < min_password_length:
+            raise forms.ValidationError("Ensure this field has at least 6 characters.")
+        if len(password1) > max_password_length:
+            raise forms.ValidationError("Ensure this field has no more than 15 characters.")
+        return password1

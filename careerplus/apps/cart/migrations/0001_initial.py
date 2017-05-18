@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('shop', '0006_auto_20170515_1734'),
+        ('shop', '0001_initial'),
     ]
 
     operations = [
@@ -23,6 +24,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(blank=True, null=True)),
                 ('owner_id', models.CharField(max_length=255, null=True, verbose_name='Owner ID')),
                 ('owner_email', models.CharField(max_length=255, null=True, verbose_name='Owner Email')),
+                ('session_id', models.CharField(blank=True, max_length=255, null=True)),
                 ('status', models.PositiveSmallIntegerField(choices=[(0, 'Open - currently active but no owner'), (1, 'Merged - merged in other cart'), (2, 'Saved - currently active but with owner'), (3, 'Submitted - gone for payment after checkout'), (4, 'Frozen - the cart cannot be modified'), (5, 'Closed - order has been made'), (6, 'Archive - cart need to be archived')], default=0, verbose_name='Status')),
                 ('date_merged', models.DateTimeField(blank=True, null=True, verbose_name='Date merged')),
                 ('date_submitted', models.DateTimeField(blank=True, null=True, verbose_name='Date submitted')),
