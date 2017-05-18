@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from .choices import STATUS_CHOICES
+from .choices import STATUS_CHOICES, WELCOME_CALL
 
 class Order(AbstractAutoDate):
     number = models.CharField(

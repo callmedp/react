@@ -5,3 +5,8 @@ STATUS_CHOICES = (
     (3, "Closed"),
     (4, "Archive"),
 )
+
+WELCOME_CALL = (
+    (0, 'Welcome call pending'),
+    (1, 'Welcome call done'),
+)
