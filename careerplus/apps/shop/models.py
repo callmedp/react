@@ -881,6 +881,12 @@ class ChildProduct(AbstractAutoDate):
             'pri': self.father,
             'sec': self.children}
 
+    class Meta:
+        unique_together = ('father', 'children')
+        verbose_name = _('Product Child')
+        verbose_name_plural = _('Product Childs')
+
+
 # class ProductOffer(AbstractAutoDate):
 #     offer = models.ForeignKey(
 #         Offer,

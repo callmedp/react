@@ -2,8 +2,13 @@ from django import forms
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
-from shop.models import Keyword, AttributeOptionGroup, AttributeOption, Attribute, Product, Category, ProductCategory, ProductChapter, FAQProduct
+from shop.models import (
+    Keyword, AttributeOptionGroup, AttributeOption,
+    Attribute, Product, Category, ProductCategory,
+    ProductChapter, FAQProduct, ProductPrice,
+    ChildProduct, VariationProduct, RelatedProduct)
 from partner.models import Vendor
+from geolocation.models import Country
 from shop.choices import BG_CHOICES
 
 
@@ -762,13 +767,13 @@ class CategoryInlineFormSet(forms.BaseInlineFormSet):
 
                 if duplicates:
                     raise forms.ValidationError(
-                        'Relationships must be unique.',
+                        'Categories must be unique.',
                         code='duplicate_parent'
                     )
 
                 if duplicates_main:
                     raise forms.ValidationError(
-                        'Main parent must be Unique',
+                        'Main category must be Unique',
                         code='double_main'
                     )
         return
@@ -833,7 +838,7 @@ class ChapterInlineFormSet(forms.BaseInlineFormSet):
 
                 if duplicates:
                     raise forms.ValidationError(
-                        'Relationships must be unique.',
+                        'Chapters must be unique.',
                         code='duplicate_parent'
                     )
 
@@ -899,7 +904,320 @@ class FAQInlineFormSet(forms.BaseInlineFormSet):
 
                 if duplicates:
                     raise forms.ValidationError(
-                        'Relationships must be unique.',
+                        'FAQs must be unique.',
+                        code='duplicate_parent'
+                    )
+        return
+
+
+class ProductPriceForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductPriceForm, self).__init__(*args, **kwargs)
+        # if obj:
+        #     qs = Category.objects.all()
+        #     if obj.type_ == 0 or obj.type_level == 1:
+        #         qs = qs.none()
+        #     elif obj.type_level == 2:
+        #         qs = qs.filter(type_level=1)
+        #     elif obj.type_level == 3:
+        #         qs = qs.filter(type_level=2)
+        #     elif obj.type_level == 4:
+        #         qs = qs.filter(type_level=3)
+            # self.fields['related_to'].queryset = qs
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['currency'].widget.attrs['class'] = form_class
+        self.fields['currency'].required = True        
+        self.fields['value'].widget.attrs['class'] = form_class
+        self.fields['fake_value'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        
+    class Meta:
+        model = ProductPrice
+        fields = (
+            'currency', 'value', 'fake_value', 'active',)
+
+    def clean(self):
+        super(ProductPriceForm, self).clean()
+
+
+    def clean_currency(self):
+        currency = self.cleaned_data.get('currency', None)
+        if currency:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return currency
+
+
+class PriceInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(PriceInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        currencies = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                currency = form.cleaned_data['currency']
+                product = form.cleaned_data['product']
+                if currency in currencies:
+                    duplicates = True
+                currencies.append(currency)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Currencies must be unique.',
+                        code='duplicate_parent'
+                    )
+        return
+
+
+class ProductCountryForm(forms.ModelForm):
+
+    countries = forms.ModelMultipleChoiceField(
+        queryset=Country.objects.filter(active=True),
+        required=True,
+        to_field_name='pk',
+        widget=forms.SelectMultiple(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    def __init__(self, *args, **kwargs):
+        super(ProductCountryForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Product
+        fields = (
+            'countries',)
+
+    def clean(self):
+        super(ProductCountryForm, self).clean()
+
+    def clean_countries(self):
+        countries = self.cleaned_data.get('countries', None)
+        if countries:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return countries
+
+
+class ProductChildForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductChildForm, self).__init__(*args, **kwargs)
+        if obj:
+            qs = Product.objects.exclude(pk=obj.pk)
+            # if obj.type_ == 0 or obj.type_level == 1:
+            #     qs = qs.none()
+            # elif obj.type_level == 2:
+            #     qs = qs.filter(type_level=1)
+            # elif obj.type_level == 3:
+            #     qs = qs.filter(type_level=2)
+            # elif obj.type_level == 4:
+            #     qs = qs.filter(type_level=3)
+            self.fields['children'].queryset = qs
+        
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['children'].widget.attrs['class'] = form_class
+        self.fields['children'].required = True        
+        self.fields['sort_order'].widget.attrs['class'] = form_class
+        self.fields['price_offset'].widget.attrs['class'] = form_class
+        self.fields['price_offset_percent'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+    class Meta:
+        model = ChildProduct
+        fields = (
+            'children', 'sort_order', 'price_offset', 'price_offset_percent', 'active',)
+
+    def clean(self):
+        super(ProductChildForm, self).clean()
+
+
+    def clean_children(self):
+        children = self.cleaned_data.get('children', None)
+        if children:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return children
+
+
+class ChildInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(ChildInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        childs = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                child = form.cleaned_data['children']
+                product = form.cleaned_data['father']
+                if child in childs:
+                    duplicates = True
+                childs.append(child)
+                if child == product:
+                    raise forms.ValidationError(
+                        'Childs must be different.',
+                        code='duplicate_parent'
+                    )
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Childs must be unique.',
+                        code='duplicate_parent'
+                    )
+        return
+
+
+class ProductRelatedForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductRelatedForm, self).__init__(*args, **kwargs)
+        if obj:
+            qs = Product.objects.exclude(pk=obj.pk)
+            # if obj.type_ == 0 or obj.type_level == 1:
+            #     qs = qs.none()
+            # elif obj.type_level == 2:
+            #     qs = qs.filter(type_level=1)
+            # elif obj.type_level == 3:
+            #     qs = qs.filter(type_level=2)
+            # elif obj.type_level == 4:
+            #     qs = qs.filter(type_level=3)
+            self.fields['secondary'].queryset = qs
+        
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['secondary'].widget.attrs['class'] = form_class
+        self.fields['secondary'].required = True
+        self.fields['sort_order'].widget.attrs['class'] = form_class
+        self.fields['price_offset'].widget.attrs['class'] = form_class
+        self.fields['price_offset_percent'].widget.attrs['class'] = form_class
+        self.fields['type_relation'].widget.attrs['class'] = form_class
+        self.fields['ranking'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+    class Meta:
+        model = RelatedProduct
+        fields = (
+            'secondary', 'sort_order', 'price_offset', 'price_offset_percent', 'active',
+            'type_relation', 'ranking')
+
+    def clean(self):
+        super(ProductRelatedForm, self).clean()
+
+    def clean_secondary(self):
+        secondary = self.cleaned_data.get('secondary', None)
+        if secondary:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return secondary
+
+
+class RelatedInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(RelatedInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        relatives = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                rel = form.cleaned_data['secondary']
+                product = form.cleaned_data['primary']
+                type_relation = form.cleaned_data['type_relation']
+                if rel == product:
+                    raise forms.ValidationError(
+                        'Related must be different.',
+                        code='duplicate_parent'
+                    )
+                # if rel in relatives.keys:
+                #     if type_relation == 
+                #     duplicates = True
+                # childs.append(child)
+
+                # if duplicates:
+                #     raise forms.ValidationError(
+                #         'Childs must be unique.',
+                #         code='duplicate_parent'
+                #     )
+        return
+
+
+class ProductVariationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductVariationForm, self).__init__(*args, **kwargs)
+        if obj:
+            qs = Product.objects.exclude(pk=obj.pk)
+            # if obj.type_ == 0 or obj.type_level == 1:
+            #     qs = qs.none()
+            # elif obj.type_level == 2:
+            #     qs = qs.filter(type_level=1)
+            # elif obj.type_level == 3:
+            #     qs = qs.filter(type_level=2)
+            # elif obj.type_level == 4:
+            #     qs = qs.filter(type_level=3)
+            self.fields['sibling'].queryset = qs
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['sibling'].widget.attrs['class'] = form_class
+        self.fields['sibling'].required = True
+        self.fields['sort_order'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+    class Meta:
+        model = VariationProduct
+        fields = (
+            'sibling', 'sort_order', 'active', )
+
+    def clean(self):
+        super(ProductVariationForm, self).clean()
+
+    def clean_sibling(self):
+        sibling = self.cleaned_data.get('sibling', None)
+        if sibling:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return sibling
+
+
+class VariationInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(VariationInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        variations = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                var = form.cleaned_data['sibling']
+                product = form.cleaned_data['main']
+                if var in variations:
+                    duplicates = True
+                variations.append(var)
+                if var == product:
+                    raise forms.ValidationError(
+                        'Variations must be different.',
+                        code='duplicate_parent'
+                    )
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Variations must be unique.',
                         code='duplicate_parent'
                     )
         return

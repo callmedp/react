@@ -12,7 +12,6 @@
   <!-- Switchery -->
   <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}" rel="stylesheet" type="text/css">
 
-  <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
   <style type="text/css">
       ul.parsley-errors-list {
           list-style: none;
@@ -74,10 +73,9 @@
     <div class="clearfix"></div>
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
-        
         <div class="x_panel">
           <div class="x_title">
-            <h2><i class="fa fa-thumb-tack"></i> Available Countries</h2>
+            <h2><i class="fa fa-thumb-tack"></i> Variation Product</h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -85,75 +83,31 @@
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-            <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-product-country-form">
-                  {{country_form.media}}
-                    {% csrf_token %}
-                    
-                    {% if country_form.non_field_errors %}
-                      <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                        </button>
-                        {{country_form.non_field_errors}}
-                      </div>
-                    {% endif %}
-
-                    <div class="item form-group {% if country_form.countries.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ country_form.countries.id_for_label }}">Available Countries <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{country_form.countries}}
-                      </div>
-                      <div class="alert">{{country_form.countries.errors}}</div>
-                    </div>
-                    
-                    
-                    <input type="hidden" name="product" value="{{object.pk}}">
-                    <input type="hidden" name="slug" value="country">
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                      </div>
-                    </div>
-                  </form>  
-          </div>
-        </div>
-
-        <div class="x_panel">
-          <div class="x_title">
-            <h2><i class="fa fa-thumb-tack"></i> Add/Change Prices</h2>
-            <ul class="nav navbar-right panel_toolbox">
-              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-              </li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-            <div class="accordion" id="accordion2" role="tablist" aria-multiselectable="true">
+              <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
               <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-product-price-form">
                     {% csrf_token %}
-                    {{ prdprice_formset.management_form }}
-                {% if prdprice_formset.non_form_errors %}
+                    {{ prdvars_formset.management_form }}
+                {% if prdvars_formset.non_form_errors %}
                   <div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                     </button>
-                    {{ prdprice_formset.non_form_errors }}
+                    {{ prdvars_formset.non_form_errors }}
                   </div>
                 {% endif %}
               <div class="inter-related-parent-div">    
-              {% for inline_admin_form in prdprice_formset.forms %}
+              {% for inline_admin_form in prdvars_formset.forms %}
               <div class="panel {% if forloop.last %} {% endif %}">
-                <a class="panel-heading collapsed" role="tab" id="heading2{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion2" href="#collapse2{{forloop.counter}}" aria-expanded="false" aria-controls="collapse2{{forloop.counter}}">
+                <a class="panel-heading collapsed" role="tab" id="heading1{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion1" href="#collapse1{{forloop.counter}}" aria-expanded="false" aria-controls="collapse1{{forloop.counter}}">
                   {% if  inline_admin_form|get_instance %}
-                  <h4 class="panel-title">Price:&nbsp;{{inline_admin_form|get_instance}}</h4>
+                  <h4 class="panel-title">Variation Product:&nbsp;{{inline_admin_form|get_instance}}</h4>
 
                   {% else %}
-                  <h4 class="panel-title">Price: Add New
+                  <h4 class="panel-title">Variation Product: Add New
                   </h4>{% endif %}
 
                     
                 </a>
-                <div id="collapse2{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading2{{forloop.counter}}" aria-expanded="false" style="height: 0px;">
+                <div id="collapse1{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1{{forloop.counter}}" aria-expanded="false" style="height: 0px;">
                   <div class="panel-body">
                       {% if  inline_admin_form.DELETE %}
                         <div class="pull-left">
@@ -169,13 +123,13 @@
                           {{ hidden }}
                       {% endfor %}
                   
-                      <div class="item form-group {% if inline_admin_form.currency.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.currency.id_for_label }}">Currency <span class="required">*</span>
+                    <div class="item form-group {% if inline_admin_form.sibling.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sibling.id_for_label }}">Sibling <span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{inline_admin_form.currency}}
+                        {{inline_admin_form.sibling}}
                       </div>
-                      <div class="alert">{{inline_admin_form.currency.errors}}</div>
+                      <div class="alert">{{inline_admin_form.sibling.errors}}</div>
                     </div>
                     
                     <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
@@ -187,25 +141,16 @@
                       <div class="alert">{{inline_admin_form.active.errors}}</div>
                     </div>
                     
-                    <div class="item form-group {% if inline_admin_form.value.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.value.id_for_label }}">Price <span class="required"></span>
+                    <div class="item form-group {% if inline_admin_form.sort_order.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">Sort Order <span class="required"></span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{inline_admin_form.value}}
+                        {{inline_admin_form.sort_order}}
                       </div>
-                      <div class="alert">{{inline_admin_form.value.errors}}</div>
+                      <div class="alert">{{inline_admin_form.sort_order.errors}}</div>
                     </div>
                     
-                    <div class="item form-group {% if inline_admin_form.fake_value.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.fake_value.id_for_label }}">Fake Price <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{inline_admin_form.fake_value}}
-                      </div>
-                      <div class="alert">{{inline_admin_form.fake_value.errors}}</div>
-                    </div>
                     
-
                   </div>
                 </div>
               </div>
@@ -214,7 +159,7 @@
              
 
                 <input type="hidden" name="product" value="{{object.pk}}">
-                <input type="hidden" name="slug" value="price">
+                <input type="hidden" name="slug" value="vars">
                 <div class="ln_solid"></div>
                 <div class="form-group">
                   <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
@@ -223,7 +168,7 @@
                 </div>
               
               </form>
-            </div>  
+            </div>
           </div>
         </div>
 
@@ -243,13 +188,6 @@
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
    <!-- Switchery -->
       <script type="text/javascript" src="{% static "packages/switchery/dist/switchery.min.js" %}"></script>
-  <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
-    <script type="text/javascript">
-        jQuery.each($("select[multiple]"), function () {
-          // "Locations" can be any label you want
-          SelectFilter.init(this.id, this.name, 0, "/media/");
-         });
-    </script>
     
     
   <!-- Custom Theme Scripts -->

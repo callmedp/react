@@ -99,12 +99,11 @@
           <i class="fa fa-dollar"></i> Price</a>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:product-add" %}">
+        <a class="btn btn-app" href="{% url "console:productvariation-change" object.pk %}">
           <i class="fa fa-book"></i> Variation</a>
       </div>
-
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:product-add" %}">
+        <a class="btn btn-app" href="{% url "console:productchild-change" object.pk %}">
           <i class="fa fa-book"></i> Related/Child</a>
       </div>
     </div>
@@ -524,7 +523,7 @@
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         {{op_form.mail_desc}}
                       </div>
-                      <div class="alert">{{op_form.call_desc.errors}}</div>
+                      <div class="alert">{{op_form.mail_desc.errors}}</div>
                     </div>
                     <div class="item form-group {% if op_form.call_desc.errors %}bad{% endif %}">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ op_form.call_desc.id_for_label }}">Welcome Call <span class="required"></span>
