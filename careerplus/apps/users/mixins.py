@@ -25,8 +25,8 @@ class RegistrationLoginApi(object):
 
             if response.status_code == 201:
                 response_json = response.json()
-                request.session['candidate_data'] = response_json
                 response_json.update({'response': "new_user"})
+                request.session['candidate_data'] = response_json
 
             elif "non_field_errors" in response.json():
                 response_json = response.json()

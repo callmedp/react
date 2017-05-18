@@ -1,21 +1,38 @@
 $().ready(function() {
-    $.validator.addMethod("email_account", function(value, element) {
-        $.get("/ajax/email-exist/", {email:$("#id_email").val() }, function(msg){
-           {
-              if(msg.exists == "false")
-                 return false;  
-              return true;
-           }
-        })}, "User have No account");
+    var emailresponse;
+    $.validator.addMethod("emailDoesNotExist",
+        function(value, element) {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url:"/ajax/email-exist/",
+                data:{email:$("#id_email").val()},
+                success: function(res)
+                {
+                    emailresponse = ( res.exists == false ) ? false : true;
+                }
+             });
+             return emailresponse;
+
+        },
+        "This email id does not exists."
+    );
     $("#login_form").validate({
         submitHandler: function(form) {
-            $("#login_form").submit();   
+            if($(this).val() != '')
+            {
+              $('button[type="submit"]').attr('disabled' , false); 
+            }
+            else
+            {
+              $('button[type="submit"]').attr('disabled' , true);
+            }   
         },
         rules: {
                 email:{
                     required:true,
                     email:true,
-                    email_account:$("#id_email").val()
+                    emailDoesNotExist:true,
 
                 },
                 password:{

@@ -49,7 +49,7 @@
   <div>
     <h1 class="modal-title">Register</h1>
   </div>
-    <form method="post" id="register_form">
+    <form method="post" id="register_form" role="form">
     {% csrf_token %}
       <div class="form-group {% if form.email.errors %}error{% endif %}">
         {{ form.email }}

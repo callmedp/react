@@ -43,7 +43,7 @@
         {% endfor %}
     {% endif %}
   </div>
-    <form method="post" id="login_form">
+    <form method="post" id="login_form" role="form">
     {% csrf_token %}
       <fieldset>
           {% for field in form %}

@@ -1,22 +1,39 @@
 $().ready(function() {
-    $.validator.addMethod("email_exist", function(value, element) {
-        $.get("/ajax/email-exist/", {email:$("#id_email").val() }, function(msg){
-           {
-              if(msg.exists == "true")
-                 return false;  
-              return true;
-           }
-        })}, "Email is Already Taken");
+    var emailresponse;
+    $.validator.addMethod("uniqueUserName",
+        function(value, element) {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url:"/ajax/email-exist/",
+                data:{email:$("#id_email").val()},
+                success: function(res)
+                {
+                    emailresponse = ( res.exists == false ) ? true : false;
+                }
+             });
+             return emailresponse;
+
+        },
+        "This email id already taken."
+    );
 
     $("#register_form").validate({
         submitHandler: function(form) {
-        $("#register_form").submit();     
+        if($(this).val() != '')
+            {
+              $('button[type="submit"]').attr('disabled' , false); 
+            }
+            else
+            {
+              $('button[type="submit"]').attr('disabled' , true);
+            }     
         },
         rules: {
                 email:{
                     required:true,
                     email:true,
-                    email_exist:$("#id_email").val() 
+                    uniqueUserName:true,
                 },
                 raw_password:{
                     required:true,
@@ -35,7 +52,7 @@ $().ready(function() {
         },
         messages:{
             email: { 
-                required:"Please enter a valid email address",
+                required:"Please enter a valid email address",                
             },
             raw_password:{
                 required: "Please provide a password",
