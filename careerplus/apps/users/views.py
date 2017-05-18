@@ -176,7 +176,6 @@ class LoginApiView(FormView):
             })
 
         user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
-        import ipdb; ipdb.set_trace()
         if user_exist['exists'] == True:
             login_resp = RegistrationLoginApi().user_login(login_dict)
 
