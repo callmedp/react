@@ -48,7 +48,7 @@ class OrderMixin(object):
 			if order and cart_obj:
 				cart_items = cart_obj.lineitems.all().select_related('product')
 				for item in cart_items:
-					oi = OrderItem.objects.create(order=order, product=item.product,
+					OrderItem.objects.create(order=order, product=item.product,
 						title=item.product.title)
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))

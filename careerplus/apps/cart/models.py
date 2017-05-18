@@ -63,7 +63,8 @@ class LineItem(AbstractAutoDate):
         verbose_name=_("Cart"))
     parent = models.ForeignKey('self', null=True, blank=True)
     type_item = models.PositiveSmallIntegerField(default=0)
-    # reference = unique slug
+    # unique slug for line item delete
+    reference = models.CharField(max_length=255, unique=True, null=True, blank=True)
     product = models.ForeignKey(
         'shop.Product', related_name='cart_lineitems',
         verbose_name=_("Product"))

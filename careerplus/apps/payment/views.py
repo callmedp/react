@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.shortcuts import render
 
 from cart.mixins import CartMixin
+from cart.models import Cart
 from order.mixins import OrderMixin
 
 from .forms import StateForm
@@ -28,13 +29,18 @@ class PaymentOptionView(TemplateView, CartMixin, OrderMixin):
 		if payment_type == 'cash':
 			form = StateForm(request.POST)
 			if form.is_valid():
-				cart_obj = self.getCartObject()
-				cart_obj.date_submitted = timezone.now()
-				cart_obj.is_submitted = True
-				cart_obj.save()
-				order_status = 2
-				self.createOrder(cart_obj, order_status)
-				return HttpResponseRedirect(reverse('payment:thank-you'))
+				cart_pk = request.session.get('cart_pk')
+				if cart_pk:
+					cart_obj = Cart.objects.get(pk=cart_pk)
+					cart_obj.date_submitted = timezone.now()
+					cart_obj.is_submitted = True
+					cart_obj.save()
+					order_status = 2
+					self.createOrder(cart_obj, order_status)
+					return HttpResponseRedirect(reverse('payment:thank-you'))
+				else:
+					pass
+					# redirect home page
 			else:
 				return render(request, self.template_name, {"state_form": form})
 

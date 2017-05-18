@@ -11,7 +11,7 @@ from shine.core import ShineCandidateDetail
 from shop.models import Product
 from users.mixins import RegistrationLoginApi
 
-from .models import Cart, LineItem, ShippingDetail
+from .models import Cart, ShippingDetail
 from .mixins import CartMixin
 from .forms import LoginForm, ShippingDetailUpdateForm
 
@@ -20,14 +20,13 @@ class CartView(TemplateView, CartMixin):
 	template_name = "cart/cart.html"
 
 	def get(self, request, *args, **kwargs):
-		# print ("sessionid", request.session.session_key
 		return super(self.__class__, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
 		context = super(self.__class__, self).get_context_data(**kwargs)
-		cart_obj = self.getCartObject(self.request)
+		self.getCartObject()
 		context.update({
-			"cart_items": self.get_cart_items(cart_obj),
+			"cart_items": self.get_cart_items(),
 		})
 		return context
 
@@ -37,60 +36,52 @@ class AddToCartView(View, CartMixin):
 	def post(self, request, *args, **kwargs):
 		if request.is_ajax():
 			data = {"status": -1}
-			prod_id = request.POST.get('product_id', '')
-			try:
-				product = Product.objects.get(id=prod_id, active=True)
-				candidate_id = request.session.get('candidate_id')
-				if not request.session.session_key:
-					request.session.create()
-				sessionid = request.session.session_key
+			cart_type = request.POST.get('cart_type')
+			if cart_type == 'enrol_cart':
+				prod_id = request.POST.get('product_id', '')
+				try:
+					product = Product.objects.get(id=prod_id, active=True)
+					data['status'] = self.createExpressCart(product)
+				except Exception as e:
+					data['error_message'] = str(e)
 
-				if candidate_id:
-					cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
-					if cart_users:
-						cart_user = cart_users[0]
+				if data['status'] == 1:
+					data['redirect_url'] = reverse('cart:payment-login')
 
-						try:
-							cart_session = Cart.objects.get(session_id=sessionid, status=0)
-						except:
-							cart_session = None
-						if cart_session:
-							self.mergeCart(cart_session, cart_user)
+				return HttpResponse(json.dumps(data), content_type="application/json")
 
-						data['status'] = self.updateCart(cart_user, product)
+			elif cart_type == 'add_cart':
+				prod_id = request.POST.get('product_id', '')
+				try:
+					product = Product.objects.get(id=prod_id, active=True)
+					data['status'] = self.updateCart(product)
+				except Exception as e:
+					data['error_message'] = str(e)
 
-					else:
-						cart_session, created = Cart.objects.get_or_create(session_id=sessionid, status=0)
-						cart_session.owner_id = candidate_id
-						cart_session.status = 2
-						cart_session.save()
-						data['status'] = self.updateCart(cart_session, product)
-					
-				elif sessionid:
-					cart_session, created = Cart.objects.get_or_create(session_id=sessionid, status=0)
-					data['status'] = self.updateCart(cart_session, product)
-
-				else:
-					data['error_message'] = 'Your session doesn\'t exist.'
-
-			except Exception as e:
-				data['error_message'] = str(e)
-
-			return HttpResponse(json.dumps(data), content_type="application/json")
+				return HttpResponse(json.dumps(data), content_type="application/json")
 
 		return HttpResponseForbidden()
 
 
-class RemoveFromCartView(View,):
+class RemoveFromCartView(View, CartMixin):
 
 	def post(self, request, *args, **kwargs):
 		if request.is_ajax():
 			data = {"status": -1}
-			line_id = request.POST.get('line_item', '')
+			reference = request.POST.get('reference_id')
 			try:
-				line_obj = LineItem.objects.get(id=line_id)
-				line_obj.delete()
-				data['status'] = 1
+				if not self.request.session.get('cart_pk'):
+					self.getCartObject()
+
+				cart_pk = self.request.session.get('cart_pk')
+				if cart_pk:
+					cart_obj = Cart.objects.get(pk=cart_pk)
+					line_obj = cart_obj.lineitems.get(reference=reference)
+					line_obj.delete()
+					data['status'] = 1
+				else:
+					data['error_message'] = 'this cart item alredy removed.'
+
 			except Exception as e:
 				data['error_message'] = str(e)
 
@@ -134,20 +125,6 @@ class PaymentLoginView(TemplateView, RegistrationLoginApi, ShineCandidateDetail)
 			"login_form": LoginForm(),
 		})
 		return context
-
-
-# class PaymentShippingView(TemplateView):
-# 	template_name = "cart/payment-shipping.html"
-
-# 	def get(self, request, *args, **kwargs):
-# 		candidate_id = request.session.get('candidate_id')
-# 		if not candidate_id:
-# 			return HttpResponseRedirect(reverse('cart:payment-login'))
-# 		return super(self.__class__, self).get(request, *args, **kwargs)
-
-# 	def get_context_data(self, **kwargs):
-# 		context = super(self.__class__, self).get_context_data(**kwargs)
-# 		return context
 
 
 class PaymentShippingView(UpdateView):
@@ -202,8 +179,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
 	def get_context_data(self, **kwargs):
 		context = super(self.__class__, self).get_context_data(**kwargs)
-		cart_obj = self.getCartObject(self.request)
-		context.update({
-			"cart_items": self.get_cart_items(cart_obj),
-		})
+		if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
+			context.update({
+				"cart_items": self.get_cart_items(),
+			})
+		else:
+			self.getCartObject()
+			context.update({
+				"cart_items": self.get_cart_items(),
+			})
 		return context

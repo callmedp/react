@@ -1,6 +1,7 @@
 function addToCart(prod_id){
 	if (prod_id){
-		var formData = $('#addToCartForm').serialize();
+        $('#id-cart-type').val("add_cart");
+		var formData = $('#cartForm').serialize();
 		$.ajax({
             url: '/cart/add-to-cart/',
             type: 'POST',
@@ -41,8 +42,6 @@ function removeFromCart(line_id){
             data:formData,
             dataType: 'json',
             success: function(json) {
-                console.log(json.status);
-
                 if (json.status == 1){
                     alert("product removed from cart successfully");
                 }
@@ -61,3 +60,33 @@ function removeFromCart(line_id){
     }
 
 };
+
+
+$(document).ready(function() {
+     $('#enrol-now-button').click(function() {
+        $('#id-cart-type').val("enrol_cart");
+        var formData = $("#cartForm").serialize();
+        console.log(formData);
+        $.ajax({
+            url : '/cart/add-to-cart/',
+            type: 'POST',
+            data : formData,
+            success: function(data, textStatus, jqXHR)
+            {
+                console.log(data.status);
+                if (data.status == 1){
+                    console.log(data.redirect_url);
+                    window.location.href = data.redirect_url
+                    //window.location(data.redirect_url);
+                }
+                else if (data.status == -1){
+                    alert(data.error_message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Something went wrong. Try again later.');
+            }
+        });
+    });
+});
