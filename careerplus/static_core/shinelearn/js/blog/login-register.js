@@ -1,10 +1,30 @@
 $().ready(function() {
 
+    // var emailresponse;
+    // $.validator.addMethod("emailDoesNotExist",
+    //     function(value, element) {
+    //         $.ajax({
+    //             type: "GET",
+    //             async: false,
+    //             url:"/ajax/email-exist/",
+    //             data:{email:$("#id_email").val()},
+    //             success: function(res)
+    //             {
+    //                 emailresponse = ( res.exists == false ) ? false : true;
+    //             }
+    //          });
+    //          return emailresponse;
+
+    //     },
+    //     "This email is not registered. Please register first."
+    // );
+
     $("#login_form").validate({
         rules: {
                 email:{
                     required:true,
-                    email:true
+                    email:true,
+                    /*emailDoesNotExist:true,*/
                 },
                 password:{
                     required:true,
@@ -104,11 +124,14 @@ $().ready(function() {
                 data : formData,
                 success: function(data, textStatus, jqXHR)
                 {
-                    if (data.response == 'new_user'){
+                    if (data.response == 'login_user'){
                         window.location.reload();
                     }
                     else if (data.response == 'exist_user'){
-                        $('#non-field-error-register').text('User already exist. Try to login with existing email or Register with Other Email.')
+                        $('#non-field-error-register').text(data.error_message)
+                    }
+                    else if (data.response == 'error_pass'){
+                        $('#non-field-error-register').text(data.error_message)
                     }
                     else if(data.response == 'form_error'){
                         $('#non-field-error-register').text('Please enter Valid Data')

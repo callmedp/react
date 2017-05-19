@@ -86,11 +86,10 @@ class RegistrationForm(forms.Form):
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
 
     country_code = forms.ChoiceField(label=("Country:"), required=True,
-        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control custom-select country-code'}), initial=indian_obj)
+        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
 
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile No.'}), max_length=10)
-
 
     vendor_id = forms.CharField(
         max_length=30, required=True,
@@ -99,6 +98,54 @@ class RegistrationForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
+        self.fields['vendor_id'].initial = '12345'
+        self.fields['vendor_id'].widget = forms.HiddenInput()
+        # self.fields['country_code'].initial = [(self.indian_obj.pk,self.indian_obj.phone)]
+
+    def clean_raw_password(self):
+        min_password_length = 6
+        max_password_length = 15
+        password1 = self.cleaned_data.get('raw_password')
+        if len(password1) < min_password_length:
+            raise forms.ValidationError("Ensure this field has at least 6 characters.")
+        if len(password1) > max_password_length:
+            raise forms.ValidationError("Ensure this field has no more than 15 characters.")
+        return password1
+
+
+class ModalLoginApiForm(forms.Form):
+    email = forms.EmailField(max_length=100, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+
+    password = forms.CharField(
+        max_length=16, required=True, widget=forms.PasswordInput(
+            attrs={'placeholder': 'Password', 'class': 'form-control'}))
+
+
+class ModalRegistrationApiForm(forms.Form):
+    country_choices = [(m.pk, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None
+
+    email = forms.EmailField(
+        max_length=30, required=True, widget=forms.EmailInput(
+            attrs={'placeholder': 'Email', 'class': 'form-control'}))
+
+    raw_password = forms.CharField(
+        max_length=16, required=True, widget=forms.PasswordInput(
+            attrs={'placeholder': 'Password', 'class': 'form-control'}))
+
+    country_code = forms.ChoiceField(label=("Country:"), required=True,
+        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
+
+    cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
+        attrs={'class': 'form-control modal-form-control', 'placeholder': 'Mobile No.'}), max_length=10)
+
+    vendor_id = forms.CharField(
+        max_length=30, required=True,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Vendor Id', 'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(ModalRegistrationApiForm, self).__init__(*args, **kwargs)
         self.fields['vendor_id'].initial = '12345'
         self.fields['vendor_id'].widget = forms.HiddenInput()
         # self.fields['country_code'].initial = [(self.indian_obj.pk,self.indian_obj.phone)]
