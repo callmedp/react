@@ -12,7 +12,6 @@ from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from partner.models import Vendor
-from ckeditor.fields import RichTextField
 from faq.models import FAQuestion, Chapter
 from geolocation.models import Country, Currency
 
@@ -541,6 +540,7 @@ class Product(AbstractProduct, ModelMeta):
         return self.name
 
     def save(self, *args, **kwargs):
+        
         if self.name:
             if not self.title:
                 self.title = self.name

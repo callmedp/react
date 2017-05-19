@@ -20,6 +20,7 @@ lib64/
 parts/
 sdist/
 var/
+
 *.egg-info/
 .installed.cfg
 *.egg
@@ -35,7 +36,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 media/
-
+migrations/
 # Unit test / coverage reports
 htmlcov/
 .tox/

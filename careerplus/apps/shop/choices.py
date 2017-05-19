@@ -58,18 +58,10 @@ FLOW_CHOICES = (
 
 EXP_CHOICES = (
     (0, 'Default'),
-    (1, 'Exp 1-4 Yrs'),
-    (2, 'Exp 1-4 Yrs'),
-    (3, 'Flow 3'),
-    (4, 'Flow 4'),
-    (5, 'Flow 5'),
-    (6, 'Flow 6'),
-    (7, 'Flow 7'),
-    (8, 'Flow 8'),
-    (9, 'Flow 9'),
-    (10, 'Flow 10'),
-    (11, 'Flow 11'),
-    (12, 'Flow 12'),)
+    (1, '0-1 years'),
+    (2, '1-4 years'),
+    (3, '4-8 years'),
+    (4, '8-15 years'),)
 
 
 COURSE_TYPE_CHOICES = (
