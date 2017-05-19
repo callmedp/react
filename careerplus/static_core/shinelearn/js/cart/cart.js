@@ -1,4 +1,5 @@
 function addToCart(prod_id){
+    console.log()
 	if (prod_id){
         $('#id-cart-type').val("add_cart");
 		var formData = $('#cartForm').serialize();

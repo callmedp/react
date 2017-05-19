@@ -1,7 +1,8 @@
 <!--hidden form -->
 <div style="display: none">
-    <form method="POST" id="addToCartForm" > {% csrf_token %}
+    <form role="form" method="POST" id="cartForm" > {% csrf_token %}
         <input type="hidden" name="product_id" value="{{object.id}}">
+        <input type="hidden" name="cart_type" id="id-cart-type" value="">
     </form>
 </div>
 
@@ -14,8 +15,11 @@
     <strike>Rs. 4000/-</strike>
     <small>  5% off</small>
     <span class="clearfix db"></span>
-    <a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enrol now</a>
+
+    <a role="button" class="enrol-now" id="enrol-now-button" >Enrol now</a>
+
     <a role="button" class="add-cart" onclick="addToCart('{{object.id}}')">Add to cart</a>
+
     <div class="query-call">
       <a href="#"><figure class="email-icon"></figure> Have a query?</a>
       <a><figure class="calling-icon"></figure> 0124-395 5001</a>

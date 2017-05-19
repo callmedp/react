@@ -39,10 +39,11 @@ class PaymentOptionView(TemplateView, CartMixin, OrderMixin):
 					self.createOrder(cart_obj, order_status)
 					return HttpResponseRedirect(reverse('payment:thank-you'))
 				else:
-					pass
-					# redirect home page
+					return HttpResponseRedirect(reverse('cart:cart-product-list'))
 			else:
 				return render(request, self.template_name, {"state_form": form})
+		else:
+			HttpResponseRedirect(reverse('cart:cart-product-list'))
 
 	def get_context_data(self, **kwargs):
 		context = super(self.__class__, self).get_context_data(**kwargs)

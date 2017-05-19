@@ -25,7 +25,7 @@ $(function() {
                 required:"Mobile Number is Mandatory",
                 number:"Enter only number",
                 maxlength: "Please enter below 15 digits",
-                minlength: "Please enter atleast 5 digits",
+                minlength: "Please enter atleast 10 digits",
             },
             
         },
@@ -63,14 +63,14 @@ $(function() {
 
     $(document).on('click', '#product_load_more', function(event) {
         var page = parseInt($("#page_id").val());
-        $("#product_load_more").hide();
+        $(".loadmore").remove();
         $.ajax({
             url: "/ajax/product/load-more/",
             data : {"page": page, "slug": $("#slug_id").val()},
             success: function(data, textStatus, jqXHR)
             {
                 document.getElementById("page_id").value = Number(page)+1;
-                $('html,body').animate({scrollTop: $("#product_load_more").offset().top},500);
+                // $('html,body').animate({scrollTop: $(".abc").offset().top},500);
                 $("#product_list").append(data);       
                 
             },
@@ -84,14 +84,14 @@ $(function() {
     });
     $(document).on('click', '#review_load_more', function(event) {
         var page = parseInt($("#page_id1").val());
-        $("#review_load_more").hide();
+        $(".loadreview").remove();
         $.ajax({
             url: "/ajax/review/load-more/",
             data : {"page": page, "slug": $("#slug_id1").val()},
             success: function(data, textStatus, jqXHR)
             {
                 document.getElementById("page_id1").value = Number(page)+1;
-                $('html,body').animate({scrollTop: $("#review_load_more").offset().top},500);
+                // $('html,body').animate({scrollTop: $("#review_load_more").offset().top},500);
                 $("#review_list").append(data);       
                 
             },

@@ -72,12 +72,13 @@
           <form role="form" method="post" id="login_form" action="" class="personal-details col-sm-6"> {% csrf_token %}
             <strong class="personal-details-heading col-sm-12">Login with your email id</strong>
             <label id="non-field-error" class="error">{{non_field_error}}</label>
-            <div class="form-group col-sm-12">
-              <input type="email" name="email" class="form-control" placeholder="Enter your email id">
-              <span class="error-txt">Required</span>
+            <div class="form-group col-sm-12 {% if form.email.errors %}error{% endif %}">
+              {{form.email}}
+              <span class="error-txt">{{form.email.errors.0}}</span>
             </div>
-            <div class="form-group col-sm-12">
-              <input type="password" name="password" class="form-control"  placeholder="Password">
+            <div class="form-group col-sm-12 {% if form.password.errors %}error{% endif %}">
+              {{form.password}}
+              <span class="error-txt">{{form.password.errors.0}}</span>
             </div>
             <div class="continue col-sm-12">
               <button type="submit">Continue</button>

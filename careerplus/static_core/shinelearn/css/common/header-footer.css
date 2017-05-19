@@ -1033,6 +1033,14 @@ footer .footer-links span {
 .blank-star {
   width: 14px;
   height: 15px;
+  background: url(../../images/sprite.png) no-repeat -601px -160px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.blank-star {
+  width: 14px;
+  height: 15px;
   background: url(../../images/sprite.png) no-repeat -695px -87px;
   display: inline-block;
   vertical-align: sub;
@@ -1589,4 +1597,3 @@ footer .footer-links span {
   background-color: #c8c04a;
 }
 
-/*# sourceMappingURL=header-footer.css.map */

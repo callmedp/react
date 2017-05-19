@@ -148,6 +148,8 @@ class ChangeCategoryView(DetailView):
                             request.POST, request.FILES, instance=obj)
                         if form.is_valid():
                             form.save()
+                            url = obj.get_full_url()
+                            Category.objects.filter(pk=obj.pk).update(url=url)
                             messages.success(
                                 self.request,
                                 "Category Object Changed Successfully")

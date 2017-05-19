@@ -3,15 +3,6 @@ from django import forms
 from .models import ShippingDetail
 
 
-class LoginForm(forms.Form):
-	email = forms.EmailField(max_length=200, required=True,
-		widget=forms.EmailInput(
-			attrs={'class': 'form-control', 'placeholder': 'Enter your email id'}))
-	password = forms.CharField(
-        max_length=16, required=True, widget=forms.PasswordInput(
-            attrs={'placeholder': 'Password', "required": "required", 'class': 'form-control'}))
-
-
 class ShippingDetailUpdateForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):

@@ -123,7 +123,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 self.image_alt = self.name
         if self.description:
             if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description)
+                self.meta_desc = self.get_meta_desc(self.description.strip())
+                
         super(Category, self).save(*args, **kwargs)
 
     def get_meta_desc(self, description=''):
@@ -685,42 +686,6 @@ class Product(AbstractProduct, ModelMeta):
             suf,
         )
         return
-
-
-    def get_rating(self):
-        rating_ls = []
-        if int(self.avg_rating) == 1:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 2:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 3:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 4:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 5:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-
-        return rating_ls
 
     def get_description(self):
         description = self.meta_desc
