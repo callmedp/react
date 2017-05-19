@@ -1,19 +1,21 @@
 <!-- Program Structure container -->
 {% if prd_program_struct %}
-  <li>
-  <section class="container">
+
+<!-- Program Structure container -->
+<section class="container-fluid detail-box">
+  <div class="container">
     <div class="row">
       <div id="programs" class="col-sm-12 col-md-8 program-structure scroll">
         <h2>Program Structure</h2>
-        <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">  
-          {% for chapter in topic_chap_list  %}
+        <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          {% for chapter in chap_list  %}
             
           <li class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne{{forloop.counter}}">
               <h3 class="panel-title">
                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne{{forloop.counter}}"{% if forloop.counter == 1 %}
                   aria-expanded="true"{% else %}aria-expanded="false" class="collapsed"{% endif %}  aria-controls="collapseOne{{forloop.counter}}">
-                  {{chapter.heading}}
+                  {{forloop.counter}}.&nbsp;{{chapter.heading}}
                 </a>
               </h3>
             </div>
@@ -25,10 +27,9 @@
             </div>
           </li>
           {% endfor %}
-          
         </ul>
       </div>
-    </div>      
-  </section>      
-  </li>
+    </div>
+  </div>      
+</section>
 {% endif %}

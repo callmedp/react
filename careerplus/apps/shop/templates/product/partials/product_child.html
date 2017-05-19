@@ -36,18 +36,24 @@
 {% endif %}
 
 {% if combos %}
-  <!-- Combo includes -->
-  <div class="row">
-    <div class="combo-includes col-sm-12 col-md-8 mb-40">
-      <h2 class="detail-heading">Combo includes</h2>
-        <ul>
-          {% for combo in combos %}
-            <li>
-              <a href="{{combo.url}}">{{combo.label}}</a>
-            </li>
-          {% endfor %}
-          
-        </ul>
-    </div>
+<!-- Combo includes -->
+<div class="row">
+  <div class="combo-includes col-sm-12 col-md-8 mb-40">
+    <h2 class="detail-heading">Combo includes</h2>
+      <ul>
+        <li>
+          <a href="#">Resume writing ( Exp 0-1 years )</a>
+        </li>
+        <li>
+          <a href="#">Resume Showcase (Resume Booster)</a>
+        </li>
+        <li>
+          <a href="#">Linkedin Profile (Exp: 0 to 1 Years)</a>
+        </li>
+        <li>
+          <a href="#">Resume Showcase (Featured Profile: 6 months)</a>
+        </li>
+      </ul>
   </div>
+</div>
 {% endif %}

@@ -1,27 +1,36 @@
+{% if  %}
+
+{% elif %}
+  
+{% endif %}
+<!-- main package start -->
 <div class="main-package">
   <div class="main-package-content">
     <span>Experience</span>
-    <strong>{{prd_variation}}</strong>
+    <strong>0 -1 years</strong>
     <p>Starting at <small>Rs. 4000/-</small></p>
   </div>
 
   <div class="main-package-arrow"></div>
 </div>
 <!-- main package start end-->
-{% if variations  %}
-  
+
 <!-- other package start -->
 <div class="other-package-box">
   <span>Other packages</span>
-  {% for var in variations %}
-    
-  <a href="{{var.url}}" class="other-package">
+  <a href="#" class="other-package">
     <p>Experience
-    <strong>{{var.label}}</strong></p>
+    <strong>1-4 years</strong></p>
   </a>
-  {% endfor %}
-  
-</div>
-{% endif %}
 
+  <a href="#" class="other-package">
+    <p>Experience
+    <strong>4-8 years</strong></p>
+  </a>
+
+  <a href="#" class="other-package">
+    <p>Experience
+    <strong>8-15 years</strong></p>
+  </a>
+</div>
 <!-- other package end -->

@@ -12,8 +12,8 @@ from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from partner.models import Vendor
-from ckeditor.fields import RichTextField
 from faq.models import FAQuestion, Chapter
+from geolocation.models import Country, Currency
 
 from .functions import (
     get_upload_path_category,
@@ -30,7 +30,8 @@ from .choices import (
     ATTRIBUTE_CHOICES,
     RELATION_CHOICES,
     COURSE_TYPE_CHOICES,
-    MODE_CHOICES)
+    MODE_CHOICES,
+    BG_CHOICES)
 
 
 class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -46,13 +47,19 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         _('Level'), choices=CATEGORY_CHOICES, default=0)
     video_link = models.CharField(
         _('Video Link'), blank=True, max_length=200)
-    career_outcomes = models.CharField(max_length=500, null=True,
-        blank=True, help_text='semi-colon(;) separated designations, e.g. Project Engineer; Software Engineer; ...')
+    career_outcomes = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Project Engineer; Software Engineer; ...')
     description = RichTextField(
         verbose_name=_('Description'), blank=True, default='')
     banner = models.ImageField(
         _('Banner'), upload_to=get_upload_path_category,
         blank=True, null=True)
+    is_skill = models.BooleanField(
+        _('Is Skill'),
+        default=False)
     graph_image = models.ImageField(
         _('Graph Image'), upload_to=get_upload_path_category,
         blank=True, null=True)
@@ -105,7 +112,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return dict(CATEGORY_CHOICES).get(self.type_level)
 
     def save(self, *args, **kwargs):
-        if not self.url:
+        if not self.url and self.pk:
             self.url = self.get_full_url()
         if self.name:
             if not self.title:
@@ -117,9 +124,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         if self.description:
             if not self.meta_desc:
                 self.meta_desc = self.get_meta_desc(self.description)
-                
         super(Category, self).save(*args, **kwargs)
-    
+
     def get_meta_desc(self, description=''):
         if description:
             try:
@@ -143,10 +149,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
-        # return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug})
-        # return '/' #reverse('category-listing', kwargs={'slug': self.slug})
-        return
-
+        if self.pk:
+            return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug, 'pk': self.pk})
+        
     def add_relationship(self, category, relation=0):
         relationship, created = CategoryRelationship.objects.get_or_create(
             related_from=self,
@@ -209,7 +214,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
 
     def split_career_outcomes(self):
-        return self.career_outcomes.split(';')
+        return self.career_outcomes.split(',')
     
 
     def has_children(self):
@@ -277,6 +282,11 @@ class CategoryRelationship(AbstractAutoDate):
             'pri': self.related_from,
             'sec': self.related_to}
 
+    class Meta:
+        unique_together = ('related_from', 'related_to')
+        verbose_name = _('Relationship')
+        verbose_name_plural = _('Relationships')
+
 
 class AttributeOptionGroup(models.Model):
     name = models.CharField(_('Name'), max_length=128)
@@ -343,31 +353,18 @@ class Attribute(AbstractAutoDate):
     def __str__(self):
         return self.name
 
+    @property
+    def get_entity(self):
+        return dict(SERVICE_CHOICES).get(self.type_service)
+
+    @property
+    def get_type(self):
+        return dict(ATTRIBUTE_CHOICES).get(self.type_attribute)
+
 
 class Keyword(AbstractAutoDate):
     name = models.CharField(
         _('Name'), max_length=100, unique=True)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Currency(AbstractAutoDate):
-    name = models.CharField(
-        _('Name'), max_length=100,
-        help_text=_('Name of Currency'))
-    value = models.PositiveIntegerField(
-        _('Value'), help_text=_('Integer Value'))
-    # country = models.ManytoManyField()
-    exchange_rate = models.DecimalField(
-        _('Exchange'),
-        max_digits=8, decimal_places=2,
-        default=0.0)
-    offset = models.DecimalField(
-        _('Offset'),
-        max_digits=8, decimal_places=2,
-        default=0.0)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -396,6 +393,8 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_product_icon,
         blank=True, null=True)
+    image_bg = models.PositiveSmallIntegerField(
+        _('Icon Background'), choices=BG_CHOICES, default=0)
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_product_image,
         blank=True, null=True)
@@ -453,6 +452,11 @@ class Product(AbstractProduct, ModelMeta):
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
+    countries = models.ManyToManyField(
+        Country,
+        verbose_name=_('Country Available'),
+        related_name='countryavailable',
+        blank=True)
     variation = models.ManyToManyField(
         'self',
         through='VariationProduct',
@@ -535,19 +539,153 @@ class Product(AbstractProduct, ModelMeta):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        
+        if self.name:
+            if not self.title:
+                self.title = self.name
+            if not self.heading:
+                self.heading = self.name
+            if not self.image_alt:
+                self.image_alt = self.name
+        if self.description:
+            if not self.meta_desc:
+                self.meta_desc = self.get_meta_desc(self.description)
+                
+        super(Product, self).save(*args, **kwargs)
+
+    @property
+    def var_child(self, *args, **kwargs):
+        return self.type_product == 2
+
+    @property
+    def var_parent(self, *args, **kwargs):
+        return self.type_product == 1
+
+    @property
+    def is_combo(self, *args, **kwargs):
+        return self.type_product == 3
+
+    @property
+    def is_virtual(self, *args, **kwargs):
+        return self.type_product == 4
+
+    @property
+    def is_course(self, *args, **kwargs):
+        return self.type_service == 3
+
+    @property
+    def is_writing(self, *args, **kwargs):
+        return self.type_service == 1
+
+    @property
+    def is_service(self, *args, **kwargs):
+        return self.type_service == 2
+
+    @property
+    def is_others(self, *args, **kwargs):
+        return self.type_service == 4
+
+    @property
+    def get_bg(self, *args, **kwargs):
+        return dict(BG_CHOICES).get(self.image_bg)
+
+    def get_meta_desc(self, description=''):
+        if description:
+            try:
+                import re
+                cleanr = re.compile('<.*?>')
+                cleantext = re.sub(cleanr, '', description)
+            except:
+                cleantext = ''
+        return cleantext
+
+
     @property
     def category_slug(self):
-        prod_cat = self.categories.filter(
-                productcategories__is_main=True,
-                productcategories__active=True)
-        if prod_cat:
-            prod_cat = prod_cat[0].slug
+        main_prod_cat = self.categories.filter(
+            productcategories__is_main=True,
+            productcategories__active=True)
+        if main_prod_cat:
+            return main_prod_cat[0]
         else:
-            prod_cat = None
-        return prod_cat
+            prod_cat = self.categories.filter(
+                productcategories__is_main=False,
+                productcategories__active=True)
+            if prod_cat:
+                return prod_cat[0]
+        return None
+
+    def verify_category(self, cat_slug=None):
+        try:
+            prod_cat = self.categories.filter(
+                slug=cat_slug,
+                active=True)
+            if prod_cat:
+                return prod_cat[0]
+            else:
+                return self.category_slug
+        except:
+            pass
+        return None
+
+    def get_full_url(self):
+        return self.build_absolute_uri(self.get_absolute_url())
+
+    def get_absolute_url(self, prd_slug=None, cat_slug=None):
+        if cat_slug:
+            pass
+        else:
+            cat_slug = self.category_slug
+        cat_slug = cat_slug.slug if cat_slug else None
+        if self.is_course: 
+            return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        elif self.is_writing:
+            return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        elif self.is_service:
+            return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        else:
+            return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
 
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
+
+    def create_icon(self):
+        if not self.image:
+            return
+        from PIL import Image
+        from io import BytesIO
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        import os
+
+        THUMBNAIL_SIZE = (100, 100)
+        DJANGO_TYPE = None
+
+        if self.image.name.endswith(".jpg"):
+            DJANGO_TYPE = 'image/jpeg'
+            PIL_TYPE = 'jpeg'
+            FILE_EXTENSION = 'jpg'
+        elif self.image.name.endswith(".png"):
+            DJANGO_TYPE = 'image/png'
+            PIL_TYPE = 'png'
+            FILE_EXTENSION = 'png'
+        else:
+            return
+        image = Image.open(BytesIO(self.image.read()))
+        image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
+
+        temp_handle = BytesIO()
+        image.save(temp_handle, PIL_TYPE)
+        temp_handle.seek(0)
+
+        suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
+                temp_handle.read(), content_type=DJANGO_TYPE)
+        self.icon.save(
+            '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
+            suf,
+        )
+        return
+
 
     def get_rating(self):
         rating_ls = []
@@ -590,12 +728,7 @@ class Product(AbstractProduct, ModelMeta):
             description = self.description
         return description.strip()
 
-    def get_full_url(self):
-        return self.build_absolute_uri(self.get_absolute_url())
-
-    def get_absolute_url(self):
-        return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': self.category_slug, 'pk': self.pk})
-
+    
     def get_ratings(self):
         pure_rating = int(self.avg_rating)
         decimal_part = self.avg_rating - pure_rating
@@ -615,6 +748,10 @@ class Product(AbstractProduct, ModelMeta):
     @property
     def has_attributes(self):
         return self.attributes.exists()
+
+    @property
+    def get_type(self):
+        return dict(PRODUCT_CHOICES).get(self.type_product)
 
 
 class ProductArchive(AbstractProduct):
@@ -744,6 +881,11 @@ class VariationProduct(AbstractAutoDate):
             'pri': self.main,
             'sec': self.sibling}
 
+    class Meta:
+        unique_together = ('main', 'sibling')
+        verbose_name = _('Product Variation')
+        verbose_name_plural = _('Product Variations')
+
 
 class RelatedProduct(AbstractAutoDate):
     primary = models.ForeignKey(
@@ -804,6 +946,11 @@ class ChildProduct(AbstractAutoDate):
             'pri': self.father,
             'sec': self.children}
 
+    class Meta:
+        unique_together = ('father', 'children')
+        verbose_name = _('Product Child')
+        verbose_name_plural = _('Product Childs')
+
 
 # class ProductOffer(AbstractAutoDate):
 #     offer = models.ForeignKey(
@@ -849,6 +996,11 @@ class ProductCategory(AbstractAutoDate):
             'product': self.product,
             'category': self.category}
 
+    class Meta:
+        unique_together = ('product', 'category')
+        verbose_name = _('Product Category')
+        verbose_name_plural = _('Product Categories')
+
 
 class FAQProduct(AbstractAutoDate):
     question = models.ForeignKey(
@@ -869,6 +1021,12 @@ class FAQProduct(AbstractAutoDate):
         return _("%(product)s to '%(question)s'") % {
             'product': self.product,
             'question': self.question}
+
+    class Meta:
+        unique_together = ('product', 'question')
+        verbose_name = _('Product FAQ')
+        ordering = ('-question_order', 'pk')
+        verbose_name_plural = _('Product FAQs')
 
 
 class ProductAttribute(AbstractAutoDate):
@@ -951,6 +1109,13 @@ class ProductPrice(AbstractAutoDate):
             'product': self.product,
             'currency': self.currency}
 
+    class Meta:
+        unique_together = ('product', 'currency')
+        verbose_name = _('Product Currency')
+        ordering = ('pk',)
+        verbose_name_plural = _('Product Currencies')
+
+
 class ProductExtraInfo(models.Model):
     """
     Model to add any extra information to a Product.
@@ -994,3 +1159,9 @@ class ProductChapter(AbstractAutoDate):
         return _("%(top)s to '%(cp)s'") % {
             'top': self.product,
             'cp': self.chapter}
+    
+    class Meta:
+        unique_together = ('product', 'chapter')
+        verbose_name = _('Product Chapter')
+        ordering = ('-sort_order', 'pk')
+        verbose_name_plural = _('Product Chapters')

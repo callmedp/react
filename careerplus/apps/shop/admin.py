@@ -73,11 +73,17 @@ class CategoryInline(admin.TabularInline):
     extra = 1
 
 
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
-        FAQuestionInline, AttributeInline, ]
+        FAQuestionInline, AttributeInline,]
     prepopulated_fields = {"slug": ("name",)}
+
+# class ProductAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'name']
+#     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
+#         FAQuestionInline, AttributeInline, ]
+#     prepopulated_fields = {"slug": ("name",)}
     
 #     def get_queryset(self, request):
 #         qs = super(ProductAdmin, self).get_queryset(request)
@@ -97,8 +103,5 @@ admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute)
 admin.site.register(models.Keyword)
 admin.site.register(models.Product, ProductAdmin)
-admin.site.register(models.Currency)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
-admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)
-
-
+# admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)
