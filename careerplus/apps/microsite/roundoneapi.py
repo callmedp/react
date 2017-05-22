@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 import json
 import logging
+import hmac
+import hashlib
 import requests
 from collections import OrderedDict
 from itertools import islice
@@ -53,8 +55,6 @@ class RoundOneAPI(object):
                 page = 0
 
             post_data = {
-                # "location": ["delhi", "Bengaluru"],
-                # 'searchKeyword': "java",
                 "userEmail": userEmail,
                 "start": start,
                 "rows": rows,
@@ -75,11 +75,10 @@ class RoundOneAPI(object):
                 searchKeyword = keyword.replace("-", " ")[:45]
                 post_data.update({"searchKeyword": searchKeyword})
 
-            if company_list:
+            if company_list and company_list[0]:
                 post_data.update({'companyId': company_list})
 
             headers = {'content-type': 'application/json'}
-
             response = requests.post(
                 post_url, data=json.dumps(post_data),
                 headers=headers, timeout=settings.ROUNDONE_API_TIMEOUT,
@@ -93,7 +92,7 @@ class RoundOneAPI(object):
 
                 if companyJobCount:
                     company_dict = OrderedDict(sorted(companyJobCount.items(), key=lambda k: k[1]['jobCount'], reverse=False))
-                    sliced_company_dict = islice(company_dict.iteritems(), 10)
+                    sliced_company_dict = islice(company_dict.items(), 10)
                     sortedCompany = OrderedDict(sliced_company_dict)
                     request.session['sortedCompany'] = sortedCompany
                 response_json.update({'sortedCompany': sortedCompany})
@@ -112,7 +111,7 @@ class RoundOneAPI(object):
     def get_job_detail(self, request, **kwargs):
         response_json = {"response": False, "msg": "Error Fetching Detail."}
         try:
-            userEmail = self.get_user_ip(request)
+            userEmail = '127.0.0.1'#self.get_user_ip(request)
             url = settings.ROUNDONE_API_DICT.get("job_detail_url")
             api_secret_key = settings.ROUNDONE_API_DICT.get("jobdetail_secret_key")
             job_params = kwargs.get('job_params').split('-')
@@ -125,7 +124,8 @@ class RoundOneAPI(object):
             }
 
             data_str = '&'.join('{}={}'.format(key, value) for key, value in data_dict.items())
-            hmac_value = hmac.new(api_secret_key, data_str, hashlib.sha1).hexdigest()
+            #hmac_value = hmac.new(api_secret_key, data_str, hashlib.sha1).hexdigest()
+            hmac_value = hmac.new(bytearray(api_secret_key.encode('utf-8')), data_str.encode('utf-8'), hashlib.sha1).hexdigest()
             data_dict.update({"hash": hmac_value})
             response = requests.get(url, params=data_dict, timeout=settings.ROUNDONE_API_TIMEOUT)
 

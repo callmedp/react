@@ -11,11 +11,11 @@
        Round One : Job Referral from Top Companies, Employee Referral Program
     {% endblock title %}
     
-    {% block css %}
+    {% block css_section %}
         {{block.super}}
-        <link type="text/css" href="{% static 'console/css/microsite/roundone.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'console/css/microsite/multiple-select.css' %}" rel="stylesheet">
-    {% endblock css %}
+        <link type="text/css" href="{% static 'shinelearn/css/microsite/roundone.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/multiple-select.css' %}" rel="stylesheet">
+    {% endblock css_section %}
 
    {% block pageheading %}
       <header class="roundone-header">
@@ -247,11 +247,11 @@
     <!-- page content body end -->
 
 </section>
-{% include 'basic/footer.html' %}
+
 {% endblock container %}
-{% block js %}
+{% block js_section %}
    {{ block.super }} 
-    <script src="{% static 'console/js/microsite/multiple-select.js' %}">
+    <script src="{% static 'shinelearn/js/common/multiple-select.js' %}">
     </script>
-    <script src="{% static 'console/js/microsite/roundone.js' %}"></script>
-{% endblock js %}
+    <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
+{% endblock js_section %}

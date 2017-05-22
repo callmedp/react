@@ -1,0 +1,93 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+    {% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+    {%  endblock meta_tags %}
+
+    {% block title %}
+       Roundone - Shine Learning
+    {% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        <link type="text/css" href="{% static 'shinelearn/css/microsite/roundone.css' %}" rel="stylesheet">
+    {% endblock css_section %}
+
+  {% block pageheading %}
+  <header class="roundone-header">
+    <div class="container">
+      <!-- breadcrums -->
+      <ol class="breadcrumb mt-30">
+        {% for bread in breadcrumbs %}
+            {% if bread.url %}
+                <li><a href='{{bread.url}}'>{{bread.name}}
+                </a></li>
+            {% else %}
+                <li class="active">{{bread.name}}</li>
+            {% endif %}
+        {% endfor %}
+      </ol>
+      <div class="roundone-caption">
+        <h1 class="text-left">Java Developer</h1>
+      </div>
+    </div>
+  </header>
+  {% endblock pageheading %}
+
+{% block container %}
+<section class="container">
+{% with job_detail.data as job_data %}
+
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+    <div class="col-sm-9 mt-40">
+      <div class="get-refferd-heading">
+        Company : <strong>{{job_data.company}}</strong>
+        <span>Location : <strong>{{job_data.location}}</strong></span>
+      </div>
+
+      <article>
+        {% if job_data.jobDescription %}{{job_data.jobDescription}}{% else %} Error Fetching Job Details{% endif %}
+      </article>
+    </div>      
+    <!-- left content end -->
+
+    <!-- right content start -->
+    <div class="col-sm-3 mt-40">
+      <div class="get-referred-by">
+      <h3>Get referred by</h3>
+      {% with job_data.referrerDetails as ref %}
+        <figure>
+        <img src="{% if ref.referrerPicUrl %}{{ref.referrerPicUrl}}{% else %}
+        {% static 'shinelearn/images/get-referred-by.png' %}{% endif %}" 
+        align="shine learning">
+        </figure>
+        {{ref.position}}
+        <strong>{{ref.department}}</strong>
+      {% endwith %}
+      </div>
+      <a href="#" class="get-refferd">Get Referred</a>
+    </div>      
+    <!-- right content end -->
+
+    </div>
+    <!-- page content body end -->
+
+{% endwith %}
+</section>
+<!-- main section end -->
+{% endblock container %}
+{% block js_section %}
+   {{ block.super }}
+    <script type="text/javascript">
+      {% if not job_detail.response %}
+          showErrorModal("Roundone is facing some technical issues. Please Try again.", "Ok");
+      {% endif %}
+    </script>
+    <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
+{% endblock js_section %}
