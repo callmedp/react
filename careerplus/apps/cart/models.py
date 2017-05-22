@@ -98,11 +98,11 @@ class ShippingDetail(models.Model):
     """
     Always Editable Candidate Shipping Detail
     """
-    country_choices = [(m.id, m.phone + '-' + '(' + m.name + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    indian_obj = Country.objects.filter(name='India', phone='91')[0].id
+    # country_choices = [(m.id, m.phone + '-' + '(' + m.name + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    # indian_obj = Country.objects.filter(name='India', phone='91')[0].id
 
-    CHOICE_COUNTRY = [(m.id, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    default_country = Country.objects.filter(name='India', phone='91')[0].id
+    # CHOICE_COUNTRY = [(m.id, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    # default_country = Country.objects.filter(name='India', phone='91')[0].id
 
     candidate_id = models.CharField(
         null=False,
@@ -118,9 +118,9 @@ class ShippingDetail(models.Model):
 
     email = models.EmailField(max_length=255, null=True, blank=False)
 
-    country_code = models.PositiveIntegerField(choices=country_choices,
-        default=indian_obj, null=True, blank=False,
-        verbose_name=_("Country Code"))
+    # country_code = models.PositiveIntegerField(choices=country_choices,
+    #     default=indian_obj, null=True, blank=False,
+    #     verbose_name=_("Country Code"))
 
     mobile = models.CharField(max_length=15, null=True, blank=False)
 
@@ -132,8 +132,8 @@ class ShippingDetail(models.Model):
 
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.PositiveIntegerField(choices=CHOICE_COUNTRY,
-        default=default_country, null=True, blank=False)
+    # country = models.PositiveIntegerField(choices=CHOICE_COUNTRY,
+    #     default=default_country, null=True, blank=False)
 
     landmark = models.CharField(max_length=255, null=True, blank=True)
 

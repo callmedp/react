@@ -30,8 +30,8 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 		self.fields['email'].widget.attrs['placeholder'] = 'Email Id'
 		self.fields['email'].widget.attrs['class'] = form_class
 
-		self.fields['country_code'].required = True
-		self.fields['country_code'].widget.attrs['class'] = form_class
+		# self.fields['country_code'].required = True
+		# self.fields['country_code'].widget.attrs['class'] = form_class
 
 		self.fields['mobile'].required = True
 		self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile'
@@ -49,14 +49,13 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 		self.fields['state'].widget.attrs['placeholder'] = 'State'
 		self.fields['state'].widget.attrs['class'] = form_class
 
-		self.fields['country'].required = True
-		self.fields['country'].widget.attrs['class'] = form_class
+		# self.fields['country'].required = True
+		# self.fields['country'].widget.attrs['class'] = form_class
 
 	class Meta:
 		model = ShippingDetail
 
-		fields = ['first_name', 'last_name', 'email', 'country_code',
-		    'mobile', 'address', 'pincode', 'state', 'country']
+		fields = ['first_name', 'last_name', 'email', 'mobile', 'address', 'pincode', 'state', ]
 
 	def clean_first_name(self):
 		first_name = self.cleaned_data.get('first_name', '').strip()
