@@ -100,7 +100,7 @@ class ShippingDetail(models.Model):
     Always Editable Candidate Shipping Detail
     """
     try:
-        country_choices = [(m.id, m.phone + '\t' + '(' + m.name + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        country_choices = [(m.id, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         indian_obj = Country.objects.filter(name='India', phone='91')[0].id
 
         CHOICE_COUNTRY = [(m.id, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]

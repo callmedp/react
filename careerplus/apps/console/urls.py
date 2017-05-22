@@ -10,6 +10,7 @@ urlpatterns = [
 
 from . import shop_view
 
+
 urlpatterns += [
     url(r'^category/add/$',
         shop_view.AddCategoryView.as_view(), name='category-add'),
@@ -77,4 +78,19 @@ urlpatterns += [
         shop_view.ListAttributeOptionGroupView.as_view(),
         name='attributeoption-list'),
 
+]
+
+
+from . import blog_view
+
+urlpatterns += [
+    url(r'^blog/tag/$', blog_view.TagListView.as_view(), name='blog-tag-list'),
+    url(r'^blog/tag/add/$', blog_view.TagAddView.as_view(), name='blog-tag-add'),
+    url(r'^blog/tag/(?P<pk>\d+)/change/$', blog_view.TagUpdateView.as_view(),
+        name='blog-tag-update'),
+
+    url(r'^blog/category/$', blog_view.CategoryListView.as_view(), name='blog-category-list'),
+    url(r'^blog/category/add/$', blog_view.CategoryAddView.as_view(), name='blog-category-add'),
+    url(r'^blog/category/(?P<pk>\d+)/change/$', blog_view.CategoryUpdateView.as_view(),
+        name='blog-category-update'),
 ]
