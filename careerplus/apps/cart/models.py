@@ -100,11 +100,14 @@ class ShippingDetail(models.Model):
     Always Editable Candidate Shipping Detail
     """
     try:
-        country_choices = [(m.id, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        indian_obj = Country.objects.filter(name='India', phone='91')[0].id
+        country_choices, CHOICE_COUNTRY = [], []
+        for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
+            country_choices.append((m.phone, m.phone))
+            CHOICE_COUNTRY.append((m.phone, m.name))
 
-        CHOICE_COUNTRY = [(m.id, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        default_country = Country.objects.filter(name='India', phone='91')[0].id
+        indian_obj = Country.objects.filter(name='India', phone='91')[0].phone
+        default_country = indian_obj
+
     except:
         country_choices, CHOICE_COUNTRY = [], []
         indian_obj = None
@@ -147,12 +150,8 @@ class ShippingDetail(models.Model):
         return self.candidate_id
 
     def get_country_code(self):
-        try:
-            country = Country.objects.get(id=self.country_code)
-            return country.phone
-        except:
-            pass
-        return ''
+        country_dict = dict(self.country_choices)
+        return country_dict.get(self.country_code)
 
     def get_country(self):
         country_dict = dict(self.CHOICE_COUNTRY)

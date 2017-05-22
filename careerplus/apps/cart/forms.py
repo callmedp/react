@@ -81,7 +81,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 			raise forms.ValidationError(
                 "This field required only digits.")
 
-		elif country_code == 105 and len(mobile) != 10:
+		elif country_code == '91' and len(mobile) != 10:
 			raise forms.ValidationError(
                 "Mobile number contains only 10 digits.")
 
@@ -107,7 +107,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 			raise forms.ValidationError(
                 "This field required only digits.")
 
-		elif country_code == 105 and len(pincode) != 6:
+		elif country_code == '91' and len(pincode) != 6:
 			raise forms.ValidationError(
                 "pincode should be 6 digits.")
 
