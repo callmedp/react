@@ -22,7 +22,6 @@ class ProductInformationMixin(object):
                 'active': True}))
         if category:
             parent = category.get_parent()
-
             if parent:
                 breadcrumbs.append(
                     OrderedDict({
@@ -64,9 +63,13 @@ class ProductInformationMixin(object):
         info['prd_num_bought'] = product.buy_count
         info['prd_num_jobs'] = product.num_jobs
         info['prd_vendor'] = product.vendor.name
+        info['prd_vendor_img'] = product.vendor.image.url
+        info['prd_vendor_img_alt'] = product.vendor.image_alt
         info['prd_rating_star'] = product.get_ratings()
         info['prd_video'] = product.video_url
-        
+        info['prd_service'] = product.type_service
+        info['prd_product'] = product.type_product
+        info['prd_exp'] = product.get_exp
         return info
 
     def get_program_structure(self, product):
@@ -109,58 +112,69 @@ class ProductInformationMixin(object):
             })
         return recommendation
 
+    def get_other_package(self, product, category):
+        package = {
+            'other_package': False,
+        }
+        categoryproducts = category.categoryproducts.filter(
+            active=True, type_service__in=[1, 2, 4]).exclude(pk=product.pk).distinct()
+        if categoryproducts:
+            package.update({
+                'other_package': True,
+                'package_list': categoryproducts})
+        return package
+
+    def get_other_provider(self, product, category):
+        provider = {
+            'other_provider': False,
+        }
+        providers = category.categoryproducts.filter(
+            active=True, type_service=3).exclude(pk=product.pk).distinct()
+        if providers:
+            provider.update({
+                'other_provider': True,
+                'provider_list': providers})
+        return provider
+
     def get_combos(self, product):
-        combos = []
-        combo_list = product.childs.all()
-        for combo in combo_list:
-            combos.append(
-                OrderedDict({
-                    'label': combo.name,
-                    'url': '/'}))
+        combos = product.childs.filter(active=True)
         return {'combos': combos}
 
-    def get_childs(self, product):
-        childs = []
-        child_list = product.childs.all()
-        from shop.choices import MODE_CHOICES, COURSE_TYPE_CHOICES
-        for child in child_list:
-            childs.append(
-                OrderedDict({
-                    'label': child.name,
-                    'mode': dict(MODE_CHOICES).get(child.study_mode),
-                    'duration': child.duration_months,
-                    'type': dict(COURSE_TYPE_CHOICES).get(child.course_type),
-                    'certify': child.certification,
-                    'url': '/'}))
-        return {'childs': childs}
-
     def get_variation(self, product):
-        variation = []
-        var_list = product.variation.all()
-        from shop.choices import EXP_CHOICES
-        EXP_DICT = dict(EXP_CHOICES)
-        for var in var_list:
-            variation.append(
-                OrderedDict({
-                    'label': EXP_DICT.get(var.experience),
-                    'url': '/'}))
-        return {
-            'variations': variation,
-            'prd_variation': EXP_DICT.get(product.experience)
-        }
+        if product.type_service == 3:
+            course_dict = []
+            course_list = product.variation.filter(
+                siblingproduct__active=True).order_by('-siblingproduct__sort_order')
+            if course_list:
+                from shop.choices import MODE_CHOICES, COURSE_TYPE_CHOICES
+                for course in course_list:
+                    course_dict.append(
+                        OrderedDict({
+                            'label': course.name,
+                            'mode': dict(MODE_CHOICES).get(course.study_mode),
+                            'duration': course.duration_months,
+                            'type': dict(COURSE_TYPE_CHOICES).get(course.course_type),
+                            'certify': course.certification,
+                            'price': course.get_price()}))
+            return {'course_variation_list': course_dict}
+        else:
+            service_list = []
+            service_list = product.variation.filter(
+                siblingproduct__active=True).order_by('-siblingproduct__sort_order')
+            return {'country_variation_list': service_list}
 
-    def get_countries(self, product):
-        attr_country = []
-        country_id = Attribute.objects.get(pk='1')
-        attr_country_list = product.productattributes.filter(
-            attribute=country_id)
-        for con in attr_country_list:
-            attr_country.append(
-                OrderedDict({
-                    'id': con.value_option.id,
-                    'name': con.value_option.option}))
-        return {
-            'countries': attr_country}
+    def get_frequentlybought(self, product, category):
+        prd_fbt = {
+            'prd_fbt': False,
+        }
+        prd_fbt_list = product.related.filter(
+            secondaryproduct__active=True,
+            secondaryproduct__type_relation=1)
+        if prd_fbt_list:
+            prd_fbt.update({
+                'prd_fbt': True,
+                'prd_fbt_list': prd_fbt_list})
+        return prd_fbt
 
     def get_reviews(self, product, page):
         product_type = ContentType.objects.get(
@@ -198,7 +212,6 @@ class ProductDetailView(DetailView, ProductInformationMixin):
     def __init__(self, *args, **kwargs):
         # _view_signal = product_viewed
         self.category = None
-        self._view_signal = None
         # # Whether to redirect to the URL with the right path
         self._enforce_paths = True
         # # Whether to redirect child products to their parent's URL
@@ -221,14 +234,19 @@ class ProductDetailView(DetailView, ProductInformationMixin):
         category = self.category
         ctx.update(self.get_breadcrumbs(product, category))
         ctx.update(self.get_info(product))
-        # ctx.update(self.get_variation(product))
         ctx.update(self.get_program_structure(product))
         ctx.update(self.get_faq(product))
         ctx.update(self.get_recommendation(product))
-        # ctx.update(self.get_combos(product))
-        # ctx.update(self.get_childs(product))
-        # ctx.update(self.get_countries(product))
         ctx.update(self.get_reviews(product, 1))
+        if product.type_service == 3:
+            ctx.update(self.get_other_provider(product, category))
+        else:
+            ctx.update(self.get_other_package(product, category))
+        if product.type_product == 1:
+            ctx.update(self.get_variation(product))
+        if product.is_combo:
+            ctx.update(self.get_combos(product))
+        ctx.update(self.get_frequentlybought(product, category))
         return ctx
 
     # def send_signal(self, request, response, product):
@@ -287,7 +305,6 @@ class ProductReviewListView(ListView, ProductInformationMixin):
     def get_queryset(self):
         return Review.objects.none()
         
-    
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             self._page_kwarg = self.request.GET.get('pg', 1)

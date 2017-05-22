@@ -88,12 +88,15 @@
                     <figure class="bought-icon"></figure>
                     <span><strong>{{prd_num_bought}}</strong>&nbsp;people bought</span>
                     </li>
-                    <li>
-                     <a href="javascript:void(0);">
-                      <figure class="course-jobs-icon"></figure>
-                      <span><strong class="anchor-color">{{prd_num_jobs}}</strong> Jobs available</span>
-                     </a> 
-                    </li>
+                    {% if prd_num_jobs %}
+                      <li>
+                       <a href="javascript:void(0);">
+                        <figure class="course-jobs-icon"></figure>
+                        <span><strong class="anchor-color">{{prd_num_jobs}}</strong> Jobs available</span>
+                       </a> 
+                      </li>
+                    {% endif %}
+                    
                     {% if prd_cert %}
                       <li>
                         <figure class="certification-icon"></figure>
@@ -120,7 +123,9 @@
               </div>
 
             {% include "product/partials/product_child.html" %}
-            {% include "product/partials/product_options.html" %}
+            
+            {% include "product/partials/product_variations.html" %}
+            
             {% include "product/partials/frequentlybought.html" %}
             
             

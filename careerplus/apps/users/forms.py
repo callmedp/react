@@ -87,6 +87,7 @@ class RegistrationForm(forms.Form):
 
     # country_code = forms.ChoiceField(label=("Country:"), required=True,
     #     choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
+    #     choices=country_choices, widget=forms.Select(attrs={'class': 'form-control custom-select country-code'}), initial=indian_obj)
 
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile No.'}), max_length=10)

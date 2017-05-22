@@ -207,16 +207,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 type_level=4)
         return []
 
-    def get_main_parent(self):
-        return self.category_set.filter(
-            from_category__relation=0,
-            from_category__related_to=self,
-            from_category__is_main_parent=True)
-
-
     def split_career_outcomes(self):
         return self.career_outcomes.split(',')
-    
 
     def has_children(self):
         return self.get_num_children() > 0
@@ -541,7 +533,7 @@ class Product(AbstractProduct, ModelMeta):
         return self.name
 
     def save(self, *args, **kwargs):
-        
+
         if self.name:
             if not self.title:
                 self.title = self.name
@@ -591,6 +583,21 @@ class Product(AbstractProduct, ModelMeta):
     def get_bg(self, *args, **kwargs):
         return dict(BG_CHOICES).get(self.image_bg)
 
+    @property
+    def get_exp(self, *args, **kwargs):
+        return dict(EXP_CHOICES).get(self.experience)
+
+    def pv_name(self, *args, **kwargs):
+        if self.type_service == 1:
+            return self.name + ' ( ' + self.get_exp + ' ) '
+        elif self.type_service == 2:
+            return self.name + ' ( ' + self.get_exp + ' ) '
+        elif self.type_service == 3:
+            return self.name + ' by ' + self.vendor.name
+        
+        return self.name
+
+
     def get_meta_desc(self, description=''):
         if description:
             try:
@@ -601,6 +608,17 @@ class Product(AbstractProduct, ModelMeta):
                 cleantext = ''
         return cleantext
 
+    def get_price(self, *args, **kwargs):
+        prices = self.productprices.filter(currency__value=0, active=True)
+        if prices:
+            return round(prices[0].value, 0)
+        return 'Set Price'
+
+    def get_fakeprice(self, *args, **kwargs):
+        prices = self.productprices.filter(currency__value=0, active=True)
+        if prices:
+            return round(prices[0].fake_value, 0)
+        return 'Set Fake Price'
 
     @property
     def category_slug(self):

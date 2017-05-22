@@ -11,6 +11,7 @@ class StateForm(forms.Form):
 			state_choices.append((st.id, st.name))
 	except:
 		pass
+
 	state = forms.ChoiceField(required=True, choices=state_choices, initial=-1,
 		widget=forms.Select(attrs={'class': 'form-control'}))
 	

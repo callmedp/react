@@ -1,8 +1,14 @@
+
+{% if prd_service == 3 %}
+
 <!-- main package start -->
 <div class="main-package">
+  <div class="main-package-img">
+    <img src="{{prd_vendor_img}}" alt="{{prd_vendor}}">
+  </div>
   <div class="main-package-content">
-    <span>Experience</span>
-    <strong>0 -1 years</strong>
+    <span>Provided by</span>
+    <strong>{{prd_vendor}}</strong>
     <p>Starting at <small>Rs. 4000/-</small></p>
   </div>
 
@@ -10,22 +16,49 @@
 </div>
 <!-- main package start end-->
 
-<!-- other package start -->
-<div class="other-package-box">
-  <span>Other packages</span>
-  <a href="#" class="other-package">
-    <p>Experience
-    <strong>1-4 years</strong></p>
-  </a>
 
-  <a href="#" class="other-package">
-    <p>Experience
-    <strong>4-8 years</strong></p>
-  </a>
+{% if other_provider %}
+  <!-- other package start -->
+  <div class="other-package-box">
+    <span>Other providers</span>
+  {% for provider in provider_list  %}
+    <a href="{{provider.get_absolute_url}}" class="other-package">
+      <img src="{{provider.vendor.image.url}}" class="img-responsive text-center" alt="{{provider.vendor.name}}">
+    </a>
+  {% endfor %}
+  </div>
+  <!-- other package end -->
+{% endif %}
 
-  <a href="#" class="other-package">
-    <p>Experience
-    <strong>8-15 years</strong></p>
-  </a>
+{% else %}
+
+<!-- main package start -->
+<div class="main-package">
+  <div class="main-package-content">
+    <span>Experience</span>
+    <strong>{{prd_exp}}</strong>
+    <p>Starting at <small>Rs. 4000/-</small></p>
+  </div>
+
+  <div class="main-package-arrow"></div>
 </div>
-<!-- other package end -->
+<!-- main package start end-->
+
+{% if other_package %}
+
+  <!-- other package start -->
+  <div class="other-package-box">
+    <span>Other providers</span>
+  {% for package in package_list  %}
+    <a href="{{package.get_absolute_url}}" class="other-package">
+      <p>Experience
+      <strong>{{package.get_exp}}</strong></p>
+    </a>
+
+  {% endfor %}
+  </div>
+  <!-- other package end -->
+{% endif %}
+
+
+{% endif %}
