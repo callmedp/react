@@ -52,6 +52,7 @@ urlpatterns += [
         shop_view.AddChapterView.as_view(), name='chapter-add'),
     url(r'^chapter/list/$',
         shop_view.ListChapterView.as_view(), name='chapter-list'),
+    
 
     url(r'^keyword/add/$',
         shop_view.AddKeywordView.as_view(), name='keyword-add'),
