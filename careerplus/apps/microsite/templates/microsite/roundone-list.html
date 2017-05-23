@@ -215,7 +215,7 @@
         {% with job.jobId|slugit:job.jobType|slugit:job.interviewerId as job_params %}
         {% url 'partner-detail' partner='roundone' job_title=job.jobTitle|slugify job_params=job_params as detail_url %}
         <li>
-          <h2><a href="#">{{job.jobTitle}}</a></h2>
+          <h2><a href="{{detail_url}}">{{job.jobTitle}}</a></h2>
           <span class="location"><strong>{{job.companyName}} </strong> | 
           {{job.jobLocation}}</span> 
           <!--

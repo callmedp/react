@@ -31,7 +31,9 @@
         {% endfor %}
       </ol>
       <div class="roundone-caption">
-        <h1 class="text-left">Java Developer</h1>
+      {% with job_detail.data as job_data %}
+        <h1 class="text-left">{{job_data.jobTitle}}</h1>
+      {% endwith %}
       </div>
     </div>
   </header>

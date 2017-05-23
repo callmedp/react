@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.utils.text import slugify
+from django.urls import reverse
 
 from .roundoneapi import RoundOneAPI, RoundOneSEO
 from .models import MicroSite, PartnerTestimonial, PartnerFaq
@@ -103,18 +104,21 @@ class PartnerListView(TemplateView):
         return context
 
     def get_breadcrumb_data(self):
-        initial_keyword = ""
+        initial_keyword = ""                        
         keyword = self.kwargs.get('keyword', '')
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": '/partner/roundone/', "name": "Roundone"})
+        breadcrumbs.append({
+            "url": reverse('partner-home', kwargs={'partner':'roundone'}), 
+            "name": "Roundone",
+        })
 
         if keyword and keyword != "all":
             initial_keyword = keyword.replace("-", " ")
 
         clean_keyword = initial_keyword or keyword
 
-        breadcrumbs.append({"url": None, "name": clean_keyword})
+        breadcrumbs.append({"url": None, "name": clean_keyword.title()})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
@@ -164,7 +168,10 @@ class PartnerDetailView(TemplateView):
 
             breadcrumbs = []
             breadcrumbs.append({"url": '/', "name": "Home"})
-            breadcrumbs.append({"url": '/partner/roundone/', "name": "Roundone"})
+            breadcrumbs.append({
+                "url": reverse('partner-home', kwargs={'partner':'roundone'}),
+                "name": "Roundone"
+            })
 
             if context.get('jobTitle') and context.get('breadcrumb_location'):
                 breadcrumbs.append({
