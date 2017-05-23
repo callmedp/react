@@ -51,12 +51,11 @@ WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-HOST_NAME = 'http://127.0.0.1:8000'
-
 META_SITE_PROTOCOL = 'https'
 META_SITE_DOMAIN = 'learning.shine.com'
 META_SITE_TYPE = 'Website'
 META_SITE_NAME = 'ShineLearning'
+META_USE_SITES = False
 META_DEFAULT_KEYWORDS = ['E-Learning', 'Skills', 'Resume', 'India']
 META_USE_OG_PROPERTIES = True
 META_USE_TWITTER_PROPERTIES = True
@@ -129,3 +128,14 @@ ROUNDONE_API_DICT = {
     'interaction_result_url': ROUNDONE_API_BASEURL + "/applicant/view-interaction-result",
     'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
 }
+
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+CITIES_LIGHT_APP_NAME = 'geolocation'
+
+SHINE_SITE = 'https://sumosc1.shine.com'
+CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
+CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
+SHINE_API_USER = 'scpapiuser@gmail.com'
+SHINE_API_USER_PWD = 'tarun@123'
+SHINE_API_TIMEOUT = 60

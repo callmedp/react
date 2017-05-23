@@ -6,8 +6,9 @@ from django.core.files.storage import FileSystemStorage
 from ckeditor_uploader.fields import RichTextUploadingField
 from meta.models import ModelMeta
 
-from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
 from seo.models import AbstractSEO
+
+from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
 
 my_store = FileSystemStorage(location='careerplus/download/')
 
@@ -52,6 +53,9 @@ class IndexColumn(models.Model):
 		return '%s' % self.name
 
 
+from blog.models import Blog
+
+
 class Widget(AbstractCommonModel):
 	widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
 	heading = models.CharField(max_length=1024, null=True, blank=True)
@@ -76,17 +80,31 @@ class Widget(AbstractCommonModel):
 	iw = models.ForeignKey(IndexerWidget, null=True, blank=True,
 		verbose_name='Indexer Widget')
 
+	related_article = models.ManyToManyField(Blog, blank=True)
+
 	is_external = models.BooleanField(default=False)
 	is_pop_up = models.BooleanField(default=False)
 	is_active = models.BooleanField(default=False)
 
+
 	def __str__(self):
-		return str(self.id) + str(self.heading)
+		return str(self.id) + '_' + str(self.get_widget_type())
+
+	def get_widget_type(self):
+		widgetDict = dict(WIDGET_CHOICES)
+		return widgetDict.get(self.widget_type)
 
 	def get_widget_data(self):
 		data_dict = {}
 		for field in self._meta.fields:
 			data_dict[field.name] = getattr(self, field.name)
+
+		if self.widget_type == 3:
+			related_arts = self.related_article.filter(status=1)
+			related_arts = related_arts[: 5]
+			data_dict.update({
+				"related_arts": related_arts,
+			})
 
 		if self.iw:
 			data_dict.update({
@@ -109,11 +127,11 @@ class Widget(AbstractCommonModel):
 		elif self.widget_type == 4:
 			return 'practice_test.html'
 		elif self.widget_type == 5:
-			return 'writer_view.html'
+			return 'expert_section.html'
 		elif self.widget_type == 6:
 			return 'request_call.html'
 		elif self.widget_type == 7:
-			return 'shine_ad.html'
+			return 'banner_ad.html'
 		elif self.widget_type == 8:
 			return 'index_widget.html'
 
@@ -147,7 +165,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 	_metadata_default['locale'] = 'dummy_locale'
 
 	_metadata = {
-        'title': 'title',
+        'title': 'get_title',
         'description': 'get_keywords',
         'og_description': 'get_description',
         'keywords': 'get_keywords',
@@ -157,7 +175,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
     }
 
 	def __str__(self):
-		return str(self.id) + ' ' + self.title
+		return str(self.id) + '_' + self.name
 
 	def get_title(self):
 		title = self.title
@@ -188,7 +206,7 @@ class PageWidget(AbstractCommonModel):
 		help_text='determine ranking of widget')
 
 	class Meta:
-		ordering = ['section', '-ranking']
+		ordering = ['section', 'ranking']
 		unique_together = ('page', 'widget')
 
 
@@ -214,6 +232,7 @@ class Document(models.Model):
 
 class Comment(AbstractCommonModel):
 	page = models.ForeignKey(Page)
+	candidate_id = models.CharField(max_length=255, null=True)
 	message = models.TextField(null=False, blank=False)
 	is_published = models.BooleanField(default=False)
 	is_removed = models.BooleanField(default=False)

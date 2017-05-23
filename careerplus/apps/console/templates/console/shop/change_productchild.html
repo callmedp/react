@@ -1,0 +1,353 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load console_tags %}
+
+{% block title %}
+  <title>Change Product Price</title>
+{% endblock title %}
+
+{% block css_block %}
+  {{ block.super }}
+  <!-- Switchery -->
+  <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}" rel="stylesheet" type="text/css">
+
+  <style type="text/css">
+      ul.parsley-errors-list {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+      ul.errorlist {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+      .empty-form{
+        display: none;
+      }
+      .clearimg a{
+        margin-right: 30px;
+      }
+      </style>
+                
+{% endblock css_block %}
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3>
+
+        
+      </div>
+    </div>
+    <div class="row ">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <a class="btn btn-app" href="{% url "console:product-change" object.pk %}">
+          <i class="fa fa-edit"></i> Product</a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+
+
+    
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i> Child Product</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+              <div class="accordion" id="accordion1" role="tablist" aria-multiselectable="true">
+              <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-product-price-form">
+                    {% csrf_token %}
+                    {{ prdchild_formset.management_form }}
+                {% if prdchild_formset.non_form_errors %}
+                  <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    {{ prdchild_formset.non_form_errors }}
+                  </div>
+                {% endif %}
+              <div class="inter-related-parent-div">    
+              {% for inline_admin_form in prdchild_formset.forms %}
+              <div class="panel {% if forloop.last %} {% endif %}">
+                <a class="panel-heading collapsed" role="tab" id="heading1{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion1" href="#collapse1{{forloop.counter}}" aria-expanded="false" aria-controls="collapse1{{forloop.counter}}">
+                  {% if  inline_admin_form|get_instance %}
+                  <h4 class="panel-title">Child Product:&nbsp;{{inline_admin_form|get_instance}}</h4>
+
+                  {% else %}
+                  <h4 class="panel-title">Child Product: Add New
+                  </h4>{% endif %}
+
+                    
+                </a>
+                <div id="collapse1{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1{{forloop.counter}}" aria-expanded="false" style="height: 0px;">
+                  <div class="panel-body">
+                      {% if  inline_admin_form.DELETE %}
+                        <div class="pull-left">
+                          {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                          </label>
+                          
+                        </div>
+                        </br>
+                          <div class="clearfix"></div>
+                      {% endif %}
+
+                      {% for hidden in inline_admin_form.hidden_fields %}
+                          {{ hidden }}
+                      {% endfor %}
+                  
+                    <div class="item form-group {% if inline_admin_form.children.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.children.id_for_label }}">Children <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.children}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.children.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Active <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.active}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.active.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.sort_order.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">Sort Order <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.sort_order}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.sort_order.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.price_offset.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.price_offset.id_for_label }}">Price Offset <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.price_offset}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.price_offset.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.price_offset_percent.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.price_offset_percent.id_for_label }}">Price Offset Percent<span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.price_offset_percent}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.price_offset_percent.errors}}</div>
+                    </div>
+                    
+                    
+
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              </div>
+             
+
+                <input type="hidden" name="product" value="{{object.pk}}">
+                <input type="hidden" name="slug" value="child">
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                  </div>
+                </div>
+              
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i> Related Product</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="accordion" id="accordion2" role="tablist" aria-multiselectable="true">
+              <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-product-price-form">
+                    {% csrf_token %}
+                    {{ prdrelated_formset.management_form }}
+                {% if prdrelated_formset.non_form_errors %}
+                  <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    {{ prdrelated_formset.non_form_errors }}
+                  </div>
+                {% endif %}
+              <div class="inter-related-parent-div">    
+              {% for inline_admin_form in prdrelated_formset.forms %}
+              <div class="panel {% if forloop.last %} {% endif %}">
+                <a class="panel-heading collapsed" role="tab" id="heading2{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion2" href="#collapse2{{forloop.counter}}" aria-expanded="false" aria-controls="collapse2{{forloop.counter}}">
+                  {% if  inline_admin_form|get_instance %}
+                  <h4 class="panel-title">Related Product:&nbsp;{{inline_admin_form|get_instance}}</h4>
+
+                  {% else %}
+                  <h4 class="panel-title">Related Product: Add New
+                  </h4>{% endif %}
+
+                    
+                </a>
+                <div id="collapse2{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading2{{forloop.counter}}" aria-expanded="false" style="height: 0px;">
+                  <div class="panel-body">
+                      {% if  inline_admin_form.DELETE %}
+                        <div class="pull-left">
+                          {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                          </label>
+                          
+                        </div>
+                        </br>
+                          <div class="clearfix"></div>
+                      {% endif %}
+
+                      {% for hidden in inline_admin_form.hidden_fields %}
+                          {{ hidden }}
+                      {% endfor %}
+                  
+                      <div class="item form-group {% if inline_admin_form.secondary.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.secondary.id_for_label }}">Related <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.secondary}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.secondary.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Active <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.active}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.active.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.sort_order.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">Sort Order <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.sort_order}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.sort_order.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.price_offset.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.price_offset.id_for_label }}">Price Offset <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.price_offset}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.price_offset.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.price_offset_percent.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.price_offset_percent.id_for_label }}">Price Offset Percent<span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.price_offset_percent}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.price_offset_percent.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.type_relation.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.type_relation.id_for_label }}">Relation<span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.type_relation}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.type_relation.errors}}</div>
+                    </div>
+                    
+
+                    <div class="item form-group {% if inline_admin_form.ranking.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.ranking.id_for_label }}">Price Offset Percent<span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.ranking}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.ranking.errors}}</div>
+                    </div>
+                                                            
+
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              </div>
+             
+
+                <input type="hidden" name="product" value="{{object.pk}}">
+                <input type="hidden" name="slug" value="relation">
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                  </div>
+                </div>
+              
+              </form>
+            </div>  
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+   <!-- Switchery -->
+      <script type="text/javascript" src="{% static "packages/switchery/dist/switchery.min.js" %}"></script>
+    
+    
+  <!-- Custom Theme Scripts -->
+  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
+
+
+{% endblock js_block %}

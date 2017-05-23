@@ -50,7 +50,9 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'meta',
+    'cities_light',
     'sorl.thumbnail',
+    'requests'
 ]
 
 # Apps specific for this project go here.
@@ -58,8 +60,19 @@ LOCAL_APPS = [
     'users',
     'cms',
     'design',
+    'faq',
     'seo',
     'ajax',
+    'skillpage',
+    'review',
+    'geolocation',
+    'console',
+    'coupon',
+    'partner',
+    'payment',
+    'shop',
+    'cart',
+    'order',
     'blog',
     'microsite',
 ]
@@ -137,7 +150,7 @@ STATICFILES_FINDERS = (
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
-CKEDITOR_JQUERY_URL = 'shinelearning/js/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
+CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
@@ -148,9 +161,12 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+
 BROKER_URL = 'redis://localhost:6379/0'
 
 try:
     REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
 except:
     REDIS_CON = None
+
+CART_MAX_LIMIT = 5

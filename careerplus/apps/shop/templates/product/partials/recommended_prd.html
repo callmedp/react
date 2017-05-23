@@ -1,0 +1,57 @@
+<!-- Recommended products container -->
+{% if prd_recommend %}
+<!-- Recommended products container -->
+<section class="container-fluid detail-box recomend-product-bg">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 class="detail-heading">Recommended products</h2>
+
+        <div class="row">
+
+          <ul class="listing">
+          {% for rprd in recommended_list %}
+          <li class="col-sm-6 col-md-4">
+            <a title="{{rprd.name}}" class="box-panel" href="#">
+              <div class="media">
+                <div class="media-left">
+
+                <figure style="background-color:{{rprd.get_bg}};">
+                    <img class="media-object" src="{{rprd.icon.url}}" alt="{{rprd.image_alt}}">
+                </figure>
+                
+                </div>
+                <div class="media-body">
+
+                  <h3 class="listing-heading">{{rprd.name}}</h3>
+
+                  <div class="rating-review-box">
+                    {% for star in rprd.get_ratings %}
+                      {% if star == "*" %}
+                        <figure class="full-star"></figure>
+                      {% elif star == "+" %}
+                        <figure class="half-star"></figure>
+                      {% elif star == "-" %}
+                        <figure class="blank-star"></figure>
+                      {% endif %}
+                    {% endfor %}
+                      <strong>{{rprd.avg_rating|floatformat:"1"}}<small>/5</small></strong>
+                      <span class="jobs-available"><strong>{{rprd.num_jobs}}</strong> jobs available</span> 
+                  </div> 
+
+                </div>
+              </div>
+            </a>
+          </li>
+
+          {% endfor %}
+        </ul>
+
+      </div>
+
+    </div>
+  </div> 
+</div>     
+</section>      
+
+{% endif %}

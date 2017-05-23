@@ -1,8 +1,9 @@
 {% load static %}
+{% spaceless %}
 <!DOCTYPE html>
 <html lang="en">
-{% block head %}
-  <head>
+  {% block head %}
+    <head>
     {% block meta_html %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,49 +33,53 @@
         <![endif]-->
     {% endblock css_section %}
    </head>
-{% endblock head %}
+{% endblock head %} 
 <body>
 {% block navigation %}
-      <!-- navigation bar -->
-    {% include 'basic/navigation.html' %} 
-{% endblock navigation %}
-{% block blogtrending %}
-{% endblock blogtrending %}
+  <!-- navigation bar -->
+  {% include 'basic/navigation.html' %}
 
+{% endblock navigation %}
+
+{% block blogtrending %}
+
+{% endblock blogtrending %}
 <!-- breadcrums -->
 {% block breadcrumb %}
-    
+      
 {% endblock breadcrumb %}
 
 {% block pageheading %}
-    
+  
+
 {% endblock pageheading %}
 
 <!-- main section start -->
 {% block container %}
 
 {% endblock container %}
-
 {% block footer %}
       <!-- footer -->
   {% include 'basic/footer.html' %}      
 {% endblock footer %}
 
 {% block js_section %}
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-<script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
-<script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
-<script src="{% static 'shinelearn/js/common/jquery.validate.js' %}">
-</script>
-<script>
-    $('.nav-tabs > li > a').hover(function() {
-        $(this).tab('show');
-      });
-    $('.dropdown').hover(function(){ 
-        $('.dropdown-toggle', this).trigger('click'); 
-      });
-</script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+    
+    <script>
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+          });
+        $('.dropdown').hover(function(){ 
+            $('.dropdown-toggle', this).trigger('click'); 
+          });
+    </script>
 {% endblock js_section %}
 </body>
 </html>
+{% endspaceless %}
+

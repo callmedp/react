@@ -1,0 +1,323 @@
+{% extends "basic/base.html" %}
+{% load static %}
+
+{% block meta_html %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+{%  endblock meta_html %}
+
+{% block title %}
+ 
+{% endblock title %}
+{% block css_section %}
+        {{block.super}}  
+  <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" rel="stylesheet">
+  <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">       
+{% endblock css_section %}
+
+{% block pageheading %}
+	<header class="skill-header">
+		<div class="container">
+		<!-- breadcrums -->
+			<ol class="breadcrumb mt-30">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li><a href='{{bread.url}}'>{{bread.name}}
+                        </a></li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+			<div class="skill-caption">
+				<h1>{{category_obj.name}} <br> programs</h1>
+					<strong>
+					{% if top_3_prod.0 %}
+					    <a href="#">{{top_3_prod.0.name}}</a>  
+					{% endif %}
+
+					{% if top_3_prod.1 %}
+					                                  |    
+						<a href="#">{{top_3_prod.1.name}}</a>    
+					{% endif %}
+					{% if top_3_prod.2 %}
+					                                   |
+						<a href="#">{{top_3_prod.2.name}}</a>
+					{% endif %}
+					</strong>
+				{% if top_4_vendors %}
+					<div class="provider">
+					       Provider
+					   {% for top_4_vendor in top_4_vendors %}    
+						{% if forloop.counter == 1 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 2 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 3 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% if forloop.counter == 4 %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+						{% endif %}
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</header>
+{% endblock pageheading %}
+{% block container %}
+<section class="container">
+    <!-- page content body start -->
+	<div class="row">
+	<!-- left content start -->
+		<div class="col-md-9 col-sm-12">
+
+			<div class="about-course-links mb-40">
+	        	<a title="About course" class="active" href="#">About course</a> 
+	        	<a title="Importance in Market" href="#market">Importance in Market</a>
+	        	<a title="Courses" href="#programs">Courses</a>
+	        	<a title="Reviews" href="#reviews">Reviews</a>
+	        </div>
+
+		    <div class="about-course-text mb-40">
+				<div class="row">
+					<article class="col-sm-12">
+						{% if category_obj.video_link %}
+						    <div class="pull-right col-sm-6">
+						        <iframe width="560" height="315" 
+						        	src="{{url}}" frameborder="0" allowfullscreen>	
+						        </iframe>
+						    </div>
+						{% endif %}
+						{{category_obj.description | safe}}
+					</article>
+				</div>
+		    </div>
+
+		    <!-- Career Outcomes -->
+		    <div class="career-outcomes mb-40">
+		    	<h2>Career Outcomes</h2>
+		        <ul class="box-panel">
+		            {% for career_outcome in career_outcomes %}
+		            	<li>{{career_outcome}}</li>
+		            {% endfor %}
+		        </ul>
+		    </div>
+
+			<!-- Importance in Market -->
+			<div id="market" class="importance-market clearfix mb-40 scroll">
+				<h2>Importance in Market</h2>
+				{% if category_obj.graph_image %}
+			    <div class="col-sm-6 box-panel">
+			    	<figure>
+			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
+			    	</figure>
+			    </div>
+			    {% endif %} 
+				<div class="col-sm-6 market-growth">
+					<div class="col-sm-12 box-panel">
+						<div class="media">
+						    <div class="media-left media-middle">
+						    	<span class="jobs-growth-icon"></span>
+						    </div>
+						    <div class="media-body">
+						    	<strong>{{api_data.job_count}}</strong>
+						      	jobs in the market demanding this skill
+						    </div>
+						</div>
+						<div class="media">
+							<div class="media-left media-middle">
+						    	<span class="career-growth-icon"></span>
+						    </div>
+						    <div class="media-body">
+						    	<strong>Only 10%</strong>
+						      	candidates are six sigma certified
+						    </div>
+						</div>
+					</div>
+
+				    <div class="col-sm-12 box-panel mt-20 job-require">
+				    	<strong>Jobs require this skill in different functional area
+				    	</strong>
+				    	<a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.0.0}}" target="_blank">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})</a> | <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.1.0}}" target="_blank">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})</a> | <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.2.0}}" target="_blank">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})</a>  
+				    </div>
+
+			    </div>
+
+			</div>
+
+		    <!-- certification programs listing -->
+		    <div id="programs" class="listing-box mb-40 scroll">
+		    	<h2>Six Sigma Certification Programs</h2>
+		    	<ul class="listing" id="product_list">
+		    		{% for product in products %}
+				        <li class="box-panel">
+				        	<a title="{{product.name}}" href="#">
+					            <div class="media">
+					            	<div class="media-left">
+					                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.name}}">
+					            	</div>
+					            	<div class="media-body">
+					                	<div class="certification-jobs-box">
+					                  		<span class="certification-jobs"><figure class="certification-icon">
+					                  		</figure> Certification</span>
+					                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
+					                	</div>
+					                	<h3 class="listing-heading">{{product.name}}</h3>
+
+						                <div class="rating-review-box">
+						                {% for rating in product.get_ratings %}
+						                    {% if rating == "*" %}
+						                    	<figure class="full-star">
+						                    	</figure>
+						                    {% endif %}
+						                    {% if rating == "+" %}
+						                    	<figure class="half-star">	
+						                    	</figure>
+						                    {% endif %}
+						                    {% if rating == "-" %}
+						                    	<figure class="blank-star">	
+						                    	</figure>
+						                    {% endif %}
+						                {% endfor %}
+						                    <strong>{{product.avg_rating |floatformat:1}}/5</strong> | 21 ratings <b>{{product.no_review}} reviews</b>
+						                </div> 
+
+						                <div class="providers">
+						                   Providers
+						                   <span>{{product.vendor.name}}</span>
+						                </div>
+
+						                <div class="pricing-box">
+						                   Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
+						                </div>
+
+					              	</div>
+					            </div>
+				          	</a>
+				        </li>
+				        {% if products.has_next %}
+				        <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> 
+				        Load more</a>
+				        {% endif %}
+		      	
+			    	{% endfor %}
+		      	</ul>
+                <div id="prod_load_more">
+			    {% if products.has_next %} 	
+	      		<input type="hidden" name="page" 
+	      		value="{{products.next_page_number}}" id="page_id">
+	      		<input type="hidden" name="slug" value="{{slug}}" 
+	      		id="slug_id">
+			    {% endif %} 	
+			    </div>
+
+		    </div>
+		    <!-- Reviews -->
+		    {% if page_reviews %}
+		    <div id="reviews" class="reviews mb-40 scroll">
+		    	<h2>Reviews</h2>
+		    	<!--
+		      	<a href="#" class="write-review">Write a review</a>
+		      	-->
+		        	<ul id="review_list">
+		        	{% for page_review in page_reviews %}
+		          		<li class="box-panel">
+		            		<span class="review-heading">Excelent!</a></span>
+				            <div class="rating-review-box">
+				                {% for rating in page_review.get_ratings %}
+				                    {% if rating == "*" %}
+				                    	<figure class="full-star">
+				                    	</figure>
+				                    {% endif %}
+				                    {% if rating == "+" %}
+				                    	<figure class="half-star">	
+				                    	</figure>
+				                    {% endif %}
+				                    {% if rating == "-" %}
+				                    	<figure class="blank-star">	
+				                    	</figure>
+				                    {% endif %}
+				                {% endfor %}
+				                <strong>{{page_review.average_rating |floatformat:1}}/5</strong>
+				            </div>
+		            		<article>
+		            		{{page_review.content | safe}}
+		            		</article>
+		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
+		          		</li>
+		          		{% if page_reviews.has_next %}
+		          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview"> Load more</a>
+		          		{% endif %}
+		          	{% endfor %}
+		        	</ul>
+		        	<div id="revi_load_more">
+					    {% if page_reviews.has_next %} 	
+			      		<input type="hidden" name="page" 
+			      		value="{{page_reviews.next_page_number}}" id="page_id1">
+			      		<input type="hidden" name="slug" value="{{slug}}" 
+	      				id="slug_id1">
+					    {% endif %} 	
+			      	</div>
+		    </div>
+		    {% endif %}
+		</div>  
+		<!-- left content end -->
+
+		<!-- right content start -->
+		
+	<div class="col-md-3 col-sm-12">
+
+			<!-- request a call -->
+	<div class="request-call box-panel mb-40 cleafix">
+    <h2 class="heading-right">request a call</h2>
+        </style>
+      <form class="mt-20" role="form" id="queryform" >
+        <div style='display:none'>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="name" placeholder="Name">
+          <span class="error position-error" style="color:red"></span>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
+          <span class="error position-error" style="color:red"></span>
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
+          <span class="error position-error" style="color:red"></span>
+        </div>
+        
+      </form>
+      <button type="button" id="id_query"  class="submit-button">
+      Message
+      </button>
+      <div class="call-service">
+        <strong>
+          <span class="call-service-icon"></span>
+          0124-395 5001
+        </strong>
+        9am to 7pm ist monday-saturday
+      </div>
+	</div> 
+		</div>
+		<!-- request a call --> 
+	<!-- right content end -->
+	</div>
+	<!-- page content body end -->
+</section>
+{% endblock container %}
+{% block js_section %}
+   {{ block.super }}
+   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+   <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+
+{% endblock js_section %}

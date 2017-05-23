@@ -1,0 +1,179 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+
+{% block title %}
+  <title>Category Tree</title>
+{% endblock title %}
+
+{% block css_block %}
+  {{ block.super }}
+  <style type="text/css">
+
+        .label {
+          display: inline;
+          padding: .2em .6em .3em;
+          font-size: 100%;
+          font-weight: 700;
+          line-height: 2;
+          color: #fff;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: baseline;
+          border-radius: .25em;
+      }
+        .tree {
+            min-height:20px;
+            padding:19px;
+            margin-bottom:20px;
+            background-color:#f7f7f7;
+            border:3px solid #999;
+            -webkit-border-radius:4px;
+            -moz-border-radius:4px;
+            border-radius:4px;
+            -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+        }
+        .tree li {
+            list-style-type:none;
+            margin:0;
+            padding:30px 5px 0 90px;
+            position:relative
+        }
+        .tree li::before, .tree li::after {
+            content:'';
+            left: 0px;
+            position:absolute;
+            right:auto
+        }
+        .tree li::before {
+            border-left:3px solid #999;
+            bottom:50px;
+            height:100%;
+            top:0;
+            width:1px
+        }
+        .tree li::after {
+            border-top:3px solid #999;
+            height:20px;
+            top:44px;
+            width:90px
+        }
+        .tree li span {
+            -moz-border-radius:5px;
+            -webkit-border-radius:5px;
+            border:2px solid #999;
+            border-radius:5px;
+            display:inline-block;
+            padding:1px 10px;
+            text-decoration:none
+        }
+        .tree li.parent_li>span {
+            cursor:pointer
+        }
+        .tree>ul>li::before, .tree>ul>li::after {
+            border:0
+        }
+        .tree li:last-child::before {
+            height:45px
+        }
+        .tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li span {
+            background:#eee;
+            border:3px solid #94a0b4;
+            color:#000
+        }
+
+
+      </style>
+      
+{% endblock css_block %}
+
+
+{% block pagecontent %}
+  <!-- page content -->
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3></h3>
+        </div>
+
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Category Tree</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                {% if level1 %}
+                  
+                  <div class="tree">
+                    <ul>
+                      {% for l1 in level1 %}
+                        <li>
+                            <span class="label label-default"><i class="fa fa-minus-square"></i> {{l1.name}}</span>{% if l1.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                            {% if l1.childrens %}
+                                
+                              <ul>
+                                  {% for l2 in l1.childrens %}
+                                    
+                                    <li>
+                                      <span class="label label-primary" ><i class="fa fa-minus-square"></i> {{l2.name}}</span> {% if l2.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                        {% if l2.childrens %}
+                                          
+                                          <ul>
+                                            {% for l3 in l2.childrens %}
+                                              
+                                              <li>
+                                                <span class="label label-success"><i class="fa fa-minus-square"></i> {{l3.name}}</span> {% if l3.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                                  {% if l3.childrens %}
+                                                    <ul>
+                                                        {% for l4 in l3.childrens  %}
+                                                          <li>
+                                                            <span class="label label-info"><i class="fa fa-minus-square"></i> {{l4.name}}</span> {% if l4.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                                          </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                  {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                          </ul>
+                                        {% endif %}
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              {% endif %}
+                          </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+              {% endif %}
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /page content -->
+
+{% endblock pagecontent %}
+        
+        
+      
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <!-- Custom Theme Scripts -->
+  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
+{% endblock js_block %}

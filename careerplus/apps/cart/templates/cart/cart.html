@@ -1,0 +1,127 @@
+{% extends "basic/base.html" %}
+{% load static %}
+
+{% block meta_html %}
+    {{block.super}}
+{%  endblock meta_html %}
+
+{% block title %}
+   Cart - Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+{% endblock css_section %}
+
+{% block navigation %}
+  <!-- navigation bar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown have-query">
+              <a>Have a query? Call us at <strong>0124-3955001</strong></a>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+</nav>
+
+{% endblock navigation %}
+
+
+{% block container %}
+    <section class="container mt-53">
+
+        {% if cart_items %}
+        <!-- page content body start -->
+        <div class="row">
+        <!-- left content start -->
+        <div class="col-sm-9">
+          <div class="cart">
+            <ul class="bdr-btm">
+              <li class="col-sm-5 col-md-6"><span class="cart-heading">Item</span></li>
+              <li class="col-sm-3"><span class="cart-heading">Shipping</span></li>
+              <li class="col-sm-2"><span class="cart-heading">Price</span></li>
+              <li class="col-sm-2 col-md-1"></li>
+            </ul>
+
+            {% for item in cart_items %}
+                <!-- item 1 -->
+                <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
+                    <li class="col-sm-5 col-md-6">
+                        <span class="cart-sub-heading">{{item.product.name}}</span>
+                        <span class="provided-by">Provided by <a href="#">Vskills</a></span>
+                    </li>
+                    <li class="col-sm-3">
+                        <span class="custom-select">
+                            <select class="form-control">
+                                <option>Normal</option>
+                            </select>
+                        </span>
+                    </li>
+                    <li class="col-sm-2">
+                        <strong>Rs. 7499/-</strong>
+                    </li>
+                    <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                        <input type="hidden" name="reference_id" value="{{item.reference}}">
+                        <li class="col-sm-2 col-md-1">
+                            <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
+                        </li>
+                    </form>
+                </ul>
+            {% endfor %}
+
+
+          </div>
+
+        </div>
+        <!-- left content end -->
+        
+
+        <!-- right content start -->
+          <div class="col-sm-3 payment-summary-tab">
+          <div class="box-panel checkout-box">
+            Amount Payable
+            <strong>Rs. 31486/-</strong>
+            <a href="{% url "cart:payment-login" %}">Proceed to checkout</a>
+          </div>
+
+          <!-- secure payment -->
+          <div class="secure-payment">
+            <figure class="secure-icon-payment"></figure>
+            <strong>100% SECURE PAYMENT</strong>
+            All major Credit and Debit cards accepted
+            <figure class="cards-payment-icon mt-20"></figure>
+          </div>
+
+          </div>  
+        <!-- right content end -->
+
+        </div>
+        <!-- page content body end -->
+        {% endif %}
+
+    </section>
+    <!-- main section end -->
+{% endblock container %}
+  
+
+{% block js_section %}
+   {{ block.super }}
+   <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+   <script type="text/javascript">
+      function toggler(divId) {
+          $("#" + divId).toggle();
+      }
+    </script>
+
+{% endblock js_section %}

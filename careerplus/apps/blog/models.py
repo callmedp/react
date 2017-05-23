@@ -48,6 +48,8 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 			self.title = self.name + ' – Career Articles @ Learning.Shine'
 		if not self.meta_desc:
 			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
 		super(Category, self).save(*args, **kwargs)
 
 	def get_title(self):
@@ -68,6 +70,12 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 	def get_absolute_url(self):
 		return reverse('blog:articles-by-category', kwargs={'slug': self.slug})
+
+	def article_exists(self):
+		q = self.primary_category.filter(status=1) | self.secondary_category.filter(status=1)
+		if q.exists():
+			return True
+		return False
 
 
 class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
@@ -98,6 +106,8 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 			self.title = self.name + ' – Career Articles @ Learning.Shine'
 		if not self.meta_desc:
 			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
 		super(Tag, self).save(*args, **kwargs)
 
 	def get_title(self):
@@ -184,6 +194,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 			self.meta_desc = 'Read Article on ' + self.name + '.' + desc[:200]
 		if not self.display_name:
 			self.display_name = self.name
+		if self.id:
+			self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
 		super(Blog, self).save(*args, **kwargs)
 
 	def get_title(self):
@@ -219,6 +231,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 class Comment(AbstractCommonModel):
 	blog = models.ForeignKey(Blog)
+	candidate_id = models.CharField(max_length=255, null=True)
 	message = models.TextField(null=False, blank=False)
 	is_published = models.BooleanField(default=False)
 	is_removed = models.BooleanField(default=False)

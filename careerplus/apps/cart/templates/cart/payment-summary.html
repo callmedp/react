@@ -1,0 +1,182 @@
+{% extends "basic/base.html" %}
+{% load static %}
+
+{% block meta_html %}
+    {{block.super}}
+{%  endblock meta_html %}
+
+{% block title %}
+   Payment Summary - Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+{% endblock css_section %}
+
+{% block navigation %}
+  <!-- navigation bar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown have-query">
+              <a>Have a query? Call us at <strong>0124-3955001</strong></a>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+</nav>
+
+{% endblock navigation %}
+
+
+{% block container %}
+    <section class="container mt-53">
+        <!-- page content body start -->
+        <div class="row">
+
+        <!-- left content start -->
+          <div class="col-sm-3 payment-summary-tab">
+          <a href="{% url "cart:payment-login" %}"><span class="yellow-circle">1</span> Login</a>
+          <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a>
+          <a href="{% url "cart:payment-summary" %}" class="active"><span>3</span> Summary</a>
+          <a><span>4</span> Payment</a>
+
+          <!-- secure payment -->
+          <div class="secure-payment">
+            <figure class="secure-icon-payment"></figure>
+            <strong>100% SECURE PAYMENT</strong>
+            All major Credit and Debit cards accepted
+            <figure class="cards-payment-icon mt-20"></figure>
+          </div>
+
+          </div>  
+        <!-- left content end -->
+
+        <!-- right content start -->
+        <div class="col-sm-9 bdr payment-summary">
+        <div class="edit-cart">
+          <a href="{% url "cart:cart-product-list" %}">Edit cart</a>
+        </div>
+
+        {% for item in cart_items %}
+        <!-- prdduct 1 -->
+        <ul>
+          {% if forloop.counter == 1 %}
+            <li class="bdr-tp-btm">
+                <strong class="col-sm-8 col-md-9 item-heading">Item</strong>
+                <strong class="col-sm-4 col-md-3 item-heading">Price</strong>
+            </li>
+          {% endif %}
+          <li>
+            <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.product.name}}</strong>
+            </span>
+            <strong class="col-sm-4 col-md-3">Rs. 7499/-</strong>
+          </li>
+
+          {% comment %}
+          <li>
+            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Cover letter</span>
+            <span class="col-sm-4 col-md-3">Rs. 599/-</span>
+          </li>
+          <li>
+            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Resume+</span>
+            <span class="col-sm-4 col-md-3">Rs. 2099/-</span>
+          </li>
+          <li>
+            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Recommendations for profile assessment</span>
+            <span class="col-sm-4 col-md-3">Rs. 1099/-</span>
+          </li>
+          <li>
+            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Super express delivery</span>
+            <span class="col-sm-4 col-md-3">Rs. 699/-</span>
+          </li>
+          {% endcomment %}
+        </ul>
+        {% endfor %}
+
+        <!-- coupon & amount -->
+        <ul>
+          <li>
+            <span class="col-sm-8 col-md-9 text-right total-amount">Total amount</span>
+            <span class="col-sm-4 col-md-3 total-amount">Rs. 31356/-</span>
+
+            <!-- coupon -->
+            <span class="col-sm-4 col-md-6 coupon">
+              <a href="javascript:void(0)" onclick="toggler('showCoupon');">Apply coupon</a>
+              or
+              <a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a>
+
+              <div id="showCoupon" class="hidden-div">
+                Enter discount code
+                <div class="form-group">
+                  <input type="text" placeholder="Discount code">
+                  <button type="button">Apply</button>
+                </div>
+              </div>
+
+              <div id="shineCredit" class="hidden-div">
+                Enter shine credit
+                <div class="form-group error">
+                  <input type="text" placeholder="You have 100 shine loyalty points">
+                  <span class="error-txt">Required</span>
+                  <button type="button">Redeem</button>
+                </div>
+              </div>
+            </span>
+
+            <!-- amount -->
+            <span class="col-sm-8 col-md-6">
+              <span class="col-sm-6 text-right">Your Shine cash</span>
+              <span class="col-sm-6">-Rs. 2000/-</span>
+              <span class="col-sm-6 text-right">Coupon applied</span>
+              <span class="col-sm-6">-Rs. 1000/-</span>
+              <span class="col-sm-6 text-right">Shine loyalty points</span>
+              <span class="col-sm-6">-Rs. 1000/-</span>
+            </span>
+          </li>
+        </ul>
+
+        <!-- Payable amount -->
+        <ul>
+          <li class="payable-amount">
+            <span class="col-sm-8 col-md-9 text-right">Payable amount</span>
+            <span class="col-sm-4 col-md-3">Rs. 1999/-</span>
+          </li>
+        </ul>
+
+        <!-- Make payment -->
+        <span class="col-sm-8 col-md-9"></span>
+        <span class="col-sm-4 col-md-3 continue">
+          <a href="{% url "payment:payment-option" %}"><button type="button">Make payment</button></a>
+          <figure class="secure-payment-icon"></figure>
+          <span>100% Secure Payment</span>
+        </span>
+
+        </div>
+        <!-- right content end -->
+
+        </div>
+        <!-- page content body end -->
+    </section>
+    <!-- main section end -->
+{% endblock container %}
+  
+
+{% block js_section %}
+   {{ block.super }}
+   <script type="text/javascript">
+      function toggler(divId) {
+          $("#" + divId).toggle();
+      }
+    </script>
+
+{% endblock js_section %}

@@ -2,6 +2,22 @@ from django.db import models
 from django.db import IntegrityError
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
+
+
+class AbstractAutoDate(models.Model):
+    created = models.DateTimeField(editable=False)
+    modified = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(AbstractAutoDate, self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
 
 
 class AbstractSEO(models.Model):
@@ -23,6 +39,8 @@ class AbstractSEO(models.Model):
         _('Keywords'), blank=True, default='')
     heading = models.CharField(
         _('H1'), max_length=255, blank=True)
+    image_alt = models.CharField(
+        _('Image Alt'), max_length=255, blank=True)
     
     class Meta:
         abstract = True

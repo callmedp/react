@@ -1,0 +1,18 @@
+{% if prd_fbt %}
+  
+<!-- Frequently bought togeather -->
+  <div class="row">
+    <div class="select-product col-sm-12 col-md-8 mb-40">
+      <h2 class="detail-heading">Frequently bought together</h2>
+        <ul>
+          {% for fbt in prd_fbt_list  %}
+            <li {% if forloop.first %}class="selected"{% endif %}>
+              <label><input class="input" type="checkbox" data-price="{{fbt.get_price}}">{{fbt.pv_name}}</label> 
+              <strong>Rs. {{fbt.get_price}}/-</strong>
+            </li>
+          {% endfor %}
+        </ul>
+    </div>
+  </div>
+
+{% endif %}

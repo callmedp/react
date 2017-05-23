@@ -1,6 +1,5 @@
-<!-- Navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
+  <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <a class="navbar-brand" href="#"></a>
@@ -146,20 +145,25 @@
         <li class="dropdown cart-dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="cart-icon"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">My Cart</a></li>
-
+            <li><a href="{% url "cart:cart-product-list" %}">My Cart</a></li>
           </ul>
         </li>
+        {% if request.session.candidate_id %}
         <li class="dropdown login-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">Login</span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a>
           <ul class="dropdown-menu">
             <li><a href="#">My inbox</a></li>
             <li><a href="#">My orders</a></li>
             <li><a href="#">My Wallet</a></li>
             <li><a href="#">Referrals</a></li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
           </ul>
         </li>
+        {% else %}
+        <li>
+            <a href="{% url 'login' %}" ><span class="login-btn">Login</span></a>
+        </li>
+        {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

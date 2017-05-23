@@ -30,7 +30,7 @@ class WidgetAdmin(admin.ModelAdmin):
 		'is_external', 'is_pop_up', 'heading', 'redirect_url')
 	list_filter = ('widget_type', )
 	search_fields = ('heading', 'id')
-	filter_horizontal = ()
+	filter_horizontal = ('related_article', )
 	raw_id_fields = ('created_by', 'last_modified_by', 'user', 'iw')
 
 
@@ -59,7 +59,7 @@ class PageWidgetAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-	list_display = ('id', 'page', 'created_by', 'created_on', 'is_published',
+	list_display = ('id', 'page', 'candidate_id', 'created_on', 'is_published',
 		'message', 'is_removed', 'replied_to')
 	list_filter = ()
 	search_fields = ('id', 'message')
