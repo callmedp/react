@@ -73,7 +73,11 @@
         <strong>{{ref.department}}</strong>
       {% endwith %}
       </div>
-      <a href="#" class="get-refferd">Get Referred</a>
+      {% if request.session.candidate_id %}
+        <a href="#" class="get-refferd">Get Referred</a>
+      {% else %}
+        <a href="#" class="get-refferd" data-toggle="modal" data-target=".bs-example-modal-sm">Get Referred</a>
+      {% endif %}
     </div>      
     <!-- right content end -->
 

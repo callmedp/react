@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from django.urls import reverse
 
 from .roundoneapi import RoundOneAPI, RoundOneSEO
+from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
 from .models import MicroSite, PartnerTestimonial, PartnerFaq
 
 
@@ -60,7 +61,12 @@ class PartnerListView(TemplateView):
                     'listing_page').get(slug=partner, active=True)
                 banner_image_list = microsite.listing_page.banner_image.filter(
                     active=True)
-                context.update({'banner_image_list': banner_image_list})
+
+                context.update({
+                    "loginform": ModalLoginApiForm(),
+                    "registerform": ModalRegistrationApiForm()        
+                })
+                                
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
         return context

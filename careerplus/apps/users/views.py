@@ -1,5 +1,6 @@
 import json
 import requests
+import logging
 
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -174,25 +175,29 @@ class LoginApiView(FormView):
                 "email": self.request.POST.get('email'),
                 "password": self.request.POST.get('password')
             })
+        
+        try:
+            user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+            if user_exist['exists'] == True:
+                login_resp = RegistrationLoginApi().user_login(login_dict)
 
-        user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
-        if user_exist['exists'] == True:
-            login_resp = RegistrationLoginApi().user_login(login_dict)
+                if login_resp['response'] == 'login_user':
+                    resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
+                    self.request.session.update(resp_status)
 
-            if login_resp['response'] == 'login_user':
-                resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
-                self.request.session.update(resp_status)
+                    if remember_me:
+                        self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                    return HttpResponseRedirect(self.success_url)
+                elif login_resp['response'] == 'error_pass':
+                    messages.add_message(self.request, messages.SUCCESS, login_resp["non_field_errors"][0])
+                    return render(self.request, self.template_name, {'form': form})
 
-                if remember_me:
-                    self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
-                return HttpResponseRedirect(self.success_url)
-            elif login_resp['response'] == 'error_pass':
-                messages.add_message(self.request, messages.SUCCESS, login_resp["non_field_errors"][0])
+            elif user_exist['exists'] == False:
+                messages.add_message(self.request, messages.SUCCESS, "User have No Account")
                 return render(self.request, self.template_name, {'form': form})
 
-        elif user_exist['exists'] == False:
-            messages.add_message(self.request, messages.SUCCESS, "User have No Account")
-            return render(self.request, self.template_name, {'form': form})
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
