@@ -11,14 +11,16 @@
   <!-- right fixed content start -->
   <div id="price-box" class="col-sm-5 col-md-4  price-box">
   <div class="box-panel enrol-cart">
-    <strong>Rs. {{object.get_price}}/-</strong>
+     <strong id="total-price" name="price_total" sum-price="{{object.get_price}}" >Rs. {{object.get_price}}/-</strong>
     <strike>Rs. {{object.get_fakeprice}}/-</strike>
     <small>  5% off</small>
     <span class="clearfix db"></span>
 
-    <a role="button" class="enrol-now" id="enrol-now-button" >Enrol now</a>
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{object.id}}" data-price="{{object.get_price}}" >Enrol now</a>
 
-    <a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a>
+    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{object.id}}" data-price="{{object.get_price}}">Add to cart</a>
+
+    <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
     
     <div class="query-call">
       <a href="#"><figure class="email-icon"></figure> Have a query?</a>

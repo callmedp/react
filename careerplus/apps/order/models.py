@@ -69,6 +69,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(
         'order.Order', related_name='orderitems', verbose_name=_("Order"))
 
+    parent = models.ForeignKey('self', null=True, blank=True)
+
     partner = models.ForeignKey(
         'partner.Vendor', related_name='order_items', blank=True, null=True,
         on_delete=models.SET_NULL, verbose_name=_("Partner"))
@@ -103,6 +105,9 @@ class OrderItem(models.Model):
     unit_price_excl_tax = models.DecimalField(
         _("Unit Price (excl. tax)"), decimal_places=2, max_digits=12,
         blank=True, null=True)
+
+    no_process = models.BooleanField(default=False)
+    is_combo = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'order'

@@ -58,8 +58,8 @@
                 <!-- item 1 -->
                 <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
                     <li class="col-sm-5 col-md-6">
-                        <span class="cart-sub-heading">{{item.product.name}}</span>
-                        <span class="provided-by">Provided by <a href="#">Vskills</a></span>
+                        <span class="cart-sub-heading">{{item.li.product.name}}</span>
+                        <span class="provided-by">Provided by <a href="#">{{item.li.product.vendor}}</a></span>
                     </li>
                     <li class="col-sm-3">
                         <span class="custom-select">
@@ -69,15 +69,39 @@
                         </span>
                     </li>
                     <li class="col-sm-2">
-                        <strong>Rs. 7499/-</strong>
+                        <strong>Rs. {{item.li.price_excl_tax}}/-</strong>
                     </li>
-                    <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
-                        <input type="hidden" name="reference_id" value="{{item.reference}}">
+
+
+                    <form role="form" id="cart_remove_form{{item.prod.id}}">{% csrf_token %}
+                        <input type="hidden" name="reference_id" value="{{item.prod.reference}}">
                         <li class="col-sm-2 col-md-1">
-                            <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
+                            <a role="button" onclick="removeFromCart('{{item.prod.id}}')">Remove</a>
                         </li>
                     </form>
                 </ul>
+                {% if item.addons %}
+                    <span class="addons-heading"></span>
+                    {% for addon in item.addons %}
+                    <ul class="ml-15 addons">
+                      <li class="col-sm-8 col-md-9">
+                        {{addon.product.name}}
+                      </li>
+                      <li class="col-sm-2">
+                        <strong>Rs. {{addon.price_excl_tax}}/-</strong>
+                      </li>
+                      <!--li class="col-sm-2 col-md-1">
+                        <a href="#">Remove</a>
+                      </li-->
+                      <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                        <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                        <li class="col-sm-2 col-md-1">
+                            <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                        </li>
+                    </form>
+                    </ul>
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
 
 
@@ -91,7 +115,7 @@
           <div class="col-sm-3 payment-summary-tab">
           <div class="box-panel checkout-box">
             Amount Payable
-            <strong>Rs. 31486/-</strong>
+            <strong>Rs. {{total_amount}}/-</strong>
             <a href="{% url "cart:payment-login" %}">Proceed to checkout</a>
           </div>
 

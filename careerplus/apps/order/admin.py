@@ -9,7 +9,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 class OrderItemAdmin(admin.ModelAdmin):
-	list_display = ['id', 'order', 'partner', 'partner_name', 'product', 'title', 'upc']
+	list_display = ['id', 'order', 'partner', 'partner_name', 'parent', 'product', 'title', 'upc', 'is_combo', 'no_process']
 
 
 admin.site.register(Order, OrderAdmin)

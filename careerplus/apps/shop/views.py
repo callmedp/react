@@ -150,6 +150,7 @@ class ProductInformationMixin(object):
                 for course in course_list:
                     course_dict.append(
                         OrderedDict({
+                            'id': course.id,
                             'label': course.name,
                             'mode': dict(MODE_CHOICES).get(course.study_mode),
                             'duration': course.duration_months,

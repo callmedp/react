@@ -7,6 +7,8 @@ from django.forms.forms import NON_FIELD_ERRORS
 from django.http import HttpResponseForbidden, HttpResponse,\
     HttpResponseRedirect, Http404
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 from shine.core import ShineCandidateDetail
 from shop.models import Product
@@ -29,38 +31,88 @@ class CartView(TemplateView, CartMixin):
         self.getCartObject()
         context.update({
             "cart_items": self.get_cart_items(),
+            "total_amount": self.getTotalAmount(),
         })
         return context
 
 
 class AddToCartView(View, CartMixin):
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AddToCartView, self).dispatch(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
-            if cart_type == 'enrol_cart':
-                prod_id = request.POST.get('product_id', '')
-                try:
-                    product = Product.objects.get(id=prod_id, active=True)
-                    data['status'] = self.createExpressCart(product)
-                except Exception as e:
-                    data['error_message'] = str(e)
+            prod_id = request.POST.get('prod_id')
 
-                if data['status'] == 1:
-                    data['redirect_url'] = reverse('cart:payment-login')
+            try:
+                product = Product.objects.get(id=prod_id, active=True)
+                addons = request.POST.getlist('addons[]')
+                cv_id = request.POST.get('cv_id')
+                data['status'] = self.updateCart(product, addons, cv_id, cart_type)
+            except Exception as e:
+                data['error_message'] = str(e)
+                logging.getLogger('error_log').error("%s " % str(e))
 
-                return HttpResponse(json.dumps(data), content_type="application/json")
+            if data['status'] == 1 and cart_type == "express":
+                data['redirect_url'] = reverse('cart:payment-login')
 
-            elif cart_type == 'add_cart':
-                prod_id = request.POST.get('product_id', '')
-                try:
-                    product = Product.objects.get(id=prod_id, active=True)
-                    data['status'] = self.updateCart(product)
-                except Exception as e:
-                    data['error_message'] = str(e)
+            return HttpResponse(json.dumps(data), content_type="application/json")
 
-                return HttpResponse(json.dumps(data), content_type="application/json")
+
+            # if prod_id and cart_type == "cart":
+            #     try:
+            #         product = Product.objects.get(id=prod_id, active=True)
+            #         addons = request.POST.getlist('addons[]')
+            #         cv_id = request.POST.get('cv_id')
+            #         data['status'] = self.updateCart(product, addons, cv_id, cart_type)
+            #     except Exception as e:
+            #         data['error_message'] = str(e)
+            #         logging.getLogger('error_log').error("%s " % str(e))
+            #     return HttpResponse(json.dumps(data), content_type="application/json")
+
+            # elif prod_id and cart_type == "express":
+            #     try:
+            #         product = Product.objects.get(id=prod_id, active=True)
+            #         addons = request.POST.getlist('addons[]')
+            #         cv_id = request.POST.get('cv_id')
+            #         data['status'] = self.updateCart(product, addons, cv_id, cart_type)
+            #         if data['status'] == 1:
+            #             data['redirect_url'] = reverse('cart:payment-login')
+
+            #     except Exception as e:
+            #         data['error_message'] = str(e)
+            #         logging.getLogger('error_log').error("%s " % str(e))
+            #     return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+            # data = {"status": -1}
+            # cart_type = request.POST.get('cart_type')
+            # if cart_type == 'enrol_cart':
+            #     prod_id = request.POST.get('product_id', '')
+            #     try:
+            #         product = Product.objects.get(id=prod_id, active=True)
+            #         data['status'] = self.createExpressCart(product)
+            #     except Exception as e:
+            #         data['error_message'] = str(e)
+
+            #     if data['status'] == 1:
+            #         data['redirect_url'] = reverse('cart:payment-login')
+
+            #     return HttpResponse(json.dumps(data), content_type="application/json")
+
+            # elif cart_type == 'add_cart':
+            #     prod_id = request.POST.get('product_id', '')
+            #     try:
+            #         product = Product.objects.get(id=prod_id, active=True)
+            #         data['status'] = self.updateCart(product)
+            #     except Exception as e:
+            #         data['error_message'] = str(e)
+
+            #     return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
 
@@ -203,10 +255,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
             context.update({
                 "cart_items": self.get_cart_items(),
+                "total_amount": self.getTotalAmount(),
             })
         else:
             self.getCartObject()
             context.update({
                 "cart_items": self.get_cart_items(),
+                "total_amount": self.getTotalAmount(),
             })
         return context

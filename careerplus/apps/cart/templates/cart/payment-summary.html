@@ -77,10 +77,16 @@
             </li>
           {% endif %}
           <li>
-            <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.product.name}}</strong>
+            <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.li.product.name}}</strong>{% if item.li.product.expexperience %}{{item.li.product.expexperience}}{% endif %}
             </span>
-            <strong class="col-sm-4 col-md-3">Rs. 7499/-</strong>
+            <strong class="col-sm-4 col-md-3">Rs. {{item.li.price_excl_tax}}/</strong>
           </li>
+          {% for addon in item.addons %}
+               <li>
+                    <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
+                    <span class="col-sm-4 col-md-3">Rs. {{addon.price_excl_tax}}/-</span>
+                </li>
+          {% endfor %}
 
           {% comment %}
           <li>
@@ -107,7 +113,7 @@
         <ul>
           <li>
             <span class="col-sm-8 col-md-9 text-right total-amount">Total amount</span>
-            <span class="col-sm-4 col-md-3 total-amount">Rs. 31356/-</span>
+            <span class="col-sm-4 col-md-3 total-amount">Rs. {{total_amount}}/-</span>
 
             <!-- coupon -->
             <span class="col-sm-4 col-md-6 coupon">
@@ -149,7 +155,7 @@
         <ul>
           <li class="payable-amount">
             <span class="col-sm-8 col-md-9 text-right">Payable amount</span>
-            <span class="col-sm-4 col-md-3">Rs. 1999/-</span>
+            <span class="col-sm-4 col-md-3">Rs. {{total_amount}}/-</span>
           </li>
         </ul>
 
