@@ -21,18 +21,13 @@ class PartnerHomeView(TemplateView):
         try:
             microsite = MicroSite.objects.select_related('home_page').get(
                 slug=partner, active=True)
-            banner_image_list = microsite.home_page.banner_image.filter(active=True)
-            testimonial_qs = PartnerTestimonial.objects.filter(microsite=microsite,
-                active=True)
+
+            testimonial_qs = PartnerTestimonial.objects.filter(
+                microsite=microsite, active=True)
             faq_qs = PartnerFaq.objects.filter(microsite=microsite, active=True)
-            pv = None
-
-            # if microsite.slug == 'roundone':
-            #     pv = ProductVariation.objects.get(pk=1295)
-
+            
             context.update({
-                "banner_image_list": banner_image_list, "faq_qs": faq_qs,
-                "testimonial_qs": testimonial_qs, "pv": pv,
+                "faq_qs": faq_qs, "testimonial_qs": testimonial_qs
             })
 
             context.update(RoundOneAPI().get_location_list(**kwargs))
@@ -55,20 +50,11 @@ class PartnerListView(TemplateView):
         if partner == 'roundone':
             context.update(self.get_partner_context(**kwargs))
             context.update(self.get_breadcrumb_data())
-
-            try:
-                microsite = MicroSite.objects.select_related(
-                    'listing_page').get(slug=partner, active=True)
-                banner_image_list = microsite.listing_page.banner_image.filter(
-                    active=True)
-
-                context.update({
-                    "loginform": ModalLoginApiForm(),
-                    "registerform": ModalRegistrationApiForm()        
-                })
+            context.update({
+                "loginform": ModalLoginApiForm(),
+                "registerform": ModalRegistrationApiForm()        
+            })
                                 
-            except Exception as e:
-                logging.getLogger('error_log').error(str(e))
         return context
 
     def get(self, request, *args, **kwargs):
@@ -137,15 +123,10 @@ class PartnerDetailView(TemplateView):
         partner = kwargs.get('partner', '')
         if partner:
             context.update(self.get_partner_context(**kwargs))
-            try:
-                microsite = MicroSite.objects.select_related(
-                    'detail_page').get(slug=partner, active=True)
-                banner_image_list = microsite.detail_page.banner_image.filter(active=True)
-                context.update({
-                    'banner_image_list': banner_image_list,
-                    })
-            except:
-                pass
+            context.update({
+                "loginform": ModalLoginApiForm(),
+                "registerform": ModalRegistrationApiForm()        
+            })
         return context
 
     def get(self, request, *args, **kwargs):

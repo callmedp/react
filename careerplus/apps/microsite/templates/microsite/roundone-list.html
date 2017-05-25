@@ -89,91 +89,8 @@
             </div>
           </div>
         </div>
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="headingTwo">
-            <h4 class="panel-title">
-              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Mode 
-              </a>
-            </h4>
-          </div>
-          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-            <div class="panel-body">
-              <label>
-                <input type="checkbox">
-                <span>Online</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Classroom</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Blended</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="headingThree">
-            <h4 class="panel-title">
-              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Price 
-              </a>
-            </h4>
-          </div>
-          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-            <div class="panel-body">
-              <label>
-                <input type="checkbox">
-                <span>0 - 5000</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>5000 - 10000</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>10000 - 20000</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>20000 - 30000</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>30000+</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="headingFour">
-            <h4 class="panel-title">
-              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                Duration 
-              </a>
-            </h4>
-          </div>
-          <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-            <div class="panel-body">
-              <label>
-                <input type="checkbox">
-                <span>6 months</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>1 year</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>2 year</span>
-              </label>
-            </div>
-          </div>
-        </div>
       <button class="search-button" id="id_applyfilter" type="submit">
-      Go</button>
+      Filter companies</button>
       </div>
     </div>       
     <!-- left content end -->
@@ -238,7 +155,8 @@
           <a href="#" class="save-job">Save this job</a>
           <a href="{{detail_url}}" class="view-job">View job description</a>
           {% if request.session.candidate_id %}
-            <a href="#" class="get-refferd pull-right">Get Referred</a>
+            <a role="button" class="get-refferd pull-right" id="enrol-now-button" prod-id="8">Get Referred</a>
+            <!--<a href="#" class="get-refferd pull-right">Get Referred</a>-->
           {% else %}
             <a href="#" class="get-refferd pull-right" data-toggle="modal" data-target=".bs-example-modal-sm">Get Referred</a>
           {% endif %}
@@ -425,4 +343,5 @@
     </script>
     <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
 {% endblock js_section %}
