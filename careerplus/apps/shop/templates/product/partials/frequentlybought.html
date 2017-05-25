@@ -7,7 +7,7 @@
         <ul>
           {% for fbt in prd_fbt_list  %}
             <li {% if forloop.first %}class="selected"{% endif %}>
-              <label><input class="input" type="checkbox" data-price="{{fbt.get_price}}">{{fbt.pv_name}}</label> 
+              <label><input class="input" name="fbt" type="checkbox" data-id="{{fbt.id}}" data-price="{{fbt.get_price}}">{{fbt.pv_name}}</label> 
               <strong>Rs. {{fbt.get_price}}/-</strong>
             </li>
           {% endfor %}

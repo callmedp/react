@@ -11,7 +11,7 @@ from order.mixins import OrderMixin
 from .forms import StateForm
 
 
-class PaymentOptionView(TemplateView, CartMixin, OrderMixin):
+class PaymentOptionView(TemplateView, OrderMixin):
 	template_name = "payment/payment-option.html"
 
 	def get(self, request, *args, **kwargs):
@@ -49,6 +49,7 @@ class PaymentOptionView(TemplateView, CartMixin, OrderMixin):
 		context = super(self.__class__, self).get_context_data(**kwargs)
 		context.update({
 			"state_form": StateForm(),
+			"total_amount": self.getTotalAmount(),
 		})
 		return context
 

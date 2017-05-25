@@ -77,6 +77,8 @@ class LineItem(AbstractAutoDate):
     price_incl_tax = models.DecimalField(
         _('Price incl. Tax'), decimal_places=2, max_digits=12, null=True)
 
+    no_process = models.BooleanField(default=False)
+
     def __init__(self, *args, **kwargs):
         super(LineItem, self).__init__(*args, **kwargs)
         
@@ -89,10 +91,10 @@ class LineItem(AbstractAutoDate):
 
     def __str__(self):
         return _(
-            u"Cart #%(cart_id)d, Product #%(product_id)d, quantity"
-            u" %(quantity)d") % {'cart_id': self.cart.pk,
+            u"Cart #%(cart_id)d, Product #%(product_id)d, lineid"
+            u" %(line_id)d") % {'cart_id': self.cart.pk,
                                  'product_id': self.product.pk,
-                                 'quantity': self.quantity}
+                                 'line_id': self.pk}
 
 
 class ShippingDetail(models.Model):
@@ -127,7 +129,7 @@ class ShippingDetail(models.Model):
 
     email = models.EmailField(max_length=255, null=True, blank=False)
 
-    country_code = models.PositiveIntegerField(choices=country_choices,
+    country_code = models.CharField(max_length=15, choices=country_choices,
             default=indian_obj, null=True, blank=False,
             verbose_name=_("Country Code"))
 
@@ -141,7 +143,7 @@ class ShippingDetail(models.Model):
 
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.PositiveIntegerField(choices=CHOICE_COUNTRY,
+    country = models.CharField(max_length=15, choices=CHOICE_COUNTRY,
             default=default_country, null=True, blank=False)
 
     landmark = models.CharField(max_length=255, null=True, blank=True)

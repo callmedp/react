@@ -21,7 +21,7 @@
           {% for vars in course_variation_list %}
             
             <tr {% if forloop.first %}class="selected"{% endif %}>
-              <td><label><input type="radio"data-price="{{vars.price}}"></label></td>
+              <td><label><input type="radio" name="radio" data-price="{{vars.price}}" data-id="{{vars.id}}"></label></td>
               <td>{{vars.mode}}</td>
               <td>{{vars.duration}} months</td>
               <td>{% if vars.certify %}

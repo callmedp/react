@@ -64,7 +64,7 @@
         <!-- right content start -->
         <div class="col-sm-9 bdr payment-option">
           <div class="payable">
-            Payable amount <strong>Rs. 1,999/-</strong>
+            Payable amount <strong>Rs. {{total_amount}}/-</strong>
             <a href="#" class="review-order">Review order</a>
           </div>
 
@@ -143,7 +143,7 @@
                       </span>
                       <input type="hidden" name="payment_type" value="cash">
 
-                    <strong>Rs. 4599 <small>(amount payable)</small> </strong>
+                    <strong>Rs. {{total_amount}}<small>(amount payable)</small> </strong>
 
                     <div class="continue">
                       <button type="submit" class="make-payment">Make Payment</button>

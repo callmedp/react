@@ -463,7 +463,7 @@ class Product(AbstractProduct, ModelMeta):
         related_name='relatedproduct+',
         through_fields=('primary', 'secondary'),
         verbose_name=_('Related Product'),
-        symmetrical=False, blank=True)
+        symmetrical=False, blank=True)    
     childs = models.ManyToManyField(
         'self',
         through='ChildProduct',
