@@ -933,6 +933,7 @@ class ProductPriceForm(forms.ModelForm):
         self.fields['fake_value'].widget.attrs['class'] = form_class
         self.fields['active'].widget.attrs['class'] = 'js-switch'
         self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
         
     class Meta:
         model = ProductPrice
@@ -941,8 +942,7 @@ class ProductPriceForm(forms.ModelForm):
 
     def clean(self):
         super(ProductPriceForm, self).clean()
-
-
+        
     def clean_currency(self):
         currency = self.cleaned_data.get('currency', None)
         if currency:
@@ -962,6 +962,14 @@ class PriceInlineFormSet(forms.BaseInlineFormSet):
         duplicates = False
         for form in self.forms:
             if form.cleaned_data:
+                value = form.cleaned_data['value']
+                f_value = form.cleaned_data['fake_value']
+                from decimal import Decimal
+                if f_value > Decimal("0.00"):
+                    if f_value < value:
+                        raise forms.ValidationError(
+                            'Fake Price Value Should be Greater than Original Price.',
+                            code='fake more' )
                 currency = form.cleaned_data['currency']
                 product = form.cleaned_data['product']
                 if currency in currencies:

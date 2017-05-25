@@ -1237,6 +1237,7 @@ class ChangeProductView(DetailView):
                     reverse('console:product-change', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
 
+
 @Decorate(check_permission('shop.add_productchapter'))
 class ChangeProductStructureView(DetailView):
     template_name = 'console/shop/change_productstructure.html'
@@ -1453,7 +1454,7 @@ class ChangeProductPriceView(DetailView):
                         else:
                             context = self.get_context_data()
                             if formset:
-                                context.update({'prdstruct_formset': formset})
+                                context.update({'prdprice_formset': formset})
                             messages.error(
                                 self.request,
                                 "Product Price Change Failed, Changes not Saved")

@@ -10,9 +10,11 @@
   <!-- right fixed content start -->
   <div id="price-box" class="col-sm-5 col-md-4  price-box">
   <div class="box-panel enrol-cart">
-    <strong>Rs. {{object.get_price}}/-</strong>
-    <strike>Rs. {{object.get_fakeprice}}/-</strike>
-    <small>  5% off</small>
+    <strong>Rs.&nbsp;{{object.get_price}}/-</strong>
+    {% if object.get_fakeprice %}
+      <strike>Rs.&nbsp;{{object.get_fakeprice.0}}/-</strike>
+      <small>  {{object.get_fakeprice.1}}% off</small>
+    {% endif %}
     <span class="clearfix db"></span>
     <a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enrol now</a>
     <a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}" >Add to cart</a>
