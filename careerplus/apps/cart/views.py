@@ -51,8 +51,9 @@ class AddToCartView(View, CartMixin):
             try:
                 product = Product.objects.get(id=prod_id, active=True)
                 addons = request.POST.getlist('addons[]')
+                req_options = request.POST.getlist('req_options[]')
                 cv_id = request.POST.get('cv_id')
-                data['status'] = self.updateCart(product, addons, cv_id, cart_type)
+                data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options)
             except Exception as e:
                 data['error_message'] = str(e)
                 logging.getLogger('error_log').error("%s " % str(e))
@@ -61,58 +62,6 @@ class AddToCartView(View, CartMixin):
                 data['redirect_url'] = reverse('cart:payment-login')
 
             return HttpResponse(json.dumps(data), content_type="application/json")
-
-
-            # if prod_id and cart_type == "cart":
-            #     try:
-            #         product = Product.objects.get(id=prod_id, active=True)
-            #         addons = request.POST.getlist('addons[]')
-            #         cv_id = request.POST.get('cv_id')
-            #         data['status'] = self.updateCart(product, addons, cv_id, cart_type)
-            #     except Exception as e:
-            #         data['error_message'] = str(e)
-            #         logging.getLogger('error_log').error("%s " % str(e))
-            #     return HttpResponse(json.dumps(data), content_type="application/json")
-
-            # elif prod_id and cart_type == "express":
-            #     try:
-            #         product = Product.objects.get(id=prod_id, active=True)
-            #         addons = request.POST.getlist('addons[]')
-            #         cv_id = request.POST.get('cv_id')
-            #         data['status'] = self.updateCart(product, addons, cv_id, cart_type)
-            #         if data['status'] == 1:
-            #             data['redirect_url'] = reverse('cart:payment-login')
-
-            #     except Exception as e:
-            #         data['error_message'] = str(e)
-            #         logging.getLogger('error_log').error("%s " % str(e))
-            #     return HttpResponse(json.dumps(data), content_type="application/json")
-
-
-            # data = {"status": -1}
-            # cart_type = request.POST.get('cart_type')
-            # if cart_type == 'enrol_cart':
-            #     prod_id = request.POST.get('product_id', '')
-            #     try:
-            #         product = Product.objects.get(id=prod_id, active=True)
-            #         data['status'] = self.createExpressCart(product)
-            #     except Exception as e:
-            #         data['error_message'] = str(e)
-
-            #     if data['status'] == 1:
-            #         data['redirect_url'] = reverse('cart:payment-login')
-
-            #     return HttpResponse(json.dumps(data), content_type="application/json")
-
-            # elif cart_type == 'add_cart':
-            #     prod_id = request.POST.get('product_id', '')
-            #     try:
-            #         product = Product.objects.get(id=prod_id, active=True)
-            #         data['status'] = self.updateCart(product)
-            #     except Exception as e:
-            #         data['error_message'] = str(e)
-
-            #     return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
 
@@ -131,7 +80,16 @@ class RemoveFromCartView(View, CartMixin):
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                     line_obj = cart_obj.lineitems.get(reference=reference)
-                    line_obj.delete()
+                    if line_obj.parent_deleted:
+                        parent = line_obj.parent
+                        childs = cart_obj.lineitems.filter(parent=parent, parent_deleted=True)
+                        if childs.count() > 1:
+                            line_obj.delete()
+                        else:
+                            parent.delete()
+                    else:
+                        line_obj.delete()
+
                     data['status'] = 1
                 else:
                     data['error_message'] = 'this cart item alredy removed.'

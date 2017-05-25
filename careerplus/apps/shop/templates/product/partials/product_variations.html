@@ -64,10 +64,11 @@
     <div class="row">
       <div class="select-country col-sm-12 col-md-8 mb-40">
         <h2 class="detail-heading">Select countries</h2>
+           <div class="cart-message"><span class="cart-error" id="error_required"></span></div>
           <ul>
             {% for country in country_variation_list %}
               <li {% if forloop.first %}class="selected"{% endif %}>
-                <label><input class="input" value='{{country.id}}' type="checkbox" data-price="{{country.get_price}}"> {{country.name}}</label> 
+                <label><input class="input" value='{{country.id}}' name="required_option" type="checkbox" data-id="{{country.id}}" data-price="{{country.get_price}}"> {{country.name}}</label> 
               </li>
             {% endfor %}
           </ul>

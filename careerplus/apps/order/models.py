@@ -108,6 +108,7 @@ class OrderItem(models.Model):
 
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
+    is_variation = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'order'

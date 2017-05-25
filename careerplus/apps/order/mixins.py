@@ -53,6 +53,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 				cart_items = self.get_cart_items()
 				for item in cart_items:
 					parent_li = item.get('li')
+
 					if parent_li and parent_li.product.type_product == 3:
 						p_oi = OrderItem.objects.create(
 							order=order,
@@ -99,8 +100,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 							order=order,
 							product=parent_li.product,
 							title=parent_li.product.name,
-							partner=parent_li.product.vendor
-							)
+							partner=parent_li.product.vendor,
+							no_process=parent_li.no_process,
+						)
 						p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
 						p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
 						p_oi.save()
@@ -116,6 +118,20 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 							oi.upc = str(order.pk) + "_" + str(oi.pk)
 							oi.parent = p_oi
 							oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
+							oi.save()
+
+						variations = item.get('variations')
+						for var in variations:
+							oi = OrderItem.objects.create(
+								order=order,
+								product=var.product,
+								title=var.product.name,
+								partner=var.product.vendor
+								)
+							oi.upc = str(order.pk) + "_" + str(oi.pk)
+							oi.parent = p_oi
+							oi.oi_price_before_discounts_excl_tax = var.price_excl_tax
+							oi.is_variation = True
 							oi.save()
 
 

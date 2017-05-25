@@ -56,52 +56,125 @@
 
             {% for item in cart_items %}
                 <!-- item 1 -->
-                <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
-                    <li class="col-sm-5 col-md-6">
-                        <span class="cart-sub-heading">{{item.li.product.name}}</span>
-                        <span class="provided-by">Provided by <a href="#">{{item.li.product.vendor}}</a></span>
-                    </li>
-                    <li class="col-sm-3">
-                        <span class="custom-select">
-                            <select class="form-control">
-                                <option>Normal</option>
-                            </select>
-                        </span>
-                    </li>
-                    <li class="col-sm-2">
-                        <strong>Rs. {{item.li.price_excl_tax}}/-</strong>
-                    </li>
+                {% with li=item.li addons=item.addons variations=item.variations %}
+                    {% if li.product.type_service == 3 and variations %}
+
+                        <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
+                            <li class="col-sm-5 col-md-6">
+                                <span class="cart-sub-heading">{{li.product.name}}</span>
+                                <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
+                            </li>
+                            <li class="col-sm-3">
+                                <span class="custom-select">
+                                    <select class="form-control">
+                                        <option>Normal</option>
+                                    </select>
+                                </span>
+                            </li>
+                            <li class="col-sm-2">
+                                <strong>Rs. {{variations.first.price_excl_tax}}/-</strong>
+                            </li>
 
 
-                    <form role="form" id="cart_remove_form{{item.prod.id}}">{% csrf_token %}
-                        <input type="hidden" name="reference_id" value="{{item.prod.reference}}">
-                        <li class="col-sm-2 col-md-1">
-                            <a role="button" onclick="removeFromCart('{{item.prod.id}}')">Remove</a>
-                        </li>
-                    </form>
-                </ul>
-                {% if item.addons %}
-                    <span class="addons-heading"></span>
-                    {% for addon in item.addons %}
-                    <ul class="ml-15 addons">
-                      <li class="col-sm-8 col-md-9">
-                        {{addon.product.name}}
-                      </li>
-                      <li class="col-sm-2">
-                        <strong>Rs. {{addon.price_excl_tax}}/-</strong>
-                      </li>
-                      <!--li class="col-sm-2 col-md-1">
-                        <a href="#">Remove</a>
-                      </li-->
-                      <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
-                        <input type="hidden" name="reference_id" value="{{addon.reference}}">
-                        <li class="col-sm-2 col-md-1">
-                            <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
-                        </li>
-                    </form>
-                    </ul>
-                    {% endfor %}
-                {% endif %}
+                            <form role="form" id="cart_remove_form{{li.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{variations.first.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{li.id}}')">Remove</a>
+                                </li>
+                            </form>
+                        </ul>
+                        {% if addons %}
+                            <span class="addons-heading"></span>
+                            {% for addon in addons %}
+                            <ul class="ml-15 addons">
+                              <li class="col-sm-8 col-md-9">
+                                {{addon.product.name}}
+                              </li>
+                              <li class="col-sm-2">
+                                <strong>Rs. {{addon.price_excl_tax}}/-</strong>
+                              </li>
+                              <!--li class="col-sm-2 col-md-1">
+                                <a href="#">Remove</a>
+                              </li-->
+                              <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                </li>
+                            </form>
+                            </ul>
+                            {% endfor %}
+                        {% endif %}
+
+                    {% else %}
+
+                        <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
+                            <li class="col-sm-5 col-md-6">
+                                <span class="cart-sub-heading">{{li.product.name}}</span>
+                                <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
+                            </li>
+                            <li class="col-sm-3">
+                                <span class="custom-select">
+                                    <select class="form-control">
+                                        <option>Normal</option>
+                                    </select>
+                                </span>
+                            </li>
+                            <li class="col-sm-2">
+                                <strong>Rs. {{li.price_excl_tax}}/-</strong>
+                            </li>
+
+
+                            <form role="form" id="cart_remove_form{{li.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{li.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{li.id}}')">Remove</a>
+                                </li>
+                            </form>
+                        </ul>
+                        {% if addons or variations %}
+                            <span class="addons-heading"></span>
+                            {% for var in variations %}
+                                <ul class="ml-15 addons">
+                                  <li class="col-sm-8 col-md-9">
+                                    {{var.product.name}}
+                                  </li>
+                                  <li class="col-sm-2">
+                                    <strong>Rs. {{var.price_excl_tax}}/-</strong>
+                                  </li>
+                                  
+                                  <form role="form" id="cart_remove_form{{var.id}}">{% csrf_token %}
+                                    <input type="hidden" name="reference_id" value="{{var.reference}}">
+                                    <li class="col-sm-2 col-md-1">
+                                        <a role="button" onclick="removeFromCart('{{var.id}}')">Remove</a>
+                                    </li>
+                                </form>
+                                </ul>
+                            {% endfor %}
+
+                            {% for addon in addons %}
+                                <ul class="ml-15 addons">
+                                  <li class="col-sm-8 col-md-9">
+                                    {{addon.product.name}}
+                                  </li>
+                                  <li class="col-sm-2">
+                                    <strong>Rs. {{addon.price_excl_tax}}/-</strong>
+                                  </li>
+                                  <!--li class="col-sm-2 col-md-1">
+                                    <a href="#">Remove</a>
+                                  </li-->
+                                  <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                                    <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                                    <li class="col-sm-2 col-md-1">
+                                        <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                    </li>
+                                </form>
+                                </ul>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+
             {% endfor %}
 
 

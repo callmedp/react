@@ -78,6 +78,7 @@ class LineItem(AbstractAutoDate):
         _('Price incl. Tax'), decimal_places=2, max_digits=12, null=True)
 
     no_process = models.BooleanField(default=False)
+    parent_deleted = models.BooleanField(default=False)
 
     def __init__(self, *args, **kwargs):
         super(LineItem, self).__init__(*args, **kwargs)

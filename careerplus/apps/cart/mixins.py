@@ -61,7 +61,7 @@ class CartMixin(object):
 		# fromcart.date_merged = timezone.now()
 		# fromcart.save()
 
-	def updateCart(self, product, addons, cv_id, add_type):
+	def updateCart(self, product, addons, cv_id, add_type, req_options):
 		flag = -1
 		try:
 			flag = 1
@@ -88,8 +88,24 @@ class CartMixin(object):
 
 			if cart_obj:
 				cart_obj.lineitems.filter(product=product).delete()
-				if product.type_product == 0:
-					# standalone
+
+				if product.type_service == 3 and cv_id:
+					# courses
+					try:
+						cv_prod = Product.objects.get(id=cv_id, active=True)
+						parent = cart_obj.lineitems.create(product=product, no_process=True)
+						parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
+						parent.price_excl_tax = product.get_price()
+						parent.save()
+						child = cart_obj.lineitems.create(product=cv_prod, parent=parent)
+						child.reference = str(cart_obj.pk) + '_' + str(child.pk)
+						child.price_excl_tax = cv_prod.get_price()
+						child.parent_deleted = True
+						child.save()
+					except Exception as e:
+						logging.getLogger('error_log').error(str(e))
+				else:
+					# standalone/Combo/coutry-specific
 					parent = LineItem.objects.create(cart=cart_obj, product=product)
 					parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
 					parent.price_excl_tax = product.get_price()
@@ -103,44 +119,41 @@ class CartMixin(object):
 							li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
 							li.reference = str(cart_obj.pk) + '_' + str(li.pk)
 							li.price_excl_tax = child.get_price()
+							li.save()
+
+					req_products = Product.objects.filter(id__in=req_options, active=True)
+					if req_products.exists():
+						parent.no_process = True
+						parent.save()
+						for prd in req_products:
+							li = LineItem.objects.create(cart=cart_obj, parent=parent, product=prd)
+							li.reference = str(cart_obj.pk) + '_' + str(li.pk)
+							li.price_excl_tax = prd.get_price()
+							li.parent_deleted = True
 							li.save()
 					
-				elif product.type_product == 1:
-					# Variable-Parent
-					if cv_id:
-						try:
-							cv_prod = Product.objects.get(id=cv_id, active=True)
-							parent = cart_obj.lineitems.create(product=product, no_process=True)
-							parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
-							parent.price_excl_tax = product.get_price()
-							parent.save()
-							child = cart_obj.lineitems.create(product=cv_prod, parent=parent)
-							child.reference = str(cart_obj.pk) + '_' + str(child.pk)
-							child.price_excl_tax = cv_prod.get_price()
-							child.save()
-						except Exception as e:
-							logging.getLogger('error_log').error(str(e))
+				
 
-				elif product.type_product == 2:
-					#  Variable-Child
-					pass
+				# elif product.type_product == 2:
+				# 	#  Variable-Child
+				# 	pass
 
-				elif product.type_product == 3:
-					# 'Combo'
-					parent = LineItem.objects.create(cart=cart_obj, product=product)
-					parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
-					parent.price_excl_tax = product.get_price()
-					parent.save()
-					child_products = product.related.filter(
-			            secondaryproduct__active=True,
-			            secondaryproduct__type_relation=1)
-					addons = Product.objects.filter(id__in=addons, active=True)
-					for child in addons:
-						if child in child_products:
-							li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
-							li.reference = str(cart_obj.pk) + '_' + str(li.pk)
-							li.price_excl_tax = child.get_price()
-							li.save()
+				# elif product.type_product == 3:
+				# 	# 'Combo'
+				# 	parent = LineItem.objects.create(cart=cart_obj, product=product)
+				# 	parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
+				# 	parent.price_excl_tax = product.get_price()
+				# 	parent.save()
+				# 	child_products = product.related.filter(
+			 #            secondaryproduct__active=True,
+			 #            secondaryproduct__type_relation=1)
+				# 	addons = Product.objects.filter(id__in=addons, active=True)
+				# 	for child in addons:
+				# 		if child in child_products:
+				# 			li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
+				# 			li.reference = str(cart_obj.pk) + '_' + str(li.pk)
+				# 			li.price_excl_tax = child.get_price()
+				# 			li.save()
 
 				self.request.session.update({
 					"cart_pk": cart_obj.pk,
@@ -152,88 +165,6 @@ class CartMixin(object):
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))
 		return flag
-
-	# def createExpressCart(self, product, addons, cv_id):
-	# 	flag = -1
-	# 	try:
-	# 		candidate_id = self.request.session.get('candidate_id')
-	# 		if not self.request.session.session_key:
-	# 			self.request.session.create()
-	# 		session_id = self.request.session.session_key
-	# 		if candidate_id:
-	# 			cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=3)
-	# 		elif session_id:
-	# 			cart_obj = Cart.objects.create(session_id=session_id, status=3)
-
-	# 		if cart_obj:
-	# 			flag = 1
-	# 			if product.type_product == 0:
-	# 				# standalone
-	# 				parent = LineItem.objects.create(cart=cart_obj, product=product)
-	# 				parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
-	# 				parent.price_excl_tax = product.get_price()
-	# 				parent.save()
-	# 				child_products = product.related.filter(
-	# 		            secondaryproduct__active=True,
-	# 		            secondaryproduct__type_relation=1)
-	# 				addons = Product.objects.filter(id__in=addons, active=True)
-	# 				for child in addons:
-	# 					if child in child_products:
-	# 						li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
-	# 						li.reference = str(cart_obj.pk) + '_' + str(li.pk)
-	# 						li.price_excl_tax = child.get_price()
-	# 						li.save()
-					
-	# 			elif product.type_product == 1:
-	# 				# Variable-Parent
-	# 				if cv_id:
-	# 					try:
-	# 						cv_prod = Product.objects.get(id=cv_id, active=True)
-	# 						parent = cart_obj.lineitems.create(product=product, no_process=True)
-	# 						parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
-	# 						parent.price_excl_tax = product.get_price()
-	# 						parent.save()
-	# 						child = cart_obj.lineitems.create(product=cv_prod, parent=parent)
-	# 						child.reference = str(cart_obj.pk) + '_' + str(child.pk)
-	# 						child.price_excl_tax = cv_prod.get_price()
-	# 						child.save()
-	# 					except Exception as e:
-	# 						logging.getLogger('error_log').error(str(e))
-
-	# 			elif product.type_product == 2:
-	# 				#  Variable-Child
-	# 				pass
-
-	# 			elif product.type_product == 3:
-	# 				# 'Combo'
-	# 				parent = LineItem.objects.create(cart=cart_obj, product=product)
-	# 				parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
-	# 				parent.price_excl_tax = product.get_price()
-	# 				parent.save()
-	# 				child_products = product.related.filter(
-	# 		            secondaryproduct__active=True,
-	# 		            secondaryproduct__type_relation=1)
-	# 				addons = Product.objects.filter(id__in=addons, active=True)
-	# 				for child in addons:
-	# 					if child in child_products:
-	# 						li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
-	# 						li.reference = str(cart_obj.pk) + '_' + str(li.pk)
-	# 						li.price_excl_tax = child.get_price()
-	# 						li.save()
-
-
-	# 			# li = LineItem.objects.create(cart=cart_obj, product=product)
-	# 			# li.reference = str(cart_obj.pk) + '_' + str(li.pk)
-	# 			# li.save()
-	# 			# flag = 1
-	# 			# self.request.session.update({
-	# 			# 	"cart_pk": cart_obj.pk,
-	# 			# 	"checkout_type": 'express',
-	# 			# })
-
-	# 	except Exception as e:
-	# 		logging.getLogger('error_log').error(str(e))
-	# 	return flag
 
 	def getCartObject(self):
 		try:
@@ -291,29 +222,14 @@ class CartMixin(object):
 					main_products = cart_obj.lineitems.filter(parent=None).select_related('product')
 					for m_prod in main_products:
 						data = {}
-						if m_prod.no_process:
-							childitems = cart_obj.lineitems.filter(parent=m_prod).select_related('product')
-							for item in childitems:
-								m_data = {}
-								m_data['li'] = item
-								m_data['addons'] = []
-								cart_items.append(m_data)
-						else:
-							data['li'] = m_prod
-							addons = cart_obj.lineitems.filter(parent=m_prod).select_related('product')
-							data['addons'] = addons
-							cart_items.append(data)
+						data['li'] = m_prod
+						data['addons'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related('product')
+						data['variations'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+						cart_items.append(data)
 			return cart_items
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))
 		return cart_items
-
-		# if cart_pk:
-		# 	cart_obj = Cart.objects.get(pk=cart_pk)
-		# 	if cart_obj:
-		# 		cart_items = cart_obj.lineitems.all().select_related('parent', 'product')
-		# 		return cart_items
-		# return None
 
 	def getTotalAmount(self):
 		total = Decimal(0)
@@ -325,7 +241,7 @@ class CartMixin(object):
 			if cart_pk:
 				cart_obj = Cart.objects.get(pk=cart_pk)
 				if cart_obj:
-					lis = cart_obj.lineitems.filter(no_process=False).select_related('product')
+					lis = cart_obj.lineitems.all().select_related('product')
 					for li in lis:
 						total += li.price_excl_tax
 			return round(total, 2)

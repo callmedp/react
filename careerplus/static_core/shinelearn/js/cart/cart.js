@@ -127,9 +127,47 @@ $(document).ready(function() {
         }
     });
 
+    $('input[name="required_option"]').click(function(){
+        if ($(this).is(':checked'))
+        {
+            var req_price =  parseFloat($(this).attr('data-price'));
+            var sum_price = parseFloat($('#total-price').attr('sum-price'));
+            sum_price = req_price + sum_price;
+            show_price = 'Rs. ' + sum_price.toString() + '/-';
+            $('#total-price').text(show_price);
+            $("#total-price").attr("sum-price", sum_price);
+        }
+        else{
+            var req_price =  parseFloat($(this).attr('data-price'));
+            var sum_price = parseFloat($('#total-price').attr('sum-price'));
+            sum_price = sum_price - req_price;
+            show_price = 'Rs. ' + sum_price.toString() + '/-';
+            $('#total-price').text(show_price);
+            $("#total-price").attr("sum-price", sum_price);
+
+        }
+    });
+
 
     $('#add-to-cart').click(function() {
         var prod_id = $('#add-to-cart').attr('prod-id');
+        // required options ie. for countries and product varification
+
+        var req_options = [];
+        if ($('input[name="required_option"]').length){
+            $('input[name="required_option"]').each(function(){
+                if ($(this).is(':checked'))
+                {
+                    req_options.push($(this).attr('data-id'));
+                }
+            });
+
+            if (!req_options.length){
+                $('#error_required').text('*Please select options')
+                prod_id = 0
+            }
+        }
+
         if (prod_id){
 
             var cart_type = "cart";
@@ -152,11 +190,13 @@ $(document).ready(function() {
                 }
             });
 
+
             data = {
                 "prod_id": prod_id,
                 "addons": fbt,
                 "cart_type": cart_type,
                 "cv_id": cv_id,
+                "req_options": req_options,
             }
 
             $.ajax({
@@ -189,6 +229,22 @@ $(document).ready(function() {
 
     $('#enrol-now-button').click(function() {
         var prod_id = $('#enrol-now-button').attr('prod-id');
+
+        var req_options = [];
+        if ($('input[name="required_option"]').length){
+            $('input[name="required_option"]').each(function(){
+                if ($(this).is(':checked'))
+                {
+                    req_options.push($(this).attr('data-id'));
+                }
+            });
+
+            if (!req_options.length){
+                $('#error_required').text('*Please select options')
+                prod_id = 0
+            }
+        }
+
         if (prod_id){
 
             var cart_type = "express";
@@ -211,13 +267,14 @@ $(document).ready(function() {
                 }
             });
 
-            console.log(prod_id);
+            // console.log(prod_id);
 
             data = {
                 "prod_id": prod_id,
                 "addons": fbt,
                 "cart_type": cart_type,
                 "cv_id": cv_id,
+                "req_options": req_options,
             }
 
             $.ajax({
