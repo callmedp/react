@@ -55,7 +55,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
                 "This field is required.")
         elif not first_name.isalpha():
             raise forms.ValidationError(
-                "This field should be only alphabets.")
+                "This field should be only letters.")
         return first_name
 
     def clean_last_name(self):
@@ -65,7 +65,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
                 "This field is required.")
         elif not last_name.isalpha():
             raise forms.ValidationError(
-                "This field should be only alphabets.")
+                "This field should be only letters.")
         return last_name
 
     def clean_mobile(self):

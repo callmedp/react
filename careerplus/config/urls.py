@@ -35,7 +35,7 @@ urlpatterns += [
         ProductDetailView.as_view(), name='job-assist-detail'),
     url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='other-detail'),
-]   
+]
 
 urlpatterns += [
 

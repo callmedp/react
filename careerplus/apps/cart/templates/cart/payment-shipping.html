@@ -12,6 +12,31 @@
 {% block css_section %}
     {{block.super}}
     <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    <style type="text/css">
+        .error{
+            color:red;
+        }
+        .autocomplete-suggestions {
+            border: 1px solid #e4e4e4;
+            background: #F4F4F4;
+            cursor: default;
+            overflow: auto
+        }
+        .autocomplete-suggestion {
+            padding: 2px 5px;
+            font-size: 1.2em;
+            white-space: nowrap;
+            overflow: hidden
+        }
+        .autocomplete-selected {
+            background: #f0f0f0
+        }
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399ff;
+            font-weight: bolder
+        }
+    </style>
 {% endblock css_section %}
 
 {% block navigation %}
@@ -71,32 +96,25 @@
           {% endif %}
           <div class="form-group clearfix">
             <div class="col-sm-6 {% if form.first_name.errors %} error {% endif %}">
-              <!--input type="text" class="form-control" placeholder="First name"-->
               {{form.first_name}}
               <span class="error-txt">{{form.first_name.errors.0}}</span>
             </div>
             <div class="col-sm-6 {% if form.last_name.errors %} error {% endif %}">
               {{form.last_name}}
               <span class="error-txt">{{form.last_name.errors.0}}</span>
-              <!--input type="text" class="form-control" placeholder="Last name"-->
             </div>
           </div>
           <div class="form-group clearfix">
             <div class="col-sm-6 {% if form.email.errors %} error {% endif %}">
               {{form.email}}
               <span class="error-txt">{{form.email.errors.0}}</span>
-              <!--input type="email" class="form-control" placeholder="Email id"-->
             </div>
             <div class="col-sm-6 {% if form.mobile.errors or form.country_code.errors %} error {% endif %}">
               <div class="country-code">
                 <div class="custom-select">
                   {{form.country_code}}
-                  <!--select class="form-control">
-                    <option>+91</option>
-                    <option>+91</option>
-                  </select-->
+                  
                 </div>
-                <!--input type="text" class="form-control" placeholder="Mobile"-->
                 {{form.mobile}}
                 {% if form.mobile.errors %}
                     <span class="error-txt">{{form.mobile.errors.0}}</span>
@@ -110,30 +128,22 @@
             <div class="col-sm-6 {% if form.address.errors %} error {% endif %}">
               {{form.address}}
               <span class="error-txt">{{form.address.errors.0}}</span>
-              <!--input type="text" class="form-control" placeholder="Address"-->
             </div>
             <div class="col-sm-6 {% if form.pincode.errors %} error {% endif %}">
                {{form.pincode}}
               <span class="error-txt">{{form.pincode.errors.0}}</span>
-              <!--input type="text" class="form-control" placeholder="Pincode"-->
             </div>
           </div>
           <div class="form-group clearfix">
             <div class="col-sm-6 {% if form.state.errors %} error {% endif %}">
               {{form.state}}
               <span class="error-txt">{{form.state.errors.0}}</span>
-              <!--select class="form-control">
-                <option>City</option>
-                <option>Gurugram</option>
-              </select-->
+              
             </div>
             <div class="col-sm-6 custom-select {% if form.country.errors %} error {% endif %}">
               {{form.country}}
               <span class="error-txt">{{form.country.errors.0}}</span>
-              <!--select class="form-control">
-                <option>Country</option>
-                <option>India</option>
-              </select-->
+             
             </div>
           </div>
           <div class="continue ml-15">
@@ -157,6 +167,9 @@
 
 {% block js_section %}
    {{ block.super }}
+   <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
+   <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
+
    <script type="text/javascript">
       function toggler(divId) {
           $("#" + divId).toggle();

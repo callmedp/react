@@ -12,6 +12,7 @@ from cms.models import Page
 from cms.mixins import LoadMoreMixin
 from shop.models import Category
 from blog.models import Blog, Comment
+from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
 
@@ -91,7 +92,6 @@ class CmsShareView(View):
 			return HttpResponse(json.dumps(list(data)), content_type="application/json")
 
 
-
 class AjaxProductLoadMoreView(TemplateView):
     template_name = 'include/load_product.html'
 
@@ -140,7 +140,7 @@ class AjaxReviewLoadMoreView(TemplateView):
                 page_reviews = paginator.page(1)
             except EmptyPage:
                 page_reviews = 0
-            context.update({'page_reviews': page_reviews, 'page':page, 'slug':slug})
+            context.update({'page_reviews': page_reviews, 'page': page, 'slug': slug})
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
         return context
@@ -151,6 +151,20 @@ class EmailExistView(View):
 		email = request.GET.get('email')
 		try:
 			data = RegistrationLoginApi().check_email_exist(email)
+		except:
+			pass
+		return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class AjaxStateView(View):
+
+	def get(self, request, *args, **kwargs):
+		data = {"states": []}
+		try:
+			country_code = request.GET.get('country_code', '91')
+			country_obj = Country.objects.get(phone=country_code)
+			states = country_obj.state_set.all().values_list('name', flat=True)
+			data['states'] = list(states)
 		except:
 			pass
 		return HttpResponse(json.dumps(data), content_type="application/json")

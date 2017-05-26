@@ -197,7 +197,7 @@ class CartMixin(object):
 			if cart_pk:
 				cart_obj = Cart.objects.get(pk=cart_pk)
 				if cart_obj:
-					main_products = cart_obj.lineitems.filter(parent=None).select_related('product')
+					main_products = cart_obj.lineitems.filter(parent=None).select_related('product', 'product__vendor')
 					for m_prod in main_products:
 						data = {}
 						data['li'] = m_prod
