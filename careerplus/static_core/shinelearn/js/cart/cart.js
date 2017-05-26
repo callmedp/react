@@ -44,11 +44,12 @@ function removeFromCart(line_id){
             dataType: 'json',
             success: function(json) {
                 if (json.status == 1){
-                    alert("product removed from cart successfully");
+                    window.location.reload();
+                    //alert("product removed from cart successfully");
                 }
 
                 else if (json.status == -1){
-                    alert(json.error_message);
+                    alert('Something went wrong, Please try again.');
                 }
             },
             failure: function(response){

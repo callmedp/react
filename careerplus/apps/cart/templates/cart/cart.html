@@ -72,7 +72,7 @@
                                 </span>
                             </li>
                             <li class="col-sm-2">
-                                <strong>Rs. {{variations.first.price_excl_tax}}/-</strong>
+                                <strong>Rs. {{variations.first.product.get_price}}/-</strong>
                             </li>
 
 
@@ -91,7 +91,7 @@
                                 {{addon.product.name}}
                               </li>
                               <li class="col-sm-2">
-                                <strong>Rs. {{addon.price_excl_tax}}/-</strong>
+                                <strong>Rs. {{addon.product.get_price}}/-</strong>
                               </li>
                               <!--li class="col-sm-2 col-md-1">
                                 <a href="#">Remove</a>
@@ -121,7 +121,7 @@
                                 </span>
                             </li>
                             <li class="col-sm-2">
-                                <strong>Rs. {{li.price_excl_tax}}/-</strong>
+                                <strong>Rs. {{li.product.get_price}}/-</strong>
                             </li>
 
 
@@ -140,7 +140,7 @@
                                     {{var.product.name}}
                                   </li>
                                   <li class="col-sm-2">
-                                    <strong>Rs. {{var.price_excl_tax}}/-</strong>
+                                    <strong>Rs. {{var.product.get_price}}/-</strong>
                                   </li>
                                   
                                   <form role="form" id="cart_remove_form{{var.id}}">{% csrf_token %}
@@ -158,7 +158,7 @@
                                     {{addon.product.name}}
                                   </li>
                                   <li class="col-sm-2">
-                                    <strong>Rs. {{addon.price_excl_tax}}/-</strong>
+                                    <strong>Rs. {{addon.product.get_price}}/-</strong>
                                   </li>
                                   <!--li class="col-sm-2 col-md-1">
                                     <a href="#">Remove</a>

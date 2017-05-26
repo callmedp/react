@@ -83,12 +83,12 @@
                   <li>
                     <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
                     </span>
-                    <strong class="col-sm-4 col-md-3">Rs. {{variations.first.price_excl_tax}}/</strong>
+                    <strong class="col-sm-4 col-md-3">Rs. {{variations.first.product.get_price}}/-</strong>
                   </li>
                   {% for addon in addons %}
                        <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{addon.price_excl_tax}}/-</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
                         </li>
                   {% endfor %}
 
@@ -96,18 +96,18 @@
                   <li>
                     <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
                     </span>
-                    <strong class="col-sm-4 col-md-3">Rs. {{li.price_excl_tax}}/</strong>
+                    <strong class="col-sm-4 col-md-3">Rs. {{li.product.get_price}}/-</strong>
                   </li>
                   {% for var in variations %}
                        <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{var.product.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{var.price_excl_tax}}/-</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{var.product.get_price}}/-</span>
                         </li>
                   {% endfor %}
                   {% for addon in addons %}
                        <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{addon.price_excl_tax}}/-</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
                         </li>
                   {% endfor %}
 

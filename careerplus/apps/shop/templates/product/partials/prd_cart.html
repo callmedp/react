@@ -11,7 +11,8 @@
   <!-- right fixed content start -->
   <div id="price-box" class="col-sm-5 col-md-4  price-box">
   <div class="box-panel enrol-cart">
-     <strong id="total-price" name="price_total" sum-price="{{object.get_price}}" >Rs. {{object.get_price}}/-</strong>
+
+     <strong id="total-price" name="price_total" sum-price="{% if selected_products %}{{product_total_price}}{% else %}{{object.get_price}} {% endif %}" >Rs. {% if selected_products %}{{product_total_price}}{% else %}{{object.get_price}} {% endif %}/-</strong>
     <strike>Rs. {{object.get_fakeprice}}/-</strike>
     <small>  5% off</small>
     <span class="clearfix db"></span>
