@@ -2,16 +2,272 @@ from django.views.generic import FormView, ListView, UpdateView
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
-from blog.models import Tag, Category
+from blog.models import Tag, Category, Blog, Comment
 from blog.mixins import PaginationMixin
-
 
 from .blog_form import (
 	TagAddForm,
 	TagChangeForm,
 	CategoryAddForm,
-	CategoryChangeForm)
+	CategoryChangeForm,
+	ArticleFilterForm,
+	ArticleAddForm,
+	ArticleChangeForm,
+	CommentUpdateForm,
+	CommentActionForm,)
+
+
+class CommentModerateView(UpdateView):
+	model = Comment
+	template_name = 'console/blog/comment-moderation-update.html'
+	success_url = "/console/blog/comment/comment-to-moderate/"
+	http_method_names = [u'get', u'post']
+	form_class = CommentUpdateForm
+
+	def get(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		return super(self.__class__, self).get(request, args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		alert = messages.get_messages(self.request)
+		context.update({
+			'messages': alert})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		form = self.get_form()
+		if form.is_valid():
+			try:
+				# form.save()
+				obj = form.save(commit=False)
+				if obj.is_published:
+					blog = obj.blog
+					blog.comment_moderated += 1
+					blog.save()
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
+				valid_form = self.form_valid(form)
+				messages.add_message(request, messages.SUCCESS,
+					'Comment %s Updated Successfully.' % (self.object.id))
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Comment %s Not Updated. due to %s' % (self.object.id, str(e)))
+				return self.form_invalid(form)
+		return self.form_invalid(form)
+
+
+class CommentModerateListView(ListView, PaginationMixin):
+
+	context_object_name = 'comment_list'
+	template_name = 'console/blog/comment-moderation-list.html'
+	model = Comment
+	http_method_names = [u'get', u'post']
+
+	def __init__(self):
+		self.page = 1
+		self.paginated_by = 50
+		self.query = ''
+
+	def get(self, request, *args, **kwargs):
+		self.page = request.GET.get('page', 1)
+		self.query = request.GET.get('query', '')
+		return super(self.__class__, self).get(request, args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		paginator = Paginator(context['comment_list'], self.paginated_by)
+		context.update(self.pagination(paginator, self.page))
+		alert = messages.get_messages(self.request)
+		context.update({
+			"query": self.query,
+			"action_form": CommentActionForm(),
+			"messages": alert,
+		})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		try:
+			comment_list = request.POST.getlist('table_records', [])
+			action_type = int(request.POST.get('action_type', '0'))
+			comment_objs = Comment.objects.filter(id__in=comment_list)
+			if action_type == 0:
+				messages.add_message(request, messages.ERROR, 'Please select valid action first')
+			elif action_type == 1:
+				for obj in comment_objs:
+					obj.is_published = True
+					obj.save()
+					blog = obj.blog
+					blog.comment_moderated += 1
+					blog.save()
+				messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments are published.')
+			elif action_type == 2:
+				for obj in comment_objs:
+					obj.is_removed = True
+					obj.save()
+				messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments removed.')
+		except Exception as e:
+			messages.add_message(request, messages.ERROR, str(e))
+
+		return HttpResponseRedirect(reverse('console:blog-comment-to-moderate'))
+
+	def get_queryset(self):
+		queryset = super(self.__class__, self).get_queryset()
+		queryset = queryset.filter(is_published=False, is_removed=False)
+		try:
+			if self.query:
+				queryset = queryset.filter(Q(message__icontains=self.query))
+		except:
+			pass
+		return queryset
+
+
+class ArticleUpdateView(UpdateView):
+	model = Blog
+	template_name = 'console/blog/article-change.html'
+	success_url = "/console/blog/article/"
+	http_method_names = [u'get', u'post']
+	form_class = ArticleChangeForm
+
+	def get(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		context = super(self.__class__, self).get(request, *args, **kwargs)
+		return context
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		alert = messages.get_messages(self.request)
+		context.update({
+			'messages': alert})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		form = self.get_form()
+		if form.is_valid():
+			try:
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
+
+				valid_form = self.form_valid(form)
+				form.save_m2m()
+				messages.add_message(request, messages.SUCCESS,
+					'Blog %s Updated Successfully.' % (self.object.id))
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
+				return self.form_invalid(form)
+		return self.form_invalid(form)
+
+
+class ArticleAddView(FormView):
+	template_name = "console/blog/article-add.html"
+	success_url = "/console/blog/article/"
+	http_method_names = [u'get', u'post']
+	form_class = ArticleAddForm
+
+	def get(self, request, *args, **kwargs):
+		return super(self.__class__, self).get(request, args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		alert = messages.get_messages(self.request)
+		context.update({
+			'messages': alert})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		form = self.get_form()
+		if form.is_valid():
+			try:
+				blog = form.save(commit=False)
+				if request.user.is_authenticated():
+					blog.created_by = request.user
+					blog.last_modified_by = request.user
+					blog.save()
+				valid_form = self.form_valid(form)
+				form.save_m2m()
+				messages.add_message(request, messages.SUCCESS, 'Blog Created Successfully.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Blog Not Created. Due to %s' % (str(e)))
+				return self.form_invalid(form)
+		return self.form_invalid(form)
+
+
+class ArticleListView(ListView, PaginationMixin):
+
+	context_object_name = 'article_list'
+	template_name = 'console/blog/article-list.html'
+	model = Blog
+	http_method_names = [u'get', u'post']
+
+	def __init__(self):
+		self.page = 1
+		self.paginated_by = 50
+		self.query = ''
+		self.sel_status, self.sel_p_cat, self.sel_writer = '-1', '', ''
+
+	def get(self, request, *args, **kwargs):
+		self.page = request.GET.get('page', 1)
+		self.query = request.GET.get('query', '')
+		self.sel_status = int(request.GET.get('status', '-1'))
+		self.sel_p_cat = request.GET.get('p_cat', '')
+		self.sel_writer = request.GET.get('user', '')
+		return super(self.__class__, self).get(request, args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		paginator = Paginator(context['article_list'], self.paginated_by)
+		context.update(self.pagination(paginator, self.page))
+		initial_filter_data = {
+			"user": self.sel_writer,
+			"p_cat": self.sel_p_cat,
+			"status": self.sel_status
+		}
+		filter_form = ArticleFilterForm(initial=initial_filter_data)
+		context.update({
+			"query": self.query,
+			"filter_form": filter_form,
+			"sel_status": self.sel_status,
+			"sel_p_cat": self.sel_p_cat,
+			"sel_writer": self.sel_writer
+		})
+		return context
+
+	def get_queryset(self):
+		queryset = super(self.__class__, self).get_queryset()
+		try:
+			if self.query:
+				queryset = queryset.filter(Q(name__icontains=self.query) |
+					Q(slug__icontains=self.query))
+		except:
+			pass
+
+		try:
+			if self.sel_status != -1:
+				queryset = queryset.filter(status=self.sel_status)
+		except:
+			pass
+
+		try:
+			if self.sel_p_cat:
+				queryset = queryset.filter(p_cat__pk=self.sel_p_cat)
+		except:
+			pass
+
+		try:
+			if self.sel_writer:
+				queryset = queryset.filter(user__pk=self.sel_writer)
+		except:
+			pass
+
+		return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by')
 
 
 class CategoryUpdateView(UpdateView):

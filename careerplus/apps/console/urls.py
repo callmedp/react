@@ -94,4 +94,23 @@ urlpatterns += [
     url(r'^blog/category/add/$', blog_view.CategoryAddView.as_view(), name='blog-category-add'),
     url(r'^blog/category/(?P<pk>\d+)/change/$', blog_view.CategoryUpdateView.as_view(),
         name='blog-category-update'),
+
+    url(r'^blog/article/$', blog_view.ArticleListView.as_view(), name='blog-article-list'),
+    url(r'^blog/article/add/$', blog_view.ArticleAddView.as_view(), name='blog-article-add'),
+    url(r'^blog/article/(?P<pk>\d+)/change/$', blog_view.ArticleUpdateView.as_view(),
+        name='blog-article-update'),
+
+    url(r'^blog/comment/comment-to-moderate/$', blog_view.CommentModerateListView.as_view(), name='blog-comment-to-moderate'),
+    url(r'^blog/comment/(?P<pk>\d+)/change/$', blog_view.CommentModerateView.as_view(),
+            name='blog-comment-moderate-update'),
+]
+
+
+from geolocation import adminviews
+
+urlpatterns += [
+    url(r'^geolocation/country/$', adminviews.CountryListView.as_view(), name='geo-country'),
+
+    url(r'^geolocation/country/(?P<pk>\d+)/change/$', adminviews.CountryUpdateView.as_view(),
+        name='geo-country-update'),
 ]

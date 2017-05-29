@@ -41,7 +41,6 @@ urlpatterns += [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^console/', include('console.urls', namespace='console')),
-    url(r'^myadmin/geolocation/', include('geolocation.adminurls', namespace='myadmin-geoloc')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^skillpage/', include('skillpage.urls', namespace='skillpage')),

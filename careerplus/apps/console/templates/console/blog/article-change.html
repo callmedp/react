@@ -4,11 +4,12 @@
 {% load console_tags %}
 
 {% block title %}
-  <title>Change Tag</title>
+  <title>Change Article</title>
 {% endblock title %}
 
 {% block css_block %}
   {{ block.super }}
+  <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
                 
 {% endblock css_block %}
 
@@ -18,12 +19,25 @@
 <div class="right_col" role="main">
   <div class="">
     <div class="page-title">
-      <div class="title_left">
-        <h3>&nbsp;</h3>
+        <div class="col-lg-3">
+           <a class="btn btn-app" target="_blank" href="{% url "console:blog-article-add" %}">
+          <i class="fa fa-edit"></i> Add Article</a>
+        </div>
+        <div class="col-lg-3">
+           <a class="btn btn-app" target="_blank" href="{% url "console:blog-tag-add" %}">
+          <i class="fa fa-edit"></i> Add Tag</a>
+        </div>
 
-        
-      </div>
+        <div class="col-lg-3">
+           <a class="btn btn-app" target="_blank" href="{% url "console:blog-category-add" %}">
+          <i class="fa fa-edit"></i> Add Category</a>
+        </div>
+        <div class="col-lg-3">
+           <a class="btn btn-app" target="_blank" href="{% url "blog:articles-deatil" slug=object.slug pk=object.pk %}">
+          <i class="fa fa-eye"></i> View on Site</a>
+        </div>
     </div>
+
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -45,7 +59,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Change Country <small>(change existing country.)</small></h2>
+            <h2>Change Article <small>(change existing article.)</small></h2>
 
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -54,9 +68,9 @@
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-                <form class="form-horizontal form-label-left" data-parsley-validate method="POST" action="." id="tag-change-form">
+            <form class="form-horizontal form-label-left" data-parsley-validate method="POST" enctype='multipart/form-data'  action="." id="article-change-form">
               {% csrf_token %}
-              {{form.media}}
+              {{ form.media }}
               
               {% if form.non_field_errors %}
                 <div class="alert alert-danger alert-dismissible fade in" role="alert">
@@ -111,6 +125,14 @@
         
 {% block js_block %}
   {{ block.super }}
+  <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+  <script type="text/javascript">
+        jQuery.each($("select[multiple]"), function () {
+          // "Locations" can be any label you want
+          SelectFilter.init(this.id, this.name, 0, "/media/");
+         });
+  </script>
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
 {% endblock js_block %}

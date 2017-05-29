@@ -41,7 +41,9 @@ class PaymentOptionView(TemplateView, OrderMixin):
 				else:
 					return HttpResponseRedirect(reverse('cart:cart-product-list'))
 			else:
-				return render(request, self.template_name, {"state_form": form})
+				context = self.get_context_data()
+				context['state_form'] = form
+				return render(request, self.template_name, context)
 		else:
 			HttpResponseRedirect(reverse('cart:cart-product-list'))
 

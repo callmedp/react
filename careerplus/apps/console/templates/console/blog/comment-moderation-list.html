@@ -3,26 +3,25 @@
 {% load humanize %}
 {% load thumbnail %}
 
-{% block title %}
-  <title>Country Listing</title>
-{% endblock title %}
+{% block title %} Article-Comment-List {% endblock title %}
 
 {% block css_block %}
-    {{block.super}} 
+    {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
 {% endblock css_block %}
 
 
-
 {% block pagecontent %}
+
 <!-- page content -->
 <div class="right_col" role="main">
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Countries</h3>
+        <h3>Comments To Moderate</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:geo-country" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:blog-comment-to-moderate" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -36,25 +35,16 @@
       </form>
     </div>
 
-    <div class="row">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        {% if messages %}
-            {% for message in messages %}
+    {% if messages %}
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade in col-lg-12" {% endif %} role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            {{message}}
+        </div>
+        {% endfor %}
+    {% endif %}
 
-              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-
-              {{ message }}
-              </div>
-            {% endfor %}
-        {% endif %}
-
-      </div>
-    </div>
-
-
-
-    
     <div class="clearfix"></div>
     
     <div class="row">
@@ -62,7 +52,39 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Listing</h2>
+            <div class="col-sm-4">
+            <div class="input-group">
+                {{action_form.action}}
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                </span>
+            </div>
+            </div>
+            <!--h2>Select Comment to Change</h2-->
+            <!-- large modal -->
+
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Action On Comments</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are You Sure???
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="action_comment">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+
+            
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -73,42 +95,42 @@
           <div class="x_content">
 
             <div class="table-responsive">
-              <table class="table table-striped jambo_table bulk_action">
+              <form id="comment_table_form" method="post" action=".">{% csrf_token %}
+              <input type="hidden" name="action_type" id="action_type_id" class="flat">
+              <table class="table table-striped jambo_table bulk_action" id="commant-table">
                 <thead>
                   <tr class="headings">
-                    <th class="column-title"># </th>
-                    <th class="column-title">Name</th>
-                    <th class="column-title">Phone</th>
-                    <th class="column-title">Code2</th>
-                     <th class="column-title">Code3</th>
-                    </tr>
+                    <th>
+                      <input type="checkbox" id="check-all" class="flat">
+                    </th>
+                    <th class="column-title">Id</th>
+                    <th class="column-title">Message</th>
+                    <th class="column-title">Article</th>
+                    <th class="column-title">Published</th>
+                    <th class="column-title">Removed</th>
+                    <th class="bulk-actions" colspan="7">
+                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                    </th>
+                  </tr>
                 </thead>
 
                 <tbody>
                   {% for obj in page %}
-                  
-                    <tr class="even pointer">
-                      <td>{{obj.pk}}&nbsp;<small><a href="{% url "console:geo-country-update" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a></small>
-                      </td>
-
-                      <td>
-                        <a >{{obj.name}}</a>
-                        <br />
-                        <small>Modified {{obj.last_modified_on|naturaltime}}</small>
-                      </td>
-                      <td>
-                        {{obj.phone}}
-                      </td>
-                      <td>
-                        {{obj.code2}}
-                      </td>
-                      <td>
-                        {{obj.code3}}
-                      </td>
-                    </tr>
+                  <tr class="even pointer">
+                    <td class="a-center ">
+                      <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+                    </td>
+                    <td class=" ">{{obj.id}}&nbsp;<small><a href="{% url "console:blog-comment-moderate-update" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a></small></td>
+                    <td class=" ">{{obj.message}}</td>
+                    <td class=" ">{{obj.blog}}</td>
+                    <td class=" ">{{obj.is_published}}</td>
+                    <td class=" ">{{obj.is_removed}}</td>
+                    </td>
+                  </tr>
                   {% endfor %}
                 </tbody>
               </table>
+              </form>
             </div>
                    
             {% block main_pagination %}
@@ -179,13 +201,12 @@
 </div>
 <!-- /page content -->
 
-
 {% endblock pagecontent %}
 
-        
-{% block js_block %}
-  {{ block.super }}
-  <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
 
+{% block js_block %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/blog/comment-action.js" %}"></script>
 {% endblock js_block %}
+

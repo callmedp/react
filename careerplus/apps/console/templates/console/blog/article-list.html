@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Country Listing</title>
+  <title>Article Listing</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -19,14 +19,23 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Countries</h3>
+        <h3>Articles</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:geo-country" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url 'console:blog-article-list' %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
                 <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+                {% if sel_writer %}
+                   <input type="hidden" name="user" value="{{sel_writer}}">
+               {% endif %}
+               {% if not sel_status == -1 %}
+                   <input type="hidden" name="status" value="{{sel_status}}">
+               {% endif %}
+               {% if sel_p_cat %}
+                   <input type="hidden" name="p_cat" value="{{sel_p_cat}}">
+               {% endif %}
                 <span class="input-group-btn">
                   <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
                 </span>
@@ -34,6 +43,53 @@
             </div>
           </div>
       </form>
+    </div>
+
+    <div class="row top_tiles">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+           <a class="btn btn-app" href="{% url "console:blog-article-add" %}">
+          <i class="fa fa-edit"></i> Add New Article</a>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter Articles</button>
+        <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+                </div>
+                <div class="modal-body">
+                  <form class="form-group" method="GET" action="{% url 'console:blog-article-list' %}" id="filter-article-form">
+                      {% for field in filter_form %}
+                      <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> <br/>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                {% endif %}
+                            </div>
+                            <br/>
+                        </div>
+                       {% endfor %}
+                       {% if self.query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- /modals -->
+      </div>
     </div>
 
     <div class="row">
@@ -76,19 +132,19 @@
               <table class="table table-striped jambo_table bulk_action">
                 <thead>
                   <tr class="headings">
-                    <th class="column-title"># </th>
+                    <th class="column-title">#</th>
                     <th class="column-title">Name</th>
-                    <th class="column-title">Phone</th>
-                    <th class="column-title">Code2</th>
-                     <th class="column-title">Code3</th>
-                    </tr>
+                    <th class="column-title">Slug</th>
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Publish Date</th>
+                  </tr>
                 </thead>
 
                 <tbody>
                   {% for obj in page %}
                   
                     <tr class="even pointer">
-                      <td>{{obj.pk}}&nbsp;<small><a href="{% url "console:geo-country-update" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a></small>
+                      <td>{{obj.pk}}&nbsp;<small><a href="{% url "console:blog-article-update" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a></small>
                       </td>
 
                       <td>
@@ -97,13 +153,17 @@
                         <small>Modified {{obj.last_modified_on|naturaltime}}</small>
                       </td>
                       <td>
-                        {{obj.phone}}
+                        {{obj.slug}}
                       </td>
                       <td>
-                        {{obj.code2}}
+                        {{obj.get_status}}
                       </td>
                       <td>
-                        {{obj.code3}}
+                        {% if obj.publish_date %}
+                            {{obj.publish_date}}
+                        {% else %}
+                            Not Published
+                        {% endif %}
                       </td>
                     </tr>
                   {% endfor %}
@@ -187,5 +247,11 @@
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
+  <script type="text/javascript">
+        $('#id_filter').click(function(){
+            $('#filter-article-form').submit();
+        });
+  </script>
 
 {% endblock js_block %}

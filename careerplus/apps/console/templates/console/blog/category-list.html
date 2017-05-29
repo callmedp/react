@@ -96,8 +96,7 @@
                   {% for obj in page %}
                   
                     <tr class="even pointer">
-                      <td>{{obj.pk}}
-                         <small><a href="{% url "console:blog-category-update" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a></small>
+                      <td>{{obj.pk}}&nbsp;<small><a href="{% url "console:blog-category-update" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a></small>
                       </td>
 
                       <td>

@@ -4,7 +4,7 @@
 {% load console_tags %}
 
 {% block title %}
-  <title>Change Tag</title>
+  <title>Moderate Comment</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -18,12 +18,8 @@
 <div class="right_col" role="main">
   <div class="">
     <div class="page-title">
-      <div class="title_left">
-        <h3>&nbsp;</h3>
-
-        
-      </div>
     </div>
+
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -45,7 +41,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Change Country <small>(change existing country.)</small></h2>
+            <h2>Change Comment <small>(change existing comment.)</small></h2>
 
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -54,9 +50,9 @@
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-                <form class="form-horizontal form-label-left" data-parsley-validate method="POST" action="." id="tag-change-form">
+            <form class="form-horizontal form-label-left" data-parsley-validate method="POST" enctype='multipart/form-data'  action="." id="article-change-form">
               {% csrf_token %}
-              {{form.media}}
+              {{ form.media }}
               
               {% if form.non_field_errors %}
                 <div class="alert alert-danger alert-dismissible fade in" role="alert">
@@ -113,4 +109,5 @@
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
 {% endblock js_block %}
