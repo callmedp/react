@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 
 from shine.core import ShineCandidateDetail
 from shop.models import Product
-from users.mixins import RegistrationLoginApi
+from users.mixins import RegistrationLoginApi, UserMixin
 from users.forms import ModalLoginApiForm
 
 from .models import Cart, ShippingDetail
@@ -20,7 +20,7 @@ from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 
 
-class CartView(TemplateView, CartMixin):
+class CartView(TemplateView, CartMixin, UserMixin):
     template_name = "cart/cart.html"
 
     def get(self, request, *args, **kwargs):
@@ -32,6 +32,7 @@ class CartView(TemplateView, CartMixin):
         context.update({
             "cart_items": self.get_cart_items(),
             "total_amount": self.getTotalAmount(),
+            "country_obj": self.get_client_country(self.request),
         })
         return context
 

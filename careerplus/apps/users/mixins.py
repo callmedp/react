@@ -2,6 +2,8 @@ import requests
 import json
 import logging
 
+from django.contrib.gis.geoip import GeoIP
+
 from geolocation.models import Country
 
 
@@ -21,7 +23,6 @@ class RegistrationLoginApi(object):
             post_data.update({"country_code": country_obj.phone})
             response = requests.post(
                 post_url, data=json.dumps(post_data), headers=headers)
-
 
             if response.status_code == 201:
                 response_json = response.json()
@@ -79,3 +80,40 @@ class RegistrationLoginApi(object):
             logging.getLogger('error_log').error("%s " % str(e))
 
         return response_json
+
+
+class UserMixin(object):
+    def get_client_ip(self, request):
+        try:
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            return ip
+        except:
+            pass
+        return None
+
+    def get_client_country(self, request):
+        g = GeoIP()
+        ip = self.get_client_ip(request)
+        try:
+            if ip:
+                code2 = g.country(ip)['country_code']
+            else:
+                code2 = 'IN'
+        except:
+            code2 = 'IN'
+
+        if not code2:
+            code2 = 'IN'
+
+        code2 = code2.upper()
+
+        try:
+            country_obj = Country.objects.get(code2=code2)
+        except:
+            country_obj = Country.objects.get(code2='IN')
+
+        return country_obj

@@ -65,7 +65,7 @@
         <div class="col-sm-9 bdr payment-option">
           <div class="payable">
             Payable amount <strong>Rs. {{total_amount}}/-</strong>
-            <a href="#" class="review-order">Review order</a>
+            <a href="{% url "cart:payment-summary" %}" class="review-order">Review order</a>
           </div>
 
             <ul class="nav nav-tabs payment-tabs col-sm-4 col-md-4 col-lg-3" role="tablist">
