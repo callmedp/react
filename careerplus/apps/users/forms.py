@@ -81,7 +81,7 @@ class RegistrationForm(forms.Form):
         country_choices, indian_obj = [], None
 
     email = forms.EmailField(
-        max_length=30, required=True, widget=forms.TextInput(
+        max_length=60, required=True, widget=forms.TextInput(
             attrs={'placeholder': 'Email', 'class': 'form-control'}))
 
     raw_password = forms.CharField(
@@ -132,7 +132,7 @@ class ModalRegistrationApiForm(forms.Form):
         country_choices, indian_obj = [], None
 
     email = forms.EmailField(
-        max_length=30, required=True, widget=forms.EmailInput(
+        max_length=60, required=True, widget=forms.EmailInput(
             attrs={'placeholder': 'Email', 'class': 'form-control'}))
 
     raw_password = forms.CharField(

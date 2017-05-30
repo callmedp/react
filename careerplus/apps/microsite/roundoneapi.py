@@ -6,10 +6,67 @@ import hashlib
 import requests
 from collections import OrderedDict
 from itertools import islice
+
 from django.conf import settings
+from cart.models import Subscription
+
 
 
 class RoundOneAPI(object):
+
+    def create_roundone_order(self, order):
+        try:
+            user = order.candidate_id
+            post_roundone_order.delay({'user': user, 'order': order})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+
+    def get_access_token(self, email, request=None):
+        try:
+            if request:
+                access_token = request.session.get('roundone_access_token', '')
+                token_expiry = request.session.get('roundone_token_expiry')
+                if access_token and token_expiry and datetime.now() < token_expiry:
+                    return access_token
+            try:
+                password = Subscription.objects.get(
+                    candidateid=request.session['candidate_id']
+                )
+            except:
+                password = settings.ROUNDONE_DEFAULT_PASSWORD
+
+            post_url = settings.ROUNDONE_API_DICT.get("oauth_url")
+
+            post_data = {
+                "client_id": settings.ROUNDONE_API_DICT.get("client_id", ''),
+                "client_secret": settings.ROUNDONE_API_DICT.get(
+                    "client_secret", ''),
+                "affiliateName": settings.ROUNDONE_API_DICT.get(
+                    "affiliateName", 'CP'),
+                "username": email,
+                "password": password,
+            }
+
+            headers = {'content-type': 'application/json'}
+            response = requests.post(
+                post_url, data=json.dumps(post_data),
+                headers=headers,
+                timeout=settings.ROUNDONE_API_TIMEOUT)
+
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                access_token = response_json.get('access_token', '')
+                expires_in = response_json.get('expires_in', 172800)
+
+                if request and access_token:
+                    request.session.update({
+                        'roundone_access_token': access_token,
+                        'roundone_token_expiry': datetime.now() +
+                        timedelta(seconds=expires_in)})
+                return access_token
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return None
 
     def get_location_list(self, **kwargs):
         try:
@@ -37,7 +94,7 @@ class RoundOneAPI(object):
             start = 0
             sort_by = 0
             rows = 10
-            userEmail = '127.0.0.1'#self.get_user_ip(request)
+            userEmail = self.get_user_ip(request)
             post_url = settings.ROUNDONE_API_DICT.get("job_search_url")
 
             try:
@@ -46,6 +103,7 @@ class RoundOneAPI(object):
                     sort_by = 0
             except:
                 pass
+
             try:
                 page = int(request.GET.get('page', 0))
                 if page < 0:
@@ -111,7 +169,7 @@ class RoundOneAPI(object):
     def get_job_detail(self, request, **kwargs):
         response_json = {"response": False, "msg": "Error Fetching Detail."}
         try:
-            userEmail = '127.0.0.1'#self.get_user_ip(request)
+            userEmail = self.get_user_ip(request)
             url = settings.ROUNDONE_API_DICT.get("job_detail_url")
             api_secret_key = settings.ROUNDONE_API_DICT.get("jobdetail_secret_key")
             job_params = kwargs.get('job_params').split('-')
@@ -124,7 +182,6 @@ class RoundOneAPI(object):
             }
 
             data_str = '&'.join('{}={}'.format(key, value) for key, value in data_dict.items())
-            #hmac_value = hmac.new(api_secret_key, data_str, hashlib.sha1).hexdigest()
             hmac_value = hmac.new(bytearray(api_secret_key.encode('utf-8')), data_str.encode('utf-8'), hashlib.sha1).hexdigest()
             data_dict.update({"hash": hmac_value})
             response = requests.get(url, params=data_dict, timeout=settings.ROUNDONE_API_TIMEOUT)
@@ -136,6 +193,322 @@ class RoundOneAPI(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return response_json
+
+    def post_referral_request(self, request, job_params):
+        response_json = {"response": False}
+        try:
+            userEmail = request.session['email']
+            url = settings.ROUNDONE_API_DICT.get("referral_request_url")
+            data = {
+                "jobId": job_params[0],
+                "jobType": job_params[1],
+                "refId": job_params[2],
+                "userEmail": userEmail,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            headers = {'content-type': 'application/json'}
+            response = requests.post(
+                url,
+                data=json.dumps(data),
+                headers=headers,
+                timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def get_roundone_profile(self, request):
+        response_json = {"response": False}
+        try:
+            userEmail = request.session['email']
+            url = settings.ROUNDONE_API_DICT.get("get_profile_url")
+            access_token = self.get_access_token(userEmail, request)
+            params = {
+                "userEmail": userEmail,
+                "access_token": access_token
+            }
+
+            response = requests.get(
+                url, params=params,
+                timeout=settings.ROUNDONE_API_TIMEOUT)
+
+            if response.status_code == 200:
+                response_json = response.json()
+                response_json.update({'response': True, "access_token": access_token})
+
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def post_roundone_profile(self, request, roundone_profile):
+        response_json = {"response": False}
+        try:
+            if roundone_profile.get("user"):
+                applicantProfile = {"user": roundone_profile.get("user")}
+                userEmail = request.user.email
+                url = settings.ROUNDONE_API_DICT.get("post_profile_url")
+                data = {
+                    "userEmail": userEmail,
+                    "access_token": self.get_access_token(userEmail, request),
+                    "applicantProfile": applicantProfile
+                }
+                headers = {'content-type': 'application/json'}
+                response = requests.put(
+                    url, data=json.dumps(data),
+                    headers=headers,
+                    timeout=settings.ROUNDONE_API_TIMEOUT)
+                if response and response.status_code == 200 and response.json():
+                    response_json = response.json()
+                    response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def get_referral_status(self, request=None):
+        response_json = {"response": False}
+        try:
+            userEmail = request.user.email
+            url = settings.ROUNDONE_API_DICT.get("referral_status_url")
+            params = {
+                "userEmail": userEmail,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def get_referral_confirm(self, request):
+        response_json = {"response": False}
+        try:
+            userEmail = request.user.email
+            requestId = request.GET.get('requestId')
+            url = settings.ROUNDONE_API_DICT.get("referral_confirm_url")
+            put_data = {
+                "userEmail": userEmail,
+                "requestId": requestId,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            headers = {'content-type': 'application/json'}
+            response = requests.put(
+                url, data=json.dumps(put_data),
+                headers=headers,
+                timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def get_upcoming_status(self, request=None):
+        response_json = {"response": False}
+        try:
+            userEmail = request.user.email
+            url = settings.ROUNDONE_API_DICT.get("upcoming_interaction_url")
+            params = {
+                "userEmail": userEmail,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def get_past_interaction(self, request=None):
+        response_json = {"response": False}
+        try:
+            userEmail = request.session['email']
+            url = settings.ROUNDONE_API_DICT.get("past_interaction_url")
+            params = {
+                "userEmail": userEmail,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def get_saved_history(self, request=None):
+        response_json = {"response": False}
+        try:
+            userEmail = request.session['email']
+            url = settings.ROUNDONE_API_DICT.get("saved_history_url")
+            params = {
+                "userEmail": userEmail,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def delete_saved_job(self, request, job_params):
+        response_json = {"response": False}
+        try:
+            userEmail = request.session['email']
+            url = settings.ROUNDONE_API_DICT.get("delete_job_url")
+            data_dict = {
+                "jobId": job_params[0],
+                "jobType": job_params[1],
+                "refId": job_params[2],
+                "userEmail": userEmail,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            headers = {'content-type': 'application/json'}
+            response = requests.put(
+                url, data=json.dumps(data_dict),
+                headers=headers,
+                timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def is_premium_user(self, request=None):
+        try:
+            url = settings.ROUNDONE_API_DICT.get("is_premium_url")
+
+            if request.session['candidate_id']:
+                userEmail = request.session['email']
+            else:
+                return False
+
+            access_token = self.get_access_token(userEmail, request)
+
+            if len(access_token) > 0:
+                params = {
+                    "userEmail": userEmail,
+                    "access_token": access_token
+                }
+
+                response = requests.get(
+                    url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
+
+                if response and response.status_code == 200 and\
+                   response.json():
+                    response_json = response.json()
+
+                    if response_json and response_json.get("status") == "1":
+                        return True
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+
+        return False
+
+    def save_job(self, request=None, **kwargs):
+        response_json = {'response': False}
+        try:
+            url = settings.ROUNDONE_API_DICT.get("save_job_url")
+            job_params = kwargs.get('job_params').split('-')
+            userEmail = request.session['email']
+
+            post_data = {
+                "jobId": job_params[0],
+                "jobType": job_params[1],
+                "refId": job_params[2],
+                "userEmail": userEmail,
+                "access_token": self.get_access_token(userEmail, request)
+            }
+            headers = {'content-type': 'application/json'}
+            response = requests.post(
+                url,
+                data=json.dumps(post_data),
+                headers=headers,
+                timeout=settings.ROUNDONE_API_TIMEOUT)
+
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def feedback_submit(self, request, data_dict):
+        response_json = {'response': False}
+        try:
+            url = settings.ROUNDONE_API_DICT.get("feedback_submit_url")
+            userEmail = data_dict.get('userEmail')
+            orderId = data_dict.get('orderId')
+            feedback_dict = {
+                'interviewerRating': data_dict.get('interviewerRating'),
+                'roundoneRating': data_dict.get('roundoneRating'),
+                'comments': data_dict.get('comments')
+            }
+            feedback_str = '&'.join('{}={}'.format(key, value) for key, value in feedback_dict.items())
+            feedbackData = urllib.quote_plus(feedback_str)
+            put_data = {
+                'userEmail': userEmail,
+                'orderId': orderId,
+                'feedbackData': feedbackData,
+                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
+                'access_token': self.get_access_token(userEmail, request)
+            }
+            headers = {'content-type': 'application/json'}
+            response = requests.put(
+                url, data=json.dumps(put_data),
+                headers=headers,
+                timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def interaction_result(self, request, data_dict):
+        response_json = {'response': False}
+        try:
+            url = settings.ROUNDONE_API_DICT.get("interaction_result_url")
+            userEmail = data_dict.get('userEmail')
+            orderId = data_dict.get('orderId')
+            params = {
+                'userEmail': userEmail,
+                'orderId': orderId,
+                'access_token': self.get_access_token(userEmail, request)
+            }
+            response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
+            if response and response.status_code == 200 and response.json():
+                response_json = response.json()
+                response_json.update({'response': True})
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return response_json
+
+    def get_user_ip(self, request):
+        user_ip = request.session['email'] if request.session['email'] else settings.ROUNDONE_DEFAULT_CP_EMAIL
+        http_x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        try:
+            if http_x_forwarded_for:
+                user_ip = http_x_forwarded_for.split(',')[0]
+            else:
+                user_ip = request.META.get('REMOTE_ADDR')
+        except:
+            pass
+        return user_ip
 
 
 class RoundOneSEO(object):

@@ -9,7 +9,7 @@ from cart.models import Cart
 from order.mixins import OrderMixin
 
 from .forms import StateForm
-
+from microsite.roundoneapi import RoundOneAPI
 
 class PaymentOptionView(TemplateView, OrderMixin):
 	template_name = "payment/payment-option.html"
@@ -36,7 +36,8 @@ class PaymentOptionView(TemplateView, OrderMixin):
 					cart_obj.is_submitted = True
 					cart_obj.save()
 					order_status = 2
-					self.createOrder(cart_obj, order_status)
+					order = self.createOrder(cart_obj, order_status)
+					# RoundOneAPI().create_roundone_order(order)
 					return HttpResponseRedirect(reverse('payment:thank-you'))
 				else:
 					return HttpResponseRedirect(reverse('cart:cart-product-list'))

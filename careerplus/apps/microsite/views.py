@@ -1,6 +1,6 @@
 import logging
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.utils.text import slugify
@@ -9,6 +9,7 @@ from django.urls import reverse
 from .roundoneapi import RoundOneAPI, RoundOneSEO
 from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
 from .models import MicroSite, PartnerTestimonial, PartnerFaq
+from order.models import Order
 
 
 class PartnerHomeView(TemplateView):
@@ -17,7 +18,7 @@ class PartnerHomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PartnerHomeView, self).get_context_data(**kwargs)
         partner = kwargs.get('partner', '')
-
+        flag_status = False
         try:
             microsite = MicroSite.objects.select_related('home_page').get(
                 slug=partner, active=True)
@@ -25,9 +26,15 @@ class PartnerHomeView(TemplateView):
             testimonial_qs = PartnerTestimonial.objects.filter(
                 microsite=microsite, active=True)
             faq_qs = PartnerFaq.objects.filter(microsite=microsite, active=True)
-            
+
+            flag_status = Order.objects.filter(
+                candidate_id=self.request.session['candidate_id'], status=2).exists()
+
             context.update({
-                "faq_qs": faq_qs, "testimonial_qs": testimonial_qs
+                "faq_qs": faq_qs, "testimonial_qs": testimonial_qs,
+                "loginform": ModalLoginApiForm(),
+                "registerform": ModalRegistrationApiForm(),
+                'flag_status': flag_status
             })
 
             context.update(RoundOneAPI().get_location_list(**kwargs))
@@ -46,13 +53,21 @@ class PartnerListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PartnerListView, self).get_context_data(**kwargs)
         partner = kwargs.get('partner', '')
+        flag_status = False
+        try:
+            flag_status = Order.objects.filter(
+                candidate_id=self.request.session['candidate_id'], status=2).exists()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
 
         if partner == 'roundone':
             context.update(self.get_partner_context(**kwargs))
             context.update(self.get_breadcrumb_data())
+
             context.update({
                 "loginform": ModalLoginApiForm(),
-                "registerform": ModalRegistrationApiForm()        
+                "registerform": ModalRegistrationApiForm(),
+                "flag": flag_status      
             })
                                 
         return context
@@ -177,3 +192,77 @@ class PartnerDetailView(TemplateView):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return context
+
+
+class GetReferenceView(View, RoundOneAPI):
+
+    def get(self, request, *args, **kwargs):
+        return super(GetReferenceView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        job_params = request.POST.get('job_params', "").split('-')
+        source = request.POST.get('source')
+
+        try:
+            if request.session.candidate_id:
+                if self.is_premium_user(request):
+                    roundone_job_params = request.session.get(
+                        "roundone_job_params", "").split('-')
+                    roundone_source = request.session.get("roundone_source")
+                    origin = request.POST.get("origin")
+
+                    if roundone_job_params and roundone_source:
+
+                        redirect_response = self.post_referral_request(
+                            request, roundone_job_params)
+
+                        if redirect_response.get("response"):
+                            if redirect_response.get("status") == "-1":
+                                return HttpResponse(json.dumps({
+                                    "status": False,
+                                    "message": redirect_response.get("msg")}))
+                            try:
+                                del request.session['roundone_job_params']
+                                del request.session['roundone_source']
+                            except:
+                                pass
+                            if "/dashboard" in origin:
+                                return HttpResponse(json.dumps({
+                                    'status': True, 'redirect': True,
+                                    'redirect_url': roundone_source}))
+
+                    response_json = self.post_referral_request(
+                        request, job_params)
+
+                    if response_json.get("response"):
+                        status = response_json.get("status")
+                        if status and status == "1" or status == "0":
+                            return HttpResponse(json.dumps(
+                                {'status': True, 'response': True,
+                                 'message': response_json.get('msg')}))
+                        elif status == "-1":
+                            try:
+                                return HttpResponse(json.dumps(
+                                    {'status': True, 'response': False,
+                                     'message': response_json.get('msg').values[0][0]}))
+                            except:
+                                return HttpResponse(json.dumps(
+                                    {'status': True, 'response': False,
+                                     'message': response_json.get('msg')}))
+                    return HttpResponse(json.dumps(
+                        {'status': False, 'message': "Something went wrong."}))
+
+            try:
+                if self.add_cart_roundone():
+                    request.session.update({
+                        "roundone_job_params": '-'.join(job_params),
+                        "roundone_source": source
+                        })
+                    return HttpResponse(
+                        json.dumps({'status': True, 'show_cart': True}))
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return HttpResponse(
+            json.dumps({'status': False, 'message': 'Something went wrong.'}))

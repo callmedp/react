@@ -72,11 +72,13 @@ META_TWITTER_AUTHOR = '@FooBlag'
 META_GPLUS_TYPE = 'Website'
 META_GPLUS_AUTHOR = '+FooBar'
 
+ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
+
 if DEBUG or not IS_LIVE:
     # ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
     # ROUNDONE_API_BASEURL = "http://api.roundone.asia"
     ROUNDONE_API_BASEURL = "http://api.roundone.in" #"http://api.roundone.asia"
-    ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
+    ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in" #"http://testing.roundone.asia"
     ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
     ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
     ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
