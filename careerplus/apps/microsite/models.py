@@ -42,7 +42,8 @@ class PartnerPage(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     type_of_page = models.PositiveSmallIntegerField(choices=TYPE_OF_PAGE)
-    banner_image = models.ManyToManyField(MicrositeBanner, null=True, blank=True)
+    banner_image = models.ManyToManyField(MicrositeBanner, blank=True)
+    # banner_image = models.ManyToManyField(MicrositeBanner, null=True, blank=True)
 
     def __str__(self):
         return '%s' % self.name

@@ -197,7 +197,7 @@ class RoundOneAPI(object):
     def post_referral_request(self, request, job_params):
         response_json = {"response": False}
         try:
-            userEmail = request.session['email']
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("referral_request_url")
             data = {
                 "jobId": job_params[0],
@@ -223,7 +223,7 @@ class RoundOneAPI(object):
     def get_roundone_profile(self, request):
         response_json = {"response": False}
         try:
-            userEmail = request.session['email']
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("get_profile_url")
             access_token = self.get_access_token(userEmail, request)
             params = {
@@ -330,7 +330,7 @@ class RoundOneAPI(object):
     def get_past_interaction(self, request=None):
         response_json = {"response": False}
         try:
-            userEmail = request.session['email']
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("past_interaction_url")
             params = {
                 "userEmail": userEmail,
@@ -348,7 +348,7 @@ class RoundOneAPI(object):
     def get_saved_history(self, request=None):
         response_json = {"response": False}
         try:
-            userEmail = request.session['email']
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("saved_history_url")
             params = {
                 "userEmail": userEmail,
@@ -366,7 +366,7 @@ class RoundOneAPI(object):
     def delete_saved_job(self, request, job_params):
         response_json = {"response": False}
         try:
-            userEmail = request.session['email']
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("delete_job_url")
             data_dict = {
                 "jobId": job_params[0],
@@ -392,8 +392,8 @@ class RoundOneAPI(object):
         try:
             url = settings.ROUNDONE_API_DICT.get("is_premium_url")
 
-            if request.session['candidate_id']:
-                userEmail = request.session['email']
+            if 'candidate_id' in request.session:
+                userEmail = request.session.get('email', '')
             else:
                 return False
 
@@ -424,7 +424,7 @@ class RoundOneAPI(object):
         try:
             url = settings.ROUNDONE_API_DICT.get("save_job_url")
             job_params = kwargs.get('job_params').split('-')
-            userEmail = request.session['email']
+            userEmail = request.session.get('email')
 
             post_data = {
                 "jobId": job_params[0],
@@ -499,7 +499,7 @@ class RoundOneAPI(object):
         return response_json
 
     def get_user_ip(self, request):
-        user_ip = request.session['email'] if request.session['email'] else settings.ROUNDONE_DEFAULT_CP_EMAIL
+        user_ip = request.session['email'] if 'email' in request.session else settings.ROUNDONE_DEFAULT_CP_EMAIL
         http_x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         try:
             if http_x_forwarded_for:

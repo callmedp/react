@@ -5,11 +5,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.utils.text import slugify
 from django.urls import reverse
+from django.utils import timezone
 
 from .roundoneapi import RoundOneAPI, RoundOneSEO
 from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
 from .models import MicroSite, PartnerTestimonial, PartnerFaq
-from order.models import Order
+from cart.models import Subscription
 
 
 class PartnerHomeView(TemplateView):
@@ -19,6 +20,14 @@ class PartnerHomeView(TemplateView):
         context = super(PartnerHomeView, self).get_context_data(**kwargs)
         partner = kwargs.get('partner', '')
         flag_status = False
+
+        try:
+            flag_status = Subscription.objects.filter(
+                candidateid=self.request.session['candidate_id'],
+                expire_on__gt=timezone.now()).exists()
+        except:
+            pass
+
         try:
             microsite = MicroSite.objects.select_related('home_page').get(
                 slug=partner, active=True)
@@ -26,9 +35,6 @@ class PartnerHomeView(TemplateView):
             testimonial_qs = PartnerTestimonial.objects.filter(
                 microsite=microsite, active=True)
             faq_qs = PartnerFaq.objects.filter(microsite=microsite, active=True)
-
-            flag_status = Order.objects.filter(
-                candidate_id=self.request.session['candidate_id'], status=2).exists()
 
             context.update({
                 "faq_qs": faq_qs, "testimonial_qs": testimonial_qs,
@@ -54,11 +60,13 @@ class PartnerListView(TemplateView):
         context = super(PartnerListView, self).get_context_data(**kwargs)
         partner = kwargs.get('partner', '')
         flag_status = False
+
         try:
-            flag_status = Order.objects.filter(
-                candidate_id=self.request.session['candidate_id'], status=2).exists()
-        except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            flag_status = Subscription.objects.filter(
+                candidateid=self.request.session['candidate_id'],
+                expire_on__gt=timezone.now()).exists()
+        except:
+            pass
 
         if partner == 'roundone':
             context.update(self.get_partner_context(**kwargs))
@@ -78,6 +86,7 @@ class PartnerListView(TemplateView):
     def get_partner_context(self, **kwargs):
         context = {}
         try:
+
             search_response = RoundOneAPI().get_search_response(self.request, **kwargs)
             context.update({'search_result': search_response})
             keyword = kwargs.get('keyword', '')
@@ -204,7 +213,7 @@ class GetReferenceView(View, RoundOneAPI):
         source = request.POST.get('source')
 
         try:
-            if request.session.candidate_id:
+            if 'candidate_id' in request.session:
                 if self.is_premium_user(request):
                     roundone_job_params = request.session.get(
                         "roundone_job_params", "").split('-')
@@ -252,16 +261,16 @@ class GetReferenceView(View, RoundOneAPI):
                     return HttpResponse(json.dumps(
                         {'status': False, 'message': "Something went wrong."}))
 
-            try:
-                if self.add_cart_roundone():
-                    request.session.update({
-                        "roundone_job_params": '-'.join(job_params),
-                        "roundone_source": source
-                        })
-                    return HttpResponse(
-                        json.dumps({'status': True, 'show_cart': True}))
-            except Exception as e:
-                logging.getLogger('error_log').error(str(e))
+            # try:
+            #     if self.add_cart_roundone():
+            #         request.session.update({
+            #             "roundone_job_params": '-'.join(job_params),
+            #             "roundone_source": source
+            #             })
+            #         return HttpResponse(
+            #             json.dumps({'status': True, 'show_cart': True}))
+            # except Exception as e:
+            #     logging.getLogger('error_log').error(str(e))
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return HttpResponse(
