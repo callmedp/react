@@ -47,7 +47,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 			logging.getLogger('error_log').error(str(e))
 
 	def createOrderitems(self, order, cart_obj):
-		# import ipdb; ipdb.set_trace()
 		try:
 			if order and cart_obj:
 				cart_items = self.get_cart_items()
