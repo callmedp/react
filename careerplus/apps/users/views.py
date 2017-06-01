@@ -164,10 +164,12 @@ class LoginApiView(FormView):
 
     def get_context(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        import ipdb; ipdb.set_trace()
         context['form'] = self.get_form()
         return context
 
     def form_valid(self, form):
+        import ipdb; ipdb.set_trace()
         login_dict = {}
         remember_me = self.request.POST.get('remember_me', None)
 
@@ -178,6 +180,7 @@ class LoginApiView(FormView):
         
         try:
             user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+            import ipdb; ipdb.set_trace()
             if user_exist['exists'] == True:
                 login_resp = RegistrationLoginApi().user_login(login_dict)
 
@@ -188,6 +191,7 @@ class LoginApiView(FormView):
                     if remember_me:
                         self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
                     return HttpResponseRedirect(self.success_url)
+
                 elif login_resp['response'] == 'error_pass':
                     messages.add_message(self.request, messages.SUCCESS, login_resp["non_field_errors"][0])
                     return render(self.request, self.template_name, {'form': form})
@@ -199,8 +203,11 @@ class LoginApiView(FormView):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
 
+    def form_invalid(self, form):
+        return render(self.request, self.template_name, {'form': form})
+
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if 'candidate_id' in request.session:
             if 'next' in request.GET:
                 return HttpResponseRedirect(request.GET.get(
                     'next', self.success_url))

@@ -69,8 +69,24 @@ class LoginApiForm(forms.Form):
     email = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
 
     password = forms.CharField(
-        max_length=16, required=True, widget=forms.PasswordInput(
+        max_length=16, required=False, widget=forms.PasswordInput(
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(LoginApiForm, self).__init__(*args, **kwargs)
+
+    def clean_password(self):
+        min_password_length = 6
+        max_password_length = 15
+        password = self.cleaned_data.get('password')
+
+        if not password:
+            raise forms.ValidationError("This field is required")
+        if len(password) < min_password_length:
+            raise forms.ValidationError("Ensure this field has at least 6 characters.")
+        if len(password) > max_password_length:
+            raise forms.ValidationError("Ensure this field has no more than 15 characters.")
+        return password
 
 
 class RegistrationForm(forms.Form):
