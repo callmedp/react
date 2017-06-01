@@ -164,12 +164,10 @@ class LoginApiView(FormView):
 
     def get_context(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        import ipdb; ipdb.set_trace()
         context['form'] = self.get_form()
         return context
 
     def form_valid(self, form):
-        import ipdb; ipdb.set_trace()
         login_dict = {}
         remember_me = self.request.POST.get('remember_me', None)
 
@@ -180,7 +178,6 @@ class LoginApiView(FormView):
         
         try:
             user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
-            import ipdb; ipdb.set_trace()
             if user_exist['exists'] == True:
                 login_resp = RegistrationLoginApi().user_login(login_dict)
 
