@@ -115,7 +115,7 @@ class RegistrationForm(forms.Form):
 
 
 class ModalLoginApiForm(forms.Form):
-    email = forms.EmailField(max_length=100, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    email = forms.EmailField(max_length=100, required=True, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
 
     password = forms.CharField(
         max_length=16, required=True, widget=forms.PasswordInput(

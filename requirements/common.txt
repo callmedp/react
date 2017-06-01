@@ -7,3 +7,4 @@ sorl-thumbnail==12.3
 django-cities-light==3.3.0
 requests==2.13.0
 django-ckeditor==5.2.1
+pycrypto==2.6.1

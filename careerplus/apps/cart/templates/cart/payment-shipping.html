@@ -106,7 +106,8 @@
           </div>
           <div class="form-group clearfix">
             <div class="col-sm-6 {% if form.email.errors %} error {% endif %}">
-              {{form.email}}
+              <div class="form-control">
+              {{form.instance.email}}</div>
               <span class="error-txt">{{form.email.errors.0}}</span>
             </div>
             <div class="col-sm-6 {% if form.mobile.errors or form.country_code.errors %} error {% endif %}">

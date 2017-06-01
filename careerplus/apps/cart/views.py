@@ -1,19 +1,20 @@
 import json
 import logging
 
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.views.generic import TemplateView, View, UpdateView
 from django.forms.forms import NON_FIELD_ERRORS
 from django.http import HttpResponseForbidden, HttpResponse,\
-    HttpResponseRedirect, Http404
+    HttpResponseRedirect, Http404, HttpResponsePermanentRedirect
 from django.urls import reverse
+from django.core.validators import validate_email
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.template.response import TemplateResponse
 
 from shine.core import ShineCandidateDetail
 from shop.models import Product
 from users.mixins import RegistrationLoginApi, UserMixin
-from users.forms import ModalLoginApiForm
 
 from .models import Cart, ShippingDetail
 from .mixins import CartMixin
@@ -113,22 +114,29 @@ class PaymentLoginView(TemplateView):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-
         try:
-            form = ModalLoginApiForm(request.POST)
             login_resp = {}
-            if form.is_valid():
-                login_dict = {}
-                remember_me = request.POST.get('remember_me')
-                login_dict = {}
+            login_dict = {}
+            remember_me = request.POST.get('remember_me')
+            email = self.request.POST.get('email').strip()
+            password = self.request.POST.get('password')
+
+            valid_email = False
+            try:
+                validate_email(email)
+                valid_email = True
+            except Exception as e:
+                valid_email = False
+
+            if valid_email:
                 login_dict.update({
-                    "email": self.request.POST.get('email'),
-                    "password": self.request.POST.get('password')
+                    "email": email,
+                    "password": password,
                 })
 
                 user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
 
-                if user_exist['exists']:
+                if user_exist['exists'] and password:
                     login_resp = RegistrationLoginApi().user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':
@@ -139,49 +147,112 @@ class PaymentLoginView(TemplateView):
                         return HttpResponseRedirect(reverse('cart:payment-shipping'))
 
                     elif login_resp['response'] == 'error_pass':
-                        non_field_error = login_resp.get("non_field_errors")[0]
-                        return render(request, self.template_name, {'non_field_error': non_field_error, 'form': form})
+                        context = self.get_context_data()
+                        context.update({
+                            "non_field_error": login_resp.get("non_field_errors")[0],
+                            'email_exist': True,
+                            "email": email})
+                        return TemplateResponse(request, self.template_name, context)
+
+                elif user_exist['exists']:
+                    context = self.get_context_data()
+                    context.update({
+                        'email': email,
+                        'email_exist': True})
+                    return TemplateResponse(request, self.template_name, context)
 
                 elif not user_exist['exists']:
-                    non_field_error = 'This email is not registered. Please register.'
-                    return render(request, self.template_name, {'non_field_error': non_field_error, 'form': form})
+                    cart_pk = self.request.session.get('cart_pk')
+                    if cart_pk:
+                        cart_obj = Cart.objects.get(pk=cart_pk)
+                        cart_obj.email = email
+                        cart_obj.save()
+                        return HttpResponseRedirect(reverse('cart:payment-shipping'))
+                    return HttpResponseRedirect(reverse('cart:cart-product-list'))
             else:
-                return render(request, self.template_name, {'form': form})
+                email_error = "Please enter valid email address."
+                context = self.get_context_data()
+                context.update({
+                    "email_exist": False,
+                    "email_error": email_error})
+                return TemplateResponse(request, self.template_name, context)
 
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
+            return HttpResponseRedirect(reverse('cart:cart-product-list'))
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         context.update({
-            "form": ModalLoginApiForm(),
+            "email_exist": False,
         })
         return context
 
 
-class PaymentShippingView(UpdateView):
+class PaymentShippingView(UpdateView, CartMixin):
     model = ShippingDetail
     template_name = "cart/payment-shipping.html"
     success_url = "/cart/payment-summary/"
     http_method_names = [u'get', u'post']
     form_class = ShippingDetailUpdateForm
 
+    def redirect_if_necessary(self):
+        if not self.request.session.get('cart_pk'):
+            self.getCartObject()
+        cart_pk = self.request.session.get('cart_pk')
+        if not cart_pk:
+            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+        try:
+            cart_obj = Cart.objects.get(pk=cart_pk)
+        except:
+            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+
+        if cart_obj and not (cart_obj.email or self.request.session.get('candidate_id')):
+            return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
+        return None
+       
     def get_object(self):
-        candidate_id = self.request.session.get('candidate_id')
-        if candidate_id:
+        if not self.request.session.get('cart_pk'):
+            self.getCartObject()
+        cart_pk = self.request.session.get('cart_pk')
+
+        if cart_pk:
             try:
-                obj, created = ShippingDetail.objects.get_or_create(candidate_id=candidate_id)
+                obj = Cart.objects.get(pk=cart_pk)
             except:
                 raise Http404
             return obj
         raise Http404
 
     def get(self, request, *args, **kwargs):
+        redirect = self.redirect_if_necessary()
+        if redirect:
+            return redirect
         self.object = self.get_object()
         return super(self.__class__, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        form = context['form']
+        {'last_name': 'kumar', 'address': None, 'mobile': None, 'email': None, 'pincode': None, 'country': '91', 'country_code': '91', 'first_name': None, 'state': None}
+
+        if self.request.session.get('candidate_id'):
+            if not form.initial.get('first_name'):
+                form.initial.update({
+                    'first_name': self.request.session.get('first_name')})
+
+            if not form.initial.get('last_name'):
+                form.initial.update({
+                    'last_name': self.request.session.get('last_name')})
+
+            if not form.instance.email:
+                form.instance.email = self.request.session.get('email')
+                form.instance.save()
+
+            if not form.initial.get('mobile'):
+                form.initial.update({
+                    'mobile': self.request.session.get('mobile_no')})
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -190,6 +261,9 @@ class PaymentShippingView(UpdateView):
 
         if form.is_valid():
             try:
+                # form.data['email]' = form.initial.get('email')  # readonly
+                obj = form.save(commit=False)
+                obj.shipping_done = True
                 valid_form = self.form_valid(form)
                 return valid_form
             except Exception as e:
@@ -202,11 +276,25 @@ class PaymentShippingView(UpdateView):
 class PaymentSummaryView(TemplateView, CartMixin):
     template_name = "cart/payment-summary.html"
 
-    def get(self, request, *args, **kwargs):
-        candidate_id = request.session.get('candidate_id')
-        if not candidate_id:
-            return HttpResponseRedirect(reverse('cart:payment-login'))
+    def redirect_if_necessary(self):
+        if not self.request.session.get('cart_pk'):
+            self.getCartObject()
+        cart_pk = self.request.session.get('cart_pk')
+        if not cart_pk:
+            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+        try:
+            cart_obj = Cart.objects.get(pk=cart_pk)
+            if not cart_obj.shipping_done:
+                return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
+        except:
+            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            
+        return None
 
+    def get(self, request, *args, **kwargs):
+        redirect = self.redirect_if_necessary()
+        if redirect:
+            return redirect
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

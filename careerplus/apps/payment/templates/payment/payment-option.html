@@ -57,7 +57,6 @@
             All major Credit and Debit cards accepted
             <figure class="cards-payment-icon mt-20"></figure>
           </div>
-
           </div>  
         <!-- left content end -->
 
@@ -82,11 +81,16 @@
                   You will be redirected to a secure page where you can choose your bank, and make your payment.
                 </article>
                 <ul>
-                  <li class="credit-card"><a href="#">Credit Card</a></li>
-                  <li class="debit-card"><a href="#">Debit Card</a></li>
-                  <li class="net-banking"><a href="#">Net Banking</a></li>
-                  <li class="internaiton-card"><a href="#">International Card</a></li>
-                  <li class="emi"><a href="#">EMI</a></li>
+                  <li class="credit-card"><a href="{% url "payment:ccavenue_request" cart_id 'creditcard' %}">Credit Card</a></li>
+
+                  <li class="debit-card"><a href="{% url "payment:ccavenue_request" cart_id 'debit' %}">Debit Card</a></li>
+
+                  <li class="net-banking"><a href="{% url "payment:ccavenue_request" cart_id 'netbanking' %}">Net Banking</a></li>
+
+                  <li class="internaiton-card"><a href="{% url "payment:ccavenue_request" cart_id 'international' %}">International Card</a></li>
+
+                  <li class="emi"><a href="{% url "payment:ccavenue_request" cart_id 'emi' %}">EMI</a></li>
+
                 </ul>
               </div>
               <div role="tabpanel" class="tab-pane other-payment" id="mobikwik">
@@ -191,7 +195,7 @@
                     <li>Mail us a scanned copy of the deposit slip at <a href="mailto:resumeservices@shine.com">resumeservices@shine.com</a></li>
                   </ul>
 
-                <strong>Rs. 4599 <small>(amount payable)</small> </strong>
+                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
 
                 <div class="continue">
                   <button type="button" class="make-payment">Make Payment</button>

@@ -28,12 +28,12 @@ $().ready(function() {
                     required: true,
                     maxlength: 50,
                 },
-                email:{
-                    required: true,
-                    email: true,
-                    maxlength: 100,
+                // email:{
+                //     required: true,
+                //     email: true,
+                //     maxlength: 100,
 
-                },
+                // },
                 mobile:{
                     required: true,
                     digits: true,
@@ -65,11 +65,11 @@ $().ready(function() {
                 required: 'this value is required.',
                 maxlength: 'length should be less than 50 characters',
             },
-            email:{
-                required: 'this value is required.',
-                email: 'enter only valid email id',
-                maxlength: 'length should be less than 100 characters',
-            },
+            // email:{
+            //     required: 'this value is required.',
+            //     email: 'enter only valid email id',
+            //     maxlength: 'length should be less than 100 characters',
+            // },
             mobile:{
                 required: 'this value is required.',
                 digits: 'only digit accepted.',

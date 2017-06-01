@@ -12,6 +12,20 @@ from .choices import STATUS_CHOICES
 
 
 class Cart(AbstractAutoDate):
+    try:
+        country_choices, CHOICE_COUNTRY = [], []
+        for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
+            country_choices.append((m.phone, m.phone))
+            CHOICE_COUNTRY.append((m.phone, m.name))
+
+        indian_obj = Country.objects.filter(name='India', phone='91')[0].phone
+        default_country = indian_obj
+
+    except:
+        country_choices, CHOICE_COUNTRY = [], []
+        indian_obj = None
+        default_country = None
+
     owner_id = models.CharField(
         null=True,
         max_length=255,
@@ -35,6 +49,32 @@ class Cart(AbstractAutoDate):
         _("Date frozen"), null=True, blank=True)
     date_closed = models.DateTimeField(
         _("Date closed"), null=True, blank=True)
+
+    # shipping detail
+    first_name = models.CharField(max_length=255, null=True, blank=True,
+        verbose_name=_("First Name"))
+    last_name = models.CharField(max_length=255, null=True, blank=True,
+        verbose_name=_("Last Name"))
+
+    email = models.EmailField(max_length=255, null=True, blank=False)
+
+    country_code = models.CharField(max_length=15, choices=country_choices,
+        default=indian_obj, null=True, blank=False,
+        verbose_name=_("Country Code"))
+
+    mobile = models.CharField(max_length=15, null=True, blank=False)
+
+    address = models.CharField(max_length=255, null=True, blank=True)
+
+    pincode = models.CharField(max_length=15, null=True, blank=True)
+
+    state = models.CharField(max_length=255, null=True, blank=True)
+
+    country = models.CharField(max_length=15, choices=CHOICE_COUNTRY,
+        default=default_country, null=True, blank=False)
+    
+    shipping_done = models.BooleanField(default=False)  #shipping process
+    # summary_done = models.BooleanField(default=False)  #summary process
 
     class Meta:
         app_label = 'cart'
@@ -125,6 +165,7 @@ class ShippingDetail(models.Model):
 
     first_name = models.CharField(max_length=255, null=True, blank=True,
         verbose_name=_("First Name"))
+
     last_name = models.CharField(max_length=255, null=True, blank=True,
         verbose_name=_("Last Name"))
 

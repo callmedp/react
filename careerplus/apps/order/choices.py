@@ -15,7 +15,7 @@ SITE_CHOICES = (
 PAYMENT_MODE = (
     (0, 'Not Paid'),
     (1, 'Cash'),
-    (2, 'Citrus Pay'),
+    # (2, 'Citrus Pay'),
     (3, 'EMI'),
     (4, 'Cheque or Draft'),
     (5, 'CC-Avenue'),

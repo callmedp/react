@@ -22,14 +22,14 @@ class Order(AbstractAutoDate):
         max_length=255,
         verbose_name=_("Customer ID"))
 
-    # transaction_id = models.CharField(max_length=255, null=True, blank=True)
+    txn = models.CharField(max_length=255, null=True, blank=True)
 
     status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
 
-    # payment_mode = models.IntegerField(choices=PAYMENT_MODE, default=0)
-    # payment_date = models.DateTimeField(null=True, blank=True)
-    # currency = models.CharField(
-    #     _("Currency"), max_length=12,)
+    payment_mode = models.IntegerField(choices=PAYMENT_MODE, default=0)
+    payment_date = models.DateTimeField(null=True, blank=True)
+    currency = models.CharField(
+        _("Currency"), max_length=12, null=True, blank=True)
 
     total_incl_tax = models.DecimalField(
         _("Order total (inc. tax)"), decimal_places=2, max_digits=12, default=0)

@@ -23,7 +23,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 					cart_obj.save()
 					order = Order.objects.create(cart=cart_obj, candidate_id=candidate_id,
 						status=status, date_placed=timezone.now())
-					order.number = str(order.pk)
+					order.number = 'CP' + str(order.pk)
 					try:
 						shipping_obj = ShippingDetail.objects.filter(candidate_id=candidate_id)[0]
 					except:
@@ -133,11 +133,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 							oi.oi_price_before_discounts_excl_tax = var.price_excl_tax
 							oi.is_variation = True
 							oi.save()
-
-
-				# cart_items = cart_obj.lineitems.all().select_related('product')
-				# for item in cart_items:
-				# 	OrderItem.objects.create(order=order, product=item.product,
-				# 		title=item.product.title)
+				self.request.session.update({
+	                "order_pk": order.pk,
+	            })
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))

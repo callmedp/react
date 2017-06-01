@@ -26,12 +26,9 @@ GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g58#1(xdr&s%t@$erwjosc@nuiuy4j)9#g+*jhr#m1o6c)zws7'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 TEMPLATE_DEBUG = False  # django sorl required
 
-ALLOWED_HOSTS = []
 
 # Application definition
 DJANGO_APPS = [
@@ -158,6 +155,3 @@ CKEDITOR_CONFIGS = {
         # 'extraPlugins': 'codesnippet',
     },
 }
-
-
-CART_MAX_LIMIT = 5

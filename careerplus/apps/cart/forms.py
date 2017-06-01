@@ -1,13 +1,12 @@
 from django import forms
 
-from .models import ShippingDetail
+from .models import ShippingDetail, Cart
 
 
 class ShippingDetailUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ShippingDetailUpdateForm, self).__init__(*args, **kwargs)
-
         form_class = 'form-control'
         self.fields['first_name'].required = True
         self.fields['first_name'].widget.attrs['placeholder'] = 'First name'
@@ -17,9 +16,10 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Last name'
         self.fields['last_name'].widget.attrs['class'] = form_class
 
-        self.fields['email'].required = True
-        self.fields['email'].widget.attrs['placeholder'] = 'Email Id'
-        self.fields['email'].widget.attrs['class'] = form_class
+        # self.fields['email'].required = True
+        # self.fields['email'].widget.attrs['readonly'] = True
+        # self.fields['email'].widget.attrs['placeholder'] = 'Email Id'
+        # self.fields['email'].widget.attrs['class'] = form_class
 
         self.fields['country_code'].required = True
         self.fields['country_code'].widget.attrs['class'] = form_class
@@ -44,9 +44,10 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['country'].widget.attrs['class'] = form_class
 
     class Meta:
-        model = ShippingDetail
+        # model = ShippingDetail
+        model = Cart
 
-        fields = ['first_name', 'last_name', 'email', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
+        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '').strip()
