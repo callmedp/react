@@ -74,8 +74,8 @@ class LoginApiForm(forms.Form):
 
 
 class RegistrationForm(forms.Form):
-    # country_choices = [(m.id, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    # indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None
+    country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
 
     email = forms.EmailField(
         max_length=30, required=True, widget=forms.TextInput(
@@ -85,9 +85,8 @@ class RegistrationForm(forms.Form):
         max_length=16, required=True, widget=forms.PasswordInput(
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
 
-    # country_code = forms.ChoiceField(label=("Country:"), required=True,
-    #     choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
-    #     choices=country_choices, widget=forms.Select(attrs={'class': 'form-control custom-select country-code'}), initial=indian_obj)
+    country_code = forms.ChoiceField(label=("Country:"), required=True,
+        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
 
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile No.'}), max_length=10)
@@ -124,8 +123,8 @@ class ModalLoginApiForm(forms.Form):
 
 class ModalRegistrationApiForm(forms.Form):
     try:
-        country_choices = [(m.pk, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None
+        country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
     except:
         country_choices, indian_obj = [], None
 

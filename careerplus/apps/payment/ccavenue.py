@@ -1,5 +1,5 @@
 # import md5
-import base64
+import codecs
 import time
 import logging
 
@@ -65,10 +65,11 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
         plainText = self.pad(plainText)
         encDigest = md5()
-        encDigest.update(workingKey.encode('utf-8'))
+        encDigest.update(workingKey.encode())
         enc_cipher = AES.new(encDigest.digest(), AES.MODE_CBC, iv)
-        encryptedText = base64.b64encode(enc_cipher.encrypt(plainText))
+        encryptedText = enc_cipher.encrypt(plainText).hex()
         return encryptedText
+
         # iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
         # plainText = self.pad(plainText)
         # encDigest = md5.new()
@@ -80,12 +81,12 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
     def decrypt(self, cipherText, workingKey):
         iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
         decDigest = md5()
-        decDigest.update(workingKey.encode('utf-8'))
-        cipherText = base64.b64decode(cipherText)
-        encryptedText = cipherText.decode('hex')
+        decDigest.update(workingKey.encode())
+        encryptedText = codecs.decode(cipherText, "hex")
         dec_cipher = AES.new(decDigest.digest(), AES.MODE_CBC, iv)
         decryptedText = dec_cipher.decrypt(encryptedText)
-        return decryptedText
+        return decryptedText.decode()
+
         # iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
         # decDigest = md5.new()
         # decDigest.update(workingKey)
@@ -141,17 +142,16 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
             merchant_data += 'billing_email=' + p_billing_email + '&'
 
         encryption = self.encrypt(merchant_data, context_dict['workingkey'])
-
         return {'url': context_dict['url'], 'encReq': encryption, 'xscode': context_dict['accesscode']}
 
     def get(self, request, *args, **kwargs):
         data = {}
-        order_id = kwargs.get('order_id', None)
+        cart_id = kwargs.get('order_id', None)
         paytype = kwargs.get('paytype', '')
 
-        if order_id and len(paytype) > 0:
+        if cart_id and len(paytype) > 0:
             # order = Order.objects.get(id=order_id)
-            cart_obj = Cart.objects.get(id=order_id)
+            cart_obj = Cart.objects.get(id=cart_id)
             cart_obj.date_submitted = timezone.now()
             cart_obj.is_submitted = True
             cart_obj.save()
@@ -161,21 +161,28 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
             if paytype == "international":
                 data = {'p_payment_option': 'OPTCRDC',
                         'p_card_type': 'CRDC'}
+                order.payment_mode = 7
 
             elif paytype == "netbanking":
                 data = {'p_payment_option': 'OPTNBK', 'p_card_type': 'NBK'}
+                order.payment_mode = 10
 
             elif paytype == "emi":
                 data = {'p_payment_option': 'OPTEMI', 'p_card_type': 'CRDC'}
+                order.payment_mode = 11
 
             elif paytype == "creditcard":
                 data = {'p_payment_option': 'OPTCRDC', 'p_card_type': 'CRDC'}
+                order.payment_mode = 9
 
             elif paytype == "debit":
                 data = {'p_payment_option': 'OPTDBCRD', 'p_card_type': 'DBCRD'}
+                order.payment_mode = 8
 
             elif paytype == "all":
                 data = {'p_payment_option': 'ALL', 'p_card_type': 'ALL'}
+
+            order.save()
 
             context = self.get_request_url(order, request, data=data)
 
@@ -233,26 +240,26 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                     except Exception as e:
                         logging.getLogger('payment_log').error(str(e))
                         return HttpResponseRedirect(
-                            reverse('payment_oops') +
+                            reverse('payment:payment_oops') +
                             '?error=success&txn_id=' + txn_id)
 
                 elif order_status.upper() == "FAILURE":
                     logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
-                    return HttpResponseRedirect(reverse('payment_oops') + '?error=failure&txn_id='+txn_id)
+                    return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
 
                 elif order_status.upper() == "ABORTED":
                     logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
-                    return HttpResponseRedirect(reverse('payment_oops') + '?error=aborted&txn_id='+txn_id)
+                    return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=aborted&txn_id='+txn_id)
 
                 elif order_status.upper() == "INVALID":
                     logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
-                    return HttpResponseRedirect(reverse('payment_oops') + '?error=invalid&txn_id='+txn_id)
+                    return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=invalid&txn_id='+txn_id)
 
             elif stresp.upper() == "CANCEL":
                 logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
-                return HttpResponseRedirect(reverse('payment_oops') + '?error=aborted&txn_id='+txn_id)
+                return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=aborted&txn_id='+txn_id)
 
         # order_id = b64encode(str(order_id)) if order_id in (request.session.get('email_invoice_for') or []) else str(order_id)
         # payloads = '?tab=payment&error=payment_error&orderid='+order_id + '#internationalcard'
         # logging.getLogger('payment_log').error(str(request))
-        return HttpResponseRedirect(reverse('payment_oops') + '?error=failure')
+        return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')

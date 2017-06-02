@@ -5,7 +5,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = '127.0.0.1:8000'
+# SITE_DOMAIN = '127.0.0.1:8000'
+SITE_DOMAIN = 'careerplus1.shine.com'
 
 # Database
 DATABASES = {

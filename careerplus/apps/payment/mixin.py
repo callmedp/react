@@ -30,6 +30,7 @@ class PaymentMixin(object):
             payment_mode = 1
             # sms_type = mailers_config.SMS_TYPE[4]
             x_mailertag = "CASH_PAYMENT"
+            return_parameter = reverse('payment:thank-you')
 
         elif order_type == "CCAVENUE":
             order = Order.objects.get(pk=data.get('order_id'))
@@ -38,7 +39,7 @@ class PaymentMixin(object):
             payment_mode = 7
             payment_date = datetime.now()
             x_mailertag = "CCAVENUE_PAYMENT"
-            return_parameter = reverse(reverse('payment:thank-you'))
+            return_parameter = reverse('payment:thank-you')
 
         elif order_type == "CHEQUE":
             order = Order.objects.get(pk=request.session.get('order_pk'))
@@ -51,6 +52,7 @@ class PaymentMixin(object):
             order_status = 2
             payment_mode = 4
             x_mailertag = "CHEQUE_PAYMENT"
+            return_parameter = reverse('payment:thank-you')
 
         elif order_type == "MOBIKWIK":
 
@@ -60,7 +62,7 @@ class PaymentMixin(object):
             payment_mode = 6
             payment_date = datetime.now()
             x_mailertag = "MOBIKWIK_PAYMENT"
-            return_parameter = reverse(reverse('payment:thank-you'))
+            return_parameter = reverse('payment:thank-you')
 
         if order:
             order.txn = txn

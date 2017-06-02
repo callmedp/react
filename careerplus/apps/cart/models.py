@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 from django.db.models import Q
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 
 from seo.models import AbstractAutoDate
 from geolocation.models import Country
@@ -96,6 +94,10 @@ class Cart(AbstractAutoDate):
             % {'status': self.status,
                'owner': self.owner_id}
 
+    def get_country(self):
+        country_dict = dict(self.CHOICE_COUNTRY)
+        return country_dict.get(self.country)
+
 
 class LineItem(AbstractAutoDate):
     cart = models.ForeignKey(
@@ -136,67 +138,3 @@ class LineItem(AbstractAutoDate):
             u" %(line_id)d") % {'cart_id': self.cart.pk,
                                  'product_id': self.product.pk,
                                  'line_id': self.pk}
-
-
-class ShippingDetail(models.Model):
-    """
-    Always Editable Candidate Shipping Detail
-    """
-    try:
-        country_choices, CHOICE_COUNTRY = [], []
-        for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
-            country_choices.append((m.phone, m.phone))
-            CHOICE_COUNTRY.append((m.phone, m.name))
-
-        indian_obj = Country.objects.filter(name='India', phone='91')[0].phone
-        default_country = indian_obj
-
-    except:
-        country_choices, CHOICE_COUNTRY = [], []
-        indian_obj = None
-        default_country = None
-
-    candidate_id = models.CharField(
-        null=False,
-        blank=False,
-        unique=True,
-        max_length=255,
-        verbose_name=_("Candidate Id"))
-
-    first_name = models.CharField(max_length=255, null=True, blank=True,
-        verbose_name=_("First Name"))
-
-    last_name = models.CharField(max_length=255, null=True, blank=True,
-        verbose_name=_("Last Name"))
-
-    email = models.EmailField(max_length=255, null=True, blank=False)
-
-    country_code = models.CharField(max_length=15, choices=country_choices,
-            default=indian_obj, null=True, blank=False,
-            verbose_name=_("Country Code"))
-
-    mobile = models.CharField(max_length=15, null=True, blank=False)
-
-    address = models.CharField(max_length=255, null=True, blank=True)
-
-    pincode = models.CharField(max_length=15, null=True, blank=True)
-
-    city = models.CharField(max_length=255, null=True, blank=True)
-
-    state = models.CharField(max_length=255, null=True, blank=True)
-
-    country = models.CharField(max_length=15, choices=CHOICE_COUNTRY,
-            default=default_country, null=True, blank=False)
-
-    landmark = models.CharField(max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return self.candidate_id
-
-    def get_country_code(self):
-        country_dict = dict(self.country_choices)
-        return country_dict.get(self.country_code)
-
-    def get_country(self):
-        country_dict = dict(self.CHOICE_COUNTRY)
-        return country_dict.get(self.country)

@@ -36,10 +36,6 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        candidate_id = request.session.get('candidate_id')
-        if not candidate_id:
-            return HttpResponseRedirect(reverse('cart:payment-login'))
-
         payment_type = request.POST.get('payment_type', '').strip()
         if payment_type == 'cash':
             form = StateForm(request.POST)
@@ -53,8 +49,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     order_status = 2
                     self.createOrder(cart_obj, order_status)
                     order_type = "CASH"
-                    self.process_payment_method(order_type, request)
-                    return HttpResponseRedirect(reverse('payment:thank-you'))
+                    return_parameter = self.process_payment_method(order_type, request)
+                    return HttpResponseRedirect(return_parameter)
                 else:
                     return HttpResponseRedirect(reverse('cart:cart-product-list'))
             else:
@@ -78,11 +74,25 @@ class ThankYouView(TemplateView):
     template_name = "payment/thank-you.html"
 
     def get(self, request, *args, **kwargs):
-        candidate_id = request.session.get('candidate_id')
-        if not candidate_id:
-            return HttpResponseRedirect(reverse('cart:payment-login'))
-        return super(self.__class__, self).get(request, *args, **kwargs)
+        if self.request.session.get('order_pk'):
+            return super(self.__class__, self).get(request, *args, **kwargs)
+        return HttpResponseRedirect('cart:cart-product-list')
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        return context
+
+
+class PaymentOopsView(TemplateView):
+    template_name = 'payment/payment-oops.html'
+
+    def get(self, request, *args, **kwargs):
+        return super(self.__class__, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        error_type = self.request.GET.get('error', '')
+        txn_id = self.request.GET.get('txn_id', '')
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        context.update({'error_type': error_type, 'txn_id': txn_id})
+        context.update({'is_payment': True, })
         return context

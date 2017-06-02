@@ -2,9 +2,6 @@ import logging
 
 from django.utils import timezone
 
-from decimal import Decimal
-
-from cart.models import ShippingDetail
 from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
 
@@ -16,29 +13,28 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 	def createOrder(self, cart_obj, status):
 		try:
 			candidate_id = self.request.session.get('candidate_id')
-			if candidate_id and cart_obj:
+			if cart_obj:
 				if cart_obj.lineitems.all().exists():
 					cart_obj.date_frozen = timezone.now()
 					cart_obj.status = 4
 					cart_obj.save()
-					order = Order.objects.create(cart=cart_obj, candidate_id=candidate_id,
+					order = Order.objects.create(cart=cart_obj,
 						status=status, date_placed=timezone.now())
 					order.number = 'CP' + str(order.pk)
-					try:
-						shipping_obj = ShippingDetail.objects.filter(candidate_id=candidate_id)[0]
-					except:
-						shipping_obj = None
+					
+					if candidate_id:
+						order.candidate_id = candidate_id
+					
+					order.email = cart_obj.email
+					order.first_name = cart_obj.first_name
+					order.last_name = cart_obj.last_name
+					order.country_code = cart_obj.country_code
+					order.mobile = cart_obj.mobile
+					order.address = cart_obj.address
+					order.pincode = cart_obj.pincode
+					order.state = cart_obj.state
+					order.country = cart_obj.get_country()
 
-					if shipping_obj:
-						order.email = shipping_obj.email
-						order.first_name = shipping_obj.first_name
-						order.last_name = shipping_obj.last_name
-						order.country_code = shipping_obj.get_country_code()
-						order.mobile = shipping_obj.mobile
-						order.address = shipping_obj.address
-						order.pincode = shipping_obj.pincode
-						order.state = shipping_obj.state
-						order.country = shipping_obj.get_country()
 					order.total_excl_tax = self.getTotalAmount()
 					order.save()
 					self.createOrderitems(order, cart_obj)
@@ -47,7 +43,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 			logging.getLogger('error_log').error(str(e))
 
 	def createOrderitems(self, order, cart_obj):
-		# import ipdb; ipdb.set_trace()
 		try:
 			if order and cart_obj:
 				cart_items = self.get_cart_items()

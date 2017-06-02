@@ -20,4 +20,8 @@ PAYMENT_MODE = (
     (4, 'Cheque or Draft'),
     (5, 'CC-Avenue'),
     (6, 'Mobikwik'),
-    (7, 'CC-Avenue-International'))
+    (7, 'CC-Avenue-International'),
+    (8, 'Debit Card'),
+    (9, 'Credit Card'),
+    (10, 'Net Banking'),
+    (11, 'Emi'),)

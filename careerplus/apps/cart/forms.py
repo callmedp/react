@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import ShippingDetail, Cart
+from .models import Cart
 
 
 class ShippingDetailUpdateForm(forms.ModelForm):
@@ -44,7 +44,6 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['country'].widget.attrs['class'] = form_class
 
     class Meta:
-        # model = ShippingDetail
         model = Cart
 
         fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']

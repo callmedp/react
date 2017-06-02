@@ -19,6 +19,7 @@ class Order(AbstractAutoDate):
     # custome information
     candidate_id = models.CharField(
         null=True,
+        blank=True,
         max_length=255,
         verbose_name=_("Customer ID"))
 
@@ -45,22 +46,22 @@ class Order(AbstractAutoDate):
         verbose_name=_("Customer Email"))
 
     first_name = models.CharField(
-        max_length=255, null=True, verbose_name=_("First Name"))
+        max_length=255, null=True, blank=True, verbose_name=_("First Name"))
 
     last_name = models.CharField(
-        max_length=255, null=True, verbose_name=_("Last Name"))
+        max_length=255, null=True, blank=True, verbose_name=_("Last Name"))
 
     country_code = models.CharField(
-        max_length=15, null=True, verbose_name=_("Country Code"))
+        max_length=15, null=True, blank=True, verbose_name=_("Country Code"))
 
-    mobile = models.CharField(max_length=15, null=True)
+    mobile = models.CharField(max_length=15, null=True, blank=True,)
 
     address = models.CharField(max_length=255, null=True, blank=True)
 
     pincode = models.CharField(max_length=15, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.CharField(max_length=200, null=True, blank=False)
+    country = models.CharField(max_length=200, null=True, blank=True,)
 
     class Meta:
         app_label = 'order'

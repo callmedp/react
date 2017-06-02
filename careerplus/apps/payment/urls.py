@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 
-from .views import PaymentOptionView, ThankYouView
+from .views import PaymentOptionView, ThankYouView, PaymentOopsView
 from .ccavenue import Ccavenue
 
 urlpatterns = [
@@ -13,6 +13,5 @@ urlpatterns = [
     url(r'^ccavenue/request/(?P<order_id>[-\w]+)/(?P<paytype>[-\w]+)/$',
         csrf_exempt(Ccavenue.as_view()), name='ccavenue_request'),
 
- #    url(r'^thanks/?$', PaymentPageThanksView.as_view(), name='payment_thanks'),
- #    url(r'^oopsview/?$', PaymentPageOopsView.as_view(), name='payment_oops'),
+    url(r'^oops/$', PaymentOopsView.as_view(), name='payment_oops'),
 ]

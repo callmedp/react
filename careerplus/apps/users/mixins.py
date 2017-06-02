@@ -15,9 +15,9 @@ class RegistrationLoginApi(object):
             post_url = "https://sumosc1.shine.com/api/v2/web/candidate-profiles/?format=json"
 
             try:
-                country_obj = Country.objects.get(pk=post_data['country_code'])
+                country_obj = Country.objects.get(phone=post_data['country_code'])
             except:
-                country_obj = Country.objects.get(pk="105")
+                country_obj = Country.objects.get(phone='91')
 
             headers = {'Content-Type': 'application/json'}
             post_data.update({"country_code": country_obj.phone})

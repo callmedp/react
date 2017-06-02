@@ -16,7 +16,7 @@ from shine.core import ShineCandidateDetail
 from shop.models import Product
 from users.mixins import RegistrationLoginApi, UserMixin
 
-from .models import Cart, ShippingDetail
+from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 
@@ -190,7 +190,7 @@ class PaymentLoginView(TemplateView):
 
 
 class PaymentShippingView(UpdateView, CartMixin):
-    model = ShippingDetail
+    model = Cart
     template_name = "cart/payment-shipping.html"
     success_url = "/cart/payment-summary/"
     http_method_names = [u'get', u'post']
