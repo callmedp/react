@@ -99,7 +99,6 @@ class ThankYouView(TemplateView):
         order_pk = self.request.session.get('order_pk')
         if order_pk:
             order = Order.objects.get(pk=order_pk)
-            cart_obj = order.cart
             order_items = []
             if order:
                 parent_ois = order.orderitems.filter(parent=None).select_related('product', 'partner')

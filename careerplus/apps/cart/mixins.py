@@ -178,6 +178,7 @@ class CartMixin(object):
 				cart_obj = cart_user
 			elif cart_session and candidate_id:
 				cart_session.owner_id = candidate_id
+				cart_session.status = 2
 				cart_session.save()
 				cart_obj = cart_session
 			elif cart_session:

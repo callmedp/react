@@ -31,11 +31,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 		try:
 			candidate_id = self.request.session.get('candidate_id')
 			if cart_obj:
-				# cart_obj.date_submitted = timezone.now()
-				# cart_obj.is_submitted = True
-				# cart_obj.date_frozen = timezone.now()
-				# cart_obj.status = 4
-				# cart_obj.save()
 				order = Order.objects.create(cart=cart_obj, date_placed=timezone.now())
 				order.number = 'CP' + str(order.pk)
 				

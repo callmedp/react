@@ -121,14 +121,15 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
         statusmessage = request.POST.get('statusmessage', '')
         statuscode = request.POST.get('statuscode', '')
 
-        cart_pk = request.session.get('cart_pk')
+        # cart_pk = request.session.get('cart_pk')
+        cart_pk = orderid.split('_')[0]
+        cart_pk = cart_pk.replace('MK', '')
         cart_obj = Cart.objects.get(pk=cart_pk)
         response_checksum = calculate_response_checksum(statuscode, orderid, amount, statusmessage)
 
         if response_checksum == checksum and cart_obj:
             if str(statuscode) == "0":
-                cart_pk = orderid.split('_')[0]
-                order_id = cart_pk.replace('MK', '')
+                order_id = cart_pk
                 actual_amount = "%.2f" % round(self.getTotalAmount())
 
                 if order_id != str(cart_obj.pk):
