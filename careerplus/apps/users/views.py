@@ -195,7 +195,7 @@ class LoginApiView(FormView):
             return render(self.request, self.template_name, {'form': form})
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.session.get('candidate_id'):
             if 'next' in request.GET:
                 return HttpResponseRedirect(request.GET.get(
                     'next', self.success_url))

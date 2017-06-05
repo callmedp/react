@@ -43,10 +43,9 @@ class PaymentMixin(object):
 
         elif order_type == "CHEQUE":
             order = Order.objects.get(pk=request.session.get('order_pk'))
-            order.instrument_number = request.POST.get('instrument_number')
-            order.instrument_issuer = request.POST.get('instrument_issuer')
-            order.instrument_issue_date = request.POST.get(
-                'instrument_issue_date')
+            order.instrument_number = request.POST.get('cheque_no')
+            order.instrument_issuer = request.POST.get('drawn_bank')
+            order.instrument_issue_date = request.POST.get('deposit_date')
             txn = 'CP%d%s%s' % (order.pk, int(time.time()), request.POST.get(
                 'instrument_number'))
             order_status = 2

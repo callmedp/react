@@ -8,12 +8,10 @@ from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
-from django.utils import timezone
 
 from string import Template
 from Crypto.Cipher import AES
 from hashlib import md5
-
 
 # from shinecp.cart.models import Order
 from cart.models import Cart
@@ -41,7 +39,7 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
 
         return res_dict
 
-    def default_params(self, request, order=None):
+    def default_params(self, request, cart_obj=None):
         res_dict = {}
 
         # current_order = order
@@ -70,14 +68,6 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         encryptedText = enc_cipher.encrypt(plainText).hex()
         return encryptedText
 
-        # iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
-        # plainText = self.pad(plainText)
-        # encDigest = md5.new()
-        # encDigest.update(workingKey)
-        # enc_cipher = AES.new(encDigest.digest(), AES.MODE_CBC, iv)
-        # encryptedText = enc_cipher.encrypt(plainText).encode('hex')
-        # return encryptedText
-
     def decrypt(self, cipherText, workingKey):
         iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
         decDigest = md5()
@@ -87,22 +77,14 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         decryptedText = dec_cipher.decrypt(encryptedText)
         return decryptedText.decode()
 
-        # iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
-        # decDigest = md5.new()
-        # decDigest.update(workingKey)
-        # encryptedText = cipherText.decode('hex')
-        # dec_cipher = AES.new(decDigest.digest(), AES.MODE_CBC, iv)
-        # decryptedText = dec_cipher.decrypt(encryptedText)
-        # return decryptedText
-
-    def get_request_url(self, order, request, data={}):
+    def get_request_url(self, cart_obj, request, data={}):
 
         context_dict = {}
         context_dict.update(self.get_constants())
-        context_dict.update(self.default_params(request, order))
-        order_id = 'CP%d%s' % (order.pk, int(time.time()))
+        context_dict.update(self.default_params(request, cart_obj))
+        order_id = 'CP%d%s' % (cart_obj.pk, int(time.time()))
         # amount = round(order.amount_payable)
-        amount = round(order.total_excl_tax)
+        amount = round(self.getTotalAmount())
         surl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("success",))
         curl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("cancel",))
 
@@ -113,7 +95,7 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         p_redirect_url = surl
         p_cancel_url = curl
         p_language = context_dict['language']
-        p_merchant_param1 = str(order.pk)
+        p_merchant_param1 = str(cart_obj.pk)
 
         if data.get('p_payment_option') == 'ALL':
             p_payment_option = ''
@@ -127,24 +109,24 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
 
         merchant_data = 'merchant_id=' + p_merchant_id + '&' + 'order_id=' + p_order_id + '&' + "currency=" + p_currency + '&' + 'amount=' + str(p_amount) + '&' + 'redirect_url=' + p_redirect_url + '&' + 'cancel_url=' + p_cancel_url + '&' + 'language=' + p_language + '&' + 'merchant_param1=' + p_merchant_param1 + '&' + 'payment_option=' + p_payment_option + '&' + 'card_type=' + p_card_type + '&'
 
-        if order.candidate_id:
-            if order.mobile:
-                p_billing_tel = order.mobile  #excluding country_code
-                merchant_data += 'billing_tel=' + p_billing_tel + '&'
-            elif self.request.session.get('mobile'):
-                p_billing_tel = self.request.session.get('mobile')
-                merchant_data += 'billing_tel=' + p_billing_tel + '&'
+        if cart_obj.mobile:
+            p_billing_tel = cart_obj.mobile  #excluding country_code
+            merchant_data += 'billing_tel=' + p_billing_tel + '&'
+        elif self.request.session.get('mobile'):
+            p_billing_tel = self.request.session.get('mobile')
+            merchant_data += 'billing_tel=' + p_billing_tel + '&'
 
-            if order.email:
-                p_billing_email = order.email
-            elif self.request.session.get('email'):
-                p_billing_email = self.request.session.get('email')
-            merchant_data += 'billing_email=' + p_billing_email + '&'
+        if cart_obj.email:
+            p_billing_email = cart_obj.email
+        elif self.request.session.get('email'):
+            p_billing_email = self.request.session.get('email')
+        merchant_data += 'billing_email=' + p_billing_email + '&'
 
         encryption = self.encrypt(merchant_data, context_dict['workingkey'])
         return {'url': context_dict['url'], 'encReq': encryption, 'xscode': context_dict['accesscode']}
 
     def get(self, request, *args, **kwargs):
+        # order creating after payemnt 
         data = {}
         cart_id = kwargs.get('order_id', None)
         paytype = kwargs.get('paytype', '')
@@ -152,39 +134,36 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         if cart_id and len(paytype) > 0:
             # order = Order.objects.get(id=order_id)
             cart_obj = Cart.objects.get(id=cart_id)
-            cart_obj.date_submitted = timezone.now()
-            cart_obj.is_submitted = True
-            cart_obj.save()
-            order_status = 0
-            order = self.createOrder(cart_obj, order_status)
+            self.fridge_cart(cart_obj)
+            # order = self.createOrder(cart_obj)
 
             if paytype == "international":
                 data = {'p_payment_option': 'OPTCRDC',
                         'p_card_type': 'CRDC'}
-                order.payment_mode = 7
+                # order.payment_mode = 7
 
             elif paytype == "netbanking":
                 data = {'p_payment_option': 'OPTNBK', 'p_card_type': 'NBK'}
-                order.payment_mode = 10
+                # order.payment_mode = 10
 
             elif paytype == "emi":
                 data = {'p_payment_option': 'OPTEMI', 'p_card_type': 'CRDC'}
-                order.payment_mode = 11
+                # order.payment_mode = 11
 
             elif paytype == "creditcard":
                 data = {'p_payment_option': 'OPTCRDC', 'p_card_type': 'CRDC'}
-                order.payment_mode = 9
+                # order.payment_mode = 9
 
             elif paytype == "debit":
                 data = {'p_payment_option': 'OPTDBCRD', 'p_card_type': 'DBCRD'}
-                order.payment_mode = 8
+                # order.payment_mode = 8
 
             elif paytype == "all":
                 data = {'p_payment_option': 'ALL', 'p_card_type': 'ALL'}
 
-            order.save()
+            # order.save()
 
-            context = self.get_request_url(order, request, data=data)
+            context = self.get_request_url(cart_obj, request, data=data)
 
             html = '''\
                 <html>
@@ -224,42 +203,50 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                 if len(param0) <= 0:
                     continue
                 decresp_dict[param0] = param1
-
-            order_id = decresp_dict.get('merchant_param1')
+            cart_id = decresp_dict.get('merchant_param1')
             txn_id = decresp_dict.get('order_id')
             order_status = decresp_dict.get('order_status')
+
+            cart_obj = Cart.objects.get(pk=cart_id)
 
             if stresp.upper() == "SUCCESS":
 
                 if order_status.upper() == "SUCCESS":
                     try:
+                        order = self.createOrder(cart_obj)
                         return_url = self.process_payment_method(
                             order_type='CCAVENUE', request=request,
-                            data={'order_id': order_id, 'txn_id': txn_id})
+                            data={'order_id': order.pk, 'txn_id': txn_id})
                         return HttpResponseRedirect(return_url)
                     except Exception as e:
+                        cart_obj = self.get_cart_last_status(cart_obj)
                         logging.getLogger('payment_log').error(str(e))
                         return HttpResponseRedirect(
                             reverse('payment:payment_oops') +
                             '?error=success&txn_id=' + txn_id)
 
                 elif order_status.upper() == "FAILURE":
+                    cart_obj = self.get_cart_last_status(cart_obj)
                     logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
                     return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
 
                 elif order_status.upper() == "ABORTED":
+                    cart_obj = self.get_cart_last_status(cart_obj)
                     logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
                     return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=aborted&txn_id='+txn_id)
 
                 elif order_status.upper() == "INVALID":
+                    cart_obj = self.get_cart_last_status(cart_obj)
                     logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
                     return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=invalid&txn_id='+txn_id)
 
             elif stresp.upper() == "CANCEL":
+                cart_obj = self.get_cart_last_status(cart_obj)
                 logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
-                return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=aborted&txn_id='+txn_id)
+                return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=cancel&txn_id='+txn_id)
 
         # order_id = b64encode(str(order_id)) if order_id in (request.session.get('email_invoice_for') or []) else str(order_id)
         # payloads = '?tab=payment&error=payment_error&orderid='+order_id + '#internationalcard'
         # logging.getLogger('payment_log').error(str(request))
+        cart_obj = self.get_cart_last_status(cart_obj)
         return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')

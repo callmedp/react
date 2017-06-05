@@ -157,9 +157,19 @@ class CartMixin(object):
 			cart_sessions = Cart.objects.filter(session_id=sessionid, status=0)
 			cart_user, cart_session = None, None
 			if cart_users:
-				cart_user = cart_users[0]
+				for cart in cart_users:
+					if cart_user:
+						self.mergeCart(cart, cart_user)
+					else:
+						cart_user = cart
+				# cart_user = cart_users[0]
 			if cart_sessions:
-				cart_session = cart_sessions[0]
+				for cart in cart_sessions:
+					if cart_session:
+						self.mergeCart(cart, cart_session)
+					else:
+						cart_session = cart
+				# cart_session = cart_sessions[0]
 
 			if cart_user and cart_session and (cart_user != cart_session):
 				self.mergeCart(cart_session, cart_user)

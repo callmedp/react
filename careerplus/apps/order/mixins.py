@@ -10,34 +10,51 @@ from .models import Order, OrderItem
 
 class OrderMixin(CartMixin, ProductInformationMixin):
 
-	def createOrder(self, cart_obj, status):
+	def fridge_cart(self, cart_obj):
+		if cart_obj:
+			cart_obj.date_submitted = timezone.now()
+			cart_obj.is_submitted = True
+			cart_obj.date_frozen = timezone.now()
+			cart_obj.last_status = cart_obj.status
+			cart_obj.status = 4
+			cart_obj.save()
+			return cart_obj
+
+	def get_cart_last_status(self, cart_obj):
+		cart_status = cart_obj.status
+		cart_obj.status = cart_obj.last_status
+		cart_obj.last_status = cart_status
+		cart_obj.save()
+		return cart_obj
+
+	def createOrder(self, cart_obj):
 		try:
 			candidate_id = self.request.session.get('candidate_id')
 			if cart_obj:
-				if cart_obj.lineitems.all().exists():
-					cart_obj.date_frozen = timezone.now()
-					cart_obj.status = 4
-					cart_obj.save()
-					order = Order.objects.create(cart=cart_obj,
-						status=status, date_placed=timezone.now())
-					order.number = 'CP' + str(order.pk)
-					
-					if candidate_id:
-						order.candidate_id = candidate_id
-					
-					order.email = cart_obj.email
-					order.first_name = cart_obj.first_name
-					order.last_name = cart_obj.last_name
-					order.country_code = cart_obj.country_code
-					order.mobile = cart_obj.mobile
-					order.address = cart_obj.address
-					order.pincode = cart_obj.pincode
-					order.state = cart_obj.state
-					order.country = cart_obj.get_country()
+				# cart_obj.date_submitted = timezone.now()
+				# cart_obj.is_submitted = True
+				# cart_obj.date_frozen = timezone.now()
+				# cart_obj.status = 4
+				# cart_obj.save()
+				order = Order.objects.create(cart=cart_obj, date_placed=timezone.now())
+				order.number = 'CP' + str(order.pk)
+				
+				if candidate_id:
+					order.candidate_id = candidate_id
+				
+				order.email = cart_obj.email
+				order.first_name = cart_obj.first_name
+				order.last_name = cart_obj.last_name
+				order.country_code = cart_obj.country_code
+				order.mobile = cart_obj.mobile
+				order.address = cart_obj.address
+				order.pincode = cart_obj.pincode
+				order.state = cart_obj.state
+				order.country = cart_obj.get_country()
 
-					order.total_excl_tax = self.getTotalAmount()
-					order.save()
-					self.createOrderitems(order, cart_obj)
+				order.total_excl_tax = self.getTotalAmount()
+				order.save()
+				self.createOrderitems(order, cart_obj)
 				return order
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))

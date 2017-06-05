@@ -597,7 +597,6 @@ class Product(AbstractProduct, ModelMeta):
         
         return self.name
 
-
     def get_meta_desc(self, description=''):
         if description:
             try:

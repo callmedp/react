@@ -25,6 +25,12 @@ class Order(AbstractAutoDate):
 
     txn = models.CharField(max_length=255, null=True, blank=True)
 
+    # pay by cheque/Draft
+    instrument_number = models.CharField(max_length=255, null=True, blank=True)
+    instrument_issuer = models.CharField(max_length=255, null=True, blank=True)
+    instrument_issue_date = models.CharField(
+        max_length=255, null=True, blank=True)
+
     status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
 
     payment_mode = models.IntegerField(choices=PAYMENT_MODE, default=0)

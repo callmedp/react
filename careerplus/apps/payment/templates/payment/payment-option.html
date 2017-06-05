@@ -12,6 +12,11 @@
 {% block css_section %}
     {{block.super}}
     <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    <style type="text/css">
+        .danger-txt{
+            color:red;
+        }
+    </style>
 {% endblock css_section %}
 
 {% block navigation %}
@@ -103,11 +108,11 @@
                     <li>Mail us a scanned copy of the deposit slip at <a href="mailto:resumeservices@shine.com">resumeservices@shine.com</a></li>
                   </ul>
 
-                <strong>Rs. 4599 <small>(amount payable)</small> </strong>
+                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
 
                 <div class="continue">
-                  <button type="button" class="make-payment">Make Payment</button>
-                  <figure class="secure-payment-icon"></figure>100% Secure Payment
+                    <a id="mobikwik_id" href="{% url "payment:mobikwik_request" %}"><button type="button" class="make-payment">Make Payment</button></a>
+                    <figure class="secure-payment-icon"></figure>100% Secure Payment
                 </div>
               </div>
               <div role="tabpanel" class="tab-pane other-payment" id="emi">
@@ -170,7 +175,21 @@
               <div role="tabpanel" class="tab-pane other-payment" id="cheque">
                 <article>Pay by Cheque</article>
 
-                  <form class="form-inline">
+                  <form class="form-inline" id="check-pay-form" method="post" action="">{% csrf_token %}
+                  <fieldset>
+                    {% for field in check_form %}
+                        <div class="form-group {% if field.errors %}error{% endif %}">
+                            {{ field }}
+                            <span class="danger-txt">{{field.errors.0}}</span>
+                            {% if field.help_text %}
+                                <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                  </fieldset>
+                  <input type="hidden" name="payment_type" value="cheque">
+
+                    {% comment %}
                     <div class="form-group">
                       <input type="text" class="form-control" placeholder="Cheque no.*">
                     </div>
@@ -180,6 +199,9 @@
                     <div class="form-group">
                       <input type="text" class="form-control" placeholder="Date of Deposit*">
                     </div>
+                    
+                  </form>
+                  {% endcomment %}
                   </form>
 
                   <span class="bank-details">
@@ -198,7 +220,7 @@
                 <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
 
                 <div class="continue">
-                  <button type="button" class="make-payment">Make Payment</button>
+                  <button type="button" id="check-sumit-button" class="make-payment">Make Payment</button>
                   <figure class="secure-payment-icon"></figure>100% Secure Payment
                 </div>
               </div>
@@ -229,5 +251,5 @@
 
 {% block js_section %}
    {{ block.super }}
-
+   <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
 {% endblock js_section %}

@@ -36,6 +36,8 @@ class Cart(AbstractAutoDate):
     status = models.PositiveSmallIntegerField(
         _("Status"),
         default=0, choices=STATUS_CHOICES)
+    last_status = models.PositiveIntegerField(("Status"),
+        default=None, null=True, blank=True, choices=STATUS_CHOICES)
     # vouchers = models.ManyToManyField(
     #     'coupon.Voucher', verbose_name=_("Vouchers"), blank=True)
     is_submitted = models.BooleanField(default=False)
@@ -97,6 +99,14 @@ class Cart(AbstractAutoDate):
     def get_country(self):
         country_dict = dict(self.CHOICE_COUNTRY)
         return country_dict.get(self.country)
+
+    def get_status(self):
+        dataD = dict(STATUS_CHOICES)
+        return dataD.get(self.status)
+
+    def get_last_status(self):
+        dataD = dict(STATUS_CHOICES)
+        return dataD.get(self.last_status)
 
 
 class LineItem(AbstractAutoDate):
