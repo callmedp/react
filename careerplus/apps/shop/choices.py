@@ -54,7 +54,8 @@ FLOW_CHOICES = (
     (9, 'Flow 9'),
     (10, 'Flow 10'),
     (11, 'Flow 11'),
-    (12, 'Flow 12'),)
+    (12, 'Flow 12'),
+    (13, 'Flow 13'),)
 
 EXP_CHOICES = (
     (0, 'Default'),

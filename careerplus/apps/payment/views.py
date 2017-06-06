@@ -9,6 +9,7 @@ from order.models import Order
 
 from .forms import StateForm, PayByCheckForm
 from .mixin import PaymentMixin
+from microsite.roundoneapi import RoundOneAPI
 
 
 class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):

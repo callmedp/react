@@ -12,13 +12,14 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import sys
+import redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
-GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 
+GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -32,6 +33,8 @@ TEMPLATE_DEBUG = False  # django sorl required
 
 # Application definition
 DJANGO_APPS = [
+    'grappelli',
+    'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +73,7 @@ LOCAL_APPS = [
     'cart',
     'order',
     'blog',
+    'microsite',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -155,3 +159,13 @@ CKEDITOR_CONFIGS = {
         # 'extraPlugins': 'codesnippet',
     },
 }
+
+
+BROKER_URL = 'redis://localhost:6379/0'
+
+try:
+    REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
+except:
+    REDIS_CON = None
+
+CART_MAX_LIMIT = 5

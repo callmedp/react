@@ -7,6 +7,7 @@ from geolocation.models import Country
 
 from .managers import OpenBasketManager, SavedBasketManager
 from .choices import STATUS_CHOICES
+from order.models import Order
 
 
 class Cart(AbstractAutoDate):
@@ -148,3 +149,13 @@ class LineItem(AbstractAutoDate):
             u" %(line_id)d") % {'cart_id': self.cart.pk,
                                  'product_id': self.product.pk,
                                  'line_id': self.pk}
+
+
+class Subscription(models.Model):
+    candidateid = models.CharField(max_length=255, null=True, blank=True)
+    order = models.ForeignKey(Order)
+    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    expire_on = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return '%s - %s' % (self.order.id, self.candidateid)

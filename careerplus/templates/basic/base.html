@@ -13,8 +13,8 @@
         {% endblock django_meta %}
     
     {% endblock meta_html %}
-    
-    <title> {% block title %}Shine Learning{% endblock title %}</title>   
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %}CMS - Shine Learning{%endblock title%}</title>
 
     {% block canonical_url %}
       
@@ -22,54 +22,48 @@
     
     {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+        <!-- Bootstrap -->
         <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     {% endblock css_section %}
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
    </head>
-  
-  {% endblock head %}
-  
+{% endblock head %} 
 <body>
-    {% block navigation %}
-      <!-- navigation bar -->
-      {% include 'basic/navigation.html' %}
+{% block navigation %}
+  <!-- navigation bar -->
+  {% include 'basic/navigation.html' %}
+
+{% endblock navigation %}
+
+{% block blogtrending %}
+
+{% endblock blogtrending %}
+<!-- breadcrums -->
+{% block breadcrumb %}
+      
+{% endblock breadcrumb %}
+
+{% block pageheading %}
   
-    {% endblock navigation %}
-    
-    {% block blogtrending %}
-    
-    {% endblock blogtrending %}
 
-    <!-- breadcrums -->
-    {% block breadcrumb %}
-          
-    {% endblock breadcrumb %}
-    
-    {% block pageheading %}
-      
-    
-    {% endblock pageheading %}
+{% endblock pageheading %}
 
-    <!-- main section start -->
-    {% block container %}
+<!-- main section start -->
+{% block container %}
 
-    {% endblock container %}
-
-    {% block footer %}
+{% endblock container %}
+{% block footer %}
       <!-- footer -->
-      {% include 'basic/footer.html' %}
-      
-    {% endblock footer %}
+  {% include 'basic/footer.html' %}      
+{% endblock footer %}
 
-    {% block js_section %}
+{% block js_section %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
@@ -84,7 +78,8 @@
             $('.dropdown-toggle', this).trigger('click'); 
           });
     </script>
-    {% endblock js_section %}
-  </body>
+{% endblock js_section %}
+</body>
 </html>
 {% endspaceless %}
+

@@ -69,16 +69,35 @@ class LoginApiForm(forms.Form):
     email = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
 
     password = forms.CharField(
-        max_length=16, required=True, widget=forms.PasswordInput(
+        max_length=16, required=False, widget=forms.PasswordInput(
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(LoginApiForm, self).__init__(*args, **kwargs)
+
+    def clean_password(self):
+        min_password_length = 6
+        max_password_length = 15
+        password = self.cleaned_data.get('password')
+
+        if not password:
+            raise forms.ValidationError("This field is required")
+        if len(password) < min_password_length:
+            raise forms.ValidationError("Ensure this field has at least 6 characters.")
+        if len(password) > max_password_length:
+            raise forms.ValidationError("Ensure this field has no more than 15 characters.")
+        return password
 
 
 class RegistrationForm(forms.Form):
-    country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
+    try:
+        country_choices = [(m.pk, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None
+    except:
+        country_choices, indian_obj = [], None
 
     email = forms.EmailField(
-        max_length=30, required=True, widget=forms.TextInput(
+        max_length=60, required=True, widget=forms.TextInput(
             attrs={'placeholder': 'Email', 'class': 'form-control'}))
 
     raw_password = forms.CharField(
@@ -129,7 +148,7 @@ class ModalRegistrationApiForm(forms.Form):
         country_choices, indian_obj = [], None
 
     email = forms.EmailField(
-        max_length=30, required=True, widget=forms.EmailInput(
+        max_length=60, required=True, widget=forms.EmailInput(
             attrs={'placeholder': 'Email', 'class': 'form-control'}))
 
     raw_password = forms.CharField(

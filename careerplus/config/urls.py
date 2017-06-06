@@ -16,13 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
+from filebrowser.sites import site
 from django.conf.urls.static import static
 
 from users.views import (LogoutView,
     DashboardView, RegistrationApiView, LoginApiView, LogoutApiView)
-
 from shop.views import ProductDetailView
-
 
 urlpatterns = []
 
@@ -38,7 +37,8 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-
+    url(r'^grappelli/', include('grappelli.urls')),
+    url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^console/', include('console.urls', namespace='console')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
@@ -51,6 +51,8 @@ urlpatterns += [
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    # partner url
+    url(r'^partner/', include('microsite.urls')),
     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
     # url(r'^logout/$', LogoutView.as_view(), name='logout'),
