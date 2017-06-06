@@ -81,18 +81,18 @@
                     <li>
                      <a href="javascript:void(0);">
                       <figure class="review-icon"></figure>
-                      <span><strong class="anchor-color">{{prd_num_rating}}</strong>&nbsp;reviews</span>
+                      <span><strong class="anchor-color">&nbsp;{{prd_num_rating}}</strong>&nbsp;reviews</span>
                      </a> 
                     </li>
                     <li>
                     <figure class="bought-icon"></figure>
-                    <span><strong>{{prd_num_bought}}</strong>&nbsp;people bought</span>
+                    <span><strong>&nbsp;{{prd_num_bought}}</strong>&nbsp;people bought</span>
                     </li>
                     {% if prd_num_jobs %}
                       <li>
                        <a href="javascript:void(0);">
                         <figure class="course-jobs-icon"></figure>
-                        <span><strong class="anchor-color">{{prd_num_jobs}}</strong> Jobs available</span>
+                        <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong> Jobs available</span>
                        </a> 
                       </li>
                     {% endif %}
@@ -100,7 +100,7 @@
                     {% if prd_cert %}
                       <li>
                         <figure class="certification-icon"></figure>
-                        <span>Certification</span>
+                        <span>&nbsp;Certification</span>
                       </li>
                     {% endif %}
 
@@ -115,7 +115,7 @@
               <div class="row">
                 <div class="col-sm-12 col-md-8 mt-40">
                 {% if prd_about %}
-                  <h2 class="detail-heading">About course</h2>
+                  <h2 class="detail-heading">About {% if prd_service == 3 %}course{% else %}service{% endif %}</h2>
                   {{prd_about|safe}}
                   <a href="#about-course">know more</a>
                 {% endif %}
@@ -150,7 +150,7 @@
                 <div class="container">
                   <div class="col-sm-12 col-md-8">
                   {% if prd_desc %}
-                    <a title="About Six Sigma" class="active" href="#course">About Six Sigma</a>
+                    <a title="About Six Sigma" class="active" href="#course">About {{prd_H1}}</a>
                   {% endif %}
                   {% if prd_uget %}
                     <a title="What’ll you get" href="#get">What’ll you get</a>
