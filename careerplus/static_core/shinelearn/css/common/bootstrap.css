@@ -4783,7 +4783,7 @@ tbody.collapse.in {
 }
 .navbar-brand:after {
   content: '';
-  background: url(../../images/sprite.png) no-repeat;
+  background: url(../../images/dashboard/sprite.png) no-repeat;
   background-position: 0 0;
   width: 287px;
   height: 90px;
@@ -5176,10 +5176,13 @@ tbody.collapse.in {
 }
 
 .breadcrumb {
-  padding: 8px 0;
+  padding: 2px 5px;
   list-style: none;
   font-size: 12px;
   margin-top: 35px;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: table;
+  border-radius: 2px;
 }
 .breadcrumb > li {
   display: inline-block;
@@ -5187,10 +5190,13 @@ tbody.collapse.in {
 .breadcrumb > li + li:before {
   content: "-";
   padding: 0 5px;
-  color: #999;
+  color: #ededed;
+}
+.breadcrumb a, .breadcrumb a:hover {
+  color: #ededed;
 }
 .breadcrumb > .active {
-  color: #999;
+  color: #ededed;
 }
 
 .pagination {
@@ -5696,8 +5702,7 @@ a.thumbnail.active {
 }
 .media:first-child {
   margin-top: 0;
-  width:100%;
-
+  width: 100%;
 }
 
 .media,

@@ -149,6 +149,10 @@ class RegistrationApiView(FormView):
                 request.session.update(resp_status)
                 return HttpResponseRedirect(reverse('dashboard'))
 
+            elif resp['response'] == False:
+                return render(self.request, self.template_name, {'form': form})    
+
+
         elif user_resp['response'] == 'exist_user':
             messages.add_message(self.request, messages.SUCCESS, user_resp["non_field_errors"][0])
             return HttpResponseRedirect(reverse('login'))
@@ -172,9 +176,9 @@ class LoginApiView(FormView):
         remember_me = self.request.POST.get('remember_me', None)
 
         login_dict.update({
-                "email": self.request.POST.get('email'),
-                "password": self.request.POST.get('password')
-            })
+            "email": self.request.POST.get('email'),
+            "password": self.request.POST.get('password')
+        })
         
         try:
             user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])

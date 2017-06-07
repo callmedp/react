@@ -1,0 +1,35 @@
+{% if upcoming_interaction.data %}
+<ul class="table-data">
+  <li class="data-heading">
+    <datalist class="col-sm-3">
+      Job Applied
+    </datalist>
+    <datalist class="col-sm-4">
+      Referrer
+    </datalist>
+    <datalist class="col-sm-2">
+      Contact Code
+    </datalist>
+    <datalist class="col-sm-3">
+      Scheduled Date/Time
+    </datalist>
+  </li>
+  {% for upcoming in upcoming_interaction.data %}
+  <li>
+    <datalist class="col-sm-3">
+      <a href="#">{{upcoming.jobTitle}}</a>
+        <p>{{upcoming.company}}</p>
+    </datalist>
+    <datalist class="col-sm-4">
+      {{upcoming.referrerDetails.position}}, {{upcoming.referrerDetails.department}}
+    </datalist>
+    <datalist class="col-sm-2">
+      {{upcoming.contactCode}}
+    </datalist>
+    <datalist class="col-sm-3">
+      {{upcoming.interactionScheduledTime}}
+    </datalist>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}

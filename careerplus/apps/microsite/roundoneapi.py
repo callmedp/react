@@ -4,12 +4,12 @@ import logging
 import hmac
 import hashlib
 import requests
+from datetime import datetime, timedelta
 from collections import OrderedDict
 from itertools import islice
 
 from django.conf import settings
 from cart.models import Subscription
-
 
 
 class RoundOneAPI(object):
@@ -21,7 +21,7 @@ class RoundOneAPI(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
-    def get_access_token(self, email, request=None):
+    def get_access_token(self, email, request):
         try:
             if request:
                 access_token = request.session.get('roundone_access_token', '')
@@ -36,7 +36,7 @@ class RoundOneAPI(object):
                 password = settings.ROUNDONE_DEFAULT_PASSWORD
 
             post_url = settings.ROUNDONE_API_DICT.get("oauth_url")
-
+            
             post_data = {
                 "client_id": settings.ROUNDONE_API_DICT.get("client_id", ''),
                 "client_secret": settings.ROUNDONE_API_DICT.get(
@@ -44,7 +44,7 @@ class RoundOneAPI(object):
                 "affiliateName": settings.ROUNDONE_API_DICT.get(
                     "affiliateName", 'CP'),
                 "username": email,
-                "password": password,
+                "password": password.candidateid #'592be7a753c034509597de71',
             }
 
             headers = {'content-type': 'application/json'}
@@ -57,12 +57,11 @@ class RoundOneAPI(object):
                 response_json = response.json()
                 access_token = response_json.get('access_token', '')
                 expires_in = response_json.get('expires_in', 172800)
-
-                if request and access_token:
-                    request.session.update({
-                        'roundone_access_token': access_token,
-                        'roundone_token_expiry': datetime.now() +
-                        timedelta(seconds=expires_in)})
+                # if request and access_token:
+                #     request.session.update({
+                #         'roundone_access_token': access_token,
+                #         'roundone_token_expiry': datetime.now() +
+                #         timedelta(seconds=expires_in)})
                 return access_token
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -270,7 +269,7 @@ class RoundOneAPI(object):
     def get_referral_status(self, request=None):
         response_json = {"response": False}
         try:
-            userEmail = request.user.email
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("referral_status_url")
             params = {
                 "userEmail": userEmail,
@@ -288,7 +287,7 @@ class RoundOneAPI(object):
     def get_referral_confirm(self, request):
         response_json = {"response": False}
         try:
-            userEmail = request.user.email
+            userEmail = request.session.get('email', '')
             requestId = request.GET.get('requestId')
             url = settings.ROUNDONE_API_DICT.get("referral_confirm_url")
             put_data = {
@@ -312,7 +311,7 @@ class RoundOneAPI(object):
     def get_upcoming_status(self, request=None):
         response_json = {"response": False}
         try:
-            userEmail = request.user.email
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("upcoming_interaction_url")
             params = {
                 "userEmail": userEmail,
@@ -381,7 +380,7 @@ class RoundOneAPI(object):
                 url, data=json.dumps(data_dict),
                 headers=headers,
                 timeout=settings.ROUNDONE_API_TIMEOUT)
-            if response and response.status_code == 200 and response.json():
+            if response.status_code == 200 and response.json():
                 response_json = response.json()
                 response_json.update({'response': True})
         except Exception as e:

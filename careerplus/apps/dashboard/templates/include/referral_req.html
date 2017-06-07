@@ -1,0 +1,59 @@
+{% if accepted %}
+<div class="col-sm-12 notification">
+  Congratulations, Your Job Application has been accepted
+</div>
+<ul class="table-data">
+{% for accepted_data in accepted %}
+  <li>
+    <datalist class="col-sm-3">
+      <a href="#">{{accepted_data.jobTitle}}</a>
+        <p>{{accepted_data.company}}</p>
+    </datalist>
+    <datalist class="col-sm-4">
+      Referrer : {{accepted_data.referrerDetails.position}}, {{accepted_data.referrerDetails.department}}
+    </datalist>
+    <datalist class="col-sm-3">
+      <p>Date Applied: {{accepted_data.requestedDate}}</p> <p>Date Accepted: {{accepted_data.acceptedDate}}</p> <p>Expires on: {{accepted_data.expiryDate}}}</p>
+      </datalist>
+    <datalist class="col-sm-2"><a class="bdr-button" 
+    href="{{accepted_data.requestId}}">Confirm now</a></datalist>
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if pending %}
+<ul class="table-data">
+  <li class="data-heading">
+    <datalist class="col-sm-3">
+      Job Applied
+    </datalist>
+    <datalist class="col-sm-4">
+      Referrer
+    </datalist>
+    <datalist class="col-sm-3">
+      Status
+    </datalist>
+    <datalist class="col-sm-2">
+      Date Requested
+    </datalist>
+  </li>
+  {% for pending_data in pending %}
+  <li>
+    <datalist class="col-sm-3">
+      <a href="#">{{pending_data.jobTitle}}</a>
+        <p>{{pending_data.company}}</p>
+    </datalist>
+    <datalist class="col-sm-4">
+      {{pending_data.referrerDetails.position}}, {{pending_data.referrerDetails.department}}
+    </datalist>
+    <datalist class="col-sm-3">
+      {{pending_data.status}}
+    </datalist>
+    <datalist class="col-sm-2">
+      {{pending_data.requestedDate}}
+    </datalist>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}

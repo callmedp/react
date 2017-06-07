@@ -21,6 +21,7 @@
   {% block pageheading %}
   <header class="roundone-header">
     <div class="container">
+    
     <!-- breadcrums -->
       <ol class="breadcrumb mt-30">
         {% for bread in breadcrumbs %}
@@ -58,10 +59,13 @@
   {% endblock pageheading %}
 
 {% block container %}
-
 <!-- main section start -->
 <section class="container">
-
+    <div class="overlay"></div>
+    <div id="id_overlay" style="background-color: rgba(255, 255, 255,1); height: 100%; left: 0; position: fixed; top: 0px; width: 100%; z-index: 100; min-height: 100%; display:none;">
+    </div>
+    <div id="id_load" style='position: fixed; width: 100%; background: url("{% static "/shinelearn/images/loader.gif" %}") no-repeat; height: 100%; top: 50%; left: 50%; z-index: 101; display:none;'>
+    </div>
     <!-- page content body start -->
     <div class="row">
 
@@ -140,9 +144,12 @@
           <datatlist class="list2">4 years</datatlist>
           -->
           <div class="clearfix"></div>
+          {% if job.jobDescription %}
           <datatlist class="list1">Job Description:</datatlist>
           <datatlist class="list2">
-          {{job.jobDescription|safe|truncatewords:15}}</datatlist>
+            {{job.jobDescription|safe|truncatewords:15|striptags}}
+          </datatlist>
+          {% endif %}
           <div class="clearfix"></div>
           <datatlist class="list1">Your Referrer:</datatlist>
           <datatlist class="list2">
@@ -152,23 +159,33 @@
           </figure>
             {{job.position}}, {{job.departmentName}}
           </datatlist>
-          <a href="#" class="save-job">Save this job</a>
+          {% if request.session.candidate_id %}
+            <a role="button" class="save-job savejob_js" onclick="onClickSaveJob(this, {{job.jobId}});">Save this job</a>
+          {% else %}
+            <a href="#" class="save-job" data-toggle="modal" data-target=".bs-example-modal-sm">Save this job</a>
+          {% endif %}
           <a href="{{detail_url}}" class="view-job">View job description</a>
           {% if request.session.candidate_id and flag %}
             <a role="button" class="get-refferd pull-right" 
-            id="" >Get Referred</a>
+            onclick="onClickGetReference({{job.jobId}});">Get Referred</a>
           {% elif request.session.candidate_id %}
-            <a role="button" class="get-refferd pull-right" id="enrol-now-button" prod-id="8">Get Referred</a>
+            <a role="button" class="get-refferd pull-right enrol-now-button" 
+            prod-id="8">Get Referred</a>
           {% else %}
             <a href="#" class="get-refferd pull-right" data-toggle="modal" data-target=".bs-example-modal-sm">Get Referred</a>
           {% endif %}
-            <form role="form" method="POST" id="round_form" > {% csrf_token %}
-              <input type="hidden" name="job_params" value="{{job_params}}">
-            </form>
+          <form id="id_{{job.jobId}}">
+            {% csrf_token %}
+            <input type="hidden" name="job_params" value="{{job_params}}">
+            <input name="source" type="hidden" value="{{request.path}}">
+            <input name="origin" type="hidden" value="{{request.path}}">
+          </form>
         </li>
         {% endwith %}
       {% endfor %}
       </ul>
+      <input type="hidden" name="roundone-get-reference" value="{% url "roundone-get-reference" %}">
+      <input type="hidden" name="roundone-save-job" value="{% url "roundone-save-job" %}">
     </div>       
     <!-- mid content end -->
 
@@ -219,6 +236,7 @@
 
 </section>
 <!-- main section end -->
+
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -261,6 +279,44 @@
   </div>
 </div>  
 
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+       <div id="id_close_success_modal">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h1 class="modal-title">Login</h1>
+        </div>
+        <div class="modal-body">
+          <p id="id_success_message">{{message}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="id_success_accept">{{accept_btn}}</button>
+          <button type="button" id="id_success_reject">{{reject_btn}}</button>
+          <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+        </div>
+        </div>
+    </div>
+  </div>  
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp_error">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+       <div id="id_close_error_modal">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h1 class="modal-title">Login</h1>
+        </div>
+        <div class="modal-body">
+          <p id="id_error_message">{{message}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="id_error_accept">{{accept_btn}}</button>
+          <button type="button" id="id_error_reject">{{reject_btn}}</button>
+          <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+        </div>
+        </div>
+    </div>
+  </div>  
+</div>
 <!--signup-->
 <div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
   <div class="modal-dialog modal-sm" role="document">
@@ -345,5 +401,5 @@
     </script>
     <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
-    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
 {% endblock js_section %}

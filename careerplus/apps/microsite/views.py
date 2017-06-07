@@ -1,11 +1,12 @@
 import logging
-
+import json
 from django.views.generic import TemplateView, View
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.utils.text import slugify
 from django.urls import reverse
 from django.utils import timezone
+from datetime import datetime
 
 from .roundoneapi import RoundOneAPI, RoundOneSEO
 from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
@@ -20,7 +21,6 @@ class PartnerHomeView(TemplateView):
         context = super(PartnerHomeView, self).get_context_data(**kwargs)
         partner = kwargs.get('partner', '')
         flag_status = False
-
         try:
             flag_status = Subscription.objects.filter(
                 candidateid=self.request.session['candidate_id'],
@@ -40,7 +40,7 @@ class PartnerHomeView(TemplateView):
                 "faq_qs": faq_qs, "testimonial_qs": testimonial_qs,
                 "loginform": ModalLoginApiForm(),
                 "registerform": ModalRegistrationApiForm(),
-                'flag_status': flag_status
+                'flag': flag_status
             })
 
             context.update(RoundOneAPI().get_location_list(**kwargs))
@@ -67,7 +67,7 @@ class PartnerListView(TemplateView):
                 expire_on__gt=timezone.now()).exists()
         except:
             pass
-
+            
         if partner == 'roundone':
             context.update(self.get_partner_context(**kwargs))
             context.update(self.get_breadcrumb_data())
@@ -112,7 +112,7 @@ class PartnerListView(TemplateView):
             context.update(RoundOneSEO().get_seo_data(data_for="listing", **context))
             context.update(RoundOneAPI().get_location_list(**kwargs))
             context.update(**kwargs)
-            if self.request.user.is_authenticated():
+            if self.request.session.get('candidate_di', ''):
                 if RoundOneAPI().is_premium_user(self.request):
                     context.update({'is_roundone_premium': True})
         except Exception as e:
@@ -154,10 +154,7 @@ class PartnerDetailView(TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        partner = kwargs.get('partner', '')
-        if partner:
-            return super(PartnerDetailView, self).get(request, *args, **kwargs)
-        # return HttpResponseRedirect(reverse_lazy('gosf:gosf_home'))
+        return super(PartnerDetailView, self).get(request, *args, **kwargs)
 
     def get_partner_context(self, **kwargs):
         context = {}
@@ -211,7 +208,6 @@ class GetReferenceView(View, RoundOneAPI):
     def post(self, request, *args, **kwargs):
         job_params = request.POST.get('job_params', "").split('-')
         source = request.POST.get('source')
-
         try:
             if 'candidate_id' in request.session:
                 if self.is_premium_user(request):
@@ -248,12 +244,12 @@ class GetReferenceView(View, RoundOneAPI):
                         if status and status == "1" or status == "0":
                             return HttpResponse(json.dumps(
                                 {'status': True, 'response': True,
-                                 'message': response_json.get('msg')}))
+                                'message': response_json.get('msg')}))
                         elif status == "-1":
                             try:
                                 return HttpResponse(json.dumps(
                                     {'status': True, 'response': False,
-                                     'message': response_json.get('msg').values[0][0]}))
+                                     'message': response_json.get('msg')}))
                             except:
                                 return HttpResponse(json.dumps(
                                     {'status': True, 'response': False,
@@ -261,17 +257,33 @@ class GetReferenceView(View, RoundOneAPI):
                     return HttpResponse(json.dumps(
                         {'status': False, 'message': "Something went wrong."}))
 
-            # try:
-            #     if self.add_cart_roundone():
-            #         request.session.update({
-            #             "roundone_job_params": '-'.join(job_params),
-            #             "roundone_source": source
-            #             })
-            #         return HttpResponse(
-            #             json.dumps({'status': True, 'show_cart': True}))
-            # except Exception as e:
-            #     logging.getLogger('error_log').error(str(e))
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return HttpResponse(
             json.dumps({'status': False, 'message': 'Something went wrong.'}))
+
+
+
+class SaveJobView(View, RoundOneAPI):
+    def get(self, request, *args, **kwargs):
+        return super(GetReferenceView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if 'candidate_id' in request.session:
+            if self.is_premium_user(request):
+
+                job_params = request.POST.get('job_params', '')
+                kwargs.update({'job_params': job_params})
+                response_json = self.save_job(request, **kwargs)
+                if response_json.get("response"):
+                    return HttpResponse(
+                        json.dumps(
+                            {'status': True, 'response': True,
+                             'message': response_json.get('msg')}))
+                return HttpResponse(
+                    json.dumps(
+                        {'status': True, 'response': False,
+                         'message': "Something went wrong."}))
+
+        return HttpResponse(json.dumps({
+            'status': False, 'message': 'Something went wrong.'}))

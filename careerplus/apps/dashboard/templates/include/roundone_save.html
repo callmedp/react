@@ -1,0 +1,47 @@
+{% load static %}
+{% load core_filter_tags %}
+{% if saved_history.data %}
+<ul class="referral-jobs">
+{% for job in saved_history.data %}
+    {% with job.jobId|slugit:job.jobType|slugit:job.referrerDetails.referrerId as job_params %}
+        {% url 'partner-detail' partner='roundone' job_title=job.jobTitle|slugify job_params=job_params as detail_url %}
+          <li>
+            <h2><a href="{{detail_url}}">{{job.jobTitle}}</a></h2>
+            <span class="location"><strong>{{job.company}}</strong> | 
+            {{job.jobLocation}}
+            </span>
+            <!--
+            <datatlist class="list1">Exp:</datatlist>
+            <datatlist class="list2">4 years</datatlist>
+            -->
+            <div class="clearfix"></div>
+            <datatlist class="list1">Job Description:</datatlist>
+            <datatlist class="list2">
+                {{job.jobDescription|truncatewords:15}}
+            </datatlist>
+            <div class="clearfix"></div>
+            <datatlist class="list1">Your Referrer:</datatlist>
+            <datatlist class="list2">
+            {% with job.referrerDetails as ref %}
+            <figure>
+                <img src="{% static 'shinelearn/images/referral-job.jpg' %}" alt="Shine Learning">
+            </figure>
+            {{ref.position}}, {{ref.department}}
+            {% endwith %}
+            </datatlist>
+            <a class="get-refferd" onclick="onClickGetReference({{job.jobId}});">
+            Get Referred</a>
+            <a href="{{detail_url}}" class="view-job">View job description</a>
+            <div class="saved-today">
+              Saved today | <a class="delete-icon" onclick="onClickDeleteJob({{job.jobId}})"></a>
+            </div>
+            <form id="id_{{job.jobId}}">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token_value}}">
+                <input name="job_params" type="hidden" value="{{job_params}}">
+            </form>
+          </li>
+    {% endwith %}
+{% endfor %}  
+</ul>
+<input type="hidden" name="roundone-get-reference" value="{% url "roundone-get-reference" %}">
+{% endif %}

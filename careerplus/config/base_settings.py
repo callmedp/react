@@ -75,6 +75,7 @@ LOCAL_APPS = [
     'order',
     'blog',
     'microsite',
+    'dashboard',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

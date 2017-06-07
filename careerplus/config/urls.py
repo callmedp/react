@@ -59,6 +59,7 @@ urlpatterns += [
     # url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
+    url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
 
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
