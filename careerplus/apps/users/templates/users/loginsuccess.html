@@ -1,0 +1,20 @@
+{% extends "basic/base.html" %}
+    {% block css_section %}
+        {{block.super}}
+    {% endblock css_section %}    
+    {% block container %}
+
+    	<div class="container">
+    	    <div class="row">
+    	        <div class="jumbotron">
+    	            <h1>Hello</h1>
+    	            <p>{{request.session.mobile_no}}</p>
+    	        </div>
+    	    </div>
+    	</div>
+    
+    {% endblock container %}
+    {% block js_section %}
+        {{block.super}}
+    {% endblock js_section %}  
+

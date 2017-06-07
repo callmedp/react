@@ -1,61 +1,74 @@
 {% load static %}
+{% spaceless %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    {% block meta_tags %}
+  {% block head %}
+    <head>
+    {% block meta_html %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-    {% endblock meta_tags %}
+        {% block django_meta %}
+          
+        {% endblock django_meta %}
+    
+    {% endblock meta_html %}
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}CMS - Shine Learning{%endblock title%}</title>
+
+    {% block canonical_url %}
+      
+    {% endblock canonical_url %}
     
-    {% block css %}
+    {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
         <!-- Bootstrap -->
-        <link type="text/css" href="{% static 'console/css/cms/bootstrap.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'console/css/cms/header-footer.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
          <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-    {% endblock css %}
+    {% endblock css_section %}
    </head>
-
+{% endblock head %} 
 <body>
-     <!-- navigation bar -->
-    {% include 'basic/navigation.html' %}
+{% block navigation %}
+  <!-- navigation bar -->
+  {% include 'basic/navigation.html' %}
 
-    {% block blogtrending %}
-    {% endblock blogtrending %}
+{% endblock navigation %}
 
+{% block blogtrending %}
+
+{% endblock blogtrending %}
 <!-- breadcrums -->
 {% block breadcrumb %}
-    
+      
 {% endblock breadcrumb %}
 
 {% block pageheading %}
-    
+  
+
 {% endblock pageheading %}
 
 <!-- main section start -->
 {% block container %}
 
 {% endblock container %}
+{% block footer %}
+      <!-- footer -->
+  {% include 'basic/footer.html' %}      
+{% endblock footer %}
 
-
-<!-- footer -->
-{% include 'basic/footer.html' %}
-
-    {% block js %}
+{% block js_section %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
-    </script-->
-    <script src="{% static 'shinelearning/js/jquery.min.js' %}"></script>
-    <script src="{% static 'console/js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
     
     <script>
         $('.nav-tabs > li > a').hover(function() {
@@ -65,6 +78,8 @@
             $('.dropdown-toggle', this).trigger('click'); 
           });
     </script>
-    {% endblock js %}
-  </body>
+{% endblock js_section %}
+</body>
 </html>
+{% endspaceless %}
+

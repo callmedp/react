@@ -12,11 +12,14 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import sys
+import redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
+
+GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -24,15 +27,14 @@ sys.path.append(os.path.join(BASE_DIR, 'apps'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g58#1(xdr&s%t@$erwjosc@nuiuy4j)9#g+*jhr#m1o6c)zws7'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 TEMPLATE_DEBUG = False  # django sorl required
 
-ALLOWED_HOSTS = []
 
 # Application definition
 DJANGO_APPS = [
+    'grappelli',
+    'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,8 +49,10 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'meta',
+    'cities_light',
     'sorl.thumbnail',
     'rest_framework',
+    'requests'
 ]
 
 # Apps specific for this project go here.
@@ -56,10 +60,21 @@ LOCAL_APPS = [
     'users',
     'cms',
     'design',
+    'faq',
     'seo',
     'ajax',
-    'blog',
+    'skillpage',
+    'review',
+    'geolocation',
     'console',
+    'coupon',
+    'partner',
+    'payment',
+    'shop',
+    'cart',
+    'order',
+    'blog',
+    'microsite',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -143,7 +158,7 @@ REST_FRAMEWORK = {
 }
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
-CKEDITOR_JQUERY_URL = 'shinelearning/js/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
+CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
@@ -153,3 +168,13 @@ CKEDITOR_CONFIGS = {
         # 'extraPlugins': 'codesnippet',
     },
 }
+
+
+BROKER_URL = 'redis://localhost:6379/0'
+
+try:
+    REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
+except:
+    REDIS_CON = None
+
+CART_MAX_LIMIT = 5

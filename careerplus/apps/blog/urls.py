@@ -3,7 +3,7 @@ from django.conf.urls import url
 from .views import BlogLandingPageView, BlogLandingAjaxView,\
     BlogCategoryListView, BlogDetailView, BlogDetailAjaxView,\
     LoginToCommentView, ShowCommentBoxView, LoadMoreCommentView,\
-    BlogTagListView
+    BlogTagListView, RegisterToCommentView
 
 from .adminview import TagAddFormView, CategoryAddFormView, BlogAddFormView,\
     TagListView, TagUpdateView, CategoryListView, CategoryUpdateView,\
@@ -30,11 +30,15 @@ urlpatterns = [
     url(r'^load-more-comment/$', LoadMoreCommentView.as_view(),
         name='article-load-more-comment'),
 
-    url(r'^(?P<slug>[-\w]+)/$',
+    url(r'^(?P<slug>[-\w]+)/(?P<pk>\d+)/$',
         BlogDetailView.as_view(), name='articles-deatil'),
 
-    url(r'^login-to-comment/(?P<slug>[-\w]+)/$',
+    url(r'^login-to-comment/$',
         LoginToCommentView.as_view(), name='login-to-comment'),
+
+    url(r'^register-to-comment/$',
+        RegisterToCommentView.as_view(), name='register-to-comment'),
+
 
 
     url(r'^admin/comment-to-moderate/$', CommentListView.as_view(),

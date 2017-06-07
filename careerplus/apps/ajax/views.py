@@ -1,14 +1,20 @@
 import json
 import logging
 import datetime
+import requests
 
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
+from shop.models import Category
 from blog.models import Blog, Comment
+from geolocation.models import Country
+from review.models import Review
+from users.mixins import RegistrationLoginApi
 
 
 class ArticleCommentView(View):
@@ -19,12 +25,13 @@ class ArticleCommentView(View):
 				message = request.POST.get('message').strip()
 				slug = request.POST.get('slug').strip()
 				blog = Blog.objects.get(slug=slug)
-				if request.user.is_authenticated() and message:
-					Comment.objects.create(blog=blog, message=message, created_by=request.user)
+				if request.session.get('candidate_id') and message:
+					Comment.objects.create(blog=blog, message=message, candidate_id=request.session.get('candidate_id'))
 					status = 1
 					blog.no_comment += 1
 					blog.save()
-			except:
+			except Exception as e:
+				logging.getLogger('error_log').error("%s " % str(e))
 				pass
 			data = {"status": status}
 			return HttpResponse(json.dumps(data), content_type="application/json")
@@ -83,3 +90,81 @@ class CmsShareView(View):
 				pass
 			data = ["Success"]
 			return HttpResponse(json.dumps(list(data)), content_type="application/json")
+
+
+class AjaxProductLoadMoreView(TemplateView):
+    template_name = 'include/load_product.html'
+
+    def get(self, request, *args, **kwargs):
+        return super(AjaxProductLoadMoreView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AjaxProductLoadMoreView, self).get_context_data(**kwargs)
+        slug = self.request.GET.get('slug', '')
+        page = int(self.request.GET.get('page', 1))
+        try:
+            page_obj = Category.objects.get(slug=slug, active=True)
+            products = page_obj.product_set.all()
+            paginator = Paginator(products, 1)
+            try:
+                products = paginator.page(page)
+            except PageNotAnInteger:
+                products = paginator.page(1)
+            except EmptyPage:
+            	# products=paginator.page(paginator.num_pages)
+                products = 0
+            context.update({'products': products, 'page': page, 'slug': slug})
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+        return context
+
+
+class AjaxReviewLoadMoreView(TemplateView):
+    template_name = 'include/load_review.html'
+
+    def get(self, request, *args, **kwargs):
+        return super(AjaxReviewLoadMoreView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AjaxReviewLoadMoreView, self).get_context_data(**kwargs)
+        slug = self.request.GET.get('slug', '')
+        page = int(self.request.GET.get('page', 1))
+        try:
+            page_obj = Category.objects.get(slug=slug, active=True)
+            prod_id_list = page_obj.product_set.values_list('id', flat=True)
+            prod_reviews = Review.objects.filter(id__in=prod_id_list)
+            paginator = Paginator(prod_reviews, 1)
+            try:
+                page_reviews = paginator.page(page)
+            except PageNotAnInteger:
+                page_reviews = paginator.page(1)
+            except EmptyPage:
+                page_reviews = 0
+            context.update({'page_reviews': page_reviews, 'page': page, 'slug': slug})
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+        return context
+
+
+class EmailExistView(View):
+	def get(self, request, *args, **kwargs):
+		email = request.GET.get('email')
+		try:
+			data = RegistrationLoginApi().check_email_exist(email)
+		except:
+			pass
+		return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class AjaxStateView(View):
+
+	def get(self, request, *args, **kwargs):
+		data = {"states": []}
+		try:
+			country_code = request.GET.get('country_code', '91')
+			country_obj = Country.objects.get(phone=country_code)
+			states = country_obj.state_set.all().values_list('name', flat=True)
+			data['states'] = list(states)
+		except:
+			pass
+		return HttpResponse(json.dumps(data), content_type="application/json")

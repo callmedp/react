@@ -2,20 +2,19 @@
 {% load static %}
 {% load humanize %}
 {% load thumbnail %}
-    {% block meta_tags %}
+    {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_tags %}
+    {%  endblock meta_html %}
 
     {% block title %}
        Career Guidance & Advice – Articles @ Learning.Shine
     {% endblock title %}
     
-    {% block css %}
-        {{block.super}}     
-        <link type="text/css" href="{% static 'console/css/blog/blog.css' %}" rel="stylesheet">
-        
-    {% endblock css %}
+    {% block css_section %}
+        {{block.super}}
+        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet">        
+    {% endblock css_section %}
 
     {% block blogtrending %}
         <header class="carousel-bgcolor pr mb-40">
@@ -29,7 +28,7 @@
                            {% if art %}
                             <div class="item {% if forloop.counter == 1 %} active {% endif %}">
                               <div class="col-sm-4">
-                                <a href="{% url "blog:articles-deatil" art.slug %}">
+                                <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
                                  {% if art.image %}
                                   {% thumbnail art.image "360x271" crop="center" as im %}
                                     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
@@ -74,10 +73,10 @@
                 {% endfor %}
             </ol>
         </section>
-        
     {% endblock breadcrumb %}
 
    {% block pageheading %}
+
        <section class="container">
           <div class="page-header">
             <h1 class="blog-heading">Top articles</h1>
@@ -101,19 +100,23 @@
 
         <!-- right content start -->
         <div class="col-md-3 col-sm-12">
-
+          
+          {% if categories %}
           <!-- related -->
           <div class="categories box-panel mb-40">
             <h2 class="heading-right">Categories</h2>
             <ul>
                 {% for cat in categories %}
-                <li>
-                   <a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a>
-                </li>
+                   {% if cat.article_exists %}
+                    <li>
+                       <a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a>
+                    </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
             <a href="{% url "blog:blog-landing" %}" class="view-article text-right db mt-10">View more</a>
           </div>
+          {% endif %}
 
         </div>
         <!-- right content end -->
@@ -127,9 +130,10 @@
 {% endblock container %}
   
 
-{% block js %}
+{% block js_section %}
    {{ block.super }}
-   <script src="{% static 'console/js/blog/blog-landing.js' %}"></script>
+   <script src="{% static 'shinelearn/js/blog/blog-landing.js' %}"></script>
+   <!--script src="{% static 'console/js/blog/blog-landing.js' %}"></script-->
 
    <script type="text/javascript">
     $('.nav-tabs > li > a').hover(function() {
@@ -161,4 +165,4 @@
       });
     </script>
 
-{% endblock js %}
+{% endblock js_section %}

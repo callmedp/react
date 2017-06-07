@@ -2,19 +2,19 @@
 {% load static %}
 {% load humanize %}
 {% load thumbnail %}
-    {% block meta_tags %}
+    {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_tags %}
+    {%  endblock meta_html %}
 
     {% block title %}
        {{category.name}} – Career Articles @ Learning.Shine
     {% endblock title %}
     
-    {% block css %}
-        {{block.super}}  
-        <link type="text/css" href="{% static 'console/css/blog/blog.css' %}" rel="stylesheet"> 
-    {% endblock css %}
+    {% block css_section %}
+        {{block.super}} 
+        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet"> 
+    {% endblock css_section %}
 
     
     {% block breadcrumb %}
@@ -62,7 +62,7 @@
           {% for obj in recent_page %}
               <div class="box-panel article-listing mb-30">
                 <div class="media">
-                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug %}">
+                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
                    {% if obj.image %}
                     <figure class="media-left">
                       {% thumbnail obj.image "171x113" crop="center" as im %}
@@ -72,7 +72,7 @@
                     </figure>
                     {% endif %}
                     <div class="media-body">
-                      <h3 class="media-heading">{{obj.name}}</h3>
+                      <h3 class="media-heading">{{obj.display_name}}</h3>
                       <article>{{obj.content|striptags|safe|truncatechars:300}}</article>
                       <span class="view-forward"><figure class="forward-icon"></figure> {{obj.comment_moderated}} <figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
                       <span class="editor">{{obj.user.name}}, {{obj.publish_date.date}}</span>
@@ -156,7 +156,7 @@
            {% for obj in pop_page %}
                <div class="box-panel article-listing mb-30">
                 <div class="media">
-                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug %}">
+                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
                   {% if obj.image %}
                     <figure class="media-left">
                       {% thumbnail obj.image "171x113" crop="center" as im %}
@@ -166,7 +166,7 @@
                     </figure>
                     {% endif %}
                     <div class="media-body">
-                      <h3 class="media-heading">{{obj.name}}</h3>
+                      <h3 class="media-heading">{{obj.display_name}}</h3>
                       <article>{{obj.content|striptags|safe|truncatechars:300}}</article>
                       <span class="view-forward"><figure class="forward-icon"></figure>{{obj.comment_moderated}}<figure class="view-icon ml-20"></figure> {{obj.no_views}}</span>
                       <span class="editor">{{obj.user.name}}, {{obj.publish_date.date}}</span>
@@ -239,17 +239,22 @@
     <!-- right content start -->
     <div class="col-md-3 col-sm-12 mt-45">
 
+      {% if categories %}
       <!-- Categories -->
       <div class="categories box-panel mb-40">
         <h2 class="heading-right">Categories</h2>
         <ul>
         {% for cat in categories %}
+            {% if cat.article_exists %}
             <li><a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a></li>
+            {% endif %}
         {% endfor %}
         </ul>
         <a href="{% url "blog:blog-landing" %}" class="view-article text-right db mt-10">View more</a>
       </div>
+      {% endif %}
 
+      {% if pop_articles %}
       <!-- Popular & Recent -->
       <div class="recent-popular-tabs box-panel mb-40">
         <ul role="tablist">
@@ -263,7 +268,7 @@
 
             {% for art in pop_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
@@ -273,7 +278,7 @@
                     </figure>
                 {% endif %}
                 <div class="media-body">
-                  {{art.name}}
+                  {{art.display_name}}
                 </div>
               </a>
             </div>
@@ -286,7 +291,7 @@
 
             {% for art in recent_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
@@ -296,7 +301,7 @@
                     </figure>
               {% endif %}
                 <div class="media-body">
-                  {{art.name}}
+                  {{art.display_name}}
                 </div>
               </a>
             </div>
@@ -306,6 +311,7 @@
         </div>
         
       </div>
+      {% endif %}
 
 
 
@@ -320,6 +326,6 @@
 {% endblock container %}
   
 
-{% block js %}
+{% block js_section %}
    {{ block.super }}
-{% endblock js %}
+{% endblock js_section %}
