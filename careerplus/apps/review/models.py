@@ -52,6 +52,11 @@ class Review(AbstractAutoDate):
     status = models.SmallIntegerField(
         _("Status"), choices=STATUS_CHOICES, default=0)
 
+    # fields for testimonials
+    designation = models.CharField(max_length=200, null=True, blank=True)
+    company = models.CharField(max_length=200, null=True, blank=True)
+    is_testimonial = models.BooleanField(default=False)
+
     # GFK 'extra_item' If required let say linking review to orderitem and product. if required
     extra_content_type = models.ForeignKey(
         ContentType,

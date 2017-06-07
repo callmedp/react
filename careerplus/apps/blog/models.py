@@ -45,7 +45,7 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 	def save(self, *args, **kwargs):
 		if not self.title:
-			self.title = self.name + ' – Career Articles @ Learning.Shine'
+			self.title = self.name + ' - Career Articles @ Learning.Shine'
 		if not self.heading:
 			self.heading = self.name
 		if not self.meta_desc:

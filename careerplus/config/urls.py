@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 from users.views import (LogoutView,
     DashboardView, RegistrationApiView, LoginApiView, LogoutApiView)
+from homepage.views import HomePageView
 
 from shop.views import ProductDetailView
 
@@ -40,6 +41,7 @@ urlpatterns += [
 urlpatterns += [
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', HomePageView.as_view(), name='homepage'),
     url(r'^console/', include('console.urls', namespace='console')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^cms/', include('cms.urls', namespace='cms')),

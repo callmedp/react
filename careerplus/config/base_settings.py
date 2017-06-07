@@ -70,6 +70,7 @@ LOCAL_APPS = [
     'cart',
     'order',
     'blog',
+    'homepage',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

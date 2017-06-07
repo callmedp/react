@@ -69,7 +69,12 @@ $(document).ready(function() {
     $('input[name="radio"]').click(function(){
         if ($(this).is(':checked'))
         {
-            var var_price =  parseFloat($(this).attr('data-price'));
+            var var_price;
+            try{
+                var_price =  parseFloat($(this).attr('data-price'));
+            }catch(err){
+                var_price = parseFloat(0);
+            }
             var var_id = $(this).attr('data-id');
             var_price = 'Rs. ' + var_price.toString() + '/-';
             $('#total-price').text(var_price);
@@ -81,16 +86,35 @@ $(document).ready(function() {
     $('input[name="fbt"]').click(function(){
         if ($(this).is(':checked'))
         {
-            var fbt_price =  parseFloat($(this).attr('data-price'));
-            var sum_price = parseFloat($('#total-price').attr('sum-price'));
+            var fbt_price, sum_price;
+            try{
+                fbt_price =  parseFloat($(this).attr('data-price'));
+            }catch(err){
+                fbt_price = parseFloat(0);
+            }
+            try{
+                sum_price = parseFloat($('#total-price').attr('sum-price'));
+            }catch(err){
+                sum_price = parseFloat(0);
+            }
             sum_price = fbt_price + sum_price;
             show_price = 'Rs. ' + sum_price.toString() + '/-';
             $('#total-price').text(show_price);
             $("#total-price").attr("sum-price", sum_price);
         }
         else{
-            var fbt_price =  parseFloat($(this).attr('data-price'));
-            var sum_price = parseFloat($('#total-price').attr('sum-price'));
+            var fbt_price, sum_price;
+            try{
+                fbt_price =  parseFloat($(this).attr('data-price'));
+            }catch(err){
+                fbt_price = parseFloat(0);
+            }
+            try{
+                sum_price = parseFloat($('#total-price').attr('sum-price'));
+            }catch(err){
+                sum_price = parseFloat(0);
+            }
+            
             sum_price = sum_price - fbt_price;
             show_price = 'Rs. ' + sum_price.toString() + '/-';
             $('#total-price').text(show_price);
@@ -102,16 +126,35 @@ $(document).ready(function() {
     $('input[name="required_option"]').click(function(){
         if ($(this).is(':checked'))
         {
-            var req_price =  parseFloat($(this).attr('data-price'));
-            var sum_price = parseFloat($('#total-price').attr('sum-price'));
+            var req_price, sum_price;
+            try{
+                req_price =  parseFloat($(this).attr('data-price'));
+            }catch(err){
+                req_price = parseFloat(0);
+            }
+            try{
+                sum_price = parseFloat($('#total-price').attr('sum-price'));
+            }catch(err){
+                sum_price = parseFloat(0);
+            }
+            
             sum_price = req_price + sum_price;
             show_price = 'Rs. ' + sum_price.toString() + '/-';
             $('#total-price').text(show_price);
             $("#total-price").attr("sum-price", sum_price);
         }
         else{
-            var req_price =  parseFloat($(this).attr('data-price'));
-            var sum_price = parseFloat($('#total-price').attr('sum-price'));
+            var req_price, sum_price;
+            try{
+                req_price =  parseFloat($(this).attr('data-price'));
+            }catch(err){
+                req_price = parseFloat(0);
+            }
+            try{
+                sum_price = parseFloat($('#total-price').attr('sum-price'));
+            }catch(err){
+                sum_price = parseFloat(0);
+            }
             sum_price = sum_price - req_price;
             show_price = 'Rs. ' + sum_price.toString() + '/-';
             $('#total-price').text(show_price);
