@@ -1,11 +1,11 @@
 {
   "name": "bootstrap",
-  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+  "description": "The most popular front-end framework for developing responsive, common first projects on the web.",
   "keywords": [
     "css",
     "js",
     "less",
-    "mobile-first",
+    "common-first",
     "responsive",
     "front-end",
     "framework",

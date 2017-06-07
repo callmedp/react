@@ -46,12 +46,13 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'cities_light',
     'ckeditor',
     'ckeditor_uploader',
+    'django_mobile',
     'meta',
-    'cities_light',
-    'sorl.thumbnail',
     'requests'
+    'sorl.thumbnail',
 ]
 
 # Apps specific for this project go here.
@@ -89,6 +90,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_mobile.middleware.MobileDetectionMiddleware',
+    'django_mobile.middleware.SetFlavourMiddleware'
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -104,6 +107,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_mobile.context_processors.flavour'
+            ],
+            'loaders': [
+                ('django.template.loaders.cached.Loader', [
+                    'django_mobile.loader.Loader',
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader'
+                ]),
             ],
         },
     },

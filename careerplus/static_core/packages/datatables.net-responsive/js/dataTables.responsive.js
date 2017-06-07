@@ -55,7 +55,7 @@ var DataTable = $.fn.dataTable;
  * DataTables' ability to change the visibility of columns, changing the
  * visibility of columns so the displayed columns fit into the table container.
  * The end result is that complex tables will be dynamically adjusted to fit
- * into the viewport, be it on a desktop, tablet or mobile browser.
+ * into the viewport, be it on a desktop, tablet or common browser.
  *
  * Responsive for DataTables has two modes of operation, which can used
  * individually or combined:
@@ -928,8 +928,8 @@ Responsive.breakpoints = [
 	{ name: 'desktop',  width: Infinity },
 	{ name: 'tablet-l', width: 1024 },
 	{ name: 'tablet-p', width: 768 },
-	{ name: 'mobile-l', width: 480 },
-	{ name: 'mobile-p', width: 320 }
+	{ name: 'common-l', width: 480 },
+	{ name: 'common-p', width: 320 }
 ];
 
 

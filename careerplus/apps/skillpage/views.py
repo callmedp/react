@@ -139,7 +139,7 @@ class SkillQueryLead(View, UploadInFile):
 
         data_dict = {
             "name": name,
-            "mobile": mobile,
+            "common": mobile,
             "message": message,
         }
         self.write_in_file(data_dict=data_dict)

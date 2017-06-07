@@ -112,8 +112,8 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         if cart_obj.mobile:
             p_billing_tel = cart_obj.mobile  #excluding country_code
             merchant_data += 'billing_tel=' + p_billing_tel + '&'
-        elif self.request.session.get('mobile'):
-            p_billing_tel = self.request.session.get('mobile')
+        elif self.request.session.get('common'):
+            p_billing_tel = self.request.session.get('common')
             merchant_data += 'billing_tel=' + p_billing_tel + '&'
 
         if cart_obj.email:

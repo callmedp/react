@@ -16497,7 +16497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	/**
-	 * Only implements needed gestures for mobile.
+	 * Only implements needed gestures for common.
 	 */
 
 

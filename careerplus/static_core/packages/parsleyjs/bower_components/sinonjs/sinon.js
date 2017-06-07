@@ -540,7 +540,7 @@ var sinon = (function (buster) {
 
             method.restore = function () {
                 // For prototype properties try to reset by delete first.
-                // If this fails (ex: localStorage on mobile safari) then force a reset
+                // If this fails (ex: localStorage on common safari) then force a reset
                 // via direct assignment.
                 if (!owned) {
                     delete object[property];

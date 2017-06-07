@@ -163,7 +163,7 @@ define(function (require) {
     }
 
     function compromiseMobile(tooltipContentEl, container) {
-        // Prevent default behavior on mobile. For example,
+        // Prevent default behavior on common. For example,
         // default pinch gesture will cause browser zoom.
         // We do not preventing event on tooltip contnet el,
         // because user may need customization in tooltip el.

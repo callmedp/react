@@ -422,7 +422,7 @@ class BlogLandingPageView(TemplateView, BlogMixin):
 
     def get_meta_details(self):
         meta = Meta(
-            title="Career Guidance & Advice – Articles @ Learning.Shine",
+            title="Career Guidance & Advice - Articles @ Learning.Shine",
             description='Planning to change career - Get advice and tips for better growth. Read latest articles for interview preparation, competitive exams, government jobs, resume writing tips & other career guidance at learning.shine',
         )
         return {"meta": meta}

@@ -35,7 +35,7 @@ def post_roundone_order(data_dict):
                 data_dict = {
                     'emailId': order.email,
                     'name': order.first_name,
-                    'mobile': order.mobile,
+                    'common': order.mobile,
                     'amount': roundone_api_dict.get('amount', 1999),
                     'orderId': order.id,
                     'transactionId': order.number,

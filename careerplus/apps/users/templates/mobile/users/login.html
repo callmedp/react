@@ -1,0 +1,57 @@
+{% extends "mobile/basic/base.html" %}
+{% block title %}Login Shine learning{% endblock %}
+{% block css_section %}
+{{ block.super }}
+<link href="css/login.css" rel="stylesheet">
+{% endblock css_section %}
+
+
+{% block container %}
+    <div class="body-wrapper">
+        <div class="tab-container">
+            <ul class="tabs box-panel p-0">
+                <li><a href="login.html" class="current">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+
+            <!-- Tab content Satrts here -->
+            <div class="content-box mt-20">
+                <form>
+                    <div class="form-group error">
+                        <input type="email" class="form-control" placeholder="Email">
+                        <p class="mgs">Please enter vaild email address.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="c9">
+                            <input type="checkbox"> Remember me
+                        </label>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Login</button>
+                        <a href="#">Forgot Password?</a>
+                    </div>
+
+                    <div class="line_wrap w100fl">
+                        <span>or sign in with</span>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="social-login w100fl text-center">
+                        <a href="#" class="fb"><sup class="icon-fb-2"></sup></a>
+                        <a href="#" class="tw"><sup class="icon-tw-2"></sup></a>
+                        <a href="#" class="gp"><sup class="icon-gp-2"></sup></a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <a href="#" class="any-query block mt-20 text-center row">Any Query ? We are here to help you..</a>
+                </form>
+            </div><!-- Tab content ends here -->
+        </div><!-- container -->
+    </div>
+{% endblock container %}
