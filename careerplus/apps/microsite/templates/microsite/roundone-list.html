@@ -144,12 +144,10 @@
           <datatlist class="list2">4 years</datatlist>
           -->
           <div class="clearfix"></div>
-          {% if job.jobDescription %}
           <datatlist class="list1">Job Description:</datatlist>
           <datatlist class="list2">
-            {{job.jobDescription|safe|truncatewords:15|striptags}}
+            {{job.jobDescription|safe|truncatewords:15}}
           </datatlist>
-          {% endif %}
           <div class="clearfix"></div>
           <datatlist class="list1">Your Referrer:</datatlist>
           <datatlist class="list2">

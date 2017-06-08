@@ -1,5 +1,6 @@
 import logging
 import json
+import re
 from django.views.generic import TemplateView, View
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
@@ -86,9 +87,9 @@ class PartnerListView(TemplateView):
     def get_partner_context(self, **kwargs):
         context = {}
         try:
-
             search_response = RoundOneAPI().get_search_response(self.request, **kwargs)
-            context.update({'search_result': search_response})
+            jsondict = RoundOneAPI().remove_html_tags(search_response)
+            context.update({'search_result': jsondict})
             keyword = kwargs.get('keyword', '')
             location = self.request.GET.get('loc', '').split(',')
             initial_keyword = ""
@@ -112,7 +113,7 @@ class PartnerListView(TemplateView):
             context.update(RoundOneSEO().get_seo_data(data_for="listing", **context))
             context.update(RoundOneAPI().get_location_list(**kwargs))
             context.update(**kwargs)
-            if self.request.session.get('candidate_di', ''):
+            if self.request.session.get('candidate_id', ''):
                 if RoundOneAPI().is_premium_user(self.request):
                     context.update({'is_roundone_premium': True})
         except Exception as e:
@@ -133,7 +134,6 @@ class PartnerListView(TemplateView):
             initial_keyword = keyword.replace("-", " ")
 
         clean_keyword = initial_keyword or keyword
-
         breadcrumbs.append({"url": None, "name": clean_keyword.title()})
         data = {"breadcrumbs": breadcrumbs}
         return data
@@ -163,7 +163,9 @@ class PartnerDetailView(TemplateView):
             data = detail_response.get("data")
             if data:
                 jd = data.get("jobDescription")
-                data.update({"jobDescription": jd.replace("\\n", "<br>")})
+                clean = re.compile('<.*?>')
+                text = re.sub(clean, '', jd)
+                data.update({"jobDescription": text})
             context.update({'job_detail': detail_response})
 
             try:

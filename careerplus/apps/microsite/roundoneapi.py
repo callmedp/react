@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 import json
+import re
 import logging
 import hmac
 import hashlib
@@ -508,6 +509,14 @@ class RoundOneAPI(object):
         except:
             pass
         return user_ip
+
+    def remove_html_tags(self, json_dict):
+        for json_rsp in json_dict.get('data'):
+            jd = json_rsp.get('jobDescription')
+            clean = re.compile('<.*?>')
+            text = re.sub(clean, '', jd)
+            json_rsp.update({'jobDescription': text.replace("\n\n\n", "")})
+        return json_dict
 
 
 class RoundOneSEO(object):
