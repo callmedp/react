@@ -7,7 +7,7 @@ import requests
 from datetime import datetime, timedelta
 from collections import OrderedDict
 from itertools import islice
-
+from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
 from cart.models import Subscription
 
@@ -26,7 +26,7 @@ class RoundOneAPI(object):
             if request:
                 access_token = request.session.get('roundone_access_token', '')
                 token_expiry = request.session.get('roundone_token_expiry')
-                if access_token and token_expiry and datetime.now() < token_expiry:
+                if access_token and token_expiry and datetime.now() < datetime.strptime(json.loads(token_expiry), "%Y-%m-%dT%H:%M:%S.%f"):
                     return access_token
             try:
                 password = Subscription.objects.get(
@@ -57,11 +57,11 @@ class RoundOneAPI(object):
                 response_json = response.json()
                 access_token = response_json.get('access_token', '')
                 expires_in = response_json.get('expires_in', 172800)
-                # if request and access_token:
-                #     request.session.update({
-                #         'roundone_access_token': access_token,
-                #         'roundone_token_expiry': datetime.now() +
-                #         timedelta(seconds=expires_in)})
+                if request and access_token:
+                    request.session.update({
+                        'roundone_access_token': access_token,
+                        'roundone_token_expiry': json.dumps(datetime.now() +
+                        timedelta(seconds=expires_in), cls=DjangoJSONEncoder)})
                 return access_token
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
