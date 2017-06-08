@@ -63,6 +63,8 @@ class AddToCartView(View, CartMixin):
             if data['status'] == 1 and cart_type == "express":
                 data['redirect_url'] = reverse('cart:payment-login')
 
+            data['cart_count'] = str(self.get_cart_count())
+
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
@@ -201,11 +203,11 @@ class PaymentShippingView(UpdateView, CartMixin):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
         except:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
 
         if cart_obj and not (cart_obj.email or self.request.session.get('candidate_id')):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
@@ -281,13 +283,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
             if not cart_obj.shipping_done:
                 return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
         except:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
             
         return None
 

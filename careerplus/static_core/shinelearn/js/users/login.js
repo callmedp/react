@@ -19,13 +19,16 @@ $().ready(function() {
     );
     $("#login_form").validate({
         submitHandler: function(form) {
+            e.preventDefault();
             if($(this).val() != '')
             {
-              $('button[type="submit"]').attr('disabled' , false); 
+              $('button[type="submit"]').prop('disabled', false);  
+              // $('button[type="submit"]').attr('disabled' , false); 
             }
             else
             {
-              $('button[type="submit"]').attr('disabled' , true);
+                $('button[type="submit"]').prop('disabled', true);
+              // $('button[type="submit"]').attr('disabled' , true);
             }   
         },
         rules: {

@@ -53,11 +53,12 @@
     {% csrf_token %}
       <div class="form-group {% if form.email.errors %}error{% endif %}">
         {{ form.email }}
-        <span class="error-txt">{{ form.email.errors }}</span>
+        <span class="error-txt" style="bottom:-25px">{{ form.email.errors }}</span>
       </div>
       <div class="form-group {% if form.email.errors %}error{% endif %}">
         {{ form.raw_password }}
-        <span class="error-txt">{{ form.raw_password.errors }}</span>
+        <span class="error-txt" style="bottom:-25px">{{ form.raw_password.errors }}
+        </span>
       </div>
       <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
         <div class="country-code">
@@ -65,7 +66,8 @@
             {{form.country_code}}
           </div>
           {{form.cell_phone}}
-          <span class="error-txt">{{form.cell_phone.errors}}</span>
+          <span class="error-txt" style="bottom:-33px">{{form.cell_phone.errors}}
+          </span>
         </div>
       </div>
       <div class="form-group">
@@ -74,7 +76,7 @@
       <div class="form-check">
         <label class="form-check-label">
           <input type="checkbox" class="form-check-input" 
-          name="term_conditions">
+          name="term_conditions" checked>
           I agree to Terms & conditions
         </label>
       </div>

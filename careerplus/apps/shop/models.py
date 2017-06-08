@@ -419,6 +419,9 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     requires_delivery = models.BooleanField(
         _("Requires delivery?"),
         default=True)
+    # is_discountable = models.BooleanField(
+    #     _("Discountable?"),
+    #     default=True)
     certification = models.BooleanField(
         _("Give Certification"),
         default=True)
@@ -616,8 +619,14 @@ class Product(AbstractProduct, ModelMeta):
     def get_fakeprice(self, *args, **kwargs):
         prices = self.productprices.filter(currency__value=0, active=True)
         if prices:
-            return round(prices[0].fake_value, 0)
-        return 'Set Fake Price'
+            inr_price = prices[0].value
+            fake_inr_price = prices[0].fake_value
+            if inr_price:
+                if fake_inr_price > Decimal('0.00'):
+                    diff = float(fake_inr_price) - float(inr_price)
+                    percent_diff = round((diff / float(fake_inr_price)) * 100, 0)
+                    return (round(prices[0].fake_value, 0), percent_diff)
+        return None
 
     @property
     def category_slug(self):

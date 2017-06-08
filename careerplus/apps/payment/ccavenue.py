@@ -126,6 +126,8 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         return {'url': context_dict['url'], 'encReq': encryption, 'xscode': context_dict['accesscode']}
 
     def get(self, request, *args, **kwargs):
+        if not request.session.get('cart_pk'):
+            return HttpResponseRedirect(reverse('homepage'))
         data = {}
         cart_id = kwargs.get('order_id', None)   # order_id is cart_pk here
         paytype = kwargs.get('paytype', '')
@@ -207,6 +209,12 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                         return_url = self.process_payment_method(
                             order_type='CCAVENUE', request=request,
                             data={'order_id': order.pk, 'txn_id': txn_id})
+                        try:
+                            del request.session['cart_pk']
+                            del request.session['checkout_type']
+                            request.session.modified = True
+                        except:
+                            pass
                         return HttpResponseRedirect(return_url)
                     except Exception as e:
                         cart_obj = self.get_cart_last_status(cart_obj)

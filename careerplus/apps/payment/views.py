@@ -9,6 +9,7 @@ from order.models import Order
 
 from .forms import StateForm, PayByCheckForm
 from .mixin import PaymentMixin
+from microsite.roundoneapi import RoundOneAPI
 
 
 class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
@@ -19,11 +20,11 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
         except:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
 
         if cart_obj and not (cart_obj.shipping_done):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
@@ -47,9 +48,15 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     self.createOrder(cart_obj)
                     order_type = "CASH"
                     return_parameter = self.process_payment_method(order_type, request)
+                    try:
+                        del request.session['cart_pk']
+                        del request.session['checkout_type']
+                        request.session.modified = True
+                    except:
+                        pass
                     return HttpResponseRedirect(return_parameter)
                 else:
-                    return HttpResponseRedirect(reverse('cart:cart-product-list'))
+                    return HttpResponseRedirect(reverse('homepage'))
             else:
                 context = self.get_context_data()
                 context['state_form'] = form
@@ -64,9 +71,15 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     self.createOrder(cart_obj)
                     order_type = "CHEQUE"
                     return_parameter = self.process_payment_method(order_type, request)
+                    try:
+                        del request.session['cart_pk']
+                        del request.session['checkout_type']
+                        request.session.modified = True
+                    except:
+                        pass
                     return HttpResponseRedirect(return_parameter)
                 else:
-                    return HttpResponseRedirect(reverse('cart:cart-product-list'))
+                    return HttpResponseRedirect(reverse('homepage'))
             else:
                 context = self.get_context_data()
                 context['check_form'] = form
@@ -92,7 +105,7 @@ class ThankYouView(TemplateView):
     def get(self, request, *args, **kwargs):
         if self.request.session.get('order_pk'):
             return super(self.__class__, self).get(request, *args, **kwargs)
-        return HttpResponseRedirect('cart:cart-product-list')
+        return HttpResponseRedirect(reverse('homepage'))
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)

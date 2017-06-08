@@ -222,7 +222,8 @@ $(document).ready(function() {
                 success: function(json) {
 
                     if (json.status == 1){
-                        $('#id-cart-message').text('Added to cart.');
+                        var info = 'Added to cart. You have '+ json.cart_count + ' products in cart.'
+                        $('#id-cart-message').text(info);
                         // alert("product added in cart successfully");
                     }
 

@@ -11,9 +11,14 @@
 
 {% block css_section %}
     {{block.super}}
-    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    <!--link type="text/css" href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet"-->
+    <link href="{% static "shinelearn/css/bootstrap-datepicker.min.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "shinelearn/css/cart/payment.css" %}" rel="stylesheet">
     <style type="text/css">
         .danger-txt{
+            color:red;
+        }
+        .error{
             color:red;
         }
     </style>
@@ -72,7 +77,7 @@
             <a href="{% url "cart:payment-summary" %}" class="review-order">Review order</a>
           </div>
 
-            <ul class="nav nav-tabs payment-tabs col-sm-4 col-md-4 col-lg-3" role="tablist">
+            <ul class="nav payment-tabs col-sm-4 col-md-4 col-lg-3" role="tablist">
               <li role="presentation" class="active"><a href="#card" aria-controls="card" role="tab" data-toggle="tab">Card & Net Banking</a></li>
               <li role="presentation"><a href="#mobikwik" aria-controls="mobikwik" role="tab" data-toggle="tab">Mobikwik</a></li>
               <li role="presentation"><a href="#emi" aria-controls="emi" role="tab" data-toggle="tab">EMI</a></li>
@@ -117,7 +122,7 @@
               </div>
               <div role="tabpanel" class="tab-pane other-payment" id="emi">
                 <article>For EMI, you will be redirected to a secure page where you can choose your bank, and make your payment.</article>
-                <strong>Rs. 4599 <small>(amount payable)</small> </strong>
+                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
 
                 <div class="continue">
                   <button type="button" class="make-payment">Make Payment</button>
@@ -143,7 +148,7 @@
                     <p><small>Account No.</small> : 000705038629</p>
                   </span>
 
-                  <form role="form" method="post" action="." >{% csrf_token %}
+                  <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
                       <span class="custom-select">
                         <div class="{% if state_form.state.errors %}error{% endif %}">
                             {{state_form.state}}
@@ -251,5 +256,6 @@
 
 {% block js_section %}
    {{ block.super }}
+   <script src="{% static 'shinelearn/js/bootstrap-datepicker.min.js' %}"></script>
    <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
 {% endblock js_section %}

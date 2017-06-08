@@ -27,7 +27,6 @@ class RegistrationLoginApi(object):
             if response.status_code == 201:
                 response_json = response.json()
                 response_json.update({'response': "new_user"})
-                request.session['candidate_data'] = response_json
 
             elif "non_field_errors" in response.json():
                 response_json = response.json()
@@ -59,6 +58,10 @@ class RegistrationLoginApi(object):
             elif "non_field_errors" in response.json():
                 response_json = response.json()
                 response_json.update({'response': "error_pass"})
+
+            elif response.status_code == 400:
+                response_json = response.json()
+                response_json.update({'response': "form_error"})
 
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))

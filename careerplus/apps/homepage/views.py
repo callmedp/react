@@ -20,7 +20,7 @@ class HomePageView(TemplateView):
 		pass
 
 	def get_testimonials(self):
-		testimonials = Review.objects.filter(is_testimonial=True)[: 10]
+		testimonials = Review.objects.filter(is_testimonial=True)[: 5]
 		return {"testimonials": testimonials}
 
 	def get(self, request, *args, **kwargs):

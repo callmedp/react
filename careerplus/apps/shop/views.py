@@ -270,6 +270,8 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     def return_http404(self, product):
         if not product:
             return True
+        if not product.active:
+            return True
         if not self.category:
             return True
         if product.var_child:

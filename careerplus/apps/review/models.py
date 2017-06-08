@@ -56,6 +56,8 @@ class Review(AbstractAutoDate):
     designation = models.CharField(max_length=200, null=True, blank=True)
     company = models.CharField(max_length=200, null=True, blank=True)
     is_testimonial = models.BooleanField(default=False)
+    # image
+    # ordering
 
     # GFK 'extra_item' If required let say linking review to orderitem and product. if required
     extra_content_type = models.ForeignKey(
@@ -160,7 +162,7 @@ class Review(AbstractAutoDate):
         return final_score
 
     def get_remarks(self):
-        remarks= ''
+        remarks = ''
         if self.average_rating >= 4.0:
             remarks = "Excellent!"
         elif self.average_rating >= 3.0:
