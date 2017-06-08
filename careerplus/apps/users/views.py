@@ -193,6 +193,10 @@ class LoginApiView(FormView):
                     messages.add_message(self.request, messages.SUCCESS, login_resp["non_field_errors"][0])
                     return render(self.request, self.template_name, {'form': form})
 
+                elif login_resp['response'] == False:
+                    messages.add_message(self.request, messages.SUCCESS, "Something went to wrong")
+                    return render(self.request, self.template_name, {'form': form})    
+
             elif user_exist['exists'] == False:
                 messages.add_message(self.request, messages.SUCCESS, "User have No Account")
                 return render(self.request, self.template_name, {'form': form})
