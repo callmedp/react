@@ -48,12 +48,8 @@ class LoginView(FormView):
     template_name = "users/login.html"
     success_url = "/dashboard/"
 
-    def get_context(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
-        context['form'] = self.get_form()
-        return context
-
     def form_error(self, user):
+        super(LoginView, self).form
         error_message = None
         if user is None:
             error_message = "Username and Password do not match"
@@ -135,14 +131,14 @@ class RegistrationApiView(FormView):
             "country_code": request.POST.get('country_code'),
             "vendor_id": request.POST.get('vendor_id'),
         })
-        user_resp = RegistrationLoginApi().user_registration(post_data)
+        user_resp = RegistrationLoginApi.user_registration(post_data)
 
         if user_resp['response'] == 'new_user':
             login_dict.update({
                 "email": request.POST.get('email'),
                 "password": request.POST.get('password') if request.POST.get('password') else request.POST.get('raw_password'),
             })
-            resp = RegistrationLoginApi().user_login(login_dict)
+            resp = RegistrationLoginApi.user_login(login_dict)
             
             if resp['response'] == 'login_user':
                 resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
@@ -162,27 +158,24 @@ class LoginApiView(FormView):
     template_name = "users/login.html"
     success_url = "/dashboard/"
 
-    def get_context(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
-        context['form'] = self.get_form()
-        return context
-
     def form_valid(self, form):
         login_dict = {}
         remember_me = self.request.POST.get('remember_me', None)
-
+        user_email = self.request.POST.get('email')
         login_dict.update({
-                "email": self.request.POST.get('email'),
-                "password": self.request.POST.get('password')
-            })
+            "email": user_email,
+            "password": self.request.POST.get('password')
+        })
         
         try:
-            user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
-            if user_exist['exists'] == True:
-                login_resp = RegistrationLoginApi().user_login(login_dict)
+            user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
+            if user_exist['exists']:
+                login_resp = RegistrationLoginApi.user_login(login_dict) # TODO: Do we need this check here
+                                                                        # TODO: if we have that check on frontend?
 
                 if login_resp['response'] == 'login_user':
-                    resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
+                    resp_status = ShineCandidateDetail().get_status_detail(email=None,
+                                                                           shine_id=login_resp['candidate_id'])
                     self.request.session.update(resp_status)
 
                     if remember_me:
@@ -190,18 +183,16 @@ class LoginApiView(FormView):
                     return HttpResponseRedirect(self.success_url)
 
                 elif login_resp['response'] == 'error_pass':
-                    messages.add_message(self.request, messages.SUCCESS, login_resp["non_field_errors"][0])
+                    messages.add_message(self.request, messages.ERROR, login_resp["non_field_errors"][0])
                     return render(self.request, self.template_name, {'form': form})
 
-            elif user_exist['exists'] == False:
-                messages.add_message(self.request, messages.SUCCESS, "User have No Account")
+            else:
+                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.")
                 return render(self.request, self.template_name, {'form': form})
 
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-
-    def form_invalid(self, form):
-        return render(self.request, self.template_name, {'form': form})
+            logging.getLogger('error_log').error("Exception while logging in a user with email: %s. "
+                                                 "Exception: %s " % (user_email, str(e)))
 
     def dispatch(self, request, *args, **kwargs):
 

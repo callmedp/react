@@ -40,10 +40,10 @@ class LoginToCommentView(View):
                     "password": self.request.POST.get('password')
                 })
 
-                user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+                user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
                 if user_exist['exists']:
-                    login_resp = RegistrationLoginApi().user_login(login_dict)
+                    login_resp = RegistrationLoginApi.user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
@@ -79,14 +79,14 @@ class RegisterToCommentView(View):
                     "country_code": request.POST.get('country_code'),
                     "vendor_id": request.POST.get('vendor_id'),
                 })
-                user_resp = RegistrationLoginApi().user_registration(post_data)
+                user_resp = RegistrationLoginApi.user_registration(post_data)
 
                 if user_resp['response'] == 'new_user':
                     login_dict.update({
                         "email": request.POST.get('email'),
                         "password": request.POST.get('password') if request.POST.get('password') else request.POST.get('raw_password'),
                     })
-                    resp = RegistrationLoginApi().user_login(login_dict)
+                    resp = RegistrationLoginApi.user_login(login_dict)
 
                     if resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])

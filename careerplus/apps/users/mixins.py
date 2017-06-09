@@ -9,7 +9,8 @@ from geolocation.models import Country
 
 class RegistrationLoginApi(object):
 
-    def user_registration(self, post_data):
+    @staticmethod
+    def user_registration(post_data):
         try:
             response_json = {"response": False}
             post_url = "https://sumosc1.shine.com/api/v2/web/candidate-profiles/?format=json"
@@ -40,8 +41,9 @@ class RegistrationLoginApi(object):
             logging.getLogger('error_log').error("%s " % str(e))
 
         return response_json
-        
-    def user_login(self, login_dict):
+
+    @staticmethod
+    def user_login(login_dict):
         try:
             response_json = {"response": False}
             post_url = "https://sumosc1.shine.com/api/v2/user/access/?format=json"
@@ -67,8 +69,9 @@ class RegistrationLoginApi(object):
             logging.getLogger('error_log').error("%s " % str(e))
 
         return response_json
-    
-    def check_email_exist(self, email):
+
+    @staticmethod
+    def check_email_exist(email):
         try:
             response_json = {"response": False}
             email_url = "https://sumosc1.shine.com/api/v3/email-exists/?email={}&format=json".format(email,)
