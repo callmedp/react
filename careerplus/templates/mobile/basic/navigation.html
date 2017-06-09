@@ -1,4 +1,4 @@
-
+{% load static %}
 <div class="sidebar" id="main-sidebar">
     <div class="main-sidebar-wrapper" id="main-sidebar-wrapper">
         <div class="login_wrap non_login w100fl" style="display:block;">
@@ -6,38 +6,24 @@
                 <div class="user_details">
                     <div class="media">
                         <div class="media-left">
-                          <span><img src="images/user.jpg"></span>
+                            <span><img src="{% static 'shinelearn/images/mobile/common/user.jpg' %}"></span>
                         </div>
                         <div class="media-body rel">
-                          <h3 class="media-heading">Welcome Guest</h3>
-                          <div class="mt-10">
-                            <a href="login.html" class="btn btn-outline">Login</a> 
-                            <a href="register.html" class="btn btn-outline">Register</a>
-                          </div>
+                            <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>
+                            <div class="mt-10">
+                                {% if request.session.candidate_id %}
+                                <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+                                <a href="{% url 'register' %}" class="btn btn-outline">Register</a>
+                                {% else %}
+                                <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div><!-- User after login Ends here -->
-            </div><img src="images/nonlogin.jpg">
+            </div><img src="{% static 'shinelearn/images/mobile/common/nonlogin.jpg' %}">
+
         </div><!-- Login widgets Ends here -->
-
-
-        <div class="login_wrap non_login w100fl" style="display:none;">
-            <div class="login_content">
-                <div class="user_details">
-                    <div class="media">
-                        <div class="media-left">
-                          <span><img src="images/user.jpg"></span>
-                        </div>
-                        <div class="media-body rel">
-                          <h3 class="media-heading">Brijesh rajput</h3>
-                          <div class="mt-10">
-                            <a href="#" class="btn btn-outline">Logout</a>
-                          </div>
-                        </div>
-                    </div>
-                </div><!-- User after login Ends here -->
-            </div><img src="images/nonlogin.jpg">
-        </div><!-- LogOut widgets Ends here -->
 
         <nav>
             <ul class="sb-menu">

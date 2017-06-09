@@ -4,7 +4,7 @@
 // highlight sections and secondary sections of docs content`.
 
 .s2-docs-sidebar {
-  // By default it is not affixed in common views, so undo that
+  // By default it is not affixed in mobile views, so undo that
   &.affix {
     position: static;
   }
@@ -105,13 +105,13 @@
     width: 213px;
   }
 
-  // Undo the static from common first approach
+  // Undo the static from mobile first approach
   .s2-docs-sidebar.affix {
     position: fixed;
     top: 0px;
   }
 
-  // Undo the static from common first approach
+  // Undo the static from mobile first approach
   .s2-docs-sidebar.affix-bottom {
     position: absolute;
   }
@@ -131,7 +131,7 @@
   }
 }
 
-/* Back to top (hidden on common) */
+/* Back to top (hidden on mobile) */
 .back-to-top {
   display: none;
   padding: 4px 10px;

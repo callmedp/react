@@ -24,9 +24,9 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['country_code'].required = True
         self.fields['country_code'].widget.attrs['class'] = form_class
 
-        self.fields['common'].required = True
-        self.fields['common'].widget.attrs['placeholder'] = 'Mobile'
-        self.fields['common'].widget.attrs['class'] = form_class
+        self.fields['mobile'].required = True
+        self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile'
+        self.fields['mobile'].widget.attrs['class'] = form_class
 
         self.fields['address'].required = True
         self.fields['address'].widget.attrs['placeholder'] = 'Address'
@@ -46,7 +46,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
     class Meta:
         model = Cart
 
-        fields = ['first_name', 'last_name', 'country_code', 'common', 'address', 'pincode', 'state', 'country']
+        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '').strip()
@@ -69,7 +69,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         return last_name
 
     def clean_mobile(self):
-        mobile = self.cleaned_data.get('common', '').strip()
+        mobile = self.cleaned_data.get('mobile', '').strip()
         country_code = self.cleaned_data.get('country_code', None)
 
         if not mobile:

@@ -811,7 +811,7 @@ if (typeof jQuery === 'undefined') {
 
     if (!isActive) {
       if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
-        // if common we use a backdrop because click events don't delegate
+        // if mobile we use a backdrop because click events don't delegate
         $(document.createElement('div'))
           .addClass('dropdown-backdrop')
           .insertAfter($(this))

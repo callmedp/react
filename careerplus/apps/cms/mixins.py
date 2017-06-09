@@ -15,7 +15,7 @@ class UploadInFile(object):
 		try:
 			name = data_dict.get('name', '').strip()
 			country_code = data_dict.get('country_code', '91')
-			mobile = data_dict.get('common', '').strip()
+			mobile = data_dict.get('mobile', '').strip()
 			email = data_dict.get('email', '').strip()
 			path = data_dict.get('path', '').strip()
 			message = data_dict.get('message', '')
@@ -25,25 +25,25 @@ class UploadInFile(object):
 			file_path = file_dir + filename
 			if os.path.exists(file_path):
 				with open(file_path, 'a') as csvfile:
-					fieldnames = ['name', 'country_code', 'common', 'email', 'message', 'path']
+					fieldnames = ['name', 'country_code', 'mobile', 'email', 'message', 'path']
 					writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 					writer.writerow({
 						"name": name,
 						"country_code": country_code,
-						"common": mobile,
+						"mobile": mobile,
 						"email": email,
 						"message": message,
 						"path": path
 					})
 			else:
 				with open(file_path, 'w') as csvfile:
-					fieldnames = ['name', 'country_code', 'common', 'email', 'message', 'path']
+					fieldnames = ['name', 'country_code', 'mobile', 'email', 'message', 'path']
 					writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 					writer.writeheader()
 					writer.writerow({
 						"name": name,
 						"country_code": country_code,
-						"common": mobile,
+						"mobile": mobile,
 						"email": email,
 						"message": message,
 						"path": path

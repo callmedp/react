@@ -234,7 +234,7 @@ class PaymentShippingView(UpdateView, CartMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         form = context['form']
-        {'last_name': 'kumar', 'address': None, 'common': None, 'email': None, 'pincode': None, 'country': '91', 'country_code': '91', 'first_name': None, 'state': None}
+        {'last_name': 'kumar', 'address': None, 'mobile': None, 'email': None, 'pincode': None, 'country': '91', 'country_code': '91', 'first_name': None, 'state': None}
 
         if self.request.session.get('candidate_id'):
             if not form.initial.get('first_name'):
@@ -249,9 +249,9 @@ class PaymentShippingView(UpdateView, CartMixin):
                 form.instance.email = self.request.session.get('email')
                 form.instance.save()
 
-            if not form.initial.get('common'):
+            if not form.initial.get('mobile'):
                 form.initial.update({
-                    'common': self.request.session.get('mobile_no')})
+                    'mobile': self.request.session.get('mobile_no')})
 
         return context
 

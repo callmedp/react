@@ -1,8 +1,9 @@
 {% extends "mobile/basic/base.html" %}
+{% load static %}
 {% block title %}Login Shine learning{% endblock %}
 {% block css_section %}
 {{ block.super }}
-<link href="css/login.css" rel="stylesheet">
+<link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
 {% endblock css_section %}
 
 
@@ -10,8 +11,8 @@
     <div class="body-wrapper">
         <div class="tab-container">
             <ul class="tabs box-panel p-0">
-                <li><a href="login.html" class="current">Login</a></li>
-                <li><a href="register.html">Register</a></li>
+                <li><a href="{% url 'login' %}" class="current">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
             </ul>
 
             <!-- Tab content Satrts here -->

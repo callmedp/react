@@ -160,7 +160,7 @@ class LeadManagementView(View, UploadInFile):
             data_dict = {
                 "name": name,
                 "country_code": country_obj.phone,
-                "common": mobile,
+                "mobile": mobile,
                 "email": email,
                 "message": message,
                 "path": path,
@@ -195,7 +195,7 @@ class DownloadPdfView(View, UploadInFile):
             data_dict = {
                 "name": name,
                 "country_code": country_obj.phone,
-                "common": mobile,
+                "mobile": mobile,
                 "email": email,
                 "message": message,
                 "path": path,
@@ -215,7 +215,7 @@ class DownloadPdfView(View, UploadInFile):
                 data_dict = {
                     "name": request.session.get('full_name'),
                     "country_code": country_obj.phone,
-                    "common": request.session.get('mobile_no'),
+                    "mobile": request.session.get('mobile_no'),
                     "email": request.session.get('email'),
                     "path": path,
                 }

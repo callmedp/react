@@ -16509,7 +16509,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	/**
-	 * Only implements needed gestures for common.
+	 * Only implements needed gestures for mobile.
 	 */
 
 
@@ -30334,7 +30334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    function compromiseMobile(tooltipContentEl, container) {
-	        // Prevent default behavior on common. For example,
+	        // Prevent default behavior on mobile. For example,
 	        // default pinch gesture will cause browser zoom.
 	        // We do not preventing event on tooltip contnet el,
 	        // because user may need customization in tooltip el.
