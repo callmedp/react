@@ -272,3 +272,21 @@ class CartMixin(object):
 					total += li.product.get_price()
 
 		return {"product_total_price": round(total, 0)}
+
+	def get_cart_count(self):
+		total_count = 0
+		try:
+			if not self.request.session.get('cart_pk'):
+				self.getCartObject()
+			cart_pk = self.request.session.get('cart_pk')
+
+			if cart_pk:
+				cart_obj = Cart.objects.get(pk=cart_pk)
+				total_count += cart_obj.lineitems.all().count()
+				total_count -= cart_obj.lineitems.filter(
+					parent=None, product__type_service=3,
+					no_process=True).count()
+				
+		except Exception as e:
+			logging.getLogger('error_log').error(str(e))
+		return total_count

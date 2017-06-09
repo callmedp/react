@@ -141,11 +141,6 @@ class ModalLoginApiForm(forms.Form):
 
 
 class ModalRegistrationApiForm(forms.Form):
-    try:
-        country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
-    except:
-        country_choices, indian_obj = [], None
 
     email = forms.EmailField(
         max_length=60, required=True, widget=forms.EmailInput(
@@ -156,7 +151,7 @@ class ModalRegistrationApiForm(forms.Form):
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
 
     country_code = forms.ChoiceField(label=("Country:"), required=True,
-        choices=country_choices, widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
+        widget=forms.Select(attrs={'class': 'form-control'}))
 
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control modal-form-control', 'placeholder': 'Mobile No.'}), max_length=10)
@@ -170,6 +165,13 @@ class ModalRegistrationApiForm(forms.Form):
         super(ModalRegistrationApiForm, self).__init__(*args, **kwargs)
         self.fields['vendor_id'].initial = '12345'
         self.fields['vendor_id'].widget = forms.HiddenInput()
+        try:
+            country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
+        except:
+            country_choices, indian_obj = [], None
+        self.fields['country_code'].choices = country_choices
+        self.fields['country_code'].initial = indian_obj
         # self.fields['country_code'].initial = [(self.indian_obj.pk,self.indian_obj.phone)]
 
     def clean_raw_password(self):

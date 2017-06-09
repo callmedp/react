@@ -47,7 +47,7 @@ class PaymentMixin(object):
             order.instrument_issuer = request.POST.get('drawn_bank')
             order.instrument_issue_date = request.POST.get('deposit_date')
             txn = 'CP%d%s%s' % (order.pk, int(time.time()), request.POST.get(
-                'instrument_number'))
+                'cheque_no'))
             order_status = 2
             payment_mode = 4
             x_mailertag = "CHEQUE_PAYMENT"

@@ -110,7 +110,7 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         merchant_data = 'merchant_id=' + p_merchant_id + '&' + 'order_id=' + p_order_id + '&' + "currency=" + p_currency + '&' + 'amount=' + str(p_amount) + '&' + 'redirect_url=' + p_redirect_url + '&' + 'cancel_url=' + p_cancel_url + '&' + 'language=' + p_language + '&' + 'merchant_param1=' + p_merchant_param1 + '&' + 'payment_option=' + p_payment_option + '&' + 'card_type=' + p_card_type + '&'
 
         if cart_obj.mobile:
-            p_billing_tel = cart_obj.mobile  #excluding country_code
+            p_billing_tel = cart_obj.mobile  # excluding country_code
             merchant_data += 'billing_tel=' + p_billing_tel + '&'
         elif self.request.session.get('mobile'):
             p_billing_tel = self.request.session.get('mobile')
@@ -126,42 +126,34 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         return {'url': context_dict['url'], 'encReq': encryption, 'xscode': context_dict['accesscode']}
 
     def get(self, request, *args, **kwargs):
-        # order creating after payemnt 
+        if not request.session.get('cart_pk'):
+            return HttpResponseRedirect(reverse('homepage'))
         data = {}
-        cart_id = kwargs.get('order_id', None)
+        cart_id = kwargs.get('order_id', None)   # order_id is cart_pk here
         paytype = kwargs.get('paytype', '')
 
         if cart_id and len(paytype) > 0:
-            # order = Order.objects.get(id=order_id)
             cart_obj = Cart.objects.get(id=cart_id)
             self.fridge_cart(cart_obj)
-            # order = self.createOrder(cart_obj)
 
             if paytype == "international":
                 data = {'p_payment_option': 'OPTCRDC',
                         'p_card_type': 'CRDC'}
-                # order.payment_mode = 7
 
             elif paytype == "netbanking":
                 data = {'p_payment_option': 'OPTNBK', 'p_card_type': 'NBK'}
-                # order.payment_mode = 10
 
             elif paytype == "emi":
                 data = {'p_payment_option': 'OPTEMI', 'p_card_type': 'CRDC'}
-                # order.payment_mode = 11
 
             elif paytype == "creditcard":
                 data = {'p_payment_option': 'OPTCRDC', 'p_card_type': 'CRDC'}
-                # order.payment_mode = 9
 
             elif paytype == "debit":
                 data = {'p_payment_option': 'OPTDBCRD', 'p_card_type': 'DBCRD'}
-                # order.payment_mode = 8
 
             elif paytype == "all":
                 data = {'p_payment_option': 'ALL', 'p_card_type': 'ALL'}
-
-            # order.save()
 
             context = self.get_request_url(cart_obj, request, data=data)
 
@@ -217,6 +209,12 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                         return_url = self.process_payment_method(
                             order_type='CCAVENUE', request=request,
                             data={'order_id': order.pk, 'txn_id': txn_id})
+                        try:
+                            del request.session['cart_pk']
+                            del request.session['checkout_type']
+                            request.session.modified = True
+                        except:
+                            pass
                         return HttpResponseRedirect(return_url)
                     except Exception as e:
                         cart_obj = self.get_cart_last_status(cart_obj)

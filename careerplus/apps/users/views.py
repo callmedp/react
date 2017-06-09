@@ -160,7 +160,7 @@ class RegistrationApiView(FormView):
 class LoginApiView(FormView):
     form_class = LoginApiForm
     template_name = "users/login.html"
-    success_url = "/dashboard/"
+    success_url = "/"
 
     def get_context(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -222,5 +222,4 @@ class LogoutApiView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         request.session.flush()
-        return HttpResponseRedirect(reverse('register'))
-
+        return HttpResponseRedirect(reverse('homepage'))
