@@ -44,9 +44,6 @@ $(document).ready(function() {
         todayHighlight: true
     });
 
-
-    
-
     $("#check-pay-form").validate({
         rules: {
                 cheque_no:{

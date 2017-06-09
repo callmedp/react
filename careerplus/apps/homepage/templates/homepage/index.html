@@ -1,5 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}Shine Learning{% endblock title %}
 
@@ -17,169 +18,47 @@
         <header class="home-header-loggedin">
           <div class="container">
             <div class="home-caption">
-              <h1>Hi Manish,</h1>
+              <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
               <strong>We would like to recommend these courses for you based on your profile</strong>
             </div>
             
             <!-- recommend courses -->
             <div>
               <ul class="listing">
+                {% for course in recommended_courses %}
                 <li class="col-sm-6 col-md-4">
-                  <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
+                  <a title="{{course.heading}}" class="box-panel" href="{{course.get_absolute_url}}">
                     <div class="media">
                       <div class="media-left">
-                          <figure class="color1">
-                            <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
+                          <figure class="color1" style="background-color:{{course.get_bg}};">
+                            <img class="media-object" src="{{course.image.url}}" alt="{{course.image_alt}}">
                           </figure>
                       </div>
                       <div class="media-body">
 
-                        <h3 class="listing-heading">Prince2 Foundation Training</h3>
+                        <h3 class="listing-heading">{{course.heading}}</h3>
 
                         <div class="rating-review-box">
-                            <figure class="full-star"></figure>
-                            <figure class="full-star"></figure>
-                            <figure class="half-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <strong>3.9<small>/5</small></strong>
-                            <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                            {% for star in course.get_ratings %}
+                                  {% if star == '*' %}
+                                    <figure class="full-star"></figure>
+                                  {% elif star == '+' %}
+                                    <figure class="half-star"></figure>
+                                  {% else %}
+                                    <figure class="blank-star"></figure>
+                                  {% endif %}
+                                {% endfor %}
+                                
+                                <strong>{{course.get_avg_ratings}}<small>/5</small></strong>
+                                <span class="jobs-available"><strong>{{course.num_jobs}}</strong> jobs available</span>
                         </div> 
 
                       </div>
                     </div>
                   </a>
                 </li>
-                <li class="col-sm-6 col-md-4">
-                  <a title="Background Verification" class="box-panel" href="#">
-                    <div class="media">
-                      <div class="media-left">
-                          <figure class="color2">
-                            <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                          </figure>
-                      </div>
-                      <div class="media-body">
-
-                        <h3 class="listing-heading">Vskills Certified Project Management</h3>
-
-                        <div class="rating-review-box">
-                            <figure class="full-star"></figure>
-                            <figure class="full-star"></figure>
-                            <figure class="half-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <strong>3.9<small>/5</small></strong> 
-                            <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                        </div> 
-
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="col-sm-6 col-md-4">
-                  <a title="The Complete Career Package" class="box-panel" href="#">
-                    <div class="media">
-                      <div class="media-left">
-                          <figure class="color3">
-                            <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                          </figure>
-                      </div>
-                      <div class="media-body">
-
-                        <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
-
-                        <div class="rating-review-box">
-                            <figure class="full-star"></figure>
-                            <figure class="full-star"></figure>
-                            <figure class="half-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <strong>3.9<small>/5</small></strong> 
-                            <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                        </div> 
-
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="col-sm-6 col-md-4">
-                  <a title="Featured Profile" class="box-panel" href="#">
-                    <div class="media">
-                      <div class="media-left">
-                          <figure class="color4">
-                            <img class="media-object" src="images/course-logo4.png" alt="Resume / Visual Resume / LinkedIn">
-                          </figure>
-                      </div>
-                      <div class="media-body">
-
-                        <h3 class="listing-heading">Logistics and Supply Chain Management</h3>
-
-                        <div class="rating-review-box">
-                            <figure class="full-star"></figure>
-                            <figure class="full-star"></figure>
-                            <figure class="half-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <strong>3.9<small>/5</small></strong> 
-                            <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                        </div> 
-
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="col-sm-6 col-md-4">
-                  <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                    <div class="media">
-                      <div class="media-left">
-                          <figure class="color5">
-                            <img class="media-object" src="images/course-logo5.png" alt="Resume / Visual Resume / LinkedIn">
-                          </figure>
-                      </div>
-                      <div class="media-body">
-
-                        <h3 class="listing-heading">Certified Human Resources</h3>
-
-                        <div class="rating-review-box">
-                            <figure class="full-star"></figure>
-                            <figure class="full-star"></figure>
-                            <figure class="half-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <strong>3.9<small>/5</small></strong> 
-                            <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                        </div> 
-
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="col-sm-6 col-md-4">
-                  <a title="Background Verification" class="box-panel" href="#">
-                    <div class="media">
-                      <div class="media-left">
-                          <figure class="color6">
-                            <img class="media-object" src="images/course-logo6.png" alt="Resume / Visual Resume / LinkedIn">
-                          </figure>
-                      </div>
-                      <div class="media-body">
-
-                        <h3 class="listing-heading">Certified Six Sigma Black Belt</h3>
-
-                        <div class="rating-review-box">
-                            <figure class="full-star"></figure>
-                            <figure class="full-star"></figure>
-                            <figure class="half-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <figure class="blank-star"></figure>
-                            <strong>3.9<small>/5</small></strong> 
-                            <span class="jobs-available"><strong>212</strong> jobs available</span>
-                        </div> 
-
-                      </div>
-                    </div>
-                  </a>
-                </li>
+                {% endfor %}
+                
               </ul>
             </div>
             <a class="modification" data-toggle="collapse" href="#search" aria-expanded="false" aria-controls="search">Modify recommendation</a>
@@ -258,6 +137,8 @@
     {% endblock section1 %}
 
     {% block section2 %}
+        {% if tcourses %}
+
         <!-- our courses -->
         <section class="container-fluid our-courses">
           <div class="row">
@@ -266,999 +147,88 @@
               <article>Choose from a pool of 600+ courses basis my domain or area of interest</article>
               <!-- Nav tabs -->
               <ul class="nav tab-link" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Certifications</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Operations</a></li>
-                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Finance</a></li>
-                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Human Resources</a></li>
+                  
+                {% for course in tcourses %}
+                      <li role="presentation" {% if forloop.first %}class="active"{% endif %}><a href="#{{course.tab}}" aria-controls="{{course.tab}}" role="tab" data-toggle="tab">{{course.name}}</a></li>
+                {% endfor %}
+                  
               </ul>
 
               <!-- Tab panes -->
               <div class="tab-content">
                 <!-- Certifications tab content -->
-                <div role="tabpanel" class="tab-pane active" id="home">
+                {% for course in tcourses %}
+                <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{course.tab}}">
                   <ul class="listing">
+                    {% for tprd in course.tprds %}
                     <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
+                      <a title="{{tprd.product.heading}}" class="box-panel" href="{{tprd.product.get_absolute_url}}">
                         <div class="media">
                           <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
+                              <figure style="background-color:{{tprd.product.get_bg}};">
+                                <img class="media-object" src="{{tprd.product.image.url}}" alt="{{tprd.product.image_alt}}" height="134" width="131">
                               </figure>
                           </div>
                           <div class="media-body">
 
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
+                            <h3 class="listing-heading">{{tprd.product.heading}}</h3>
 
                             <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                                {% for star in tprd.product.get_ratings %}
+                                  {% if star == '*' %}
+                                    <figure class="full-star"></figure>
+                                  {% elif star == '+' %}
+                                    <figure class="half-star"></figure>
+                                  {% else %}
+                                    <figure class="blank-star"></figure>
+                                  {% endif %}
+                                {% endfor %}
+                                
+                                <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
+                                <span class="jobs-available"><strong>{{tprd.product.num_jobs}}</strong> jobs available</span> 
                             </div> 
 
                           </div>
                         </div>
                       </a>
                     </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
+                    {% endfor %}
 
-                            <h3 class="listing-heading">Vskills Certified Project</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Featured Profile" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color4">
-                                <img class="media-object" src="images/course-logo4.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Logistics and Supply Chain</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color5">
-                                <img class="media-object" src="images/course-logo5.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Human Resources</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color6">
-                                <img class="media-object" src="images/course-logo6.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Six Sigma Black</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Vskills Certified Project</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
                   </ul>
-                  <a title="View all" href="#" class="view-all">View all</a>
+                  <a title="View all" href="{{course.view_all}}" class="view-all">View all</a>
                 </div>
-                <!-- Operations tab content -->
-                <div role="tabpanel" class="tab-pane" id="profile">
-                  <ul class="listing">
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Vskills Certified Project Management Professi..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Featured Profile" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color4">
-                                <img class="media-object" src="images/course-logo4.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Logistics and Supply Chain Management Pr..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color5">
-                                <img class="media-object" src="images/course-logo5.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Human Resources Manager</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color6">
-                                <img class="media-object" src="images/course-logo6.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Six Sigma Black Belt Professional</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Vskills Certified Project Management Professi..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                  <a title="View all" href="#" class="view-all">View all</a>
-                </div>
-                <!-- Finance tab content -->
-                <div role="tabpanel" class="tab-pane" id="messages">
-                  <ul class="listing">
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Vskills Certified Project Management Professi..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Featured Profile" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color4">
-                                <img class="media-object" src="images/course-logo4.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Logistics and Supply Chain Management Pr..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color5">
-                                <img class="media-object" src="images/course-logo5.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Human Resources Manager</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color6">
-                                <img class="media-object" src="images/course-logo6.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Six Sigma Black Belt Professional</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Vskills Certified Project Management Professi..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                  <a title="View all" href="#" class="view-all">View all</a>
-                </div>
-                <!-- Human Resources tab content -->
-                <div role="tabpanel" class="tab-pane" id="settings">
-                  <ul class="listing">
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Vskills Certified Project Management Professi..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Featured Profile" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color4">
-                                <img class="media-object" src="images/course-logo4.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Logistics and Supply Chain Management Pr..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color5">
-                                <img class="media-object" src="images/course-logo5.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Human Resources Manager</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color6">
-                                <img class="media-object" src="images/course-logo6.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Certified Six Sigma Black Belt Professional</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Background Verification" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color2">
-                                <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Vskills Certified Project Management Professi..</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color1">
-                                <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">Prince2 Foundation Training</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong>
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="col-sm-6 col-md-4">
-                      <a title="The Complete Career Package" class="box-panel" href="#">
-                        <div class="media">
-                          <div class="media-left">
-                              <figure class="color3">
-                                <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
-                              </figure>
-                          </div>
-                          <div class="media-body">
-
-                            <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
-
-                            <div class="rating-review-box">
-                                <figure class="full-star"></figure>
-                                <figure class="full-star"></figure>
-                                <figure class="half-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <figure class="blank-star"></figure>
-                                <strong>3.9<small>/5</small></strong> 
-                                <span class="jobs-available"><strong>212</strong> jobs available</span> 
-                            </div> 
-
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                  <a title="View all" href="#" class="view-all">View all</a>
-                </div>
+                {% endfor %}
+                
               </div>
 
             </div>
           </div>
         </section>
+        {% endif %}
     {% endblock section2 %}
 
     {% block section3 %}
         <!-- Job assistance services -->
+        {% if job_asst_services %}
         <section class="container-fluid job-assistance">
           <div class="row">
             <div class="container">
               <h2>Job assistance services</h2>
               <article>Struggling to find my next job? Get interview ready through our array of job assistance services</article>
                 <ul class="listing">
-                  {% for prd in job_asst_services %}
+                  {% for tprd in job_asst_services %}
                   <li>
-                    <a title="Resume writing" class="box-panel" href="#">
-                      <figure class="color1">
-                        <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
+                    <a title="Resume writing" class="box-panel" href="{{tprd.product.get_absolute_url}}">
+                      <figure style="background-color:{{tprd.product.get_bg}};">
+                        {% thumbnail tprd.product.image "200x125" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{tprd.product.image_alt}}">
+                        {% endthumbnail %}
+                        <!--img class="media-object" src="{{prd.image.url}}" alt="{{prd.image_alt}}"-->
                       </figure>
                       <div class="caption">
-                        <h3 class="listing-heading">{{prd.name}}</h3>
+                        <h3 class="listing-heading">{{tprd.product.heading}}</h3>
                         <div class="rating-review-box">
-                            {% for star in prd.get_ratings %}
+                            {% for star in tprd.product.get_ratings %}
                               {% if star == '*' %}
                                 <figure class="full-star"></figure>
                               {% elif star == '+' %}
@@ -1267,8 +237,8 @@
                                 <figure class="blank-star"></figure>
                               {% endif %}
                             {% endfor %}
-                          <strong>{{prd.get_avg_ratings}}<small>/5</small></strong>
-                          <span class="jobs-available"><strong>{{prd.buy_count}}</strong> people bought</span> 
+                          <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
+                          <span class="jobs-available"><strong>{{tprd.product.buy_count}}</strong> people bought</span> 
                         </div> 
 
                       </div>
@@ -1276,10 +246,11 @@
                   </li>
                   {% endfor %}
                 </ul>
-                <a title="View all" href="#" class="view-all">View all</a>
+                <a title="View all" href="{{job_asst_view_all}}" class="view-all">View all</a>
             </div>
           </div>
         </section>
+        {% endif %}
     {% endblock section3 %}
 
     {% block section4 %}
@@ -1295,7 +266,11 @@
               <div class="carousel-inner" role="listbox">
                 {% for review in testimonials %}
                 <div class="item {% if forloop.first %}active{% endif %}">
-                  <img src="{% static "shinelearn/images/user-loggedin.jpg" %}" alt="Shine" width="100" height="100">
+                  {% if review.image %}
+                      <img src="{{review.image.url}}" alt="profile-pic" width="100" height="100">
+                  {% else %}
+                    <img src="{% static "shinelearn/images/user-loggedin.jpg" %}" alt="profile-pic" width="100" height="100">
+                  {% endif %}
                   <div class="carousel-caption">           
                     {{review.content|striptags|safe}}
                     <strong>
