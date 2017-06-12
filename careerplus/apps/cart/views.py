@@ -136,10 +136,10 @@ class PaymentLoginView(TemplateView):
                     "password": password,
                 })
 
-                user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+                user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
                 if user_exist['exists'] and password:
-                    login_resp = RegistrationLoginApi().user_login(login_dict)
+                    login_resp = RegistrationLoginApi.user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])

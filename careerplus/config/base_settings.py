@@ -46,16 +46,18 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'cities_light',
     'ckeditor',
     'ckeditor_uploader',
+    'django_mobile',
     'meta',
-    'cities_light',
+    'requests',
     'sorl.thumbnail',
-    'requests'
 ]
 
 # Apps specific for this project go here.
 LOCAL_APPS = [
+    'core',
     'users',
     'cms',
     'design',
@@ -90,6 +92,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.UpgradedMobileDetectionMiddleware',
+    'core.middleware.UpgradedSetFlavourMiddleware',
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -98,17 +102,27 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_mobile.context_processors.flavour'
+            ],
+            'loaders': [
+                ('django_mobile.loader.CachedLoader', [
+                    'django_mobile.loader.Loader',
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader'
+                ]),
             ],
         },
     },
 ]
+
+# For django-mobile compatiility
+TEMPLATE_LOADERS = TEMPLATES[0]['OPTIONS']['loaders']
 
 WSGI_APPLICATION = 'careerplus.wsgi.application'
 

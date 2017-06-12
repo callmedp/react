@@ -251,5 +251,5 @@ class DownloadPdfView(View, UploadInFile):
             page_obj = Page.objects.get(pk=pk, is_active=True)
         except Exception:
             raise Http404
-
         return HttpResponseRedirect(page_obj.get_absolute_url())
+
