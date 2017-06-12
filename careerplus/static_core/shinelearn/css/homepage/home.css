@@ -1,0 +1,538 @@
+body {
+  padding-top: 0;
+}
+
+.navbar-default {
+  background-color: rgba(48, 52, 57, 0.4);
+}
+
+.navbar-color {
+  background-color: #2f5da5;
+}
+
+.home-header {
+  clear: both;
+  background: url(../../images/home-header-pic1.jpg) #666 no-repeat center top;
+  background-size: cover;
+  display: block;
+}
+.home-header .home-caption {
+  color: #fff;
+  text-align: center;
+  margin: 12% 0 5% 0;
+  display: block;
+  clear: both;
+}
+.home-header .home-caption h1 {
+  font-size: 45px;
+  display: block;
+  font-weight: 400;
+  line-height: 55px;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+.home-header .home-caption strong {
+  display: block;
+  font-size: 20px;
+  color: #e7dcad;
+  font-weight: 400;
+}
+
+.home-header-loggedin {
+  clear: both;
+  background: url(../../images/home-header-pic2.jpg) #666 no-repeat center top;
+  background-size: cover;
+  display: block;
+}
+.home-header-loggedin .home-caption {
+  color: #fff;
+  text-align: center;
+  margin: 7% 0 3% 0;
+  display: block;
+  clear: both;
+}
+.home-header-loggedin .home-caption h1 {
+  font-size: 45px;
+  display: block;
+  font-weight: 400;
+  line-height: 55px;
+  margin-top: 0;
+}
+.home-header-loggedin .home-caption strong {
+  display: block;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.home-search-box {
+  display: block;
+  font-size: 0;
+  margin: 0 auto;
+  text-align: center;
+}
+.home-search-box strong {
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  display: block;
+  margin-bottom: 10px;
+}
+.home-search-box input {
+  border: 1px solid #e1e1e1;
+  padding: 10px 15px;
+  height: 62px;
+  box-shadow: none;
+  border-radius: 5px;
+}
+@media (max-width: 991px) {
+  .home-search-box input {
+    padding: 10px 5px;
+  }
+}
+.home-search-box input:focus {
+  box-shadow: none;
+  border: 1px solid #fff;
+}
+.home-search-box input.input1 {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.home-search-box input.input1:focus {
+  border-left: 1px solid #e1e1e1;
+}
+.home-search-box input.input1.tt-query {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-left: 1px solid #e1e1e1;
+}
+.home-search-box input.input2 {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-left: -1px;
+}
+.home-search-box input.input2:focus {
+  border-left: 1px solid #e1e1e1;
+}
+.home-search-box input.input2.tt-query {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-left: 1px solid #e1e1e1;
+}
+.home-search-box input.input3 {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -1px;
+}
+.home-search-box input.input3:focus {
+  border-left: 1px solid #e1e1e1;
+}
+.home-search-box input.input3.tt-query {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.home-search-box .find-jobs-btn {
+  border-radius: 5px;
+  height: 62px;
+  padding: 6px 40px;
+  text-transform: uppercase;
+  margin-left: 15px;
+  font-size: 16px;
+}
+
+.search-mg {
+  margin-bottom: 7%;
+}
+
+.search-bg {
+  background-color: #adb1b7;
+  border: 30px solid #adb1b7;
+}
+
+.modification {
+  font-size: 14px;
+  color: #fff;
+  border: 1px solid #e1e1e1;
+  border-radius: 2px;
+  padding: 10px 20px;
+  margin: 0 auto 30px auto;
+  display: table;
+}
+.modification:hover, .modification:focus {
+  color: #fff;
+}
+
+.listing {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  clear: both;
+  display: block;
+  overflow: hidden;
+}
+.listing li {
+  display: block;
+  padding: 0 15px;
+  margin: 0 0 30px 0;
+}
+.listing li a {
+  display: block;
+  overflow: hidden;
+}
+.listing li a:hover {
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+.listing .media {
+  margin-top: 0;
+}
+.listing .media .media-left {
+  border-spacing: 0 12px 0 0;
+}
+.listing .media .media-left figure {
+  width: 125px;
+  height: 125px;
+}
+.listing .listing-heading {
+  margin: 10px 10px 5px 0;
+  display: block;
+  color: #3f5f94;
+  font-size: 18px;
+  font-weight: 600;
+}
+.listing .rating-review-box {
+  display: block;
+  color: #666;
+  font-size: 13px;
+}
+.listing .rating-review-box strong {
+  font-weight: 600;
+  margin-left: 5px;
+}
+.listing .rating-review-box .jobs-available {
+  font-size: 13px;
+  color: #666;
+  display: block;
+  margin-top: 10px;
+}
+.listing .rating-review-box .jobs-available strong {
+  font-weight: 600;
+}
+
+.how-it-works {
+  padding: 60px 0;
+  overflow: hidden;
+  list-style-type: none;
+  margin: 0;
+  text-align: center;
+}
+.how-it-works li {
+  display: inline-block;
+  padding: 0 2%;
+  vertical-align: top;
+  color: #666;
+  position: relative;
+}
+@media (max-width: 991px) {
+  .how-it-works li {
+    min-height: 230px;
+  }
+}
+.how-it-works li:first-child {
+  border-left: none;
+  background: none;
+}
+.how-it-works li strong {
+  font-size: 20px;
+  color: #333;
+  display: block;
+  font-weight: 600;
+  margin: 10px 0;
+  line-height: 20px;
+}
+.how-it-works li figure {
+  margin: 20px auto 0 auto;
+}
+.how-it-works li:before {
+  position: absolute;
+  left: -17px;
+  top: 45%;
+  width: 30px;
+  height: 21px;
+  background: url(../../images/sprite.png) no-repeat -621px -151px;
+  content: '';
+  z-index: 9;
+}
+.how-it-works li:first-child:before {
+  background: none;
+}
+
+.our-courses {
+  background-color: #f3f8fa;
+  padding-top: 60px;
+  padding-bottom: 50px;
+}
+.our-courses h2 {
+  font-size: 30px;
+  color: #333;
+  margin: 0 auto;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+}
+.our-courses article {
+  display: block;
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin: 20px 0 30px 0;
+}
+.our-courses .tab-link {
+  display: table;
+  margin: 0 auto 30px auto;
+  font-size: 19px;
+  font-weight: #333;
+  cursor: pointer;
+  border-bottom: 1px solid #e1e1e1;
+}
+.our-courses .tab-link li {
+  margin-left: 40px;
+  display: inline-block;
+}
+.our-courses .tab-link li:first-child {
+  margin-left: 0;
+}
+.our-courses .tab-link li.active a {
+  background: transparent;
+  border-bottom: 2px solid #3f5f94;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  font-weight: 600;
+}
+.our-courses .tab-link li a, .our-courses .tab-link li a:hover, .our-courses .tab-link li a:focus {
+  border-radius: 0;
+  color: #333;
+  padding: 10px 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+.job-assistance {
+  padding-top: 60px;
+  padding-bottom: 50px;
+}
+.job-assistance h2 {
+  font-size: 30px;
+  color: #333;
+  margin: 0 auto;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+}
+.job-assistance article {
+  display: block;
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin: 20px 0 30px 0;
+}
+.job-assistance .listing {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.job-assistance .listing li {
+  display: inline-block;
+  padding: 0 15px;
+  margin: 0 0 25px 0;
+  width: 19.6%;
+  vertical-align: top;
+}
+@media (max-width: 991px) {
+  .job-assistance .listing li {
+    width: 24.5%;
+  }
+}
+.job-assistance .listing li a {
+  display: block;
+  overflow: hidden;
+}
+.job-assistance .listing li a:hover {
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+.job-assistance .listing li .media-object {
+  text-align: center;
+  margin: 0 auto;
+}
+.job-assistance .listing li .caption {
+  padding: 10px;
+}
+.job-assistance .listing li .caption h4 {
+  margin: 0 0 10px 0;
+}
+.job-assistance .listing li .listing-heading {
+  margin: 10px 10px 5px 0;
+  display: block;
+  color: #3f5f94;
+  font-size: 18px;
+  font-weight: 600;
+}
+.job-assistance .listing li .rating-review-box {
+  display: block;
+  color: #666;
+  font-size: 13px;
+}
+.job-assistance .listing li .rating-review-box strong {
+  font-weight: 600;
+}
+.job-assistance .listing li .rating-review-box .jobs-available {
+  font-size: 13px;
+  color: #666;
+  display: block;
+  margin-top: 10px;
+}
+.job-assistance .listing li .rating-review-box .jobs-available strong {
+  font-weight: 600;
+}
+@media (max-width: 991px) {
+  .job-assistance .listing li:last-child {
+    display: none;
+  }
+}
+
+.testimonials {
+  background-color: #e6f0f5;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.testimonials h2 {
+  font-size: 30px;
+  color: #333;
+  margin: 0 auto 20px auto;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+}
+.testimonials .item {
+  margin: 0 auto;
+  padding: 0 40px 0 8%;
+  min-height: 140px;
+}
+@media (max-width: 1190px) {
+  .testimonials .item {
+    min-height: 160px;
+  }
+}
+@media (max-width: 991px) {
+  .testimonials .item {
+    min-height: 205px;
+  }
+}
+.testimonials .item img {
+  border-radius: 100%;
+}
+.testimonials .item .carousel-caption {
+  left: 20%;
+  right: 8%;
+  text-align: left;
+  text-shadow: none;
+  color: #666;
+  font-size: 15px;
+  padding-top: 0;
+  top: 0;
+}
+.testimonials .item .carousel-caption:before {
+  content: '"';
+  font-size: 30px;
+  color: #3f5f94;
+  font-weight: 600;
+}
+@media (max-width: 1190px) {
+  .testimonials .item .carousel-caption {
+    left: 21%;
+  }
+}
+@media (max-width: 991px) {
+  .testimonials .item .carousel-caption {
+    left: 25%;
+  }
+}
+.testimonials .item .carousel-caption strong {
+  display: block;
+  font-weight: 400;
+  margin: 10px 0 0 0;
+  font-size: 18px;
+  color: #2669d7;
+}
+.testimonials .item .carousel-caption strong small {
+  display: block;
+  font-size: 11px;
+  color: #666;
+}
+.testimonials .carousel-control {
+  width: 15px;
+  top: 20%;
+}
+.testimonials .carousel-control.left {
+  background: url(../../images/sprite.png) no-repeat -471px -207px;
+  width: 36px;
+  height: 35px;
+}
+.testimonials .carousel-control.right {
+  background: url(../../images/sprite.png) no-repeat -508px -207px;
+  width: 36px;
+  height: 35px;
+}
+
+/*search typeahead css start*/
+.twitter-typeahead {
+  width: auto;
+}
+
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+}
+
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  color: #666;
+  background-color: #fff;
+  border: 1px solid #e1e1e1;
+  width: 100%;
+  text-align: left;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 10px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #666;
+  background-color: #f2f2f2;
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #666;
+}
+
+.tt-suggestion p {
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+  text-align: left;
+  padding: 0;
+}
+
+/*search typeahead css end*/
+
+/*# sourceMappingURL=home.css.map */

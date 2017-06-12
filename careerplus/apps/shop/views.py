@@ -7,6 +7,9 @@ from django.utils.http import urlquote
 from django.views.generic import DetailView, ListView
 from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
+
+from cart.mixins import CartMixin
+
 from .models import Product, Category, Attribute
 from review.models import Review
 
@@ -150,6 +153,7 @@ class ProductInformationMixin(object):
                 for course in course_list:
                     course_dict.append(
                         OrderedDict({
+                            'id': course.id,
                             'label': course.name,
                             'mode': dict(MODE_CHOICES).get(course.study_mode),
                             'duration': course.duration_months,
@@ -203,7 +207,7 @@ class ProductInformationMixin(object):
             }
 
 
-class ProductDetailView(DetailView, ProductInformationMixin):
+class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
     http_method_names = ['get', 'post']
 
@@ -247,6 +251,9 @@ class ProductDetailView(DetailView, ProductInformationMixin):
         if product.is_combo:
             ctx.update(self.get_combos(product))
         ctx.update(self.get_frequentlybought(product, category))
+
+        ctx.update(self.getSelectedProduct(product))
+        ctx.update(self.getSelectedProductPrice(product))
         return ctx
 
     # def send_signal(self, request, response, product):

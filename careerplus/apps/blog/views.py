@@ -1,13 +1,13 @@
 import json
 
 from django.views.generic import (
-	TemplateView,
-	ListView,
-	DetailView,
-	View)
+    TemplateView,
+    ListView,
+    DetailView,
+    View)
 
 from django.http import HttpResponseForbidden, Http404,\
-	HttpResponsePermanentRedirect, HttpResponse
+    HttpResponsePermanentRedirect, HttpResponse
 from django.utils.http import urlquote
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
@@ -17,62 +17,96 @@ from django.conf import settings
 from meta.views import Meta
 
 from shine.core import ShineCandidateDetail
-from users.forms import LoginApiForm, RegistrationForm
+from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
 from users.mixins import RegistrationLoginApi
 
 from .mixins import BlogMixin, PaginationMixin, LoadCommentMixin
 from .models import Category, Blog, Tag
 
 
-class LoginToCommentView(View, RegistrationLoginApi, ShineCandidateDetail):
+class LoginToCommentView(View):
     http_method_names = [u'post', ]
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
-            form = LoginApiForm(request.POST)
+            form = ModalLoginApiForm(request.POST)
             login_resp = {}
             if form.is_valid():
+                login_dict = {}
                 remember_me = request.POST.get('remember_me')
-                login_resp = self.user_login(self.request)
-                if login_resp['response'] == 'login_user':
-                	resp_status = self.get_status_detail(email=None, shine_id=login_resp['candidate_id'])
-                	if resp_status:
-                		self.request.session.update(resp_status)
-                	if remember_me:
-                		self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
-                elif login_resp['response'] == 'error_pass':
-                	login_resp['error_message'] = login_resp.get("non_field_errors")[0]
+                login_dict = {}
+                login_dict.update({
+                    "email": self.request.POST.get('email'),
+                    "password": self.request.POST.get('password')
+                })
+
+                user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+
+                if user_exist['exists']:
+                    login_resp = RegistrationLoginApi().user_login(login_dict)
+
+                    if login_resp['response'] == 'login_user':
+                        resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
+                        self.request.session.update(resp_status)
+                        if remember_me:
+                            self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+
+                    elif login_resp['response'] == 'error_pass':
+                        login_resp['error_message'] = login_resp.get("non_field_errors")[0]
+
+                elif not user_exist['exists']:
+                    login_resp['response'] = 'error_pass'
+                    login_resp['error_message'] = "This email is not registered. Please register."
             else:
-            	login_resp['response'] = 'form_validation_error'
+                login_resp['response'] = 'form_validation_error'
             return HttpResponse(json.dumps(login_resp), content_type="application/json")
         return HttpResponseForbidden()
 
 
-class RegisterToCommentView(View, RegistrationLoginApi, ShineCandidateDetail):
+class RegisterToCommentView(View):
     http_method_names = [u'post', ]
 
     def post(self, request, *args, **kwargs):
-    	if request.is_ajax():
-    		form = RegistrationForm(request.POST)
-    		user_resp = {}
-    		if form.is_valid():
-    			user_resp = self.user_registration(request)
-    			if user_resp['response'] == 'new_user':
-    				resp = RegistrationLoginApi().user_login(request)
-    				if resp['response'] == 'login_user':
-    					resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
-    					request.session.update(resp_status)
+        if request.is_ajax():
+            form = ModalRegistrationApiForm(request.POST)
+            user_resp = {}
+            if form.is_valid():
+                login_dict, post_data = {}, {}
+                post_data.update({
+                    "email": request.POST.get('email'),
+                    "raw_password": request.POST.get('raw_password'),
+                    "cell_phone": request.POST.get('cell_phone'),
+                    "country_code": request.POST.get('country_code'),
+                    "vendor_id": request.POST.get('vendor_id'),
+                })
+                user_resp = RegistrationLoginApi().user_registration(post_data)
 
-    			elif user_resp['response'] == 'exist_user':
-    				pass
+                if user_resp['response'] == 'new_user':
+                    login_dict.update({
+                        "email": request.POST.get('email'),
+                        "password": request.POST.get('password') if request.POST.get('password') else request.POST.get('raw_password'),
+                    })
+                    resp = RegistrationLoginApi().user_login(login_dict)
 
-    			elif user_resp['response'] == 'form_error':
-    				pass
-    		else:
-    			user_resp['response'] = 'form_validation_error'
-    		return HttpResponse(json.dumps(user_resp), content_type="application/json")
+                    if resp['response'] == 'login_user':
+                        resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
+                        request.session.update(resp_status)
+                        user_resp['response'] = 'login_user'
 
-    	return HttpResponseForbidden()
+                    elif resp['response'] == 'error_pass':
+                        user_resp['error_message'] = user_resp["non_field_errors"][0]
+                        user_resp['response'] = 'error_pass'
+
+                elif user_resp['response'] == 'exist_user':
+                    user_resp['error_message'] = user_resp["non_field_errors"][0]
+
+                elif user_resp['response'] == 'form_error':
+                    pass
+            else:
+                user_resp['response'] = 'form_validation_error'
+            return HttpResponse(json.dumps(user_resp), content_type="application/json")
+
+        return HttpResponseForbidden()
 
 
 class BlogDetailView(DetailView, BlogMixin):
@@ -80,9 +114,9 @@ class BlogDetailView(DetailView, BlogMixin):
     model = Blog
 
     def __init__(self):
-    	self.article = None
-    	self.paginated_by = 1
-    	self.page = 1
+        self.article = None
+        self.paginated_by = 1
+        self.page = 1
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
@@ -93,9 +127,9 @@ class BlogDetailView(DetailView, BlogMixin):
         if pk is not None:
             queryset = queryset.filter(pk=pk, status=1)
         elif slug is not None:
-        	queryset = queryset.filter(slug=slug, status=1)
+            queryset = queryset.filter(slug=slug, status=1)
         try:
-        	obj = queryset.get()
+            obj = queryset.get()
         except:
             raise Http404
         return obj
@@ -119,7 +153,7 @@ class BlogDetailView(DetailView, BlogMixin):
         self.object.save()
         redirect = self.redirect_if_necessary(request.path, self.object)
         if redirect:
-        	return redirect
+            return redirect
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
 
@@ -157,51 +191,51 @@ class BlogDetailView(DetailView, BlogMixin):
         article_list = article_list.distinct().select_related('user').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
-        		paginated_by=self.paginated_by, page=self.page,
-        		object_list=article_list)
+                paginated_by=self.paginated_by, page=self.page,
+                object_list=article_list)
 
         context.update({
-        	"scroll_article": render_to_string('include/detail-article-list.html',
-        		{"page_obj": page_obj,
-        		"slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+            "scroll_article": render_to_string('include/detail-article-list.html',
+                {"page_obj": page_obj,
+                "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
         })
 
         context.update({
-        	"loginform": LoginApiForm(),
-        	"registerform": RegistrationForm()
+            "loginform": ModalLoginApiForm(),
+            "registerform": ModalRegistrationApiForm()
         })
 
         return context
 
     def get_breadcrumb_data(self):
-    	breadcrumbs = []
-    	breadcrumbs.append({"url": '/', "name": "Home"})
-    	breadcrumbs.append({"url": reverse('blog:blog-landing'), "name": "Career Guidance"})
-    	breadcrumbs.append({"url": reverse('blog:articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
-    	breadcrumbs.append({"url": None, "name": self.object.display_name})
-    	data = {"breadcrumbs": breadcrumbs}
-    	return data
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": reverse('blog:blog-landing'), "name": "Career Guidance"})
+        breadcrumbs.append({"url": reverse('blog:articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
+        breadcrumbs.append({"url": None, "name": self.object.display_name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
 
 
 class BlogCategoryListView(TemplateView, PaginationMixin):
     template_name = "blog/articles-by-category.html"
 
     def __init__(self):
-    	self.page = 1
-    	self.paginated_by = 10
-    	self.cat_obj = None
+        self.page = 1
+        self.paginated_by = 10
+        self.cat_obj = None
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
         try:
-        	self.active_tab = int(request.GET.get('tab', 0))
+            self.active_tab = int(request.GET.get('tab', 0))
         except:
-        	self.active_tab = 0
+            self.active_tab = 0
         try:
-        	self.cat_obj = Category.objects.get(slug=slug, is_active=True)
+            self.cat_obj = Category.objects.get(slug=slug, is_active=True)
         except Exception:
-        	raise Http404
+            raise Http404
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
         
@@ -218,9 +252,9 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
 
         paginator = Paginator(main_articles, self.paginated_by)
         if self.active_tab == 0:
-        	page_data = self.pagination(paginator, self.page)
+            page_data = self.pagination(paginator, self.page)
         else:
-        	page_data = self.pagination(paginator, 1)
+            page_data = self.pagination(paginator, 1)
         context.update({
             "recent_page": page_data.get('page'),
             "recent_end": page_data.get('page_end'),
@@ -231,9 +265,9 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         main_articles = main_articles.order_by('-score', '-publish_date')
         paginator = Paginator(main_articles, self.paginated_by)
         if self.active_tab == 1:
-        	page_data = self.pagination(paginator, self.page)
+            page_data = self.pagination(paginator, self.page)
         else:
-        	page_data = self.pagination(paginator, 1)
+            page_data = self.pagination(paginator, 1)
         context.update({
             "pop_page": page_data.get('page'),
             "pop_end": page_data.get('page_end'),
@@ -253,12 +287,12 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         return context
 
     def get_breadcrumb_data(self):
-    	breadcrumbs = []
-    	breadcrumbs.append({"url": '/', "name": "Home"})
-    	breadcrumbs.append({"url": reverse('blog:blog-landing'), "name": "Career Guidance"})
-    	breadcrumbs.append({"url": None, "name": self.cat_obj.name})
-    	data = {"breadcrumbs": breadcrumbs}
-    	return data
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": reverse('blog:blog-landing'), "name": "Career Guidance"})
+        breadcrumbs.append({"url": None, "name": self.cat_obj.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
 
 
 class BlogTagListView(TemplateView, PaginationMixin):
@@ -337,61 +371,61 @@ class BlogTagListView(TemplateView, PaginationMixin):
 
 
 class BlogLandingPageView(TemplateView, BlogMixin):
-	model = Category
-	template_name = "blog/blog-landing.html"
+    model = Category
+    template_name = "blog/blog-landing.html"
 
-	def __init__(self):
-		self.page = 1
-		self.paginated_by = 1
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 1
 
-	def get(self, request, *args, **kwargs):
-		self.page = self.request.GET.get('page', 1)
-		context = super(self.__class__, self).get(request, args, **kwargs)
-		return context
+    def get(self, request, *args, **kwargs):
+        self.page = self.request.GET.get('page', 1)
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
 
-	def get_context_data(self, **kwargs):
-		context = super(self.__class__, self).get_context_data(**kwargs)
-		categories = Category.objects.filter(is_active=True)
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        categories = Category.objects.filter(is_active=True)
 
-		page_obj = self.scrollPagination(paginated_by=self.paginated_by,
-			page=self.page, object_list=categories)
+        page_obj = self.scrollPagination(paginated_by=self.paginated_by,
+            page=self.page, object_list=categories)
 
-		article_list = {}
-		for p in page_obj:
-			top_articles = p.primary_category.filter(status=1)
-			if top_articles.count() > 3:
-				top_articles = top_articles[: 3]
-			else:
-				top_articles = top_articles
+        article_list = {}
+        for p in page_obj:
+            top_articles = p.primary_category.filter(status=1)
+            if top_articles.count() > 3:
+                top_articles = top_articles[: 3]
+            else:
+                top_articles = top_articles
 
-			article_list.update({
-    			p: top_articles.select_related('p_cat', 'user'),
-    		})
+            article_list.update({
+                p: top_articles.select_related('p_cat', 'user'),
+            })
 
-		article_list = render_to_string('include/top_article.html',
-			{'page_obj': page_obj, 'article_list': article_list})
-		context.update({
-			'categories': categories,
-			'article_list': article_list
-		})
+        article_list = render_to_string('include/top_article.html',
+            {'page_obj': page_obj, 'article_list': article_list})
+        context.update({
+            'categories': categories,
+            'article_list': article_list
+        })
 
-		context.update(self.get_breadcrumb_data())
-		context.update(self.get_meta_details())
-		return context
+        context.update(self.get_breadcrumb_data())
+        context.update(self.get_meta_details())
+        return context
 
-	def get_breadcrumb_data(self):
-		breadcrumbs = []
-		breadcrumbs.append({"url": '/', "name": "Home"})
-		breadcrumbs.append({"url": None, "name": "Career Guidance"})
-		data = {"breadcrumbs": breadcrumbs}
-		return data
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": None, "name": "Career Guidance"})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
 
-	def get_meta_details(self):
-		meta = Meta(
-		    title="Career Guidance & Advice – Articles @ Learning.Shine",
-		    description='Planning to change career - Get advice and tips for better growth. Read latest articles for interview preparation, competitive exams, government jobs, resume writing tips & other career guidance at learning.shine',
-		)
-		return {"meta": meta}
+    def get_meta_details(self):
+        meta = Meta(
+            title="Career Guidance & Advice – Articles @ Learning.Shine",
+            description='Planning to change career - Get advice and tips for better growth. Read latest articles for interview preparation, competitive exams, government jobs, resume writing tips & other career guidance at learning.shine',
+        )
+        return {"meta": meta}
 
 
 class BlogLandingAjaxView(ListView, BlogMixin):
@@ -399,36 +433,36 @@ class BlogLandingAjaxView(ListView, BlogMixin):
     template_name = 'include/top_article.html'
 
     def __init__(self):
-    	self.page = 1
-    	self.paginated_by = 1
+        self.page = 1
+        self.paginated_by = 1
 
     def get(self, request, *args, **kwargs):
-    	if request.is_ajax():
-    		self.page = int(self.request.GET.get('page', 1))
-    		return super(self.__class__, self).get(request, args, **kwargs)
-    	else:
-    		return HttpResponseForbidden()
+        if request.is_ajax():
+            self.page = int(self.request.GET.get('page', 1))
+            return super(self.__class__, self).get(request, args, **kwargs)
+        else:
+            return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         category_list = context['category_list']
         page_obj = self.scrollPagination(paginated_by=self.paginated_by,
-			page=self.page, object_list=category_list)
+            page=self.page, object_list=category_list)
 
         article_list = {}
         for p in page_obj:
-        	top_articles = p.primary_category.filter(status=1)
-        	if top_articles.count() > 3:
-        		top_articles = top_articles[: 3]
-        	elif top_articles.exists():
-        		top_articles = top_articles
+            top_articles = p.primary_category.filter(status=1)
+            if top_articles.count() > 3:
+                top_articles = top_articles[: 3]
+            elif top_articles.exists():
+                top_articles = top_articles
 
-        	article_list.update({
-        		p: top_articles.select_related('p_cat', 'user'),
-        	})
+            article_list.update({
+                p: top_articles.select_related('p_cat', 'user'),
+            })
         context.update({
-        	"page_obj": page_obj,
-        	"article_list": article_list
+            "page_obj": page_obj,
+            "article_list": article_list
 
         })
         return context
@@ -443,22 +477,22 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
     template_name = 'include/detail-article-list.html'
 
     def __init__(self):
-    	self.page = 1
-    	self.paginated_by = 1
-    	self.slug = None
-    	self.blog = None
+        self.page = 1
+        self.paginated_by = 1
+        self.slug = None
+        self.blog = None
 
     def get(self, request, *args, **kwargs):
-    	if request.is_ajax():
-    		self.page = self.request.GET.get('page', 1)
-    		self.slug = self.request.GET.get('slug')
-    		try:
-    			self.blog = Blog.objects.get(slug=self.slug)
-    		except:
-    			return ''
-    		return super(self.__class__, self).get(request, args, **kwargs)
-    	else:
-    		return HttpResponseForbidden()
+        if request.is_ajax():
+            self.page = self.request.GET.get('page', 1)
+            self.slug = self.request.GET.get('slug')
+            try:
+                self.blog = Blog.objects.get(slug=self.slug)
+            except:
+                return ''
+            return super(self.__class__, self).get(request, args, **kwargs)
+        else:
+            return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -480,85 +514,85 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
 
 
 class ShowCommentBoxView(TemplateView, LoadCommentMixin):
-	template_name = 'include/comment-box.html'
+    template_name = 'include/comment-box.html'
 
-	def __init__(self):
-		self.art_id = None
-		self.article = None
-		self.paginated_by = 2
-		self.page = 1
+    def __init__(self):
+        self.art_id = None
+        self.article = None
+        self.paginated_by = 2
+        self.page = 1
 
-	def get(self, request, *args, **kwargs):
-		if request.is_ajax():
-			self.art_id = request.GET.get('art_id')
-			try:
-				self.article = Blog.objects.get(id=self.art_id)
-			except:
-				return ''
-			return super(self.__class__, self).get(request, args, **kwargs)
-		else:
-			return HttpResponseForbidden()
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.art_id = request.GET.get('art_id')
+            try:
+                self.article = Blog.objects.get(id=self.art_id)
+            except:
+                return ''
+            return super(self.__class__, self).get(request, args, **kwargs)
+        else:
+            return HttpResponseForbidden()
 
-	def get_context_data(self, **kwargs):
-		context = super(self.__class__, self).get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
 
-		comments = self.article.comment_set.filter(is_published=True, is_removed=False)
-		page_obj = self.pagination_loadmore(page=self.page,
-			paginated_by=self.paginated_by, comment_list=comments)
+        comments = self.article.comment_set.filter(is_published=True, is_removed=False)
+        page_obj = self.pagination_loadmore(page=self.page,
+            paginated_by=self.paginated_by, comment_list=comments)
 
-		comment_load_context = {
-		    "comments": page_obj,
-		    "page_obj": self.article,
-		}
+        comment_load_context = {
+            "comments": page_obj,
+            "page_obj": self.article,
+        }
 
-		comment_list = render_to_string('include/article-load-comment.html',
-			comment_load_context)
+        comment_list = render_to_string('include/article-load-comment.html',
+            comment_load_context)
 
-		# import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
 
-		if self.request.session.get('candidate_id'):
-			login_status = 1
-		else:
-			login_status = 0
+        if self.request.session.get('candidate_id'):
+            login_status = 1
+        else:
+            login_status = 0
 
-		context.update({
-			"article": self.article,
-			"comment_list": comment_list,
-			"login_status": login_status
-		})
-		return context
+        context.update({
+            "article": self.article,
+            "comment_list": comment_list,
+            "login_status": login_status
+        })
+        return context
 
 
 class LoadMoreCommentView(TemplateView, LoadCommentMixin):
-	template_name = 'include/article-load-comment.html'
+    template_name = 'include/article-load-comment.html'
 
-	def __init__(self):
-		self.slug = None
-		self.article = None
-		self.paginated_by = 2
-		self.page = 1
+    def __init__(self):
+        self.slug = None
+        self.article = None
+        self.paginated_by = 2
+        self.page = 1
 
-	def get(self, request, *args, **kwargs):
-		if request.is_ajax():
-			self.page = request.GET.get('page')
-			self.slug = request.GET.get('slug')
-			try:
-				self.article = Blog.objects.get(slug=self.slug)
-			except:
-				return ''
-			return super(self.__class__, self).get(request, args, **kwargs)
-		else:
-			return HttpResponseForbidden()
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.page = request.GET.get('page')
+            self.slug = request.GET.get('slug')
+            try:
+                self.article = Blog.objects.get(slug=self.slug)
+            except:
+                return ''
+            return super(self.__class__, self).get(request, args, **kwargs)
+        else:
+            return HttpResponseForbidden()
 
-	def get_context_data(self, **kwargs):
-		context = super(self.__class__, self).get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
 
-		comments = self.article.comment_set.filter(is_published=True, is_removed=False)
-		page_obj = self.pagination_loadmore(page=self.page,
-			paginated_by=self.paginated_by, comment_list=comments)
+        comments = self.article.comment_set.filter(is_published=True, is_removed=False)
+        page_obj = self.pagination_loadmore(page=self.page,
+            paginated_by=self.paginated_by, comment_list=comments)
 
-		context.update({
-		    "comments": page_obj,
-		    "page_obj": self.article,
-		})
-		return context
+        context.update({
+            "comments": page_obj,
+            "page_obj": self.article,
+        })
+        return context

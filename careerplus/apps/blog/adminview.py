@@ -374,7 +374,7 @@ class TagListView(ListView, PaginationMixin):
 
 class BlogAddFormView(FormView):
 	template_name = "blogadmin/article-add.html"
-	success_url = "/article/admin/article-add/"
+	success_url = "/article/admin/articles/"
 	http_method_names = [u'get', u'post']
 	form_class = BlogAddForm
 
@@ -409,7 +409,7 @@ class BlogAddFormView(FormView):
 
 class TagAddFormView(FormView):
 	template_name = "blogadmin/tag-add.html"
-	success_url = "/article/admin/tag-add/"
+	success_url = "/article/admin/tags/"
 	http_method_names = [u'get', u'post']
 	form_class = TagAddForm
 
@@ -443,7 +443,7 @@ class TagAddFormView(FormView):
 
 class CategoryAddFormView(FormView):
 	template_name = "blogadmin/category-add.html"
-	success_url = "/article/admin/category-add/"
+	success_url = "/article/admin/categories/"
 	http_method_names = [u'get', u'post']
 	form_class = CategoryAddForm
 

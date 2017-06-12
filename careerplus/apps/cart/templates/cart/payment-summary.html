@@ -6,7 +6,7 @@
 {%  endblock meta_html %}
 
 {% block title %}
-   Payment Login - Shine Learning
+   Payment Summary - Shine Learning
 {% endblock title %}
 
 {% block css_section %}
@@ -63,51 +63,68 @@
 
         <!-- right content start -->
         <div class="col-sm-9 bdr payment-summary">
+        {% if request.session.checkout_type == 'cart' %}
         <div class="edit-cart">
           <a href="{% url "cart:cart-product-list" %}">Edit cart</a>
         </div>
+        {% endif %}
 
         {% for item in cart_items %}
-        <!-- prdduct 1 -->
-        <ul>
-          {% if forloop.counter == 1 %}
-            <li class="bdr-tp-btm">
-                <strong class="col-sm-8 col-md-9 item-heading">Item</strong>
-                <strong class="col-sm-4 col-md-3 item-heading">Price</strong>
-            </li>
-          {% endif %}
-          <li>
-            <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.product.name}}</strong>
-            </span>
-            <strong class="col-sm-4 col-md-3">Rs. 7499/-</strong>
-          </li>
 
-          {% comment %}
-          <li>
-            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Cover letter</span>
-            <span class="col-sm-4 col-md-3">Rs. 599/-</span>
-          </li>
-          <li>
-            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Resume+</span>
-            <span class="col-sm-4 col-md-3">Rs. 2099/-</span>
-          </li>
-          <li>
-            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Recommendations for profile assessment</span>
-            <span class="col-sm-4 col-md-3">Rs. 1099/-</span>
-          </li>
-          <li>
-            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> Super express delivery</span>
-            <span class="col-sm-4 col-md-3">Rs. 699/-</span>
-          </li>
-          {% endcomment %}
-        </ul>
+        {% with li=item.li addons=item.addons variations=item.variations %}
+            <!-- prdduct 1 -->
+            <ul>
+              {% if forloop.counter == 1 %}
+                <li class="bdr-tp-btm">
+                    <strong class="col-sm-8 col-md-9 item-heading">Item</strong>
+                    <strong class="col-sm-4 col-md-3 item-heading">Price</strong>
+                </li>
+              {% endif %}
+
+              {% if li.product.type_service == 3 and variations %}
+                  <li>
+                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
+                    </span>
+                    <strong class="col-sm-4 col-md-3">Rs. {{variations.first.product.get_price}}/-</strong>
+                  </li>
+                  {% for addon in addons %}
+                       <li>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
+                        </li>
+                  {% endfor %}
+
+              {% else %}
+                  <li>
+                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
+                    </span>
+                    <strong class="col-sm-4 col-md-3">Rs. {{li.product.get_price}}/-</strong>
+                  </li>
+                  {% for var in variations %}
+                       <li>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{var.product.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{var.product.get_price}}/-</span>
+                        </li>
+                  {% endfor %}
+                  {% for addon in addons %}
+                       <li>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
+                        </li>
+                  {% endfor %}
+
+              {% endif %}
+
+              
+            </ul>
+        {% endwith %}
         {% endfor %}
 
         <!-- coupon & amount -->
         <ul>
           <li>
             <span class="col-sm-8 col-md-9 text-right total-amount">Total amount</span>
-            <span class="col-sm-4 col-md-3 total-amount">Rs. 31356/-</span>
+            <span class="col-sm-4 col-md-3 total-amount">Rs. {{total_amount}}/-</span>
 
             <!-- coupon -->
             <span class="col-sm-4 col-md-6 coupon">
@@ -149,7 +166,7 @@
         <ul>
           <li class="payable-amount">
             <span class="col-sm-8 col-md-9 text-right">Payable amount</span>
-            <span class="col-sm-4 col-md-3">Rs. 1999/-</span>
+            <span class="col-sm-4 col-md-3">Rs. {{total_amount}}/-</span>
           </li>
         </ul>
 

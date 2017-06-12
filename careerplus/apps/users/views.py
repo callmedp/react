@@ -1,5 +1,6 @@
 import json
 import requests
+import logging
 
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -125,19 +126,25 @@ class RegistrationApiView(FormView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        user_resp = RegistrationLoginApi().user_registration(request)
+        login_dict, post_data = {}, {}
+
+        post_data.update({
+            "email": request.POST.get('email'),
+            "raw_password": request.POST.get('raw_password'),
+            "cell_phone": request.POST.get('cell_phone'),
+            "country_code": request.POST.get('country_code'),
+            "vendor_id": request.POST.get('vendor_id'),
+        })
+        user_resp = RegistrationLoginApi().user_registration(post_data)
 
         if user_resp['response'] == 'new_user':
-            resp = RegistrationLoginApi().user_login(request)
+            login_dict.update({
+                "email": request.POST.get('email'),
+                "password": request.POST.get('password') if request.POST.get('password') else request.POST.get('raw_password'),
+            })
+            resp = RegistrationLoginApi().user_login(login_dict)
             
             if resp['response'] == 'login_user':
-                client_token = ShineToken().get_client_token()
-
-                headers = {
-                    "User-Access-Token": resp['access_token'],
-                    "Client-Access-Token": client_token,
-                    "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
-                }
                 resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
                 request.session.update(resp_status)
                 return HttpResponseRedirect(reverse('dashboard'))
@@ -153,7 +160,7 @@ class RegistrationApiView(FormView):
 class LoginApiView(FormView):
     form_class = LoginApiForm
     template_name = "users/login.html"
-    success_url = "/dashboard/"
+    success_url = "/"
 
     def get_context(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -161,29 +168,48 @@ class LoginApiView(FormView):
         return context
 
     def form_valid(self, form):
+        login_dict = {}
         remember_me = self.request.POST.get('remember_me', None)
-        login_resp = RegistrationLoginApi().user_login(self.request)
-        if login_resp['response'] == 'login_user':
 
-            client_token = ShineToken().get_client_token()
-            headers = {
-                "User-Access-Token": login_resp['access_token'],
-                "Client-Access-Token": client_token,
-                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
-            }
+        login_dict.update({
+                "email": self.request.POST.get('email'),
+                "password": self.request.POST.get('password')
+            })
+        
+        try:
+            user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+            if user_exist['exists'] == True:
+                login_resp = RegistrationLoginApi().user_login(login_dict)
 
-            resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
-            self.request.session.update(resp_status)
+                if login_resp['response'] == 'login_user':
+                    resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
+                    self.request.session.update(resp_status)
 
-            if remember_me:
-                self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
-            return HttpResponseRedirect(self.success_url)
-        elif login_resp['response'] == 'error_pass':
-            messages.add_message(self.request, messages.SUCCESS, login_resp["non_field_errors"][0])
-            return render(self.request, self.template_name, {'form': form})
+                    if remember_me:
+                        self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                    return HttpResponseRedirect(self.success_url)
+
+                elif login_resp['response'] == 'error_pass':
+                    messages.add_message(self.request, messages.SUCCESS, login_resp["non_field_errors"][0])
+                    return render(self.request, self.template_name, {'form': form})
+
+                elif login_resp['response'] == False:
+                    messages.add_message(self.request, messages.SUCCESS, "Something went to wrong")
+                    return render(self.request, self.template_name, {'form': form})    
+
+            elif user_exist['exists'] == False:
+                messages.add_message(self.request, messages.SUCCESS, "User have No Account")
+                return render(self.request, self.template_name, {'form': form})
+
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+
+    def form_invalid(self, form):
+        return render(self.request, self.template_name, {'form': form})
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+
+        if request.session.get('candidate_id'):
             if 'next' in request.GET:
                 return HttpResponseRedirect(request.GET.get(
                     'next', self.success_url))
@@ -196,5 +222,4 @@ class LogoutApiView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         request.session.flush()
-        return HttpResponseRedirect(reverse('register'))
-
+        return HttpResponseRedirect(reverse('homepage'))

@@ -1,7 +1,8 @@
 <!--hidden form -->
 <div style="display: none">
-    <form method="POST" id="addToCartForm" > {% csrf_token %}
+    <form role="form" method="POST" id="cartForm" > {% csrf_token %}
         <input type="hidden" name="product_id" value="{{object.id}}">
+        <input type="hidden" name="cart_type" id="id-cart-type" value="">
     </form>
 </div>
 
@@ -10,14 +11,21 @@
   <!-- right fixed content start -->
   <div id="price-box" class="col-sm-5 col-md-4  price-box">
   <div class="box-panel enrol-cart">
-    <strong>Rs.&nbsp;{{object.get_price}}/-</strong>
-    {% if object.get_fakeprice %}
-      <strike>Rs.&nbsp;{{object.get_fakeprice.0}}/-</strike>
-      <small>  {{object.get_fakeprice.1}}% off</small>
+     <strong id="total-price" name="price_total" sum-price="{% if selected_products %}{{product_total_price}}{% else %}{{object.get_price}} {% endif %}" >Rs. {% if selected_products %}{{product_total_price}}{% else %}{{object.get_price}} {% endif %}/-</strong>
+     {% if object.get_fakeprice %}
+    <strike>Rs.&nbsp;{{object.get_fakeprice.0}}/-</strike>
+    <small>  {{object.get_fakeprice.1}}% off</small>
     {% endif %}
     <span class="clearfix db"></span>
-    <a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enrol now</a>
-    <a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}" >Add to cart</a>
+
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{object.id}}" data-price="{{object.get_price}}" >Enrol now</a>
+
+    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{object.id}}" data-price="{{object.get_price}}">Add to cart</a>
+
+    <div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div>
+
+    <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
+    
     <div class="query-call">
       <a href="#"><figure class="email-icon"></figure> Have a query?</a>
       <a><figure class="calling-icon"></figure> 0124-395 5001</a>

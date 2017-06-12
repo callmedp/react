@@ -46,7 +46,7 @@ class ColumnHeading(models.Model):
 class IndexColumn(models.Model):
 	indexer = models.ForeignKey(IndexerWidget)
 	column = models.PositiveIntegerField(choices=COLUMN_TYPE)
-	url = models.CharField(max_length=2048, null=True, blank=True)
+	url = models.CharField(max_length=2048, null=True, blank=True, help_text='provide full url including https://')
 	name = models.CharField(max_length=255)
 
 	def __str__(self):
@@ -72,8 +72,6 @@ class Widget(AbstractCommonModel):
 	document_upload = models.FileField("Document", max_length=200,
     	upload_to="documents/cms/widget/", blank=True, null=True)
 
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
-		help_text='for user or writer')
 	display_name = models.CharField(max_length=100, null=True, blank=True)
 	writer_designation = models.CharField(max_length=255, null=True, blank=True)
 
@@ -194,7 +192,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 		return self.build_absolute_uri(self.get_absolute_url())
 
 	def get_absolute_url(self):
-		return reverse('cms:page', kwargs={'slug': self.slug})
+		return reverse('cms:page', kwargs={'slug': self.slug, 'pk': self.pk})
 
 
 class PageWidget(AbstractCommonModel):

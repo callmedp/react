@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from .choices import STATUS_CHOICES, SITE_CHOICES
+from .choices import STATUS_CHOICES, SITE_CHOICES, PAYMENT_MODE
 
 
 class Order(AbstractAutoDate):
@@ -19,41 +19,55 @@ class Order(AbstractAutoDate):
     # custome information
     candidate_id = models.CharField(
         null=True,
+        blank=True,
         max_length=255,
         verbose_name=_("Customer ID"))
 
+    txn = models.CharField(max_length=255, null=True, blank=True)
+
+    # pay by cheque/Draft
+    instrument_number = models.CharField(max_length=255, null=True, blank=True)
+    instrument_issuer = models.CharField(max_length=255, null=True, blank=True)
+    instrument_issue_date = models.CharField(
+        max_length=255, null=True, blank=True)
+
+    status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
+
+    payment_mode = models.IntegerField(choices=PAYMENT_MODE, default=0)
+    payment_date = models.DateTimeField(null=True, blank=True)
+    currency = models.CharField(
+        _("Currency"), max_length=12, null=True, blank=True)
+
+    total_incl_tax = models.DecimalField(
+        _("Order total (inc. tax)"), decimal_places=2, max_digits=12, default=0)
+    total_excl_tax = models.DecimalField(
+        _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
+
+    date_placed = models.DateTimeField(db_index=True)
+
+    # shipping Address
     email = models.CharField(
         null=True,
         max_length=255,
         verbose_name=_("Customer Email"))
 
-    first_name = models.CharField(max_length=255, null=True,
-        verbose_name=_("First Name"))
+    first_name = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_("First Name"))
 
-    last_name = models.CharField(max_length=255, null=True,
-        verbose_name=_("Last Name"))
+    last_name = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_("Last Name"))
 
-    country_code = models.CharField(max_length=15, null=True,
-        verbose_name=_("Country Code"))
+    country_code = models.CharField(
+        max_length=15, null=True, blank=True, verbose_name=_("Country Code"))
 
-    mobile = models.CharField(max_length=15, null=True)
+    mobile = models.CharField(max_length=15, null=True, blank=True,)
 
     address = models.CharField(max_length=255, null=True, blank=True)
 
     pincode = models.CharField(max_length=15, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.CharField(max_length=200, null=True, blank=False)
-
-    # currency = models.CharField(
-    #     _("Currency"), max_length=12,)
-    total_incl_tax = models.DecimalField(
-        _("Order total (inc. tax)"), decimal_places=2, max_digits=12, default=0)
-    total_excl_tax = models.DecimalField(
-        _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
-
-    status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
-    date_placed = models.DateTimeField(db_index=True)
+    country = models.CharField(max_length=200, null=True, blank=True,)
 
     class Meta:
         app_label = 'order'
@@ -68,6 +82,8 @@ class Order(AbstractAutoDate):
 class OrderItem(models.Model):
     order = models.ForeignKey(
         'order.Order', related_name='orderitems', verbose_name=_("Order"))
+
+    parent = models.ForeignKey('self', null=True, blank=True)
 
     partner = models.ForeignKey(
         'partner.Vendor', related_name='order_items', blank=True, null=True,
@@ -103,6 +119,10 @@ class OrderItem(models.Model):
     unit_price_excl_tax = models.DecimalField(
         _("Unit Price (excl. tax)"), decimal_places=2, max_digits=12,
         blank=True, null=True)
+
+    no_process = models.BooleanField(default=False)
+    is_combo = models.BooleanField(default=False)
+    is_variation = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'order'

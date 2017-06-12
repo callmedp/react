@@ -130,9 +130,10 @@ $(document).ready(function() {
         if (flag){
             var formData = $("#cms_comment_form").serialize();
             var page_slug = $('#page_slug').val();
+            var page_pk = $('#page_pk').val();
             console.log(page_slug);
             $.ajax({
-                url : "/cms/page/" + page_slug + "/",
+                url : "/cms/page/" + page_slug + "/" + page_pk + "/",
                 type: "POST",
                 data : formData,
                 success: function(data, textStatus, jqXHR)

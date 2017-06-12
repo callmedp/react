@@ -1,10 +1,19 @@
 $().ready(function() {
 
+    $.validator.addMethod("indiaMobile", function(value, element) {
+        var country_code = $('#id_country_code').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
+
     $("#login_form").validate({
         rules: {
                 email:{
                     required:true,
-                    email:true
+                    email:true,
+                    /*emailDoesNotExist:true,*/
                 },
                 password:{
                     required:true,
@@ -68,7 +77,8 @@ $().ready(function() {
                 cell_phone:{
                     required:true,
                     number: true,
-                    minlength: 10,
+                    indiaMobile: true,
+                    minlength: 4,
                     maxlength: 15,
                 },
                 term_conditions:{
@@ -83,8 +93,9 @@ $().ready(function() {
             cell_phone:{
                 required:"Mobile Number is Mandatory",
                 number:"Enter only number",
+                indiaMobile:"Length must be 10 digits.",
                 maxlength: "Please enter below 15 digits",
-                minlength: "Please enter atleast 10 digits",
+                minlength: "Please enter atleast 4 digits",
             },
             term_conditions:{
               required:"Please accept term conditions",
@@ -104,11 +115,14 @@ $().ready(function() {
                 data : formData,
                 success: function(data, textStatus, jqXHR)
                 {
-                    if (data.response == 'new_user'){
+                    if (data.response == 'login_user'){
                         window.location.reload();
                     }
                     else if (data.response == 'exist_user'){
-                        $('#non-field-error-register').text('User already exist. Try to login with existing email or Register with Other Email.')
+                        $('#non-field-error-register').text(data.error_message)
+                    }
+                    else if (data.response == 'error_pass'){
+                        $('#non-field-error-register').text(data.error_message)
                     }
                     else if(data.response == 'form_error'){
                         $('#non-field-error-register').text('Please enter Valid Data')

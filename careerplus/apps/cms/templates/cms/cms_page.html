@@ -63,6 +63,7 @@
                 <div class="media-body">
                   <div style='display:none'>
                         <input type='hidden' id='page_slug' value='{{page_obj.slug}}'/>
+                        <input type='hidden' id='page_pk' value='{{page_obj.pk}}'/>
                   </div>
                   <form role="form" id="cms_comment_form">
                   {% csrf_token %}
@@ -101,8 +102,7 @@
 
     </section>
     <!-- main section end -->
-
-    <!--modals-->
+<!--modals-->
 <!--login-->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
   <div class="modal-dialog modal-sm" role="document">
@@ -115,19 +115,15 @@
       </div>
 
        <form role method="post" id="login_form" >{% csrf_token %}
-          <fieldset>
-              {% for field in loginform %}
-                  {% if field.errors %}
-                      <div class="form-group error">  
-                          {{ field }}
-                      </div>
-                  {% else %}
-                      <div class="form-group">
-                          {{ field }}
-                      </div>
-                  {% endif %}
-              {% endfor %}
-          </fieldset>
+          
+          <div class="form-group {% if loginform.email.errors %} error {% endif %}">
+            {{loginform.email}}
+            <span class="error-txt">{{loginform.email.errors.0}}</span>
+          </div>
+          <div class="form-group {% if loginform.password.errors %} error {% endif %}">
+               {{loginform.password}}
+               <span class="error-txt">{{loginform.password.errors.0}}</span>
+          </div>
           <div class="form-check">
             <label class="form-check-label">
               <input type="checkbox" name="remember_me" class="form-check-input">
@@ -144,7 +140,7 @@
           </div>
           <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
         </form>
-        
+
       </div>
     </div>
   </div>
@@ -163,23 +159,35 @@
 
       <form role="form" id="register_form" >
         {% csrf_token %}
-          <fieldset>
-              {% for field in registerform %}
-                  {% if field.errors %}
-                      <div class="form-group error">  
-                          {{ field }}
-                        <span class="error-txt">
-                          {% for error in  field.errors %}{{ error }}{% endfor %}
-                        </span>
-                      </div>
-                  {% else %}
-                      <div class="form-group">
-                          {{ field }}
-                          <span class="error-txt"></span>
-                      </div>
-                  {% endif %}
-              {% endfor %}
-          </fieldset>
+          <div class="form-group {% if registerform.email.errors %}error{% endif %}">
+            {{ registerform.email }}
+            <span class="error-txt">{{ registerform.email.errors.0 }}</span>
+          </div>
+          <div class="form-group {% if registerform.email.errors %}error{% endif %}">
+            {{ registerform.raw_password }}
+            <span class="error-txt">{{ registerform.raw_password.errors.0 }}</span>
+          </div>
+
+          
+          <div class="form-group {% if registerform.cell_phone.errors or registerform.country_code.errors %}error{% endif %}">
+            <div class="country-code">
+              <div class="custom-select">
+                {{registerform.country_code}}
+              </div>
+               {{registerform.cell_phone}}
+              <span class="error-txt">
+                   {% if registerform.cell_phone.errors %}
+                      {{registerform.cell_phone.errors.0}}
+                   {% else %}
+                       {{registerform.country_code.errors.0}}
+                   {% endif %}
+              </span>
+            </div>
+            
+          </div>
+          <div class="form-group">
+            {{registerform.vendor_id }}
+          </div>
           <div class="form-check">
             <label class="form-check-label">
               <input type="checkbox" class="form-check-input" name="term_conditions">
@@ -199,7 +207,7 @@
       </div>
     </div>
   </div>
-</div>      
+</div>
 
 
 {% endblock container %}
@@ -207,7 +215,6 @@
 
 {% block js_section %}
    {{ block.super }}
-   <!--script src="{% static 'console/js/jquery.validate.js' %}"></script-->
    <script src="{% static 'shinelearn/js/cms/cms.js' %}"></script>
    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
 

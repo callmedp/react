@@ -123,7 +123,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 self.image_alt = self.name
         if self.description:
             if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description)
+                self.meta_desc = self.get_meta_desc(self.description.strip())
+                
         super(Category, self).save(*args, **kwargs)
 
     def get_meta_desc(self, description=''):
@@ -465,7 +466,7 @@ class Product(AbstractProduct, ModelMeta):
         related_name='relatedproduct+',
         through_fields=('primary', 'secondary'),
         verbose_name=_('Related Product'),
-        symmetrical=False, blank=True)
+        symmetrical=False, blank=True)    
     childs = models.ManyToManyField(
         'self',
         through='ChildProduct',
@@ -599,7 +600,6 @@ class Product(AbstractProduct, ModelMeta):
         
         return self.name
 
-
     def get_meta_desc(self, description=''):
         if description:
             try:
@@ -665,7 +665,7 @@ class Product(AbstractProduct, ModelMeta):
         else:
             cat_slug = self.category_slug
         cat_slug = cat_slug.slug if cat_slug else None
-        if self.is_course: 
+        if self.is_course:
             return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         elif self.is_writing:
             return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
@@ -713,42 +713,6 @@ class Product(AbstractProduct, ModelMeta):
         )
         return
 
-
-    def get_rating(self):
-        rating_ls = []
-        if int(self.avg_rating) == 1:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 2:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 3:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 4:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('grey-rating-icon')
-        elif int(self.avg_rating) == 5:
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-            rating_ls.append('orange-rating-icon')
-
-        return rating_ls
-
     def get_description(self):
         description = self.meta_desc
         if not description:
@@ -771,6 +735,9 @@ class Product(AbstractProduct, ModelMeta):
         for i in range(rest_part):
             final_score.append('-')
         return final_score
+
+    def get_avg_ratings(self):
+        return round(self.avg_rating, 1)
 
     @property
     def has_attributes(self):

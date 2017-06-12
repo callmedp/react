@@ -49,28 +49,34 @@
   <div>
     <h1 class="modal-title">Register</h1>
   </div>
-    <form method="post" id="register_form">
+    <form method="post" id="register_form" role="form">
     {% csrf_token %}
-      <fieldset>
-          {% for field in form %}
-              {% if field.errors %}
-                  <div class="form-group error">  
-                      {{ field }}
-                    <span class="error-txt">
-                      {% for error in  field.errors %}{{ error }}{% endfor %}
-                    </span>
-                  </div>
-              {% else %}
-                  <div class="form-group">
-                      {{ field }}
-                      <span class="error-txt"></span>
-                  </div>
-              {% endif %}
-          {% endfor %}
-      </fieldset>
+      <div class="form-group {% if form.email.errors %}error{% endif %}">
+        {{ form.email }}
+        <span class="error-txt" style="bottom:-25px">{{ form.email.errors }}</span>
+      </div>
+      <div class="form-group {% if form.email.errors %}error{% endif %}">
+        {{ form.raw_password }}
+        <span class="error-txt" style="bottom:-25px">{{ form.raw_password.errors }}
+        </span>
+      </div>
+      <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
+        <div class="country-code">
+          <div class="custom-select">
+            {{form.country_code}}
+          </div>
+          {{form.cell_phone}}
+          <span class="error-txt" style="bottom:-33px">{{form.cell_phone.errors}}
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        {{ form.vendor_id }}
+      </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input type="checkbox" class="form-check-input" name="term_conditions">
+          <input type="checkbox" class="form-check-input" 
+          name="term_conditions" checked>
           I agree to Terms & conditions
         </label>
       </div>
