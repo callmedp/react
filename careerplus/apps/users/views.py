@@ -43,7 +43,7 @@ class CreateUserView(FormView):
         return render(request, self.template_name, {'form': form})
 
 
-class LoginView(FormView):
+class LoginView(FormView): # TODO: remove if not in use
     form_class = LoginForm
     template_name = "users/login.html"
     success_url = "/dashboard/"
@@ -183,11 +183,11 @@ class LoginApiView(FormView):
                     return HttpResponseRedirect(self.success_url)
 
                 elif login_resp['response'] == 'error_pass':
-                    messages.add_message(self.request, messages.ERROR, login_resp["non_field_errors"][0])
+                    messages.add_message(self.request, messages.ERROR, login_resp["non_field_errors"][0], 'danger')
                     return render(self.request, self.template_name, {'form': form})
 
             else:
-                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.")
+                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
                 return render(self.request, self.template_name, {'form': form})
 
         except Exception as e:

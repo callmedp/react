@@ -201,11 +201,11 @@ textarea.form-control {
   background-color: #fbfbfb;
   padding: 30px; }
 
-.error .form-control {
+.error.form-control {
   border-color: #f34a38;
   color: #f34a38; }
 
-.error .mgs {
+.form-group label.error{
   font-size: 85%;
   padding-top: 3px;
   color: #f34a38;
