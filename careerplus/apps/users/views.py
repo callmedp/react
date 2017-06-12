@@ -184,7 +184,9 @@ class LoginApiView(FormView):
 
                 elif login_resp['response'] == 'error_pass':
                     messages.add_message(self.request, messages.ERROR, login_resp["non_field_errors"][0], 'danger')
-                    return render(self.request, self.template_name, {'form': form})
+                elif not login_resp['response']:
+                    messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+                return render(self.request, self.template_name, {'form': form})
 
             else:
                 messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
