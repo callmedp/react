@@ -1,12 +1,39 @@
 from django import forms
+from django.db.models import Q
+
+from geolocation.models import Country
 
 from .models import Cart
 
 
 class ShippingDetailUpdateForm(forms.ModelForm):
+    country_code = forms.ChoiceField(
+        required=True, widget=forms.Select())
+    country = forms.ChoiceField(
+        required=True, widget=forms.Select())
+
+    class Meta:
+        model = Cart
+
+        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
 
     def __init__(self, *args, **kwargs):
         super(ShippingDetailUpdateForm, self).__init__(*args, **kwargs)
+        try:
+            country_choices, CHOICE_COUNTRY = [], []
+            for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
+                country_choices.append((m.phone, m.phone))
+                CHOICE_COUNTRY.append((m.name, m.name))
+
+            # indian_obj = Country.objects.filter(phone='91')[0]
+            # default_country = indian_obj.name
+            # default_code = indian_obj.phone
+
+        except:
+            country_choices, CHOICE_COUNTRY = [('91', '91')], [('India', 'India')]
+            # default_code = '91'
+            # default_country = 'India'
+
         form_class = 'form-control'
         self.fields['first_name'].required = True
         self.fields['first_name'].widget.attrs['placeholder'] = 'First name'
@@ -23,6 +50,8 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 
         self.fields['country_code'].required = True
         self.fields['country_code'].widget.attrs['class'] = form_class
+        self.fields['country_code'].choices = country_choices
+        # self.fields['country_code'].initial = default_code
 
         self.fields['mobile'].required = True
         self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile'
@@ -42,11 +71,8 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 
         self.fields['country'].required = True
         self.fields['country'].widget.attrs['class'] = form_class
-
-    class Meta:
-        model = Cart
-
-        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
+        self.fields['country'].choices = CHOICE_COUNTRY
+        # self.fields['country'].initial = default_country
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '').strip()

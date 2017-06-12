@@ -63,6 +63,7 @@
                 <div class="media-body">
                   <div style='display:none'>
                         <input type='hidden' id='page_slug' value='{{page_obj.slug}}'/>
+                        <input type='hidden' id='page_pk' value='{{page_obj.pk}}'/>
                   </div>
                   <form role="form" id="cms_comment_form">
                   {% csrf_token %}

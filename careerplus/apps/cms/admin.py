@@ -30,8 +30,8 @@ class WidgetAdmin(admin.ModelAdmin):
 		'is_external', 'is_pop_up', 'heading', 'redirect_url')
 	list_filter = ('widget_type', )
 	search_fields = ('heading', 'id')
-	filter_horizontal = ('related_article', )
-	raw_id_fields = ('created_by', 'last_modified_by', 'user', 'iw')
+	filter_horizontal = ['related_article', ]
+	# raw_id_fields = ('created_by', 'last_modified_by', 'user', 'iw')
 
 
 class DocumentAdminInline(admin.TabularInline):
@@ -55,7 +55,7 @@ class PageWidgetAdmin(admin.ModelAdmin):
 	list_filter = ('section', )
 	search_fields = ('id',)
 	filter_horizontal = ()
-	raw_id_fields = ('created_by', 'last_modified_by', 'page', 'widget')
+	# raw_id_fields = ('created_by', 'last_modified_by', 'page', 'widget')
 
 
 class CommentAdmin(admin.ModelAdmin):
