@@ -6,6 +6,7 @@ from django.db import models
 from django.dispatch import Signal
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from seo.models import AbstractAutoDate
 
 from .choices import (
     COUPON_TYPES,
@@ -17,20 +18,15 @@ from .choices import (
 )
 
 
-try:
-    user_model = settings.AUTH_USER_MODEL
-except AttributeError:
-    from django.contrib.auth.models import User as user_model
-
 redeem_done = Signal(providing_args=["coupon"])
 
 
 class CouponManager(models.Manager):
-    def create_coupon(self, type, value, users=[], valid_until=None, prefix="", campaign=None, user_limit=None):
+    def create_coupon(self, coupon_type, value, users=[], valid_until=None, prefix="", campaign=None, user_limit=None):
         coupon = self.create(
             value=value,
             code=Coupon.generate_code(prefix),
-            type=type,
+            coupon_type=coupon_type,
             valid_until=valid_until,
             campaign=campaign,
         )
@@ -40,7 +36,7 @@ class CouponManager(models.Manager):
             coupon.save()
         except IntegrityError:
             # Try again with other code
-            coupon = Coupon.objects.create_coupon(type, value, users, valid_until, prefix, campaign)
+            coupon = Coupon.objects.create_coupon(coupon_type, value, users, valid_until, prefix, campaign)
         if not isinstance(users, list):
             users = [users]
         for user in users:
@@ -48,10 +44,10 @@ class CouponManager(models.Manager):
                 CouponUser(user=user, coupon=coupon).save()
         return coupon
 
-    def create_coupons(self, quantity, type, value, valid_until=None, prefix="", campaign=None):
+    def create_coupons(self, quantity, coupon_type, value, valid_until=None, prefix="", campaign=None):
         coupons = []
         for i in range(quantity):
-            coupons.append(self.create_coupon(type, value, None, valid_until, prefix, campaign))
+            coupons.append(self.create_coupon(coupon_type, value, None, valid_until, prefix, campaign))
         return coupons
 
     def used(self):
@@ -64,15 +60,22 @@ class CouponManager(models.Manager):
         return self.filter(valid_until__lt=timezone.now())
 
 
-class Coupon(models.Model):
-    value = models.IntegerField(
-        _("Value"), help_text=_("Arbitrary coupon value"))
+class Coupon(AbstractAutoDate):
+    value = models.DecimalField(
+        _("Value"), max_digits=8, decimal_places=2, default=0.0)
+    min_purchase = models.DecimalField(
+        _("Minimum purchase Value"), max_digits=8, decimal_places=2, default=0.0)
+    max_deduction = models.DecimalField(
+        _("Maximum Deduction"), max_digits=8, decimal_places=2, default=0.0)
+    
     code = models.CharField(
         _("Code"), max_length=30, unique=True, blank=True,
         help_text=_("Leaving this field empty will generate a random code."))
-    type = models.CharField(_("Type"), max_length=20, choices=COUPON_TYPES)
+    coupon_type = models.CharField(_("Type"), max_length=20, choices=COUPON_TYPES)
     user_limit = models.PositiveIntegerField(_("User limit"), default=1)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    valid_from = models.DateTimeField(
+        _("Valid from"), blank=True, null=True,
+        help_text=_("Leave empty for coupons that never expire"))
     valid_until = models.DateTimeField(
         _("Valid until"), blank=True, null=True,
         help_text=_("Leave empty for coupons that never expire"))
@@ -80,11 +83,11 @@ class Coupon(models.Model):
         'Campaign',
         verbose_name=_("Campaign"),
         blank=True, null=True, related_name='coupons')
-
+    active = models.BooleanField(default=True)
+    
     objects = CouponManager()
 
     class Meta:
-        ordering = ['created_at']
         verbose_name = _("Coupon")
         verbose_name_plural = _("Coupons")
 
@@ -136,7 +139,7 @@ class Coupon(models.Model):
         redeem_done.send(sender=self.__class__, coupon=self)
 
 
-class Campaign(models.Model):
+class Campaign(AbstractAutoDate):
     name = models.CharField(_("Name"), max_length=255, unique=True)
     description = models.TextField(_("Description"), blank=True)
 
@@ -149,13 +152,11 @@ class Campaign(models.Model):
         return self.name
 
 
-class CouponUser(models.Model):
+class CouponUser(AbstractAutoDate):
     coupon = models.ForeignKey(Coupon, related_name='users')
-    user = models.ForeignKey(user_model, verbose_name=_("User"), null=True, blank=True)
+    user = models.CharField(
+        _("User Email"), max_length=255, blank=True, null=True)
     redeemed_at = models.DateTimeField(_("Redeemed at"), blank=True, null=True)
-
-    class Meta:
-        unique_together = (('coupon', 'user'),)
 
     def __str__(self):
         return str(self.user)

@@ -1,33 +1,33 @@
-from django.contrib import admin
+# from django.contrib import admin
 
-from .models import ConditionalOffer, Condition, Benefit, Range
-
-
-class ConditionAdmin(admin.ModelAdmin):
-    list_display = ('type', 'value', 'range')
+# from .models import ConditionalOffer, Condition, Benefit, Range
 
 
-class BenefitAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'type', 'value', 'range')
+# class ConditionAdmin(admin.ModelAdmin):
+#     list_display = ('type', 'value', 'range')
 
 
-class ConditionalOfferAdmin(admin.ModelAdmin):
-    list_display = ('name', 'offer_type', 'start_datetime', 'end_datetime',
-                    'condition', 'benefit', 'total_discount')
-    list_filter = ('offer_type',)
-    readonly_fields = ('total_discount', 'num_orders')
-    fieldsets = (
-        (None, {
-            'fields': ('name', 'description', 'offer_type', 'condition',
-                       'benefit', 'start_datetime', 'end_datetime', 'priority')
-        }),
-        ('Usage', {
-            'fields': ('total_discount', 'num_orders')
-        }),
-    )
+# class BenefitAdmin(admin.ModelAdmin):
+#     list_display = ('__str__', 'type', 'value', 'range')
 
 
-admin.site.register(ConditionalOffer, ConditionalOfferAdmin)
-admin.site.register(Condition, ConditionAdmin)
-admin.site.register(Benefit, BenefitAdmin)
-admin.site.register(Range)
+# class ConditionalOfferAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'offer_type', 'start_datetime', 'end_datetime',
+#                     'condition', 'benefit', 'total_discount')
+#     list_filter = ('offer_type',)
+#     readonly_fields = ('total_discount', 'num_orders')
+#     fieldsets = (
+#         (None, {
+#             'fields': ('name', 'description', 'offer_type', 'condition',
+#                        'benefit', 'start_datetime', 'end_datetime', 'priority')
+#         }),
+#         ('Usage', {
+#             'fields': ('total_discount', 'num_orders')
+#         }),
+#     )
+
+
+# admin.site.register(ConditionalOffer, ConditionalOfferAdmin)
+# admin.site.register(Condition, ConditionAdmin)
+# admin.site.register(Benefit, BenefitAdmin)
+# admin.site.register(Range)
