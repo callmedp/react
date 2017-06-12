@@ -2,6 +2,7 @@ from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import validate_email
 from django import forms
+from django.contrib.auth import get_user_model
 from geolocation.models import Country
 from django.db.models import Q
 
@@ -22,7 +23,7 @@ class UserCreateForm(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Mobile No.'}), max_length=10)
     
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ['name', 'contact_number', 'email', 'password1']
         
     def clean_password1(self):

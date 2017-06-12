@@ -45,7 +45,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 				order.address = cart_obj.address
 				order.pincode = cart_obj.pincode
 				order.state = cart_obj.state
-				order.country = cart_obj.get_country()
+				order.country = cart_obj.country
 
 				order.total_excl_tax = self.getTotalAmount()
 				order.save()

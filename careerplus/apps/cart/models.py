@@ -1,36 +1,14 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-# from django.db.models import Q
 
 from seo.models import AbstractAutoDate
 from order.models import Order
 
-# from geolocation.models import Country
-
-
 from .managers import OpenBasketManager, SavedBasketManager
 from .choices import STATUS_CHOICES
-from .functions import (
-    get_country_code,
-    default_code,
-    get_country,
-    default_country)
 
 
 class Cart(AbstractAutoDate):
-    # try:
-    #     country_choices, CHOICE_COUNTRY = [], []
-    #     for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
-    #         country_choices.append((m.phone, m.phone))
-    #         CHOICE_COUNTRY.append((m.phone, m.name))
-
-    #     indian_obj = Country.objects.filter(name='India', phone='91')[0].phone
-    #     default_country = indian_obj
-
-    # except:
-    #     country_choices, CHOICE_COUNTRY = [], []
-    #     indian_obj = None
-    #     default_country = None
 
     owner_id = models.CharField(
         null=True,
@@ -68,27 +46,9 @@ class Cart(AbstractAutoDate):
     email = models.EmailField(max_length=255, null=True, blank=False)
 
     country_code = models.CharField(
-        max_length=15, choices=get_country_code(), default=default_code(),
-        null=True, blank=False, verbose_name=_("Country Code"))
+        max_length=15,
+        null=True, blank=True, verbose_name=_("Country Code"))
 
-    #     indian_obj = None
-    #     default_country = None
-
-    owner_id = models.CharField(
-        null=True,
-        max_length=255,
-        verbose_name=_("Owner ID"))
-    owner_email = models.CharField(
-        null=True,
-        max_length=255,
-        verbose_name=_("Owner Email"))
-    session_id = models.CharField(max_length=255, null=True, blank=True)
-    status = models.PositiveSmallIntegerField(
-        _("Status"),
-        default=0, choices=STATUS_CHOICES)
-    last_status = models.PositiveIntegerField(
-        ("Status"), default=None, null=True, blank=True, choices=STATUS_CHOICES)
-    # vouchers = models.ManyToManyField(
     mobile = models.CharField(max_length=15, null=True, blank=False)
 
     address = models.CharField(max_length=255, null=True, blank=True)
@@ -98,8 +58,8 @@ class Cart(AbstractAutoDate):
     state = models.CharField(max_length=255, null=True, blank=True)
 
     country = models.CharField(
-        max_length=15, choices=get_country(),
-        default=default_country(), null=True, blank=False)
+        max_length=200,
+        null=True, blank=True)
     
     shipping_done = models.BooleanField(default=False)  #shipping process
     # summary_done = models.BooleanField(default=False)  #summary process
