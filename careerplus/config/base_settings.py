@@ -51,7 +51,8 @@ THIRD_PARTY_APPS = [
     'meta',
     'cities_light',
     'sorl.thumbnail',
-    'requests'
+    'requests',
+    'rest_framework',
 ]
 
 # Apps specific for this project go here.

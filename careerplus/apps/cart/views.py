@@ -45,6 +45,7 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+
         if request.is_ajax():
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
@@ -309,6 +310,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+
         if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
             context.update({
                 "cart_items": self.get_cart_items(),
@@ -320,4 +322,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 "cart_items": self.get_cart_items(),
                 "total_amount": self.getTotalAmount(),
             })
+        cart_obj = None
+        cart_pk = self.request.session.get('cart_pk')
+        try:
+            cart_obj = Cart.objects.get(pk=cart_pk)
+        except Cart.DoesNotExist:
+            pass
+        context.update({'coupon': cart_obj.coupon})
         return context
+
+

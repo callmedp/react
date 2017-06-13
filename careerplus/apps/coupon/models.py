@@ -18,9 +18,6 @@ from .choices import (
 )
 
 
-redeem_done = Signal(providing_args=["coupon"])
-
-
 class CouponManager(models.Manager):
     def create_coupon(self, coupon_type, value, users=[], valid_until=None, prefix="", campaign=None, user_limit=None):
         coupon = self.create(
@@ -67,7 +64,6 @@ class Coupon(AbstractAutoDate):
         _("Minimum purchase Value"), max_digits=8, decimal_places=2, default=0.0)
     max_deduction = models.DecimalField(
         _("Maximum Deduction"), max_digits=8, decimal_places=2, default=0.0)
-    
     code = models.CharField(
         _("Code"), max_length=30, unique=True, blank=True,
         help_text=_("Leaving this field empty will generate a random code."))
@@ -99,6 +95,9 @@ class Coupon(AbstractAutoDate):
             self.code = Coupon.generate_code()
         super(Coupon, self).save(*args, **kwargs)
 
+    def suspended(self):
+        return self.valid_from is not None and self.valid_from > timezone.now() and self.active
+
     def expired(self):
         return self.valid_until is not None and self.valid_until < timezone.now()
 
@@ -124,19 +123,6 @@ class Coupon(AbstractAutoDate):
             return prefix + code
         else:
             return prefix + code
-
-    def redeem(self, user=None):
-        try:
-            coupon_user = self.users.get(user=user)
-        except CouponUser.DoesNotExist:
-            try:  # silently fix unbouned or nulled coupon users
-                coupon_user = self.users.get(user__isnull=True)
-                coupon_user.user = user
-            except CouponUser.DoesNotExist:
-                coupon_user = CouponUser(coupon=self, user=user)
-        coupon_user.redeemed_at = timezone.now()
-        coupon_user.save()
-        redeem_done.send(sender=self.__class__, coupon=self)
 
 
 class Campaign(AbstractAutoDate):
