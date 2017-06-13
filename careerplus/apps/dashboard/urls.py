@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from .views import RoundoneDashboardView, DashboardSavedDeleteView, \
-DashboardUpcomingView, DashboardPastView, DashboardSavedView, DashboardResultView
+DashboardUpcomingView, DashboardPastView, DashboardSavedView, \
+DashboardResultView, DashboardRoundoneProfileView, RoundonePersonalSubmit
 
 urlpatterns = [
     url(r'^roundone/$', RoundoneDashboardView.as_view(),
@@ -20,4 +21,10 @@ urlpatterns = [
 
     url(r'^roundone/result/$', DashboardResultView.as_view(),
         name='dashboard_roundone_result'),
+
+    url(r'^roundone/profile/$', DashboardRoundoneProfileView.as_view(),
+        name='dashboard_roundone_profile'),
+
+    url(r'^roundone/profile/personal_submit$',
+        RoundonePersonalSubmit.as_view(), name='post_personal_detail'),
 ]

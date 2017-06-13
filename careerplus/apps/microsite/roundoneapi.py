@@ -248,7 +248,7 @@ class RoundOneAPI(object):
         try:
             if roundone_profile.get("user"):
                 applicantProfile = {"user": roundone_profile.get("user")}
-                userEmail = request.user.email
+                userEmail = request.session.get('email', '')
                 url = settings.ROUNDONE_API_DICT.get("post_profile_url")
                 data = {
                     "userEmail": userEmail,

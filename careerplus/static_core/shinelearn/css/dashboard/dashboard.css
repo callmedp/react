@@ -337,7 +337,7 @@
 /*----------------feddback & interview page css----------------*/
 .feedback-header {
   clear: both;
-  background: url(../../images/dashboard/detail-header-bg.jpg) no-repeat center top;
+  background: url(../../images/detail-header-bg.jpg) no-repeat center top;
   background-size: cover;
   display: block;
 }
@@ -566,6 +566,155 @@
   margin-top: 5px;
 }
 .referrer-listing .listing .rating-review-box .jobs-available strong {
+  font-weight: 600;
+}
+
+/*--------------profile page css-------------*/
+.profile-data {
+  font-size: 13px;
+  color: #999;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.profile-data li {
+  list-style: none;
+}
+.profile-data li .profile-head {
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+  display: inline-block;
+}
+.profile-data li .block-inline {
+  display: inline-block;
+}
+.profile-data li .btn-profile {
+  border: 1px solid #e1e1e1;
+  background-color: #fff;
+  padding: 3px 20px;
+  margin-left: 12px;
+  border-radius: 2px;
+  color: #3f5f94;
+}
+.profile-data li .btn-primary {
+  background-color: #4877c6;
+  color: #fff;
+  padding: 3px 20px;
+  border-radius: 2px;
+}
+.profile-data li .btn-primary:hover {
+  color: #fff;
+  background-color: #3f5f94;
+}
+.profile-data li .mt-10 {
+  margin-top: 10px;
+}
+.profile-data li .gap-bottom,
+.profile-data li .bdr-bottom {
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+}
+.profile-data li .bdr-bottom {
+  border-bottom: 1px solid #e1e1e1;
+}
+.profile-data li .skill-box {
+  background-color: #e6e6e6;
+  display: inline-block;
+  text-align: center;
+  margin-right: 10px;
+}
+.profile-data li .skill-time,
+.profile-data li .skill-name {
+  padding: 5px 10px;
+  display: inline-block;
+}
+.profile-data li .skill-name {
+  border-right: 1px solid #e1e1e1;
+}
+.profile-data li .alert-resume {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  max-width: 80%;
+}
+.profile-data li .user-info {
+  margin: 0 0 0 -15px;
+}
+.profile-data li .user-info h1 {
+  margin: 0;
+  font-weight: 400;
+  color: #333;
+}
+.profile-data li .text-center {
+  text-align: center;
+}
+.profile-data li .pro-select {
+  max-width: 300px;
+}
+.profile-data li .pro-select2 {
+  max-width: 150px;
+  width: 48%;
+  margin-right: 2%;
+}
+.profile-data li .pro-select, .profile-data li .pro-select2 {
+  background: url(../images/dropdown.png);
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: right;
+  padding: 6px;
+  width: 100%;
+  text-align: left;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #999;
+  outline: 0;
+  -webkit-transition: 0.3s ease all;
+  -moz-transition: 0.3s ease all;
+  -ms-transition: 0.3s ease all;
+  -o-transition: 0.3s ease all;
+  transition: 0.3s ease all;
+  position: relative;
+  cursor: pointer;
+}
+.profile-data li .pro-input {
+  width: 100%;
+  max-width: 300px;
+}
+.profile-data li .pro-input, .profile-data li .pro-input2, .profile-data li .pro-mob {
+  background-color: #fff;
+  padding: 6px;
+  border: 1px solid #999;
+}
+.profile-data li .pro-input2 {
+  width: 48%;
+  max-width: 144px;
+  margin-right: 2%;
+}
+.profile-data li .pro-mob {
+  width: 40px;
+  margin-right: 2%;
+}
+.profile-data li .pro-mob + .pro-input2 {
+  max-width: 246px;
+}
+.profile-data li .current-comp {
+  display: block;
+}
+.profile-data li .current-comp input[type=checkbox] {
+  margin-right: 5px;
+  position: relative;
+  top: 2px;
+}
+.profile-data li .mright20 {
+  margin-right: 20px;
+}
+.profile-data li .min-width-50 {
+  min-width: 50px;
+}
+.profile-data .gray-padding li {
+  padding-left: 15px;
+}
+.profile-data label {
   font-weight: 600;
 }
 

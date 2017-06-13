@@ -10,7 +10,7 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 
-from microsite.roundoneapi import RoundOneAPI, RoundOneSEO
+from microsite.roundoneapi import RoundOneAPI
 from django.conf import settings
 
 
@@ -84,8 +84,6 @@ class DashboardPastView(RoundOneAPI, View):
                     for data in past_interaction.get('data'):
                         try:
                             status = data.get("status", "")
-                            # status_str = ROUNDONE_PAST_STATUS.get(str(status))
-                            # action = ROUNDONE_PAST_ACTION.get(str(status), '')
                             data.update({"status_str": status})
                             data.update({"action": status})
                         except:
@@ -178,7 +176,6 @@ class DashboardResultView(RoundOneAPI, TemplateView):
                 pass
 
         context = {
-            "STATIC_URL": settings.STATIC_URL,
             'result': result_json,
             'show_feedback': show_feedback,
             "status": status}
@@ -200,3 +197,67 @@ class DashboardSavedDeleteView(RoundOneAPI, View):
         else:
             pass
         return HttpResponse(json.dumps({'status': False}))
+
+
+
+class DashboardRoundoneProfileView(RoundOneAPI, TemplateView):
+    template_name = "include/roundone_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardRoundoneProfileView, self).get_context_data(**kwargs)
+        roundone_profile = self.get_roundone_profile(self.request)
+
+        if roundone_profile.get("response"):
+            rouser = roundone_profile.get("user")
+            employments = {}
+            education = {}
+            skill_list = []
+            if rouser:
+                education = rouser.get("education")
+                employments = rouser.get("employments")
+                skill_str = rouser.get("skills", "")
+                skill_list = skill_str.split(",")
+                csrf_token_value = get_token(self.request)
+
+            context.update({
+                "rouser": rouser, "education_list": education,
+                "employment_list": employments,
+                'csrf_token_value': csrf_token_value,
+                'skill_list': skill_list
+            })
+        return context
+
+    def get(self, request, *args, **kwargs):
+        return super(DashboardRoundoneProfileView, self).get(request, *args, **kwargs)
+
+
+class RoundonePersonalSubmit(RoundOneAPI, View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            name = request.POST.get("name")
+            contact = request.POST.get("mobile")
+            total_exp = request.POST.get("total_exp")
+            roundone_profile = request.session.get("roundone_profile")
+            if not roundone_profile:
+                roundone_profile = self.get_roundone_profile(request)
+            if roundone_profile.get("response"):
+                rouser = roundone_profile.get("user")
+                rouser.update({
+                    "name": name,
+                    "mobile": contact,
+                    "total_exp": total_exp,
+                    "skills": request.POST.get("skill_str")
+                })
+                response_json = self.post_roundone_profile(
+                    request, roundone_profile)
+                if response_json.get("response"):
+                    request.session.update({
+                        "roundone_profile": roundone_profile})
+                    return HttpResponse(json.dumps({
+                        "status": True,
+                        "message": response_json.get("msg")}))
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return HttpResponse(json.dumps({
+            "status": False, "message": "Profile Not Updated"}))
