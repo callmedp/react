@@ -146,11 +146,20 @@ class ProductInformationMixin(object):
     def get_variation(self, product):
         if product.type_service == 3:
             course_dict = []
+            selected_var = None
             course_list = product.variation.filter(
                 siblingproduct__active=True).order_by('-siblingproduct__sort_order')
             if course_list:
                 from shop.choices import MODE_CHOICES, COURSE_TYPE_CHOICES
                 for course in course_list:
+                    fake_price = course.get_fakeprice()
+                    if fake_price:
+                        fake_price = fake_price[0]
+                    else:
+                        fake_price = 0
+
+                    if not selected_var:
+                        selected_var = course
                     course_dict.append(
                         OrderedDict({
                             'id': course.id,
@@ -159,8 +168,9 @@ class ProductInformationMixin(object):
                             'duration': course.duration_months,
                             'type': dict(COURSE_TYPE_CHOICES).get(course.course_type),
                             'certify': course.certification,
-                            'price': course.get_price()}))
-            return {'course_variation_list': course_dict}
+                            'price': course.get_price(),
+                            'fake_price': fake_price}))
+            return {'course_variation_list': course_dict, 'selected_var': selected_var}
         else:
             service_list = []
             service_list = product.variation.filter(

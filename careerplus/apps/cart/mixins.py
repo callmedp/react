@@ -230,9 +230,15 @@ class CartMixin(object):
 			if cart_pk:
 				cart_obj = Cart.objects.get(pk=cart_pk)
 				if cart_obj:
-					lis = cart_obj.lineitems.all().select_related('product')
+					lis = cart_obj.lineitems.filter(no_process=False).select_related('product')
 					for li in lis:
 						total += li.product.get_price()
+					lis = cart_obj.lineitems.filter(no_process=True).select_related('product')
+					for li in lis:
+						if li.product.type_service == 3 and li.no_process == True:
+							pass
+						else:
+							total += li.product.get_price()
 			return round(total, 0)
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))
@@ -255,7 +261,9 @@ class CartMixin(object):
 		return data
 
 	def getSelectedProductPrice(self, product):
+		data = {}
 		total = Decimal(0)
+		fake_total = Decimal(0)
 		if not self.request.session.get('cart_pk'):
 			self.getCartObject()
 		cart_pk = self.request.session.get('cart_pk')
@@ -263,22 +271,42 @@ class CartMixin(object):
 			cart_obj = Cart.objects.get(pk=cart_pk)
 			try:
 				parent_li = cart_obj.lineitems.get(product=product)
-				total += parent_li.product.get_price()
+				if parent_li.product.type_service == 3 and parent_li.no_process == True:
+					pass
+				else:
+					total += parent_li.product.get_price()
+					if parent_li.product.get_fakeprice():
+						fake_total += parent_li.product.get_fakeprice()[0]
+					else:
+						fake_total += parent_li.product.get_price()
 			except:
 				parent_li = None
 			if parent_li:
 				lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')
 				for li in lis:
 					total += li.product.get_price()
+					if li.product.get_fakeprice():
+						fake_total += li.product.get_fakeprice()[0]
+					else:
+						fake_total += li.product.get_price()
+		if fake_total > Decimal(0.00):
+			diff = fake_total - total
+			percent_diff = round((diff / fake_total) * 100, 0)
+			data.update({'percent_diff': percent_diff, })
 
-		return {"product_total_price": round(total, 0)}
+		data.update({
+        	"product_total_price": round(total, 0),
+        	"fake_total": round(fake_total, 0)})
+		return data
 
-	def get_cart_count(self):
+	def get_cart_count(self, request=None):
 		total_count = 0
 		try:
-			if not self.request.session.get('cart_pk'):
+			if not request:
+				request = self.request
+			if not request.session.get('cart_pk'):
 				self.getCartObject()
-			cart_pk = self.request.session.get('cart_pk')
+			cart_pk = request.session.get('cart_pk')
 
 			if cart_pk:
 				cart_obj = Cart.objects.get(pk=cart_pk)

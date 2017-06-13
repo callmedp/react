@@ -1,9 +1,8 @@
 from django.views.generic import TemplateView
 
 from shop.models import Product
-from review.models import Review
 
-from .models import TopTrending
+from .models import TopTrending, Testimonial
 
 
 class HomePageView(TemplateView):
@@ -53,7 +52,7 @@ class HomePageView(TemplateView):
 		return {"recommended_courses": recommended_courses, }
 
 	def get_testimonials(self):
-		testimonials = Review.objects.filter(is_testimonial=True).order_by('-priority')
+		testimonials = Testimonial.objects.filter(page=1, is_active=True)
 		testimonials = testimonials[: 5]
 		return {"testimonials": testimonials}
 

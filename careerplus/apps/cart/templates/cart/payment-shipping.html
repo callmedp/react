@@ -114,14 +114,9 @@
               <div class="country-code">
                 <div class="custom-select">
                   {{form.country_code}}
-                  
                 </div>
                 {{form.mobile}}
-                {% if form.mobile.errors %}
-                    <span class="error-txt">{{form.mobile.errors.0}}</span>
-                {% else %}
-                    <span class="error-txt">{{form.country_code.errors.0}}</span>
-                {% endif %}
+                <span class="error-txt">{% if form.mobile.errors %} {{form.mobile.errors.0}} {% else %}{{form.country_code.errors.0}}{% endif %}</span>
               </div>
             </div>
           </div>
