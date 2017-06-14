@@ -156,6 +156,10 @@ class OrderItem(models.Model):
         verbose_name = _("Order Item")
         verbose_name_plural = _("Order Items")
 
+        permissions = (
+            ("change_welcome_call", "Can Change Welcome Call Operation"),
+        )
+
     def __str__(self):
         if self.product:
             title = self.product.title

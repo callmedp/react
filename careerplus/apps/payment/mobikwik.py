@@ -63,7 +63,7 @@ def make_checksum(checksum_string):
         # python 3.4
         sec_key = MOBIKWIK_SECRET_KEY
         hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
-        checksum = codecs.encode(hmac_obj.digest(), "hex")
+        checksum = codecs.encode(hmac_obj.digest(), "hex").decode()
         return checksum
     else:
         # python 3.5
@@ -80,7 +80,7 @@ def calculate_response_checksum(statuscode, orderid, amount, statusmessage):
         mer_id = MOBIKWIK_MERCHANT_ID
         checksum_string = "'%s''%s''%s''%s''%s'" % (statuscode, orderid, amount, statusmessage, mer_id)
         hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
-        checksum = codecs.encode(hmac_obj.digest(), "hex")
+        checksum = codecs.encode(hmac_obj.digest(), "hex").decode()
         return checksum
     else:
         # python 3.5

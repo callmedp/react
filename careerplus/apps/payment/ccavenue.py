@@ -70,7 +70,7 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
             encDigest = md5()
             encDigest.update(workingKey.encode())
             enc_cipher = AES.new(encDigest.digest(), AES.MODE_CBC, iv)
-            encryptedText = codecs.encode(enc_cipher.encrypt(plainText), "hex")
+            encryptedText = codecs.encode(enc_cipher.encrypt(plainText), "hex").decode()
             return encryptedText
         else:
             # python 3.5
