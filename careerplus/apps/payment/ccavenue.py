@@ -19,6 +19,9 @@ from order.mixins import OrderMixin
 
 from .mixin import PaymentMixin
 
+import platform
+py_major, py_minor, py_patchlevel = platform.python_version_tuple()
+
 
 class Ccavenue(View, PaymentMixin, OrderMixin):
 
@@ -60,25 +63,49 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         return data
 
     def encrypt(self, plainText, workingKey):
-        iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
-        plainText = self.pad(plainText)
-        encDigest = md5()
-        encDigest.update(workingKey.encode())
-        enc_cipher = AES.new(encDigest.digest(), AES.MODE_CBC, iv)
-        encryptedText = enc_cipher.encrypt(plainText).hex()
-        return encryptedText
+        if py_major == '3' and py_minor == '4':
+            # python 3.4
+            iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
+            plainText = self.pad(plainText)
+            encDigest = md5()
+            encDigest.update(workingKey.encode())
+            enc_cipher = AES.new(encDigest.digest(), AES.MODE_CBC, iv)
+            encryptedText = codecs.encode(enc_cipher.encrypt(plainText), "hex")
+            return encryptedText
+        else:
+            # python 3.5
+            iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
+            plainText = self.pad(plainText)
+            encDigest = md5()
+            encDigest.update(workingKey.encode())
+            enc_cipher = AES.new(encDigest.digest(), AES.MODE_CBC, iv)
+            encryptedText = enc_cipher.encrypt(plainText).hex()
+            return encryptedText
 
     def decrypt(self, cipherText, workingKey):
-        iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
-        decDigest = md5()
-        decDigest.update(workingKey.encode())
-        encryptedText = codecs.decode(cipherText, "hex")
-        dec_cipher = AES.new(decDigest.digest(), AES.MODE_CBC, iv)
-        decryptedText = dec_cipher.decrypt(encryptedText)
-        return decryptedText.decode()
+
+        if py_major == '3' and py_minor == '4':
+            import ipdb; ipdb.set_trace()
+            # python 3.4
+            iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
+            decDigest = md5()
+            decDigest.update(workingKey.encode())
+            encryptedText = codecs.decode(cipherText, "hex")
+            dec_cipher = AES.new(decDigest.digest(), AES.MODE_CBC, iv)
+            decryptedText = dec_cipher.decrypt(encryptedText)
+            return decryptedText.decode()
+
+        else:
+            # python 3.5
+            iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
+            decDigest = md5()
+            decDigest.update(workingKey.encode())
+            encryptedText = codecs.decode(cipherText, "hex")
+            dec_cipher = AES.new(decDigest.digest(), AES.MODE_CBC, iv)
+            decryptedText = dec_cipher.decrypt(encryptedText)
+            return decryptedText.decode()
 
     def get_request_url(self, cart_obj, request, data={}):
-
         context_dict = {}
         context_dict.update(self.get_constants())
         context_dict.update(self.default_params(request, cart_obj))

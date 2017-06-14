@@ -195,6 +195,7 @@ class CartMixin(object):
 				del request.session['cart_pk']
 				del request.session['checkout_type']
 				request.session.modified = True
+			return cart_obj
 
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))
@@ -202,43 +203,42 @@ class CartMixin(object):
 	def get_cart_items(self, cart_obj=None):
 		cart_items = []
 		try:
-			if not self.request.session.get('cart_pk'):
-				self.getCartObject()
-			cart_pk = self.request.session.get('cart_pk')
-			if cart_pk:
+			if not cart_obj:
+				if not self.request.session.get('cart_pk'):
+					self.getCartObject()
+				cart_pk = self.request.session.get('cart_pk')
 				cart_obj = Cart.objects.get(pk=cart_pk)
-				if cart_obj:
-					main_products = cart_obj.lineitems.filter(parent=None).select_related('product', 'product__vendor')
-					for m_prod in main_products:
-						data = {}
-						data['li'] = m_prod
-						data['addons'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related('product')
-						data['variations'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
-						cart_items.append(data)
+			if cart_obj:
+				main_products = cart_obj.lineitems.filter(parent=None).select_related('product', 'product__vendor')
+				for m_prod in main_products:
+					data = {}
+					data['li'] = m_prod
+					data['addons'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related('product')
+					data['variations'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+					cart_items.append(data)
 			return cart_items
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))
 		return cart_items
 
-	def getTotalAmount(self):
+	def getTotalAmount(self, cart_obj=None):
 		total = Decimal(0)
 		try:
-			if not self.request.session.get('cart_pk'):
-				self.getCartObject()
-			cart_pk = self.request.session.get('cart_pk')
-
-			if cart_pk:
+			if not cart_obj:
+				if not self.request.session.get('cart_pk'):
+					self.getCartObject()
+				cart_pk = self.request.session.get('cart_pk')
 				cart_obj = Cart.objects.get(pk=cart_pk)
-				if cart_obj:
-					lis = cart_obj.lineitems.filter(no_process=False).select_related('product')
-					for li in lis:
+			if cart_obj:
+				lis = cart_obj.lineitems.filter(no_process=False).select_related('product')
+				for li in lis:
+					total += li.product.get_price()
+				lis = cart_obj.lineitems.filter(no_process=True).select_related('product')
+				for li in lis:
+					if li.product.type_service == 3 and li.no_process == True:
+						pass
+					else:
 						total += li.product.get_price()
-					lis = cart_obj.lineitems.filter(no_process=True).select_related('product')
-					for li in lis:
-						if li.product.type_service == 3 and li.no_process == True:
-							pass
-						else:
-							total += li.product.get_price()
 			return round(total, 0)
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))

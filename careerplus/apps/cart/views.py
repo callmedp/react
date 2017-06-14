@@ -29,10 +29,10 @@ class CartView(TemplateView, CartMixin, UserMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        self.getCartObject()
+        cart_obj = self.getCartObject()
         context.update({
-            "cart_items": self.get_cart_items(),
-            "total_amount": self.getTotalAmount(),
+            "cart_items": self.get_cart_items(cart_obj=cart_obj),
+            "total_amount": self.getTotalAmount(cart_obj=cart_obj),
             "country_obj": self.get_client_country(self.request),
         })
         return context
@@ -286,17 +286,22 @@ class PaymentShippingView(UpdateView, CartMixin):
 class PaymentSummaryView(TemplateView, CartMixin):
     template_name = "cart/payment-summary.html"
 
+    def __init__(self):
+        self.cart_obj = None
+
     def redirect_if_necessary(self):
         if not self.request.session.get('cart_pk'):
-            self.getCartObject()
-        cart_pk = self.request.session.get('cart_pk')
-        if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('homepage'))
-        try:
-            cart_obj = Cart.objects.get(pk=cart_pk)
-            if not cart_obj.shipping_done:
-                return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
-        except:
+            self.cart_obj = self.getCartObject()
+        else:
+            cart_pk = self.request.session.get('cart_pk')
+            try:
+                self.cart_obj = Cart.objects.get(pk=cart_pk)
+                if not self.cart_obj.shipping_done:
+                    return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
+            except:
+                return HttpResponsePermanentRedirect(reverse('homepage'))
+
+        if not self.cart_obj:
             return HttpResponsePermanentRedirect(reverse('homepage'))
             
         return None
@@ -309,15 +314,20 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
-            context.update({
-                "cart_items": self.get_cart_items(),
-                "total_amount": self.getTotalAmount(),
-            })
-        else:
-            self.getCartObject()
-            context.update({
-                "cart_items": self.get_cart_items(),
-                "total_amount": self.getTotalAmount(),
-            })
+        context.update({
+            "cart_items": self.get_cart_items(cart_obj=self.cart_obj),
+            "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),
+        })
+
+        # if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
+        #     context.update({
+        #         "cart_items": self.get_cart_items(),
+        #         "total_amount": self.getTotalAmount(),
+        #     })
+        # else:
+        #     self.getCartObject()
+        #     context.update({
+        #         "cart_items": self.get_cart_items(),
+        #         "total_amount": self.getTotalAmount(),
+        #     })
         return context

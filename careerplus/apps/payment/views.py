@@ -15,18 +15,21 @@ from microsite.roundoneapi import RoundOneAPI
 class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
     template_name = "payment/payment-option.html"
 
+    def __init__(self):
+        self.cart_obj = None
+
     def redirect_if_necessary(self):
         if not self.request.session.get('cart_pk'):
-            self.getCartObject()
-        cart_pk = self.request.session.get('cart_pk')
-        if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('homepage'))
-        try:
-            cart_obj = Cart.objects.get(pk=cart_pk)
-        except:
-            return HttpResponsePermanentRedirect(reverse('homepage'))
-
-        if cart_obj and not (cart_obj.shipping_done):
+            self.cart_obj = self.getCartObject()
+        else:
+            cart_pk = self.request.session.get('cart_pk')
+            if not cart_pk:
+                return HttpResponsePermanentRedirect(reverse('homepage'))
+            try:
+                self.cart_obj = Cart.objects.get(pk=cart_pk)
+            except:
+                return HttpResponsePermanentRedirect(reverse('homepage'))
+        if self.cart_obj and not (self.cart_obj.shipping_done):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
         return None
 
@@ -93,7 +96,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
-            "total_amount": self.getTotalAmount(),
+            "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),
             "cart_id": self.request.session.get('cart_pk'),
         })
         return context
