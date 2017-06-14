@@ -137,10 +137,12 @@ class OrderItem(models.Model):
 
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='oi_assigned',
         null=True, blank=True)
 
     assigned_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='oi_assigned_by',
         null=True, blank=True)
 
     closed_on = models.DateTimeField(null=True, blank=True)
@@ -176,8 +178,10 @@ class OrderItemOperation(AbstractAutoDate):
 
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='oio_assigned',
         null=True, blank=True)
 
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='oio_added_by',
         null=True, blank=True)
