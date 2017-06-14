@@ -1,10 +1,12 @@
 <!-- Reviews container -->
+{% if prd_review_list %}
+          
 {% if prd_rv_page == 1 %}
-  
-<li>
-<section class="container">
-  <div class="row">
-    <div id="review" class="col-sm-12 col-md-8 reviews mb-40 scroll">
+<!-- Reviews container -->
+<section class="container-fluid detail-box">
+  <div class="container">
+    <div class="row">
+      <div id="review" class="col-sm-12 col-md-8 reviews mb-40 scroll">
       <h2>Reviews</h2>
           <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
           <ul id="id_review_list">
@@ -16,11 +18,11 @@
               <div class="rating-review-box">
                   {% for star in review.get_ratings %}
                     {% if star == "*" %}
-                      <figure class="orange-rating-icon"></figure>
+                      <figure class="full-star"></figure>
                     {% elif star == "+" %}
-                      x
+                      <figure class="half-star"></figure>
                     {% elif star == "-" %}
-                      <figure class="grey-rating-icon"></figure>
+                      <figure class="blank-star"></figure>
                     {% endif %}
                   {% endfor %}
                   
@@ -32,15 +34,17 @@
           {% endfor %}
           {% if prd_review_list.has_next %}
             
-            <a style="cursor:pointer;text-decoration:none;"onclick="LoadMoreProductReview({{product.id}})" class="load-more" id="loadmorereviewbtn"> Load more</a>
+            <a style="cursor:pointer;text-decoration:none;" onclick="LoadMoreProductReview({{product.id}})" class="load-more" id="loadmorereviewbtn"> Load more</a>
           {% endif %}
 {% if prd_rv_page == 1 %}
 
             </ul>
           
           
-      </div>
-  </div>      
+        </div>
+    </div>  
+  </div>    
 </section>      
-</li>
+{%endif%}
+
 {%endif%}

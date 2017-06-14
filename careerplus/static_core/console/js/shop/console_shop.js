@@ -358,7 +358,7 @@ if (typeof NProgress != 'undefined') {
 			  
 			if(typeof $.fn.tagsInput !== 'undefined'){	
 			 
-			$('#tags_1').tagsInput({
+			$('#id_career_outcomes').tagsInput({
 			  width: 'auto'
 			});
 			
@@ -518,6 +518,54 @@ if (typeof NProgress != 'undefined') {
 	  	
 	  };
 
+	  function init_category_relation_change() {
+	  	if($('#change-category-relation-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+			$('#change-category-relation-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});/*.on('form:submit', function() {
+			    console.log('error');
+	  		    return false; // Don't submit form for this demo
+			  });*/
+		};	  
+	  	
+	  };
+
+	function init_category_skill_change() {
+		  	if($('#change-category-skill-form').length > 0){
+		  		var parsleyConfig = {
+			        errorsContainer: function(parsleyField) {
+			            var $errfield = parsleyField.$element.parent().siblings('.alert');
+			            return $errfield;
+			        },
+			    };
+				
+				$('#change-category-skill-form').parsley(parsleyConfig).on('field:validated', function() {
+					if (this.validationResult === true) {
+				      this.$element.closest('.item').removeClass('bad');
+
+				    } else {
+				      this.$element.closest('.item').addClass('bad');
+				    }
+				});/*.on('form:submit', function() {
+				    console.log('error');
+		  		    return false; // Don't submit form for this demo
+				  });*/
+			};	  
+		  	
+		  };
+
 		function init_tree_cat() {
 	      $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
 		    $('.tree li.parent_li > span').on('click', function (e) {
@@ -575,16 +623,15 @@ if (typeof NProgress != 'undefined') {
 	  	
 	  };
 	  
-	  function init_topic_add() {
-	  	if($('#add-topic-form').length > 0){
+	  function init_keyword_add() {
+	  	if($('#add-keyword-form').length > 0){
 	  		var parsleyConfig = {
 		        errorsContainer: function(parsleyField) {
 		            var $errfield = parsleyField.$element.parent().siblings('.alert');
 		            return $errfield;
 		        },
 		    };
-			
-		  	$('#add-topic-form').parsley(parsleyConfig).on('field:validated', function() {
+			$('#add-keyword-form').parsley(parsleyConfig).on('field:validated', function() {
 				if (this.validationResult === true) {
 			      this.$element.closest('.item').removeClass('bad');
 
@@ -595,21 +642,216 @@ if (typeof NProgress != 'undefined') {
 		};	  
 	  	
 	  };
+
+	  function init_attribute_add() {
+	  	if($('#add-attribute-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#add-attribute-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+
+	function init_category_product_change() {
+	  	if($('#change-category-product-form').length > 0){
+	  		console.log('check');
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+			$('#change-category-product-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});/*.on('form:submit', function() {
+			    console.log('error');
+	  		    return false; // Don't submit form for this demo
+			  });*/
+		};	  
+	  	
+	  };
+
+	
+	function init_product_add() {
+	  	if($('#add-product-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#add-product-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  function init_product_change() {
+	  	if($('#change-product-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  function init_product_seo_change() {
+	  	if($('#change-product-seo-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-seo-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  
+	  function init_product_attr_change() {
+	  	if($('#change-product-attr-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-attr-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  	  
+	  function init_ColorSelector() {
+			
+			if( typeof ($.fn.colorselector) === 'undefined'){ return; }
+				console.log('init_colorselector');
+			
+				$('#id_image_bg').colorselector();
+
+		}; 
+
+	function init_product_structure_change() {
+	  	if($('#change-product-structure-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-structure-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+	  function init_product_faq_change() {
+	  	if($('#change-product-faq-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-faq-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  }; 
+	   
 	   
 	$(document).ready(function() {
 				
 		init_sidebar();
 		init_InputMask();
 		init_TagsInput();
+		init_ColorSelector();
 		init_category_parsley();
 		init_category_add();
 		init_category_change();
 		init_category_seo_change();
+		init_category_relation_change();
+		init_category_skill_change();
+		
 		init_tree_cat();
 		init_SmartWizard();
 		init_faq_add();
 		init_chapter_add();
-		init_topic_add();
+		init_keyword_add();
+		init_attribute_add();
+		init_product_add();
+		init_product_change();
+		init_product_seo_change();
+		init_product_attr_change();
+		init_category_product_change();
+
+		init_product_structure_change();
+		init_product_faq_change();
+
+
 	});	
 
 

@@ -1,4 +1,5 @@
 {% load static %}
+{% if products %}
 {% for product in products %}
     <li class="box-panel">
     	<a title="{{product.name}}" href="#">
@@ -14,11 +15,20 @@
                 	<h3 class="listing-heading">{{product.name}}</h3>
 
 	                <div class="rating-review-box">
-	                    <span class="{{product.get_rating.0}}"></span>
-	                    <span class="{{product.get_rating.1}}"></span>
-	                    <span class="{{product.get_rating.2}}"></span>
-	                    <span class="{{product.get_rating.3}}"></span>
-	                    <span class="{{product.get_rating.4}}"></span>
+	                    {% for rating in product.get_ratings %}
+                          {% if rating == "*" %}
+                            <figure class="full-star">
+                            </figure>
+                          {% endif %}
+                          {% if rating == "+" %}
+                            <figure class="half-star">  
+                            </figure>
+                          {% endif %}
+                          {% if rating == "-" %}
+                            <figure class="blank-star"> 
+                            </figure>
+                          {% endif %}
+                      {% endfor %}
 	                    <strong>{{product.avg_rating |floatformat:1}}/5</strong> | 21 ratings <b>{{product.no_review}} reviews</b>
 	                </div> 
 
@@ -36,9 +46,11 @@
       	</a>
     </li>
 {% endfor %}
-{% if products.has_next %}
-<input type="hidden" name="page" 
-value="{{products.next_page_number}}" id="page_id">
-<input type="hidden" name="slug" value="{{slug}}" 
-id="slug_id">
 {% endif %}
+  {% if products.has_next %}  
+            <input type="hidden" name="page" 
+            value="{{products.next_page_number}}" id="page_id">
+            <input type="hidden" name="slug" value="{{slug}}" 
+            id="slug_id">
+            <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> Load more</a>            
+{% endif %}   

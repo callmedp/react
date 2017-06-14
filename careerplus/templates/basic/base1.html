@@ -1,0 +1,85 @@
+{% load static %}
+{% spaceless %}
+<!DOCTYPE html>
+<html lang="en">
+  {% block head %}
+    <head>
+    {% block meta_html %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block django_meta %}
+          
+        {% endblock django_meta %}
+    
+    {% endblock meta_html %}
+    
+    <title> {% block title %}Shine Learning{% endblock title %}</title>   
+
+    {% block canonical_url %}
+      
+    {% endblock canonical_url %}
+    
+    {% block css_section %}
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+        <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+    {% endblock css_section %}
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+   </head>
+  
+  {% endblock head %}
+  
+<body>
+    {% block navigation %}
+      <!-- navigation bar -->
+      {% include 'basic/navigation.html' %}
+  
+    {% endblock navigation %}
+    
+    <!-- main section start -->
+    {% block main_container %}
+
+      {% block page_heading %}
+
+        
+      
+      {% endblock page_heading %}
+
+
+
+
+    {% endblock main_container %}
+
+    {% block footer %}
+      <!-- footer -->
+      {% include 'basic/footer.html' %}
+      
+    {% endblock footer %}
+
+    {% block js_section %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+    
+    <script>
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+          });
+        $('.dropdown').hover(function(){ 
+            $('.dropdown-toggle', this).trigger('click'); 
+          });
+    </script>
+    {% endblock js_section %}
+  </body>
+</html>
+{% endspaceless %}

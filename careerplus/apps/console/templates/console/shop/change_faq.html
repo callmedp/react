@@ -1,0 +1,143 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+
+{% block title %}
+  <title>Change FAQ</title>
+{% endblock title %}
+
+{% block cssblock %}
+	{{ block.super }}
+	<style type="text/css">
+      ul.parsley-errors-list {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+      ul.errorlist {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+  </style>
+              
+{% endblock cssblock %}
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3>
+
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Change FAQ <small>(change frequently asked question.)</small></h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+        		<form class="form-horizontal form-label-left" method="POST" action="." novalidate id="add-faq-form">
+              {{form.media}}
+              {% csrf_token %}
+              
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  {{form.non_field_errors}}
+                </div>
+              {% endif %}
+              
+              <div class="item form-group {% if form.text.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.text.id_for_label }}">Question <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.text}}
+                </div>
+                <div class="alert">{{form.text.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.answer.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.answer.id_for_label }}">Answer <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.answer}}
+                </div>
+                <div class="alert">{{form.answer.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.status.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.status.id_for_label }}">Status <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.status}}
+                </div>
+                <div class="alert">{{form.status.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.sort_order.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.sort_order.id_for_label }}">Order <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.sort_order}}
+                </div>
+                <div class="alert">{{form.sort_order.errors}}</div>
+              </div>
+
+              <input type="hidden" name="faq" value="{{object.pk}}">
+              <div class="ln_solid"></div>
+              <div class="form-group">
+                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                  <button type="reset" class="btn btn-primary">Reset</button>
+                  <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </form>
+                    
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+      
+  <!-- Custom Theme Scripts -->
+  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
+
+
+{% endblock js_block %}

@@ -46,6 +46,8 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 	def save(self, *args, **kwargs):
 		if not self.title:
 			self.title = self.name + ' – Career Articles @ Learning.Shine'
+		if not self.heading:
+			self.heading = self.name
 		if not self.meta_desc:
 			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
 		if self.id:
@@ -104,6 +106,8 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 	def save(self, *args, **kwargs):
 		if not self.title:
 			self.title = self.name + ' – Career Articles @ Learning.Shine'
+		if not self.heading:
+			self.heading = self.name
 		if not self.meta_desc:
 			self.meta_desc = 'Read Latest Articles on ' + self.name + '. Find the Most Relevant Information, News and other career guidance for ' + self.name +' at learning.shine'
 		if self.id:
@@ -131,8 +135,7 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
-	display_name = models.CharField(('Name'), max_length=200, blank=True,
-		help_text=("Set title for blog."))
+	
 	name = models.CharField(('Name'), max_length=200, blank=False,
 		help_text=("Set name for slug generation."))
 	p_cat = models.ForeignKey(Category, related_name='primary_category',
@@ -188,6 +191,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 	def save(self, *args, **kwargs):
 		if not self.title:
 			self.title = self.name + ' – Learning.Shine'
+		if not self.heading:
+			self.heading = self.name
 		if not self.meta_desc:
 			# desc = mark_safe(self.content)
 			desc = re.sub(re.compile('<.*?>'), '', self.content)
@@ -224,13 +229,19 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 		self.score = score
 		self.save()
 
+	@property
 	def get_status(self):
 		statusD = dict(STATUS)
 		return statusD.get(self.status)
 
+	@property
+	def display_name(self):
+		return self.heading if self.heading else self.name
+
 
 class Comment(AbstractCommonModel):
 	blog = models.ForeignKey(Blog)
+	candidate_id = models.CharField(max_length=255, null=True)
 	message = models.TextField(null=False, blank=False)
 	is_published = models.BooleanField(default=False)
 	is_removed = models.BooleanField(default=False)

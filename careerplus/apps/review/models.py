@@ -155,7 +155,7 @@ class Review(AbstractAutoDate):
         return final_score
 
     def get_remarks(self):
-        remarks= ''
+        remarks = ''
         if self.average_rating >= 4.0:
             remarks = "Excellent!"
         elif self.average_rating >= 3.0:

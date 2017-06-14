@@ -1,8 +1,7 @@
-<!-- FAQs container -->
 {% if prd_faq %}
-   
-  <li>
-  <section class="container">
+<!-- FAQs container -->
+<section class="container-fluid detail-box">
+  <div class="container">
     <div class="row">
       <div id="faq" class="col-sm-12 col-md-8 program-structure scroll">
         <h2>FAQs</h2>
@@ -13,7 +12,7 @@
               <h3 class="panel-title">
                 <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo{{forloop.counter}}" {% if forloop.counter == 1 %}
                   aria-expanded="true"{% else %}aria-expanded="false" class="collapsed"{% endif %} aria-controls="collapseTwo{{forloop.counter}}">
-                  {{ques.text}}
+                  {{forloop.counter}}.&nbsp;{{ques.text}}
                 </a>
               </h3>
             </div>
@@ -24,10 +23,14 @@
               </div>
             </div>
           </li>
+
           {% endfor %}
+          
         </ul>
       </div>
-    </div>      
-  </section>      
-  </li>
+    </div>
+  </div>      
+</section>
+  
 {% endif %}
+

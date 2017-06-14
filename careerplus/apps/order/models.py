@@ -3,41 +3,71 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from .choices import STATUS_CHOICES, WELCOME_CALL
+from .choices import STATUS_CHOICES, SITE_CHOICES, PAYMENT_MODE
+
 
 class Order(AbstractAutoDate):
     number = models.CharField(
         _("Order number"), max_length=128, db_index=True, unique=True)
 
-    site = models.CharField(
-        _("Site"), max_length=128)
+    site = models.PositiveSmallIntegerField(default=0, choices=SITE_CHOICES)
 
     cart = models.ForeignKey(
         'cart.Cart', verbose_name=_("Cart"),
         null=True, blank=True, on_delete=models.SET_NULL)
 
-    customer_id = models.CharField(
+    # custome information
+    candidate_id = models.CharField(
         null=True,
+        blank=True,
         max_length=255,
         verbose_name=_("Customer ID"))
-    cutomer_email = models.CharField(
+
+    txn = models.CharField(max_length=255, null=True, blank=True)
+
+    # pay by cheque/Draft
+    instrument_number = models.CharField(max_length=255, null=True, blank=True)
+    instrument_issuer = models.CharField(max_length=255, null=True, blank=True)
+    instrument_issue_date = models.CharField(
+        max_length=255, null=True, blank=True)
+
+    status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
+
+    payment_mode = models.IntegerField(choices=PAYMENT_MODE, default=0)
+    payment_date = models.DateTimeField(null=True, blank=True)
+    currency = models.CharField(
+        _("Currency"), max_length=12, null=True, blank=True)
+
+    total_incl_tax = models.DecimalField(
+        _("Order total (inc. tax)"), decimal_places=2, max_digits=12, default=0)
+    total_excl_tax = models.DecimalField(
+        _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
+
+    date_placed = models.DateTimeField(db_index=True)
+
+    # shipping Address
+    email = models.CharField(
         null=True,
         max_length=255,
         verbose_name=_("Customer Email"))
-    # address = models.ForeignKey(
-    #     'Address', null=True, blank=True,
-    #     verbose_name=_("Address"),
-    #     on_delete=models.SET_NULL)
 
-    # currency = models.CharField(
-    #     _("Currency"), max_length=12,)
-    total_incl_tax = models.DecimalField(
-        _("Order total (inc. tax)"), decimal_places=2, max_digits=12)
-    total_excl_tax = models.DecimalField(
-        _("Order total (excl. tax)"), decimal_places=2, max_digits=12)
+    first_name = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_("First Name"))
 
-    status = models.PositiveSmallIntegerField(default=0, choices= STATUS_CHOICES)
-    date_placed = models.DateTimeField(db_index=True)
+    last_name = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_("Last Name"))
+
+    country_code = models.CharField(
+        max_length=15, null=True, blank=True, verbose_name=_("Country Code"))
+
+    mobile = models.CharField(max_length=15, null=True, blank=True,)
+
+    address = models.CharField(max_length=255, null=True, blank=True)
+
+    pincode = models.CharField(max_length=15, null=True, blank=True)
+    state = models.CharField(max_length=255, null=True, blank=True)
+
+    country = models.CharField(max_length=200, null=True, blank=True,)
 
     class Meta:
         app_label = 'order'
@@ -52,6 +82,8 @@ class Order(AbstractAutoDate):
 class OrderItem(models.Model):
     order = models.ForeignKey(
         'order.Order', related_name='orderitems', verbose_name=_("Order"))
+
+    parent = models.ForeignKey('self', null=True, blank=True)
 
     partner = models.ForeignKey(
         'partner.Vendor', related_name='order_items', blank=True, null=True,
@@ -68,17 +100,17 @@ class OrderItem(models.Model):
         _("Quantity"), default=1)
 
     oi_price_incl_tax = models.DecimalField(
-        _("Price (inc. tax)"), decimal_places=2, max_digits=12)
+        _("Price (inc. tax)"), decimal_places=2, max_digits=12, default=0)
     oi_price_excl_tax = models.DecimalField(
-        _("Price (excl. tax)"), decimal_places=2, max_digits=12)
+        _("Price (excl. tax)"), decimal_places=2, max_digits=12, default=0)
 
     # Price information before discounts are applied
     oi_price_before_discounts_incl_tax = models.DecimalField(
         _("Price before discounts (inc. tax)"),
-        decimal_places=2, max_digits=12)
+        decimal_places=2, max_digits=12, default=0)
     oi_price_before_discounts_excl_tax = models.DecimalField(
         _("Price before discounts (excl. tax)"),
-        decimal_places=2, max_digits=12)
+        decimal_places=2, max_digits=12, default=0)
 
     # Normal site price for item (without discounts)
     unit_price_incl_tax = models.DecimalField(
@@ -87,7 +119,11 @@ class OrderItem(models.Model):
     unit_price_excl_tax = models.DecimalField(
         _("Unit Price (excl. tax)"), decimal_places=2, max_digits=12,
         blank=True, null=True)
-    
+
+    no_process = models.BooleanField(default=False)
+    is_combo = models.BooleanField(default=False)
+    is_variation = models.BooleanField(default=False)
+
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -102,4 +138,3 @@ class OrderItem(models.Model):
             title = _('<missing product>')
         return _("Product '%(name)s', quantity '%(qty)s'") % {
             'name': title, 'qty': self.quantity}
-

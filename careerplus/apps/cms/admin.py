@@ -59,7 +59,7 @@ class PageWidgetAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-	list_display = ('id', 'page', 'created_by', 'created_on', 'is_published',
+	list_display = ('id', 'page', 'candidate_id', 'created_on', 'is_published',
 		'message', 'is_removed', 'replied_to')
 	list_filter = ()
 	search_fields = ('id', 'message')

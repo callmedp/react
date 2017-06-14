@@ -7,15 +7,15 @@
   
 {% endblock css_section %}
     
+{% block breadcrumb %}
+    {% include "product/partials/breadcrumb.html" %}
+{% endblock breadcrumb %}
 
 {% block pageheading %}
     <!-- header -->
     <header>
       <div class="detail-course-header">
         <div class="container">
-        {% block breadcrumb %}
-          {% include "product/partials/breadcrumb.html" %}
-        {% endblock breadcrumb %}
           <div class="course-caption">
             
             <div class="course-caption-img">
@@ -39,6 +39,13 @@
           {% include "product/partials/reviewnjob.html" %}
         </div>   
 
+        <!--hidden form -->
+        <div style="display: none">
+            <form id="cartForm" > {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{object.id}}">
+                <input type="hidden" name="cart_type" id="id-cart-type" value="">
+            </form>
+        </div>
         <!-- right fixed content start -->
         <div class="col-sm-5 col-md-4  price-box">
         <div class="box-panel enrol-cart">
@@ -46,13 +53,17 @@
           <strike>Rs. 4000/-</strike>
           <small>  5% off</small>
           <span class="clearfix db"></span>
-          <a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enrol now</a>
-          <a href="#" class="add-cart">Add to cart</a>
+
+          <a role="button" class="enrol-now" id="enrol-now-button" >Enrol now</a>
+
+          <a role="button" class="add-cart" onclick="addToCart('{{object.id}}')">Add to cart</a>
+
           <div class="query-call">
           <a href="#"><figure class="email-icon"></figure> Have a query?</a>
           <a><figure class="calling-icon"></figure> 0124-395 5001</a>
           </div>
         </div>
+
 
         <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
            
@@ -161,95 +172,9 @@
 {% endblock container %}
 
 
-
-
-  
-
-<!--modals-->
-<!--login-->
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-     <div class="register">
-     <div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Login</h1>
-      </div>
-        <form>
-          <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Username">
-            <label class="error"></label>
-          </div>
-          <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Password">
-          </div>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input">
-              Remember me
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary submit">Login</button>
-          <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
-          <div class="social-login">
-            <span>or login with</span>
-            <a class="facebook" href="#"></a>
-            <a class="linkedin" href="#"></a>
-            <a class="gplus" href="#"></a>
-          </div>
-          <small class="form-text text-muted text-center">Don’t have an account yet? <a href="register.html" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>  
-
-<!--signup-->
-<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-     <div class="register">
-     <div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Register</h1>
-      </div>
-        <form>
-          <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Name">
-            <label class="error"></label>
-          </div>
-          <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email">
-          </div>
-          <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Password">
-          </div>
-          <div class="form-group">
-            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Mobile No.">
-          </div>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input">
-              I agree to Terms & conditions
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary submit">Register</button>
-          <div class="social-login">
-            <span>or Register with</span>
-            <a class="facebook" href="#"></a>
-            <a class="linkedin" href="#"></a>
-            <a class="gplus" href="#"></a>
-          </div>
-          <small class="form-text text-muted text-center mt-4">Already have an account? <a href="login.html" data-toggle="modal" data-target=".bs-example-modal-sm" data-dismiss="modal">Login Now</a></small>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>  
-
-
 {% block js_section %}
   {{block.super}} 
+  <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
   <script type="text/javascript">
   function LoadMoreProductReview(pv_id) {
       if (processing) {

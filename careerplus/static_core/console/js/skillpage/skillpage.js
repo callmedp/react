@@ -81,4 +81,25 @@ $(function() {
         }); 
   
     });
+    $(document).on('click', '#review_load_more', function(event) {
+        alert("sdsaddas");
+        var page = parseInt($("#page_id").val());
+        $.ajax({
+            url: "/ajax/review/load-more/",
+            data : {"page": page, "slug": $("#slug_id").val()},
+            success: function(data, textStatus, jqXHR)
+            {
+                document.getElementById("page_id").value = Number(page)+1;
+                $('html,body').animate({scrollTop: $("#review_load_more").offset().top},500);
+                $("#product_list").append(data);       
+                
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                $("#prod_load_more").remove();
+                alert("Can't load more comments.");
+            }
+        }); 
+  
+    });
 });

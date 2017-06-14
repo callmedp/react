@@ -16,24 +16,28 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
+from filebrowser.sites import site
 from django.conf.urls.static import static
-from users.views import (LogoutView,
-    DashboardView, RegistrationApiView, LoginApiView)
+
+from users.views import (LogoutView, DashboardView, RegistrationApiView, LoginApiView, LogoutApiView)
 from shop.views import ProductDetailView
+
 urlpatterns = []
 
 urlpatterns += [
-    url(r'^courses/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+).html$',
+    url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
-
-    # url(r'^writing-services/(?P<cat_slug>[\w-])/(?P<prd_slug>[\w-])?$',
-    #     ProductDetailView.as_view(), name='resume-detail'),
-    # url(r'^job-assistance/(?P<cat_slug>[\w-])/(?P<prd_slug>[\w-])?$',
-    #     ProductDetailView.as_view(), name='job-assist-detail'),
+    url(r'^resume/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
+        ProductDetailView.as_view(), name='resume-detail'),
+    url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
+        ProductDetailView.as_view(), name='job-assist-detail'),
+    url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
+        ProductDetailView.as_view(), name='other-detail'),
 ]
 
 urlpatterns += [
-
+    url(r'^grappelli/', include('grappelli.urls')),
+    url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^console/', include('console.urls', namespace='console')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
@@ -41,13 +45,19 @@ urlpatterns += [
     url(r'^skillpage/', include('skillpage.urls', namespace='skillpage')),
     url(r'^article/', include('blog.urls', namespace='blog')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
+    url(r'^cart/', include('cart.urls', namespace='cart')),
+    url(r'^payment/', include('payment.urls', namespace='payment')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^$', RegistrationApiView.as_view(), name='create-user'),
+    # partner url
+    url(r'^partner/', include('microsite.urls')),
+    url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
-    url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    # url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
+
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(

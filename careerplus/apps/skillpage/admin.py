@@ -1,5 +1,5 @@
-from django.contrib import admin
-from shop.models import Category, Product, ProductCategory, CategoryRelationship
+# from django.contrib import admin
+# from shop.models import Category, Product, ProductCategory, CategoryRelationship
 # from partner.models import Vendor
 
 
@@ -31,4 +31,4 @@ from shop.models import Category, Product, ProductCategory, CategoryRelationship
 
 # admin.site.register(Category, CategoryAdmin)
 # admin.site.register(Product, ProductAdmin)
-# # admin.site.register(Vendor, VendorAdmin)
+# admin.site.register(Vendor, VendorAdmin)
