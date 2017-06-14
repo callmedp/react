@@ -2,8 +2,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from .choices import STATUS_CHOICES, SITE_CHOICES, PAYMENT_MODE
+from .choices import STATUS_CHOICES, SITE_CHOICES,\
+    PAYMENT_MODE, OI_OPS_STATUS
 
 
 class Order(AbstractAutoDate):
@@ -124,6 +124,29 @@ class OrderItem(models.Model):
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
 
+    # operation fields
+    oi_status = models.PositiveIntegerField(
+        _("Operation Status"), default=0, choices=OI_OPS_STATUS)
+    last_oi_status = models.PositiveIntegerField(
+        _("Last Operation Status"), default=0, choices=OI_OPS_STATUS)
+    oi_resume = models.FileField(
+        max_length=255, upload_to='oi_resume/', null=True, blank=True)
+    oi_draft = models.FileField(
+        max_length=255, upload_to='oi_draft/', null=True, blank=True)
+    draft_counter = models.PositiveIntegerField(default=0)
+
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True)
+
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True)
+
+    closed_on = models.DateTimeField(null=True, blank=True)
+    midout_sent_on = models.DateTimeField(null=True, blank=True)
+    draft_added_on = models.DateTimeField(null=True, blank=True)
+
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -138,3 +161,23 @@ class OrderItem(models.Model):
             title = _('<missing product>')
         return _("Product '%(name)s', quantity '%(qty)s'") % {
             'name': title, 'qty': self.quantity}
+
+
+class OrderItemOperation(AbstractAutoDate):
+    oi = models.ForeignKey(OrderItem)
+    oi_resume = models.FileField(
+        max_length=255, upload_to='oi_resume/', null=True, blank=True)
+    oi_draft = models.FileField(
+        max_length=255, upload_to='oi_draft/', null=True, blank=True)
+    oi_status = models.PositiveIntegerField(
+        _("Operation Status"), default=0, choices=OI_OPS_STATUS)
+    last_oi_status = models.PositiveIntegerField(
+        _("Last Operation Status"), default=0, choices=OI_OPS_STATUS)
+
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True)
+
+    added_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True)
