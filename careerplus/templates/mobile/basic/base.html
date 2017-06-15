@@ -7,7 +7,7 @@
     {% block meta_html %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         {% block django_meta %}
         {% endblock django_meta %}
     {% endblock meta_html %}
@@ -26,40 +26,41 @@
     {% endblock css_section %}
    </head>
     {% endblock head %}
-<body>
-    <div class="wrapper">
 
-        {% block header %}
-            <!-- menu icon -->
-            {% include 'basic/header.html' %}
-        {% endblock header %}
+    <body>
+        <div class="wrapper">
 
-        <!-- main section start -->
-        {% block container %}
-        {% endblock container %}
+            {% block header %}
+                <!-- menu icon -->
+                {% include 'basic/header.html' %}
+            {% endblock header %}
 
-        {% block footer %}
-        <!-- footer -->
-        {% include 'basic/footer.html' %}
-        {% endblock footer %}
+            <!-- main section start -->
+            {% block container %}
+            {% endblock container %}
 
-        {% block navigation %}
-        <!-- left side menu -->
-        {% include 'basic/navigation.html' %}
-        {% endblock navigation %}
-    </div>
-{% block js_section %}
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
-    <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
-    <script src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
-    <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
-{% endblock js_section %}
-</body>
+            {% block footer %}
+            <!-- footer -->
+            {% include 'basic/footer.html' %}
+            {% endblock footer %}
+
+            {% block navigation %}
+            <!-- left side menu -->
+            {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
+        </div>
+    {% block js_section %}
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
+        <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+        <script src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+        <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+    {% endblock js_section %}
+    </body>
 </html>
 {% endspaceless %}
 
