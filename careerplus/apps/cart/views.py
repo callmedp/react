@@ -1,7 +1,6 @@
 import json
 import logging
 
-from django.shortcuts import render, render_to_response
 from django.views.generic import TemplateView, View, UpdateView
 from django.forms.forms import NON_FIELD_ERRORS
 from django.http import HttpResponseForbidden, HttpResponse,\
@@ -24,6 +23,12 @@ from .forms import ShippingDetailUpdateForm
 class CartView(TemplateView, CartMixin, UserMixin):
     template_name = "cart/cart.html"
 
+    def get_recommended_products(self):
+        recommended_products = []
+        # recommended_products = Product.objects.filter(
+        #     type_service=3, type_product__in=[0, 1, 3], active=True)
+        return {'recommended_products': list(recommended_products)}
+
     def get(self, request, *args, **kwargs):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
@@ -35,6 +40,8 @@ class CartView(TemplateView, CartMixin, UserMixin):
             "total_amount": self.getTotalAmount(cart_obj=cart_obj),
             "country_obj": self.get_client_country(self.request),
         })
+        if not context['cart_items']:
+            context.update(self.get_recommended_products())
         return context
 
 
@@ -138,7 +145,7 @@ class PaymentLoginView(TemplateView):
 
                 user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
 
-                if user_exist['exists'] and password:
+                if user_exist.get('exists') and password:
                     login_resp = RegistrationLoginApi().user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':
@@ -156,14 +163,14 @@ class PaymentLoginView(TemplateView):
                             "email": email})
                         return TemplateResponse(request, self.template_name, context)
 
-                elif user_exist['exists']:
+                elif user_exist.get('exists'):
                     context = self.get_context_data()
                     context.update({
                         'email': email,
                         'email_exist': True})
                     return TemplateResponse(request, self.template_name, context)
 
-                elif not user_exist['exists']:
+                elif not user_exist.get('exists'):
                     cart_pk = self.request.session.get('cart_pk')
                     if cart_pk:
                         cart_obj = Cart.objects.get(pk=cart_pk)
@@ -181,7 +188,7 @@ class PaymentLoginView(TemplateView):
 
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
-            return HttpResponseRedirect(reverse('cart:cart-product-list'))
+            return HttpResponseRedirect(reverse('homepage'))
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
