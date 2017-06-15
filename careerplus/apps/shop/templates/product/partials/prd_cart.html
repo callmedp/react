@@ -11,10 +11,12 @@
   <!-- right fixed content start -->
   <div id="price-box" class="col-sm-5 col-md-4  price-box">
   <div class="box-panel enrol-cart">
-     <strong id="total-price" name="price_total" sum-price="{% if selected_products %}{{product_total_price}}{% else %}{{object.get_price}} {% endif %}" >Rs. {% if selected_products %}{{product_total_price}}{% else %}{{object.get_price}} {% endif %}/-</strong>
-     {% if object.get_fakeprice %}
-    <strike>Rs.&nbsp;{{object.get_fakeprice.0}}/-</strike>
-    <small>  {{object.get_fakeprice.1}}% off</small>
+     <strong id="total-price" name="price_total" sum-price="{% if selected_products %}{{product_total_price}}{% elif selected_var %}{{selected_var.get_price}}{% else %}{{object.get_price}} {% endif %}" >Rs. {% if selected_products %}{{product_total_price}}{% elif selected_var %}{{selected_var.get_price}}{% else %}{{object.get_price}} {% endif %}/-</strong>
+
+    
+    {% if fake_total or selected_var.get_fakeprice or object.get_fakeprice %}
+    <strike id="id-total-actual-price" total-actual-price="{% if fake_total %}{{fake_total}} {% elif selected_var.get_fakeprice %}{{selected_var.get_fakeprice.0}}{% else %}{{object.get_fakeprice.0}}{% endif %}" >Rs.&nbsp;{% if fake_total %}{{fake_total}} {% elif selected_var.get_fakeprice %}{{selected_var.get_fakeprice.0}}{% else %}{{object.get_fakeprice.0}}{% endif %}/-</strike>
+    <small id="id_percentage-off" percentage-off="{% if fake_total %}{{percent_diff}} {% elif selected_var.get_fakeprice %}{{selected_var.get_fakeprice.1}}{% else %}{{object.get_fakeprice.1}}{% endif %}">  {% if fake_total %}{{percent_diff}} {% elif selected_var.get_fakeprice %}{{selected_var.get_fakeprice.1}}{% else %}{{object.get_fakeprice.1}}{% endif %}% off</small>
     {% endif %}
     <span class="clearfix db"></span>
 

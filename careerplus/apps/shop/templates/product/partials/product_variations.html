@@ -21,7 +21,7 @@
           {% for vars in course_variation_list %}
             
             <tr>
-              <td><label><input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" data-price="{{vars.price}}" data-id="{{vars.id}}"></label></td>
+              <td><label><input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" data-price="{{vars.price}}" data-id="{{vars.id}}" actual-price="{% if vars.fake_price %} {{vars.fake_price}}{% else %}{{vars.price}}{% endif %}"></label></td>
               <td>{{vars.mode}}</td>
               <td>{{vars.duration}} months</td>
               <td>{% if vars.certify %}
@@ -49,7 +49,7 @@
           <ul>
             {% for service in service_variation_list  %}
               <li>
-                <label><input class="input" name="required_option" data-id="{{service.id}}" {% if service.id in selected_products %}checked{% endif %} type="checkbox" data-price="{{service.get_price}}">{{service.pv_name}}</label> 
+                <label><input class="input" name="required_option" data-id="{{service.id}}" {% if service.id in selected_products %}checked{% endif %} type="checkbox" data-price="{{service.get_price}}" actual-price="{% if service.get_fakeprice %} {{service.get_fakeprice.0}}{% else %}{{service.get_price}}{% endif %}">{{service.pv_name}}</label> 
                 <strong>Rs. {{service.get_price}}/-</strong>
               </li>
             {% endfor %}
@@ -68,7 +68,7 @@
           <ul>
             {% for country in country_variation_list %}
               <li>
-                <label><input {% if country.id in selected_products %}checked{% endif %} class="input" value='{{country.id}}' name="required_option" type="checkbox" data-id="{{country.id}}" data-price="{{country.get_price}}"> {{country.pv_name}}</label> 
+                <label><input {% if country.id in selected_products %}checked{% endif %} class="input" value='{{country.id}}' name="required_option" type="checkbox" data-id="{{country.id}}" data-price="{{country.get_price}}" actual-price="{% if country.get_fakeprice %} {{country.get_fakeprice.0}}{% else %}{{country.get_price}}{% endif %}"> {{country.pv_name}}</label> 
               </li>
             {% endfor %}
           </ul>
