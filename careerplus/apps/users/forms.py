@@ -64,6 +64,8 @@ class RegistrationForm(forms.Form):
         max_length=30, required=True, initial=settings.CP_VENDOR_ID, widget=forms.HiddenInput(
             attrs={'class': 'form-control'}))
 
+    is_job_seeker = forms.BooleanField(widget=forms.CheckboxInput(check_test=lambda x: x=='on'), initial=False)
+
     def clean_raw_password(self):
         password = self.cleaned_data.get('raw_password')
         password = clean_password_util(password)
