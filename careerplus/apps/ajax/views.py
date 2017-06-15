@@ -147,12 +147,10 @@ class AjaxReviewLoadMoreView(TemplateView):
 
 
 class EmailExistView(View):
+
     def get(self, request, *args, **kwargs):
         email = request.GET.get('email')
-        try:
-            data = RegistrationLoginApi.check_email_exist(email)
-        except:
-            pass
+        data = RegistrationLoginApi.check_email_exist(email)
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 

@@ -8,10 +8,10 @@ from .views import AjaxCommentLoadMoreView, CmsShareView,\
 
 urlpatterns = [
     url(r'^page/load-more/$',
-    	AjaxCommentLoadMoreView.as_view(), name='comment-load-more'),
+        AjaxCommentLoadMoreView.as_view(), name='comment-load-more'),
 
     url(r'^page/cms-share/$',
-    	CmsShareView.as_view(), name='cms-share'),
+        CmsShareView.as_view(), name='cms-share'),
 
     url(r'^product/load-more/$',
         AjaxProductLoadMoreView.as_view(), name='product-load-more'),
@@ -20,10 +20,10 @@ urlpatterns = [
         AjaxReviewLoadMoreView.as_view(), name='review-load-more'),
     
     url(r'^article-share/$',
-    	ArticleShareView.as_view(), name='article-share'),
+        ArticleShareView.as_view(), name='article-share'),
 
     url(r'^article-comment/$',
-    	ArticleCommentView.as_view(), name='article-comment-post'),
+        ArticleCommentView.as_view(), name='article-comment-post'),
 
     url(r'^email-exist/$',
         EmailExistView.as_view(), name='email-exist'),

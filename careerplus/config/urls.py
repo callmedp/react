@@ -19,8 +19,7 @@ from django.conf import settings
 from filebrowser.sites import site
 from django.conf.urls.static import static
 
-from users.views import (LogoutView,
-    DashboardView, RegistrationApiView, LoginApiView, LogoutApiView)
+from users.views import (DashboardView, RegistrationApiView, LoginApiView, LogoutApiView)
 from homepage.views import HomePageView
 
 from shop.views import ProductDetailView
@@ -58,7 +57,6 @@ urlpatterns += [
     url(r'^partner/', include('microsite.urls')),
     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
-    # url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
 
