@@ -37,6 +37,7 @@ class RegistrationApiView(FormView):
             "cell_phone": request.POST.get('cell_phone'),
             "country_code": request.POST.get('country_code'),
             "vendor_id": request.POST.get('vendor_id'),
+            "is_job_seeker": request.POST.get('is_job_seeker') == 'on'
         })
         user_resp = RegistrationLoginApi.user_registration(post_data)
 
