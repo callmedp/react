@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post">
+	{% csrf_token %}
+  <ol>
+	<li>
+		<p class="question">What is the answer to this question?</p>                        
+		<textarea rows="5" cols="50" 
+		name="question1">{{ans}}</textarea>         
+	</li>
+	<li>
+		<p class="question">What is the answer to this question?</p>                        
+		<textarea class="js-answer " rows="5" cols="50" 
+		name="question2">{{ans}}</textarea>         
+	</li>
+	<li>
+		<p class="question">What is the answer to this question?</p>                        
+		<textarea  class="js-answer" rows="5" cols="50" 
+		name="question3">{{ans}}</textarea>         
+	</li>
+	<li>
+		<p class="question1">What is the answer to this question?</p>                        
+		<textarea  class="js-answer" rows="5" cols="50" 
+		name="question4">{{ans}}</textarea>         
+	</li>
+	<li>
+		<p class="question">What is the answer to this question?</p>                        
+		<textarea class="js-answer" rows="5" cols="50" 
+		name="question5">{{ans}}</textarea>         
+	</li>
+ </ol>
+<button type="submit">submit</button>
+</form>
+</body>
+</html>

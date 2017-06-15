@@ -77,6 +77,8 @@ LOCAL_APPS = [
     'blog',
     'homepage',
     'microsite',
+    'linkedin',
+    'emailers',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
