@@ -25,3 +25,18 @@ PAYMENT_MODE = (
     (9, 'Credit Card'),
     (10, 'Net Banking'),
     (11, 'Emi'),)
+
+OI_OPS_STATUS = (
+    # for flow 1 - 29
+    (0, 'Default'),
+    (1, 'Welcome Call Pending'),
+    (2, 'Welcome Call Done'),
+    (3, 'Assigned'),
+    (4, 'Resume Not Uploaded'),
+    (5, 'Pending Approval'),
+    (6, 'Approved'),
+    (7, 'Rejected By Admin'),
+    (8, 'Rejected By Candidate'),
+    (9, 'Closed'),
+
+)

@@ -17,5 +17,14 @@ $().ready(function() {
                 required: "Please provide a password",
             },
         },
+        highlight: function(element) {
+            $(element).closest('.form-group').addClass('error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.form-group').removeClass('error');
+        },
+        errorPlacement: function(error, element){
+            $(element).siblings('.error-txt').html(error.text());
+        }
     });
 });

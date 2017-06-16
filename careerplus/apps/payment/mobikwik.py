@@ -2,6 +2,7 @@ import urllib
 import hmac
 import logging
 import time
+import codecs
 
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, View
@@ -17,6 +18,10 @@ from cart.models import Cart
 from order.mixins import OrderMixin
 
 from .mixin import PaymentMixin
+
+
+import platform
+py_major, py_minor, py_patchlevel = platform.python_version_tuple()
 
 
 TEST_MODE = True
@@ -54,19 +59,37 @@ def send_checksum_string(orderid):
 
 
 def make_checksum(checksum_string):
-    sec_key = MOBIKWIK_SECRET_KEY
-    hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
-    checksum = hmac_obj.digest().hex()
-    return checksum
+    if py_major == '3' and py_minor == '4':
+        # python 3.4
+        sec_key = MOBIKWIK_SECRET_KEY
+        hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
+        checksum = codecs.encode(hmac_obj.digest(), "hex").decode()
+        return checksum
+    else:
+        # python 3.5
+        sec_key = MOBIKWIK_SECRET_KEY
+        hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
+        checksum = hmac_obj.digest().hex()
+        return checksum
 
 
 def calculate_response_checksum(statuscode, orderid, amount, statusmessage):
-    sec_key = MOBIKWIK_SECRET_KEY
-    mer_id = MOBIKWIK_MERCHANT_ID
-    checksum_string = "'%s''%s''%s''%s''%s'" % (statuscode, orderid, amount, statusmessage, mer_id)
-    hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
-    checksum = hmac_obj.digest().hex()
-    return checksum
+    if py_major == '3' and py_minor == '4':
+        # python 3.4
+        sec_key = MOBIKWIK_SECRET_KEY
+        mer_id = MOBIKWIK_MERCHANT_ID
+        checksum_string = "'%s''%s''%s''%s''%s'" % (statuscode, orderid, amount, statusmessage, mer_id)
+        hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
+        checksum = codecs.encode(hmac_obj.digest(), "hex").decode()
+        return checksum
+    else:
+        # python 3.5
+        sec_key = MOBIKWIK_SECRET_KEY
+        mer_id = MOBIKWIK_MERCHANT_ID
+        checksum_string = "'%s''%s''%s''%s''%s'" % (statuscode, orderid, amount, statusmessage, mer_id)
+        hmac_obj = hmac.new(sec_key.encode(), checksum_string.encode(), sha256)
+        checksum = hmac_obj.digest().hex()
+        return checksum
 
 
 class MobikwikRequestView(SingleObjectMixin, TemplateView, OrderMixin):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TopTrending, TrendingProduct
+from .models import TopTrending, TrendingProduct, Testimonial
 
 
 class TopTrendingAdmin(admin.ModelAdmin):
@@ -14,5 +14,11 @@ class TrendingProductAdmin(admin.ModelAdmin):
 	search_fields = ('id', 'trendingcourse__name', 'product__name')
 
 
+class TestimonialAdmin(admin.ModelAdmin):
+	list_display = ['id', 'user_id', 'user_name', 'rating', 'designation', 'company']
+	search_fields = ('id', 'user_id', 'user_name', 'designation', 'company')
+
+
 admin.site.register(TrendingProduct, TrendingProductAdmin)
 admin.site.register(TopTrending, TopTrendingAdmin)
+admin.site.register(Testimonial, TestimonialAdmin)

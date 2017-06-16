@@ -4,6 +4,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import permission_required
+from django.utils.decorators import method_decorator
 
 from blog.models import Tag, Category, Blog, Comment
 from blog.mixins import PaginationMixin
@@ -414,6 +416,7 @@ class TagUpdateView(UpdateView):
 		return self.form_invalid(form)
 
 
+@method_decorator(permission_required('blog.add_tag', login_url='/console/login/'), name='dispatch')
 class TagListView(ListView, PaginationMixin):
 
 	context_object_name = 'tag_list'

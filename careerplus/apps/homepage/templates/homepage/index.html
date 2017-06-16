@@ -264,18 +264,18 @@
 
               <!-- Wrapper for slides -->
               <div class="carousel-inner" role="listbox">
-                {% for review in testimonials %}
+                {% for test in testimonials %}
                 <div class="item {% if forloop.first %}active{% endif %}">
-                  {% if review.image %}
-                      <img src="{{review.image.url}}" alt="profile-pic" width="100" height="100">
+                  {% if test.image %}
+                      <img src="{{test.image.url}}" alt="profile-pic" width="100" height="100">
                   {% else %}
                     <img src="{% static "shinelearn/images/user-loggedin.jpg" %}" alt="profile-pic" width="100" height="100">
                   {% endif %}
                   <div class="carousel-caption">           
-                    {{review.content|striptags|safe}}
+                    {{test.review|striptags|safe}}
                     <strong>
-                      {{review.user_name}}
-                      <small>{{review.designation}} {% if review.company %}at {{review.company}}{% endif %}</small>
+                      {{test.user_name}}
+                      <small>{{test.designation}} {% if test.company %}at {{test.company}}{% endif %}</small>
                     </strong>
 
                   </div>

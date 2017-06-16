@@ -19,6 +19,7 @@ $().ready(function() {
 
 
     $("#shipping_form").validate({
+        // errorClass: 'error-txt',
         rules: {
                 first_name:{
                     required: true,
@@ -91,6 +92,15 @@ $().ready(function() {
                 maxlength: 'length must be less than 200 characters.',
             }
         },
+        highlight: function(element) {
+            $(element).closest('.col-sm-6').addClass('error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.col-sm-6').removeClass('error');
+        },
+        errorPlacement: function(error, element){
+            $(element).siblings('.error-txt').html(error.text());
+        }
     });
 
     $( "#id_country" ).change(function() {
@@ -129,7 +139,6 @@ $().ready(function() {
             dataType: 'json',
             success: function(json) {
                 states = json.states;
-                console.log(states);
                 // initialize autocomplete with custom appendTo
                 $('#id_state').autocomplete({
                     lookup: states

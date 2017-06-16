@@ -87,10 +87,6 @@ class Cart(AbstractAutoDate):
             % {'status': self.status,
                'owner': self.owner_id}
 
-    def get_country(self):
-        country_dict = dict(self.CHOICE_COUNTRY)
-        return country_dict.get(self.country)
-
     def get_status(self):
         dataD = dict(STATUS_CHOICES)
         return dataD.get(self.status)

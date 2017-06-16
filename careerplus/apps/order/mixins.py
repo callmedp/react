@@ -47,7 +47,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 				order.state = cart_obj.state
 				order.country = cart_obj.country
 
-				order.total_excl_tax = self.getTotalAmount()
+				order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
 				order.save()
 				self.createOrderitems(order, cart_obj)
 				return order
