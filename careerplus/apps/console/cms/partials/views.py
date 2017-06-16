@@ -1,27 +1,9 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.renderers import TemplateHTMLRenderer
-
+from console.common.mixins import ListPartialMixin, DetailPartialMixin, AddPartialMixin
 from cms.api.core.mixins import IndexerWidgetViewMixin, ColumnHeadingViewMixin, IndexColumnViewMixin, WidgetViewMixin,\
     PageViewMixin, PageWidgetViewMixin, CommentViewMixin, DocumentViewMixin, PageCounterViewMixin
 from cms.api.core.serializers import PageSerializer, CommentSerializer  
 from cms.models import Page, Comment
-
-from django.shortcuts import get_object_or_404 , redirect #render
-
-
-# TODO: Check page_size param acceptance in url param - not accepting, accepting for api view
-class ListPartialMixin(object):
-    renderer_classes = [TemplateHTMLRenderer]
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-        else:
-            serializer = self.get_serializer(queryset, many=True)
-        return Response(data={'page': serializer.data, 'partial_template': self.partial_template_name, 'doing_partial': request.META.get('HTTP_X_PJAX')}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
 
 
 class IndexerWidgetListPartial(ListPartialMixin, IndexerWidgetViewMixin, ListAPIView):
@@ -59,38 +41,6 @@ class CommentListPartial(ListPartialMixin, CommentViewMixin, ListAPIView):
 
 class PageCounterListPartial(ListPartialMixin, PageCounterViewMixin, ListAPIView):
     template_name = partial_template_name = 'console/cms/partials/pagecounter-list-partial.html'
-
-
-class DetailPartialMixin(object):
-    renderer_classes = [TemplateHTMLRenderer]
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(data={'serializer': serializer, 'instance': instance, 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        if not serializer.is_valid():
-            return Response({'serializer': serializer, 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, status=status.HTTP_400_BAD_REQUEST)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        if hasattr(self, 'success_list_redirect') and self.success_list_redirect:
-            return redirect(self.success_list_redirect)
-        elif hasattr(self, 'success_detail_redirect') and self.success_detail_redirect:
-            return redirect(self.success_detail_redirect, pk=serializer.data.get('id'))
-        else:
-            return Response(data={'serializer': 'serializer', 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name , status=status.HTTP_200_OK)
-
-    def post(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
 
 class IndexerWidgetDetailPartial(DetailPartialMixin, IndexerWidgetViewMixin, RetrieveUpdateAPIView):
@@ -145,27 +95,6 @@ class PageCounterDetailPartial(DetailPartialMixin, PageCounterViewMixin, Retriev
     template_name = partial_template_name = 'console/cms/partials/pagecounter-detail-partial.html'
     success_list_redirect = 'console:cms:pages:pagecounter-list'
     success_detail_redirect = 'console:cms:pages:pagecounter-detail'
-
-
-class AddPartialMixin(object):
-    renderer_classes = [TemplateHTMLRenderer]
-
-    def get(self, request, *args, **kwargs):
-        serializer = self.get_serializer()
-        return Response(data={'serializer': serializer, 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(data={'serializer': serializer, 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name, status=status.HTTP_400_BAD_REQUEST)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        if hasattr(self, 'success_list_redirect') and self.success_list_redirect:
-            return redirect(self.success_list_redirect)
-        elif hasattr(self, 'success_detail_redirect') and self.success_detail_redirect:
-            return redirect(self.success_detail_redirect, pk=serializer.data.get('id'))
-        else:
-            return Response(data={'serializer': 'serializer', 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name , status=status.HTTP_201_CREATED, headers=headers)
 
 
 class IndexerWidgetAddPartial(AddPartialMixin, IndexerWidgetViewMixin, CreateAPIView):

@@ -44,7 +44,7 @@ class IndexerWidgetSerializer(serializers.ModelSerializer):
     """
     heading = serializers.CharField(max_length=255, allow_blank=True, allow_null=True, required=False,
         style={'template': 'console/fields/input.html',
-        'attrs': {'data-parsley-trigger': 'keyup', 'data-parsley-length': [4, 255], 'data-parsley-required': True}})
+        'attrs': {'data-parsley-trigger': 'keyup', 'data-parsley-length': [4, 255]}})
     column_heading = ColumnHeadingSerializer(label='ColumnHeading')
     index_column = IndexColumnSerializer(label='Index Column')
     class Meta:

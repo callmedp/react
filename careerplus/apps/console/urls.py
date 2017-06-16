@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 
 urlpatterns = [
     url(r'^cms/', include('console.cms.urls', namespace='cms')),
+    url(r'^partner/', include('console.partner.urls', namespace='partner')),
 ]
 
 from django.conf.urls import url

@@ -10,6 +10,7 @@ class AbstractAutoDate(models.Model):
     modified = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
+        import pdb; pdb.set_trace()
         ''' On save, update timestamps '''
         if not self.id:
             self.created = timezone.now()
@@ -46,6 +47,7 @@ class AbstractSEO(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
+        import pdb; pdb.set_trace()
 
         pk_field_name = self._meta.pk.name
         url_value_name = getattr(self, 'url_value_name', 'name')
