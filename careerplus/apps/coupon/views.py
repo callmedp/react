@@ -38,6 +38,14 @@ class CouponRedeemView(APIView, CartMixin):
                 {'success': 0,
                  'error': 'Something went wrong, Please login to continue.'
                  }, status=400, content_type='application/json')
+        wal_txn = cart_obj.wallettxn.filter(
+            txn_type=2).order_by('-created').select_related('wallet')
+        if wal_txn:
+            return Response(
+                {'success': 0,
+                 'error': 'Points already applied!.'
+                 }, status=400, content_type='application/json')
+        
         user_email = cart_obj.email
         old_coupon = cart_obj.coupon
 

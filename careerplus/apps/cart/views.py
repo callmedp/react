@@ -1,6 +1,7 @@
 import json
 import logging
-
+from decimal import Decimal
+from django.utils import timezone
 from django.shortcuts import render, render_to_response
 from django.views.generic import TemplateView, View, UpdateView
 from django.forms.forms import NON_FIELD_ERRORS
@@ -19,7 +20,7 @@ from users.mixins import RegistrationLoginApi, UserMixin
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
-
+from wallet.models import Wallet
 
 class CartView(TemplateView, CartMixin, UserMixin):
     template_name = "cart/cart.html"
@@ -322,13 +323,64 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 "cart_items": self.get_cart_items(),
                 "total_amount": self.getTotalAmount(),
             })
-        cart_obj = None
+        cart_obj, wal_obj = None, None
+        cart_coupon, cart_wallet  = None, None
+        wal_txn, wal_total, wal_point = None, None, None
+        
         cart_pk = self.request.session.get('cart_pk')
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
         except Cart.DoesNotExist:
-            pass
-        context.update({'coupon': cart_obj.coupon})
+            cart_obj = None
+        if cart_obj:
+            wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
+            cart_coupon = cart_obj.coupon
+            if cart_coupon:
+                wal_obj = None
+            elif wal_txn:
+                wal_obj = None
+                wal_txn = wal_txn[0]
+                points = wal_txn.point_txn.all()
+                points_active = points.filter(expiry__gte=timezone.now())
+                points_used = wal_txn.usedpoint.all()
+                
+                if len(points_active) == len(points):
+                    cart_wallet = wal_txn
+                    wal_point = wal_txn.point_value
+                else:
+                    points_used = wal_txn.usedpoint.all().order_by('point__pk')
+                    for pts in points_used:
+                        point = pts.point
+                        point.current += pts.point_value
+                        point.last_used = timezone.now()
+                        pts.txn_type = 5
+                        if point.expiry <= timezone.now():
+                            point.status = 3
+                        else:
+                            if point.current > Decimal(0):
+                                point.status = 1
+                            else:
+                                point.status = 2
+                        point.save()
+                        pts.save()
+                    wal_txn.txn_type = 5
+                    wal_txn.notes = 'Auto Reverted From Cart'
+                    wal_txn.status = 1
+                    wal_txn.save()
+                    wal_obj = wal_txn.wallet
+                    wal_total = wal_obj.get_current_amount()
+                    if wal_total <= Decimal(0):
+                        wal_obj = None
+            elif cart_obj.owner_id:
+                wal_obj, created = Wallet.objects.get_or_create(owner=cart_obj.owner_id)
+                wal_total = wal_obj.get_current_amount()
+                if wal_total <= Decimal(0):
+                    wal_obj = None
+
+        context.update({
+            'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
+            'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
+        
         return context
 
 

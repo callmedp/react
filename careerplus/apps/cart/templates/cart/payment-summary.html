@@ -132,7 +132,7 @@
             </style>
             <!-- coupon -->
             <span class="col-sm-4 col-md-6 coupon">
-              {% if coupon %}
+              {% if cart_coupon %}
                 <div id="showCoupon" >
                   <div class="form-group">
                     <input id="discount_code" type="text" value="Coupon {{coupon.code}} is applied!" name="code" maxlength="15">
@@ -140,47 +140,54 @@
                     <button type="button" onclick="JSRemoveDiscount();">Remove</button>
                   </div>
                 </div>
-              {% elif wallet%}
+              {% elif cart_wallet%}
                 <div id="shineCredit" >
-                Enter shine credit
-                <div class="form-group error">
-                  <input type="text" placeholder="You have 100 shine loyalty points">
-                  <span class="error-txt">Required</span>
-                  <button type="button">Redeem</button>
+                <div class="form-group">
+                  <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!">
+                  <span class="error-txt" id="point-alert" ></span>
+                  <button type="button" onclick="JSRemovePoint();">Remove</button>
                 </div>
                 </div>
               {% else %}
                 <a href="javascript:void(0)" onclick="toggler('showCoupon');">Apply coupon</a>
-                or
-                <a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a>
-                <form action="." id="discountForm">
-                  <div id="showCoupon" class="hidden-div">
-                    Enter discount code
-                    <div class="form-group">
-                      <input id="discount_code" type="text" placeholder="Discount code" name="code" maxlength="15">
-                       <span class="error-txt" id="discount-alert"></span>
-                      <button type="button" onclick="JSApplyDiscount();">Apply</button>
+                {% if wallet %}
+                  or
+                  <a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a>
+                  
+                {% endif %}
+                  <form action="." id="discountForm">
+                    <div id="showCoupon" class="hidden-div">
+                      Enter discount code
+                      <div class="form-group">
+                        <input id="discount_code" type="text" placeholder="Discount code" name="code" maxlength="15">
+                         <span class="error-txt" id="discount-alert"></span>
+                        <button type="button" onclick="JSApplyDiscount();">Apply</button>
+                      </div>
                     </div>
-                  </div>
-                </form>
-                <div id="shineCredit" class="hidden-div">
-                  Enter shine credit
-                  <div class="form-group error">
-                    <input type="text" placeholder="You have 100 shine loyalty points">
-                    <span class="error-txt">Required</span>
-                    <button type="button">Redeem</button>
-                  </div>
-                </div>
-              
+                  </form>
+                {% if wallet %}
+                  
+                  <form action="." id="walletForm">
+                    <div id="shineCredit" class="hidden-div">
+                      You have {{wallet_total}} shine loyalty points.
+                      <div class="form-group">
+                        <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
+                        <span class="error-txt" id="point-alert" ></span>
+                        <button type="button" onclick="JSApplyPoint();">Redeem</button>
+                      </div>
+                    </div>
+                  </form>
+                {% endif %}
+                
               {% endif %}
               </span>
 
             <!-- amount -->
             <span class="col-sm-8 col-md-6">
-              {% if coupon %}
+              {% if cart_coupon %}
                 <span class="col-sm-6 text-right">Coupon applied</span>
                 <span class="col-sm-6">-Rs. {{coupon_amount}}/-</span>
-              {% elif wallet%}
+              {% elif cart_wallet%}
                 <span class="col-sm-6 text-right">Your Shine cash</span>
                 <span class="col-sm-6">-Rs. 2000/-</span>
                 
@@ -286,6 +293,84 @@
           }
       };
 
+      function JSApplyPoint() {
+          let alert_message = '';
+          if ($('#loyalty_point').val().trim()){
+            $('#loyalty_point').parent().removeClass('error');
+              try {
+                  let loyalty_point = $('#loyalty_point').val().trim();
+                  if(isNaN(loyalty_point)){
+                    throw "NaN"
+                  }
+                  loyalty_point = parseInt(loyalty_point, 10);
+                  let min_point = parseInt($('#loyalty_point').prop('min'), 10);
+                  let max_point = parseInt($('#loyalty_point').prop('max'), 10);
+                  if(loyalty_point <= min_point){
+                    throw "Min"
+                  }
+                  if(loyalty_point > max_point){
+                    throw "Max"
+                  }
+                  $.ajax({
+                      url: '/cart/applypoint/',
+                      type: 'post',
+                      data: 'point=' + loyalty_point,
+                      dataType: 'json',
+                      success: function(json) {
+                        window.location.reload();
+                      },
+                      failure: function(response){
+                        alert_message = 'Something is not working, Please try later!';
+                        $('#loyalty_point').parent().addClass('error');
+                        $('#point-alert').empty();
+                        $('#point-alert').text(alert_message);
+                        $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                      },
+                      error: function (result, status, err) {
+                        if(result && result.status == 400)
+                        {
+                          alert_message = result.responseJSON;
+                          alert_message = alert_message.error;
+                        }
+                        else{
+                          alert_message = 'Something is not working, Please try later!';
+                        }
+                        $('#loyalty_point').parent().addClass('error');
+                        $('#point-alert').empty();
+                        $('#point-alert').text(alert_message);
+                        $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                      }
+                  });
+              }
+              catch (e) {
+                if(e == 'NaN'){
+                  alert_message = 'Please enter digits!';
+                }
+                else if(e == 'Min'){
+                  alert_message = 'Redeem points should be greater than 0!';
+                }
+                else if(e == 'Max'){
+                  alert_message = 'Redeem points should be less than available points!';
+                }
+                else{
+                  alert_message = 'Something is not working, Please try later!';
+                }
+                $('#loyalty_point').parent().addClass('error');
+                $('#point-alert').empty();
+                $('#point-alert').text(alert_message);
+                $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+              }
+                  
+          }
+          else{
+              alert_message = 'Enter Loyalty Point First!';
+              $('#loyalty_point').parent().addClass('error');
+              $('#point-alert').empty();
+              $('#point-alert').text(alert_message);
+              $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+              
+          }
+      };
       function JSRemoveDiscount() {
           $.ajax({
               url: '/cart/removecoupon/',
@@ -316,6 +401,41 @@
                 $('#discount-alert').empty();
                 $('#discount-alert').text(alert_message);
                 $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                
+              }
+          });
+      
+      };
+      function JSRemovePoint() {
+          $.ajax({
+              url: '/cart/removepoint/',
+              type: 'post',
+              dataType: 'json',
+              success: function(json) {
+                  window.location.reload();
+              },
+              failure: function(response){
+                  alert_message = 'Something is not working, Please try later!';
+                  $('#loyalty_point').parent().addClass('error');
+                  $('#point-alert').empty();
+                  $('#point-alert').text(alert_message);
+                  $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                  
+              },
+              error: function (result, status, err) {
+                if(result && result.status == 400)
+                {
+                  alert_message = result.responseJSON;
+                  alert_message = alert_message.error;
+                }
+                else{
+                  alert_message = 'Something is not working, Please try later!';
+                
+                }
+                $('#loyalty_point').parent().addClass('error');
+                $('#point-alert').empty();
+                $('#point-alert').text(alert_message);
+                $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
                 
               }
           });

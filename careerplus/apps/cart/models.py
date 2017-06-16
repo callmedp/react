@@ -29,6 +29,7 @@ class Cart(AbstractAutoDate):
         'coupon.Coupon',
         on_delete=models.SET_NULL,
         verbose_name=_("Coupon"), null=True,)
+    
     is_submitted = models.BooleanField(default=False)
     date_merged = models.DateTimeField(
         _("Date merged"), null=True, blank=True)
