@@ -219,7 +219,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         if cart_obj and not (cart_obj.email or self.request.session.get('candidate_id')):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
         return None
-       
+
     def get_object(self):
         if not self.request.session.get('cart_pk'):
             self.getCartObject()
@@ -243,7 +243,6 @@ class PaymentShippingView(UpdateView, CartMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         form = context['form']
-        {'last_name': 'kumar', 'address': None, 'mobile': None, 'email': None, 'pincode': None, 'country': '91', 'country_code': '91', 'first_name': None, 'state': None}
 
         if self.request.session.get('candidate_id'):
             if not form.initial.get('first_name'):
@@ -269,7 +268,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         if not form.initial.get('country'):
             form.initial.update({
                 'country': 'India'})
-        
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -310,7 +309,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if not self.cart_obj:
             return HttpResponsePermanentRedirect(reverse('homepage'))
-            
+
         return None
 
     def get(self, request, *args, **kwargs):
@@ -325,16 +324,4 @@ class PaymentSummaryView(TemplateView, CartMixin):
             "cart_items": self.get_cart_items(cart_obj=self.cart_obj),
             "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),
         })
-
-        # if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
-        #     context.update({
-        #         "cart_items": self.get_cart_items(),
-        #         "total_amount": self.getTotalAmount(),
-        #     })
-        # else:
-        #     self.getCartObject()
-        #     context.update({
-        #         "cart_items": self.get_cart_items(),
-        #         "total_amount": self.getTotalAmount(),
-        #     })
         return context
