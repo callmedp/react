@@ -32,10 +32,11 @@ OI_OPS_STATUS = (
     (1, 'Welcome Call Pending'),
     (2, 'Welcome Call Done'),
     (3, 'Assigned'),
-    (4, 'Resume Uploaded Pending'),
-    (5, 'Approval Required'),
-    (6, 'Rejected By Admin'),
-    (7, 'Rejected By Candidate'),
-    (8, 'Closed'),
+    (4, 'Resume Not Uploaded'),
+    (5, 'Pending Approval'),
+    (6, 'Approved'),
+    (7, 'Rejected By Admin'),
+    (8, 'Rejected By Candidate'),
+    (9, 'Closed'),
 
 )

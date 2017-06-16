@@ -39,9 +39,8 @@
 
 
 {% block container %}
+    {% if cart_items %}
     <section class="container mt-53">
-
-        {% if cart_items %}
         <!-- page content body start -->
         <div class="row">
         <!-- left content start -->
@@ -205,10 +204,75 @@
 
         </div>
         <!-- page content body end -->
-        {% endif %}
 
     </section>
     <!-- main section end -->
+    {% else %}
+        <!-- Blank Cart -->
+        <section class="container">
+
+            <!-- page content body start -->
+            <div class="row">
+                <!-- content start -->
+                <div class="col-sm-12 mt-53">
+                  <div class="empty-cart bdr">
+                    <figure class="empty-cart-pic"></figure>
+                    <article>You have no product in your cart. <br>Add your first product and earn <strong>Shine loyalty points</strong></article>
+                    <a href="{% url "homepage" %}" class="search-button">Search now</a>
+                  </div>
+                </div>
+                <!-- content end -->
+
+                {% if recommended_products %}
+                <!-- Recommended products start -->
+                <div class="col-sm-12 mt-40">
+                  <h2 class="detail-heading">Recommended products</h2>
+
+                  <div class="row">
+
+                    <ul class="listing">
+                      {% for prd in recommended_products %}
+                      <li class="col-sm-6 col-md-4">
+                        <a title="prd.name" class="box-panel" href="{{prd.get_absolute_url}}">
+                          <div class="media">
+                            <div class="media-left">
+                                <figure style="background-color:{{prd.get_bg}};">
+                                    <img class="media-object" src="{{prd.image.url}}" alt="{{prd.image_alt}}" height="134" width="131">
+                                </figure>
+                            </div>
+                            <div class="media-body">
+
+                              <h3 class="listing-heading">{{prd.name}}</h3>
+                              <div class="rating-review-box">
+                                    {% for star in prd.get_ratings %}
+                                          {% if star == '*' %}
+                                            <figure class="full-star"></figure>
+                                          {% elif star == '+' %}
+                                            <figure class="half-star"></figure>
+                                          {% else %}
+                                            <figure class="blank-star"></figure>
+                                          {% endif %}
+                                    {% endfor %}
+                                        
+                                    <strong>{{prd.get_avg_ratings}}<small>/5</small></strong>
+                                    <span class="jobs-available"><strong>{{prd.num_jobs}}</strong> jobs available</span>
+                                </div>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      {% endfor %}
+
+                    </ul>
+
+                  </div>
+
+                </div>
+                <!-- Recommended products end -->
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
 {% endblock container %}
   
 
