@@ -62,6 +62,11 @@ class RegistrationApiView(FormView):
             messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
         return render(self.request, self.template_name, {'form': form})
 
+    def get_form_kwargs(self):
+        kwargs = super(RegistrationApiView, self).get_form_kwargs()
+        kwargs['flavour'] = self.request.flavour
+        return kwargs
+
 
 class LoginApiView(FormView):
     form_class = LoginApiForm
