@@ -1,15 +1,11 @@
-import json
-import requests
 import logging
 
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
-from django.http import (HttpResponse,
-    HttpResponseRedirect)
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView
 from django.core.urlresolvers import reverse
-from shine.core import ShineToken, ShineCandidateDetail
+from shine.core import ShineCandidateDetail
 
 from .forms import RegistrationForm, LoginApiForm
 from .mixins import RegistrationLoginApi
@@ -48,34 +44,36 @@ class RegistrationApiView(FormView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         login_dict, post_data = {}, {}
-
         post_data.update({
             "email": request.POST.get('email'),
             "raw_password": request.POST.get('raw_password'),
             "cell_phone": request.POST.get('cell_phone'),
             "country_code": request.POST.get('country_code'),
             "vendor_id": request.POST.get('vendor_id'),
+            "is_job_seeker": request.POST.get('is_job_seeker') == 'on'
         })
         user_resp = RegistrationLoginApi.user_registration(post_data)
 
         if user_resp['response'] == 'new_user':
             login_dict.update({
                 "email": request.POST.get('email'),
-                "password": request.POST.get('password') if request.POST.get('password') else request.POST.get('raw_password'),
+                "password": request.POST.get('password') if request.POST.get('password')
+                            else request.POST.get('raw_password'),
             })
             resp = RegistrationLoginApi.user_login(login_dict)
             
             if resp['response'] == 'login_user':
-                resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
+                resp_status = ShineCandidateDetail().get_status_detail(shine_id=resp['candidate_id'])
                 request.session.update(resp_status)
-                return HttpResponseRedirect(reverse('dashboard'))
+                return HttpResponseRedirect(self.success_url)
 
         elif user_resp['response'] == 'exist_user':
-            messages.add_message(self.request, messages.SUCCESS, user_resp["non_field_errors"][0])
+            messages.add_message(self.request, messages.ERROR, "This user already exists", 'danger')
             return HttpResponseRedirect(reverse('login'))
 
-        elif user_resp['response'] == 'form_error':
-            return render(self.request, self.template_name, {'form': form})
+        elif not user_resp['response']:
+            messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+        return render(self.request, self.template_name, {'form': form})
 
 
 class LoginApiView(FormView):
