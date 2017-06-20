@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
-    PAYMENT_MODE, OI_OPS_STATUS
+    PAYMENT_MODE, OI_OPS_STATUS, ORDER_ITEM_FLOW_STATUS
 
 
 class Order(AbstractAutoDate):
@@ -134,6 +134,9 @@ class OrderItem(models.Model):
     oi_draft = models.FileField(
         max_length=255, upload_to='oi_draft/', null=True, blank=True)
     draft_counter = models.PositiveIntegerField(default=0)
+    tat_date = models.DateTimeField(null=True, blank=True)
+    oi_flow_status = models.PositiveSmallIntegerField(
+        default=0, choices=ORDER_ITEM_FLOW_STATUS)
 
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,

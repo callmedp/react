@@ -39,3 +39,9 @@ OI_OPS_STATUS = (
     (8, 'Closed'),
 
 )
+
+ORDER_ITEM_FLOW_STATUS = (
+    (0, 'Default'),
+    (1, 'Counselling Form Not Submitted'),
+    (2, 'Counselling Form Submitted'),
+)

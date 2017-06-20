@@ -22,7 +22,6 @@ class SendMail():
         return render_to_string(template, context)
 
     def process(self, to=None, send_dict=None, data=None):
-        import ipdb; ipdb.set_trace()
         try:
             body = self.render_template(send_dict['template'], data)
         except Exception as e:
@@ -42,11 +41,3 @@ class SendMail():
                 'upender.singh@hindustantimes.com', '592be7a753c034509597de71')
             data['button_text'] = "click here to dashboard"
         self.process(to, send_dict, data)
-
-
-# context_dict['LOGIN_URL'] = 'http://' + str(settings.SITE_DOMAIN)\
-#                 + reverse('cp_login', kwargs={'token': token})+'?next='
-# <a href="{{ LOGIN_URL }}/dashboard/" style="color:#555555; text-decoration:none;"> <img src="http://static1.shine.com/shinecp/images/version1/mailer/feedback/order_icon.gif" style="vertical-align:middle; margin-right:8px;" />View your orders </a>
-# <a href="{{SITE_DOMAIN_EMAIL}}/user/login/{{token}}/?next=/dashboard/{{campaign_string}}" style="text-decoration: none;">
-#                                                 <P style="font-family:Arial, Helvetica, sans-serif; font-size:20px; color:#ffffff; line-height:22px; border: 1px solid #1e3e6b; border-radius: 3px; padding: 7px; text-align: center; background: -webkit-linear-gradient(top,#1e3e6b,#1e3e6b); background: transparent -moz-linear-gradient(center top , #1e3e6b,#1e3e6b) repeat scroll 0% 0%;">{{ button_text }}</P>
-#                                             </a>

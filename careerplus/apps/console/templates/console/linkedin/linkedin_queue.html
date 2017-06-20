@@ -1,0 +1,44 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>Linkedin Queue</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}} 
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Linkedin</h3>
+      </div>
+    </div>
+    {% for rsp in quiz_obj %}
+      {% if rsp.submitted %}
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <a class="btn btn-app" href="{% url 'counselling-form' rsp.oi.id %}">
+        <i class="fa fa-edit"></i>Edit Counselling Form</a>
+      </div>
+      {% endif%}
+    {% endfor %}
+  </div>
+</div>
+{% endblock pagecontent %}
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" 
+    src="{% static "packages/parsleyjs/parsley.min.js" %}">
+  </script>
+
+{% endblock js_block %}

@@ -7,8 +7,8 @@ urlpatterns = [
     url(r'^logout/$', ConsoleLogoutView.as_view(), name='logout'),
 ]
 
-
 from . import shop_view
+from . import linkedin_view
 
 
 urlpatterns += [
@@ -79,6 +79,12 @@ urlpatterns += [
         shop_view.ListAttributeOptionGroupView.as_view(),
         name='attributeoption-list'),
 
+    url(r'^linkedin-profile/$',
+        linkedin_view.LinkedinProfileView.as_view(),
+        name='linkedin-profile'),
+    url(r'^linkedin-queue/$',
+        linkedin_view.LinkedinQueueView.as_view(),
+        name='linkedin-queue'),
 ]
 
 

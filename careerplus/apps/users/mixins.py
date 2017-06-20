@@ -73,14 +73,13 @@ class RegistrationLoginApi(object):
     @staticmethod
     def check_email_exist(email):
         try:
-            response_json = {"response": False}
+            response_json = {"exists": False}
             email_url = "https://sumosc1.shine.com/api/v3/email-exists/?email={}&format=json".format(email,)
             headers = {'Content-Type': 'application/json'}
             response = requests.get(email_url, headers=headers)
 
             if response.status_code == 200:
                 response_json = response.json()
-                response_json.update({'response': True})
 
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
