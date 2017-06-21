@@ -29,7 +29,7 @@ class RegistrationApiView(FormView):
     form_class = RegistrationForm
 
     def get_context_data(self, **kwargs):
-        context = super(self.RegistrationApiView, self).get_context_data(**kwargs)
+        context = super(RegistrationApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()
         context.update({
@@ -39,7 +39,7 @@ class RegistrationApiView(FormView):
         return context
 
     def get(self, request, *args, **kwargs):
-        return super(self.RegistrationApiView, self).get(request, args, **kwargs)
+        return super(RegistrationApiView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()

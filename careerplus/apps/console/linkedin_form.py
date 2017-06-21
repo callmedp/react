@@ -24,21 +24,39 @@ class DraftForm(forms.Form):
     recommendation = forms.CharField(label=("Recommendations"), max_length=85,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
     follow_company = forms.CharField(label=("Follow companies"), max_length=85,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
     join_group = forms.CharField(label=("Join Group"), max_length=85,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
     public_url = forms.CharField(label=("Public Url"), max_length=85,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
     key_skills = forms.CharField(label=("Key Skills"),
         help_text='comma separated skills, e.g. java, python; ...', 
         max_length=500,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    class Meta:
+        model = Draft
+        
+    def __init__(self, *args, **kwargs):
+        super(DraftForm, self).__init__(*args, **kwargs)
+
+    def save(self, request, commit=True):
+        draft = super(DraftForm, self).save(commit=False)
+        if commit:
+            draft.save()
+        return draft
+
     
+class OrganizationForm(forms.ModelForm):
     name = forms.CharField(label=("Company Name*:"), max_length=85,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
@@ -55,25 +73,18 @@ class DraftForm(forms.Form):
     current = forms.BooleanField(
         widget=forms.CheckboxInput(attrs={'class':'form-control col-md-7 col-xs-12'}))
 
-    def __init__(self, *args, **kwargs):
-        super(DraftForm, self).__init__(*args, **kwargs)
-
-    
-class OrganizationForm(forms.ModelForm):
-
     class Meta:
         model = Organization
-        fields = ['name', 'title', 'desc',
-        'work_from', 'work_to', 'current']
+        fields = ['name', 'title', 'desc', 'current']
         
     def __init__(self, *args, **kwargs):
         super(OrganizationForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
-        draft = super(OrganizationForm, self).save(commit=False)
+        org = super(OrganizationForm, self).save(commit=False)
         if commit:
-            draft.save()
-        return draft
+            org.save()
+        return org
 
 
 class EducationForm(forms.ModelForm):
@@ -86,11 +97,8 @@ class EducationForm(forms.ModelForm):
 
     desc = forms.CharField(required=True, widget=CKEditorWidget())
     
-    study_from = forms.DateField(
-        widget=forms.TextInput(attrs={'class': 'datepicker'}))
-
-    study_to = forms.DateField(
-        widget=forms.TextInput(attrs={'class': 'datepicker'}))
+    study_from_to = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'daterange'}))
 
     current = forms.BooleanField(
         widget=forms.CheckboxInput(attrs={'class':'form-control col-md-7 col-xs-12'}))

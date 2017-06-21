@@ -85,6 +85,9 @@ urlpatterns += [
     url(r'^linkedin-queue/$',
         linkedin_view.LinkedinQueueView.as_view(),
         name='linkedin-queue'),
+    url(r'^draft-listing/$',
+        linkedin_view.LinkedinQueueView.as_view(),
+        name='draft-listing'),
 ]
 
 

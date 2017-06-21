@@ -10,7 +10,6 @@ class Draft(models.Model):
     candidate_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='Name')
     headline = models.CharField(max_length=120, verbose_name='Headline', null=True, blank=True)
     summary = RichTextField(verbose_name='Summary', null=True, blank=True)
-    # summary = models.TextField( null=True, blank=True, verbose_name='Summary')
     profile_photo = models.CharField(max_length=2000,null=True,
         blank=True, verbose_name='Profile Photograph')
     recommendation = models.CharField(max_length=2000,null=True,
@@ -39,7 +38,6 @@ class Organization(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True, verbose_name='Company Name')
     title = models.CharField(max_length=100, null=True, blank=True, verbose_name='Title')
     desc = RichTextField(verbose_name='Description', null=True, blank=True)
-    # desc = models.TextField(null=True, blank=True, verbose_name='Description')
     work_from = models.DateField(blank=True, null=True, verbose_name='From',help_text="Date Format MM/DD/YYYY")
     work_to = models.DateField(blank=True, null=True, verbose_name='To',help_text="Date Format MM/DD/YYYY")
     current = models.BooleanField(default=False)

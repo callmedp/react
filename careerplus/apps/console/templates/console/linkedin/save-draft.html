@@ -43,7 +43,6 @@
       <div class="title_left">
         <h3></h3>
       </div>
-
     </div>
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -60,8 +59,6 @@
 
       </div>
     </div>
-    
-
     <div class="clearfix"></div>
 
     <div class="row">
@@ -115,21 +112,18 @@
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.summary.id_for_label }}">Summary <span class="required">*</span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{form.summery}}
+                        {{form.summary}}
                       </div>
                       <div class="alert">{{form.summary.errors}}</div>
                     </div>
-
                     <div class="item form-group {% if form.profile_photo.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.profile_photo.id_for_label }}">Level <span class="required">*</span>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.profile_photo.id_for_label }}">Profile Photograph<span class="required"></span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         {{form.profile_photo}}
                       </div>
                       <div class="alert">{{form.profile_photo.errors}}</div>
-                    </div>
-
-                    
+                    </div>       
                     <div class="item form-group {% if form.recommendation.errors %}bad{% endif %}">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.recommendation.id_for_label }}">Recommendation <span class="required"></span>
                       </label>
@@ -147,16 +141,14 @@
                       </div>
                       <div class="alert">{{form.follow_company.errors}}</div>
                     </div>
-
                     <div class="item form-group {% if form.join_group.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.join_group.id_for_label }}">Follow Company <span class="required"></span>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.join_group.id_for_label }}">Join Groups<span class="required"></span>
                       </label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         {{form.join_group}}
                       </div>
                       <div class="alert">{{form.join_group.errors}}</div>
                     </div>
-
                     <div class="item form-group {% if form.public_url.errors %}bad{% endif %}">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.public_url.id_for_label }}">Public Url <span class="required"></span>
                       </label>
@@ -174,43 +166,6 @@
                       </div>
                       <div class="alert">{{form.key_skills.errors}}</div>
                     </div>
-                    
-                    <div class="item form-group {% if form.key_skills.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.name.id_for_label }}">Company Name <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{form.name}}
-                      </div>
-                      <div class="alert">{{form.name.errors}}</div>
-                    </div>
-
-                    <div class="item form-group {% if form.title.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.title.id_for_label }}">Title <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{form.title}}
-                      </div>
-                      <div class="alert">{{form.title.errors}}</div>
-                    </div>
-
-                    <div class="item form-group {% if form.desc.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.desc.id_for_label }}">Description <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{form.desc}}
-                      </div>
-                      <div class="alert">{{form.desc.errors}}</div>
-                    </div>
-
-                    <div class="item form-group {% if form.work_date_range.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.work_date_range.id_for_label }}">Work From <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{form.work_date_range}}
-                      </div>
-                      <div class="alert">{{form.work_date_range.errors}}</div>
-                    </div>
-
                     <input type="hidden" name="draft" value="{{object.pk}}">
                     <div class="ln_solid"></div>
                     <div class="form-group">
@@ -220,7 +175,7 @@
                     </div>
                   </form>
                 </div>              
-</div>
+  </div>
 </div>
         <!-- /page content -->
 {% endblock pagecontent %}
@@ -241,11 +196,6 @@
     
       <!-- Switchery -->
       <script type="text/javascript" src="{% static "packages/switchery/dist/switchery.min.js" %}"></script>
-
-      
-      <!-- Custom Theme Scripts -->
-      <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}">
-      </script>
       <script type="text/javascript">
         $('.daterange').daterangepicker();
       </script>

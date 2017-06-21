@@ -5,6 +5,7 @@ from django.views.generic import (
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
+from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
 from .decorators import Decorate, check_permission
@@ -15,9 +16,10 @@ from linkedin.models import Draft, Organization, Education, QuizResponse
 from .linkedin_form import DraftForm
 
 
-class LinkedinProfileView(TemplateView):
+class LinkedinProfileView(FormView):
     template_name = 'console/linkedin/save-draft.html'
     model = Draft
+    form_class = DraftForm
 
     def get(self, request, *args, **kwargs):
         return super(LinkedinProfileView, self).get(request, args, **kwargs)
@@ -25,7 +27,7 @@ class LinkedinProfileView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LinkedinProfileView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
-        form = DraftForm()
+        form = self.get_form()
         context.update({
             'messages': alert,
             'form': form
@@ -33,12 +35,19 @@ class LinkedinProfileView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        import ipdb; ipdb.set_trace()
+        form = self.get_form()
+        if form.is_valid():
+            form.save(request, commit=True)
+            messages.add_message(request, messages.SUCCESS, 'Draft Saved')
+            return HttpResponseRedirect(reverse('draft-listing'))
+        form = self.get_form()
+        return render(request, self.template_name, {'form': form})
+        
 
 
 class LinkedinQueueView(TemplateView):
     template_name = 'console/linkedin/linkedin_queue.html'
-
+    
     def get(self, request, *args, **kwargs):
         return super(LinkedinQueueView, self).get(request, args, **kwargs)
 
@@ -52,3 +61,18 @@ class LinkedinQueueView(TemplateView):
         })
         return context
 
+
+class DraftListing(ListView):
+    model = Draft
+    template_name = 'console/linkedin/draft_list.html'
+
+    def get(self, request, *args, **kwargs):
+        return super(DraftListing, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(DraftListing, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert,
+        })
+        return context
