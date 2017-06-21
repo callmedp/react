@@ -94,5 +94,5 @@ class VendorHierarchy(AbstractAutoDate):
 
     def __str__(self):
         return _("%(vendor)s to '%(employee)s'") % {
-            'vendor': self.vendor,
+            'vendor': self.vendee,
             'employee': self.employee}

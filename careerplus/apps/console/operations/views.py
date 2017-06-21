@@ -1,7 +1,6 @@
 from rest_framework.views import APIView
 
-from console.operations.models import Snippet
-from console.operations.SnippetSerializer
+from console.models import OrderOperations
 
 class NewOrdersVendorUpload(APIView):
     """
@@ -13,6 +12,7 @@ class NewOrdersVendorUpload(APIView):
 
     def post(self, request, order_item_id):
         try:
+            import pdb; pdb.set_trace()
             OrderOperations.create(request.data)
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
