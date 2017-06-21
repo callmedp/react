@@ -1,0 +1,30 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% block title %}CMS | listing Shine learning{% endblock %}
+{% block css_section %}
+{{ block.super }}
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/cms/cms.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
+{% endblock css_section %}
+{% block back_icon %}<img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">{% endblock back_icon %}
+{% block header_title %}<h1 class="heading-back w100fl pb-0">Resume format for freshers</h1>{% endblock header_title %}
+{% block container %}
+    <div class="body-wrapper ">
+        <section class="content-box pt-0">
+            {{ left_widgets|safe|default:'' }}
+            {% if page_obj.allow_comment %}
+            {% include 'include/load_comment.html' %}
+            {% endif %}
+            {{ right_widgets|safe|default:'' }}
+        </section><!-- end of section here -->
+    </div>
+{% endblock container %}
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
+{% endblock js_section %}
+
+
+

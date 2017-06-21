@@ -1,0 +1,17 @@
+{% load static %}
+<div class="comment-wrap mt-20">
+    <textarea placeholder="Write comments" class="form-control"></textarea>
+
+    <ul class="mt-20">
+        {% static 'shinelearn/images/mobile/common/default-user.jpg' as default_user_pic %}
+        <li>
+            <sup><img src="{{ default_user_pic }}"></sup>
+            <p class="pb-0">Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>
+            <span class="editor fs-12 c9">Sanjay Singh, 1 hr ago</span>
+        </li><li>
+            <sup><img src="{{ default_user_pic }}"></sup>
+            <p class="pb-0">Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>
+            <span class="editor fs-12 c9">Sanjay Singh, 1 hr ago</span>
+        </li>
+    </ul>
+</div><!-- end of Comment wrap here -->
