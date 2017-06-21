@@ -186,4 +186,4 @@ CKEDITOR_CONFIGS = {
 # except:
 #     REDIS_CON = None
 
-CART_MAX_LIMIT = 5
+DRAFT_MAX_LIMIT = 3
