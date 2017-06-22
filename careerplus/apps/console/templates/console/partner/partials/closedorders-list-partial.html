@@ -63,12 +63,12 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" ">{{obj.order.number}}</td>
-                    <td class=" ">{{obj.id}}</td>
-                    <td class=" ">{{obj.product.name}}</td>
-                    <td class=" ">{{obj.quantity}}</td>
-                    <td class=" ">{{obj.order.date_placed|slice:":10"}}</td>
-                    <td class=" ">NONE</td>
+                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.order.number}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.id}}</td></a>
+                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.product.name}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.quantity}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.order.date_placed|slice:":10"}}</a></td>
+                    <td class=" "><button type="button">Archive</button></td>
                   </tr>
                   {% endfor %}
                 </tbody>
