@@ -218,15 +218,9 @@ class OrderItem(models.Model):
 
     @property
     def get_oi_status(self):
-<<<<<<< HEAD
-        statusD = dict(OI_OPS_STATUS)
-        return statusD.get(self.oi_status)
-
-
-=======
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
->>>>>>> b0c2e65040ef91cb61aa3d086d977f9c78301aa1
+
 
 
 class OrderItemOperation(AbstractAutoDate):
