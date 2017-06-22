@@ -72,19 +72,19 @@
                     <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.order.date_placed|slice:":10"}}</a></td>
                     {% if is_vendee %}
                       <td class=" ">
-                        <form enctype="multipart/form-data">
-                        <input name="file" type="file" />
-                        <input type="button" value="Upload" />
+                        <form enctype="multipart/form-data" action="{% url 'console:operations:neworders-vendor-upload' orderitem_id=obj.id vendor_id=obj.partner%}" method="post">
+                        <input name="file" type="file" onchange="postFile(event);"/>
+                        {% csrf_token %}
                         </form>
                       </td>
                     {% endif %}
                     <td class=" ">
                       <form enctype="multipart/form-data">
                         {% if is_vendee %}
-                          <input type="button" value="Hold" />
+                          <input type="button" data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}" value="Hold" onclick="holdOrder(event);"/>
                         {% endif %}
                         {% if is_admin %}
-                          <input type="button" value="Close Order" />
+                          <input type="button" value="Close Order"  data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}" onclick="closeOrder(event);"/>
                         {% endif %}
                       </form>
                     </td>
@@ -158,44 +158,49 @@
   </div>
 </div>
 
-{% block js %}
+{% block js_block %}
   {% if doing_partial %}
     <script type="text/javascript">
         $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
-        $(':button').on('click', function() {
-          debugger;
-          $.ajax({
-              // Your server script to process the upload
-              url: 'upload.php',
-              type: 'POST',
-
-              // Form data
-              data: new FormData($('form')[0]),
-
-              // Tell jQuery not to process data or worry about content-type
-              // You *must* include these options!
-              cache: false,
-              contentType: false,
-              processData: false,
-
-              // Custom XMLHttpRequest
-              xhr: function() {
-                  var myXhr = $.ajaxSettings.xhr();
-                  if (myXhr.upload) {
-                      // For handling the progress of the upload
-                      myXhr.upload.addEventListener('progress', function(e) {
-                          if (e.lengthComputable) {
-                              $('progress').attr({
-                                  value: e.loaded,
-                                  max: e.total,
-                              });
-                          }
-                      } , false);
-                  }
-                  return myXhr;
-              },
-          });
-      });
     </script>
   {% endif %}
-{% endblock js %}
+  <script type="text/javascript">
+    function postFile(event){
+      if ($(event.target).closest('form') && $(event.target).closest('form').get(0)){
+        $(event.target).closest('form').get(0).submit();
+      } 
+    }
+    function holdOrder (event) {
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+      });
+      $.ajax({
+        url: '/console/order/neworders/' + String(event.target.attributes['data-attr-id'].value)+'/hold/',
+        type: 'PUT',
+        success: function(data){
+          location.reload();
+        }
+      })
+    }
+    function closeOrder (event) {
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+      });
+      $.ajax({
+        url: '/console/order/neworders/' + String(event.target.attributes['data-attr-id'].value)+'/close/',
+        type: 'PUT',
+        success: function(data){
+          location.reload();
+        }
+      })
+    }
+  </script>
+{% endblock js_block %}
