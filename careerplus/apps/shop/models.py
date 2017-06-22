@@ -665,7 +665,7 @@ class Product(AbstractProduct, ModelMeta):
         else:
             cat_slug = self.category_slug
         cat_slug = cat_slug.slug if cat_slug else None
-        if self.is_course: 
+        if self.is_course:
             return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         elif self.is_writing:
             return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
@@ -735,6 +735,9 @@ class Product(AbstractProduct, ModelMeta):
         for i in range(rest_part):
             final_score.append('-')
         return final_score
+
+    def get_avg_ratings(self):
+        return round(self.avg_rating, 1)
 
     @property
     def has_attributes(self):

@@ -93,3 +93,5 @@ ENV/
 
 #Local Env
 careerplus/templates/.gitignore
+# Pycharm files
+.idea

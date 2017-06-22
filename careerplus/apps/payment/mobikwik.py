@@ -72,6 +72,11 @@ def calculate_response_checksum(statuscode, orderid, amount, statusmessage):
 class MobikwikRequestView(SingleObjectMixin, TemplateView, OrderMixin):
     template_name = 'payment/mobikwik_wallet.html'
 
+    def get(self, request, *args, **kwargs):
+        if not request.session.get('cart_pk'):
+            return HttpResponseRedirect(reverse('homepage'))
+        return super(self.__class__, self).get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         cart_pk = self.request.session.get('cart_pk')
         cart_obj = Cart.objects.get(pk=cart_pk)
@@ -179,6 +184,12 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                                 try:
                                     order = self.createOrder(cart_obj)
                                     return_url = self.process_payment_method(order_type='MOBIKWIK', request=request, data={'order_id': order.pk, 'txn_id': refid2})
+                                    try:
+                                        del request.session['cart_pk']
+                                        del request.session['checkout_type']
+                                        request.session.modified = True
+                                    except:
+                                        pass
                                     return HttpResponseRedirect(return_url)
                                 except Exception as e:
                                     cart_obj = self.get_cart_last_status(cart_obj)

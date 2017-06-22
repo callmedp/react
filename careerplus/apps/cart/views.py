@@ -63,6 +63,8 @@ class AddToCartView(View, CartMixin):
             if data['status'] == 1 and cart_type == "express":
                 data['redirect_url'] = reverse('cart:payment-login')
 
+            data['cart_count'] = str(self.get_cart_count())
+
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
@@ -134,10 +136,10 @@ class PaymentLoginView(TemplateView):
                     "password": password,
                 })
 
-                user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+                user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
                 if user_exist['exists'] and password:
-                    login_resp = RegistrationLoginApi().user_login(login_dict)
+                    login_resp = RegistrationLoginApi.user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
@@ -201,11 +203,11 @@ class PaymentShippingView(UpdateView, CartMixin):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
         except:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
 
         if cart_obj and not (cart_obj.email or self.request.session.get('candidate_id')):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
@@ -253,6 +255,14 @@ class PaymentShippingView(UpdateView, CartMixin):
                 form.initial.update({
                     'mobile': self.request.session.get('mobile_no')})
 
+        if not form.initial.get('country_code'):
+            form.initial.update({
+                'country_code': '91'})
+
+        if not form.initial.get('country'):
+            form.initial.update({
+                'country': 'India'})
+        
         return context
 
     def post(self, request, *args, **kwargs):
@@ -281,13 +291,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
             if not cart_obj.shipping_done:
                 return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
         except:
-            return HttpResponsePermanentRedirect(reverse('cart:cart-product-list'))
+            return HttpResponsePermanentRedirect(reverse('homepage'))
             
         return None
 

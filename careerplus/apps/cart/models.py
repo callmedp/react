@@ -1,29 +1,14 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.db.models import Q
 
 from seo.models import AbstractAutoDate
-from geolocation.models import Country
+from order.models import Order
 
 from .managers import OpenBasketManager, SavedBasketManager
 from .choices import STATUS_CHOICES
-from order.models import Order
 
 
 class Cart(AbstractAutoDate):
-    try:
-        country_choices, CHOICE_COUNTRY = [], []
-        for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
-            country_choices.append((m.phone, m.phone))
-            CHOICE_COUNTRY.append((m.phone, m.name))
-
-        indian_obj = Country.objects.filter(name='India', phone='91')[0].phone
-        default_country = indian_obj
-
-    except:
-        country_choices, CHOICE_COUNTRY = [], []
-        indian_obj = None
-        default_country = None
 
     owner_id = models.CharField(
         null=True,
@@ -37,8 +22,9 @@ class Cart(AbstractAutoDate):
     status = models.PositiveSmallIntegerField(
         _("Status"),
         default=0, choices=STATUS_CHOICES)
-    last_status = models.PositiveIntegerField(("Status"),
-        default=None, null=True, blank=True, choices=STATUS_CHOICES)
+    last_status = models.PositiveIntegerField(
+        _("Last Status"), default=None, null=True,
+        blank=True, choices=STATUS_CHOICES)
     # vouchers = models.ManyToManyField(
     #     'coupon.Voucher', verbose_name=_("Vouchers"), blank=True)
     is_submitted = models.BooleanField(default=False)
@@ -52,16 +38,16 @@ class Cart(AbstractAutoDate):
         _("Date closed"), null=True, blank=True)
 
     # shipping detail
-    first_name = models.CharField(max_length=255, null=True, blank=True,
-        verbose_name=_("First Name"))
-    last_name = models.CharField(max_length=255, null=True, blank=True,
-        verbose_name=_("Last Name"))
+    first_name = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_("First Name"))
+    last_name = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_("Last Name"))
 
     email = models.EmailField(max_length=255, null=True, blank=False)
 
-    country_code = models.CharField(max_length=15, choices=country_choices,
-        default=indian_obj, null=True, blank=False,
-        verbose_name=_("Country Code"))
+    country_code = models.CharField(
+        max_length=15,
+        null=True, blank=True, verbose_name=_("Country Code"))
 
     mobile = models.CharField(max_length=15, null=True, blank=False)
 
@@ -71,8 +57,9 @@ class Cart(AbstractAutoDate):
 
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.CharField(max_length=15, choices=CHOICE_COUNTRY,
-        default=default_country, null=True, blank=False)
+    country = models.CharField(
+        max_length=200,
+        null=True, blank=True)
     
     shipping_done = models.BooleanField(default=False)  #shipping process
     # summary_done = models.BooleanField(default=False)  #summary process

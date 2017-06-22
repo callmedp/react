@@ -63,9 +63,11 @@
 
         <!-- right content start -->
         <div class="col-sm-9 bdr payment-summary">
+        {% if request.session.checkout_type == 'cart' %}
         <div class="edit-cart">
           <a href="{% url "cart:cart-product-list" %}">Edit cart</a>
         </div>
+        {% endif %}
 
         {% for item in cart_items %}
 
