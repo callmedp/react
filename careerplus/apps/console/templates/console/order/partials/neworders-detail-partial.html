@@ -3,8 +3,13 @@
 <div class="">
 <div class="page-title">
   <div class="title_left">
-    <h3>Change Page Details</h3>
+    <h3>Order Details</h3>
   </div>
+  {% if is_admin %}
+    <div class="title_right"> 
+      <a class="col-md-3 col-sm-3 col-xs-3 pull-right" href="{% url 'console:order:pages:neworders-detail-change' serializer.data.id %}" data-pjax='.right_col'>Edit Order</a>
+    </div>
+  {% endif %}
 </div>
 
 <div class="clearfix"></div>
@@ -12,7 +17,7 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Change Page Form</h2>
+        <h2></h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>
@@ -24,6 +29,7 @@
       <div class="x_content">
         <br />
 
+        {% comment %}
         <form id="page-update-form" method="post" data-parsley-validate class="form-horizontal form-label-left" action="." enctype='multipart/form-data' >{% csrf_token %}
             {% render_form serializer template_pack='rest_framework/horizontal' %}            
               <div class="form-group">
@@ -32,23 +38,10 @@
                 </div>
             </div>
         </form>
+        {% endcomment %}
         
       </div>
     </div>
   </div>
 </div>
 </div>
-
-{% block js %}
-  {% if doing_partial %}
-    <script type="text/javascript">
-        $('.right_col form[method] button[data-pjax]').pjax();
-    </script>
-    <script type="text/javascript">
-      $.each($("select[multiple]"), function () {
-        // "Locations" can be any label you want
-        SelectFilter.init(this.id, this.name, 0, "/media/");
-       });
-    </script>
-  {% endif %}
-{% endblock js %}

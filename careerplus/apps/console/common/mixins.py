@@ -18,6 +18,8 @@ class ListPartialMixin(object):
         if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
             context['is_vendee'] = True
             context['vendor_id'] = self.request.user.vendor_set.all()[0].id
+        if request.user and request.user.is_staff:
+            context['is_admin'] = True
         return Response(data=context, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
 
 
@@ -31,6 +33,8 @@ class DetailPartialMixin(object):
         if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
             context['is_vendee'] = True
             context['vendor_id'] = self.request.user.vendor_set.all()[0].id
+        if request.user and request.user.is_staff:
+            context['is_admin'] = True
         return Response(data=context, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
 
 
@@ -44,6 +48,8 @@ class UpdatableDetailPartialMixin(DetailPartialMixin):
             if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
                 context['is_vendee'] = True
                 context['vendor_id'] = self.request.user.vendor_set.all()[0].id
+            if request.user and request.user.is_staff:
+                context['is_admin'] = True
             return Response(context, status=status.HTTP_400_BAD_REQUEST)
         self.perform_update(serializer)
 
@@ -61,6 +67,8 @@ class UpdatableDetailPartialMixin(DetailPartialMixin):
             if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
                 context['is_vendee'] = True
                 context['vendor_id'] = self.request.user.vendor_set.all()[0].id
+            if request.user and request.user.is_staff:
+                context['is_admin'] = True
             return Response(data=context, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name , status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
@@ -76,6 +84,8 @@ class AddPartialMixin(object):
         if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
             context['is_vendee'] = True
             context['vendor_id'] = self.request.user.vendor_set.all()[0].id
+        if request.user and request.user.is_staff:
+            context['is_admin'] = True
         return Response(data=context, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
 
     def create(self, request, *args, **kwargs):
@@ -85,6 +95,8 @@ class AddPartialMixin(object):
             if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
                 context['is_vendee'] = True
                 context['vendor_id'] = self.request.user.vendor_set.all()[0].id
+            if request.user and request.user.is_staff:
+                context['is_admin'] = True
             return Response(data=context, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name, status=status.HTTP_400_BAD_REQUEST)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -97,4 +109,6 @@ class AddPartialMixin(object):
             if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
                 context['is_vendee'] = True
                 context['vendor_id'] = self.request.user.vendor_set.all()[0].id
+            if request.user and request.user.is_staff:
+                context['is_admin'] = True
             return Response(data=context, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name , status=status.HTTP_201_CREATED, headers=headers)

@@ -61,11 +61,11 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" ">{{obj.id}}</td>
-                    <td class=" ">{{obj.document}}</td>
-                    <td class=" ">{{obj.is_active}}</td>
-                    <td class=" ">{{obj.priority}}</td>
-                    <td class=" ">{{obj.page}}</td>
+                    <td class=" "><a href="{% url 'console:cms:pages:document-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:document-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.document}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:document-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.is_active}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:document-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.priority}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:document-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.page}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -139,7 +139,7 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form>div>a[data-pjax]').pjax();
+        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
     </script>
   {% endif %}
 {% endblock js %}

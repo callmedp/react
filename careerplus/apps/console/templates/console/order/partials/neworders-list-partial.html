@@ -1,9 +1,9 @@
 <div class="">
   <div class="page-title">
     <div class="title_left">
-      <h3>Held Orders</h3>
+      <h3>New Orders</h3>
     </div>
-    <form class="form-group" method="GET" action="{% url 'console:partner:pages:heldorders-list'  vendor_id=received_kwargs.vendor_id %}" id="filter-tables">
+    <form class="form-group" method="GET" action="{% url 'console:order:pages:neworders-list' %}" id="filter-tables">
         <div class="title_right">
           <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
@@ -49,7 +49,9 @@
                     <th class="column-title">Product Name</th>
                     <th class="column-title">Quantity</th>
                     <th class="column-title">Order Placed On</th>
-                    <th class="column-title">Upload Supporting Documents</th>
+                    {% if is_vendee %}
+                      <th class="column-title">Upload Supporting Documents</th>
+                    {% endif %}
 
                     <th class="bulk-actions" colspan="7">
                         <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
@@ -63,12 +65,19 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.order.number}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.id}}</td></a>
-                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.product.name}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.quantity}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:closedorders-detail'  vendor_id=received_kwargs.vendor_id pk=obj.id %}">{{obj.order.date_placed|slice:":10"}}</a></td>
-                    <td class=" "><button>Unhold</button></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.order.number}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</td></a>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.product.name}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.quantity}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.order.date_placed|slice:":10"}}</a></td>
+                    {% if is_vendee %}
+                      <td class=" ">
+                        <form enctype="multipart/form-data">
+                        <input name="file" type="file" />
+                        <input type="button" value="Upload" />
+                        </form>
+                      </td>
+                    {% endif %}
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -142,7 +151,41 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form>div>a[data-pjax]').pjax();
+        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+        $(':button').on('click', function() {
+          debugger;
+          $.ajax({
+              // Your server script to process the upload
+              url: 'upload.php',
+              type: 'POST',
+
+              // Form data
+              data: new FormData($('form')[0]),
+
+              // Tell jQuery not to process data or worry about content-type
+              // You *must* include these options!
+              cache: false,
+              contentType: false,
+              processData: false,
+
+              // Custom XMLHttpRequest
+              xhr: function() {
+                  var myXhr = $.ajaxSettings.xhr();
+                  if (myXhr.upload) {
+                      // For handling the progress of the upload
+                      myXhr.upload.addEventListener('progress', function(e) {
+                          if (e.lengthComputable) {
+                              $('progress').attr({
+                                  value: e.loaded,
+                                  max: e.total,
+                              });
+                          }
+                      } , false);
+                  }
+                  return myXhr;
+              },
+          });
+      });
     </script>
   {% endif %}
 {% endblock js %}

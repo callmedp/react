@@ -62,12 +62,12 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" ">{{obj.id}}</td>
-                    <td class=" ">{{obj.heading}}</td>
-                    <td class=" ">{{obj.widget_type}}</td>
-                    <td class=" ">{{obj.user}}</td>
-                    <td class=" ">{{obj.iw}}</td>
-                    <td class=" ">{{obj.is_active}}</td>
+                    <td class=" "><a href="{% url 'console:cms:pages:widget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:widget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.heading}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:widget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.widget_type}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:widget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.user}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:widget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.iw}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:widget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.is_active}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -141,7 +141,7 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form>div>a[data-pjax]').pjax();
+        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
     </script>
   {% endif %}
 {% endblock js %}

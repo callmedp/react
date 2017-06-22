@@ -1,5 +1,5 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
-from console.common.mixins import ListPartialMixin, DetailPartialMixin, AddPartialMixin
+from console.common.mixins import ListPartialMixin, UpdatableDetailPartialMixin, AddPartialMixin
 from cms.api.core.mixins import IndexerWidgetViewMixin, ColumnHeadingViewMixin, IndexColumnViewMixin, WidgetViewMixin,\
     PageViewMixin, PageWidgetViewMixin, CommentViewMixin, DocumentViewMixin, PageCounterViewMixin
 from cms.api.core.serializers import PageSerializer, CommentSerializer  
@@ -43,55 +43,55 @@ class PageCounterListPartial(ListPartialMixin, PageCounterViewMixin, ListAPIView
     template_name = partial_template_name = 'console/cms/partials/pagecounter-list-partial.html'
 
 
-class IndexerWidgetDetailPartial(DetailPartialMixin, IndexerWidgetViewMixin, RetrieveUpdateAPIView):
+class IndexerWidgetDetailPartial(UpdatableDetailPartialMixin, IndexerWidgetViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/indexerwidget-detail-partial.html'
     success_list_redirect = 'console:cms:pages:indexerwidget-list'
     success_detail_redirect = 'console:cms:pages:indexerwidget-detail'
 
 
-class ColumnHeadingDetailPartial(DetailPartialMixin, ColumnHeadingViewMixin, RetrieveUpdateAPIView):
+class ColumnHeadingDetailPartial(UpdatableDetailPartialMixin, ColumnHeadingViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/columnheading-detail-partial.html'
     success_list_redirect = 'console:cms:pages:columnheading-list'
     success_detail_redirect = 'console:cms:pages:columnheading-detail'
 
 
-class IndexColumnDetailPartial(DetailPartialMixin, IndexColumnViewMixin, RetrieveUpdateAPIView):
+class IndexColumnDetailPartial(UpdatableDetailPartialMixin, IndexColumnViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/indexcolumn-detail-partial.html'
     success_list_redirect = 'console:cms:pages:indexcolumn-list'
     success_detail_redirect = 'console:cms:pages:indexcolumn-detail'
 
 
-class WidgetDetailPartial(DetailPartialMixin, WidgetViewMixin, RetrieveUpdateAPIView):
+class WidgetDetailPartial(UpdatableDetailPartialMixin, WidgetViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/widget-detail-partial.html'
     success_list_redirect = 'console:cms:pages:widget-list'
     success_detail_redirect = 'console:cms:pages:widget-detail'
 
 
-class PageDetailPartial(DetailPartialMixin, PageViewMixin, RetrieveUpdateAPIView):
+class PageDetailPartial(UpdatableDetailPartialMixin, PageViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/page-detail-partial.html'
     success_list_redirect = 'console:cms:pages:page-list'
     success_detail_redirect = 'console:cms:pages:page-detail'
 
 
-class PageWidgetDetailPartial(DetailPartialMixin, PageWidgetViewMixin, RetrieveUpdateAPIView):
+class PageWidgetDetailPartial(UpdatableDetailPartialMixin, PageWidgetViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/pagewidget-detail-partial.html'
     success_list_redirect = 'console:cms:pages:pagewidget-list'
     success_detail_redirect = 'console:cms:pages:pagewidget-detail'
 
 
-class DocumentDetailPartial(DetailPartialMixin, DocumentViewMixin, RetrieveUpdateAPIView):
+class DocumentDetailPartial(UpdatableDetailPartialMixin, DocumentViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/document-detail-partial.html'
     success_list_redirect = 'console:cms:pages:document-list'
     success_detail_redirect = 'console:cms:pages:document-detail'
 
 
-class CommentDetailPartial(DetailPartialMixin, CommentViewMixin, RetrieveUpdateAPIView):
+class CommentDetailPartial(UpdatableDetailPartialMixin, CommentViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/comment-detail-partial.html'
     success_list_redirect = 'console:cms:pages:comment-list'
     success_detail_redirect = 'console:cms:pages:comment-detail'
 
 
-class PageCounterDetailPartial(DetailPartialMixin, PageCounterViewMixin, RetrieveUpdateAPIView):
+class PageCounterDetailPartial(UpdatableDetailPartialMixin, PageCounterViewMixin, RetrieveUpdateAPIView):
     template_name = partial_template_name = 'console/cms/partials/pagecounter-detail-partial.html'
     success_list_redirect = 'console:cms:pages:pagecounter-list'
     success_detail_redirect = 'console:cms:pages:pagecounter-detail'

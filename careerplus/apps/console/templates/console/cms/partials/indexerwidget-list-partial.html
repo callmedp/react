@@ -59,9 +59,9 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" ">{{obj.id}}</td>
-                    <td class=" ">{{obj.heading}}</td>
-                    <td class=" ">{{obj.created_by}}</td>
+                    <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.heading}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.created_by}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -135,7 +135,7 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form>div>a[data-pjax]').pjax();
+        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
     </script>
   {% endif %}
 {% endblock js %}

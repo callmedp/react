@@ -62,12 +62,12 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" ">{{obj.id}}</td>
-                    <td class=" ">{{obj.page}}</td>
-                    <td class=" ">{{obj.no_views}}</td>
-                    <td class=" ">{{obj.no_downloads}}</td>
-                    <td class=" ">{{obj.no_shares}}</td>
-                    <td class=" ">{{obj.count_period}}</td>
+                    <td class=" "><a href="{% url 'console:cms:pages:pagecounter-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:pagecounter-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.page}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:pagecounter-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.no_views}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:pagecounter-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.no_downloads}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:pagecounter-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.no_shares}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:pagecounter-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.count_period}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -141,7 +141,7 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form>div>a[data-pjax]').pjax();
+        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
     </script>
   {% endif %}
 {% endblock js %}

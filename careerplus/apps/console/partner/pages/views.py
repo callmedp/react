@@ -1,4 +1,5 @@
-from console.partner.partials.views import VendorListPartial, VendorHierarchyListPartial, VendorDetailPartial, VendorHierarchyDetailPartial, VendorAddPartial, VendorHierarchyAddPartial, NewOrdersListPartial, ClosedOrdersListPartial, HeldOrdersListPartial,NewOrdersDetailPartial, ClosedOrdersDetailPartial, HeldOrdersDetailPartial
+from console.partner.partials.views import VendorListPartial, VendorHierarchyListPartial, VendorDetailPartial, VendorHierarchyDetailPartial, VendorAddPartial, VendorHierarchyAddPartial
+
 
 class VendorListView(VendorListPartial):
 
@@ -26,35 +27,5 @@ class VendorAddView(VendorAddPartial):
 
 
 class VendorHierarchyAddView(VendorHierarchyAddPartial):
-
-    template_name = 'console/partner/pages/console-page.html'
-
-
-class NewOrdersListView(NewOrdersListPartial):
-
-    template_name = 'console/partner/pages/console-page.html'
-
-
-class ClosedOrdersListView(ClosedOrdersListPartial):
-
-    template_name = 'console/partner/pages/console-page.html'
-
-
-class HeldOrdersListView(HeldOrdersListPartial):
-
-    template_name = 'console/partner/pages/console-page.html'
-
-
-class NewOrdersDetailView(NewOrdersDetailPartial):
-
-    template_name = 'console/partner/pages/console-page.html'
-
-
-class ClosedOrdersDetailView(ClosedOrdersDetailPartial):
-
-    template_name = 'console/partner/pages/console-page.html'
-
-
-class HeldOrdersDetailView(HeldOrdersDetailPartial):
 
     template_name = 'console/partner/pages/console-page.html'

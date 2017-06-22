@@ -1,12 +1,8 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAdminUser
-from django.db.models.query import QuerySet
-from console.common.mixins import ListPartialMixin, DetailPartialMixin, UpdatableDetailPartialMixin, AddPartialMixin
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
+from console.common.mixins import ListPartialMixin, UpdatableDetailPartialMixin, AddPartialMixin
 from partner.api.core.mixins import VendorViewMixin, VendorHierarchyViewMixin
-from order.api.core.mixins import OrderItemViewMixin
 from partner.api.core.serializers import VendorSerializer, VendorHierarchySerializer  
 from partner.models import Vendor, VendorHierarchy
-from partner.api.core.permissions import IsAdminOrEmployeeOfVendor
  
 class VendorListPartial(ListPartialMixin, VendorViewMixin, ListAPIView):
 
@@ -40,68 +36,3 @@ class VendorHierarchyAddPartial(AddPartialMixin, VendorHierarchyViewMixin, Creat
     template_name = partial_template_name = 'console/partner/partials/vendorhierarchy-add-partial.html'
     success_list_redirect = 'console:partner:pages:vendorhierarchy-list'
     success_detail_redirect = 'console:partner:pages:vendorhierarchy-detail'
-
-
-class OrderMixin:
-    permission_classes = (IsAdminOrEmployeeOfVendor, )
-    def get_queryset(self):
-        assert self.queryset is not None, (
-            "'%s' should either include a `queryset` attribute, "
-            "or override the `get_queryset()` method."
-            % self.__class__.__name__
-        )
-
-        queryset = self.queryset
-        if isinstance(queryset, QuerySet):
-            # Ensure queryset is re-evaluated on each request.
-            queryset = queryset.filter(partner__id=self.kwargs['vendor_id'])
-        return queryset
-
-
-class OrderListPartialMixin(OrderMixin, ListPartialMixin):
-    pass
-
-
-class OrderDetailPartialMixin(OrderMixin, DetailPartialMixin):
-    pass
-
-
-class NewOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPIView):
-
-    template_name = partial_template_name = 'console/partner/partials/neworders-list-partial.html'
-
-    def get_queryset(self):
-        return super(NewOrdersListPartial, self).get_queryset().filter(order__status__in=[1,2])
-
-
-class NewOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):
-    template_name = partial_template_name = 'console/partner/partials/neworders-detail-partial.html'
-    success_list_redirect = 'console:partner:pages:neworders-list'
-    success_detail_redirect = 'console:partner:pages:neworders-detail'
-
-
-class ClosedOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPIView):
-
-    template_name = partial_template_name = 'console/partner/partials/closedorders-list-partial.html'
-
-    def get_queryset(self):
-        return super(ClosedOrdersListPartial, self).get_queryset().filter(order__status=3)
-
-
-class ClosedOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):
-    template_name = partial_template_name = 'console/partner/partials/closedorders-detail-partial.html'
-    success_list_redirect = 'console:partner:pages:closedorders-list'
-    success_detail_redirect = 'console:partner:pages:closedorders-detail'
-
-
-class HeldOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPIView):
-    template_name = partial_template_name = 'console/partner/partials/heldorders-list-partial.html'
-
-    def get_queryset(self):
-        return super(HeldOrdersListPartial, self).get_queryset().filter(order__status=2)
-
-
-class HeldOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):
-    template_name = partial_template_name = 'console/partner/partials/heldorders-detail-partial.html'
-    success_list_redirect = 'console:partner:pages:heldorders-list'
-    success_detail_redirect = 'console:partner:pages:heldorders-detail'

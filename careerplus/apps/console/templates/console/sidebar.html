@@ -4,7 +4,7 @@
     <h3>Catalog</h3>
     <ul class="nav side-menu">
     {% if is_vendee %}
-      <li><a><i class="fa fa-chevron-down"></i> Inbox <span class="fa fa-chevron-down"></span></a>
+      <li><a><i class="fa fa-chevron-bookmark"></i> Inbox <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li><a href="{% url 'console:partner:pages:neworders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>New Orders</a></li>
           <li><a href="{% url 'console:partner:pages:closedorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Closed Orders</a></li>
@@ -33,6 +33,16 @@
           <li><a href="{% url 'console:keyword-list' %}">Keyword</a></li>
         </ul>
       </li>
+
+      {% if is_admin %}
+      <li><a><i class="fa fa-bookmark"></i> Orders <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            <li><a href="{% url 'console:order:pages:neworders-list' %}" data-pjax='.right_col'>New Orders</a></li>
+          <li><a href="{% url 'console:order:pages:closedorders-list' %}" data-pjax='.right_col'>Closed Orders</a></li>
+          <li><a href="{% url 'console:order:pages:heldorders-list' %}" data-pjax='.right_col'>Held Orders</a></li>
+        </ul>
+      </li>
+      {% endif %}
 
       <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">

@@ -150,8 +150,6 @@ class WidgetSerializer(serializers.ModelSerializer):
         style={'template': 'console/fields/checkbox.html', 'attrs': {}})
     is_active = serializers.BooleanField(required=False,
         style={'template': 'console/fields/checkbox.html', 'attrs': {}})
-    user = serializers.PrimaryKeyRelatedField(allow_null=True, help_text='for user or writer', queryset=User.objects.all(), required=False,
-        style={'template': 'console/fields/select.html', 'empty_text': 'Select associated User', 'attrs': {}})
     iw = serializers.PrimaryKeyRelatedField(allow_null=True, label='Indexer Widget', queryset=models.IndexerWidget.objects.all(), required=False,
         style={'template': 'console/fields/select.html', 'empty_text': 'Select associated Indexer Widget', 'attrs': {}})
     class Meta:
