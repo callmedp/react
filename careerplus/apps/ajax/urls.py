@@ -2,9 +2,10 @@ from django.conf.urls import url
 
 
 from .views import AjaxCommentLoadMoreView, CmsShareView,\
-   ArticleShareView, ArticleCommentView,\
-   AjaxProductLoadMoreView, AjaxReviewLoadMoreView,\
-   EmailExistView, AjaxStateView
+    ArticleShareView, ArticleCommentView,\
+    AjaxProductLoadMoreView, AjaxReviewLoadMoreView,\
+    EmailExistView, AjaxStateView, AjaxOrderItemCommentView,\
+    ApproveByAdminDraft, RejectByAdminDraft
 
 urlpatterns = [
     url(r'^page/load-more/$',
@@ -30,4 +31,13 @@ urlpatterns = [
 
     url(r'^get-states/$',
         AjaxStateView.as_view(), name='indian-state'),
+
+    url(r'^orderitem/add-comment/$',
+        AjaxOrderItemCommentView.as_view(), name='order-item-comment'),
+
+    url(r'^orderitem/approve-draft/$',
+        ApproveByAdminDraft.as_view(), name='oi-draft-accept'),
+
+    url(r'^orderitem/reject-draft/$',
+        RejectByAdminDraft.as_view(), name='oi-draft-reject'),
 ]

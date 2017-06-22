@@ -85,5 +85,8 @@ class MessageForm(forms.ModelForm):
 		self.fields['message'].required = True
 		self.fields['message'].label = 'Message'
 		self.fields['message'].widget.attrs['maxlength'] = 255
+		self.fields['message'].widget.attrs['rows'] = 5
+		self.fields['message'].widget.attrs['cols'] = 50
+		self.fields['message'].widget.attrs['width'] = "285px"
 
 		self.fields['is_internal'].label = 'For Internal Only'

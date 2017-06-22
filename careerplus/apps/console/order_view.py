@@ -225,6 +225,18 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                         obj.assigned_to = writer
                         obj.assigned_by = request.user
                         obj.save()
+                        obj.orderitemoperation_set.create(
+                            oi_status=1,
+                            last_oi_status=obj.oi_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user
+                        )
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=1,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user
+                        )
                         # mail to user about writer information
                     messages.add_message(request, messages.SUCCESS, str(len(orderitem_objs)) + ' orderitems are Assigned')
                 except Exception as e:
@@ -286,7 +298,8 @@ class OrderItemDetailVeiw(DetailView):
             try:
                 last_status = obj.oi_status
                 obj.oi_draft = request.FILES.get('file', '')
-                obj.draft_counter += 1
+                if obj.oi_status == 8:
+                    obj.draft_counter += 1
                 obj.oi_status = 5  # pending Approval
                 obj.last_oi_status = last_status
                 obj.draft_added_on = timezone.now()
@@ -319,7 +332,9 @@ class OrderItemDetailVeiw(DetailView):
         obj = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         order = obj.order
-        drafts = obj.orderitemoperation_set.filter(draft_counter__range=[1, max_limit_draft])
+        communications = obj.message_set.all().select_related('added_by')
+        operations = obj.orderitemoperation_set.all().select_related('added_by', 'assigned_to')
+        drafts = operations.filter(draft_counter__range=[1, max_limit_draft])
         context.update({
             "order": order,
             "max_limit_draft": max_limit_draft,
@@ -327,5 +342,283 @@ class OrderItemDetailVeiw(DetailView):
             "draft_form": FileUploadForm(),
             "messages": alert,
             "message_form": MessageForm(),
+            "communications": communications,
+            "operations": operations,
         })
         return context
+
+
+@method_decorator(permission_required('order.can_show_approval_queue', login_url='/console/login/'), name='dispatch')
+class ApprovalQueueVeiw(ListView, PaginationMixin):
+    context_object_name = 'approval_list'
+    template_name = 'console/order/approval-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ApprovalQueueVeiw, self).get(request, args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+    def get_context_data(self, **kwargs):
+        context = super(ApprovalQueueVeiw, self).get_context_data(**kwargs)
+        paginator = Paginator(context['approval_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+        context.update({
+            "messages": alert,
+            "max_limit_draft": max_limit_draft,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(ApprovalQueueVeiw, self).get_queryset()
+        queryset = queryset.filter(order__status=1, oi_status=5, product__type_flow__in=[1]).exclude(oi_status=9)
+        # user = self.request.user
+        # if user.has_perm('order.can_show_unassigned_inbox') and user.has_perm('order.can_show_assigned_inbox'):
+        #     pass
+        # elif user.has_perm('order.can_show_unassigned_inbox'):
+        #     queryset = queryset.filter(assigned_to=None)
+        # elif user.has_perm('order.can_show_assigned_inbox'):
+        #     queryset = queryset.filter(assigned_to=user)
+        # else:
+        #     queryset = queryset.none()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+
+
+@method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/'), name='dispatch')
+class ApprovedQueueVeiw(ListView, PaginationMixin):
+    context_object_name = 'approved_list'
+    template_name = 'console/order/approved-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ApprovedQueueVeiw, self).get(request, args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+    def get_context_data(self, **kwargs):
+        context = super(ApprovedQueueVeiw, self).get_context_data(**kwargs)
+        paginator = Paginator(context['approved_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+        context.update({
+            "messages": alert,
+            "max_limit_draft": max_limit_draft,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(ApprovedQueueVeiw, self).get_queryset()
+        queryset = queryset.filter(order__status=1, oi_status=6, product__type_flow__in=[1])
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+
+
+@method_decorator(permission_required('order.can_show_rejectedbyadmin_queue', login_url='/console/login/'), name='dispatch')
+class RejectedByAdminQueue(ListView, PaginationMixin):
+    context_object_name = 'rejectedbyadmin_list'
+    template_name = 'console/order/rejectedbyadmin-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(RejectedByAdminQueue, self).get(request, args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+    def get_context_data(self, **kwargs):
+        context = super(RejectedByAdminQueue, self).get_context_data(**kwargs)
+        paginator = Paginator(context['rejectedbyadmin_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+        context.update({
+            "messages": alert,
+            "max_limit_draft": max_limit_draft,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(RejectedByAdminQueue, self).get_queryset()
+        queryset = queryset.filter(order__status=1, oi_status=7, product__type_flow__in=[1])
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+
+
+@method_decorator(permission_required('order.can_show_rejectedbycandidate_queue', login_url='/console/login/'), name='dispatch')
+class RejectedByCandidateQueue(ListView, PaginationMixin):
+    context_object_name = 'rejectedbycandidate_list'
+    template_name = 'console/order/rejectedbycandidate-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(RejectedByCandidateQueue, self).get(request, args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+    def get_context_data(self, **kwargs):
+        context = super(RejectedByCandidateQueue, self).get_context_data(**kwargs)
+        paginator = Paginator(context['rejectedbycandidate_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+        context.update({
+            "messages": alert,
+            "max_limit_draft": max_limit_draft,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(RejectedByCandidateQueue, self).get_queryset()
+        queryset = queryset.filter(order__status=1, oi_status=8, product__type_flow__in=[1])
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+
+
+@method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/'), name='dispatch')
+class AllocatedQueueVeiw(ListView, PaginationMixin):
+    context_object_name = 'allocated_list'
+    template_name = 'console/order/allocated-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(AllocatedQueueVeiw, self).get(request, args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            orderitem_list = request.POST.getlist('table_records', [])
+            writer_pk = int(request.POST.get('action_type', '0'))
+            orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
+            if writer_pk == 0:
+                messages.add_message(request, messages.ERROR, 'Please select valid action first')
+            else:
+                User = get_user_model()
+                try:
+                    writer = User.objects.get(pk=writer_pk)
+                    for obj in orderitem_objs:
+                        obj.assigned_to = writer
+                        obj.assigned_by = request.user
+                        obj.save()
+                        obj.orderitemoperation_set.create(
+                            oi_status=1,
+                            last_oi_status=obj.oi_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user
+                        )
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=1,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user
+                        )
+                        # mail to user about writer information
+                    messages.add_message(request, messages.SUCCESS, str(len(orderitem_objs)) + ' orderitems are Re Assigned')
+                except Exception as e:
+                    messages.add_message(request, messages.ERROR, str(e))
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, str(e))
+        return HttpResponseRedirect(reverse('console:queue-allocated'))
+
+    def get_context_data(self, **kwargs):
+        context = super(AllocatedQueueVeiw, self).get_context_data(**kwargs)
+        paginator = Paginator(context['allocated_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "action_form": InboxActionForm(),
+            "messages": alert,
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(AllocatedQueueVeiw, self).get_queryset()
+        queryset = queryset.filter(order__status=1, product__type_flow__in=[1]).exclude(assigned_to=None)
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')

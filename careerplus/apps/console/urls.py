@@ -138,6 +138,21 @@ urlpatterns += [
     url(r'^queue/inbox/$',
         order_view.InboxQueueVeiw.as_view(), name='queue-inbox'),
 
+    url(r'^queue/approval/$',
+        order_view.ApprovalQueueVeiw.as_view(), name='queue-approval'),
+
+    url(r'^queue/approved/$',
+        order_view.ApprovedQueueVeiw.as_view(), name='queue-approved'),
+
+    url(r'^queue/rejectedbyadmin/$',
+        order_view.RejectedByAdminQueue.as_view(), name='queue-rejectedbyadmin'),
+
+    url(r'^queue/rejectedbycandidate/$',
+        order_view.RejectedByCandidateQueue.as_view(), name='queue-rejectedbycandidate'),
+
+    url(r'^queue/allocated/$',
+        order_view.AllocatedQueueVeiw.as_view(), name='queue-allocated'),
+
     url(r'^queue/orderitem/(?P<pk>\d+)/detail/$',
         order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
 ]
