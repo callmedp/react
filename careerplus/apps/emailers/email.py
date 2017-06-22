@@ -27,7 +27,7 @@ class SendMail():
         except Exception as e:
             logging.getLogger('email_log').error("%s - %s" % (str(to), str(e)))
 
-        self.base_send_mail(subject=send_dict.get('subject', 'Shine Career Plus'), body=body, to=to, from_email=send_dict.get('from_email', None), headers=send_dict.get('header', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
+        self.base_send_mail(subject=send_dict.get('subject', 'Shine Career Plus'), body=body, to=to, from_email=send_dict.get('from_email', None), headers=send_dict.get('header', None), bcc=send_dict.get('bcc_list', None), cc=send_dict.get('cc_list', None), fail_silently=False, attachments=[])
                 
     def send(self, to=None, mail_type=None, data={}):
         send_dict = {}
@@ -40,4 +40,14 @@ class SendMail():
             data['token'] = AutoLogin().encode(
                 'upender.singh@hindustantimes.com', '592be7a753c034509597de71')
             data['button_text'] = "click here to dashboard"
+
+        if str(mail_type) == "2":
+            send_dict['subject'] = "Linkedin Profile"
+            send_dict['template'] = 'emailers/payment_confirm.html'
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['cc_list'] = [data.get('cc')]
+            data['email'] = [to]
+            data['token'] = AutoLogin().encode(to, data.get('candidateid'), data.get('orderitem'))
+            data['button_text'] = "click here to dashboard"
+
         self.process(to, send_dict, data)

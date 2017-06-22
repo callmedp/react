@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
-    PAYMENT_MODE, OI_OPS_STATUS, ORDER_ITEM_FLOW_STATUS
+    PAYMENT_MODE, OI_OPS_STATUS
 
 
 class Order(AbstractAutoDate):
@@ -157,8 +157,8 @@ class OrderItem(models.Model):
         max_length=255, upload_to='oi_draft/', null=True, blank=True)
     draft_counter = models.PositiveIntegerField(default=0)
     tat_date = models.DateTimeField(null=True, blank=True)
-    oi_flow_status = models.PositiveSmallIntegerField(
-        default=0, choices=ORDER_ITEM_FLOW_STATUS)
+    # oi_flow_status = models.PositiveSmallIntegerField(
+    #     default=0, choices=ORDER_ITEM_FLOW_STATUS)
 
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
@@ -191,6 +191,9 @@ class OrderItem(models.Model):
             ("writer_assignment_action", "Can Assign to Other writer"),
             ("can_assigned_to_writer", "Can Assigned To This Writer"),
             ("can_view_order_item_detail", "Can View Order Item Detail"),
+            # for linkedin flow
+            ("writer_assignment_linkedin_action", "Can Assign to Other linkedin writer"),
+            ("can_assigned_to_linkedin_writer", "Can Assigned To This linkedin Writer"),
         )
 
     def __str__(self):
@@ -200,6 +203,13 @@ class OrderItem(models.Model):
             title = _('<missing product>')
         return _("Product '%(name)s', quantity '%(qty)s'") % {
             'name': title, 'qty': self.quantity}
+
+    @property
+    def get_oi_status(self):
+        statusD = dict(OI_OPS_STATUS)
+        return statusD.get(self.oi_status)
+
+
 
 
 class OrderItemOperation(AbstractAutoDate):

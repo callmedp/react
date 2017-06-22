@@ -7,10 +7,10 @@ from django.conf import settings
 
 class AutoLogin(object):
 
-    def encode(self, email, candidateid):
+    def encode(self, email, candidateid, orderid):
 
-        inp_str = '{email}|{candidateid}|{salt}'.format(
-            **{'email': email, 'candidateid': candidateid, 'salt': settings.ENCODE_SALT})
+        inp_str = '{email}|{candidateid}|{orderid}|{salt}'.format(
+            **{'email': email, 'candidateid': candidateid, 'orderid': orderid, 'salt': settings.ENCODE_SALT})
 
         b = bytes(inp_str, 'utf-8')
         ciph = XOR.new(settings.ENCODE_SALT)
@@ -23,6 +23,7 @@ class AutoLogin(object):
         inp_str = ciph.decrypt(token)
         str_inp = inp_str.decode("utf-8")
         inp_list = str_inp.split('|')
-        email = str_inp[0]
+        email = inp_list[0]
         candidateid = inp_list[1]
-        return email, candidateid
+        orderid = inp_list[2]
+        return email, candidateid, orderid

@@ -1,5 +1,8 @@
 from django import forms
 from ckeditor.widgets import CKEditorWidget
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 from linkedin.models import Draft, Organization, Education
 
@@ -116,3 +119,21 @@ class EducationForm(forms.ModelForm):
         if commit:
             draft.save()
         return draft
+
+
+class LinkedinInboxActionForm(forms.Form):
+    action = forms.ModelChoiceField(
+        queryset=User.objects.none(),
+        empty_label="Select Writer",
+        to_field_name='pk',
+        required=True, widget=forms.Select())
+
+    def __init__(self, *args, **kwargs):
+        super(LinkedinInboxActionForm, self).__init__(*args, **kwargs)
+        from django.contrib.auth.models import Permission
+        from django.db.models import Q
+        perm = Permission.objects.get(codename='writer_assignment_linkedin_action')
+        users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        self.fields['action'].required = True
+        self.fields['action'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['action'].queryset = users

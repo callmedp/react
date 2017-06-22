@@ -6,6 +6,7 @@ from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
 
 from .models import Order, OrderItem
+from linkedin.models import QuizResponse
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -50,7 +51,15 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 				order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
 				order.save()
 				self.createOrderitems(order, cart_obj)
-				return order
+				order_item = order.orderitems.exclude(no_process=True)[0]
+
+				if order_item.product.type_flow == 8:
+					quiz_rsp = QuizResponse()
+					quiz_rsp.oi = order_item
+					quiz_rsp.save()
+					order_item.oi_status = 30
+					order_item.save()
+			    return order
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))
 

@@ -22,44 +22,45 @@
 		name="q1">{{quiz_resp.anser5}}</textarea>
   	</ol>
   	<a href="/console/">Back to Console</a>
-  {% endif %}
-{% else %}
-<form method="post">
-	{% csrf_token %}
-  <ol>
-	<li>
-		<p class="question">{{ques_dict.q1}}</p>                        
-		<textarea rows="5" cols="50" class="js-answer" 
-		name="q1">{{ans}}</textarea>
-		<p class='submit-error'></p>        
-	</li>
-	<li>
-		<p class="question">{{ques_dict.q2}}</p>                        
-		<textarea class="js-answer " rows="5" cols="50" class="js-answer"
-		name="q2">{{ans}}</textarea>
-		<p class='submit-error'></p>         
-	</li>
-	<li>
-		<p class="question">{{ques_dict.q3}}</p>                        
-		<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
-		name="q3">{{ans}}</textarea>
-		<p class='submit-error'></p>         
-	</li>
-	<li>
-		<p class="question1">{{ques_dict.q4}}</p>                        
-		<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
-		name="q4">{{ans}}</textarea>
-		<p class='submit-error'></p>         
-	</li>
-	<li>
-		<p class="question">{{ques_dict.q5}}</p>                        
-		<textarea class="js-answer" rows="5" cols="50" class="js-answer"
-		name="q5">{{ans}}</textarea>
-		<p class='submit-error'></p>         
-	</li>
- </ol>
-<button type="submit">submit</button>
-</form>
+  
+  {% else %}
+	<form method="post">
+		{% csrf_token %}
+	  <ol>
+		<li>
+			<p class="question">{{ques_dict.q1}}</p>                        
+			<textarea rows="5" cols="50" class="js-answer" 
+			name="q1">{{ans}}</textarea>
+			<p class='submit-error'></p>        
+		</li>
+		<li>
+			<p class="question">{{ques_dict.q2}}</p>                        
+			<textarea class="js-answer " rows="5" cols="50" class="js-answer"
+			name="q2">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>
+		<li>
+			<p class="question">{{ques_dict.q3}}</p>                        
+			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
+			name="q3">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>
+		<li>
+			<p class="question1">{{ques_dict.q4}}</p>                        
+			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
+			name="q4">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>
+		<li>
+			<p class="question">{{ques_dict.q5}}</p>                        
+			<textarea class="js-answer" rows="5" cols="50" class="js-answer"
+			name="q5">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>
+	 </ol>
+	<button type="submit">submit</button>
+	</form>
+	{% endif %}
 {% endif %}
 </body>
 </html>

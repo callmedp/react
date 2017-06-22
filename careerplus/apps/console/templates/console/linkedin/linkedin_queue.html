@@ -4,8 +4,15 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Linkedin Listing</title>
+  <title>Welcome Call- Shinelearning</title>
 {% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+{% endblock css_block %}
+
+
 
 {% block pagecontent %}
 <!-- page content -->
@@ -15,8 +22,8 @@
       <div class="title_left">
         <h3>Linkedin Inbox</h3>
       </div>
-    <!-- 
-      <form class="form-group" method="GET" action="{% url "console:category-list" %}" id="filter-tables">
+    <!--
+      <form class="form-group" method="GET" action="{% url "console:queue-welcome" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -30,6 +37,7 @@
       </form>
     -->
     </div>
+
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -45,6 +53,7 @@
 
       </div>
     </div>
+
     
     <div class="clearfix"></div>
     
@@ -53,7 +62,38 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Linkedin Inbox</h2>
+            <div class="col-sm-4">
+            <div class="input-group">
+                {{action_form.action}}
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                </span>
+            </div>
+            </div>
+            <!--h2>Select Comment to Change</h2-->
+            <!-- large modal -->
+
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Action On Welcome Call</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are You Sure???
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" 
+                      id="action_welcome">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -64,52 +104,51 @@
           <div class="x_content">
 
             <div class="table-responsive">
+              <form id="linkedin_form" method="post" action=".">{% csrf_token %}
+              <input type="hidden" name="action_type" id="action_type_id" 
+              class="flat">
               <table class="table table-striped jambo_table bulk_action">
                 <thead>
                   <tr class="headings">
-                    <th class="column-title"># </th>
+                    <th>
+                      <input type="checkbox" id="check-all" class="flat">
+                    </th>
                     <th class="column-title">Order Id</th>
                     <th class="column-title">Candidate Info</th>
+                    <th class="column-title">Item Name</th>
                     <th class="column-title">Counselling Form</th>
                     <th class="column-title">#Edit</th>
-                    </tr>
+                  </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="inbox-table">
                   {% for obj in page %}
-                  
-                <tr class="even pointer">
-                  <td>{{obj.pk}}</td>
-                  <td>
-                    <a >{{obj.name}}</a>
-                    <br />
-                    <small>Modified {{obj.modified|naturaltime}}</small>
-                  </td>
-                  <td>
-                    <ul class="list-inline">
-                      <li>
-                        {% if obj.icon %}
-                          <img src="{{obj.icon.url}}" class="avatar" alt="{{obj.image_alt}}">
-                        {% elif obj.image %}
-                          {% thumbnail obj.image "100x100" crop="center" as im %}
-                            <img src="{{ im.url }}" class="avatar" >
-                          {% endthumbnail %}  
-                        {% endif %}
-                      </li>
-                    </ul>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-success btn-xs">{{obj.get_level}}</button>
-                  </td>
-                  <td>
-                    <a href="{% url "console:category-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                  </td>
-                </tr>
-                {% endfor %}
+                    <tr class="even pointer">
+                      <td class="a-center ">
+                          <input type="checkbox" class="flat" 
+                          name="table_records" value="{{obj.pk}}" >
+                      </td>
+                      <td>{{obj.pk}}</td>
+                      <td>email:{{obj.order.email}}<br>
+                      name:{{obj.order.first_name}}<br>
+                      mobile:{{obj.order.mobile}}</td> 
+                      <td>{{obj.product}}</td>
+                      {% if obj.oi_status == 31 %}
+                      <td>{{obj.get_oi_status}}</td>
+                      <td><a href="{% url 'counselling-form' obj.pk %}">
+                      Edit Counselling Form</a></td>
+                      {% else %}
+                      <td>{{obj.get_oi_status}}</td>
+                      <td><a href="{% url 'counselling-form' obj.pk %}">
+                      Submit Counselling Form</a></td>
+                      {% endif %} 
+                    </tr>
+                  {% endfor %}
                 </tbody>
               </table>
+              </form>
             </div>
-          <!--         
+                   
             {% block main_pagination %}
                 <div class="main_pagination">
                   {% if page %}
@@ -119,7 +158,6 @@
                         {% endwith %}
                       </div>
                   </div>
-                  
 
                 <div class="col-sm-8">
                     <div class="pull-right">
@@ -166,9 +204,9 @@
                 {% endif %}
 
 
-      </div>
+      </div><!-- main_pagination end here -->
       {% endblock main_pagination %}
-    --> 
+     
                 
           </div>
         </div>
@@ -185,10 +223,10 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-  
-  <!-- Custom Theme Scripts -->
-  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
-
-
+  <script type="text/javascript" 
+    src="{% static "packages/iCheck/icheck.min.js" %}">
+  </script>
+  <script type="text/javascript" 
+    src="{% static "console/js/linkedin/linkedin_inbox.js" %}">
+  </script>
 {% endblock js_block %}

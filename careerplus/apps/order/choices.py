@@ -37,12 +37,9 @@ OI_OPS_STATUS = (
     (6, 'Approved'),
     (7, 'Rejected By Admin'),
     (8, 'Rejected By Candidate'),
+    #for linkedin flow
+    (30, 'Counselling Form Not Submitted'),
+    (31, 'Counselling Form Submitted'),
     (9, 'Closed'),
 
-)
-
-ORDER_ITEM_FLOW_STATUS = (
-    (0, 'Default'),
-    (1, 'Counselling Form Not Submitted'),
-    (2, 'Counselling Form Submitted'),
 )
