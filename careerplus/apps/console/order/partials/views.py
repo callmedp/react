@@ -40,7 +40,7 @@ class NewOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPIVie
     template_name = partial_template_name = 'console/order/partials/neworders-list-partial.html'
 
     def get_queryset(self):
-        return super(NewOrdersListPartial, self).get_queryset().filter(order__status__in=[1,2])
+        return super(NewOrdersListPartial, self).get_queryset().filter(order__status=1).order_by('-date_placed')
 
 
 class NewOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):
@@ -60,7 +60,7 @@ class ClosedOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPI
     template_name = partial_template_name = 'console/order/partials/closedorders-list-partial.html'
 
     def get_queryset(self):
-        return super(ClosedOrdersListPartial, self).get_queryset().filter(order__status=3)
+        return super(ClosedOrdersListPartial, self).get_queryset().filter(order__status=3).order_by('-date_placed')
 
 
 class ClosedOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):
@@ -79,7 +79,7 @@ class HeldOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPIVi
     template_name = partial_template_name = 'console/order/partials/heldorders-list-partial.html'
 
     def get_queryset(self):
-        return super(HeldOrdersListPartial, self).get_queryset().filter(order__status=2)
+        return super(HeldOrdersListPartial, self).get_queryset().filter(order__status=2).order_by('-date_placed')
 
 
 class HeldOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):

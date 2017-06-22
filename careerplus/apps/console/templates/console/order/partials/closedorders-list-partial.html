@@ -49,8 +49,9 @@
                     <th class="column-title">Product Name</th>
                     <th class="column-title">Quantity</th>
                     <th class="column-title">Order Placed On</th>
-                    <th class="column-title">Upload Supporting Documents</th>
-
+                    {% if is_vendee %}
+                      <th class="column-title">Archive</th>
+                    {% endif %}
                     <th class="bulk-actions" colspan="7">
                         <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                     </th>

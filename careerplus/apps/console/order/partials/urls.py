@@ -10,5 +10,6 @@ urlpatterns = [
 	url(r'^heldorders/(?P<pk>\d+)/$', views.HeldOrdersDetailPartial.as_view(), name='heldorders-detail-partial'),
 	url(r'^neworders/(?P<pk>\d+)/change/$', views.NewOrdersUpdatableDetailPartial.as_view(), name='neworders-detail-change-partial'),
 	url(r'^closedorders/(?P<pk>\d+)/change/$', views.ClosedOrdersUpdatableDetailPartial.as_view(), name='closedorders-detail-change-partial'),
-	url(r'^heldorders/(?P<pk>\d+)/change/$', views.HeldOrdersUpdatableDetailPartial.as_view(), name='heldorders-detail-change-partial'),	
+	url(r'^heldorders/(?P<pk>\d+)/change/$', views.HeldOrdersUpdatableDetailPartial.as_view(), name='heldorders-detail-change-partial'),
+	
 ]

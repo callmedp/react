@@ -4,6 +4,7 @@ urlpatterns = [
     url(r'^cms/', include('console.cms.urls', namespace='cms')),
     url(r'^order/', include('console.order.urls', namespace='order')),
     url(r'^partner/', include('console.partner.urls', namespace='partner')),
+    url(r'^operations/', include('console.operations.urls', namespace='operations')),
 ]
 
 from django.conf.urls import url

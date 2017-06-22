@@ -4,7 +4,7 @@
     <h3>Catalog</h3>
     <ul class="nav side-menu">
     {% if is_vendee %}
-      <li><a><i class="fa fa-chevron-bookmark"></i> Inbox <span class="fa fa-chevron-down"></span></a>
+      <li><a><i class="fa fa-bookmark"></i> Inbox <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li><a href="{% url 'console:partner:pages:neworders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>New Orders</a></li>
           <li><a href="{% url 'console:partner:pages:closedorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Closed Orders</a></li>
@@ -53,15 +53,17 @@
         </ul>
       </li>
 
-      <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="{% url "console:cms:pages:indexerwidget-list" %}" data-pjax='.right_col'>Indexer Widget</a></li>
-            <li><a href="{% url "console:cms:pages:widget-list" %}" data-pjax='.right_col'>Widget</a></li>
-            <li><a href="{% url "console:cms:pages:page-list" %}" data-pjax='.right_col'>Page</a></li>
-            <li><a href="{% url "console:cms:pages:comment-list" %}" data-pjax='.right_col'>Moderate Comments</a></li>
-            <li><a href="{% url "console:cms:pages:pagecounter-list" %}" data-pjax='.right_col'>Page Counter</a></li>
-        </ul>
-      </li>
+      {% if is_admin %}
+        <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url "console:cms:pages:indexerwidget-list" %}" data-pjax='.right_col'>Indexer Widget</a></li>
+              <li><a href="{% url "console:cms:pages:widget-list" %}" data-pjax='.right_col'>Widget</a></li>
+              <li><a href="{% url "console:cms:pages:page-list" %}" data-pjax='.right_col'>Page</a></li>
+              <li><a href="{% url "console:cms:pages:comment-list" %}" data-pjax='.right_col'>Moderate Comments</a></li>
+              <li><a href="{% url "console:cms:pages:pagecounter-list" %}" data-pjax='.right_col'>Page Counter</a></li>
+          </ul>
+        </li>
+      {% endif %}
 
       <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
