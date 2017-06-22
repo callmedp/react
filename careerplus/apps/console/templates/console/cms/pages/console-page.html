@@ -1,11 +1,10 @@
-{% extends "myadmin/base.html" %}
+{% extends "console/base_console.html" %}
 {% load static %}
 {% load humanize %}
-{% block meta_tags %}
-   {{block.super}}
-{% endblock meta_tags %}
 
-{% block title %} CMS Management Console {% endblock title %}
+{% block title %} 
+    <title> CMS Management Console </title>
+  {% endblock title %}
 
 {% block css %}
     {{block.super}}
@@ -23,7 +22,7 @@
 {% endblock pagecontent %}
 
 
-{% block js %}
+{% block js_block %}
     {{block.super}}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
   	<script type="text/javascript">
@@ -39,4 +38,4 @@
     $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
 		$('ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
 	</script>
-{% endblock js %}
+{% endblock js_block %}

@@ -1,11 +1,10 @@
-{% extends "myadmin/base.html" %}
+{% extends "console/base_console.html" %}
 {% load static %}
 {% load humanize %}
-{% block meta_tags %}
-   {{block.super}}
-{% endblock meta_tags %}
 
-{% block title %} CMS Management Console {% endblock title %}
+{% block title %} 
+    <title> CMS Management Console </title>
+  {% endblock title %}
 
 {% block css %}
     {{block.super}}
@@ -16,27 +15,27 @@
 
 <!-- page content -->
 <div class="right_col" role="main">
-	{% include partial_template %}
+  {% include partial_template %}
 </div>
 <!-- /page content -->
 
 {% endblock pagecontent %}
 
 
-{% block js %}
+{% block js_block %}
     {{block.super}}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
-  	<script type="text/javascript">
+    <script type="text/javascript">
       jQuery.each($("select[multiple]"), function () {
         // "Locations" can be any label you want
         SelectFilter.init(this.id, this.name, 0, "/media/");
        });
      </script>
     <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
-	<script type="text/javascript">
-    // $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-    // $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-    // $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
-		$('ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
-	</script>
-{% endblock js %}
+  <script type="text/javascript">
+    $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+    $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+    $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
+    $('ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+  </script>
+{% endblock js_block %}

@@ -27,7 +27,11 @@
 
       <!-- Custom Theme Style -->
       <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
-      
+    
+      <!-- bootstrap-daterangepicker -->
+      <link href="{% static "/packages/bootstrap-daterangepicker/daterangepicker.css"  %}" rel="stylesheet" type="text/css">
+      <link href="{% static "/console/css/datepicker/bootstrap-datetimepicker.min.css"  %}" rel="stylesheet" type="text/css">
+    
     {% endblock css_block %}
     
     </head>
@@ -172,6 +176,16 @@
       <script type="text/javascript" src="{% static "packages/nprogress/nprogress.js" %}"></script>
 
       <script type="text/javascript" src="{% static "console/js/common.js" %}"></script>
+
+      <!-- PJAX -->
+      <script type="text/javascript" src="{% static "console/js/jquery.pjax.js" %}"></script>
+
+      <!-- bootstrap-daterangepicker -->
+      <script type="text/javascript" src="{% static "packages/moment/min/moment.min.js" %}"></script>
+      <script type="text/javascript" src="{% static "console/js/datepicker/bootstrap-datetimepicker.min.js" %}"></script>
+
+      <!-- Parsley -->
+      <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
 
       <!--script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script-->
     {% endblock js_block %}
