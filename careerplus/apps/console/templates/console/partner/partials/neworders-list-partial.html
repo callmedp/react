@@ -45,6 +45,7 @@
                     </th-->
                     
                     <th class="column-title">Order Number</th>
+                    <th class="column-title">Order Item Id</th>
                     <th class="column-title">Product Name</th>
                     <th class="column-title">Quantity</th>
                     <th class="column-title">Order Placed On</th>
@@ -63,6 +64,7 @@
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
                     <td class=" ">{{obj.order.number}}</td>
+                    <td class=" ">{{obj.id}}</td>
                     <td class=" ">{{obj.product.name}}</td>
                     <td class=" ">{{obj.quantity}}</td>
                     <td class=" ">{{obj.order.date_placed|slice:":10"}}</td>

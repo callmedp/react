@@ -1,6 +1,7 @@
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAdminUser
 
 from . import serializers
 from partner import models
@@ -16,7 +17,7 @@ class VendorViewMixin(object):
     order_fields = ('id', 'email', 'country', 'state', 'city', 'created', 'modified')
     ordering = ('-id')
     pagination_class = PageNumberPagination
-
+    permission_classes = (IsAdminUser,)
 
 class VendorHierarchyViewMixin(object):
 
@@ -28,3 +29,4 @@ class VendorHierarchyViewMixin(object):
     order_fields = ('id', 'vendee', 'employee', 'created', 'modified')
     ordering = ('-id')
     pagination_class = PageNumberPagination
+    permission_classes = (IsAdminUser,)

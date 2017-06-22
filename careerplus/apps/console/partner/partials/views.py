@@ -1,12 +1,13 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAdminUser
 from django.db.models.query import QuerySet
 from console.common.mixins import ListPartialMixin, DetailPartialMixin, UpdatableDetailPartialMixin, AddPartialMixin
 from partner.api.core.mixins import VendorViewMixin, VendorHierarchyViewMixin
 from order.api.core.mixins import OrderItemViewMixin
 from partner.api.core.serializers import VendorSerializer, VendorHierarchySerializer  
 from partner.models import Vendor, VendorHierarchy
-
-
+from partner.api.core.permissions import IsAdminOrEmployeeOfVendor
+ 
 class VendorListPartial(ListPartialMixin, VendorViewMixin, ListAPIView):
 
     template_name = partial_template_name = 'console/partner/partials/vendor-list-partial.html'
@@ -42,6 +43,7 @@ class VendorHierarchyAddPartial(AddPartialMixin, VendorHierarchyViewMixin, Creat
 
 
 class OrderMixin:
+    permission_classes = (IsAdminOrEmployeeOfVendor, )
     def get_queryset(self):
         assert self.queryset is not None, (
             "'%s' should either include a `queryset` attribute, "
@@ -83,7 +85,7 @@ class ClosedOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPI
     template_name = partial_template_name = 'console/partner/partials/closedorders-list-partial.html'
 
     def get_queryset(self):
-        return super(NewOrdersListPartial, self).get_queryset().filter(order__status=3)
+        return super(ClosedOrdersListPartial, self).get_queryset().filter(order__status=3)
 
 
 class ClosedOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):
@@ -96,7 +98,7 @@ class HeldOrdersListPartial(OrderListPartialMixin, OrderItemViewMixin, ListAPIVi
     template_name = partial_template_name = 'console/partner/partials/heldorders-list-partial.html'
 
     def get_queryset(self):
-        return super(NewOrdersListPartial, self).get_queryset().filter(order__status=2)
+        return super(HeldOrdersListPartial, self).get_queryset().filter(order__status=2)
 
 
 class HeldOrdersDetailPartial(OrderDetailPartialMixin, OrderItemViewMixin, RetrieveAPIView):
