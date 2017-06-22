@@ -72,6 +72,7 @@ class Order(AbstractAutoDate):
 
     # welcome call done or not
     welcome_call_done = models.BooleanField(default=False)
+    midout_sent_on = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         app_label = 'order'
@@ -171,11 +172,10 @@ class OrderItem(models.Model):
         null=True, blank=True)
 
     closed_on = models.DateTimeField(null=True, blank=True)
-    midout_sent_on = models.DateTimeField(null=True, blank=True)
     draft_added_on = models.DateTimeField(null=True, blank=True)
 
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    updated_on = models.DateTimeField(null=True, blank=True)
+    updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         app_label = 'order'
@@ -184,7 +184,7 @@ class OrderItem(models.Model):
         verbose_name = _("Order Item")
         verbose_name_plural = _("Order Items")
         permissions = (
-            ("can_show_midout_queue", "Can Show Midout Queue"),
+            # ("can_show_midout_queue", "Can Show Midout Queue"),
             ("can_show_inbox_queue", "Can Show Inbox Queue"),
             ("can_show_assigned_inbox", "Can Show Only Assigned Inbox"),
             ("can_show_unassigned_inbox", "Can Show Only Not Assigned Inbox"),
@@ -194,6 +194,18 @@ class OrderItem(models.Model):
             # for linkedin flow
             ("writer_assignment_linkedin_action", "Can Assign to Other linkedin writer"),
             ("can_assigned_to_linkedin_writer", "Can Assigned To This linkedin Writer"),
+            # Approval Queue
+            ("can_show_approval_queue", "Can View Approval Queue"),
+            # Appoved Queue
+            ("can_show_approved_queue", "Can View Approved Queue"),
+            # Rejected By Admin Queue
+            ("can_show_rejectedbyadmin_queue", "Can View Rejected By Admin Queue"),
+
+            # Rejected By Candidate Queue
+            ("can_show_rejectedbycandidate_queue", "Can View Rejected By Candidate Queue"),
+
+            # Allocated Queue
+            ("can_show_allocated_queue", "Can View Allocated Queue"),
         )
 
     def __str__(self):
@@ -206,10 +218,15 @@ class OrderItem(models.Model):
 
     @property
     def get_oi_status(self):
+<<<<<<< HEAD
         statusD = dict(OI_OPS_STATUS)
         return statusD.get(self.oi_status)
 
 
+=======
+        dict_status = dict(OI_OPS_STATUS)
+        return dict_status.get(self.oi_status)
+>>>>>>> b0c2e65040ef91cb61aa3d086d977f9c78301aa1
 
 
 class OrderItemOperation(AbstractAutoDate):
@@ -234,6 +251,14 @@ class OrderItemOperation(AbstractAutoDate):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='oio_added_by',
         null=True, blank=True)
+
+    class Meta:
+        ordering = ['created']
+
+    @property
+    def get_oi_status(self):
+        dict_status = dict(OI_OPS_STATUS)
+        return dict_status.get(self.oi_status)
 
 
 class Message(models.Model):

@@ -15,6 +15,7 @@ from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
+from order.models import OrderItem
 
 
 class ArticleCommentView(View):
@@ -165,4 +166,64 @@ class AjaxStateView(View):
             data['states'] = list(states)
         except:
             pass
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class AjaxOrderItemCommentView(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax():
+            oi_pk = request.POST.get('pk', None)
+            message = request.POST.get('message', '').strip()
+            is_internal = request.POST.get('is_internal', False)
+            if is_internal:
+                is_internal = True
+            if oi_pk and message:
+                oi_obj = OrderItem.objects.get(pk=oi_pk)
+                oi_obj.message_set.create(
+                    message=message,
+                    added_by=request.user,
+                    is_internal=is_internal)
+                data['status'] = 1
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class ApproveByAdminDraft(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax():
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                obj.oi_status = 6
+                obj.save()
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=last_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=request.user)
+            except:
+                pass
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+class RejectByAdminDraft(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax():
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                obj.oi_status = 7
+                obj.save()
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=last_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=request.user)
+            except:
+                pass
         return HttpResponse(json.dumps(data), content_type="application/json")

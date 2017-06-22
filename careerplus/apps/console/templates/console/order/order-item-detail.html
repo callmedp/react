@@ -34,7 +34,7 @@
             <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Order item Detail <small>order item information</small></h2>
+                <h2>Order item Detail <small>Item name: {{object.product.name}}({{object.product.get_exp}})</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -46,22 +46,26 @@
                 <table class="table table-bordered">
                   <thead>
                     <tr>
+                      <th>OrderItemId</th>
                       <th>OrderId</th>
                       <th>Email</th>
                       <th>Mobile</th>
                       <th>Name</th>
                       <th>Payment Status</th>
+                      <th>Flow Status</th>
                       <th>Added On</th>
                       <th>Closed On</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
+                      <td>{{object.id}}</td>
                       <td>{{order.id}}</td>
                       <td>{{order.email}}</td>
                       <td>{{order.country_code}} {{order.mobile}}</td>
                       <td>{{order.first_name}} {{order.last_name}}</td>
                       <td>{{order.get_status}}</td>
+                      <td>{{object.get_oi_status}}</td>
                       <td>{{order.date_placed}}</td>
                       <td>{% if order.closed_on %}{{order.closed_on}}{% endif %}</td>
                     </tr>
@@ -86,10 +90,12 @@
 
                 <table class="table table-bordered">
                   <tbody>
+                    {% if object.oi_resume %}
                     <tr>
                       <th>Candidate Resume</th>
                       <td><a href="{{object.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
                     </tr>
+                    {% endif %}
                     {% for draft in drafts %}
                         <tr>
                         <th>Draft {% if draft.draft_counter == max_limit_draft %}Final{% else %}{{draft.draft_counter}}{% endif %}</th>
@@ -97,6 +103,16 @@
                     {% endfor %}
                   </tbody>
                 </table>
+
+                {% if object.oi_status == 5 %}
+                    <form role="form" method="post" id="accept-reject-form{{object.id}}">{% csrf_token %}
+                    <input type="hidden" name="oi_pk" id="oi_id" value="{{object.pk}}">
+                    </form>
+                    <center>
+                        <button type="button" onclick="acceptDraftByAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
+                        <button type="button" onclick="rejectDraftByAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                    </center>
+                {% endif %}
 
                 {% if object.draft_counter < max_limit_draft %}
                     <h2>Upload Draft</h2>
@@ -112,54 +128,31 @@
           <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Basic Tables <small>basic table subtitle</small></h2>
+                <h2>Order item Operations <small>action histories</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
                   </li>
                 </ul>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
 
-                <table class="table">
+                <table class="table table-bordered">
                   <thead>
                     <tr>
-                      <th>#</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Username</th>
+                      <th>How Old</th>
+                      <th>Action</th>
+                      <th>Added By / Assigned</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
+                    {% for op in operations %}
+                        <tr>
+                          <td>{{op.created|naturaltime}}</td>
+                          <td>{{op.get_oi_status}}</td>
+                          <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
+                        </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
 
@@ -179,160 +172,52 @@
                 </div>
                 <div class="x_content">
                   <ul class="list-unstyled msg_list">
-                    <li>
-                      <a>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that
-                        </span>
-                      </a>
-                    </li>
+                    {% for msg in communications %}
+                        <li>
+                          <a>
+                            <span>
+                              <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}} {{order.last_name}}{% endif %}</span>
+
+                              <span class="time">{{msg.added_on|naturaltime}}</span>
+                            </span>
+                            <span class="message">
+                              {{msg.message}}
+                            </span>
+                          </a>
+                        </li>
+                    {% endfor %}
+                    
 
                   </ul>
+
+                  <form id="message-add-form" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                        <fieldset>
+                            {% for field in message_form %}
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">{{ field.label }}</label> 
+
+                                    <div class="col-md-8">
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div style='display:none'>
+                            <input type="hidden" name="pk" value="{{object.pk}}">
+                            </div>
+                        </fieldset>
+                          <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                              <center><button type="button" id="message-submit" class="btn btn-success">Add Message</button></center>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
               </div>
             </div>
-
-
-          <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2>Stripped table <small>Stripped table subtitle</small></h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
-
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Username</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2>Hover rows <small>Try hovering over the rows</small></h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Username</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>
@@ -345,4 +230,5 @@
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/order-item-detail.js" %}"></script>
 {% endblock js_block %}
