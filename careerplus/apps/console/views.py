@@ -10,6 +10,9 @@ class ConsoleDashboardView(TemplateView):
     success_url = reverse_lazy('ConsoleDashboardView')
 
     def get_context_data(self, **kwargs):
+        if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
+            kwargs['is_vendee'] = True
+            kwargs['vendor_id'] = self.request.user.vendor_set.all()[0].id
         context = super(ConsoleDashboardView, self).get_context_data(**kwargs)
         return context
 

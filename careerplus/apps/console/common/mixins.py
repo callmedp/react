@@ -8,11 +8,13 @@ class ListPartialMixin(object):
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
+        import pdb; pdb.set_trace()
         if page is not None:
             serializer = self.get_serializer(page, many=True)
         else:
             serializer = self.get_serializer(queryset, many=True)
-        return Response(data={'page': serializer.data, 'received_kwargs': kwargs, 'partial_template': self.partial_template_name, 'doing_partial': request.META.get('HTTP_X_PJAX')}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
+        return Response(data={'page': serializer.data, 'page_object': self.paginator.page,
+            'received_kwargs': kwargs, 'partial_template': self.partial_template_name, 'doing_partial': request.META.get('HTTP_X_PJAX')}, template_name=self.partial_template_name if request.META.get('HTTP_X_PJAX') else self.template_name)
 
 
 class DetailPartialMixin(object):
