@@ -6,9 +6,9 @@
     {% if is_vendee %}
       <li><a><i class="fa fa-chevron-down"></i> Inbox <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-            <li><a href="{% url 'console:partner:pages:neworders-list' vendor_id=vendor_id %}">New Orders</a></li>
-          <li><a href="{% url 'console:partner:pages:closedorders-list' vendor_id=vendor_id %}">Closed Orders</a></li>
-          <li><a href="{% url 'console:partner:pages:heldorders-list' vendor_id=vendor_id %}">Held Orders</a></li>
+            <li><a href="{% url 'console:partner:pages:neworders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>New Orders</a></li>
+          <li><a href="{% url 'console:partner:pages:closedorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Closed Orders</a></li>
+          <li><a href="{% url 'console:partner:pages:heldorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Held Orders</a></li>
         </ul>
       </li>
       {% endif %}
