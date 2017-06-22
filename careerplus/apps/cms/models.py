@@ -44,10 +44,10 @@ class ColumnHeading(models.Model):
 
 
 class IndexColumn(models.Model):
-	indexer = models.ForeignKey(IndexerWidget)
-	column = models.PositiveIntegerField(choices=COLUMN_TYPE)
-	url = models.CharField(max_length=2048, null=True, blank=True, help_text='provide full url including https://')
-	name = models.CharField(max_length=255)
+    indexer = models.ForeignKey(IndexerWidget)
+    column = models.PositiveIntegerField(choices=COLUMN_TYPE)
+    url = models.CharField(max_length=2048, null=True, blank=True, help_text='provide full url including https://')
+    name = models.CharField(max_length=255)
 
     def __str__(self):
         return '%s' % self.name
@@ -57,82 +57,82 @@ from blog.models import Blog
 
 
 class Widget(AbstractCommonModel):
-	widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
-	heading = models.CharField(max_length=1024, null=True, blank=True)
-	redirect_url = models.URLField(null=True, blank=True,
-		verbose_name='Re-directing Url',
-    	help_text='Append http://.')
+    widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
+    heading = models.CharField(max_length=1024, null=True, blank=True)
+    redirect_url = models.URLField(null=True, blank=True,
+        verbose_name='Re-directing Url',
+        help_text='Append http://.')
 
-	image = models.FileField("Image", max_length=200, upload_to="images/cms/widget/",
-    	blank=True, null=True, help_text='use this for Resume help')
-	image_alt = models.CharField(max_length=100, null=True, blank=True)
+    image = models.FileField("Image", max_length=200, upload_to="images/cms/widget/",
+        blank=True, null=True, help_text='use this for Resume help')
+    image_alt = models.CharField(max_length=100, null=True, blank=True)
 
-	description = RichTextUploadingField(null=True, blank=True)
+    description = RichTextUploadingField(null=True, blank=True)
 
-	document_upload = models.FileField("Document", max_length=200,
-    	upload_to="documents/cms/widget/", blank=True, null=True)
+    document_upload = models.FileField("Document", max_length=200,
+        upload_to="documents/cms/widget/", blank=True, null=True)
 
-	display_name = models.CharField(max_length=100, null=True, blank=True)
-	writer_designation = models.CharField(max_length=255, null=True, blank=True)
+    display_name = models.CharField(max_length=100, null=True, blank=True)
+    writer_designation = models.CharField(max_length=255, null=True, blank=True)
 
-	iw = models.ForeignKey(IndexerWidget, null=True, blank=True,
-		verbose_name='Indexer Widget')
+    iw = models.ForeignKey(IndexerWidget, null=True, blank=True,
+        verbose_name='Indexer Widget')
 
-	related_article = models.ManyToManyField(Blog, blank=True)
+    related_article = models.ManyToManyField(Blog, blank=True)
 
-	is_external = models.BooleanField(default=False)
-	is_pop_up = models.BooleanField(default=False)
-	is_active = models.BooleanField(default=False)
+    is_external = models.BooleanField(default=False)
+    is_pop_up = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
 
-	def __str__(self):
-		# return str(self.id) + str(self.heading)
+    def __str__(self):
+        # return str(self.id) + str(self.heading)
         return 'Widget #' + str(self.id) + ' with type ' + str(dict(WIDGET_CHOICES).get(self.widget_type))
 
-	def get_widget_type(self):
-		widgetDict = dict(WIDGET_CHOICES)
-		return widgetDict.get(self.widget_type)
+    def get_widget_type(self):
+        widgetDict = dict(WIDGET_CHOICES)
+        return widgetDict.get(self.widget_type)
 
-	def get_widget_data(self):
-		data_dict = {}
-		for field in self._meta.fields:
-			data_dict[field.name] = getattr(self, field.name)
+    def get_widget_data(self):
+        data_dict = {}
+        for field in self._meta.fields:
+            data_dict[field.name] = getattr(self, field.name)
 
-		if self.widget_type == 3:
-			related_arts = self.related_article.filter(status=1)
-			related_arts = related_arts[: 5]
-			data_dict.update({
-				"related_arts": related_arts,
-			})
+        if self.widget_type == 3:
+            related_arts = self.related_article.filter(status=1)
+            related_arts = related_arts[: 5]
+            data_dict.update({
+                "related_arts": related_arts,
+            })
 
-		if self.iw:
-			data_dict.update({
-				'indexer_heading': self.iw.heading,
-			})
-			data_dict['column_headings'] = dict(self.iw.columnheading_set.values_list('column', 'name'))
-			data_dict['column_data'] = {}
-			for key, value in data_dict['column_headings'].items():
-				data_dict['column_data'].update({key: dict(self.iw.indexcolumn_set.filter(column=key).values_list('name', 'url'))})
+        if self.iw:
+            data_dict.update({
+                'indexer_heading': self.iw.heading,
+            })
+            data_dict['column_headings'] = dict(self.iw.columnheading_set.values_list('column', 'name'))
+            data_dict['column_data'] = {}
+            for key, value in data_dict['column_headings'].items():
+                data_dict['column_data'].update({key: dict(self.iw.indexcolumn_set.filter(column=key).values_list('name', 'url'))})
 
-		return data_dict
+        return data_dict
 
-	def get_template(self):
-		if self.widget_type == 1:
-			return 'text_format.html'
-		elif self.widget_type == 2:
-			return 'download_pdf.html'
-		elif self.widget_type == 3:
-			return 'related_blog.html'
-		elif self.widget_type == 4:
-			return 'practice_test.html'
-		elif self.widget_type == 5:
-			return 'expert_section.html'
-		elif self.widget_type == 6:
-			return 'request_call.html'
-		elif self.widget_type == 7:
-			return 'banner_ad.html'
-		elif self.widget_type == 8:
-			return 'index_widget.html'
+    def get_template(self):
+        if self.widget_type == 1:
+            return 'text_format.html'
+        elif self.widget_type == 2:
+            return 'download_pdf.html'
+        elif self.widget_type == 3:
+            return 'related_blog.html'
+        elif self.widget_type == 4:
+            return 'practice_test.html'
+        elif self.widget_type == 5:
+            return 'expert_section.html'
+        elif self.widget_type == 6:
+            return 'request_call.html'
+        elif self.widget_type == 7:
+            return 'banner_ad.html'
+        elif self.widget_type == 8:
+            return 'index_widget.html'
 
 
 class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
@@ -192,8 +192,8 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
     def get_full_url(self):
         return self.build_absolute_uri(self.get_absolute_url())
 
-	def get_absolute_url(self):
-		return reverse('cms:page', kwargs={'slug': self.slug, 'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('cms:page', kwargs={'slug': self.slug, 'pk': self.pk})
 
 
 class PageWidget(AbstractCommonModel):
