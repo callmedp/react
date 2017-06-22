@@ -47,9 +47,9 @@ class WidgetViewMixin(object):
     queryset = models.Widget.objects.all()
     serializer_class = serializers.WidgetSerializer
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
-    filter_fields = ('widget_type', 'user', 'created_by', 'user', 'writer_designation', 'iw', 'is_external', 'is_pop_up', 'is_active')
-    search_fields = ('=widget_type', 'heading', '=user__id', '^user__name', '^display_name', '^writer_designation', '=iw__id')
-    order_fields = ('id', 'widget_type', 'heading', 'user', 'display_name', 'writer_designation', 'iw', 'is_external', 'is_pop_up', 'is_active', 'created_by', 'created_on')
+    filter_fields = ('widget_type', 'created_by', 'writer_designation', 'iw', 'is_external', 'is_pop_up', 'is_active')
+    search_fields = ('=widget_type', 'heading', '^display_name', '^writer_designation', '=iw__id')
+    order_fields = ('id', 'widget_type', 'heading', 'display_name', 'writer_designation', 'iw', 'is_external', 'is_pop_up', 'is_active', 'created_by', 'created_on')
     ordering = ('-id')
     pagination_class = PageNumberPagination
 
