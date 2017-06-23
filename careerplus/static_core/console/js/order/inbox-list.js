@@ -9,12 +9,12 @@ $(function(){
         }
         else{
         	var selected = new Array();
-            $('#inbox-table input:checked').each(function() {
-                selected.push($(this).prop('name'));
+            $('#body-table-inbox input[name="table_records"]:checked').each(function() {
+                selected.push($(this).prop('value'));
             });
 
-            if ((selected.length - 1) > 0){
-            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected  '+ (selected.length - 1) +' order items to do action' + ' ?</div>');
+            if (selected.length > 0){
+            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected  '+ selected.length +' order items to do action' + ' ?</div>');
                 $('#action_inbox').show();
                 $('#actionModal').modal("show");
             }
@@ -42,13 +42,27 @@ $(function(){
         }
         else{
         	var selected = new Array();
-            $('#inbox-table input:checked').each(function() {
-                selected.push($(this).prop('name'));
+            $('#body-table-inbox input[name="table_records"]:checked').each(function() {
+                selected.push($(this).prop('value'));
             });
 
-            if ((selected.length -1) > 0){
-            	$("#inbox_table_form").submit();
+            if (selected.length > 0){
             	$('#actionModal').modal("hide");
+                $.ajax({
+                    url: '/console/queue/inbox/',
+                    type: "POST",
+                    data : {"selected_id": selected, "action_type": action},
+                    dataType: 'json',
+                    success: function(data) {
+                        var message = data.display_message
+                        alert(message);
+                        window.location.reload();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert("Something went wrong. Try again later");
+                    }
+                });
+
             }
             else{
                 $('#myModalbody').html('<div class="alert alert-danger">You have selected no orderitem, Please select orderitems first.</div>');

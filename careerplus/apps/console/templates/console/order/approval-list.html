@@ -79,14 +79,15 @@
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
-                    <th class="column-title">Draft Level</th>
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
+                    <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
                     <th class="column-title">Review Document</th>
+                    <th class="column-title">Approve / Reject Draft</th>
                   </tr>
                 </thead>
 
@@ -99,15 +100,25 @@
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
-                      <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td>Delivery Type</td>
                       <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
                       <td>{{obj.updated_on|naturaltime}}</td>
-
+                      <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
                       <td><a target="_blank" href="{% url "console:order-item-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review Document</button></a></td>
+
+                      <td>
+                          <form role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
+                          <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
+                          <center>
+                            <button type="button" onclick="acceptDraftByAdmin('{{obj.id}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
+                            <button type="button" onclick="rejectDraftByAdmin('{{obj.id}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                          </center>
+                        </form>
+                        
+                    </td>
                       
                       
                     </tr>
@@ -188,4 +199,5 @@
         
 {% block js_block %}
   {{ block.super }}
+  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
 {% endblock js_block %}

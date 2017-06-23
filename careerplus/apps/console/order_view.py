@@ -1,11 +1,14 @@
+import json
+
 from django.views.generic import TemplateView, ListView, DetailView
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
@@ -211,39 +214,42 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        try:
-            orderitem_list = request.POST.getlist('table_records', [])
-            writer_pk = int(request.POST.get('action_type', '0'))
-            orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
-            if writer_pk == 0:
-                messages.add_message(request, messages.ERROR, 'Please select valid action first')
-            else:
-                User = get_user_model()
-                try:
-                    writer = User.objects.get(pk=writer_pk)
-                    for obj in orderitem_objs:
-                        obj.assigned_to = writer
-                        obj.assigned_by = request.user
-                        obj.save()
-                        obj.orderitemoperation_set.create(
-                            oi_status=1,
-                            last_oi_status=obj.oi_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user
-                        )
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=1,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user
-                        )
-                        # mail to user about writer information
-                    messages.add_message(request, messages.SUCCESS, str(len(orderitem_objs)) + ' orderitems are Assigned')
-                except Exception as e:
-                    messages.add_message(request, messages.ERROR, str(e))
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, str(e))
-        return HttpResponseRedirect(reverse('console:queue-inbox'))
+        if request.is_ajax():
+            try:
+                data = {"display_message": ''}
+                orderitem_list = request.POST.getlist('selected_id[]', [])
+                writer_pk = int(request.POST.get('action_type', '0'))
+                orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
+                if writer_pk == 0:
+                    data['display_message'] = 'Please select valid action first.'
+                else:
+                    User = get_user_model()
+                    try:
+                        writer = User.objects.get(pk=writer_pk)
+                        for obj in orderitem_objs:
+                            obj.assigned_to = writer
+                            obj.assigned_by = request.user
+                            obj.save()
+                            obj.orderitemoperation_set.create(
+                                oi_status=1,
+                                last_oi_status=obj.oi_status,
+                                assigned_to=obj.assigned_to,
+                                added_by=request.user
+                            )
+                            obj.orderitemoperation_set.create(
+                                oi_status=obj.oi_status,
+                                last_oi_status=1,
+                                assigned_to=obj.assigned_to,
+                                added_by=request.user
+                            )
+                            # mail to user about writer information
+                        data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
+                    except Exception as e:
+                        data['display_message'] = str(e)
+            except Exception as e:
+                data['display_message'] = str(e)
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
         context = super(InboxQueueVeiw, self).get_context_data(**kwargs)
@@ -253,8 +259,9 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         context.update({
             "action_form": InboxActionForm(),
             "messages": alert,
+            "draft_form": FileUploadForm(),
+            "message_form": MessageForm(),
         })
-
         return context
 
     def get_queryset(self):
@@ -280,6 +287,10 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             pass
         return queryset.select_related('order', 'product')
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(InboxQueueVeiw, self).dispatch(request, *args, **kwargs)
+
 
 @method_decorator(permission_required('order.can_view_order_item_detail', login_url='/console/login/'), name='dispatch')
 class OrderItemDetailVeiw(DetailView):
@@ -300,6 +311,8 @@ class OrderItemDetailVeiw(DetailView):
                 obj.oi_draft = request.FILES.get('file', '')
                 if obj.oi_status == 8:
                     obj.draft_counter += 1
+                elif not obj.draft_counter:
+                        obj.draft_counter += 1
                 obj.oi_status = 5  # pending Approval
                 obj.last_oi_status = last_status
                 obj.draft_added_on = timezone.now()
@@ -480,6 +493,8 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         context.update({
             "messages": alert,
             "max_limit_draft": max_limit_draft,
+            "draft_form": FileUploadForm(),
+            "message_form": MessageForm(),
         })
         return context
 
@@ -527,6 +542,8 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         context.update({
             "messages": alert,
             "max_limit_draft": max_limit_draft,
+            "draft_form": FileUploadForm(),
+            "message_form": MessageForm(),
         })
         return context
 

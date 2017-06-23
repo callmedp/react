@@ -158,6 +158,8 @@ class OrderItem(models.Model):
         max_length=255, upload_to='oi_draft/', null=True, blank=True)
     draft_counter = models.PositiveIntegerField(default=0)
 
+    waiting_for_input = models.BooleanField(default=False)
+
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='oi_assigned',

@@ -88,5 +88,17 @@ class MessageForm(forms.ModelForm):
 		self.fields['message'].widget.attrs['rows'] = 5
 		self.fields['message'].widget.attrs['cols'] = 50
 		self.fields['message'].widget.attrs['width'] = "285px"
+		self.fields['message'].widget.attrs['placeholder'] = 'write message here....'
 
 		self.fields['is_internal'].label = 'For Internal Only'
+		self.fields['is_internal'].initial = True
+		self.fields['is_internal'].help_text = 'For Internal Users Only'
+
+
+class WaitingForInputForm(forms.ModelForm):
+	class Meta:
+		model = OrderItem
+		fields = ['waiting_for_input']
+
+	def __init__(self, *args, **kwargs):
+		super(WaitingForInputForm, self).__init__(*args, **kwargs)

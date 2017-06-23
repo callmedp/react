@@ -104,7 +104,7 @@
           <div class="x_content">
 
             <div class="table-responsive">
-              <form id="inbox_table_form" method="post" action=".">{% csrf_token %}
+              <!--form id="inbox_table_form" method="post" action="."-->{% csrf_token %}
               <input type="hidden" name="action_type" id="action_type_id" class="flat">
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
@@ -125,15 +125,17 @@
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Candidate Doc</th>
                     <th class="column-title">Upload Draft</th>
+                    <th class="column-title">Submit Msg</th>
                     <th class="column-title">Deatil Link</th>
                     <th class="column-title">User Category</th>
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">How Old</th>
+                    <th class="column-title">Waiting for input</th>
                     <th class="column-title">Assigned</th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="body-table-inbox">
                   {% for obj in page %}
                     <tr class="even pointer">
                       {% if perms.order.writer_assignment_permission %}
@@ -148,17 +150,82 @@
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
                       <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
-                      <td>upload draft</td>
+                      <td>
+                        <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                            {{draft_form.file}}
+                            <div style="display:none">
+                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                            </div>
+                            <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                        </form>
+                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
+                            <div class="modal-dialog modal-lg">
+                              <div class="modal-content">
+
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                  </button>
+                                  <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+                                </div>
+                                <div class="modal-body" id="myModalbody{{obj.pk}}">
+                                  Are You Sure???
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <button type="button" data-dismiss="modal" class="btn btn-primary" onclick="uploadDraft('{{obj.pk}}',)">Yes</button>
+                                </div>
+
+                              </div>
+                            </div>
+                        </div>
+                      </td>
+                      <td>
+                        <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                            <fieldset>
+
+                                {% for field in message_form %}
+                                    <div class="form-group"> 
+                                        <div class="col-md-4">
+                                            {{ field }}
+                                            {% if field.help_text %}
+                                                <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <div style='display:none'>
+                                    <input type="hidden" name="pk" value="{{obj.pk}}">
+                                </div>
+                            </fieldset>
+                              <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                  <center><button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button></center>
+                                </div>
+                            </div>
+                        </form>
+                      </td>
                       <td><a target="_blank" href="{% url "console:order-item-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Detail order item</button></a></td>
                       <td>User Category</td>
                       <td>Delivery Type</td>
                       <td>{{obj.updated_on|naturaltime}}</td>
+
+                      <td>
+                        <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
+                            <div class="form-group">
+                            <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"></div>
+                            <div style="display:none">
+                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                            </div>
+                            <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
+                        </form>
+                      </td>
+
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
               </table>
-              </form>
+              <!--/form-->
             </div>
             {% block main_pagination %}
                 <div class="main_pagination">
@@ -234,7 +301,10 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/order/inbox-list.js" %}"></script>
+
+  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
 
 {% endblock js_block %}

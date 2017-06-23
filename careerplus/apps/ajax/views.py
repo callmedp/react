@@ -16,6 +16,7 @@ from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
 from order.models import OrderItem
+from console.order_form import FileUploadForm
 
 
 class ArticleCommentView(View):
@@ -173,21 +174,26 @@ class AjaxStateView(View):
 
 class AjaxOrderItemCommentView(View):
     def post(self, request, *args, **kwargs):
-        data = {"status": 0}
         if request.is_ajax():
-            oi_pk = request.POST.get('pk', None)
-            message = request.POST.get('message', '').strip()
-            is_internal = request.POST.get('is_internal', False)
-            if is_internal:
-                is_internal = True
-            if oi_pk and message:
-                oi_obj = OrderItem.objects.get(pk=oi_pk)
-                oi_obj.message_set.create(
-                    message=message,
-                    added_by=request.user,
-                    is_internal=is_internal)
-                data['status'] = 1
-        return HttpResponse(json.dumps(data), content_type="application/json")
+            try:
+                data = {"status": 0}
+                if request.is_ajax():
+                    oi_pk = request.POST.get('pk', None)
+                    message = request.POST.get('message', '').strip()
+                    is_internal = request.POST.get('is_internal', False)
+                    if is_internal:
+                        is_internal = True
+                    if oi_pk and message:
+                        oi_obj = OrderItem.objects.get(pk=oi_pk)
+                        oi_obj.message_set.create(
+                            message=message,
+                            added_by=request.user,
+                            is_internal=is_internal)
+                        data['status'] = 1
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
 
 
 class ApproveByAdminDraft(View):
@@ -208,7 +214,9 @@ class ApproveByAdminDraft(View):
                     added_by=request.user)
             except:
                 pass
-        return HttpResponse(json.dumps(data), content_type="application/json")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
 
 class RejectByAdminDraft(View):
     def post(self, request, *args, **kwargs):
@@ -228,4 +236,68 @@ class RejectByAdminDraft(View):
                     added_by=request.user)
             except:
                 pass
-        return HttpResponse(json.dumps(data), content_type="application/json")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class UploadDraftView(View):
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {'display_message': "", }
+            form = FileUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    oi_pk = request.POST.get('oi_pk', None)
+                    obj = OrderItem.objects.get(pk=oi_pk)
+
+                    last_status = obj.oi_status
+                    obj.oi_draft = request.FILES.get('file', '')
+                    if obj.oi_status == 8:
+                        obj.draft_counter += 1
+                    elif not obj.draft_counter:
+                        obj.draft_counter += 1
+                    obj.oi_status = 5  # pending Approval
+                    obj.last_oi_status = last_status
+                    obj.draft_added_on = timezone.now()
+                    obj.save()
+                    data['display_message'] = 'Draft uploded Successfully.'
+                    obj.orderitemoperation_set.create(
+                        oi_draft=obj.oi_draft,
+                        draft_counter=obj.draft_counter,
+                        oi_status=4,
+                        last_oi_status=last_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=4,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                except Exception as e:
+                    data['display_message'] = str(e)
+            else:
+                error_message = form.errors.get('file')
+                if error_message:
+                    data['display_message'] = error_message
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class SaveWaitingInput(View):
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {"message": "Waiting input Not Updated"}
+            oi_pk = request.POST.get('oi_pk', None)
+            waiting_input = request.POST.get('waiting_input', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                if waiting_input:
+                    obj.waiting_for_input = True
+                else:
+                    obj.waiting_for_input = False
+                obj.save()
+                data['message'] = 'Waiting Input Updated Successfully.'
+            except Exception as e:
+                data['message'] = str(e)
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
