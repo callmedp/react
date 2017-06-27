@@ -267,9 +267,7 @@ class ShineCandidateDetail(ShineToken):
         try:
             if shine_id:
                 headers = self.get_api_headers()
-                status_url = settings.SHINE_SITE +\
-                        "/api/v2/candidate/" +\
-                        shine_id + "/status/?format=json"
+                status_url = "{}/api/v2/candidate/{}/status/?format=json".format(settings.SHINE_SITE, shine_id)
                 status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                 if status_response.status_code == 200 and status_response.json():
                     return status_response.json()

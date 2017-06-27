@@ -1,0 +1,11 @@
+/* current element like this */
+[class^="icon-"] {
+  background-image: url("../../../images/mobile/common/sprites.svg"); }
+
+.fill-star, .unfill-star {
+  background-image: url("../../../images/mobile/common/sprites.svg"); }
+
+.level-control:after {
+  background-image: url("../../../images/mobile/common/sprites.svg"); }
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImltYWdlcy5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsK0JBQStCO0FBQy9CO0VBQ0UsK0NBQStDLEVBQUU7O0FBRW5EO0VBQ0UsK0NBQStDLEVBQUU7O0FBRW5EO0VBQ0UsK0NBQStDLEVBQUUiLCJmaWxlIjoiaW1hZ2VzLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIGN1cnJlbnQgZWxlbWVudCBsaWtlIHRoaXMgKi9cbltjbGFzc149XCJpY29uLVwiXSB7XG4gIGJhY2tncm91bmQtaW1hZ2U6IHVybChcIi4uL2ltYWdlcy9zcHJpdGVzLnN2Z1wiKTsgfVxuXG4uZmlsbC1zdGFyLCAudW5maWxsLXN0YXIge1xuICBiYWNrZ3JvdW5kLWltYWdlOiB1cmwoXCIuLi9pbWFnZXMvc3ByaXRlcy5zdmdcIik7IH1cblxuLmxldmVsLWNvbnRyb2w6YWZ0ZXIge1xuICBiYWNrZ3JvdW5kLWltYWdlOiB1cmwoXCIuLi9pbWFnZXMvc3ByaXRlcy5zdmdcIik7IH1cbiJdfQ== */

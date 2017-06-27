@@ -25,7 +25,7 @@ def user_register(data={}, order=None):
             "vendor_id": '12345',
             "raw_password": raw_password,
         })
-        user_resp = RegistrationLoginApi().user_registration(data)
+        user_resp = RegistrationLoginApi.user_registration(data)
         candidate_id = user_resp.get('id')
         order.candidate_id = candidate_id
         order.save()

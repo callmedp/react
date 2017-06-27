@@ -9,7 +9,7 @@ $().ready(function() {
                 data:{email:$("#id_email").val()},
                 success: function(res)
                 {
-                    emailresponse = ( res.exists == false ) ? false : true;
+                    emailresponse = res.exists;
                 }
              });
              return emailresponse;
@@ -35,20 +35,20 @@ $().ready(function() {
                 email:{
                     required:true,
                     email:true,
-                    emailDoesNotExist:true,
+                    emailDoesNotExist:true
 
                 },
                 password:{
                     required:true,
                     minlength:6,
-                    maxlength: 15,
-                },                
+                    maxlength: 15
+                }
         },
         messages:{
-            email: { required:"Please enter a valid email address",},
+            email: { required:"Please enter a valid email address"},
             password:{
-                required: "Please provide a password",
-            },
-        },
+                required: "Please provide a password"
+            }
+        }
     });
 });
