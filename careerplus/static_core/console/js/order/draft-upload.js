@@ -4,7 +4,7 @@ function clickSubmitDraft(oi_id, ){
     	$('#draft-upload-form' + oi_id).parsley().validate();
         if ($('#draft-upload-form' + oi_id).parsley().isValid()){
         	$('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload draft and send for approval???</div>');
-            $('#uploadDraft' + oi_id).show();
+            $('#uploadDraftAction' + oi_id).show();
             $('#draftmodal' + oi_id).modal("show");
         }
     }
@@ -12,9 +12,10 @@ function clickSubmitDraft(oi_id, ){
 
 function uploadDraft(oi_id, ){
     if (oi_id){
+        $('#draftmodal' + oi_id).modal("hide");
+        console.log("hello");
     	$('#draft-upload-form' + oi_id).parsley().validate();
         if ($('#draft-upload-form' + oi_id).parsley().isValid()){
-            $('#draftmodal' + oi_id).modal("hide");
             var formData = new FormData($('#draft-upload-form' + oi_id)[0]);
             $.ajax({
                 url: '/ajax/orderitem/upload-draft/',
@@ -26,9 +27,11 @@ function uploadDraft(oi_id, ){
                 data : formData,
                 enctype: "multipart/form-data",
                 success: function(json) {
-                    $('#draft-upload-form' + oi_id)[0].reset();
+                    //$('#draft-upload-form' + oi_id)[0].reset();
                     var message = json.display_message;
                     alert(message);
+                    window.location.reload();
+
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong. Try again later");
@@ -53,6 +56,7 @@ function submitMessage(oi_id, ){
                     if (json.status == 1){
                         $('#message-add-form' + oi_id)[0].reset();
                         alert('Message added successfully');
+                        window.location.reload();
                     }
                     else{
                         alert("Something went wrong. Try again later");
@@ -89,7 +93,19 @@ function saveWaitingForInput(oi_id, ){
 };
 
 
-function acceptDraftByAdmin(oi_id, ){
+function clickApproveDraft(oi_id, ){
+    if (oi_id){
+        $('#accept-reject-form' + oi_id).parsley().validate();
+        if ($('#accept-reject-form' + oi_id).parsley().isValid()){
+            $('#approveModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to approve draft???</div>');
+            $('#approveAction' + oi_id).show();
+            $('#approvemodal' + oi_id).modal("show");
+        }
+    }
+};
+
+
+function approveDraftByAdmin(oi_id, ){
     if (oi_id){
         var formData = $('#accept-reject-form' + oi_id).serialize();
         $.ajax({
@@ -110,6 +126,18 @@ function acceptDraftByAdmin(oi_id, ){
                 alert("Something went wrong. Try again later");
             }
         });
+    }
+};
+
+
+function clickRejectDraft(oi_id, ){
+    if (oi_id){
+        $('#accept-reject-form' + oi_id).parsley().validate();
+        if ($('#accept-reject-form' + oi_id).parsley().isValid()){
+            $('#rejectModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to reject draft???</div>');
+            $('#rejectAction' + oi_id).show();
+            $('#rejectmodal' + oi_id).modal("show");
+        }
     }
 };
 

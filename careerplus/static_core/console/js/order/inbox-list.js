@@ -19,7 +19,7 @@ $(function(){
                 $('#actionModal').modal("show");
             }
             else{
-            	$('#myModalbody').html('<div class="alert alert-danger">Please select writer first.</div>');
+            	$('#myModalbody').html('<div class="alert alert-danger">Please select element first to do actions.</div>');
 	            $('#action_inbox').hide();
 	            $('#actionModal').modal("show");
             }

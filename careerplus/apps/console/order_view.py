@@ -361,6 +361,46 @@ class OrderItemDetailVeiw(DetailView):
         return context
 
 
+@method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/'), name='dispatch')
+class OrderDetailVeiw(DetailView):
+    model = Order
+    template_name = "console/order/order-detail.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(OrderDetailVeiw, self).get(request, *args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderDetailVeiw, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        order = self.get_object()
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+
+        order_items = order.orderitems.all().select_related('product', 'partner')
+
+        # if order:
+        #     parent_ois = order.orderitems.filter(parent=None).select_related('product', 'partner')
+        #     for p_oi in parent_ois:
+        #         data = {}
+        #         data['oi'] = p_oi
+        #         data['addons'] = order.orderitems.filter(parent=p_oi, is_combo=False, is_variation=False, no_process=False).select_related('product', 'partner')
+        #         data['variations'] = order.orderitems.filter(parent=p_oi, is_variation=True).select_related('product', 'partner')
+        #         order_items.append(data)
+        #     context.update({
+        #         'orderitems': order_items,
+        #         'order': order})
+
+        context.update({
+            "order": order,
+            'orderitems': list(order_items),
+            "max_limit_draft": max_limit_draft,
+            "messages": alert,
+            "message_form": MessageForm(),
+        })
+        return context
+
+
 @method_decorator(permission_required('order.can_show_approval_queue', login_url='/console/login/'), name='dispatch')
 class ApprovalQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'approval_list'

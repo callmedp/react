@@ -85,6 +85,10 @@ class Order(AbstractAutoDate):
             ("can_show_midout_queue", "Can Show Midout Queue"),
             ("can_show_all_order", "Can View All Orders"),
             ("can_show_paid_order", "Can View Paid Orders"),
+
+            # order deatil permissions
+            ("can_view_order_detail", "Can View Order Deatil"),
+            
         )
 
     def __str__(self):
@@ -217,6 +221,21 @@ class OrderItem(models.Model):
     def get_oi_status(self):
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
+
+    def get_oi_communications(self):
+        communications = self.message_set.all().select_related('added_by')
+        return list(communications)
+
+    def get_oi_operations(self):
+        operations = self.orderitemoperation_set.all().select_related(
+            'added_by', 'assigned_to')
+        return list(operations)
+
+    def get_oi_drafts(self):
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+        drafts = self.orderitemoperation_set.filter(
+            draft_counter__range=[1, max_limit_draft])
+        return list(drafts)
 
 
 class OrderItemOperation(AbstractAutoDate):

@@ -84,7 +84,6 @@
                     <th class="column-title">Transactions</th>
                     <th class="column-title">Currency</th>
                     <th class="column-title">Amount Payable</th>
-                    <th class="column-title">Total</th>
                     <th class="column-title">Payment Status</th>
                     <th class="column-title">Payment Mode</th>
                     <th class="column-title">Payment Date</th>
@@ -102,11 +101,10 @@
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
                       <td>{{obj.country_code}} {{obj.mobile}}</td>
-                      <td><a href="">Detail order</a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td><a href="">Deatil Txns</a></td>
                       <td>INR</td>
                       <td>{{obj.total_incl_tax}}</td>
-                      <td>total</td>
                       <td>{{obj.get_status}}</td>
                       <td>{{obj.get_payment_mode}}</td>
                       <td>{{obj.payment_date}}</td>

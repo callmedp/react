@@ -113,14 +113,54 @@
                           <form role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
                           <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
                           <center>
-                            <button type="button" onclick="acceptDraftByAdmin('{{obj.id}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
-                            <button type="button" onclick="rejectDraftByAdmin('{{obj.id}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
+                            <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Reject Draft</button>
                           </center>
-                        </form>
+                          </form>
+
+                          <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="approvemodal{{obj.pk}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                      </button>
+                                      <h4 class="modal-title" id="myModalLabel">Approve Draft</h4>
+                                    </div>
+                                    <div class="modal-body" id="approveModalbody{{obj.pk}}">
+                                      Are You Sure???
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="button" id="approveAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="approveDraftByAdmin('{{obj.id}}',)">Yes</button>
+                                    </div>
+
+                                  </div>
+                                </div>
+                            </div>
+
+                          <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="rejectmodal{{obj.pk}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                      </button>
+                                      <h4 class="modal-title" id="myModalLabel">Reject Draft</h4>
+                                    </div>
+                                    <div class="modal-body" id="rejectModalbody{{obj.pk}}">
+                                      Are You Sure???
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="button" id="rejectAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="rejectDraftByAdmin('{{obj.id}}',)">Yes</button>
+                                    </div>
+
+                                  </div>
+                                </div>
+                            </div>
                         
-                    </td>
-                      
-                      
+                        </td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -199,5 +239,6 @@
         
 {% block js_block %}
   {{ block.super }}
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
 {% endblock js_block %}

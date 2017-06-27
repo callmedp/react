@@ -155,4 +155,7 @@ urlpatterns += [
 
     url(r'^queue/orderitem/(?P<pk>\d+)/detail/$',
         order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
+
+    url(r'^queue/order/(?P<pk>\d+)/details/$',
+        order_view.OrderDetailVeiw.as_view(), name='order-detail'),
 ]
