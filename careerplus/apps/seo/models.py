@@ -46,7 +46,6 @@ class AbstractSEO(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-
         pk_field_name = self._meta.pk.name
         url_value_name = getattr(self, 'url_value_name', 'name')
         url_slug_name = getattr(self, 'url_slug_name', 'slug')

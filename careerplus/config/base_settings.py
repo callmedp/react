@@ -53,6 +53,7 @@ THIRD_PARTY_APPS = [
     'meta',
     'requests',
     'sorl.thumbnail',
+    'rest_framework',
 ]
 
 # Apps specific for this project go here.
@@ -162,6 +163,14 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser'
+    ],
+    'PAGE_SIZE': 10
+}
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
 CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'

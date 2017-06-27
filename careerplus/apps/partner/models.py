@@ -89,7 +89,10 @@ class VendorHierarchy(AbstractAutoDate):
     designation = models.PositiveSmallIntegerField(
         default=1)
 
+    # class Meta:
+    #     auto_created = True
+
     def __str__(self):
         return _("%(vendor)s to '%(employee)s'") % {
-            'vendor': self.vendor,
+            'vendor': self.vendee,
             'employee': self.employee}

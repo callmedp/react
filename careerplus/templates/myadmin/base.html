@@ -41,6 +41,7 @@
     <link href="{% static "/packages/bootstrap-daterangepicker/daterangepicker.css"  %}" rel="stylesheet" type="text/css">
     {% endcomment %}
 
+    <link href="{% static "/console/css/datepicker/bootstrap-datetimepicker.min.css"  %}" rel="stylesheet" type="text/css">
     
     <!-- Custom Theme Style -->
     <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
@@ -162,17 +163,20 @@
     <script type="text/javascript" src="{% static "packages/jqvmap/jquery.vmap.js" %}"></script>
     <script type="text/javascript" src="{% static "packages/jqvmap/jquery.vmap.world.js" %}"></script>
     <script type="text/javascript" src="{% static "packages/jqvmap/examples/js/jquery.vmap.sampledata.js" %}"></script>
-
-    <!-- Parsley -->
-    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-    
-    <!-- bootstrap-daterangepicker -->
-    <script type="text/javascript" src="{% static "packages/moment/min/moment.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "packages/bootstrap-daterangepicker/daterangepicker.js" %}"></script>
     
     <!-- Custom Theme Scripts -->
     <script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script>
     {% endcomment %}
+
+    <!-- PJAX -->
+    <script type="text/javascript" src="{% static "console/js/jquery.pjax.js" %}"></script>
+
+    <!-- bootstrap-daterangepicker -->
+    <script type="text/javascript" src="{% static "packages/moment/min/moment.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/datepicker/bootstrap-datetimepicker.min.js" %}"></script>
+
+    <!-- Parsley -->
+    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
 
     {% endblock js %}
 

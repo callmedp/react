@@ -49,11 +49,13 @@ urlpatterns += [
     url(r'^article/', include('blog.urls', namespace='blog')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^cart/', include('cart.urls', namespace='cart')),
+    url(r'^order/', include('order.urls', namespace='order')),
     url(r'^payment/', include('payment.urls', namespace='payment')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     # partner url
+    url(r'^partner/', include('partner.urls')),
     url(r'^partner/', include('microsite.urls')),
     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
