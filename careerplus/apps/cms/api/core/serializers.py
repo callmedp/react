@@ -273,7 +273,7 @@ class CommentSerializer(serializers.ModelSerializer):
         style={'template': 'console/fields/select.html', 'empty_text': 'Select Comment replied to', 'attrs': {}})
     class Meta:
         model = models.Comment
-        fields = ('message', 'is_published', 'is_removed', 'page', 'replied_to', 'last_modified_by', 'last_modified_on')
+        fields = ('id', 'message', 'is_published', 'is_removed', 'page', 'replied_to', 'last_modified_by', 'last_modified_on')
         read_only_fields = ('id', 'last_modified_by', 'last_modified_on')
 
 
