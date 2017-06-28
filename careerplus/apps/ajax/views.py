@@ -60,10 +60,10 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
-            slug = request.POST.get('slug', '')
+            pk = request.POST.get('pk', None)
             page = int(request.POST.get('page', 1))
             try:
-                page_obj = Page.objects.get(slug=slug, is_active=True)
+                page_obj = Page.objects.get(pk=pk, is_active=True)
                 comments = page_obj.comment_set.filter(is_published=True,
                     is_removed=False)
                 comment_list = self.pagination_method(page=page,
@@ -71,6 +71,7 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
                 return HttpResponse(json.dumps({'comment_list': comment_list}))
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
+        return HttpResponseForbidden()
 
 
 class CmsShareView(View):
