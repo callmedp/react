@@ -62,12 +62,12 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" ">{{obj.id}}</td>
-                    <td class=" ">{{obj.name}}</td>
-                    <td class=" ">{{obj.slug}}</td>
-                    <td class=" ">{{obj.email}}</td>
-                    <td class=" ">{{obj.country}}</td>
-                    <td class=" ">{{obj.mobile}}</td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.name}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.slug}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.email}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.country}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.mobile}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>

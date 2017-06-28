@@ -63,6 +63,13 @@
               <li><a href="{% url "console:cms:pages:pagecounter-list" %}" data-pjax='.right_col'>Page Counter</a></li>
           </ul>
         </li>
+        <li><a><i class="fa fa-edit"></i> Vendor <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url "console:partner:pages:vendor-list" %}" data-pjax='.right_col'>Vendor</a></li>
+            <li><a href="{% url "console:partner:pages:vendorhierarchy-list" %}" data-pjax='.right_col'>Vendor Hierarchy</a></li>
+          </ul>
+        </li>
+
       {% endif %}
 
       <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>

@@ -17,7 +17,7 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2></h2>
+        <h2>New Order</h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>
@@ -29,17 +29,60 @@
       <div class="x_content">
         <br />
 
-        {% comment %}
-        <form id="page-update-form" method="post" data-parsley-validate class="form-horizontal form-label-left" action="." enctype='multipart/form-data' >{% csrf_token %}
-            {% render_form serializer template_pack='rest_framework/horizontal' %}            
-              <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                  <center><button type="submit" class="btn btn-success">Submit</button></center>
-                </div>
-            </div>
-        </form>
-        {% endcomment %}
-        
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Order Number String
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.number}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Order Item ID
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.id}}
+          </div>
+        </div>
+      </div>  
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Product Name
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.product.name}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Quantity
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.quantity}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Status
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.status}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Date Placed
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.date_placed|slice:":10"}}
+          </div>
+        </div>
+      </div>        
       </div>
     </div>
   </div>

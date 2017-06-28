@@ -6,10 +6,10 @@
     <title> CMS Management Console </title>
   {% endblock title %}
 
-{% block css %}
+{% block css_block %}
     {{block.super}}
     <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
-{% endblock css %}
+{% endblock css_block %}
 
 {% block pagecontent %}
 
@@ -33,9 +33,11 @@
      </script>
     <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
 	<script type="text/javascript">
-    $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-    $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-    $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
-		$('ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+     window.onload = function(){
+      $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
+  		$('tbody>tr>td>a[data-pjax], ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+    }
 	</script>
 {% endblock js_block %}

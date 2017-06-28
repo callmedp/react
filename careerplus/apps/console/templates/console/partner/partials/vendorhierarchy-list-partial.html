@@ -60,10 +60,10 @@
                     <!--td class="a-center ">
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
-                    <td class=" ">{{obj.id}}</td>
-                    <td class=" ">{{obj.vendee}}</td>
-                    <td class=" ">{{obj.employee}}</td>
-                    <td class=" ">{{obj.active}}</td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendorhierarchy-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendorhierarchy-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.vendee}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendorhierarchy-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.employee}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendorhierarchy-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.active}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
