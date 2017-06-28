@@ -98,10 +98,15 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     }
 
     class Meta:
-        verbose_name = _('Catalog Category')
-        verbose_name_plural = _('Catalog Categories')
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
+        permissions = (
+            ("console_add_category", "Can Add Category From Console"),
+            ("console_change_category", "Can Change Category From Console"),
+            ("console_change_category_seo", "Can Change Category From Console"),
+            )
 
     def __str__(self):
 
@@ -112,7 +117,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return dict(CATEGORY_CHOICES).get(self.type_level)
 
     def save(self, *args, **kwargs):
-        if not self.url and self.pk:
+        if self.pk:
             self.url = self.get_full_url()
         if self.name:
             if not self.title:
@@ -128,43 +133,39 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         super(Category, self).save(*args, **kwargs)
 
     def get_meta_desc(self, description=''):
-        if description:
-            try:
-                import re
-                cleanr = re.compile('<.*?>')
-                cleantext = re.sub(cleanr, '', description)
-            except:
-                cleantext = ''
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(self.description, 'html.parser')
+            cleantext = soup.get_text()
+            cleantext = cleantext.strip()
+        except:
+            cleantext = ''
         return cleantext
 
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
 
     def get_description(self):
-        description = self.meta_desc
-        if not description:
-            description = self.description
-        return description.strip()
+        return self.meta_desc
 
     def get_full_url(self):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
         if self.pk:
-            return reverse('skillpage:skill-page-listing', kwargs={'slug': self.slug, 'pk': self.pk})
+            return reverse('skillpage:skill-page-listing',
+                kwargs={'slug': self.slug, 'pk': self.pk})
         
-    def add_relationship(self, category, relation=0):
+    def add_relationship(self, category):
         relationship, created = CategoryRelationship.objects.get_or_create(
             related_from=self,
-            related_to=category,
-            relation=relation)
+            related_to=category,)
         return relationship
 
-    def remove_relationship(self, category, relation=0):
+    def remove_relationship(self, category):
         CategoryRelationship.objects.filter(
             related_from=self,
-            related_to=category,
-            relation=relation).delete()
+            related_to=category).delete()
         return
 
     def get_relationships(self):
@@ -181,30 +182,42 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         elif self.type_level == 2:
             return self.related_to.filter(
                 to_category__related_from=self,
-                type_level=1)
+                to_category__active=True,
+                type_level=1,
+                active=True)
         elif self.type_level == 3:
             return self.related_to.filter(
                 to_category__related_from=self,
-                type_level=2)
+                to_category__active=True,
+                type_level=2,
+                active=True)
         elif self.type_level == 4:
             return self.related_to.filter(
                 to_category__related_from=self,
-                type_level=3)
+                to_category__active=True,
+                type_level=3,
+                active=True)
         return []
 
     def get_childrens(self):
         if self.type_level == 1:
             return self.category_set.filter(
                 from_category__related_to=self,
-                type_level=2)
+                from_category__active=True,
+                type_level=2,
+                active=True)
         elif self.type_level == 2:
             return self.category_set.filter(
                 from_category__related_to=self,
-                type_level=3)
+                from_category__active=True,
+                type_level=3,
+                active=True)
         elif self.type_level == 3:
             return self.category_set.filter(
                 from_category__related_to=self,
-                type_level=4)
+                from_category__active=True,
+                type_level=4,
+                active=True)
         return []
 
     def split_career_outcomes(self):
@@ -219,37 +232,40 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def create_icon(self):
         if not self.image:
             return
-        from PIL import Image
-        from io import BytesIO
-        from django.core.files.uploadedfile import SimpleUploadedFile
-        import os
+        try:
+            from PIL import Image
+            from io import BytesIO
+            from django.core.files.uploadedfile import SimpleUploadedFile
+            import os
 
-        THUMBNAIL_SIZE = (100, 100)
-        DJANGO_TYPE = None
+            THUMBNAIL_SIZE = (100, 100)
+            DJANGO_TYPE = None
 
-        if self.image.name.endswith(".jpg"):
-            DJANGO_TYPE = 'image/jpeg'
-            PIL_TYPE = 'jpeg'
-            FILE_EXTENSION = 'jpg'
-        elif self.image.name.endswith(".png"):
-            DJANGO_TYPE = 'image/png'
-            PIL_TYPE = 'png'
-            FILE_EXTENSION = 'png'
-        else:
-            return
-        image = Image.open(BytesIO(self.image.read()))
-        image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
+            if self.image.name.endswith(".jpg"):
+                DJANGO_TYPE = 'image/jpeg'
+                PIL_TYPE = 'jpeg'
+                FILE_EXTENSION = 'jpg'
+            elif self.image.name.endswith(".png"):
+                DJANGO_TYPE = 'image/png'
+                PIL_TYPE = 'png'
+                FILE_EXTENSION = 'png'
+            else:
+                return
+            image = Image.open(BytesIO(self.image.read()))
+            image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
 
-        temp_handle = BytesIO()
-        image.save(temp_handle, PIL_TYPE)
-        temp_handle.seek(0)
+            temp_handle = BytesIO()
+            image.save(temp_handle, PIL_TYPE)
+            temp_handle.seek(0)
 
-        suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
-                temp_handle.read(), content_type=DJANGO_TYPE)
-        self.icon.save(
-            '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
-            suf,
-        )
+            suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
+                    temp_handle.read(), content_type=DJANGO_TYPE)
+            self.icon.save(
+                '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
+                suf,
+            )
+        except:
+            pass
         return
 
 
@@ -264,16 +280,15 @@ class CategoryRelationship(AbstractAutoDate):
         verbose_name=_('To'),
         related_name='to_category',
         on_delete=models.CASCADE)
-    relation = models.PositiveSmallIntegerField(
-        choices=((0, 'Active'), (1, 'Inactive'),), default=0)
     sort_order = models.PositiveIntegerField(
         _('Sort Order'), default=1)
     is_main_parent = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
 
     def __str__(self):
-        return _("%(pri)s to '%(sec)s'") % {
-            'pri': self.related_from,
-            'sec': self.related_to}
+        return _("%(pri)s  ===>  %(sec)s") % {
+            'sec': self.related_from,
+            'pri': self.related_to}
 
     class Meta:
         unique_together = ('related_from', 'related_to')
@@ -714,11 +729,7 @@ class Product(AbstractProduct, ModelMeta):
         return
 
     def get_description(self):
-        description = self.meta_desc
-        if not description:
-            description = self.description
-        return description.strip()
-
+        return self.meta_desc
     
     def get_ratings(self):
         pure_rating = int(self.avg_rating)
@@ -944,27 +955,6 @@ class ChildProduct(AbstractAutoDate):
         unique_together = ('father', 'children')
         verbose_name = _('Product Child')
         verbose_name_plural = _('Product Childs')
-
-
-# class ProductOffer(AbstractAutoDate):
-#     offer = models.ForeignKey(
-#         Offer,
-#         verbose_name=_('Offer'),
-#         related_name='offers',
-#         on_delete=models.CASCADE)
-#     product = models.ForeignKey(
-#         Product,
-#         verbose_name=_('Product'),
-#         related_name='offerproducts',
-#         on_delete=models.CASCADE)
-#     active = models.BooleanField(default=True)
-#     off_order = models.PositiveIntegerField(
-#         _('Offer Order'), default=1)
-
-#     def __str__(self):
-#         return _("%(product)s to '%(offer)s'") % {
-#             'product': self.product,
-#             'offer': self.offer}
 
 
 class ProductCategory(AbstractAutoDate):

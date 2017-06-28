@@ -171,8 +171,8 @@ CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googl
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-        'height': 400,
-        'width': 700,
+        'height': 'auto',
+        'width': 'auto',
         # 'removePlugins': 'stylesheetparser',
         # 'extraPlugins': 'codesnippet',
     },

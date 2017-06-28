@@ -38,7 +38,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Add Category <small>(add new category to the product catalog)</small></h2>
+            <h2>Add New Product Category</h2>
 
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -64,9 +64,9 @@
                 
               </style>
               {% csrf_token %}
-              <p>Product Category are differentiated in Levels shown in navigations. Please make sure new category doesn't conflict with existing one. After adding the category its relationship will be added from (<a href="#">here</a>)
+              <p>Product Category are differentiated in Levels shown in navigations. Please make sure new category doesn't conflict with existing one. After adding the category its relationship will be added later.
               </p>
-              <span class="section">Category Info</span>
+              <span class="section">Category Form</span>
               
               {% if form.non_field_errors %}
                 <div class="alert alert-danger alert-dismissible fade in" role="alert">

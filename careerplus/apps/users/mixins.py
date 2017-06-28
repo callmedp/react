@@ -73,6 +73,7 @@ class RegistrationLoginApi(object):
 
     @staticmethod
     def check_email_exist(email):
+        import ipdb;ipdb.set_trace()
         response_json = {"response": False}
         email_url = "{}/api/v3/email-exists/?email={}&format=json".format(settings.SHINE_SITE, email)
         headers = {'Content-Type': 'application/json'}

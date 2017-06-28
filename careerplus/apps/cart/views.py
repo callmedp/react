@@ -148,7 +148,7 @@ class PaymentLoginView(TemplateView):
 
                 user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
-                if user_exist['exists'] and password:
+                if user_exist.get('exists') and password:
                     login_resp = RegistrationLoginApi.user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':

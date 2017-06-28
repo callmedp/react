@@ -55,7 +55,8 @@ from faq.forms import (
     ChangeFaqForm)
 from faq.models import FAQuestion, Chapter
 
-@Decorate(check_permission('shop.add_category'))
+
+@Decorate(check_permission('shop.console_add_category'))
 class AddCategoryView(FormView):
     form_class = AddCategoryForm
     template_name = 'console/shop/add_category.html'
@@ -84,11 +85,12 @@ class AddCategoryView(FormView):
     def form_invalid(self, form):
         messages.error(
             self.request,
-            "Your submission has not been saved. Try again."
+            "Your addition has not been saved. Try again."
         )
         return super(AddCategoryView, self).form_invalid(form)
 
 
+@Decorate(check_permission('shop.console_change_category'))
 class ChangeCategoryView(DetailView):
     template_name = 'console/shop/change_category.html'
     model = Category
@@ -115,7 +117,6 @@ class ChangeCategoryView(DetailView):
             max_num=20, validate_max=True)
 
         alert = messages.get_messages(self.request)
-        from django.forms.models import model_to_dict
         main_change_form = ChangeCategoryForm(
             instance=self.get_object())
         seo_change_form = ChangeCategorySEOForm(
@@ -153,7 +154,8 @@ class ChangeCategoryView(DetailView):
                             messages.success(
                                 self.request,
                                 "Category Object Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:category-list',))
+                            return HttpResponseRedirect(
+                                reverse('console:category-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -173,7 +175,8 @@ class ChangeCategoryView(DetailView):
                             messages.success(
                                 self.request,
                                 "Category SEO Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:category-list',))
+                            return HttpResponseRedirect(
+                                reverse('console:category-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -193,7 +196,8 @@ class ChangeCategoryView(DetailView):
                             messages.success(
                                 self.request,
                                 "Category Skill Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:category-list',))
+                            return HttpResponseRedirect(
+                                reverse('console:category-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -265,7 +269,48 @@ class ChangeCategoryView(DetailView):
         return HttpResponseBadRequest()
 
 
-@Decorate(check_permission('shop.change_category'))
+@Decorate(check_permission('shop.console_change_category'))
+class ListCategoryView(ListView, PaginationMixin):
+    model = Category
+    context_object_name = 'category_list'
+    template_name = 'console/shop/list_category.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListCategoryView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListCategoryView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListCategoryView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListCategoryView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['category_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('shop.console_change_category'))
 class ListCategoryRelationView(TemplateView):
     template_name = "console/shop/tree_category.html"
     
@@ -487,47 +532,6 @@ class AddAttributeView(FormView):
         return super(AddAttributeView, self).form_invalid(form)
 
 
-@Decorate(check_permission('shop.change_category'))
-class ListCategoryView(ListView, PaginationMixin):
-    model = Category
-    context_object_name = 'category_list'
-    template_name = 'console/shop/list_category.html'
-    http_method_names = [u'get', ]
-
-    def dispatch(self, request, *args, **kwargs):
-        self.page = 1
-        self.paginated_by = 50
-        self.query = ''
-        return super(ListCategoryView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
-        return super(ListCategoryView, self).get(request, args, **kwargs)
-
-    def get_queryset(self):
-        queryset = super(ListCategoryView, self).get_queryset()
-        try:
-            if self.query:
-                queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
-            pass
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(ListCategoryView, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        context.update({'messages': alert})
-        paginator = Paginator(context['category_list'], self.paginated_by)
-        context.update(self.pagination(paginator, self.page))
-        alert = messages.get_messages(self.request)
-        context.update({
-            "query": self.query,
-            "messages": alert,
-        })
-        return context
-
-
 @Decorate(check_permission('faq.change_faquestion'))
 class ListFaqView(ListView, PaginationMixin):
     model = FAQuestion
@@ -560,47 +564,6 @@ class ListFaqView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         context.update({'messages': alert})
         paginator = Paginator(context['faq_list'], self.paginated_by)
-        context.update(self.pagination(paginator, self.page))
-        alert = messages.get_messages(self.request)
-        context.update({
-            "query": self.query,
-            "messages": alert,
-        })
-        return context
-
-
-@Decorate(check_permission('shop.change_category'))
-class ListCategoryView(ListView, PaginationMixin):
-    model = Category
-    context_object_name = 'category_list'
-    template_name = 'console/shop/list_category.html'
-    http_method_names = [u'get', ]
-
-    def dispatch(self, request, *args, **kwargs):
-        self.page = 1
-        self.paginated_by = 50
-        self.query = ''
-        return super(ListCategoryView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
-        return super(ListCategoryView, self).get(request, args, **kwargs)
-
-    def get_queryset(self):
-        queryset = super(ListCategoryView, self).get_queryset()
-        try:
-            if self.query:
-                queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
-            pass
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(ListCategoryView, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        context.update({'messages': alert})
-        paginator = Paginator(context['category_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         context.update({
