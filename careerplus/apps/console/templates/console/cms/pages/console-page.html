@@ -26,7 +26,7 @@
     {{block.super}}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
   	<script type="text/javascript">
-      jQuery.each($("select[multiple]"), function () {
+      $.each($("select[multiple]"), function () {
         // "Locations" can be any label you want
         SelectFilter.init(this.id, this.name, 0, "/media/");
        });

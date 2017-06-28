@@ -8,7 +8,7 @@
         <ul class="nav child_menu">
             <li><a href="{% url 'console:partner:pages:neworders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>New Orders</a></li>
           <li><a href="{% url 'console:partner:pages:closedorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Closed Orders</a></li>
-          <li><a href="{% url 'console:partner:pages:heldorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Held Orders</a></li>
+          <li><a href="{% url 'console:partner:pages:heldorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Hold Orders</a></li>
         </ul>
       </li>
       {% endif %}
@@ -39,7 +39,7 @@
         <ul class="nav child_menu">
             <li><a href="{% url 'console:order:pages:neworders-list' %}" data-pjax='.right_col'>New Orders</a></li>
           <li><a href="{% url 'console:order:pages:closedorders-list' %}" data-pjax='.right_col'>Closed Orders</a></li>
-          <li><a href="{% url 'console:order:pages:heldorders-list' %}" data-pjax='.right_col'>Held Orders</a></li>
+          <li><a href="{% url 'console:order:pages:heldorders-list' %}" data-pjax='.right_col'>Hold Orders</a></li>
         </ul>
       </li>
       {% endif %}

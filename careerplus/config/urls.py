@@ -50,6 +50,7 @@ urlpatterns += [
     url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^cart/', include('cart.urls', namespace='cart')),
     url(r'^order/', include('order.urls', namespace='order')),
+    url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
     url(r'^payment/', include('payment.urls', namespace='payment')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),

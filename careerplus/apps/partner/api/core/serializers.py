@@ -27,13 +27,13 @@ class VendorSerializer(serializers.ModelSerializer):
         'attrs': {'data-parsley-trigger': 'keyup', 'data-parsley-length': [6, 20]}})
     country = serializers.PrimaryKeyRelatedField(required=False, allow_null=True, queryset=Country.objects.all(),
         style={'template': 'console/fields/select.html', 'empty_text': 'Select Country',
-        'attrs': {}})
+        'attrs': {'id': 'vendor-country'}})
     state = serializers.PrimaryKeyRelatedField(required=False, allow_null=True, queryset=State.objects.all(),
         style={'template': 'console/fields/select.html', 'empty_text': 'Select State',
         'attrs': {}})
     city = serializers.PrimaryKeyRelatedField(required=False, allow_null=True, queryset=City.objects.all(),
         style={'template': 'console/fields/select.html', 'empty_text': 'Select City',
-        'attrs': {}})
+        'attrs': {'id': 'vendor-city'}})
     address = serializers.CharField(required=False, allow_blank=True,
         style={'template': 'console/fields/textarea.html',
         'attrs': {}})
