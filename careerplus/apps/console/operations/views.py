@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser
 from django.shortcuts import redirect
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from partner.api.core.permissions import IsEmployeeOfVendor
+from partner.api.core.permissions import IsEmployeeOfVendor, IsAdminOrEmployeeOfVendor
 from console.models import OrderItemOperations
 from order.models import OrderItem
 
@@ -42,11 +42,12 @@ class NewOrdersVendorUpload(APIView):
                 return redirect(self.success_list_redirect, vendor_id=vendor_id)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 class NewOrdersVendorUploadDetails(APIView):
     """
     List and post views for vendor to submit order associated documents.
     """
-    permission_classes = (IsEmployeeOfVendor, )
+    permission_classes = (IsAdminOrEmployeeOfVendor, )
     def get(self, request, vendor_id=None):
         uploaded_docs = None
         if 'orderitem_ids' in request.data and isinstance(request.data['orderitem_ids'], list):

@@ -6,10 +6,10 @@
     <title> Order Management </title>
   {% endblock title %}
 
-{% block css %}
+{% block css_block %}
     {{block.super}}
     <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
-{% endblock css %}
+{% endblock css_block %}
 
 {% block pagecontent %}
 
@@ -26,16 +26,35 @@
     {{block.super}}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
     <script type="text/javascript">
-      jQuery.each($("select[multiple]"), function () {
+      window.onload = function(){
+        jQuery.each($("select[multiple]"), function () {
         // "Locations" can be any label you want
         SelectFilter.init(this.id, this.name, 0, "/media/");
-       });
-     </script>
+        $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+        $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+        $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
+        $('tbody>tr>td>a[data-pjax], ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+        });
+        var selected = $('tbody>tr');
+        var orderitemIds = selected.map(function(ind,val){return val.attributes['data-attr-id'].value;}).toArray();
+        $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+          }
+        });
+        $.ajax({
+          url: '/console/operations/vendor/' + String(selected.attr('data-attr-vendorid')) + '/neworders/upload/',
+          type: 'GET',
+          success: function(data){
+            for (key in data) {
+              $('tbody>tr>td>form>span[data-attr-id='+key+']').html('<a href="/media/' + data[key] + '">'+ data[key]+ '</a>');
+              $('tbody>tr>td[data-attr-id='+key+']').html('<a href="/media/' + data[key] + '">'+ data[key]+ '</a>');
+            }
+          }
+        });
+      };
+    </script>
     <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
-  <script type="text/javascript">
-    $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-    $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-    $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
-    $('ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
-  </script>
 {% endblock js_block %}

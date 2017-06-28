@@ -206,6 +206,9 @@ class PageWidget(AbstractCommonModel):
         help_text='determine ranking of widget')
 
     class Meta:
+        # Comment this while initial migration
+        auto_created = True
+        #
         ordering = ['section', '-ranking']
         unique_together = ('page', 'widget')
 

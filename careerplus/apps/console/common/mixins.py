@@ -29,7 +29,7 @@ class DetailPartialMixin(object):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        context = {'serializer': serializer, 'received_kwargs': kwargs, 'instance': instance, 'partial_template': self.partial_template_name}
+        context = {'serializer': serializer, 'received_kwargs': kwargs, 'instance': instance, 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}
         if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
             context['is_vendee'] = True
             context['vendor_id'] = self.request.user.vendor_set.all()[0].id
@@ -64,6 +64,7 @@ class UpdatableDetailPartialMixin(DetailPartialMixin):
             return redirect(self.success_detail_redirect, pk=serializer.data.get('id'))
         else:
             context = {'serializer': 'serializer', 'received_kwargs': kwargs, 'doing_partial': request.META.get('HTTP_X_PJAX'), 'partial_template': self.partial_template_name}
+            print(context.get('doing_partial'))
             if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
                 context['is_vendee'] = True
                 context['vendor_id'] = self.request.user.vendor_set.all()[0].id

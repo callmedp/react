@@ -208,7 +208,7 @@ class PageSerializer(serializers.ModelSerializer):
     heading = serializers.CharField(allow_blank=True, max_length=255, required=False,
         style={'template': 'console/fields/input.html',
         'attrs': {'data-parsley-length': [4, 255]}})
-    document = DocumentSerializer(label='Document')
+    document = DocumentSerializer(label='Document', required=False)
 
     class Meta:
         model = models.Page
