@@ -162,7 +162,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     """
         Serializer for `Document` model
     """
-    doc = serializers.FileField(label='Document',
+    doc = serializers.FileField(label='Document', required=False,
         style={'template': 'console/fields/input.html', 'attrs': {}})
     is_active = serializers.BooleanField(required=False,
         style={'template': 'console/fields/checkbox.html', 'attrs': {}})
@@ -170,8 +170,8 @@ class DocumentSerializer(serializers.ModelSerializer):
         style={'template': 'console/fields/input.html', 'attrs': {}})
     class Meta:
         model = models.Document
-        fields = ('doc', 'is_active', 'priority', 'page_id')
-        read_only_fields = ('id', )
+        fields = ('id', 'doc', 'is_active', 'priority', 'page')
+        read_only_fields = ('id', 'page')
 
 
 class PageSerializer(serializers.ModelSerializer):
@@ -217,24 +217,15 @@ class PageSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'slug', 'total_view', 'total_download', 'total_share', 'comment_count', 'created_by', 'created_on', 'last_modified_by', 'last_modified_on')
 
     def compose_document(self, validated_document_data):
-        if validated_document_data.get('page_id'):
-            retrieved_documents = models.Document.objects.filter(page=validated_document_data.get('page_id'))
+        if validated_document_data.get('page'):
+            retrieved_documents = models.Document.objects.filter(page=validated_document_data.get('page'))
             if retrieved_documents and len(retrieved_documents):
                 serialized_document = DocumentSerializer(retrieved_documents[0], data=validated_document_data)
                 if serialized_document.is_valid():
                     return serialized_document.save()
         return DocumentSerializer().create(validated_document_data)
 
-    def represent_document(self, obj):
-        if hasattr(obj, 'id') and obj.id:
-            retrieved_documents = models.Document.objects.filter(page=obj.id)
-            if retrieved_documents and len(retrieved_documents):
-                serialized_document = DocumentSerializer(retrieved_documents[0])
-                return serialized_document.to_representation(serialized_document.data)
-        return None
-
     def to_representation(self, obj):
-        obj.document = self.represent_document(obj)
         data = super(PageSerializer, self).to_representation(obj)
         return data
 
@@ -242,16 +233,18 @@ class PageSerializer(serializers.ModelSerializer):
         document_data = validated_data.get('document', {})
         validated_data.pop('document')
         page_obj = super(PageSerializer, self).create(validated_data)
-        document_data['page_id'] = page_obj.id
-        document_obj = self.compose_document(document_data)
+        document_data['page'] = page_obj
+        if 'doc' in document_data and document_data['doc']:
+            document_obj = self.compose_document(document_data)
         return page_obj
 
     def update(self, instance, validated_data):
         document_data = validated_data.get('document', {})
         validated_data.pop('document')
         page_obj = super(PageSerializer, self).update(instance, validated_data)
-        document_data['page_id'] = page_obj.id
-        document_obj = self.compose_document(document_data)
+        document_data['page'] = page_obj
+        if 'doc' in document_data and document_data['doc']:
+            document_obj = self.compose_document(document_data)
         return page_obj
 
 
