@@ -45,6 +45,7 @@
                     </th-->
                     
                     <th class="column-title">Order Number</th>
+                    <th class="column-title">Customer</th>
                     <th class="column-title">Order Item Id</th>
                     <th class="column-title">Product Name</th>
                     <th class="column-title">Quantity</th>
@@ -69,8 +70,9 @@
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
                     <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.order.number}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{%if obj.order.first_name %}{{obj.order.first_name|default_if_none:""}} {{obj.order.last_name|default_if_none:""}} {%if obj.order.email%} | {{obj.order.email|default_if_none:""}}{%endif%}{%elif obj.order.email|default_if_none:""%}{{obj.order.email}}{%endif%}</a></td>
                     <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
-                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.product.name}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.product.name|default_if_none:""}}</a></td>
                     <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.quantity}}</a></td>
                     <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.order.date_placed|slice:":10"}}</a></td>
                     {% if is_vendee %}
@@ -174,9 +176,12 @@
   {% endif %}
   <script type="text/javascript">
     function postFile(event){
-      if ($(event.target).closest('form') && $(event.target).closest('form').get(0)){
-        $(event.target).closest('form').get(0).submit();
-      } 
+      if ($(event.target).find('input[type=file]').length>0 && $(event.target).find('input[type=file]').get(0).files.length>0) {
+        if ($(event.target).closest('form') && $(event.target).closest('form').get(0)){
+          $(event.target).closest('form').get(0).submit();
+        }  
+      }
+      event.preventDefault();
     }
     function holdOrder (event) {
       $.ajaxSetup({

@@ -13,7 +13,12 @@ class LimitedSerializerMixin(serializers.ModelSerializer):
     def to_representation(self, obj):
         data = super(LimitedSerializerMixin, self).to_representation(obj)
         if self.Meta.limit_fields:
-            return data.get(self.Meta.limited_case_field, None)
+            if self.Meta.limited_case_field == 'id':
+                return data.get(self.Meta.limited_case_field, None)
+            else:
+                d = {'id': data['id']};
+                d[self.Meta.limited_case_field] = data.get(self.Meta.limited_case_field, None);
+                return d
         return data
 
 class CurrencySerializer(LimitedSerializerMixin):

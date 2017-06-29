@@ -63,11 +63,11 @@
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
                     <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.name}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.slug}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.email}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.country}}</a></td>
-                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.mobile}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.name|default_if_none:""}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.slug|default_if_none:""}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.email|default_if_none:""}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.country|default_if_none:""}}</a></td>
+                    <td class=" "><a href="{% url 'console:partner:pages:vendor-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.mobile|default_if_none:""}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -141,7 +141,7 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form>div>a[data-pjax]').pjax();
+        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
     </script>
   {% endif %}
 {% endblock js %}

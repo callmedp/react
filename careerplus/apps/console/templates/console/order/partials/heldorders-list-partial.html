@@ -45,6 +45,7 @@
                     </th-->
                     
                     <th class="column-title">Order Number</th>
+                    <th class="column-title">Customer</th>
                     <th class="column-title">Order Item Id</th>
                     <th class="column-title">Product Name</th>
                     <th class="column-title">Quantity</th>
@@ -66,8 +67,9 @@
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
                     <td class=" "><a href="{% url 'console:order:pages:heldorders-detail' pk=obj.id %}">{{obj.order.number}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{%if obj.order.first_name %}{{obj.order.first_name|default_if_none:""}} {{obj.order.last_name|default_if_none:""}} {%if obj.order.email%} | {{obj.order.email|default_if_none:""}}{%endif%}{%elif obj.order.email|default_if_none:""%}{{obj.order.email}}{%endif%}</a></td>
                     <td class=" "><a href="{% url 'console:order:pages:heldorders-detail' pk=obj.id %}">{{obj.id}}</td></a>
-                    <td class=" "><a href="{% url 'console:order:pages:heldorders-detail' pk=obj.id %}">{{obj.product.name}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:heldorders-detail' pk=obj.id %}">{{obj.product.name|default_if_none:""}}</a></td>
                     <td class=" "><a href="{% url 'console:order:pages:heldorders-detail' pk=obj.id %}">{{obj.quantity}}</a></td>
                     <td class=" "><a href="{% url 'console:order:pages:heldorders-detail' pk=obj.id %}">{{obj.order.date_placed|slice:":10"}}</a></td>
                     {% if is_vendee %}

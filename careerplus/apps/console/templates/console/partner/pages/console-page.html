@@ -26,17 +26,44 @@
     {{block.super}}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
     <script type="text/javascript">
+      function renderCachedCities(cached){
+        var parsed = JSON.parse(cached);
+        if (parsed instanceof Array) {
+          var formedString = '<option value="" selected="">Select City</option>';
+          $.map(parsed, function(val){formedString+=('<option value="'+ val['id'] +'">'+ val['name'] +'</option>');})
+          $('#vendor-city').html(formedString);
+        }
+      }
+      function renderCities(event){
+        var country = String(event.target.value);
+        var cached = localStorage.getItem('savedcities - ' + country);
+        if (!(cached && JSON.parse(cached) && (JSON.parse(cached) instanceof Array))) {
+          $.ajax({
+            url: '/geolocation/api/v1/city/?country=' + String(country),
+            type: 'GET',
+            accept: 'application/json',
+            success: function(data){
+              if (data) {
+                var responseData = JSON.stringify(data);
+                if (responseData){
+                  localStorage.setItem('savedcities - ' + country, responseData);
+                  renderCachedCities(responseData);
+                }
+              }
+            }
+          });
+        }
+        else {
+          renderCachedCities(cached);
+        } 
+      }
       window.onload = function(){
         $.each($("select[multiple]"), function () {
           // "Locations" can be any label you want
-          SelectFilter.init(this.id, this.name, 0, "/media/");
+          if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
          });
-        $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-        $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-        $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
-        $('.right_col form[method] button[data-pjax]').pjax();
-        $('tbody>tr>td>a[data-pjax], ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+         $('ul.nav.child_menu>li>a[data-pjax], tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax], .right_col form button[data-pjax]').pjax();
+        $('#vendor-country').change(renderCities);
       };
-    </script>    
-    <script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
+    </script>
 {% endblock js_block %}

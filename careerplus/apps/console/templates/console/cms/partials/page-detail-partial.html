@@ -5,6 +5,9 @@
   <div class="title_left">
     <h3>Change Page Details</h3>
   </div>
+  <div class="title_right"> 
+      <a class="col-md-3 col-sm-3 col-xs-3 pull-right" href="{% url 'cms:page' slug=serializer.data.slug pk=serializer.data.id %}" data-pjax='.right_col'>View Page</a>
+    </div>
 </div>
 
 <div class="clearfix"></div>
@@ -42,13 +45,14 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form[method] button[data-pjax]').pjax();
-    </script>
-    <script type="text/javascript">
-      $.each($("select[multiple]"), function () {
+        $.each($("select[multiple]"), function () {
         // "Locations" can be any label you want
-        SelectFilter.init(this.id, this.name, 0, "/media/");
-       });
+        if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
+      });
+      $('.right_col form button[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+      $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
     </script>
   {% endif %}
 {% endblock js %}

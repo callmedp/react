@@ -43,14 +43,11 @@
     <script type="text/javascript">
       jQuery.each($("select[multiple]"), function () {
         // "Locations" can be any label you want
-        SelectFilter.init(this.id, this.name, 0, "/media/");
+        if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
       });
-      $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-      $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
-      $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
-      $('tbody>tr>td>a[data-pjax], ul.nav.child_menu>li>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
-      $('.right_col form[method] button[data-pjax]').pjax();
-      $('#vendor-country').onchange(function(element, eele, eke){debugger;});
+      $('.right_col form>div>a[data-pjax], .right_col form button[data-pjax]').pjax();
+      $('#vendor-country').change(renderCities);
     </script>
   {% endif %}
+  
 {% endblock js %}
