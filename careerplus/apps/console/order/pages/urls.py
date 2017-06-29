@@ -17,9 +17,9 @@ urlpatterns = [
     url(r'^closedorders/(?P<orderitem_id>\d+)/archive/$', views.ArchiveOrderAPI.as_view(), name='closedorders-archive'),
     url(r'^heldorders/(?P<orderitem_id>\d+)/unhold/$', views.UnholdOrderAPI.as_view(), name='heldorders-unhold'),
 
-    url(r'^(?P<order_id>\d+)/close/$', views.CloseOrderAPI.as_view(), name='order-close'),
-    url(r'^(?P<order_id>\d+)/hold/$', views.HoldOrderAPI.as_view(), name='order-hold'),
-    url(r'^(?P<order_id>\d+)/archive/$', views.ArchiveOrderAPI.as_view(), name='order-archive'),
-    url(r'^(?P<order_id>\d+)/unhold/$', views.UnholdOrderAPI.as_view(), name='order-unhold'),
+    url(r'^(?P<orderitem_id>\d+)/close/$', views.CloseOrderAPI.as_view(), name='order-close'),
+    url(r'^(?P<orderitem_id>\d+)/hold/$', views.HoldOrderAPI.as_view(), name='order-hold'),
+    url(r'^(?P<orderitem_id>\d+)/archive/$', views.ArchiveOrderAPI.as_view(), name='order-archive'),
+    url(r'^(?P<orderitem_id>\d+)/unhold/$', views.UnholdOrderAPI.as_view(), name='order-unhold'),
 
 ]

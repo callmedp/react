@@ -97,7 +97,13 @@
           <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
           Status
           </label>
-          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.status}}
+          <div class="col-md-6 col-sm-6 col-xs-12">
+          {% load console_tags %}
+          {% if serializer.data.oi_status > 8 %}
+          {{serializer.fields.oi_status.choices|get_item:serializer.data.oi_status }}
+          {% elif serializer.data.order.status > -1 %}
+          {{serializer.fields.order.fields.status.choices|get_item:serializer.data.order.status }}
+          {% endif %}
           </div>
         </div>
       </div>

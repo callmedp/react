@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from console.order.partials.views import NewOrdersListPartial, ClosedOrdersListPartial, HeldOrdersListPartial, NewOrdersDetailPartial, ClosedOrdersDetailPartial, HeldOrdersDetailPartial, NewOrdersUpdatableDetailPartial, ClosedOrdersUpdatableDetailPartial, HeldOrdersUpdatableDetailPartial
 from order.models import Order, OrderItem
-from order.api.core.serializers import OrderSerializer
+from order.api.core.serializers import OrderItemSerializer
 from partner.api.core.permissions import IsEmployeeOfVendor
 
 class NewOrdersListView(NewOrdersListPartial):
@@ -53,39 +53,37 @@ class HeldOrdersUpdatableDetailView(HeldOrdersUpdatableDetailPartial):
     template_name = 'console/order/pages/console-page.html'
 
 
-class ChangeOrderStatusAPIMixin(APIView):
+class ChangeOrderItemStatusAPIMixin(APIView):
     permission_classes = (IsEmployeeOfVendor, )
     order_status = None
-    def get_object(self, order_id=None, orderitem_id=None):
+    def get_object(self, orderitem_id=None):
         try:
-            if order_id:
-                return Order.objects.get(pk=order_id)
-            elif orderitem_id:
-                return OrderItem.objects.get(pk=orderitem_id).order
+            if orderitem_id:
+                return OrderItem.objects.get(pk=orderitem_id)
             else:
                 raise Http404
-        except Order.DoesNotExist:
+        except OrderItem.DoesNotExist:
             raise Http404
 
-    def put(self, request, order_id=None, orderitem_id=None, format=None):
-        order = self.get_object(order_id=order_id, orderitem_id=orderitem_id)
+    def put(self, request, orderitem_id=None, format=None):
+        orderitem = self.get_object(orderitem_id=orderitem_id)
 
-        serializer = OrderSerializer(order, data={'status': self.order_status})
+        serializer = OrderItemSerializer(orderitem, data={'oi_status': self.order_status if self.order_status >=0 else orderitem.last_oi_status, 'last_oi_status': orderitem.oi_status}, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'operation_reflected': True})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CloseOrderAPI(ChangeOrderStatusAPIMixin):
+class CloseOrderAPI(ChangeOrderItemStatusAPIMixin):
     permission_classes = (IsAdminUser, )
-    order_status = 3
+    order_status = 9
 
-class HoldOrderAPI(ChangeOrderStatusAPIMixin):
-    order_status = 2
+class HoldOrderAPI(ChangeOrderItemStatusAPIMixin):
+    order_status = 10
 
-class ArchiveOrderAPI(ChangeOrderStatusAPIMixin):
-    order_status = 4
+class ArchiveOrderAPI(ChangeOrderItemStatusAPIMixin):
+    order_status = 11
 
-class UnholdOrderAPI(ChangeOrderStatusAPIMixin):
-    order_status = 1
+class UnholdOrderAPI(ChangeOrderItemStatusAPIMixin):
+    order_status = -1
