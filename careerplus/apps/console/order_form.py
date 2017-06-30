@@ -215,3 +215,22 @@ class OIFilterForm(forms.Form):
 
     class Meta:
         fields = ['writer', 'added_on', 'delivery_type', 'updated_on', 'draft_level']
+
+
+class OIActionForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(OIActionForm, self).__init__(*args, **kwargs)
+        ACTION_CHOICES = (
+            (0, "Select Action"),
+            (-1, "Export As Csv"),
+        )
+        self.fields['action'] = forms.ChoiceField(
+            label=("Action:"), choices=ACTION_CHOICES,
+            required=True,
+            initial=0,
+            widget=forms.Select(
+                attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    class Meta:
+        fields = ['action', ]

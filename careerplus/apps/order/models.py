@@ -207,6 +207,10 @@ class OrderItem(models.Model):
             # Allocated Queue
             ("can_show_allocated_queue", "Can View Allocated Queue"),
 
+            # Action Permission
+            ("oi_action_permission", "OrderItem Action Permission"),
+            ("oi_export_as_csv_permission", "Order Item Export As CSV Permission"),
+
         )
 
     def __str__(self):
@@ -236,6 +240,13 @@ class OrderItem(models.Model):
         drafts = self.orderitemoperation_set.filter(
             draft_counter__range=[1, max_limit_draft])
         return list(drafts)
+
+    def get_draft_level(self):
+        if self.draft_counter == settings.DRAFT_MAX_LIMIT:
+            return 'Final Draft'
+        elif self.draft_counter:
+            return 'Draft %s' %(self.draft_counter)
+        return ''
 
 
 class OrderItemOperation(AbstractAutoDate):

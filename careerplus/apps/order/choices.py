@@ -38,5 +38,6 @@ OI_OPS_STATUS = (
     (7, 'Rejected By Admin'),
     (8, 'Rejected By Candidate'),
     (9, 'Closed'),
+    (10, 'Resume Uploded'),
 
 )

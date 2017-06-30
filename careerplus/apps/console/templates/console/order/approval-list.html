@@ -9,6 +9,7 @@
 
 {% block css_block %}
     {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
 {% endblock css_block %}
 
@@ -156,10 +157,56 @@
 
           <div class="x_content">
 
+            {% if perms.order.oi_action_permission %}
+                <form method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view"%}">{% csrf_token %}
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        {{action_form.action}}
+                        <input type="hidden" name="queue_name" value="approval" />
+                        <input type="hidden" id="selected-id" name="selected_id" />
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                        </span>
+                    </div>
+                </div>
+                </form>
+            {% endif %}
+
+            <!-- modal action -->
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Action</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are You Sure???
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="action_button">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+
+
             <div class="table-responsive">
               <table class="table table-striped jambo_table bulk_action" id="approval-table">
                 <thead>
                   <tr class="headings">
+                    {% if perms.order.oi_action_permission %}
+                        <th>
+                          <input type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th class="bulk-actions" colspan="100%">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    {% endif %}
                     <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
@@ -173,14 +220,19 @@
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
-                    <th class="column-title">Review Document</th>
+                    <th class="column-title">Review Order</th>
                     <th class="column-title">Approve / Reject Draft</th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="body-table-list">
                   {% for obj in page %}
                     <tr class="even pointer">
+                      {% if perms.order.oi_action_permission %}
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+                            </td>
+                      {% endif %}
                       <td>{{obj.pk}}</td>
                       <td>{{obj.order.id}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
@@ -197,7 +249,7 @@
                       </td>
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-item-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review Document</button></a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
 
                       <td>
                           <form role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
@@ -330,7 +382,9 @@
 {% block js_block %}
   {{ block.super }}
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
   <script type="text/javascript">

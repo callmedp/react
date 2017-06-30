@@ -92,36 +92,38 @@
                 <table class="table table-bordered table-responsive">
                   <thead>
                     <tr>
-                        <th>Order Item</th>
-                          <th>Status</th>
-                          <th>
-                              <h2><small>Candidate resumes/drafts:</small></h2>
-                              <table class="table table-bordered table-responsive">
+                        <th>Order Item Id</th>
+                        <th>Item Name</th>
+                        <th>Status</th>
+                        <th>
+                            <h2><small>Candidate resumes/drafts:</small></h2>
+                            <table class="table table-bordered table-responsive">
                                <th>Label</th>
                                <th>Draft</th>
-                              </table>
-                          </th>
-                          <th>
-                              <h2><small>Order items operations/actions:</small></h2>
-                              <table class="table table-bordered table-responsive">
+                            </table>
+                        </th>
+                        <th>
+                            <h2><small>Order items operations/actions:</small></h2>
+                            <table class="table table-bordered table-responsive">
                                <th>How Old</th>
                                <th>Action</th>
                                <th>Added By / Assigned</th>
-                              </table>
-                          </th>
+                            </table>
+                        </th>
 
-                          <th>
-                              Messages / Communications
-                          </th>
-                          <th>Can Process</th>
-                          <th>Is Combo</th>
-                          <th>Is Variation</th>
+                        <th>
+                            Messages / Communications
+                        </th>
+                        <th>Can Process</th>
+                        <th>Is Combo</th>
+                        <th>Is Variation</th>
                     <tr>
                       
                   </thead>
                   <tbody>
                       {% for obj in orderitems %}
                       <tr>
+                          <td>{{obj.id}}</td>
                           <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
                           <td>{{obj.get_oi_status}}</td>
                           <td>

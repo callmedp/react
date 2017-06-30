@@ -1,7 +1,8 @@
 import json
+import csv
 import datetime
 
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, View
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
@@ -14,6 +15,8 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
 
+from io import StringIO
+
 from order.models import Order, OrderItem
 from blog.mixins import PaginationMixin
 
@@ -24,7 +27,8 @@ from .order_form import (
     FileUploadForm,
     MessageForm,
     OrderFilterForm,
-    OIFilterForm,)
+    OIFilterForm,
+    OIActionForm,)
 
 
 @method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/'), name='dispatch')
@@ -208,7 +212,6 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
         except:
             pass
 
-
         return queryset
 
 
@@ -237,8 +240,15 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             try:
                 oi = OrderItem.objects.get(pk=obj_pk)
                 order = oi.order
-                oi.oi_resume = request.FILES.get('oi_resume', '')
-                oi.save()
+                orderitems = order.orderitems.all()  # filter(product__type_flow__in=[1])
+                for oi in orderitems:
+                    oi.oi_resume = request.FILES.get('oi_resume', '')
+                    oi.save()
+                    oi.orderitemoperation_set.create(
+                        oi_status=10,
+                        last_oi_status=oi.oi_status,
+                        assigned_to=oi.assigned_to,
+                        added_by=request.user)
                 messages.add_message(request, messages.SUCCESS, 'resume uploded Successfully')
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
@@ -510,18 +520,6 @@ class OrderDetailVeiw(DetailView):
 
         order_items = order.orderitems.all().select_related('product', 'partner')
 
-        # if order:
-        #     parent_ois = order.orderitems.filter(parent=None).select_related('product', 'partner')
-        #     for p_oi in parent_ois:
-        #         data = {}
-        #         data['oi'] = p_oi
-        #         data['addons'] = order.orderitems.filter(parent=p_oi, is_combo=False, is_variation=False, no_process=False).select_related('product', 'partner')
-        #         data['variations'] = order.orderitems.filter(parent=p_oi, is_variation=True).select_related('product', 'partner')
-        #         order_items.append(data)
-        #     context.update({
-        #         'orderitems': order_items,
-        #         'order': order})
-
         context.update({
             "order": order,
             'orderitems': list(order_items),
@@ -574,6 +572,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             "max_limit_draft": max_limit_draft,
             "filter_form": filter_form,
             "query": self.query,
+            "action_form": OIActionForm(),
         })
         return context
 
@@ -773,6 +772,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "query": self.query,
+            "action_form": OIActionForm(),
         })
         return context
 
@@ -871,6 +871,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "query": self.query,
+            "action_form": OIActionForm(),
         })
         return context
 
@@ -1041,3 +1042,141 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             pass
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+
+
+class ActionOrderItemView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            action = int(request.POST.get('action', '0'))
+        except:
+            action = 0
+
+        selected = request.POST.get('selected_id', '')
+        selected_id = json.loads(selected)
+        queue_name = request.POST.get('queue_name', '')
+
+        if action == -1 and queue_name == 'approval':
+            csvfile = StringIO()
+            csv_writer = csv.writer(csvfile, delimiter=',', quotechar="'",
+                quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow(['Orderitem Id', 'OrderId', 'Name',
+                'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                'Expert Name', 'Updated_On', 'Draft Level',
+                'Draft Submited On', 'Payment Date'])
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                if orderitems:
+                    for oi in orderitems:
+                        try:
+                            if oi.assigned_to:
+                                writer = oi.assigned_to.name or oi.assigned_to.email
+                            else:
+                                writer = ''
+                            csv_writer.writerow([
+                                str(oi.pk),
+                                str(oi.order.id),
+                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(oi.order.email),
+                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.partner.name),
+                                str(oi.get_oi_status),
+                                str(writer),
+                                str(oi.updated_on),
+                                str(oi.get_draft_level()),
+                                str(oi.draft_added_on),
+                                str(oi.order.payment_date)])
+                        except:
+                            continue
+                    response = HttpResponse(csvfile.getvalue())
+                    file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
+                    response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
+                return response
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-approval'))
+
+        elif action == -1 and queue_name == 'rejectedbycandidate':
+            csvfile = StringIO()
+            csv_writer = csv.writer(csvfile, delimiter=',', quotechar="'",
+                quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow(['Orderitem Id', 'OrderId', 'Name',
+                'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                'Expert Name', 'Updated_On', 'Draft Level',
+                'Draft Submited On', 'Payment Date'])
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                if orderitems:
+                    for oi in orderitems:
+                        try:
+                            if oi.assigned_to:
+                                writer = oi.assigned_to.name or oi.assigned_to.email
+                            else:
+                                writer = ''
+                            csv_writer.writerow([
+                                str(oi.pk),
+                                str(oi.order.id),
+                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(oi.order.email),
+                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.partner.name),
+                                str(oi.get_oi_status),
+                                str(writer),
+                                str(oi.updated_on),
+                                str(oi.get_draft_level()),
+                                str(oi.draft_added_on),
+                                str(oi.order.payment_date)])
+                        except:
+                            continue
+                    response = HttpResponse(csvfile.getvalue())
+                    file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
+                    response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
+                return response
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-rejectedbycandidate'))
+
+        elif action == -1 and queue_name == 'rejectedbyadmin':
+            csvfile = StringIO()
+            csv_writer = csv.writer(csvfile, delimiter=',', quotechar="'",
+                quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow(['Orderitem Id', 'OrderId', 'Name',
+                'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                'Expert Name', 'Updated_On', 'Draft Level',
+                'Draft Submited On', 'Payment Date'])
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                if orderitems:
+                    for oi in orderitems:
+                        try:
+                            if oi.assigned_to:
+                                writer = oi.assigned_to.name or oi.assigned_to.email
+                            else:
+                                writer = ''
+                            csv_writer.writerow([
+                                str(oi.pk),
+                                str(oi.order.id),
+                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(oi.order.email),
+                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.partner.name),
+                                str(oi.get_oi_status),
+                                str(writer),
+                                str(oi.updated_on),
+                                str(oi.get_draft_level()),
+                                str(oi.draft_added_on),
+                                str(oi.order.payment_date)])
+                        except:
+                            continue
+                    response = HttpResponse(csvfile.getvalue())
+                    file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
+                    response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
+                return response
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-rejectedbyadmin'))
