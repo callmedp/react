@@ -1,17 +1,20 @@
-{% load static %}
-<div class="comment-wrap mt-20">
-    <textarea placeholder="Write comments" class="form-control"></textarea>
+{% load static humanize %}
+{% static 'shinelearn/images/mobile/common/default-user.jpg' as default_user_pic %}
+{% for comment in comments %}
+    <li>
+        <sup><img src="{{ default_user_pic }}"></sup>
+        <p class="pb-0">{{comment.message}}</p>
+        <span class="editor fs-12 c9">{{ comment.created_by|title }}, {{ comment.created_on|naturaltime }}</span>
+    </li>
+{% endfor %}
 
-    <ul class="mt-20">
-        {% static 'shinelearn/images/mobile/common/default-user.jpg' as default_user_pic %}
-        <li>
-            <sup><img src="{{ default_user_pic }}"></sup>
-            <p class="pb-0">Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>
-            <span class="editor fs-12 c9">Sanjay Singh, 1 hr ago</span>
-        </li><li>
-            <sup><img src="{{ default_user_pic }}"></sup>
-            <p class="pb-0">Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>
-            <span class="editor fs-12 c9">Sanjay Singh, 1 hr ago</span>
-        </li>
-    </ul>
-</div><!-- end of Comment wrap here -->
+{% if comments.has_next %}
+    <div id="load_more">
+        <form role="form" id="loadform">
+            {% csrf_token %}
+            <input type="hidden" name="page" value="{{comments.next_page_number}}">
+            <input type="hidden" name="slug" value="{{page_obj.slug}}">
+        </form>
+        <a id="comment_load_more" role="button" class="comments-links mb-40"> <span class="comments-icon mr-10"></span>Load more Comments</a>
+    </div>
+{% endif %}

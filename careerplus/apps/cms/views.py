@@ -104,11 +104,6 @@ class CMSPageView(DetailView, LoadMoreMixin):
         country_choices = [(m.id, m.phone + '-' + '(' + m.code3 + ')') for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(name='India', phone='91')[0].pk
-        
-        if self.request.session.get('candidate_id'):
-            download_pop_up = "no"
-        else:
-            download_pop_up = "yes"
 
         download_docs = page_obj.document_set.filter(is_active=True)
         csrf_token_value = get_token(self.request)
@@ -120,13 +115,14 @@ class CMSPageView(DetailView, LoadMoreMixin):
             })
 
         for left in left_widgets:
+            if self.request.flavour == 'mobile' and left.widget.widget_type in [6, 7]:
+                continue
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
                 'widget': left.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
-                'download_pop_up': download_pop_up,
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })
@@ -134,13 +130,14 @@ class CMSPageView(DetailView, LoadMoreMixin):
             context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context)
 
         for right in right_widgets:
+            if self.request.flavour == 'mobile' and right.widget.widget_type in [6, 7]:
+                continue
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
                 'widget': right.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
-                'download_pop_up': download_pop_up,
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })

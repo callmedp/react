@@ -52,6 +52,7 @@ THIRD_PARTY_APPS = [
     'django_mobile',
     'meta',
     'requests',
+    'sekizai',
     'sorl.thumbnail',
 ]
 
@@ -108,7 +109,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django_mobile.context_processors.flavour'
+                'django_mobile.context_processors.flavour',
+                'sekizai.context_processors.sekizai',
+                'core.context_processors.js_settings'
             ],
             'loaders': [
                 # ('django_mobile.loader.CachedLoader', [
@@ -184,3 +187,7 @@ CKEDITOR_CONFIGS = {
 #     REDIS_CON = None
 
 CART_MAX_LIMIT = 5
+
+########## DOMAIN SETTINGS ######################
+MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
+MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)

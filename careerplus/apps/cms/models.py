@@ -111,7 +111,6 @@ class Widget(AbstractCommonModel):
             data_dict['column_data'] = {}
             for key, value in data_dict['column_headings'].items():
                 data_dict['column_data'].update({key: dict(self.iw.indexcolumn_set.filter(column=key).values_list('name', 'url'))})
-
         return data_dict
 
     def get_template(self):

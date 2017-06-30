@@ -2,31 +2,19 @@
 <!-- box starts here -->
 <div class="container">
     <div class="box row">
-        <h2>What our Content Writer says about this Resume Format</h2>
+        <h2>{{heading}}</h2>
         <div class="media">
             <figure class="media-left">
-                <img class="media-object user" src="{% static 'shinelearn/images/mobile/common/user.jpg' %}" alt="...">
+                <img class="media-object user" src="{{image.url}}" alt="Shine">
             </figure>
 
             <div class="media-body rel">
-                <h3 class="media-heading">Sana Praveen</h3>
-                <p>Resume Writing Expert</p>
+                <h3 class="media-heading">{{display_name|title}}</h3>
+                <p>{{writer_designation|title}}</p>
             </div>
         </div>
         <hr>
-        <p><strong>Why do you think this is the best profile?</strong><br> A profile which makes customer happy is considered as the best profile.</p>
-
-        <p><strong>What were the challenges faced while drafting this cv format?</strong><br> While developing this resume, I had to face a lot of challenges. The client did not like the resume in first go, he was not satisfied with the content and the layout. He rejected the resume a couple of times and even was irritated by the time of development call. But then I took it as a challenge and completed the resume and finally the client liked it.</p>
+        {{ description|safe }}
         <hr>
-
-        <div class="media">
-            <div class="media-body rel">
-                <a href="#" class="fs-16 bold">Click here to Download <br>Sample Resume</a>
-            </div>
-
-            <figure class="media-right vertical-middle">
-                <span class="icon-download-big">d</span>
-            </figure>
-        </div>
     </div>
 </div><!-- box ends here -->

@@ -52,6 +52,8 @@ class ArticleShareView(View):
                 pass
             data = {"status": "success"}
             return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            return HttpResponseForbidden
 
 
 class AjaxCommentLoadMoreView(View, LoadMoreMixin):
@@ -69,6 +71,8 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
                 return HttpResponse(json.dumps({'comment_list': comment_list}))
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
+        else:
+            return HttpResponseForbidden
 
 
 class CmsShareView(View):
