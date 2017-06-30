@@ -41,13 +41,13 @@
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('.right_col form[method] button[data-pjax]').pjax();
-    </script>
-    <script type="text/javascript">
-      $.each($("select[multiple]"), function () {
+      jQuery.each($("select[multiple]"), function () {
         // "Locations" can be any label you want
-        SelectFilter.init(this.id, this.name, 0, "/media/");
-       });
+        if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
+      });
+      $('.right_col form>div>a[data-pjax], .right_col form button[data-pjax]').pjax();
+      $('#vendor-country').change(renderCities);
     </script>
   {% endif %}
+  
 {% endblock js %}

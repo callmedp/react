@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class AbstractAutoDate(models.Model):
-    created = models.DateTimeField(editable=False)
+    created = models.DateTimeField(editable=False, default=timezone.now())
     modified = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):

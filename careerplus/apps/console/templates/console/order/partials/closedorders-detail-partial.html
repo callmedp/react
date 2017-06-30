@@ -50,9 +50,36 @@
       <div class="container">
         <div class="row justify-content-md-center">
           <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Customer Name
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.first_name | default_if_none:""}} {{serializer.data.order.last_name| default_if_none:""}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Customer Email
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.email| default_if_none:""}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
           Product Name
           </label>
-          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.product.name}}
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.product.name| default_if_none:""}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Price Charged (excluding taxes)
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.oi_price_excl_tax| default_if_none:""}}
           </div>
         </div>
       </div>
@@ -70,7 +97,13 @@
           <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
           Status
           </label>
-          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.status}}
+          <div class="col-md-6 col-sm-6 col-xs-12">
+          {% load console_tags %}
+          {% if serializer.data.oi_status > 8 %}
+          {{serializer.fields.oi_status.choices|get_item:serializer.data.oi_status }}
+          {% elif serializer.data.order.status > -1 %}
+          {{serializer.fields.order.fields.status.choices|get_item:serializer.data.order.status }}
+          {% endif %}
           </div>
         </div>
       </div>
@@ -88,3 +121,11 @@
   </div>
 </div>
 </div>
+
+{% block js %}
+  {% if doing_partial %}
+    <script type="text/javascript">
+      $('.right_col div.title_right>a[data-pjax]').pjax();
+    </script>
+  {% endif %}
+{% endblock js %}

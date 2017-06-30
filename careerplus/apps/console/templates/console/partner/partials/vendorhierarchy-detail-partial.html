@@ -28,7 +28,7 @@
             {% render_form serializer template_pack='rest_framework/horizontal' %}            
               <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                  <center><button type="submit" class="btn btn-success">Submit</button></center>
+                  <center><button type="submit" class="btn btn-success" data-pjax=".right_col">Submit</button></center>
                 </div>
             </div>
         </form>
@@ -38,3 +38,17 @@
   </div>
 </div>
 </div>
+
+
+{% block js %}
+  {% if doing_partial %}
+    <script type="text/javascript">
+      jQuery.each($("select[multiple]"), function () {
+        // "Locations" can be any label you want
+        if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
+      });
+      $('.right_col form>div>a[data-pjax], .right_col form button[data-pjax]').pjax();
+    </script>
+  {% endif %}
+  
+{% endblock js %}

@@ -25,3 +25,19 @@ PAYMENT_MODE = (
     (9, 'Credit Card'),
     (10, 'Net Banking'),
     (11, 'Emi'),)
+
+OI_OPS_STATUS = (
+    # for flow 1 - 29
+    (0, 'Default'),
+    (1, 'Assigned'),
+    (2, 'Resume Not Uploaded'),
+    (3, 'Upload Draft'),
+    (4, 'Draft Uploaded'),
+    (5, 'Pending Approval'),
+    (6, 'Approved'),
+    (7, 'Rejected By Admin'),
+    (8, 'Rejected By Candidate'),
+    (9, 'Closed'),
+    (10, 'On Hold by Vendor'),
+    (11, 'Archived'),
+)

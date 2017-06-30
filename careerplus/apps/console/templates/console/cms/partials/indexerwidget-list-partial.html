@@ -60,8 +60,8 @@
                       <input type="checkbox" class="flat" name="table_records">
                     </td-->
                     <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
-                    <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.heading}}</a></td>
-                    <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.created_by}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.heading|default_if_none:""}}</a></td>
+                    <td class=" "><a href="{% url 'console:cms:pages:indexerwidget-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.created_by|default_if_none:""}}</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -132,10 +132,18 @@
   </div>
 </div>
 
+
 {% block js %}
   {% if doing_partial %}
     <script type="text/javascript">
-        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+        $.each($("select[multiple]"), function () {
+        // "Locations" can be any label you want
+        if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
+      });
+      $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+      $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
     </script>
   {% endif %}
 {% endblock js %}

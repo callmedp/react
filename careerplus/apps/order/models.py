@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from .choices import STATUS_CHOICES, SITE_CHOICES, PAYMENT_MODE
+from .choices import STATUS_CHOICES, SITE_CHOICES, PAYMENT_MODE, OI_OPS_STATUS
 
 
 class Order(AbstractAutoDate):
@@ -123,6 +123,14 @@ class OrderItem(models.Model):
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
+
+    ## THESE STATUS FIELDS ARE FROM UNMERGED - COMMIT 2fd291f37aca6bae266f36d9d23ab2a9068bdf9e from amar
+    ## WHILE MERGING CHECK COMPLETE FLOW
+    # Find usage in careerplus/apps/console/order/partials/views.py and corresponding serializer and view mixin.
+    oi_status = models.PositiveIntegerField(
+        _("Operation Status"), default=0, choices=OI_OPS_STATUS)
+    last_oi_status = models.PositiveIntegerField(
+        _("Last Operation Status"), default=0, choices=OI_OPS_STATUS)
 
     class Meta:
         app_label = 'order'

@@ -87,7 +87,8 @@ class Widget(AbstractCommonModel):
 
     def __str__(self):
         # return str(self.id) + str(self.heading)
-        return 'Widget #' + str(self.id) + ' with type ' + str(dict(WIDGET_CHOICES).get(self.widget_type))
+        return 'Widget #' + str(self.id) + ' with type ' + str(dict(WIDGET_CHOICES).get(self.widget_type)) if not self.heading else \
+            str(self.heading) + ' - widget #' + str(self.id)
 
     def get_widget_type(self):
         widgetDict = dict(WIDGET_CHOICES)

@@ -103,7 +103,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
         context['page_obj'] = page_obj
         context['page_heading'] = page_obj.name
         country_choices = [(m.id, m.phone + '-' + '(' + m.code3 + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        initial_country = Country.objects.filter(name='India', phone='91')[0].pk
+        initial_country = 3 #Country.objects.filter(name='India', phone='91')[0].pk
         
         if self.request.session.get('candidate_id'):
             download_pop_up = "no"
