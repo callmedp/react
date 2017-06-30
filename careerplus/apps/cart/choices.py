@@ -7,3 +7,9 @@ STATUS_CHOICES = (
     (5, "Closed - order has been made"),
     (6, "Archive - cart need to be archived"),
 )
+
+DELIVERY_TYPE = (
+    (0, 'Normal'),
+    (1, 'Express'),
+    (2, 'Super Express')
+)

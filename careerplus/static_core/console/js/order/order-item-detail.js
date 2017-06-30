@@ -3,7 +3,6 @@ $(function(){
 		$('#message-add-form').parsley().validate();
         if ($('#message-add-form').parsley().isValid()){
         	var formData = $('#message-add-form').serialize();
-        	console.log(formData);
         	$.ajax({
 	            url: '/ajax/orderitem/add-comment/',
 	            type: "POST",

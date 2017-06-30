@@ -86,6 +86,10 @@ class Order(AbstractAutoDate):
             ("can_show_midout_queue", "Can Show Midout Queue"),
             ("can_show_all_order", "Can View All Orders"),
             ("can_show_paid_order", "Can View Paid Orders"),
+
+            # order deatil permissions
+            ("can_view_order_detail", "Can View Order Deatil"),
+            
         )
 
     def __str__(self):
@@ -162,6 +166,8 @@ class OrderItem(models.Model):
 
     oio_linkedin = models.OneToOneField(Draft, null=True, blank=True)
 
+    waiting_for_input = models.BooleanField(default=False)
+
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='oi_assigned',
@@ -207,6 +213,10 @@ class OrderItem(models.Model):
 
             # Allocated Queue
             ("can_show_allocated_queue", "Can View Allocated Queue"),
+
+            # Action Permission
+            ("oi_action_permission", "OrderItem Action Permission"),
+            ("oi_export_as_csv_permission", "Order Item Export As CSV Permission"),
         )
 
     def __str__(self):
@@ -221,6 +231,28 @@ class OrderItem(models.Model):
     def get_oi_status(self):
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
+
+    def get_oi_communications(self):
+        communications = self.message_set.all().select_related('added_by')
+        return list(communications)
+
+    def get_oi_operations(self):
+        operations = self.orderitemoperation_set.all().select_related(
+            'added_by', 'assigned_to')
+        return list(operations)
+
+    def get_oi_drafts(self):
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+        drafts = self.orderitemoperation_set.filter(
+            draft_counter__range=[1, max_limit_draft])
+        return list(drafts)
+
+    def get_draft_level(self):
+        if self.draft_counter == settings.DRAFT_MAX_LIMIT:
+            return 'Final Draft'
+        elif self.draft_counter:
+            return 'Draft %s' %(self.draft_counter)
+        return ''
 
 
 

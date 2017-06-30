@@ -9,6 +9,8 @@
 
 {% block css_block %}
     {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
 {% endblock css_block %}
 
 
@@ -27,6 +29,32 @@
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
                 <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+                <div style="display:none">
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.writer }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.updated_on }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.delivery_type }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.draft_level }}
+                        </div>
+                        <br/>
+                    </div>
+                </div>
                 <span class="input-group-btn">
                   <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
                 </span>
@@ -35,6 +63,66 @@
           </div>
       </form>
     </div>
+
+    <div class="row top_tiles">
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+      </div>
+      <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+                </div>
+                <div class="modal-body">
+                  <form class="form-group" method="GET" action="{% url "console:queue-approval" %}" id="list-filter-form">
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.writer.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.writer }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.updated_on.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.updated_on }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.draft_level.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.draft_level }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.delivery_type.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.delivery_type }}
+                            </div>
+                            <br/>
+                        </div>
+                       {% if self.query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- /modals -->
+    </div>
+
 
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -69,47 +157,152 @@
 
           <div class="x_content">
 
+            {% if perms.order.oi_action_permission %}
+                <form method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view"%}">{% csrf_token %}
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        {{action_form.action}}
+                        <input type="hidden" name="queue_name" value="approval" />
+                        <input type="hidden" id="selected-id" name="selected_id" />
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                        </span>
+                    </div>
+                </div>
+                </form>
+            {% endif %}
+
+            <!-- modal action -->
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Action</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are You Sure???
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="action_button">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+
+
             <div class="table-responsive">
               <table class="table table-striped jambo_table bulk_action" id="approval-table">
                 <thead>
                   <tr class="headings">
+                    {% if perms.order.oi_action_permission %}
+                        <th>
+                          <input type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th class="bulk-actions" colspan="100%">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    {% endif %}
                     <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
-                    <th class="column-title">Draft Level</th>
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
+                    <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
-                    <th class="column-title">Review Document</th>
+                    <th class="column-title">Review Order</th>
+                    <th class="column-title">Approve / Reject Draft</th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="body-table-list">
                   {% for obj in page %}
                     <tr class="even pointer">
+                      {% if perms.order.oi_action_permission %}
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+                            </td>
+                      {% endif %}
                       <td>{{obj.pk}}</td>
                       <td>{{obj.order.id}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
-                      <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td>Delivery Type</td>
                       <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
-                      <td>{{obj.updated_on|naturaltime}}</td>
-
+                      <td>
+                          {{obj.updated_on|naturaltime}}
+                          <b>Updated On: {{obj.updated_on}}</b>
+                      </td>
+                      <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-item-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review Document</button></a></td>
-                      
-                      
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
+
+                      <td>
+                          <form role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
+                          <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
+                          <center>
+                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
+                            <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                          </center>
+                          </form>
+
+                          <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="approvemodal{{obj.pk}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                      </button>
+                                      <h4 class="modal-title" id="myModalLabel">Approve Draft</h4>
+                                    </div>
+                                    <div class="modal-body" id="approveModalbody{{obj.pk}}">
+                                      Are You Sure???
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="button" id="approveAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="approveDraftByAdmin('{{obj.id}}',)">Yes</button>
+                                    </div>
+
+                                  </div>
+                                </div>
+                            </div>
+
+                          <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="rejectmodal{{obj.pk}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                      </button>
+                                      <h4 class="modal-title" id="myModalLabel">Reject Draft</h4>
+                                    </div>
+                                    <div class="modal-body" id="rejectModalbody{{obj.pk}}">
+                                      Are You Sure???
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="button" id="rejectAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="rejectDraftByAdmin('{{obj.id}}',)">Yes</button>
+                                    </div>
+
+                                  </div>
+                                </div>
+                            </div>
+                        
+                        </td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -188,4 +381,37 @@
         
 {% block js_block %}
   {{ block.super }}
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('.date-range-picker').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                  format: 'DD/MM/YYYY',
+                  cancelLabel: 'Clear',
+                },
+            },function(start, end, label) {
+              
+            });
+
+            $('.date-range-picker').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            });
+
+            $('.date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            })
+
+            $('#id_filter').click(function(){
+                $('#list-filter-form').submit();
+            });
+        });
+
+  </script>
 {% endblock js_block %}

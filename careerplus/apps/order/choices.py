@@ -41,5 +41,6 @@ OI_OPS_STATUS = (
     (30, 'Counselling Form Not Submitted'),
     (31, 'Counselling Form Submitted'),
     (9, 'Closed'),
+    (10, 'Resume Uploded'),
 
 )

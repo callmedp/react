@@ -9,6 +9,7 @@
 
 {% block css_block %}
     {{block.super}}
+    <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
 {% endblock css_block %}
 
 
@@ -27,6 +28,32 @@
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
                 <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+                <div style="display:none">
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.writer }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.updated_on }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.delivery_type }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.draft_level }}
+                        </div>
+                        <br/>
+                    </div>
+                </div>
                 <span class="input-group-btn">
                   <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
                 </span>
@@ -34,6 +61,65 @@
             </div>
           </div>
       </form>
+    </div>
+
+    <div class="row top_tiles">
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+      </div>
+      <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+                </div>
+                <div class="modal-body">
+                  <form class="form-group" method="GET" action="{% url "console:queue-approved" %}" id="list-filter-form">
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.writer.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.writer }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.updated_on.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.updated_on }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.draft_level.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.draft_level }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.delivery_type.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.delivery_type }}
+                            </div>
+                            <br/>
+                        </div>
+                       {% if self.query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- /modals -->
     </div>
 
     <div class="row">
@@ -79,12 +165,12 @@
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
-                    <th class="column-title">Draft Level</th>
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
+                    <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
                     <th class="column-title">Review Document</th>
                   </tr>
@@ -99,15 +185,14 @@
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
-                      <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td>Delivery Type</td>
                       <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
                       <td>{{obj.updated_on|naturaltime}}</td>
-
+                      <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-item-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review Document</button></a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
                       
                       
                     </tr>
@@ -188,4 +273,33 @@
         
 {% block js_block %}
   {{ block.super }}
+  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('.date-range-picker').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                  format: 'DD/MM/YYYY',
+                  cancelLabel: 'Clear',
+                },
+            },function(start, end, label) {
+              
+            });
+
+            $('.date-range-picker').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            });
+
+            $('.date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            })
+
+            $('#id_filter').click(function(){
+                $('#list-filter-form').submit();
+            });
+        });
+
+  </script>
 {% endblock js_block %}

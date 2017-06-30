@@ -145,13 +145,21 @@ urlpatterns += [
         order_view.RejectedByAdminQueue.as_view(), name='queue-rejectedbyadmin'),
 
     url(r'^queue/rejectedbycandidate/$',
-        order_view.RejectedByCandidateQueue.as_view(), name='queue-rejectedbycandidate'),
+        order_view.RejectedByCandidateQueue.as_view(),
+        name='queue-rejectedbycandidate'),
 
     url(r'^queue/allocated/$',
         order_view.AllocatedQueueVeiw.as_view(), name='queue-allocated'),
 
     url(r'^queue/orderitem/(?P<pk>\d+)/detail/$',
         order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
+
+    url(r'^queue/order/(?P<pk>\d+)/details/$',
+        order_view.OrderDetailVeiw.as_view(), name='order-detail'),
+
+    url(r'^queue/orderitem/downloadascsv/$',
+        order_view.ActionOrderItemView.as_view(),
+        name='action-orderitem-view'),
 ]
 
 from . import linkedin_view
@@ -172,4 +180,8 @@ urlpatterns += [
     url(r'^linkedin/orderitem/(?P<pk>\d+)/detail/$',
         linkedin_view.LinkedinOrderDetailVeiw.as_view(), name='linkedin-order-detail'),
 ]
+
+
+
+
 
