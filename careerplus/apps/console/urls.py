@@ -8,8 +8,6 @@ urlpatterns = [
 ]
 
 from . import shop_view
-from . import linkedin_view
-
 
 urlpatterns += [
     url(r'^category/add/$',
@@ -77,17 +75,7 @@ urlpatterns += [
         name='attributeoption-add'),
     url(r'^attributeoption/list/$',
         shop_view.ListAttributeOptionGroupView.as_view(),
-        name='attributeoption-list'),
-
-    url(r'^linkedin-profile/$',
-        linkedin_view.LinkedinProfileView.as_view(),
-        name='linkedin-profile'),
-    url(r'^linkedin-queue/$',
-        linkedin_view.LinkedinQueueView.as_view(),
-        name='linkedin-queue'),
-    url(r'^draft-listing/$',
-        linkedin_view.LinkedinQueueView.as_view(),
-        name='draft-listing'),
+        name='attributeoption-list'),    
 ]
 
 
@@ -165,3 +153,23 @@ urlpatterns += [
     url(r'^queue/orderitem/(?P<pk>\d+)/detail/$',
         order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
 ]
+
+from . import linkedin_view
+
+urlpatterns += [
+    url(r'^linkedin/inbox/$',
+        linkedin_view.LinkedinQueueView.as_view(),
+        name='linkedin-inbox'),
+
+    url(r'^linkedin/draft-listing/$',
+        linkedin_view.DraftListing.as_view(),
+        name='draft-listing'),
+
+    url(r'^linkedin/change-draft/(?P<pk>\d+)/draft/$',
+        linkedin_view.ChangeDraftView.as_view(),
+        name='change-draft'),
+
+    url(r'^linkedin/orderitem/(?P<pk>\d+)/detail/$',
+        linkedin_view.LinkedinOrderDetailVeiw.as_view(), name='linkedin-order-detail'),
+]
+

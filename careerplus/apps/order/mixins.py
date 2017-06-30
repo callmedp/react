@@ -6,7 +6,8 @@ from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
 
 from .models import Order, OrderItem
-from linkedin.models import QuizResponse
+from linkedin.models import Draft, Organization, Education
+from quizs.models import QuizResponse
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -54,12 +55,24 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 				order_item = order.orderitems.exclude(no_process=True)[0]
 
 				if order_item.product.type_flow == 8:
+					# associate draft object with order
+					draft_obj = Draft.objects.create()
+					org_obj = Organization()
+					org_obj.draft = draft_obj
+					org_obj.save()
+
+					edu_obj = Education()
+					edu_obj.draft = draft_obj
+					edu_obj.save()
+
 					quiz_rsp = QuizResponse()
 					quiz_rsp.oi = order_item
 					quiz_rsp.save()
+
 					order_item.oi_status = 30
+					order_item.oio_linkedin = draft_obj
 					order_item.save()
-			    return order
+			return order
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))
 

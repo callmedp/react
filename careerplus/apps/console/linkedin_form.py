@@ -6,15 +6,16 @@ User = get_user_model()
 
 from linkedin.models import Draft, Organization, Education
 
-LEVEL = ((0, 'School'),(1,'College'),)
+LEVEL = (('', '---------'),(0, 'School'),(1,'College'),)
 
 
-class DraftForm(forms.Form):
+class DraftForm(forms.ModelForm):
     candidate_name = forms.CharField(label=("Name*:"), max_length=85,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    headline = forms.CharField(label=("Headline*:"), max_length=85,
+    headline = forms.CharField(
+        label=("Headline*:"), max_length=85,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
@@ -48,40 +49,155 @@ class DraftForm(forms.Form):
 
     class Meta:
         model = Draft
-        
+        exclude = ()
+
     def __init__(self, *args, **kwargs):
         super(DraftForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['candidate_name'].required = True
+        self.fields['headline'].required = True
+        self.fields['summary'].required = True
+        self.fields['profile_photo'].required = True
+        self.fields['recommendation'].required = True
+        self.fields['follow_company'].required = True
+        self.fields['join_group'].required = True
+        self.fields['public_url'].required = True
+        self.fields['key_skills'].required = True
 
-    def save(self, request, commit=True):
+    def clean_candidate_name(self):
+        name = self.cleaned_data.get('candidate_name', '')
+        if name == '':
+            raise forms.ValidationError("This field is required.")
+        return name
+
+    def clean_headline(self):
+        name = self.cleaned_data.get('headline', '')
+        if name == '':
+            raise forms.ValidationError("This field1 is required.")
+        return name
+
+    def clean_summary(self):
+        summary = self.cleaned_data.get('summary', '')
+        if summary == '':
+            raise forms.ValidationError("This field1 is required.")
+        return summary
+
+    def clean_profile_photo(self):
+        profile_photo = self.cleaned_data.get('profile_photo', '')
+        if profile_photo == '':
+            raise forms.ValidationError("This field1 is required.")
+        return profile_photo
+
+    def clean_recommendation(self):
+        recommendation = self.cleaned_data.get('recommendation', '')
+        if recommendation == '':
+            raise forms.ValidationError("This field1 is required.")
+        return recommendation
+
+    def clean_follow_company(self):
+        follow_company = self.cleaned_data.get('follow_company', '')
+        if follow_company == '':
+            raise forms.ValidationError("This field1 is required.")
+        return follow_company
+
+    def clean_join_group(self):
+        join_group = self.cleaned_data.get('join_group', '')
+        if join_group == '':
+            raise forms.ValidationError("This field1 is required.")
+        return join_group
+
+    def clean_public_url(self):
+        public_url = self.cleaned_data.get('public_url', '')
+        if public_url == '':
+            raise forms.ValidationError("This field1 is required.")
+        return public_url
+
+    def clean_key_skills(self):
+        key_skills = self.cleaned_data.get('key_skills', '')
+        if key_skills == '':
+            raise forms.ValidationError("This field1 is required.")
+        return key_skills
+
+    def save(self, commit=True):
         draft = super(DraftForm, self).save(commit=False)
         if commit:
             draft.save()
         return draft
 
-    
+
 class OrganizationForm(forms.ModelForm):
-    name = forms.CharField(label=("Company Name*:"), max_length=85,
+    org_name = forms.CharField(label=("Company Name*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+        attrs={'class': 'form-control'}))
 
     title = forms.CharField(label=("Title*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+        attrs={'class': 'form-control'}))
 
-    desc = forms.CharField(required=True, widget=CKEditorWidget())
+    org_desc = forms.CharField(
+        required=True, widget=CKEditorWidget())
     
-    work_date_range = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'daterange'}))
+    work_from = forms.DateField(
+          widget=forms.DateInput(attrs={'class': 'form-control work_from'}))
 
-    current = forms.BooleanField(
-        widget=forms.CheckboxInput(attrs={'class':'form-control col-md-7 col-xs-12'}))
+    work_to = forms.DateField(
+          widget=forms.DateInput(attrs={'class': 'form-control work_to'}))
+
+    org_current = forms.BooleanField(label=("Current Organization"), required=False, widget=forms.CheckboxInput(
+        attrs={'class': 'checkbox'}))
 
     class Meta:
         model = Organization
-        fields = ['name', 'title', 'desc', 'current']
-        
+        fields = ['org_name', 'title', 'org_desc', 'work_from', 'work_to', 'org_current']
+
     def __init__(self, *args, **kwargs):
         super(OrganizationForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['org_name'].widget.attrs.update({'required':'required'})
+        self.fields['title'].widget.attrs.update({'required':'required'})
+        self.fields['org_desc'].widget.attrs.update({'required':'required'})
+        self.fields['work_from'].widget.attrs.update({'required':'required'})
+        self.fields['work_to'].widget.attrs.update({'required':'required'})
+        self.fields['org_current'].widget.attrs.update({'required':'required'})
+
+    def clean_org_name(self):
+        org_name = self.cleaned_data.get('org_name', '')
+        if org_name == '':
+            raise forms.ValidationError("This field is required.")
+        return org_name
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title', '')
+        if title == '':
+            raise forms.ValidationError("This field is required.")
+        return title
+
+    def clean_org_desc(self):
+        org_desc = self.cleaned_data.get('org_desc', '')
+        if org_desc == '':
+            raise forms.ValidationError("This field is required.")
+        return org_desc
+
+    def clean_work_from(self):
+        work_from = self.cleaned_data.get('work_from', '')
+        if work_from is None:
+            raise forms.ValidationError("This field is required.")
+        return work_from
+
+    def clean_work_to(self):
+        work_from = self.cleaned_data.get("work_from", '')
+        work_to = self.cleaned_data.get('work_to', '')
+        if work_to is None:
+            raise forms.ValidationError("This field is required.")
+        elif work_to < work_from:
+            raise forms.ValidationError("End date should be greater than from date.")
+        return work_to
+
+    def clean_org_current(self):
+        org_current = self.cleaned_data.get('org_current', '')
+        if org_current is False:
+            raise forms.ValidationError("This field is required.")
+        return org_current
 
     def save(self, commit=True):
         org = super(OrganizationForm, self).save(commit=False)
@@ -91,34 +207,103 @@ class OrganizationForm(forms.ModelForm):
 
 
 class EducationForm(forms.ModelForm):
-    name = forms.CharField(label=("Name*:"), max_length=85,
+    school_name = forms.CharField(label=("Name*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+        attrs={'class': 'form-control'}))
+
+    degree = forms.CharField(label=("Degree*:"), max_length=85,
+        widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
+    field = forms.CharField(label=("Field Of Study*:"), max_length=85,
+        widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
 
     level = forms.ChoiceField(choices = LEVEL, 
-        widget=forms.Select(attrs={'class': 'form-control col-md-7 col-xs-12'}))
+        widget=forms.Select(attrs={'class': 'form-control'}))
 
-    desc = forms.CharField(required=True, widget=CKEditorWidget())
+    edu_desc = forms.CharField(required=True, widget=CKEditorWidget())
     
-    study_from_to = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'daterange'}))
+    study_from = forms.DateField(
+          widget=forms.DateInput(attrs={'class': 'form-control study_from'}))
 
-    current = forms.BooleanField(
-        widget=forms.CheckboxInput(attrs={'class':'form-control col-md-7 col-xs-12'}))
+    study_to = forms.DateField(
+          widget=forms.DateInput(attrs={'class': 'form-control study_to'}))
+
+    edu_current = forms.BooleanField(
+        required=False, widget=forms.CheckboxInput(attrs={'class':'checkbox'}))
 
     class Meta:
         model = Education
-        fields = ['name', 'level', 'desc',
-        'study_from', 'study_to', 'current']
+        fields = ['school_name', 'degree', 'field', 'level', 'edu_desc', 'study_from', 'study_to', 'edu_current']
         
     def __init__(self, *args, **kwargs):
         super(EducationForm, self).__init__(*args, **kwargs)
+        self.fields['school_name'].widget.attrs.update({'required':'required'})
+        self.fields['degree'].widget.attrs.update({'required':'required'})
+        self.fields['field'].widget.attrs.update({'required':'required'})
+        self.fields['level'].widget.attrs.update({'required':'required'})
+        self.fields['edu_desc'].widget.attrs.update({'required':'required'})
+        self.fields['study_from'].widget.attrs.update({'required':'required'})
+        self.fields['study_to'].widget.attrs.update({'required':'required'})
+        self.fields['edu_current'].widget.attrs.update({'required':'required'})
+
+    def clean_school_name(self):
+        school_name = self.cleaned_data.get('school_name', '')
+        if school_name == '':
+            raise forms.ValidationError("This field is required.")
+        return school_name
+
+    def clean_degree(self):
+        degree = self.cleaned_data.get('degree', '')
+        if degree == '':
+            raise forms.ValidationError("This field is required.")
+        return degree
+
+    def clean_field(self):
+        field = self.cleaned_data.get('field', '')
+        if field == '':
+            raise forms.ValidationError("This field is required.")
+        return field
+
+    def clean_level(self):
+        level = self.cleaned_data.get('level', '')
+        if level == 'NA':
+            raise forms.ValidationError("This field is required.")
+        return level
+
+    def clean_edu_desc(self):
+        edu_desc = self.cleaned_data.get('edu_desc', '')
+        if edu_desc == '':
+            raise forms.ValidationError("This field is required.")
+        return edu_desc
+
+    def clean_study_from(self):
+        study_from = self.cleaned_data.get('study_from', '')
+        if study_from is None:
+            raise forms.ValidationError("This field is required.")
+        return study_from
+
+    def clean_study_to(self):
+        study_from = self.cleaned_data.get("study_from", '')
+        study_to = self.cleaned_data.get('study_to', '')
+        if study_to is None:
+            raise forms.ValidationError("This field is required.")
+        elif study_to < study_from:
+            raise forms.ValidationError("End date should be greater than start date.")
+        return study_to
+
+    def clean_edu_current(self):
+        edu_current = self.cleaned_data.get('edu_current', '')
+        if edu_current is False:
+            raise forms.ValidationError("This field is required.")
+        return edu_current
 
     def save(self, commit=True):
-        draft = super(EducationForm, self).save(commit=False)
+        edu = super(EducationForm, self).save(commit=False)
         if commit:
-            draft.save()
-        return draft
+            edu.save()
+        return edu
 
 
 class LinkedinInboxActionForm(forms.Form):
@@ -137,3 +322,24 @@ class LinkedinInboxActionForm(forms.Form):
         self.fields['action'].required = True
         self.fields['action'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['action'].queryset = users
+
+
+class OrganizationInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(OrganizationInlineFormSet, self).clean()
+        for form in self.forms:
+            form.empty_permitted = False
+        
+        if any(self.errors):
+            return
+        return
+
+class EducationInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(EducationInlineFormSet, self).clean()
+        for form in self.forms:
+            form.empty_permitted = False
+        
+        if any(self.errors):
+            return
+        return

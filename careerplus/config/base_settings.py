@@ -79,6 +79,7 @@ LOCAL_APPS = [
     'microsite',
     'linkedin',
     'emailers',
+    'quizs',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

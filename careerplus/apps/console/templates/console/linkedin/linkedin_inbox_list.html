@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Welcome Call- Shinelearning</title>
+  <title>Ilinkedin Inbox- Shinelearning</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -115,9 +115,13 @@
                     </th>
                     <th class="column-title">Order Id</th>
                     <th class="column-title">Candidate Info</th>
+                    <th class="column-title">Delivery Type</th>                    
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Counselling Form</th>
-                    <th class="column-title">#Edit</th>
+                    <th class="column-title">detail Link</th>
+                    <th class="column-title">Edit Draft Link</th>
+                    <th class="column-title">How Old</th>
+                    <th class="column-title">Assigned</th>
                   </tr>
                 </thead>
 
@@ -129,19 +133,29 @@
                           name="table_records" value="{{obj.pk}}" >
                       </td>
                       <td>{{obj.pk}}</td>
-                      <td>email:{{obj.order.email}}<br>
-                      name:{{obj.order.first_name}}<br>
-                      mobile:{{obj.order.mobile}}</td> 
+                      <td>
+                        email:{{obj.order.email}}<br>
+                        name:{{obj.order.first_name}}<br>
+                        mobile:{{obj.order.mobile}}
+                      </td>
+                      <td>Regular</td>
                       <td>{{obj.product}}</td>
                       {% if obj.oi_status == 31 %}
-                      <td>{{obj.get_oi_status}}</td>
                       <td><a href="{% url 'counselling-form' obj.pk %}">
                       Edit Counselling Form</a></td>
                       {% else %}
-                      <td>{{obj.get_oi_status}}</td>
                       <td><a href="{% url 'counselling-form' obj.pk %}">
                       Submit Counselling Form</a></td>
-                      {% endif %} 
+                      {% endif %}
+                      <td><a target="_blank" href="{% url "console:linkedin-order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs">
+                      <i class="fa fa-eye"></i>Details order item</button></a></td>
+                      <td>
+                        <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
+                        <button type="button" class="btn btn-success btn-xs">
+                        <i class="fa fa-eye"></i>Draft Link</button></a>
+                      </td>
+                      <td>{{obj.updated_on|naturaltime}}</td>
+                      <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                     </tr>
                   {% endfor %}
                 </tbody>

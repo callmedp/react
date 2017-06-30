@@ -30,14 +30,7 @@
       </form>
     -->
     </div>
-
-    <div class="row top_tiles">
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:linkedin-profile" %}">
-          <i class="fa fa-edit"></i> Add Draft</a>
-      </div>
-    </div>
-
+    
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -94,14 +87,14 @@
                     <br />
                   </td>
                   <td>
-                    <a href="{% url "console:draft-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                    <a href="{% url "console:change-draft" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                   </td>
                 </tr>
                 {% endfor %}
                 </tbody>
               </table>
             </div>
-          <!--         
+         
             {% block main_pagination %}
                 <div class="main_pagination">
                   {% if page %}
@@ -159,9 +152,7 @@
 
 
       </div>
-      {% endblock main_pagination %}
-      -->
-                
+      {% endblock main_pagination %}          
           </div>
         </div>
       </div>

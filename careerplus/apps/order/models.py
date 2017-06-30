@@ -5,6 +5,7 @@ from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS
 
+from linkedin.models import Draft
 
 class Order(AbstractAutoDate):
     number = models.CharField(
@@ -158,8 +159,8 @@ class OrderItem(models.Model):
         max_length=255, upload_to='oi_draft/', null=True, blank=True)
     draft_counter = models.PositiveIntegerField(default=0)
     tat_date = models.DateTimeField(null=True, blank=True)
-    # oi_flow_status = models.PositiveSmallIntegerField(
-    #     default=0, choices=ORDER_ITEM_FLOW_STATUS)
+
+    oio_linkedin = models.OneToOneField(Draft, null=True, blank=True)
 
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,

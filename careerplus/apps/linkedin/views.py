@@ -8,7 +8,7 @@ from shine.core import ShineToken, ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from .utills import ques_dict
 from order.models import Order, OrderItem
-from linkedin.models import QuizResponse
+from quizs.models import QuizResponse
 
 class AutoLoginView(View):
 
