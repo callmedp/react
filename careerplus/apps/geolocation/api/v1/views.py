@@ -23,7 +23,8 @@ class CurrencyViewSet(ReadOnlyModelViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         kwargs['context'] = self.get_serializer_context()
-        return serializer_class(*args, **kwargs, limit_fields=((self.request.GET.get('id', None) != None) or (self.request.GET.get('name', None) != None) or (self.request.GET.get('value', None) != None)))
+        limit_fields = ((self.request.GET.get('id', None) != None) or (self.request.GET.get('name', None) != None) or (self.request.GET.get('value', None) != None))
+        return serializer_class(*args, limit_fields=limit_fields, **kwargs)
 
 
 class CityViewSet(ReadOnlyModelViewSet):
@@ -42,4 +43,5 @@ class CityViewSet(ReadOnlyModelViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         kwargs['context'] = self.get_serializer_context()
-        return serializer_class(*args, **kwargs, limit_fields=(self.request.GET.get('country', None) != None))
+        limit_fields = (self.request.GET.get('country', None) != None)
+        return serializer_class(*args, limit_fields=limit_fields, **kwargs)
