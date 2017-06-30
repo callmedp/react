@@ -1,48 +1,28 @@
-{% load static %}
+{% load static thumbnail %}
 <!-- Related articles Starts here -->
+{% if related_arts %}
 <div class="related-article row mb-30 mt-30">
-    <h2 class="mb-10">Related articles</h2>
+    <h2 class="mb-10">{{heading}}</h2>
 
     <ul class="home-slider">
-
+        {% for art in related_arts %}
         <li>
             <div class="media">
-                <a title="Government Jobs" href="#">
+                <a href="{% url 'blog:articles-deatil' art.slug art.pk %}">
+                    {% if art.image %}
                     <figure class="media-left">
-                        <img class="media-object w-auto" src="{% static 'shinelearn/images/mobile/cms/article-list-1.jpg' %}" alt="...">
+                        {% thumbnail art.image "98x64" crop="center" as im %}
+                            <img class="media-object w-auto" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                        {% endthumbnail %}
                     </figure>
+                    {% endif %}
                     <div class="media-body rel">
-                        <p class="mb-0">8 Reasons to consider a career change</p>
+                        <p class="mb-0">{{art.display_name}}</p>
                     </div>
                 </a>
             </div>
         </li>
-
-        <li>
-            <div class="media">
-                <a title="Government Jobs" href="#">
-                    <figure class="media-left">
-                        <img class="media-object w-auto" src="{% static 'shinelearn/images/mobile/cms/article-list-2.jpg' %}" alt="...">
-                    </figure>
-                <div class="media-body rel">
-                    <p class="mb-0">Career management: Defining the process and purpose</p>
-                </div>
-                </a>
-            </div>
-        </li>
-
-        <li>
-            <div class="media">
-                <a title="Government Jobs" href="#">
-                    <figure class="media-left">
-                        <img class="media-object w-auto" src="{% static 'shinelearn/images/mobile/cms/article-list-3.jpg' %}" alt="...">
-                    </figure>
-                    <div class="media-body rel">
-                        <p class="mb-0">8 Reasons to consider a career change</p>
-                    </div>
-                </a>
-            </div>
-        </li>
-
+        {% endfor %}
     </ul>
 </div><!-- Related articles Ends here -->
+{% endif %}
