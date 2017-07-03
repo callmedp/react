@@ -83,6 +83,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.name
 
+
+    def get_vendor(self):
+        vendor_list = self.vendor_set.all()
+        if vendor_list:
+            return vendor_list[0]
+        return None
 # class UserEmail(models.Model):
 #     """
 #     This is to record of all emails sent to a user.

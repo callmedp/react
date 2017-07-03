@@ -79,16 +79,23 @@
 
             <div class="" role="tabpanel" data-example-id="togglable-tabs">
               <ul id="myTab1" class="nav nav-tabs bar_tabs right" role="tablist">
+                {% if perms.shop.console_change_category_main %}
+                
                 <li role="presentation" class="active"><a href="#tab_content11" id="home-tabb" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Main</a>
                 </li>
-
-                <li role="presentation" class=""><a href="#tab_content22" role="tab" id="profile-tabb" data-toggle="tab" aria-controls="profile" aria-expanded="false">SEO</a>
-                </li>
                 
-                <li role="presentation" class=""><a href="#tab_content33" role="tab" id="profile-tabb3" data-toggle="tab" aria-controls="profile" aria-expanded="false">Skillpage</a>
+                <li role="presentation" class=""><a href="#tab_content22" role="tab" id="profile-tabb3" data-toggle="tab" aria-controls="profile" aria-expanded="false">Skillpage</a>
                 </li>
+                {% endif %}
+                {% if perms.shop.console_change_category_seo %}
+      
+                <li role="presentation" class=""><a href="#tab_content33" role="tab" id="profile-tabb" data-toggle="tab" aria-controls="profile" aria-expanded="false">SEO</a>
+                </li>
+                {% endif %}
+                
               </ul>
               <div id="myTabContent2" class="tab-content">
+                {% if perms.shop.console_change_category_main %}
                 
                 <div role="tabpanel" class="tab-pane fade active in" id="tab_content11" aria-labelledby="home-tab">
                   <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-form">
@@ -202,7 +209,88 @@
                   </form>
                 </div>
                 
+                
                 <div role="tabpanel" class="tab-pane fade" id="tab_content22" aria-labelledby="profile-tab">
+                <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-skill-form">
+                    {{skill_form.media}}
+                    {% csrf_token %}
+                    
+                    {% if skill_form.non_field_errors %}
+                      <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        {{skill_form.non_field_errors}}
+                      </div>
+                    {% endif %}
+
+                    <div class="item form-group {% if skill_form.is_skill.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.is_skill.id_for_label }}">Is SkillPage? <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{skill_form.is_skill}}
+                      </div>
+                      <div class="alert">{{skill_form.is_skill.errors}}</div>
+                    </div>
+
+
+                    
+                    <div class="item form-group {% if skill_form.description.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.description.id_for_label }}"> Description <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{skill_form.description}}
+                      </div>
+                      <div class="alert">{{skill_form.description.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if skill_form.career_outcomes.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.career_outcomes.id_for_label }}">Career Outcomes <span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{skill_form.career_outcomes}}
+                          <div id="suggestions-container" style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                      </div>
+                      <div class="alert">{{skill_form.career_outcomes.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if skill_form.video_link.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.video_link.id_for_label }}">Video Url 
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{skill_form.video_link}}
+                        {{ skill_form.video_link.help_text }}
+                      </div>
+                      <div class="alert">{{skill_form.video_link.errors}}</div>
+                    </div>
+
+
+                    <div class="item form-group {% if skill_form.graph_image.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.graph_image.id_for_label }}">Graph <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{skill_form.graph_image}}
+                      </div>
+                      <div class="alert">{{skill_form.graph_image.errors}}</div>
+                    </div>
+
+                    
+                    
+                    <input type="hidden" name="category" value="{{object.pk}}">
+                    <input type="hidden" name="slug" value="skill">
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                      </div>
+                    </div>
+                  </form>
+
+               </div>
+                {% endif %}
+               {% if perms.shop.console_change_category_seo %}
+                
+      
+                <div role="tabpanel" class="tab-pane fade" id="tab_content33" aria-labelledby="profile-tab">
                   <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-seo-form">
                     {{form.media}}
                     {% csrf_token %}
@@ -280,88 +368,15 @@
                     </div>
                   </form>
                 </div>
-                
-                <div role="tabpanel" class="tab-pane fade" id="tab_content33" aria-labelledby="profile-tab">
-                <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-skill-form">
-                    {{skill_form.media}}
-                    {% csrf_token %}
-                    
-                    {% if skill_form.non_field_errors %}
-                      <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                        </button>
-                        {{skill_form.non_field_errors}}
-                      </div>
-                    {% endif %}
-
-                    <div class="item form-group {% if skill_form.is_skill.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.is_skill.id_for_label }}">Is SkillPage? <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{skill_form.is_skill}}
-                      </div>
-                      <div class="alert">{{skill_form.is_skill.errors}}</div>
-                    </div>
-
-
-                    
-                    <div class="item form-group {% if skill_form.description.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.description.id_for_label }}"> Description <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{skill_form.description}}
-                      </div>
-                      <div class="alert">{{skill_form.description.errors}}</div>
-                    </div>
-                    
-                    <div class="item form-group {% if skill_form.career_outcomes.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.career_outcomes.id_for_label }}">Career Outcomes <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                          {{skill_form.career_outcomes}}
-                          <div id="suggestions-container" style="position: relative; float: left; width: 250px; margin: 10px;"></div>
-                      </div>
-                      <div class="alert">{{skill_form.career_outcomes.errors}}</div>
-                    </div>
-
-                    <div class="item form-group {% if skill_form.video_link.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.video_link.id_for_label }}">Video Url 
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{skill_form.video_link}}
-                        {{ skill_form.video_link.help_text }}
-                      </div>
-                      <div class="alert">{{skill_form.video_link.errors}}</div>
-                    </div>
-
-
-                    <div class="item form-group {% if skill_form.graph_image.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.graph_image.id_for_label }}">Graph <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{skill_form.graph_image}}
-                      </div>
-                      <div class="alert">{{skill_form.graph_image.errors}}</div>
-                    </div>
-
-                    
-                    
-                    <input type="hidden" name="category" value="{{object.pk}}">
-                    <input type="hidden" name="slug" value="skill">
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                      </div>
-                    </div>
-                  </form>
-
-               </div>
+               {%endif%}
               </div>
             </div>
 
           </div>
         </div>
+
+        {% if perms.shop.console_change_category_main %}
+                
         {% if relationship_formset  %}
           
         <div class="x_panel">
@@ -472,6 +487,7 @@
 
           </div>
         </div>
+      {% endif %}
       {% endif %}
     </div>
   </div>

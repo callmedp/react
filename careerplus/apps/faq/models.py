@@ -54,6 +54,11 @@ class FAQuestion(AbstractAutoDate):
         verbose_name = _("Frequent asked question")
         verbose_name_plural = _("Frequently asked questions")
         ordering = ['sort_order', 'created']
+        permissions = (
+            ("console_add_faq", "Can Add FAQ From Console"),
+            ("console_change_faq", "Can Change FAQ From Console"),
+            ("console_moderate_faq", "Can Moderate FAQ From Console"),
+            )
 
     def __str__(self):
         return self.text
@@ -98,7 +103,11 @@ class Chapter(AbstractAutoDate):
         ordering = ('heading',)
         verbose_name = _('chapter')
         verbose_name_plural = _('chapters')
-
+        permissions = (
+            ("console_add_chapter", "Can Add Product Chapter From Console"),
+            ("console_change_chapter", "Can Change Product Chapter From Console"),
+            ("console_moderate_chapter", "Can Moderate Product Chapter From Console"),
+            )
     def __str__(self):
         return self.heading
 

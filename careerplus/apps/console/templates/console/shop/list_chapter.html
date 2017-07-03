@@ -103,7 +103,11 @@
                   </td>
                   
                   <td>
-                    <a href="{% url "console:category-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                    {% if perms.faq.console_moderate_chapter %}
+                      <a href="{% url "console:chapter-moderate" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                    {% elif perms.faq.console_change_chapter %}
+                      <a href="{% url "console:chapter-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>  
+                    {% endif %}
                   </td>
                 </tr>
                 {% endfor %}

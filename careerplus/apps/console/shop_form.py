@@ -336,6 +336,86 @@ class ChangeCategorySEOForm(forms.ModelForm):
         return category
 
 
+class ChangeCategorySkillForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeCategorySkillForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+
+        self.fields['is_skill'].widget.attrs['class'] = 'js-switch'
+        self.fields['is_skill'].widget.attrs['data-switchery'] = 'true'
+        self.fields['description'].widget.attrs['class'] = form_class
+        self.fields['graph_image'].widget.attrs['class'] = form_class 
+        self.fields['graph_image'].widget.attrs['data-parsley-max-file-size'] = 500
+        self.fields['graph_image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        
+
+        self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
+        self.fields['video_link'].widget.attrs['class'] = form_class
+        self.fields['video_link'].widget.attrs['maxlength'] = 80
+        self.fields['video_link'].widget.attrs['placeholder'] = 'Add video url'
+        self.fields['video_link'].widget.attrs['data-parsley-type'] = 'url'
+        self.fields['video_link'].help_text = "Please add Video url without https/http"
+        
+        self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 100]"
+        self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
+        
+    class Meta:
+        model = Category
+        fields = (
+            'is_skill', 'description', 'video_link',
+            'career_outcomes', 'graph_image')
+
+    def clean(self):
+        super(ChangeCategorySkillForm, self).clean()
+    
+    def clean_description(self):
+        desc = self.cleaned_data.get('description', '')
+        if desc:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return desc
+
+    def clean_career_outcomes(self):
+        outcome = self.cleaned_data.get('career_outcomes', '')
+        if outcome:
+            if len(outcome) < 4 or len(outcome) > 400:
+                raise forms.ValidationError(
+                    "Name should be between 4-400 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return outcome
+
+    def clean_graph_image(self):
+        file = self.files.get('graph_image', '')
+        if file:
+            if file._size > 100 * 1024:
+                raise forms.ValidationError(
+                    "Image file is too large ( > 100kb ).")
+            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+                raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
+        else:
+            pass
+        return file
+
+    def clean_video_link(self):
+        link = self.cleaned_data.get('video_link', '')
+        if link:
+            from django.core.validators import URLValidator
+            val = URLValidator()
+            val('https://' + link.strip())
+        return link
+
+    def save(self, commit=True, *args, **kwargs):
+
+        category = super(ChangeCategorySkillForm, self).save(
+            commit=True, *args, **kwargs)
+        return category
+
 
 class CategoryRelationshipForm(forms.ModelForm):
 
@@ -450,86 +530,4 @@ class RelationshipInlineFormSet(forms.BaseInlineFormSet):
         if any(self.errors):
             return
         return
-
-
-class ChangeCategorySkillForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(ChangeCategorySkillForm, self).__init__(*args, **kwargs)
-        form_class = 'form-control col-md-7 col-xs-12'
-
-        self.fields['is_skill'].widget.attrs['class'] = 'js-switch'
-        self.fields['is_skill'].widget.attrs['data-switchery'] = 'true'
-        self.fields['description'].widget.attrs['class'] = form_class
-        self.fields['graph_image'].widget.attrs['class'] = form_class 
-        self.fields['graph_image'].widget.attrs['data-parsley-max-file-size'] = 500
-        self.fields['graph_image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
-        
-
-        self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
-        self.fields['video_link'].widget.attrs['class'] = form_class
-        self.fields['video_link'].widget.attrs['maxlength'] = 80
-        self.fields['video_link'].widget.attrs['placeholder'] = 'Add video url'
-        self.fields['video_link'].widget.attrs['data-parsley-type'] = 'url'
-        self.fields['video_link'].help_text = "Please add Video url without https/http"
-        
-        self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 100]"
-        self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
-        
-    class Meta:
-        model = Category
-        fields = (
-            'is_skill', 'description', 'video_link',
-            'career_outcomes', 'graph_image')
-
-    def clean(self):
-        super(ChangeCategorySkillForm, self).clean()
-    
-    def clean_description(self):
-        desc = self.cleaned_data.get('description', '')
-        if desc:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return desc
-
-    def clean_career_outcomes(self):
-        outcome = self.cleaned_data.get('career_outcomes', '')
-        if outcome:
-            if len(outcome) < 4 or len(outcome) > 400:
-                raise forms.ValidationError(
-                    "Name should be between 4-400 characters.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return outcome
-
-    def clean_graph_image(self):
-        file = self.files.get('graph_image', '')
-        if file:
-            if file._size > 100 * 1024:
-                raise forms.ValidationError(
-                    "Image file is too large ( > 100kb ).")
-            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
-                raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
-        else:
-            pass
-        return file
-
-    def clean_video_link(self):
-        link = self.cleaned_data.get('video_link', '')
-        if link:
-            from django.core.validators import URLValidator
-            val = URLValidator()
-            val('https://' + link.strip())
-        return link
-
-    def save(self, commit=True, *args, **kwargs):
-
-        category = super(ChangeCategorySkillForm, self).save(
-            commit=True, *args, **kwargs)
-        return category
-
 

@@ -105,7 +105,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         permissions = (
             ("console_add_category", "Can Add Category From Console"),
             ("console_change_category", "Can Change Category From Console"),
-            ("console_change_category_seo", "Can Change Category From Console"),
+            ("console_change_category_seo", "Can Change Category SEO From Console"),
+            ("console_change_category_main", "Can Change Category Main From Console"),
             )
 
     def __str__(self):
@@ -434,9 +435,6 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     requires_delivery = models.BooleanField(
         _("Requires delivery?"),
         default=True)
-    # is_discountable = models.BooleanField(
-    #     _("Discountable?"),
-    #     default=True)
     certification = models.BooleanField(
         _("Give Certification"),
         default=True)

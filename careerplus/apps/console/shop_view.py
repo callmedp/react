@@ -52,7 +52,10 @@ from shop.forms import (
 from faq.forms import (
     AddFaqForm,
     AddChapterForm,
-    ChangeFaqForm)
+    ChangeFaqForm,
+    ModerateFaqForm,
+    ChangeChapterForm,
+    ModerateChapterForm,)
 from faq.models import FAQuestion, Chapter
 
 
@@ -253,8 +256,6 @@ class ChangeCategoryView(DetailView):
                                 "You cannot add parent for level1")
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
-                        
-                    
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
@@ -362,7 +363,7 @@ class ListCategoryRelationView(TemplateView):
 
 
 
-@Decorate(check_permission('faq.add_faquestion'))
+@Decorate(check_permission('faq.console_add_faq'))
 class AddFaqView(FormView):
     form_class = AddFaqForm
     template_name = 'console/shop/add_faq.html'
@@ -380,14 +381,29 @@ class AddFaqView(FormView):
         return context
 
     def form_valid(self, form):
-        form.save()
-        messages.success(
-            self.request,
-            "You have successfully added a faq"
-        )
-        self.success_url = reverse_lazy('console:faquestion-list')
-        return super(AddFaqView, self).form_valid(form)
-
+        user = self.request.user
+        if user.has_perm('faq.console_add_faq'):
+            vendor = user.get_vendor()
+            if not vendor:
+                messages.error(
+                    self.request,
+                    "You are not associated to any vendor.")
+                return super(AddFaqView, self).form_invalid(form)
+            faq = form.save()
+            faq.vendor = vendor
+            faq.save()
+            messages.success(
+                self.request,
+                "You have successfully added a faq"
+            )    
+            self.success_url = reverse_lazy('console:faquestion-list')
+            return super(AddFaqView, self).form_valid(form)
+        else:
+            messages.error(
+                self.request,
+                "You don't have permission to add faq.")          
+            return super(AddFaqView, self).form_invalid(form)
+        
     def form_invalid(self, form):
         messages.error(
             self.request,
@@ -396,7 +412,7 @@ class AddFaqView(FormView):
         return super(AddFaqView, self).form_invalid(form)
 
 
-@Decorate(check_permission('faq.add_chapter'))
+@Decorate(check_permission('faq.console_add_chapter'))
 class AddChapterView(FormView):
     form_class = AddChapterForm
     template_name = 'console/shop/add_chapter.html'
@@ -414,14 +430,28 @@ class AddChapterView(FormView):
         return context
 
     def form_valid(self, form):
-        form.save()
-        messages.success(
-            self.request,
-            "You have successfully added a Chapter"
-        )
-        self.success_url = reverse_lazy('console:chapter-list')
-        return super(AddChapterView, self).form_valid(form)
-
+        user = self.request.user
+        if user.has_perm('faq.console_add_chapter'):
+            vendor = user.get_vendor()
+            if not vendor:
+                messages.error(
+                    self.request,
+                    "You are not associated to any vendor.")
+                return super(AddChapterView, self).form_invalid(form)
+            faq = form.save()
+            faq.vendor = vendor
+            faq.save()
+            messages.success(
+                self.request,
+                "You have successfully added a chapter"
+            )    
+            self.success_url = reverse_lazy('console:chapter-list')
+            return super(AddChapterView, self).form_valid(form)
+        else:
+            messages.error(
+                self.request,
+                "You don't have permission to add chapter.")          
+            return super(AddChapterView, self).form_invalid(form)
     def form_invalid(self, form):
         messages.error(
             self.request,
@@ -532,7 +562,8 @@ class AddAttributeView(FormView):
         return super(AddAttributeView, self).form_invalid(form)
 
 
-@Decorate(check_permission('faq.change_faquestion'))
+
+@Decorate(check_permission('faq.console_change_faq'))
 class ListFaqView(ListView, PaginationMixin):
     model = FAQuestion
     context_object_name = 'faq_list'
@@ -552,6 +583,11 @@ class ListFaqView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ListFaqView, self).get_queryset()
+        vendor = self.request.user.get_vendor()
+        if not vendor:
+            queryset = queryset.none()
+        else:
+            queryset = queryset.filter(vendor=vendor)
         try:
             if self.query:
                 queryset = queryset.filter(Q(text__icontains=self.query))
@@ -573,7 +609,49 @@ class ListFaqView(ListView, PaginationMixin):
         return context
 
 
-@Decorate(check_permission('faq.change_chapter'))
+@Decorate(check_permission('faq.console_moderate_faq'))
+class ListModerationFaqView(ListView, PaginationMixin):
+    model = FAQuestion
+    context_object_name = 'faq_list'
+    template_name = 'console/shop/list_faq.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListModerationFaqView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListModerationFaqView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListModerationFaqView, self).get_queryset()
+        queryset = queryset.filter(status=0)
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(text__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListModerationFaqView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['faq_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(check_permission('faq.console_change_chapter'))
 class ListChapterView(ListView, PaginationMixin):
     model = Chapter
     context_object_name = 'chapter_list'
@@ -594,6 +672,11 @@ class ListChapterView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(ListChapterView, self).get_queryset()
         queryset = queryset.filter(parent__isnull=True)
+        vendor = self.request.user.get_vendor()
+        if not vendor:
+            queryset = queryset.none()
+        else:
+            queryset = queryset.filter(vendor=vendor)
         try:
             if self.query:
                 queryset = queryset.filter(Q(heading__icontains=self.query))
@@ -613,6 +696,51 @@ class ListChapterView(ListView, PaginationMixin):
             "messages": alert,
         })
         return context
+
+
+
+@Decorate(check_permission('faq.console_moderate_chapter'))
+class ListModerationChapterView(ListView, PaginationMixin):
+    model = Chapter
+    context_object_name = 'chapter_list'
+    template_name = 'console/shop/list_chapter.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListModerationChapterView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListModerationChapterView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListModerationChapterView, self).get_queryset()
+        queryset = queryset.filter(parent__isnull=True)
+        queryset = queryset.filter(status=0)
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(heading__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListModerationChapterView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['chapter_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
 
 
 @Decorate(check_permission('shop.change_keyword'))
@@ -807,6 +935,7 @@ class ChangeAttributeView(DetailView):
         return HttpResponseBadRequest()
 
 
+@Decorate(check_permission('faq.console_change_faq'))
 class ChangeFaqView(DetailView):
     template_name = 'console/shop/change_faq.html'
     model = FAQuestion
@@ -873,6 +1002,209 @@ class ChangeFaqView(DetailView):
                     reverse('console:faquestion-change', kwargs={'pk': faq}))
         return HttpResponseBadRequest()
 
+
+@Decorate(check_permission('faq.console_moderate_faq'))
+class ModerateFaqView(DetailView):
+    template_name = 'console/shop/change_faq.html'
+    model = FAQuestion
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ModerateFaqView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ModerateFaqView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(ModerateFaqView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ModerateFaqView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        main_change_form = ModerateFaqForm(
+            instance=self.get_object())
+        context.update({
+            'messages': alert,
+            'form': main_change_form})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                faq = int(request.POST.get('faq'))
+                if obj == faq:
+                    obj = self.object = self.get_object()
+                    form = None
+                    form = ModerateFaqForm(
+                        request.POST, instance=obj)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(
+                            self.request,
+                            "FAQ Changed Successfully")
+                        return HttpResponseRedirect(reverse('console:mfaquestion-list',))
+                    else:
+                        context = self.get_context_data()
+                        if form:
+                            context.update({'form': form})
+                        messages.error(
+                            self.request,
+                            "FAQ Object Change Failed, Changes not Saved")
+                        return TemplateResponse(
+                            request, [
+                                "console/shop/change_faq.html"
+                            ], context)
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:faquestion-moderate', kwargs={'pk': faq}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:faquestion-moderate', kwargs={'pk': faq}))
+        return HttpResponseBadRequest()
+
+
+@Decorate(check_permission('faq.console_change_chapter'))
+class ChangeChapterView(DetailView):
+    template_name = 'console/shop/change_chapter.html'
+    model = Chapter
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ChangeChapterView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ChangeChapterView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(ChangeChapterView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangeChapterView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        main_change_form = ChangeChapterForm(
+            instance=self.get_object())
+        context.update({
+            'messages': alert,
+            'form': main_change_form})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                chapter = int(request.POST.get('chapter'))
+                if obj == chapter:
+                    obj = self.object = self.get_object()
+                    form = None
+                    form = ChangeChapterForm(
+                        request.POST, instance=obj)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(
+                            self.request,
+                            "Chapter Changed Successfully")
+                        return HttpResponseRedirect(reverse('console:chapter-list',))
+                    else:
+                        context = self.get_context_data()
+                        if form:
+                            context.update({'form': form})
+                        messages.error(
+                            self.request,
+                            "Chapter Object Change Failed, Changes not Saved")
+                        return TemplateResponse(
+                            request, [
+                                "console/shop/change_chapter.html"
+                            ], context)
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:chapter-change', kwargs={'pk': chapter}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:chapter-change', kwargs={'pk': chapter}))
+        return HttpResponseBadRequest()
+
+
+@Decorate(check_permission('faq.console_moderate_chapter'))
+class ModerateChapterView(DetailView):
+    template_name = 'console/shop/change_chapter.html'
+    model = Chapter
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ModerateChapterView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(ModerateChapterView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(ModerateChapterView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(ModerateChapterView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        main_change_form = ModerateChapterForm(
+            instance=self.get_object())
+        context.update({
+            'messages': alert,
+            'form': main_change_form})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                chapter = int(request.POST.get('chapter'))
+                if obj == chapter:
+                    obj = self.object = self.get_object()
+                    form = None
+                    form = ModerateChapterForm(
+                        request.POST, instance=obj)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(
+                            self.request,
+                            "Chapter Changed Successfully")
+                        return HttpResponseRedirect(reverse('console:mchapter-list',))
+                    else:
+                        context = self.get_context_data()
+                        if form:
+                            context.update({'form': form})
+                        messages.error(
+                            self.request,
+                            "Chapter Object Change Failed, Changes not Saved")
+                        return TemplateResponse(
+                            request, [
+                                "console/shop/change_chapter.html"
+                            ], context)
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:chapter-moderate', kwargs={'pk': chapter}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:chapter-moderate', kwargs={'pk': chapter}))
+        return HttpResponseBadRequest()
 
 class ChangeKeywordView(DetailView):
     template_name = 'console/shop/change_keyword.html'

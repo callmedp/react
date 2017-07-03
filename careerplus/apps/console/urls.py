@@ -45,15 +45,25 @@ urlpatterns += [
         shop_view.AddFaqView.as_view(), name='faquestion-add'),
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(), name='faquestion-list'),
+    url(r'^faq/moderation-list/$',
+        shop_view.ListModerationFaqView.as_view(), name='mfaquestion-list'),
     url(r'^faq/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeFaqView.as_view(), name='faquestion-change'),
-    
+    url(r'^faq/moderate/(?P<pk>[\d]+)/$',
+        shop_view.ModerateFaqView.as_view(), name='faquestion-moderate'),
+        
 
     url(r'^chapter/add/$',
         shop_view.AddChapterView.as_view(), name='chapter-add'),
     url(r'^chapter/list/$',
         shop_view.ListChapterView.as_view(), name='chapter-list'),
-    
+    url(r'^chapter/moderation-list/$',
+        shop_view.ListModerationChapterView.as_view(), name='mchapter-list'),
+    url(r'^chapter/change/(?P<pk>[\d]+)/$',
+        shop_view.ChangeChapterView.as_view(), name='chapter-change'),
+    url(r'^chapter/moderate/(?P<pk>[\d]+)/$',
+        shop_view.ModerateChapterView.as_view(), name='chapter-moderate'),
+        
 
     url(r'^keyword/add/$',
         shop_view.AddKeywordView.as_view(), name='keyword-add'),
