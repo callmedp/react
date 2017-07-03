@@ -168,7 +168,7 @@
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
-                    <th class="column-title">Draft Submitted On</th>
+                    <th class="column-title">Draft Approved On</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
@@ -188,7 +188,7 @@
                       <td>Delivery Type</td>
                       <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
-                      <td>{{obj.draft_added_on}}</td>
+                      <td>{{obj.approved_on}}</td>
                       <td>{{obj.updated_on|naturaltime}}</td>
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>

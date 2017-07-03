@@ -6,11 +6,12 @@ from django.utils import timezone
 
 from order.models import OrderItem
 from emailers.email import SendMail
+from emailers.sms import SendSMS
 
 
 class Command(BaseCommand):
     """
-        Daily Cron for draft reminder mail
+        Daily Cron for draft reminder mail/Sms
     """
 
     def __init__(self, *args, **kwargs):
@@ -39,13 +40,21 @@ def draft_reminder_mail():
                     "info": 'Your developed document is awaiting for approval',
                     "subject": 'Your developed document is awaiting for approval',
                     "draft_level": draft_level,
+                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "mobile": oi.order.mobile,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
                 except Exception as e:
                     logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
+                try:
+                    SendSMS().send(sms_type=mail_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
             elif draft_level == 1 and today_date == approved_date + datetime.timedelta(days=15):
+
                 to_emails = [oi.order.email]
                 mail_type = 'REMINDER'
                 data = {}
@@ -53,11 +62,18 @@ def draft_reminder_mail():
                     "info": 'Your developed document is awaiting for approval',
                     "subject": 'Your developed document is awaiting for approval',
                     "draft_level": draft_level,
+                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "mobile": oi.order.mobile,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
                 except Exception as e:
                     logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                try:
+                    SendSMS().send(sms_type=mail_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 1 and today_date == approved_date + datetime.timedelta(days=22):
                 to_emails = [oi.order.email]
@@ -67,11 +83,18 @@ def draft_reminder_mail():
                     "info": 'Your developed document is awaiting for approval',
                     "subject": 'Your developed document is awaiting for approval',
                     "draft_level": draft_level,
+                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "mobile": oi.order.mobile,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
                 except Exception as e:
                     logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                try:
+                    SendSMS().send(sms_type=mail_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 1 and today_date == approved_date + datetime.timedelta(days=29):
                 to_emails = [oi.order.email]
@@ -80,12 +103,19 @@ def draft_reminder_mail():
                 email_dict.update({
                     "info": 'Auto closer mail',
                     "draft_level": oi.draft_counter,
+                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "mobile": oi.order.mobile,
                 })
 
                 try:
                     SendMail().send(to_emails, mail_type, email_dict)
                 except Exception as e:
                     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                try:
+                    SendSMS().send(sms_type=mail_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 2 and today_date == approved_date + datetime.timedelta(days=4):
                 to_emails = [oi.order.email]
@@ -95,11 +125,18 @@ def draft_reminder_mail():
                     "info": 'Your developed document is awaiting for approval',
                     "subject": 'Your developed document is awaiting for approval',
                     "draft_level": draft_level,
+                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "mobile": oi.order.mobile,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
                 except Exception as e:
                     logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                try:
+                    SendSMS().send(sms_type=mail_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 2 and today_date == approved_date + datetime.timedelta(days=7):
                 to_emails = [oi.order.email]
@@ -109,11 +146,18 @@ def draft_reminder_mail():
                     "info": 'Your developed document is awaiting for approval',
                     "subject": 'Your developed document is awaiting for approval',
                     "draft_level": draft_level,
+                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "mobile": oi.order.mobile,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
                 except Exception as e:
                     logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                try:
+                    SendSMS().send(sms_type=mail_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 2 and today_date == approved_date + datetime.timedelta(days=10):
                 to_emails = [oi.order.email]
@@ -122,12 +166,19 @@ def draft_reminder_mail():
                 email_dict.update({
                     "info": 'Auto closer Email',
                     "draft_level": oi.draft_counter,
+                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "mobile": oi.order.mobile,
                 })
 
                 try:
                     SendMail().send(to_emails, mail_type, email_dict)
                 except Exception as e:
                     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                try:
+                    SendSMS().send(sms_type=mail_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
     except Exception as e:
         logging.getLogger('email_log').error("%s - %s" % (
             "Reminder mail cron", str(e)))

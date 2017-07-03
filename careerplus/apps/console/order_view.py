@@ -21,6 +21,7 @@ from io import StringIO
 from order.models import Order, OrderItem
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
+from emailers.sms import SendSMS
 
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
@@ -358,15 +359,22 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                             mail_type = 'Writer_Information'
                             data = {}
                             data.update({
+                                "name": obj.order.first_name + ' ' + obj.order.last_name,
                                 "writer_name": writer.name,
                                 "writer_email": writer.email,
                                 "writer_mobile": writer.contact_number,
+                                "mobile": obj.order.mobile
                             })
 
                             try:
                                 SendMail().send(to_emails, mail_type, data)
                             except Exception as e:
                                 logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=data)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                             obj.orderitemoperation_set.create(
                                 oi_status=1,
@@ -1211,7 +1219,7 @@ class ActionOrderItemView(View):
                 if mid_out_sent:
                     # mail to user about writer information
                     to_emails = [order.email]
-                    mail_type = 'MIDOUT_MAIL'
+                    mail_type = 'MIDOUT'
                     data = {}
                     data.update({
                         "info": 'Upload your resume',

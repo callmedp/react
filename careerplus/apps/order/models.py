@@ -178,7 +178,7 @@ class OrderItem(models.Model):
 
     closed_on = models.DateTimeField(null=True, blank=True)
     draft_added_on = models.DateTimeField(null=True, blank=True)
-    approved_on = models.DateTimeField(null=True, blank=True) # draft approved on
+    approved_on = models.DateTimeField(null=True, blank=True)  # draft approved on
 
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)

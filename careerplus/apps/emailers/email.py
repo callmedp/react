@@ -67,7 +67,7 @@ class SendMail():
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
-        elif mail_type == "MIDOUT_MAIL":
+        elif mail_type == "MIDOUT":
             send_dict['subject'] = data.get('subject', "Upload your resume")
             template_name = data.get('template_name', 'midout_mail.html')
             send_dict['template'] = 'emailers/' + template_name

@@ -4,6 +4,8 @@ from django.utils import timezone
 
 from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
+from emailers.email import SendMail
+from emailers.sms import SendSMS
 
 from .models import Order, OrderItem
 
@@ -50,6 +52,28 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
                 self.createOrderitems(order, cart_obj)
+
+                # mai and sms
+                if order.orderitems.filter(product__type_flow__in=[1]) and order.status == 1:
+                    to_emails = [order.email]
+                    mail_type = "MIDOUT"
+                    data = {}
+                    data.update({
+                        "info": 'Upload Your resume',
+                        "subject": 'Upload Your Resume',
+                        "name": order.first_name + ' ' + order.last_name,
+                        "mobile": order.mobile,
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                        order.midout_sent_on = timezone.now()
+                    except Exception as e:
+                        logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
                 return order
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

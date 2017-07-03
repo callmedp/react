@@ -18,6 +18,7 @@ from users.mixins import RegistrationLoginApi
 from order.models import OrderItem
 from console.order_form import FileUploadForm
 from emailers.email import SendMail
+from emailers.sms import SendSMS
 
 
 class ArticleCommentView(View):
@@ -222,33 +223,37 @@ class ApproveByAdminDraft(View):
                 obj.save()
 
                 # mail to user about writer information
+                to_emails = [obj.order.email]
+                email_dict = {}
+                email_dict.update({
+                    "info": 'Auto closer Email',
+                    "draft_level": obj.draft_counter,
+                    "name": obj.order.first_name + ' ' + obj.order.last_name,
+                    "mobile": obj.order.mobile,
+                })
                 if obj.draft_counter < 3:
-                    to_emails = [obj.order.email]
                     mail_type = 'REMINDER'
-                    email_dict = {}
-                    email_dict.update({
-                        "info": 'Your developed document is awaiting for approval',
-                        "draft_level": obj.draft_counter,
-                    })
-
                     try:
                         SendMail().send(to_emails, mail_type, email_dict)
                     except Exception as e:
                         logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=email_dict)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                 else:
-                    to_emails = [obj.order.email]
                     mail_type = 'AUTO_CLOSER'
-                    email_dict = {}
-                    email_dict.update({
-                        "info": 'Auto closer Email',
-                        "draft_level": obj.draft_counter,
-                    })
-
                     try:
                         SendMail().send(to_emails, mail_type, email_dict)
                     except Exception as e:
                         logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=email_dict)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                 if obj.oi_status == 9:
                     obj.orderitemoperation_set.create(
