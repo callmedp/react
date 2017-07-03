@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Allocated Order Item- Shinelearning</title>
+  <title>Closed Order Item- Shinelearning</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -21,10 +21,10 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Allocated</h3>
+        <h3>Closed Orderitems</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-allocated" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:queue-closed-orderitems" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -33,7 +33,7 @@
                 <div style="display:none">
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.writer }}
+                            {{ filter_form.payment_date }}
                         </div>
                         <br/>
                     </div>
@@ -42,11 +42,6 @@
                             {{ filter_form.added_on }}
                         </div>
                         <br/>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.oi_status }}
-                        </div>
                     </div>
                 </div>
 
@@ -74,11 +69,11 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-allocated" %}" id="list-filter-form">
+                  <form class="form-group" method="GET" action="{% url "console:queue-closed-orderitems" %}" id="list-filter-form">
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.writer.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.writer }}
+                                {{ filter_form.payment_date }}
                             </div>
                             <br/>
                         </div>
@@ -86,13 +81,6 @@
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.added_on.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 {{ filter_form.added_on }}
-                            </div>
-                            <br/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.oi_status.label }}</label></br>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.oi_status }}
                             </div>
                             <br/>
                         </div>
@@ -135,38 +123,6 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            {% if perms.order.writer_assignment_permission %}
-            <div class="col-sm-4">
-            <div class="input-group">
-                {{action_form.action}}
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
-                </span>
-            </div>
-            </div>
-            {% endif %}
-            <!--h2>Select Comment to Change</h2-->
-            <!-- large modal -->
-
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                      </button>
-                      <h4 class="modal-title" id="myModalLabel">Action On Allocated List</h4>
-                    </div>
-                    <div class="modal-body" id="myModalbody">
-                      Are You Sure???
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="action_inbox">Yes</button>
-                    </div>
-                  </div>
-                </div>
-            </div>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -182,14 +138,6 @@
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
-                    {% if perms.order.writer_assignment_permission %}
-                        <th>
-                          <input type="checkbox" id="check-all" class="flat">
-                        </th>
-                        <th class="bulk-actions" colspan="100%">
-                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                        </th>
-                    {% endif %}
                     <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
@@ -201,9 +149,7 @@
                     <th class="column-title">User Category</th>
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">How Old</th>
-                    <th class="column-title">Assigned</th>
-                    <th class="column-title">Assigned By</th> 
-                    <th class="column-title">Flow Status</th>
+                    <th class="column-title">Payment Date</th>
                     <th class="column-title">Added On</th>
                   </tr>
                 </thead>
@@ -211,11 +157,6 @@
                 <tbody id="body-table-inbox">
                   {% for obj in page %}
                     <tr class="even pointer">
-                      {% if perms.order.writer_assignment_permission %}
-                          <td class="a-center ">
-                              <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
-                          </td>
-                      {% endif %}
                       <td>{{obj.pk}}</td>
                       <td>{{obj.order.id}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
@@ -227,10 +168,7 @@
                       <td>User Category</td>
                       <td>Delivery Type</td>
                       <td>{{obj.updated_on|naturaltime}}</td>
-                      <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
-
-                      <td>{{obj.assigned_by.name}}</td>
-                      <td>{{obj.get_oi_status}}</td>
+                      <td>{{obj.order.payment_date}}</td>
                       <td>{{obj.added_on}}</td>
                     </tr>
                   {% endfor %}

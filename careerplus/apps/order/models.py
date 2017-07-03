@@ -230,6 +230,11 @@ class OrderItem(models.Model):
             ("can_view_all_allocated_list", "Can View All Allocated List"),
             ("can_view_only_assigned_allocated_list", "Can View Only Assigned Allocated List"),
 
+            # Closed Permission
+            ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),
+            ("can_view_all_closed_oi_list", "Can View All Closed Orderitem List"),
+            ("can_view_only_assigned_closed_oi_list", "Can View Only Assigned Closed Orderitem List"),
+
             # Action Permission
             ("oi_action_permission", "OrderItem Action Permission"),
             ("oi_export_as_csv_permission", "Order Item Export As CSV Permission"),
