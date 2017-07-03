@@ -18,7 +18,6 @@ class AutoLogin(object):
         return base64.b64encode(ciph.encrypt(b))
 
     def decode(self, token):
-        import ipdb; ipdb.set_trace()
         token = base64.b64decode(token)
         ciph = XOR.new(settings.ENCODE_SALT)
         inp_str = ciph.decrypt(token)

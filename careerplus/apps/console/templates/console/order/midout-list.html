@@ -9,6 +9,7 @@
 
 {% block css_block %}
     {{block.super}} 
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
     <style type="text/css">
         .error{
@@ -116,12 +117,47 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Listing</h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
             </ul>
             <div class="clearfix"></div>
+            {% if perms.order.oi_action_permission %}
+                <form method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view"%}">{% csrf_token %}
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        {{action_form.action}}
+                        <input type="hidden" name="queue_name" value="midout" />
+                        <input type="hidden" id="selected-id" name="selected_id" />
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                        </span>
+                    </div>
+                </div>
+                </form>
+            {% endif %}
+            <!-- modal action -->
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Action</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are You Sure???
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="action_button">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+
           </div>
 
           <div class="x_content">
@@ -130,12 +166,22 @@
               <table class="table table-striped jambo_table bulk_action">
                 <thead>
                   <tr class="headings">
+                    {% if perms.order.oi_action_permission %}
+                        <th>
+                          <input type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th class="bulk-actions" colspan="100%">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    {% endif %}
                     <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
+                    <th class="column-title">Payment Date</th>
+                    <th class="column-title">Midout sent on</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Order Deatil</th>
                     <th class="column-title">Candidate Resume</th>
@@ -143,15 +189,22 @@
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="body-table-list">
                   {% for obj in page %}
                     <tr class="even pointer">
+                      {% if perms.order.oi_action_permission %}
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+                            </td>
+                      {% endif %}
                       <td>{{obj.pk}}</td>
                       <td>{{obj.order.id}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>{{obj.order.payment_date}}</td>
+                      <td>{{obj.order.midout_sent_on}}</td>
                       <td>
                           {{obj.updated_on|naturaltime}}</br>
                           <b>Updated On: {{obj.updated_on}}</b>
@@ -249,6 +302,8 @@
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
 
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>

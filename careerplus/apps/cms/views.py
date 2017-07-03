@@ -80,7 +80,12 @@ class CMSPageView(DetailView, LoadMoreMixin):
             except Exception:
                 raise Http404
             if request.session.get('candidate_id') and message and self.page_obj:
-                Comment.objects.create(candidate_id=request.session.get('candidate_id'), message=message, page=self.page_obj)
+                name = ''
+                if request.session.get('first_name'):
+                    name = request.session.get('first_name')
+                if request.session.get('last_name'):
+                    name += ' ' + request.session.get('last_name')
+                Comment.objects.create(candidate_id=request.session.get('candidate_id'), message=message, name=name, page=self.page_obj)
                 self.page_obj.comment_count += 1
                 self.page_obj.save()
                 today = timezone.now()

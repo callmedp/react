@@ -1,6 +1,7 @@
 import json
 import csv
 import datetime
+import logging
 
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.core.paginator import Paginator
@@ -19,6 +20,7 @@ from io import StringIO
 
 from order.models import Order, OrderItem
 from blog.mixins import PaginationMixin
+from emailers.email import SendMail
 
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
@@ -243,10 +245,13 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                 orderitems = order.orderitems.all()  # filter(product__type_flow__in=[1])
                 for oi in orderitems:
                     oi.oi_resume = request.FILES.get('oi_resume', '')
+                    last_status = oi.oi_status
+                    oi.oi_status = 10
+                    oi.last_oi_status = last_status
                     oi.save()
                     oi.orderitemoperation_set.create(
-                        oi_status=10,
-                        last_oi_status=oi.oi_status,
+                        oi_status=oi.oi_status,
+                        last_oi_status=last_status,
                         assigned_to=oi.assigned_to,
                         added_by=request.user)
                 messages.add_message(request, messages.SUCCESS, 'resume uploded Successfully')
@@ -273,13 +278,14 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             "form": ResumeUploadForm(),
             "query": self.query,
             "filter_form": filter_form,
+            "action_form": OIActionForm(queue_name='midout'),
         })
         return context
 
     def get_queryset(self):
         queryset = OrderItem.objects.all().select_related('order', 'product')
         queryset = queryset.filter(
-            order__status=1, product__type_flow__in=[1], oi_resume='')
+            order__status=1, product__type_flow__in=[1], oi_resume__in=['', None])
 
         try:
             if self.query:
@@ -335,7 +341,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                 data = {"display_message": ''}
                 orderitem_list = request.POST.getlist('selected_id[]', [])
                 writer_pk = int(request.POST.get('action_type', '0'))
-                orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
+                orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list).select_related('order')
                 if writer_pk == 0:
                     data['display_message'] = 'Please select valid action first.'
                 else:
@@ -346,6 +352,22 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                             obj.assigned_to = writer
                             obj.assigned_by = request.user
                             obj.save()
+
+                            # mail to user about writer information
+                            to_emails = [obj.order.email]
+                            mail_type = 'Writer_Information'
+                            data = {}
+                            data.update({
+                                "writer_name": writer.name,
+                                "writer_email": writer.email,
+                                "writer_mobile": writer.contact_number,
+                            })
+
+                            try:
+                                SendMail().send(to_emails, mail_type, data)
+                            except Exception as e:
+                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
                             obj.orderitemoperation_set.create(
                                 oi_status=1,
                                 last_oi_status=obj.oi_status,
@@ -358,7 +380,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                                 assigned_to=obj.assigned_to,
                                 added_by=request.user
                             )
-                            # mail to user about writer information
+
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
                         data['display_message'] = str(e)
@@ -388,9 +410,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         queryset = super(InboxQueueVeiw, self).get_queryset()
         queryset = queryset.filter(order__status=1, product__type_flow__in=[1], oi_draft='').exclude(oi_resume='').exclude(oi_status=9)
         user = self.request.user
-        if user.has_perm('order.can_show_unassigned_inbox') and user.has_perm('order.can_show_assigned_inbox'):
-            pass
-        elif user.has_perm('order.can_show_unassigned_inbox'):
+        if user.has_perm('order.can_show_unassigned_inbox'):
             queryset = queryset.filter(assigned_to=None)
         elif user.has_perm('order.can_show_assigned_inbox'):
             queryset = queryset.filter(assigned_to=user)
@@ -578,16 +598,15 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovalQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=5, product__type_flow__in=[1]).exclude(oi_status=9)
-        # user = self.request.user
-        # if user.has_perm('order.can_show_unassigned_inbox') and user.has_perm('order.can_show_assigned_inbox'):
-        #     pass
-        # elif user.has_perm('order.can_show_unassigned_inbox'):
-        #     queryset = queryset.filter(assigned_to=None)
-        # elif user.has_perm('order.can_show_assigned_inbox'):
-        #     queryset = queryset.filter(assigned_to=user)
-        # else:
-        #     queryset = queryset.none()
+        queryset = queryset.filter(order__status=1, oi_status=5, product__type_flow__in=[1])
+        user = self.request.user
+       
+        if user.has_perm('order.can_view_all_approval_list'):
+            pass
+        elif user.has_perm('order.can_view_only_assigned_approval_list'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |
@@ -684,6 +703,15 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
         queryset = queryset.filter(order__status=1, oi_status=6, product__type_flow__in=[1])
+        user = self.request.user
+
+        if user.has_perm('order.can_view_all_approved_list'):
+            pass
+        elif user.has_perm('order.can_view_only_assigned_approved_list'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
+
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |
@@ -779,6 +807,15 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RejectedByAdminQueue, self).get_queryset()
         queryset = queryset.filter(order__status=1, oi_status=7, product__type_flow__in=[1])
+
+        user = self.request.user
+
+        if user.has_perm('order.can_view_all_rejectedbyadmin_list'):
+            pass
+        elif user.has_perm('order.can_view_only_assigned_rejectedbyadmin_list'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
 
         try:
             if self.query:
@@ -879,6 +916,15 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         queryset = super(RejectedByCandidateQueue, self).get_queryset()
         queryset = queryset.filter(order__status=1, oi_status=8, product__type_flow__in=[1])
 
+        user = self.request.user
+
+        if user.has_perm('order.can_view_all_rejectedbycandidate_list'):
+            pass
+        elif user.has_perm('order.can_view_only_assigned_rejectedbycandidate_list'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
+
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |
@@ -948,41 +994,6 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         self.oi_status = request.GET.get('oi_status', '')
         return super(AllocatedQueueVeiw, self).get(request, args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        try:
-            orderitem_list = request.POST.getlist('table_records', [])
-            writer_pk = int(request.POST.get('action_type', '0'))
-            orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
-            if writer_pk == 0:
-                messages.add_message(request, messages.ERROR, 'Please select valid action first')
-            else:
-                User = get_user_model()
-                try:
-                    writer = User.objects.get(pk=writer_pk)
-                    for obj in orderitem_objs:
-                        obj.assigned_to = writer
-                        obj.assigned_by = request.user
-                        obj.save()
-                        obj.orderitemoperation_set.create(
-                            oi_status=1,
-                            last_oi_status=obj.oi_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user
-                        )
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=1,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user
-                        )
-                        # mail to user about writer information
-                    messages.add_message(request, messages.SUCCESS, str(len(orderitem_objs)) + ' orderitems are Re Assigned')
-                except Exception as e:
-                    messages.add_message(request, messages.ERROR, str(e))
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, str(e))
-        return HttpResponseRedirect(reverse('console:queue-allocated'))
-
     def get_context_data(self, **kwargs):
         context = super(AllocatedQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['allocated_list'], self.paginated_by)
@@ -1005,6 +1016,15 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
         queryset = queryset.filter(order__status=1, product__type_flow__in=[1]).exclude(assigned_to=None).exclude(oi_status=9)
+        user = self.request.user
+
+        if user.has_perm('order.can_view_all_allocated_list'):
+            pass
+        elif user.has_perm('order.can_view_only_assigned_allocated_list'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
+
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |
@@ -1180,3 +1200,32 @@ class ActionOrderItemView(View):
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:queue-rejectedbyadmin'))
+        elif action == -2 and queue_name == 'midout':
+            orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+            for oi in orderitems:
+                order = oi.order
+                mid_out_sent = True
+                if order.midout_sent_on and timezone.now().date() == order.midout_sent_on.date():
+                    mid_out_sent = False
+
+                if mid_out_sent:
+                    # mail to user about writer information
+                    to_emails = [order.email]
+                    mail_type = 'MIDOUT_MAIL'
+                    data = {}
+                    data.update({
+                        "info": 'Upload your resume',
+                        "subject": 'Upload your resume',
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                        order.midout_sent_on = timezone.now()
+                        order.save()
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+            messages.add_message(request, messages.SUCCESS, "Midout sent Successfully for selected items")
+            return HttpResponseRedirect(reverse('console:queue-midout'))
+
+        messages.add_message(request, messages.ERROR, "Select Valid Action")
+        return HttpResponseRedirect(reverse('console:queue-' + queue_name))

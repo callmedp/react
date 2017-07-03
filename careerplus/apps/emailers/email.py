@@ -1,7 +1,6 @@
 import logging
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.template import Context
 from django.template.loader import render_to_string
 from linkedin.autologin import AutoLogin
 
@@ -11,7 +10,7 @@ class SendMail():
     def base_send_mail(self, subject, body, to=None, from_email=settings.DEFAULT_FROM_EMAIL, headers=None, cc=None, bcc=None, fail_silently=False, attachments=[], mimetype='application/pdf'):
         '''
             Base function to send email. If debug_mode is true the cc will be shinecp@hindustantimes.com
-        '''  
+        '''
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
 
         emsg.content_subtype = "html"
@@ -22,13 +21,12 @@ class SendMail():
         return render_to_string(template, context)
 
     def process(self, to=None, send_dict=None, data=None):
-        import ipdb; ipdb.set_trace()
         try:
             body = self.render_template(send_dict['template'], data)
         except Exception as e:
             logging.getLogger('email_log').error("%s - %s" % (str(to), str(e)))
 
-        self.base_send_mail(subject=send_dict.get('subject', 'Shine Career Plus'), body=body, to=to, from_email=send_dict.get('from_email', None), headers=send_dict.get('header', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
+        self.base_send_mail(subject=send_dict.get('subject', 'Shinelearning'), body=body, to=to, from_email=send_dict.get('from_email', settings.DEFAULT_FROM_EMAIL), headers=send_dict.get('header', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
                 
     def send(self, to=None, mail_type=None, data={}):
         send_dict = {}
@@ -41,12 +39,37 @@ class SendMail():
             data['token'] = AutoLogin().encode(
                 'upender.singh@hindustantimes.com', '592be7a753c034509597de71')
             data['button_text'] = "click here to dashboard"
-        self.process(to, send_dict, data)
+            self.process(to, send_dict, data)
 
+        elif mail_type == "Writer_Information":
+            send_dict['subject'] = data.get('subject', 'Information of your writer')
+            template_name = data.get('template_name', 'writer_info.html')
+            send_dict['template'] = 'emailers/' + template_name
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)
 
-# context_dict['LOGIN_URL'] = 'http://' + str(settings.SITE_DOMAIN)\
-#                 + reverse('cp_login', kwargs={'token': token})+'?next='
-# <a href="{{ LOGIN_URL }}/dashboard/" style="color:#555555; text-decoration:none;"> <img src="http://static1.shine.com/shinecp/images/version1/mailer/feedback/order_icon.gif" style="vertical-align:middle; margin-right:8px;" />View your orders </a>
-# <a href="{{SITE_DOMAIN_EMAIL}}/user/login/{{token}}/?next=/dashboard/{{campaign_string}}" style="text-decoration: none;">
-#                                                 <P style="font-family:Arial, Helvetica, sans-serif; font-size:20px; color:#ffffff; line-height:22px; border: 1px solid #1e3e6b; border-radius: 3px; padding: 7px; text-align: center; background: -webkit-linear-gradient(top,#1e3e6b,#1e3e6b); background: transparent -moz-linear-gradient(center top , #1e3e6b,#1e3e6b) repeat scroll 0% 0%;">{{ button_text }}</P>
-#                                             </a>
+        elif mail_type == "REMINDER":
+            send_dict['subject'] = data.get('subject', "Your developed document has been uploaded")
+            template_name = data.get('template_name', 'draft_reminder.html')
+            send_dict['template'] = 'emailers/' + template_name
+
+            # for 2nd draft
+            if data.get('draft_level') == 2:
+                send_dict['subject'] = "Your modified document is awaiting for approval"
+
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)
+
+        elif mail_type == "AUTO_CLOSER":
+            send_dict['subject'] = data.get('subject', "Auto Closer Your Order item")
+            template_name = data.get('template_name', 'auto_closer.html')
+            send_dict['template'] = 'emailers/' + template_name
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)
+
+        elif mail_type == "MIDOUT_MAIL":
+            send_dict['subject'] = data.get('subject', "Upload your resume")
+            template_name = data.get('template_name', 'midout_mail.html')
+            send_dict['template'] = 'emailers/' + template_name
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)

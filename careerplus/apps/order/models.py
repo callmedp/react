@@ -80,11 +80,13 @@ class Order(AbstractAutoDate):
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
         permissions = (
+            # order queue permission
             ("can_show_order_queue", "Can Show Order Queue"),
-            ("can_show_welcome_queue", "Can Show Welcome Queue"),
-            ("can_show_midout_queue", "Can Show Midout Queue"),
             ("can_show_all_order", "Can View All Orders"),
-            ("can_show_paid_order", "Can View Paid Orders"),
+            ("can_show_paid_order", "Can View Only Paid Orders"),
+
+            # welcome call permission
+            ("can_show_welcome_queue", "Can Show Welcome Queue"),
 
             # order deatil permissions
             ("can_view_order_detail", "Can View Order Deatil"),
@@ -176,6 +178,7 @@ class OrderItem(models.Model):
 
     closed_on = models.DateTimeField(null=True, blank=True)
     draft_added_on = models.DateTimeField(null=True, blank=True)
+    approved_on = models.DateTimeField(null=True, blank=True) # draft approved on
 
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -187,25 +190,45 @@ class OrderItem(models.Model):
         verbose_name = _("Order Item")
         verbose_name_plural = _("Order Items")
         permissions = (
-            # ("can_show_midout_queue", "Can Show Midout Queue"),
+            # midout queue permission
+            ("can_show_midout_queue", "Can Show Midout Queue"),
+            ("can_upload_candidate_resume", "Can Upload Candidate resume"),
+
+            # inbox permission
             ("can_show_inbox_queue", "Can Show Inbox Queue"),
+            ("show_writer_inbox_view", "Show Writer Inbox View Fields"),
             ("can_show_assigned_inbox", "Can Show Only Assigned Inbox"),
-            ("can_show_unassigned_inbox", "Can Show Only Not Assigned Inbox"),
-            ("writer_assignment_action", "Can Assign to Other writer"),
+            ("can_show_unassigned_inbox", "Can Show Only Unassigned Inbox"),
+            ("writer_assignment_action", "Writer Assignment Action permission"),
             ("can_assigned_to_writer", "Can Assigned To This Writer"),
+
+            # oirder item detail permission
             ("can_view_order_item_detail", "Can View Order Item Detail"),
+
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),
+            ("can_view_all_approval_list", "Can View All Approval List"),
+            ("can_view_only_assigned_approval_list", "Can View Only Assigned Approval List"),
+
             # Appoved Queue
             ("can_show_approved_queue", "Can View Approved Queue"),
+            ("can_view_all_approved_list", "Can View All Approved List"),
+            ("can_view_only_assigned_approved_list", "Can View Only Assigned Approved List"),
+
             # Rejected By Admin Queue
             ("can_show_rejectedbyadmin_queue", "Can View Rejected By Admin Queue"),
+            ("can_view_all_rejectedbyadmin_list", "Can View All Rejected by Admin List"),
+            ("can_view_only_assigned_rejectedbyadmin_list", "Can View Only Assigned Rejected By Admin List"),
 
             # Rejected By Candidate Queue
             ("can_show_rejectedbycandidate_queue", "Can View Rejected By Candidate Queue"),
+            ("can_view_all_rejectedbycandidate_list", "Can View All Rejected By Candidate List"),
+            ("can_view_only_assigned_rejectedbycandidate_list", "Can View Only Assigned Rejected By Candidate List"),
 
             # Allocated Queue
             ("can_show_allocated_queue", "Can View Allocated Queue"),
+            ("can_view_all_allocated_list", "Can View All Allocated List"),
+            ("can_view_only_assigned_allocated_list", "Can View Only Assigned Allocated List"),
 
             # Action Permission
             ("oi_action_permission", "OrderItem Action Permission"),

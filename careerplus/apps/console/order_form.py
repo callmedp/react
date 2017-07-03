@@ -220,11 +220,18 @@ class OIFilterForm(forms.Form):
 class OIActionForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
+        queue_name = kwargs.pop('queue_name', None)
         super(OIActionForm, self).__init__(*args, **kwargs)
+
         ACTION_CHOICES = (
             (0, "Select Action"),
-            (-1, "Export As Csv"),
         )
+
+        if queue_name == 'midout':
+            ACTION_CHOICES += ((-2, "Send Midout Mail"),)
+        else:
+            ACTION_CHOICES += ((-1, "Export As Csv"),)
+
         self.fields['action'] = forms.ChoiceField(
             label=("Action:"), choices=ACTION_CHOICES,
             required=True,

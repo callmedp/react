@@ -17,6 +17,7 @@ from review.models import Review
 from users.mixins import RegistrationLoginApi
 from order.models import OrderItem
 from console.order_form import FileUploadForm
+from emailers.email import SendMail
 
 
 class ArticleCommentView(View):
@@ -25,10 +26,16 @@ class ArticleCommentView(View):
         if request.is_ajax():
             try:
                 message = request.POST.get('message').strip()
-                slug = request.POST.get('slug').strip()
-                blog = Blog.objects.get(slug=slug)
+                pk = request.POST.get('pk', None)
+                blog = Blog.objects.get(pk=pk, is_active=True)
+
                 if request.session.get('candidate_id') and message:
-                    Comment.objects.create(blog=blog, message=message, candidate_id=request.session.get('candidate_id'))
+                    name = ''
+                    if request.session.get('first_name'):
+                        name = request.session.get('first_name')
+                    if request.session.get('last_name'):
+                        name += ' ' + request.session.get('last_name')
+                    Comment.objects.create(blog=blog, message=message, name=name, candidate_id=request.session.get('candidate_id'))
                     status = 1
                     blog.no_comment += 1
                     blog.save()
@@ -206,13 +213,62 @@ class ApproveByAdminDraft(View):
                 obj = OrderItem.objects.get(pk=oi_pk)
                 data['status'] = 1
                 last_status = obj.oi_status
-                obj.oi_status = 6
+                if obj.draft_counter == 3:
+                    obj.oi_status = 9
+                    obj.closed_on = timezone.now()
+                else:
+                    obj.oi_status = 6
+                obj.approved_on = timezone.now()
                 obj.save()
-                obj.orderitemoperation_set.create(
-                    oi_status=obj.oi_status,
-                    last_oi_status=last_status,
-                    assigned_to=obj.assigned_to,
-                    added_by=request.user)
+
+                # mail to user about writer information
+                if obj.draft_counter < 3:
+                    to_emails = [obj.order.email]
+                    mail_type = 'REMINDER'
+                    email_dict = {}
+                    email_dict.update({
+                        "info": 'Your developed document is awaiting for approval',
+                        "draft_level": obj.draft_counter,
+                    })
+
+                    try:
+                        SendMail().send(to_emails, mail_type, email_dict)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                else:
+                    to_emails = [obj.order.email]
+                    mail_type = 'AUTO_CLOSER'
+                    email_dict = {}
+                    email_dict.update({
+                        "info": 'Auto closer Email',
+                        "draft_level": obj.draft_counter,
+                    })
+
+                    try:
+                        SendMail().send(to_emails, mail_type, email_dict)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                if obj.oi_status == 9:
+                    obj.orderitemoperation_set.create(
+                        oi_status=6,
+                        last_oi_status=last_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=6,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                else:
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
             except:
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
