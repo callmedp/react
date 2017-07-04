@@ -84,7 +84,6 @@ class Widget(AbstractCommonModel):
     is_pop_up = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
-
     def __str__(self):
         # return str(self.id) + str(self.heading)
         return 'Widget #' + str(self.id) + ' with type ' + str(dict(WIDGET_CHOICES).get(self.widget_type)) if not self.heading else \
@@ -198,7 +197,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class PageWidget(AbstractCommonModel):
-    
+
     page = models.ForeignKey(Page)
     widget = models.ForeignKey(Widget)
     section = models.CharField(choices=SECTION, max_length=255,
@@ -209,7 +208,6 @@ class PageWidget(AbstractCommonModel):
     class Meta:
         # Comment this while initial migration
         auto_created = True
-        #
         ordering = ['section', '-ranking']
         unique_together = ('page', 'widget')
 
