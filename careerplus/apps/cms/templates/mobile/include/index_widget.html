@@ -4,35 +4,22 @@
 
     <!-- tab container starts here -->
     <div class="tab-container cms mt-10">
-        <ul class="tabs box-panel p-0">
-            <li><a href="#" class="current" data-tab="tab-1">Functional area</a></li>
-            <li><a href="#" data-tab="tab-2">Other formats</a></li>
+        <ul class="tabs p-0">
+            {% for key, value in column_data.items %}
+            <li><a href="#" {% if forloop.first %}class="current"{% endif %} data-tab="tab-{{ forloop.counter }}">{{ column_headings|get_value:key }}</a></li>
+            {% endfor %}
         </ul>
 
         <!-- Tab content Satrts here -->
-        <div id="tab-1" class="tab-content current row pb-0">
+        {% for key, value in column_data.items %}
+        <div id="tab-{{ forloop.counter }}" class="tab-content {% if forloop.first %}current{% endif %} row pb-0">
             <ul class="bullet">
-                <li><a href="#">IT software</a></li>
-                <li><a href="#">Marketing</a></li>
-                <li><a href="#">IT hardware</a></li>
-                <li><a href="#">Finance</a></li>
-                <li><a href="#">Operation</a></li>
-                <li><a href="#">Sales</a></li>
+                {% for k, v in value.items %}
+                <li><a href="{{v}}">{{k}}</a></li>
+                {% endfor %}
             </ul>
             <div class="clearfix"></div>
         </div><!-- Tab content ends here -->
-
-        <!-- Tab content Satrts here -->
-        <div id="tab-2" class="tab-content row pb-0">
-            <ul class="bullet">
-                <li><a href="#">Aenean tincidunt</a></li>
-                <li><a href="#">Vestibulum</a></li>
-                <li><a href="#">IT hardware</a></li>
-                <li><a href="#">Aenean</a></li>
-                <li><a href="#">Vestibulum</a></li>
-                <li><a href="#">Nullam quis</a></li>
-            </ul>
-            <div class="clearfix"></div>
-        </div><!-- Tab content ends here -->
+        {% endfor %}
     </div><!-- Tab container -->
 </div><!-- box ends here -->

@@ -127,7 +127,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
                 'initial_country': initial_country,
             })
             widget_context.update(left.widget.get_widget_data())
-            context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context)
+            context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context, request=self.request)
 
         for right in right_widgets:
             if self.request.flavour == 'mobile' and right.widget.widget_type in [6, 7]:

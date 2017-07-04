@@ -4,11 +4,11 @@
     <div class="content-box">
         <div class="download-pdf">
             {% if download_doc %}
-            <a href="{{download_doc.get_url}}" pop-up="{% if request.session.candidate_id %}yes{% else %}no{% endif %}">
+            <a id="id_download_button" href="{{download_doc.get_url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
                 <div class="wrap">
                     <div class="table">
                         <div class="table-cell">
-                            <span class="mt-10"><sup class="icon-download"></sup></span>
+                            <span class="mt-10" id="sidebar-countries-trigger"><sup class="icon-download"></sup></span>
                             <p class="pb-0 fs-15">{{heading}}</p>
                         </div>
                     </div>
@@ -19,3 +19,56 @@
         </div><!-- end of download pdf -->
     </div><!-- end of Content box -->
 </div><!-- download wrap Ends here -->
+
+<!-- Select countries (optional) start here -->
+<div class="sidebar" id="sidebar-countries">
+    <div class="content-box cms-right packages pt-0">
+        <h2 class="mb-0">{{heading}}</h2>
+
+        <div class="mt-20">
+            <form role="form" method="post" id="downloadpdf_form" action="{% url "cms:download-pdf" page_obj.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Name" id="user_name" name="name" >
+                    <p class="mgs"></p>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" id="id_email" name="email"  class="form-control" placeholder="Email">
+                    <p class="mgs"></p>
+                </div>
+
+                <div class="form-group">
+                    <div class="pull-left code">
+                        <select name="country_code">
+                            {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.1}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <input type="number" id="id_mobile" name="mobile_number" class="form-control pull-left number" placeholder="Mobile">
+                    <p class="mgs"></p>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="form-group mt-30 tnc">
+                    <p class="c9">
+                        <input type="checkbox"  name="term_condition" id="test1"/>
+                        <label for="test1" class="fs-13">
+                            By downloading this sample, you hereby accept our
+                            <a href="#">Terms &amp; Conditions</a>
+                        </label>
+                        <span class="mgs"></span>
+                    </p>
+                </div>
+                <input type='hidden' id="id_action" name='action_type' />
+                <div class="form-group text-center tabs">
+                    <button type="submit" id="id_download" class="btn btn-blue w100fl btn-round mb-20">Download</button>
+                    <div class="clearfix"></div>
+                    <p> <a href="#" id="id_skip">Skip</a></p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div><!-- Select countries (optional) ends here -->

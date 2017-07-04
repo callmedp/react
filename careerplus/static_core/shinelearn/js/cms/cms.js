@@ -1,3 +1,19 @@
+var highlightError = function(element, errorClass) {
+    $(element).siblings('.error').removeClass('hide_error');
+};
+
+var unhighlightError = function(element, errorClass) {
+    $(element).siblings('.error').addClass('hide_error');
+};
+
+var errorPlacement = function(error, element){
+    $(element).siblings('.error').html(error.text());
+};
+
+var showLeadForm = function () {
+    $('#id_download_model').modal("show");
+};
+
 $(document).ready(function() {
 
     $(document).on('click', '#id_download_button', function(event) {
@@ -10,15 +26,11 @@ $(document).ready(function() {
             window.open(href, '_blank');
         }
         else {
-            $('#id_download_model').modal("show");
+            showLeadForm();
         }
     });
-    
-    $(document).on('click', '#id_download', function(event) {
-        event.preventDefault();
-        $("#id_action").val(1);  //action on download button
-        var $pdfForm = $("#downloadpdf_form");
-        $pdfForm.validate({
+    var $pdfForm = $("#downloadpdf_form");
+    $pdfForm.validate({
 
             rules:{
                 name:{
@@ -50,30 +62,31 @@ $(document).ready(function() {
                 },
                 mobile_number:{
                     required:"Mobile Number is Mandatory",
-                    number:"Enter only number",
+                    number:"Enter only numbers",
                     maxlength: "Please enter less than 15 digits",
                     minlength: "Please enter atleast 5 digits"
+                },
+                term_condition: {
+                    required: "Please accept our Terms & Conditions"
                 }
-                
-            },
-            highlight:function(element, errorClass) {
-                $(element).siblings('.error').removeClass('hide_error');
-            },
-            unhighlight:function(element, errorClass) {
-                $(element).siblings('.error').addClass('hide_error');    
-            },
-            errorPlacement: function(error, element){
-            
-                $(element).siblings('.error').html(error.text());
-            }
 
+            },
+            highlight: highlightError,
+            unhighlight: unhighlightError,
+            errorPlacement: errorPlacement
         });
+
+
+    $(document).on('click', '#id_download', function(event) {
+        event.preventDefault();
+        $("#id_action").val(1);  //action on download button
+        var $pdfForm = $("#downloadpdf_form");
         if ($pdfForm.valid()) {
+            var href = $('#id_download_button').attr('href');
+            window.open(href, '_blank');
             $pdfForm.submit();
             $pdfForm[0].reset();
             $('#id_download_model').modal('toggle');
-            var href = $('#id_download_button').attr('href');
-            window.open(href, '_blank'); 
         }
     });
 
