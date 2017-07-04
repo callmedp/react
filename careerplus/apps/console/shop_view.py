@@ -31,7 +31,7 @@ from shop.forms import (
     AddAttributeForm, AddProductForm,
     ChangeProductForm,
     ChangeProductSEOForm,
-    ChangeProductAttributeForm,
+    # ChangeProductAttributeForm,
     ChangeProductOperationForm,
     ProductCategoryForm,
     ProductStructureForm,
@@ -1274,7 +1274,7 @@ class ChangeKeywordView(DetailView):
 
 
 
-@Decorate(check_permission('shop.change_product'))
+@Decorate(check_permission('shop.console_change_product'))
 class ListProductView(ListView, PaginationMixin):
     model = Product
     context_object_name = 'product_list'
@@ -1294,6 +1294,11 @@ class ListProductView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ListProductView, self).get_queryset()
+        vendor = self.request.user.get_vendor()
+        if not vendor:
+            queryset = queryset.none()
+        else:
+            queryset = queryset.filter(vendor=vendor)
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
@@ -1315,7 +1320,7 @@ class ListProductView(ListView, PaginationMixin):
         return context
 
 
-@Decorate(check_permission('shop.add_product'))
+@Decorate(check_permission('shop.console_add_product'))
 class AddProductView(FormView):
     form_class = AddProductForm
     template_name = 'console/shop/add_product.html'
@@ -1333,13 +1338,28 @@ class AddProductView(FormView):
         return context
 
     def form_valid(self, form):
-        form.save()
-        messages.success(
-            self.request,
-            "You have successfully added a product"
-        )
-        self.success_url = reverse_lazy('console:product-list')
-        return super(AddProductView, self).form_valid(form)
+        user = self.request.user
+        if user.has_perm('shop.console_add_product'):
+            vendor = user.get_vendor()
+            if not vendor:
+                messages.error(
+                    self.request,
+                    "You are not associated to any vendor.")
+                return super(AddProductView, self).form_invalid(form)
+            product = form.save()
+            product.vendor = vendor
+            product.save()
+            messages.success(
+                self.request,
+                "You have successfully added a product"
+            )    
+            self.success_url = reverse_lazy('console:product-list')
+            return super(AddProductView, self).form_valid(form)
+        else:
+            messages.error(
+                self.request,
+                "You don't have permission to add product.")          
+            return super(AddProductView, self).form_invalid(form)
 
     def form_invalid(self, form):
         messages.error(
@@ -1348,7 +1368,8 @@ class AddProductView(FormView):
         )
         return super(AddProductView, self).form_invalid(form)
 
-@Decorate(check_permission('shop.change_product'))
+
+@Decorate(check_permission('shop.console_change_product'))
 class ChangeProductView(DetailView):
     template_name = 'console/shop/change_product.html'
     model = Product

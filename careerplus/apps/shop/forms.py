@@ -55,7 +55,10 @@ class AddAttributeForm(forms.ModelForm):
 
     class Meta:
         model = Attribute
-        fields = ['name', 'type_service', 'display_name', 'type_attribute', 'required', 'is_visible', 'is_sortable', 'is_multiple', 'is_searchable', 'is_comparable', 'is_filterable', 'is_indexable', 'active', 'option_group']
+        fields = ['name', 'type_service', 'display_name',
+            'type_attribute', 'required', 'is_visible',
+            'is_sortable', 'is_multiple', 'is_searchable',
+            'is_filterable', 'is_indexable', 'active', 'option_group']
 
     def __init__(self, *args, **kwargs):
         super(AddAttributeForm, self).__init__(*args, **kwargs)
@@ -88,10 +91,6 @@ class AddAttributeForm(forms.ModelForm):
 
         self.fields['is_filterable'].widget.attrs['class'] = 'js-switch'
         self.fields['is_filterable'].widget.attrs['data-switchery'] = 'true'
-
-        self.fields['is_comparable'].widget.attrs['class'] = 'js-switch'
-        self.fields['is_comparable'].widget.attrs['data-switchery'] = 'true'
-
 
         self.fields['name'].widget.attrs['class'] = form_class
         self.fields['name'].widget.attrs['maxlength'] = 80
@@ -222,33 +221,31 @@ class DataColorChoiceField(forms.ChoiceField):
 
 
 
-class AddProductForm(forms.ModelForm):
-
-    image_bg = DataColorChoiceField(choices=BG_CHOICES)
+class AddProductBaseForm(forms.ModelForm):
 
     class Meta:
         model = Product
         fields = [
             'name', 'type_service',
-            'type_product', 'type_flow',
-            'upc', 'image', 'image_bg', 'video_url',
-            'about', 'description',
-            'buy_shine', 'vendor']
+            'type_product', 'upc']
+
+class AddProductForm(AddProductBaseForm):
+
+    inr_price = forms.DecimalField(max_digits=12, decimal_places=2)
+
+    class Meta(AddProductBaseForm.Meta):
+        fields = AddProductBaseForm.Meta.fields + ['inr_price']
 
     def __init__(self, *args, **kwargs):
         super(AddProductForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
-        self.fields['type_flow'].widget.attrs['class'] = form_class
-        self.fields['type_flow'].widget.attrs['data-parsley-notdefault'] = ''
         
         self.fields['type_service'].widget.attrs['class'] = form_class
         self.fields['type_service'].widget.attrs['data-parsley-notdefault'] = ''
-
         self.fields['type_product'].widget.attrs['class'] = form_class
-               
-        self.fields['vendor'].widget.attrs['class'] = form_class
-        self.fields['vendor'].empty_label = 'Select Vendor'
-        self.fields['vendor'].required = True
+                       
+        self.fields['inr_price'].widget.attrs['class'] = form_class
+        self.fields['inr_price'].required = True
         
         self.fields['name'].widget.attrs['class'] = form_class
         self.fields['name'].widget.attrs['maxlength'] = 80
@@ -257,25 +254,15 @@ class AddProductForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
-        self.fields['image'].widget.attrs['class'] = form_class + ' clearimg'
-        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 100
-        self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
         
-
         self.fields['upc'].widget.attrs['class'] = form_class
-        
         self.fields['upc'].widget.attrs['maxlength'] = 80
         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
         self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['upc'].widget.attrs['data-parsley-length'] = "[4, 60]"
         self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
 
-        
-        self.fields['video_url'].widget.attrs['class'] = form_class
-        self.fields['video_url'].widget.attrs['maxlength'] = 80
-        self.fields['video_url'].widget.attrs['placeholder'] = 'Add video url'
-        self.fields['video_url'].widget.attrs['data-parsley-type'] = 'url'
-    
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
@@ -320,68 +307,10 @@ class AddProductForm(forms.ModelForm):
                 "This field is required.")
         return upc
 
-    def clean_image_bg(self):
-        image_bg = self.cleaned_data.get('image_bg', '')
-        if image_bg:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return image_bg
-
-    def clean_video_url(self):
-        link = self.cleaned_data.get('video_url', '')
-        if link:
-            from django.core.validators import URLValidator
-            val = URLValidator()
-            val('https://' + link.strip())
-        else:
-            raise forms.ValidationError(
-                "This is required.")
-        return link
-
-    def clean_image(self):
-        file = self.files.get('image', '')
-        if file:
-            if file._size > 200 * 1024:
-                raise forms.ValidationError(
-                    "Image file is too large ( > 200kb ).")
-        else:
-            raise forms.ValidationError(
-                "Could not read the uploaded image.")
-        return file
-
-    def clean_description(self):
-        desc = self.cleaned_data.get('description', '')
-        if desc:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return desc
-
-    def clean_about(self):
-        about = self.cleaned_data.get('about', '')
-        if about:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return about
-
-    def clean_buy_shine(self):
-        buy_shine = self.cleaned_data.get('buy_shine', '')
-        if buy_shine:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return buy_shine
-
+    
     def save(self, commit=True, *args, **kwargs):
         product = super(AddProductForm, self).save(
             commit=True, *args, **kwargs)
-        product.create_icon()
         return product
 
 
@@ -639,36 +568,36 @@ class ChangeProductSEOForm(forms.ModelForm):
         return product
 
 
-class ChangeProductAttributeForm(forms.ModelForm):
+# class ChangeProductAttributeForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super(ChangeProductAttributeForm, self).__init__(*args, **kwargs)
-        form_class = 'form-control col-md-7 col-xs-12'
-        self.fields['duration_months'].widget.attrs['class'] = form_class
-        self.fields['duration_days'].widget.attrs['class'] = form_class
-        self.fields['certification'].widget.attrs['class'] = 'js-switch'
-        self.fields['certification'].widget.attrs['data-switchery'] = 'true'
-        self.fields['requires_delivery'].widget.attrs['class'] = 'js-switch'
-        self.fields['requires_delivery'].widget.attrs['data-switchery'] = 'true'
+#     def __init__(self, *args, **kwargs):
+#         super(ChangeProductAttributeForm, self).__init__(*args, **kwargs)
+#         form_class = 'form-control col-md-7 col-xs-12'
+#         self.fields['duration_months'].widget.attrs['class'] = form_class
+#         self.fields['duration_days'].widget.attrs['class'] = form_class
+#         self.fields['certification'].widget.attrs['class'] = 'js-switch'
+#         self.fields['certification'].widget.attrs['data-switchery'] = 'true'
+#         self.fields['requires_delivery'].widget.attrs['class'] = 'js-switch'
+#         self.fields['requires_delivery'].widget.attrs['data-switchery'] = 'true'
         
-        self.fields['course_type'].widget.attrs['class'] = form_class
-        self.fields['course_type'].widget.attrs['data-parsley-notdefault'] = ''
+#         self.fields['course_type'].widget.attrs['class'] = form_class
+#         self.fields['course_type'].widget.attrs['data-parsley-notdefault'] = ''
 
-        self.fields['study_mode'].widget.attrs['class'] = form_class
-        self.fields['study_mode'].widget.attrs['data-parsley-notdefault'] = ''
+#         self.fields['study_mode'].widget.attrs['class'] = form_class
+#         self.fields['study_mode'].widget.attrs['data-parsley-notdefault'] = ''
 
-        self.fields['experience'].widget.attrs['class'] = form_class
-        self.fields['study_mode'].widget.attrs['data-parsley-notdefault'] = ''
+#         self.fields['experience'].widget.attrs['class'] = form_class
+#         self.fields['study_mode'].widget.attrs['data-parsley-notdefault'] = ''
 
-    class Meta:
-        model = Product
-        fields = ('duration_months', 'duration_days', 'certification', 'course_type', 'study_mode', 'experience', 'requires_delivery')
+#     class Meta:
+#         model = Product
+#         fields = ('duration_months', 'duration_days', 'certification', 'course_type', 'study_mode', 'experience', 'requires_delivery')
 
     
-    def save(self, commit=True, *args, **kwargs):
-        product = super(ChangeProductAttributeForm, self).save(
-            commit=True, *args, **kwargs)
-        return product
+#     def save(self, commit=True, *args, **kwargs):
+#         product = super(ChangeProductAttributeForm, self).save(
+#             commit=True, *args, **kwargs)
+#         return product
 
 
 class ChangeProductOperationForm(forms.ModelForm):

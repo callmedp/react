@@ -12,7 +12,9 @@ from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from partner.models import Vendor
-from faq.models import FAQuestion, Chapter
+from faq.models import (
+    FAQuestion, Chapter,
+    ScreenFAQ, ScreenChapter)
 from geolocation.models import Country, Currency
 
 from .functions import (
@@ -340,14 +342,6 @@ class Attribute(AbstractAutoDate):
     type_attribute = models.PositiveSmallIntegerField(
         _('Type'), choices=ATTRIBUTE_CHOICES, default=0)
     required = models.BooleanField(_('Required'), default=False)
-    is_visible = models.BooleanField(default=True)
-    is_multiple = models.BooleanField(default=True)
-    is_searchable = models.BooleanField(default=True)
-    is_indexable = models.BooleanField(default=True)
-    is_comparable = models.BooleanField(default=True)
-    is_filterable = models.BooleanField(default=True)
-    is_sortable = models.BooleanField(default=True)
-    active = models.BooleanField(default=True)
     option_group = models.ForeignKey(
         'shop.AttributeOptionGroup', blank=True, null=True,
         verbose_name=_("Option Group"),
@@ -359,6 +353,15 @@ class Attribute(AbstractAutoDate):
         through_fields=('attribute', 'product'),
         blank=True)
 
+
+    is_visible = models.BooleanField(default=True)
+    is_multiple = models.BooleanField(default=True)
+    is_searchable = models.BooleanField(default=True)
+    is_indexable = models.BooleanField(default=True)
+    is_filterable = models.BooleanField(default=True)
+    is_sortable = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
+    
     def __str__(self):
         return self.name
 
@@ -396,6 +399,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     upc = models.CharField(
         _('Universal Product Code'), max_length=100,
         help_text=_('To be filled by vendor'))
+    
     banner = models.ImageField(
         _('Banner'), upload_to=get_upload_path_product_banner,
         blank=True, null=True)
@@ -414,6 +418,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     flow_image = models.ImageField(
         _('Delivery Flow Image'), upload_to=get_upload_path_product_image,
         blank=True, null=True)
+    
     email_cc = RichTextField(
         verbose_name=_('Email CC'), blank=True, default='')
     about = RichTextField(
@@ -426,22 +431,54 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         verbose_name=_('Welcome Mail Description'), blank=True, default='')
     call_desc = RichTextField(
         verbose_name=_('Welcome Call Description'), blank=True, default='')
-    duration_months = models.IntegerField(
-        _('Duration In Months'), default=0)
-    duration_days = models.IntegerField(
-        _('Duration In Days'), default=0)
-    experience = models.PositiveSmallIntegerField(
-        _('Experience'), choices=EXP_CHOICES, default=0)
-    requires_delivery = models.BooleanField(
-        _("Requires delivery?"),
-        default=True)
-    certification = models.BooleanField(
-        _("Give Certification"),
-        default=True)
-    study_mode = models.PositiveSmallIntegerField(
-        _('Study Mode'), choices=MODE_CHOICES, default=0)
-    course_type = models.PositiveSmallIntegerField(
-        _('Course Type'), choices=COURSE_TYPE_CHOICES, default=0)
+    inr_price = models.DecimalField(
+        _('INR Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    fake_inr_price = models.DecimalField(
+        _('Fake INR Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    usd_price = models.DecimalField(
+        _('USD Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    fake_usd_price = models.DecimalField(
+        _('Fake USD Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    aed_price = models.DecimalField(
+        _('AED Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    fake_aed_price = models.DecimalField(
+        _('Fake AED Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    gbp_price = models.DecimalField(
+        _('GBP Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    fake_gbp_price = models.DecimalField(
+        _('Fake GBP Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0) 
+    # duration_months = models.IntegerField(
+    #     _('Duration In Months'), default=0)
+    # duration_days = models.IntegerField(
+    #     _('Duration In Days'), default=0)
+    # experience = models.PositiveSmallIntegerField(
+    #     _('Experience'), choices=EXP_CHOICES, default=0)
+    # requires_delivery = models.BooleanField(
+    #     _("Requires delivery?"),
+    #     default=True)
+    # certification = models.BooleanField(
+    #     _("Give Certification"),
+    #     default=True)
+    # study_mode = models.PositiveSmallIntegerField(
+    #     _('Study Mode'), choices=MODE_CHOICES, default=0)
+    # course_type = models.PositiveSmallIntegerField(
+    #     _('Course Type'), choices=COURSE_TYPE_CHOICES, default=0)
 
     class Meta:
         abstract = True
@@ -461,18 +498,17 @@ class Product(AbstractProduct, ModelMeta):
     search_keywords = models.TextField(
         _('Search Keywords'),
         blank=True, default='')
-    countries = models.ManyToManyField(
-        Country,
-        verbose_name=_('Country Available'),
-        related_name='countryavailable',
+    keywords = models.ManyToManyField(
+        'shop.Keyword',
+        verbose_name=_('Product Keyword'),
+        related_name='productkeyword',
         blank=True)
-    variation = models.ManyToManyField(
-        'self',
-        through='VariationProduct',
-        related_name='variationproduct+',
-        through_fields=('main', 'sibling'),
-        verbose_name=_('Variation Product'),
-        symmetrical=False, blank=True)
+    categories = models.ManyToManyField(
+        'shop.Category',
+        verbose_name=_('Product Category'),
+        through='ProductCategory',
+        through_fields=('product', 'category'),
+        blank=True)
     related = models.ManyToManyField(
         'self',
         through='RelatedProduct',
@@ -487,20 +523,22 @@ class Product(AbstractProduct, ModelMeta):
         through_fields=('father', 'children'),
         verbose_name=_('Child Product'),
         symmetrical=False, blank=True)
-    categories = models.ManyToManyField(
-        'shop.Category',
-        verbose_name=_('Product Category'),
-        through='ProductCategory',
-        through_fields=('product', 'category'),
-        blank=True)
-    keywords = models.ManyToManyField(
-        'shop.Keyword',
-        verbose_name=_('Product Keyword'),
-        related_name='productkeyword',
-        blank=True)
+    
     vendor = models.ForeignKey(
         'partner.Vendor', related_name='productvendor', blank=True,
         null=True, verbose_name=_("Product Vendor"))
+    countries = models.ManyToManyField(
+        Country,
+        verbose_name=_('Country Available'),
+        related_name='countryavailable',
+        blank=True)
+    variation = models.ManyToManyField(
+        'self',
+        through='VariationProduct',
+        related_name='variationproduct+',
+        through_fields=('main', 'sibling'),
+        verbose_name=_('Variation Product'),
+        symmetrical=False, blank=True)
     chapters = models.ManyToManyField(
         Chapter,
         verbose_name=_('Product Structure'),
@@ -519,13 +557,9 @@ class Product(AbstractProduct, ModelMeta):
         through='ProductAttribute',
         through_fields=('product', 'attribute'),
         blank=True)
-    prices = models.ManyToManyField(
-        Currency,
-        verbose_name=_('Product Price'),
-        through='ProductPrice',
-        through_fields=('product', 'currency'),
-        blank=True)
+    
     active = models.BooleanField(default=False)
+    is_indexable = models.BooleanField(default=False)
     _metadata_default = ModelMeta._metadata_default.copy()
     _metadata_default['locale'] = 'dummy_locale'
 
@@ -544,6 +578,12 @@ class Product(AbstractProduct, ModelMeta):
         verbose_name_plural = _('Products')
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
+        permissions = (
+            ("console_add_product", "Can Add Product From Console"),
+            ("console_change_product", "Can Change Product From Console"),
+            ("console_moderate_product", "Can Moderate Product From Console"),
+            ("console_live_product", "Can Live Product From Console"),
+        )
 
     def __str__(self):
         return self.name
@@ -757,105 +797,47 @@ class Product(AbstractProduct, ModelMeta):
         return dict(PRODUCT_CHOICES).get(self.type_product)
 
 
-class ProductArchive(AbstractProduct):
-    originalproduct = models.ForeignKey(
+class ProductScreen(AbstractProduct):
+    product = models.ForeignKey(
         Product,
         verbose_name=_('Original Product'),
         on_delete=models.SET_NULL,
-        related_name='originalproduct',
+        related_name='screenproduct',
         null=True)
-    siblings = models.CharField(
-        _('Siblings Product'),
-        blank=True,
-        max_length=100)
-    related = models.CharField(
-        _('Related Product'),
-        blank=True,
-        max_length=100)
-    childs = models.CharField(
-        _('Child Product'),
-        blank=True,
-        max_length=100)
-    categories = models.CharField(
-        _('Product Category'),
-        blank=True,
-        max_length=100)
-    keywords = models.CharField(
-        _('Product Keyword'),
-        blank=True,
-        max_length=100)
-    offers = models.CharField(
-        _('Product Offer'),
-        blank=True,
-        max_length=100)
-    faqs = models.CharField(
-        _('Product Structure'),
-        blank=True,
-        max_length=100)
-    attributes = models.CharField(
-        _('Product Attributes'),
-        blank=True,
-        max_length=100)
-    prices = models.CharField(
-        _('Product Prices'),
-        blank=True,
-        max_length=100)
+    vendor = models.ForeignKey(
+        'partner.Vendor', related_name='screenvendor', blank=True,
+        null=True, verbose_name=_("Product Vendor"))
+    countries = models.ManyToManyField(
+        Country,
+        verbose_name=_('Country Available'),
+        related_name='countryscreen',
+        blank=True)
     
-
-    class Meta:
-        verbose_name = _('Product Archive')
-        verbose_name_plural = _('Product Archives ')
-        ordering = ("-modified", "-created")
-        get_latest_by = 'created'
-
-    def __str__(self):
-        return self.name
-
-
-class ProductScreen(AbstractProduct):
-    originalproduct = models.ForeignKey(
-        Product,
-        verbose_name=_('Linked Product'),
-        on_delete=models.SET_NULL,
-        related_name='linkedproduct',
-        null=True)
-    siblings = models.CharField(
-        _('Siblings Product'),
-        blank=True,
-        max_length=100)
-    related = models.CharField(
-        _('Related Product'),
-        blank=True,
-        max_length=100)
-    childs = models.CharField(
-        _('Child Product'),
-        blank=True,
-        max_length=100)
-    categories = models.CharField(
-        _('Product Category'),
-        blank=True,
-        max_length=100)
-    keywords = models.CharField(
-        _('Product Keyword'),
-        blank=True,
-        max_length=100)
-    offers = models.CharField(
-        _('Product Offer'),
-        blank=True,
-        max_length=100)
-    faqs = models.CharField(
-        _('Product Structure'),
-        blank=True,
-        max_length=100)
-    attributes = models.CharField(
-        _('Product Attributes'),
-        blank=True,
-        max_length=100)
-    prices = models.CharField(
-        _('Product Prices'),
-        blank=True,
-        max_length=100)
-    
+    variation = models.ManyToManyField(
+        'self',
+        through='VariationProductScreen',
+        related_name='variationproduct+',
+        through_fields=('main', 'sibling'),
+        verbose_name=_('Variation Product'),
+        symmetrical=False, blank=True)
+    chapters = models.ManyToManyField(
+        ScreenChapter,
+        verbose_name=_('Product Structure'),
+        through='ProductChapterScreen',
+        through_fields=('product', 'chapter'),
+        blank=True)
+    faqs = models.ManyToManyField(
+        ScreenFAQ,
+        verbose_name=_('Product FAQ'),
+        through='FAQProductScreen',
+        through_fields=('product', 'question'),
+        blank=True)
+    attributes = models.ManyToManyField(
+        Attribute,
+        verbose_name=_('Product Attribute'),
+        through='ProductAttributeScreen',
+        through_fields=('product', 'attribute'),
+        blank=True)
     class Meta:
         verbose_name = _('Product Screen')
         verbose_name_plural = _('Product Screens ')
@@ -864,6 +846,53 @@ class ProductScreen(AbstractProduct):
 
     def __str__(self):
         return self.name
+    
+# class ProductArchive(AbstractProduct):
+#     product = models.ForeignKey(
+#         Product,
+#         verbose_name=_('Original Product'),
+#         on_delete=models.SET_NULL,
+#         related_name='archiveproduct',
+#         null=True)
+    
+
+#     class Meta:
+#         verbose_name = _('Product Archive')
+#         verbose_name_plural = _('Product Archives ')
+#         ordering = ("-modified", "-created")
+#         get_latest_by = 'created'
+
+#     def __str__(self):
+#         return self.name
+
+
+class ProductCategory(AbstractAutoDate):
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_('Category'),
+        related_name='productcategories',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        verbose_name=_('Product'),
+        related_name='productcategories',
+        on_delete=models.CASCADE)
+    is_main = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
+    prd_order = models.PositiveIntegerField(
+        _('Product Order'), default=1)
+    cat_order = models.PositiveIntegerField(
+        _('Category Order'), default=1)
+
+    def __str__(self):
+        return _("%(product)s to '%(category)s'") % {
+            'product': self.product,
+            'category': self.category}
+
+    class Meta:
+        unique_together = ('product', 'category')
+        verbose_name = _('Product Category')
+        verbose_name_plural = _('Product Categories')
 
 
 class VariationProduct(AbstractAutoDate):
@@ -889,6 +918,29 @@ class VariationProduct(AbstractAutoDate):
         verbose_name = _('Product Variation')
         verbose_name_plural = _('Product Variations')
 
+
+class VariationProductScreen(AbstractAutoDate):
+    main = models.ForeignKey(
+        ProductScreen,
+        related_name='mainproduct',
+        on_delete=models.CASCADE)
+    sibling = models.ForeignKey(
+        ProductScreen,
+        related_name='siblingproduct',
+        on_delete=models.CASCADE)
+    sort_order = models.PositiveIntegerField(
+        _('Sort Order'), default=1)
+    active = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return _("%(pri)s to '%(sec)s'") % {
+            'pri': self.main,
+            'sec': self.sibling}
+
+    class Meta:
+        unique_together = ('main', 'sibling')
+        verbose_name = _('Product Variation')
+        verbose_name_plural = _('Product Variations')
 
 class RelatedProduct(AbstractAutoDate):
     primary = models.ForeignKey(
@@ -955,62 +1007,6 @@ class ChildProduct(AbstractAutoDate):
         verbose_name_plural = _('Product Childs')
 
 
-class ProductCategory(AbstractAutoDate):
-    category = models.ForeignKey(
-        Category,
-        verbose_name=_('Category'),
-        related_name='productcategories',
-        on_delete=models.CASCADE)
-    product = models.ForeignKey(
-        Product,
-        verbose_name=_('Product'),
-        related_name='productcategories',
-        on_delete=models.CASCADE)
-    is_main = models.BooleanField(default=True)
-    active = models.BooleanField(default=True)
-    prd_order = models.PositiveIntegerField(
-        _('Product Order'), default=1)
-    cat_order = models.PositiveIntegerField(
-        _('Category Order'), default=1)
-
-    def __str__(self):
-        return _("%(product)s to '%(category)s'") % {
-            'product': self.product,
-            'category': self.category}
-
-    class Meta:
-        unique_together = ('product', 'category')
-        verbose_name = _('Product Category')
-        verbose_name_plural = _('Product Categories')
-
-
-class FAQProduct(AbstractAutoDate):
-    question = models.ForeignKey(
-        FAQuestion,
-        verbose_name=_('FAQuestion'),
-        related_name='productfaqs',
-        on_delete=models.CASCADE)
-    product = models.ForeignKey(
-        Product,
-        verbose_name=_('Product'),
-        related_name='productfaqs',
-        on_delete=models.CASCADE)
-    active = models.BooleanField(default=True)
-    question_order = models.PositiveIntegerField(
-        _('Question Order'), default=1)
-
-    def __str__(self):
-        return _("%(product)s to '%(question)s'") % {
-            'product': self.product,
-            'question': self.question}
-
-    class Meta:
-        unique_together = ('product', 'question')
-        verbose_name = _('Product FAQ')
-        ordering = ('-question_order', 'pk')
-        verbose_name_plural = _('Product FAQs')
-
-
 class ProductAttribute(AbstractAutoDate):
     attribute = models.ForeignKey(
         Attribute,
@@ -1065,6 +1061,190 @@ class ProductAttribute(AbstractAutoDate):
             'attribute': self.attribute}
 
 
+class ProductAttributeScreen(AbstractAutoDate):
+    attribute = models.ForeignKey(
+        Attribute,
+        verbose_name=_('Attribute'),
+        related_name='screenattributes',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        ProductScreen,
+        verbose_name=_('Product'),
+        related_name='screenattributes',
+        on_delete=models.CASCADE)
+    value_text = models.CharField(
+        _('Value Text'), max_length=100,
+        blank=True)
+    value_integer = models.PositiveSmallIntegerField(
+        _('Value Integer'), default=0)
+    value_image = models.ImageField(
+        _('Value Image'), upload_to=get_upload_path_product_image,
+        blank=True, null=True)
+    value_file = models.ImageField(
+        _('Value File'), upload_to=get_upload_path_product_file,
+        blank=True, null=True)
+    value_date = models.DateTimeField(
+        _('Value Date'), blank=True, null=True)
+    value_decimal = models.DecimalField(
+        _('Value Date'),
+        max_digits=8, decimal_places=2,
+        default=0.0)
+    value_ltext = RichTextField(
+        verbose_name=_('Value Large Text'), blank=True, default='')
+    value_option = models.ForeignKey(
+        'shop.AttributeOption', blank=True, null=True,
+        verbose_name=_("Value option"))
+    value_file = models.FileField(
+        upload_to=get_upload_path_product_file, max_length=255,
+        blank=True, null=True)
+    value_image = models.ImageField(
+        upload_to=get_upload_path_product_image, max_length=255,
+        blank=True, null=True)
+    value_entity = fields.GenericForeignKey(
+        'entity_content_type', 'entity_object_id')
+    entity_content_type = models.ForeignKey(
+        ContentType, null=True, blank=True, editable=False)
+    entity_object_id = models.PositiveIntegerField(
+        null=True, blank=True, editable=False)
+
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return _("%(product)s to '%(attribute)s'") % {
+            'product': self.product,
+            'attribute': self.attribute}
+
+
+class FAQProduct(AbstractAutoDate):
+    question = models.ForeignKey(
+        FAQuestion,
+        verbose_name=_('FAQuestion'),
+        related_name='productfaqs',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        verbose_name=_('Product'),
+        related_name='productfaqs',
+        on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+    question_order = models.PositiveIntegerField(
+        _('Question Order'), default=1)
+
+    def __str__(self):
+        return _("%(product)s to '%(question)s'") % {
+            'product': self.product,
+            'question': self.question}
+
+    class Meta:
+        unique_together = ('product', 'question')
+        verbose_name = _('Product FAQ')
+        ordering = ('-question_order', 'pk')
+        verbose_name_plural = _('Product FAQs')
+
+
+class FAQProductScreen(AbstractAutoDate):
+    question = models.ForeignKey(
+        ScreenFAQ,
+        verbose_name=_('FAQuestion'),
+        related_name='screenfaqs',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        ProductScreen,
+        verbose_name=_('Product'),
+        related_name='screenfaqs',
+        on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+    question_order = models.PositiveIntegerField(
+        _('Question Order'), default=1)
+
+    def __str__(self):
+        return _("%(product)s to '%(question)s'") % {
+            'product': self.product,
+            'question': self.question}
+
+    class Meta:
+        unique_together = ('product', 'question')
+        verbose_name = _('Product FAQ')
+        ordering = ('-question_order', 'pk')
+        verbose_name_plural = _('Product FAQs')
+
+
+class ProductChapter(AbstractAutoDate):
+    product = models.ForeignKey(
+        Product,
+        related_name='productstructure',
+        on_delete=models.CASCADE)
+    chapter = models.ForeignKey(
+        Chapter,
+        related_name='productstructure',
+        on_delete=models.CASCADE)
+    sort_order = models.PositiveIntegerField(
+        _('Sort Order'), default=1)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return _("%(top)s to '%(cp)s'") % {
+            'top': self.product,
+            'cp': self.chapter}
+    
+    class Meta:
+        unique_together = ('product', 'chapter')
+        verbose_name = _('Product Chapter')
+        ordering = ('-sort_order', 'pk')
+        verbose_name_plural = _('Product Chapters')
+
+
+class ProductChapterScreen(AbstractAutoDate):
+    product = models.ForeignKey(
+        ProductScreen,
+        related_name='screenstructure',
+        on_delete=models.CASCADE)
+    chapter = models.ForeignKey(
+        ScreenChapter,
+        related_name='screenstructure',
+        on_delete=models.CASCADE)
+    sort_order = models.PositiveIntegerField(
+        _('Sort Order'), default=1)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return _("%(top)s to '%(cp)s'") % {
+            'top': self.product,
+            'cp': self.chapter}
+    
+    class Meta:
+        unique_together = ('product', 'chapter')
+        verbose_name = _('Product Chapter')
+        ordering = ('-sort_order', 'pk')
+        verbose_name_plural = _('Product Chapters')
+
+
+class ProductExtraInfo(models.Model):
+    """
+    Model to add any extra information to a Product.
+    """
+    info_type = models.CharField(
+        max_length=256,
+        verbose_name=_('Type'),
+    )
+
+    product = models.ForeignKey(
+        'shop.Product',
+        verbose_name=_('Product'),
+    )
+
+    # GFK 'content_object'
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = fields.GenericForeignKey('content_type', 'object_id')
+
+    class Meta:
+        ordering = ['info_type']
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.product, self.type)
+
+
 class ProductPrice(AbstractAutoDate):
     value = models.DecimalField(
         _('Value Price'),
@@ -1096,54 +1276,3 @@ class ProductPrice(AbstractAutoDate):
         verbose_name = _('Product Currency')
         ordering = ('pk',)
         verbose_name_plural = _('Product Currencies')
-
-
-class ProductExtraInfo(models.Model):
-    """
-    Model to add any extra information to a Product.
-    """
-    info_type = models.CharField(
-        max_length=256,
-        verbose_name=_('Type'),
-    )
-
-    product = models.ForeignKey(
-        'shop.Product',
-        verbose_name=_('Product'),
-    )
-
-    # GFK 'content_object'
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    content_object = fields.GenericForeignKey('content_type', 'object_id')
-
-    class Meta:
-        ordering = ['info_type']
-
-    def __str__(self):
-        return '{0} - {1}'.format(self.product, self.type)
-
-
-class ProductChapter(AbstractAutoDate):
-    product = models.ForeignKey(
-        Product,
-        related_name='productstructure',
-        on_delete=models.CASCADE)
-    chapter = models.ForeignKey(
-        Chapter,
-        related_name='productstructure',
-        on_delete=models.CASCADE)
-    sort_order = models.PositiveIntegerField(
-        _('Sort Order'), default=1)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return _("%(top)s to '%(cp)s'") % {
-            'top': self.product,
-            'cp': self.chapter}
-    
-    class Meta:
-        unique_together = ('product', 'chapter')
-        verbose_name = _('Product Chapter')
-        ordering = ('-sort_order', 'pk')
-        verbose_name_plural = _('Product Chapters')

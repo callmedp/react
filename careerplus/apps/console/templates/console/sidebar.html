@@ -11,6 +11,8 @@
           </ul>
         </li>
       {% endif %}
+      {% if perms.shop.console_change_product %}
+      
       <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
           <li><a href="{% url 'console:product-list' %}">Product</a></li>
@@ -29,6 +31,9 @@
         {% endif %}
         </ul>
       </li>
+      {% endif %}
+      {% if perms.shop.console_moderate_product %}
+      
       <li><a><i class="fa fa-edit"></i> Content Moderation <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
         {% if perms.faq.console_moderate_faq %}
@@ -47,7 +52,8 @@
           <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
         </ul>
       </li>
-
+      {% endif %}
+      
       <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li><a href="{% url "console:geo-country" %}">Country</a></li>

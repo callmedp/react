@@ -115,3 +115,94 @@ class Chapter(AbstractAutoDate):
     def get_status(self):
         return dict(self.STATUS_CHOICES).get(self.status)
 
+
+class ScreenFAQ(AbstractAutoDate):
+
+    STATUS_CHOICES = (
+        (2, _('Active')),
+        (1, _('Inactive')),
+        (0, _('Moderation')),)
+
+    text = models.TextField(
+        _('question'), help_text=_('The actual question itself.'))
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
+    status = models.IntegerField(
+        _('status'),
+        choices=STATUS_CHOICES,
+        default=0,
+        help_text=_("Only questions with their status set to 'Active' will be "
+                    "displayed."))
+    sort_order = models.IntegerField(
+        _('sort order'), default=0,
+        help_text=_('The order you would like the question to be displayed.'))
+
+    vendor = models.ForeignKey(
+        Vendor,
+        null=True, blank=True)
+    objects = FAQuestionManager()
+    
+    class Meta:
+        verbose_name = _("Frequent asked question")
+        verbose_name_plural = _("Frequently asked questions")
+        ordering = ['sort_order', 'created']
+        permissions = (
+            ("console_add_faq", "Can Add FAQ From Console"),
+            ("console_change_faq", "Can Change FAQ From Console"),
+            ("console_moderate_faq", "Can Moderate FAQ From Console"),
+            )
+
+    def __str__(self):
+        return self.text
+
+    def is_active(self):
+        return self.status == 2
+
+    @property
+    def get_status(self):
+        return dict(self.STATUS_CHOICES).get(self.status)
+
+class ScreenChapter(AbstractAutoDate):
+    STATUS_CHOICES = (
+        (2, _('Active')),
+        (1, _('Inactive')),
+        (0, _('Moderation')),)
+
+    heading = models.CharField(_('chapter'), max_length=255)
+    parent = models.ForeignKey(
+        'self', verbose_name=_('parentchapter'),
+        related_name='parentheading', null=True, blank=True)
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
+    
+    ordering = models.PositiveSmallIntegerField(
+        _('ordering'), default=1,
+        help_text=_(u'An integer used to order the chapter \
+            amongst others related to the same chapter. If not given this \
+            chapter will be last in the list.'))
+    status = models.IntegerField(
+        _('status'),
+        choices=STATUS_CHOICES,
+        default=0,
+        help_text=_("Only questions with their status set to 'Active' will be "
+                    "displayed."))
+    vendor = models.ForeignKey(
+        Vendor,
+        null=True, blank=True)
+    
+    class Meta:
+        ordering = ('heading',)
+        verbose_name = _('chapter')
+        verbose_name_plural = _('chapters')
+        permissions = (
+            ("console_add_chapter", "Can Add Product Chapter From Console"),
+            ("console_change_chapter", "Can Change Product Chapter From Console"),
+            ("console_moderate_chapter", "Can Moderate Product Chapter From Console"),
+            )
+    def __str__(self):
+        return self.heading
+
+    @property
+    def get_status(self):
+        return dict(self.STATUS_CHOICES).get(self.status)
+
