@@ -196,7 +196,7 @@ class OrderItem(models.Model):
 
             # inbox permission
             ("can_show_inbox_queue", "Can Show Inbox Queue"),
-            ("show_writer_inbox_view", "Show Writer Inbox View Fields"),
+            ("can_view_extra_field_inbox", "Can View Extra Fields Of Inbox"),
             ("can_show_assigned_inbox", "Can Show Only Assigned Inbox"),
             ("can_show_unassigned_inbox", "Can Show Only Unassigned Inbox"),
             ("writer_assignment_action", "Writer Assignment Action permission"),
@@ -209,6 +209,7 @@ class OrderItem(models.Model):
             ("can_show_approval_queue", "Can View Approval Queue"),
             ("can_view_all_approval_list", "Can View All Approval List"),
             ("can_view_only_assigned_approval_list", "Can View Only Assigned Approval List"),
+            ("can_approve_or_reject_draft", "Can Approve Or Reject Draft"),
 
             # Appoved Queue
             ("can_show_approved_queue", "Can View Approved Queue"),

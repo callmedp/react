@@ -27,17 +27,19 @@ PAYMENT_MODE = (
     (11, 'Emi'),)
 
 OI_OPS_STATUS = (
-    # for flow 1 - 29
+    # common status 1 - 20
     (0, 'Default'),
     (1, 'Assigned'),
     (2, 'Resume Not Uploaded'),
-    (3, 'Upload Draft'),
-    (4, 'Draft Uploaded'),
-    (5, 'Pending Approval'),
-    (6, 'Approved'),
-    (7, 'Rejected By Admin'),
-    (8, 'Rejected By Candidate'),
-    (9, 'Closed'),
-    (10, 'Resume Uploded'),
+    (3, 'Resume Uploded'),
+    (4, 'Closed'),
+
+    # flow1 and flow3 21 - 40
+    (21, 'Upload Draft'),
+    (22, 'Draft Uploaded'),
+    (23, 'Pending Approval'),
+    (24, 'Approved'),
+    (25, 'Rejected By Admin'),
+    (26, 'Rejected By Candidate'),
 
 )

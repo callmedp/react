@@ -172,7 +172,7 @@
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
-                    <th class="column-title">Review Document</th>
+                    <th class="column-title">Review Order</th>
                   </tr>
                 </thead>
 
@@ -192,7 +192,7 @@
                       <td>{{obj.updated_on|naturaltime}}</td>
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
                       
                       
                     </tr>

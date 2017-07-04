@@ -73,3 +73,10 @@ class SendMail():
             send_dict['template'] = 'emailers/' + template_name
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
+
+        elif mail_type == "RESUME_CRITIQUE":
+            send_dict['subject'] = data.get('subject', "Sharing of Evaluated Resume")
+            template_name = data.get('template_name', 'critique_mail.html')
+            send_dict['template'] = 'emailers/' + template_name
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)

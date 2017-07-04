@@ -247,7 +247,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                 for oi in orderitems:
                     oi.oi_resume = request.FILES.get('oi_resume', '')
                     last_status = oi.oi_status
-                    oi.oi_status = 10
+                    oi.oi_status = 3
                     oi.last_oi_status = last_status
                     oi.save()
                     oi.orderitemoperation_set.create(
@@ -286,7 +286,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_queryset(self):
         queryset = OrderItem.objects.all().select_related('order', 'product')
         queryset = queryset.filter(
-            order__status=1, product__type_flow__in=[1], oi_resume__in=['', None])
+            order__status=1, product__type_flow__in=[1, 3], oi_resume__in=['', None]).exclude(oi_status=4)
 
         try:
             if self.query:
@@ -416,9 +416,11 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow__in=[1], oi_draft='').exclude(oi_resume='').exclude(oi_status=9)
+        queryset = queryset.filter(order__status=1, product__type_flow__in=[1, 3], oi_draft__in=['', None]).exclude(oi_resume='').exclude(oi_status=4)
         user = self.request.user
-        if user.has_perm('order.can_show_unassigned_inbox'):
+        if user.is_superuser:
+            pass
+        elif user.has_perm('order.can_show_unassigned_inbox'):
             queryset = queryset.filter(assigned_to=None)
         elif user.has_perm('order.can_show_assigned_inbox'):
             queryset = queryset.filter(assigned_to=user)
@@ -478,11 +480,11 @@ class OrderItemDetailVeiw(DetailView):
             try:
                 last_status = obj.oi_status
                 obj.oi_draft = request.FILES.get('file', '')
-                if obj.oi_status == 8:
+                if obj.oi_status == 26:
                     obj.draft_counter += 1
                 elif not obj.draft_counter:
                         obj.draft_counter += 1
-                obj.oi_status = 5  # pending Approval
+                obj.oi_status = 23  # pending Approval
                 obj.last_oi_status = last_status
                 obj.draft_added_on = timezone.now()
                 obj.save()
@@ -490,13 +492,13 @@ class OrderItemDetailVeiw(DetailView):
                 obj.orderitemoperation_set.create(
                     oi_draft=obj.oi_draft,
                     draft_counter=obj.draft_counter,
-                    oi_status=4,
+                    oi_status=22,
                     last_oi_status=last_status,
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
                 obj.orderitemoperation_set.create(
                     oi_status=obj.oi_status,
-                    last_oi_status=4,
+                    last_oi_status=22,
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
             except Exception as e:
@@ -606,7 +608,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovalQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=5, product__type_flow__in=[1])
+        queryset = queryset.filter(order__status=1, oi_status=23, product__type_flow__in=[1, 3])
         user = self.request.user
        
         if user.has_perm('order.can_view_all_approval_list'):
@@ -710,7 +712,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=6, product__type_flow__in=[1])
+        queryset = queryset.filter(order__status=1, oi_status=24, product__type_flow__in=[1, 3])
         user = self.request.user
 
         if user.has_perm('order.can_view_all_approved_list'):
@@ -814,7 +816,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByAdminQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=7, product__type_flow__in=[1])
+        queryset = queryset.filter(order__status=1, oi_status=25, product__type_flow__in=[1, 3])
 
         user = self.request.user
 
@@ -922,7 +924,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByCandidateQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=8, product__type_flow__in=[1])
+        queryset = queryset.filter(order__status=1, oi_status=26, product__type_flow__in=[1, 3])
 
         user = self.request.user
 
@@ -1023,7 +1025,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow__in=[1]).exclude(assigned_to=None).exclude(oi_status=9)
+        queryset = queryset.filter(order__status=1, product__type_flow__in=[1, 3]).exclude(assigned_to=None).exclude(oi_status=4)
         user = self.request.user
 
         if user.has_perm('order.can_view_all_allocated_list'):
@@ -1112,7 +1114,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ClosedOrderItemQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=9)
+        queryset = queryset.filter(order__status=1, oi_status=4)
         user = self.request.user
 
         if user.has_perm('order.can_view_all_closed_oi_list'):
@@ -1299,6 +1301,7 @@ class ActionOrderItemView(View):
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:queue-rejectedbyadmin'))
+
         elif action == -2 and queue_name == 'midout':
             orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
             for oi in orderitems:
