@@ -69,7 +69,7 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         verbose_name_plural = _('Vendors')
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
-
+        
     def __str__(self):
         return self.name
 

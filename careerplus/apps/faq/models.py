@@ -70,6 +70,7 @@ class FAQuestion(AbstractAutoDate):
     def get_status(self):
         return dict(self.STATUS_CHOICES).get(self.status)
 
+
 class Chapter(AbstractAutoDate):
     STATUS_CHOICES = (
         (2, _('Active')),
@@ -101,8 +102,8 @@ class Chapter(AbstractAutoDate):
     
     class Meta:
         ordering = ('heading',)
-        verbose_name = _('chapter')
-        verbose_name_plural = _('chapters')
+        verbose_name = _('Chapter')
+        verbose_name_plural = _('Chapters')
         permissions = (
             ("console_add_chapter", "Can Add Product Chapter From Console"),
             ("console_change_chapter", "Can Change Product Chapter From Console"),
@@ -146,11 +147,6 @@ class ScreenFAQ(AbstractAutoDate):
         verbose_name = _("Frequent asked question")
         verbose_name_plural = _("Frequently asked questions")
         ordering = ['sort_order', 'created']
-        permissions = (
-            ("console_add_faq", "Can Add FAQ From Console"),
-            ("console_change_faq", "Can Change FAQ From Console"),
-            ("console_moderate_faq", "Can Moderate FAQ From Console"),
-            )
 
     def __str__(self):
         return self.text
@@ -161,6 +157,7 @@ class ScreenFAQ(AbstractAutoDate):
     @property
     def get_status(self):
         return dict(self.STATUS_CHOICES).get(self.status)
+
 
 class ScreenChapter(AbstractAutoDate):
     STATUS_CHOICES = (
@@ -192,13 +189,8 @@ class ScreenChapter(AbstractAutoDate):
     
     class Meta:
         ordering = ('heading',)
-        verbose_name = _('chapter')
-        verbose_name_plural = _('chapters')
-        permissions = (
-            ("console_add_chapter", "Can Add Product Chapter From Console"),
-            ("console_change_chapter", "Can Change Product Chapter From Console"),
-            ("console_moderate_chapter", "Can Moderate Product Chapter From Console"),
-            )
+        verbose_name = _('Chapter')
+        verbose_name_plural = _('Screen Chapters')
     def __str__(self):
         return self.heading
 

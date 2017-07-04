@@ -1,67 +1,96 @@
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
   <div class="menu_section">
-    <h3>Catalog</h3>
-    <ul class="nav side-menu">
-      {% if perms.shop.console_change_category %}
-        <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
-          <ul class="nav child_menu">
-            <li><a href="{% url 'console:category-list' %}">Category</a></li>
-            <li><a href="{% url 'console:category-relation-list' %}">Category Relationship</a></li>
-          </ul>
-        </li>
-      {% endif %}
-      {% if perms.shop.console_change_product %}
-      
-      <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="{% url 'console:product-list' %}">Product</a></li>
-          <li><a href="{% url 'console:attributeoption-list' %}">Attribute Option</a></li>
-          <li><a href="{% url 'console:attribute-list' %}">Attribute</a>
+    {% if  1 == 0 %}
+        <h3>Catalog</h3>
+      <ul class="nav side-menu">
+        {% if perms.shop.console_change_category %}
+          <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:category-list' %}">Category</a></li>
+              <li><a href="{% url 'console:category-relation-list' %}">Category Relationship</a></li>
+            </ul>
           </li>
-        </ul>
-      </li>
-      <li><a><i class="fa fa-edit"></i> Content <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-        {% if perms.faq.console_change_faq %}
-          <li><a href="{% url 'console:faquestion-list' %}">FAQs</a></li>
         {% endif %}
-        {% if perms.faq.console_change_chapter %}
-          <li><a href="{% url 'console:chapter-list' %}">Chapters</a></li>
+        {% if perms.shop.console_change_product %}
+        
+          <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:product-list' %}">Product</a></li>
+              <li><a href="{% url 'console:attributeoption-list' %}">Attribute Option</a></li>
+              <li><a href="{% url 'console:attribute-list' %}">Attribute</a>
+              </li>
+            </ul>
+          </li>
+          <li><a><i class="fa fa-edit"></i> Content <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+            {% if perms.faq.console_change_faq %}
+              <li><a href="{% url 'console:faquestion-list' %}">FAQs</a></li>
+            {% endif %}
+            {% if perms.faq.console_change_chapter %}
+              <li><a href="{% url 'console:chapter-list' %}">Chapters</a></li>
+            {% endif %}
+            </ul>
+          </li>
         {% endif %}
-        </ul>
-      </li>
-      {% endif %}
-      {% if perms.shop.console_moderate_product %}
-      
-      <li><a><i class="fa fa-edit"></i> Content Moderation <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-        {% if perms.faq.console_moderate_faq %}
-          <li><a href="{% url 'console:mfaquestion-list' %}">FAQs</a></li>
-        {% endif %}
-        {% if perms.faq.console_moderate_chapter %}
-          <li><a href="{% url 'console:mchapter-list' %}">Chapters</a></li>
-        {% endif %}
-        </ul>
-      </li>
-      <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
-          <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
-          <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
-          <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
-        </ul>
-      </li>
-      {% endif %}
-      
-      <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-            <li><a href="{% url "console:geo-country" %}">Country</a></li>
-        </ul>
-      </li>
+        {% if perms.shop.console_moderate_product %}
+        
+          <li><a><i class="fa fa-edit"></i> Content Moderation <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+            {% if perms.faq.console_moderate_faq %}
+              <li><a href="{% url 'console:mfaquestion-list' %}">FAQs</a></li>
+            {% endif %}
+            {% if perms.faq.console_moderate_chapter %}
+              <li><a href="{% url 'console:mchapter-list' %}">Chapters</a></li>
+            {% endif %}
+            </ul>
+          </li>
+          <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
+              <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
+              <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
+              <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
+            </ul>
+          </li>
+          <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a href="{% url "console:geo-country" %}">Country</a></li>
+            </ul>
+          </li>
 
-                        
-    </ul>
+        {% endif %}
+        
+        
+                          
+      </ul>
+    {% endif %}
+
+    {% if  perms.vendor.console_create_product %}
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+          
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:product-list' %}">Product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Content <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+              {% if perms.faq.console_change_faq %}
+                <li><a href="{% url 'console:faquestion-list' %}">FAQs</a></li>
+              {% endif %}
+              {% if perms.faq.console_change_chapter %}
+                <li><a href="{% url 'console:chapter-list' %}">Chapters</a></li>
+              {% endif %}
+              </ul>
+            </li>
+          {% endif %}
+        </ul>
+    {% endif %}
+    
+      
   </div>
 
 </div>

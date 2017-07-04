@@ -109,7 +109,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             ("console_change_category", "Can Change Category From Console"),
             ("console_change_category_seo", "Can Change Category SEO From Console"),
             ("console_change_category_main", "Can Change Category Main From Console"),
-            )
+            ("console_delete_category_relation", "Can Delete Category Relation From Console"),
+        )
 
     def __str__(self):
 
@@ -361,6 +362,17 @@ class Attribute(AbstractAutoDate):
     is_filterable = models.BooleanField(default=True)
     is_sortable = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _('Atrribute')
+        verbose_name_plural = _('Attributes')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+        permissions = (
+            ("console_add_attribute", "Can Add Attribute From Console"),
+            ("console_change_attribute", "Can Change Attribute From Console"),
+        )
+
     
     def __str__(self):
         return self.name
@@ -463,23 +475,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Fake GBP Price'),
         max_digits=12, decimal_places=2,
         default=0.0) 
-    # duration_months = models.IntegerField(
-    #     _('Duration In Months'), default=0)
-    # duration_days = models.IntegerField(
-    #     _('Duration In Days'), default=0)
-    # experience = models.PositiveSmallIntegerField(
-    #     _('Experience'), choices=EXP_CHOICES, default=0)
-    # requires_delivery = models.BooleanField(
-    #     _("Requires delivery?"),
-    #     default=True)
-    # certification = models.BooleanField(
-    #     _("Give Certification"),
-    #     default=True)
-    # study_mode = models.PositiveSmallIntegerField(
-    #     _('Study Mode'), choices=MODE_CHOICES, default=0)
-    # course_type = models.PositiveSmallIntegerField(
-    #     _('Course Type'), choices=COURSE_TYPE_CHOICES, default=0)
-
+    
     class Meta:
         abstract = True
 
@@ -582,6 +578,7 @@ class Product(AbstractProduct, ModelMeta):
             ("console_add_product", "Can Add Product From Console"),
             ("console_change_product", "Can Change Product From Console"),
             ("console_moderate_product", "Can Moderate Product From Console"),
+            ("console_delete_product_relations", "Can Live Product From Console"),
             ("console_live_product", "Can Live Product From Console"),
         )
 
