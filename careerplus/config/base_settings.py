@@ -79,6 +79,8 @@ LOCAL_APPS = [
     'homepage',
     'microsite',
     'wallet',
+    'linkedin',
+    'emailers',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -112,14 +114,15 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'careerplus.config.context_processors.common_context_processor',
                 'django_mobile.context_processors.flavour'
+                'django_mobile.context_processors.flavour',
+                'careerplus.config.context_processors.common_context_processor',
             ],
-            'loaders': [
+            'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
                     'django_mobile.loader.Loader',
                     'django.template.loaders.filesystem.Loader',
                     'django.template.loaders.app_directories.Loader'
-                # ]),
-            ],
+                ]),
         },
     },
 ]
@@ -186,4 +189,10 @@ CKEDITOR_CONFIGS = {
 # except:
 #     REDIS_CON = None
 
-CART_MAX_LIMIT = 5
+DRAFT_MAX_LIMIT = 3
+
+# HTMSL
+HTMSL_USER = 'sumo'
+HTMSL_PASS = 'w1XN75L'
+HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
+ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'

@@ -242,6 +242,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 class Comment(AbstractCommonModel):
 	blog = models.ForeignKey(Blog)
 	candidate_id = models.CharField(max_length=255, null=True)
+	name = models.CharField(max_length=255, null=True, blank=True)
 	message = models.TextField(null=False, blank=False)
 	is_published = models.BooleanField(default=False)
 	is_removed = models.BooleanField(default=False)

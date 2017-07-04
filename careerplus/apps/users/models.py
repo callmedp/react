@@ -69,6 +69,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
+        if self.name:
+            return self.name
         return "%s" % str(self.email)
 
     def get_short_name(self):

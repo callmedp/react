@@ -91,6 +91,48 @@
     {% endif %}
     
       
+      
+      <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            {% if perms.order.can_show_order_queue %}
+                <li><a href="{% url "console:queue-order" %}">Orders</a></li>
+            {% endif %}
+            {% if perms.order.can_show_welcome_queue %}
+                <li><a href="{% url "console:queue-welcome" %}">Welcome Call</a></li>
+            {% endif %}
+            {% if perms.order.can_show_welcome_queue %}
+                <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
+            {% endif %}
+            {% if perms.order.can_show_inbox_queue %}
+                <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
+            {% endif %}
+            {% if perms.order.can_show_approval_queue %}
+                <li><a href="{% url "console:queue-approval" %}">Approval</a></li>
+            {% endif %}
+            {% if perms.order.can_show_approved_queue %}
+                <li><a href="{% url "console:queue-approved" %}">Approved</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_rejectedbyadmin_queue %}
+                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_rejectedbycandidate_queue %}
+                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_allocated_queue %}
+                <li><a href="{% url "console:queue-allocated" %}">Allocated</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_closed_oi_queue %}
+                <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
+            {% endif %}
+            
+        </ul>
+      </li>
+                        
+    </ul>
   </div>
 
 </div>

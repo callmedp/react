@@ -95,32 +95,85 @@ urlpatterns += [
 from . import blog_view
 
 urlpatterns += [
-    url(r'^blog/tag/$', blog_view.TagListView.as_view(), name='blog-tag-list'),
-    url(r'^blog/tag/add/$', blog_view.TagAddView.as_view(), name='blog-tag-add'),
+    url(r'^blog/tag/$',
+        blog_view.TagListView.as_view(), name='blog-tag-list'),
+    url(r'^blog/tag/add/$',
+        blog_view.TagAddView.as_view(), name='blog-tag-add'),
     url(r'^blog/tag/(?P<pk>\d+)/change/$', blog_view.TagUpdateView.as_view(),
         name='blog-tag-update'),
 
-    url(r'^blog/category/$', blog_view.CategoryListView.as_view(), name='blog-category-list'),
-    url(r'^blog/category/add/$', blog_view.CategoryAddView.as_view(), name='blog-category-add'),
-    url(r'^blog/category/(?P<pk>\d+)/change/$', blog_view.CategoryUpdateView.as_view(),
-        name='blog-category-update'),
+    url(r'^blog/category/$', blog_view.CategoryListView.as_view(),
+        name='blog-category-list'),
+    url(r'^blog/category/add/$', blog_view.CategoryAddView.as_view(),
+        name='blog-category-add'),
+    url(r'^blog/category/(?P<pk>\d+)/change/$',
+        blog_view.CategoryUpdateView.as_view(), name='blog-category-update'),
 
-    url(r'^blog/article/$', blog_view.ArticleListView.as_view(), name='blog-article-list'),
-    url(r'^blog/article/add/$', blog_view.ArticleAddView.as_view(), name='blog-article-add'),
-    url(r'^blog/article/(?P<pk>\d+)/change/$', blog_view.ArticleUpdateView.as_view(),
-        name='blog-article-update'),
+    url(r'^blog/article/$', blog_view.ArticleListView.as_view(),
+        name='blog-article-list'),
+    url(r'^blog/article/add/$', blog_view.ArticleAddView.as_view(),
+        name='blog-article-add'),
+    url(r'^blog/article/(?P<pk>\d+)/change/$',
+        blog_view.ArticleUpdateView.as_view(), name='blog-article-update'),
 
-    url(r'^blog/comment/comment-to-moderate/$', blog_view.CommentModerateListView.as_view(), name='blog-comment-to-moderate'),
-    url(r'^blog/comment/(?P<pk>\d+)/change/$', blog_view.CommentModerateView.as_view(),
-            name='blog-comment-moderate-update'),
+    url(r'^blog/comment/comment-to-moderate/$',
+        blog_view.CommentModerateListView.as_view(),
+        name='blog-comment-to-moderate'),
+    url(r'^blog/comment/(?P<pk>\d+)/change/$',
+        blog_view.CommentModerateView.as_view(),
+        name='blog-comment-moderate-update'),
 ]
 
 
 from geolocation import adminviews
 
 urlpatterns += [
-    url(r'^geolocation/country/$', adminviews.CountryListView.as_view(), name='geo-country'),
+    url(r'^geolocation/country/$',
+        adminviews.CountryListView.as_view(), name='geo-country'),
 
-    url(r'^geolocation/country/(?P<pk>\d+)/change/$', adminviews.CountryUpdateView.as_view(),
-        name='geo-country-update'),
+    url(r'^geolocation/country/(?P<pk>\d+)/change/$',
+        adminviews.CountryUpdateView.as_view(), name='geo-country-update'),
+]
+
+
+from . import order_view
+
+urlpatterns += [
+    url(r'^queue/orders/$',
+        order_view.OrderListView.as_view(), name='queue-order'),
+    url(r'^queue/welcomecall/$',
+        order_view.WelcomeCallVeiw.as_view(), name='queue-welcome'),
+    url(r'^queue/midout/$',
+        order_view.MidOutQueueView.as_view(), name='queue-midout'),
+    url(r'^queue/inbox/$',
+        order_view.InboxQueueVeiw.as_view(), name='queue-inbox'),
+
+    url(r'^queue/approval/$',
+        order_view.ApprovalQueueVeiw.as_view(), name='queue-approval'),
+
+    url(r'^queue/approved/$',
+        order_view.ApprovedQueueVeiw.as_view(), name='queue-approved'),
+
+    url(r'^queue/rejectedbyadmin/$',
+        order_view.RejectedByAdminQueue.as_view(), name='queue-rejectedbyadmin'),
+
+    url(r'^queue/rejectedbycandidate/$',
+        order_view.RejectedByCandidateQueue.as_view(),
+        name='queue-rejectedbycandidate'),
+
+    url(r'^queue/allocated/$',
+        order_view.AllocatedQueueVeiw.as_view(), name='queue-allocated'),
+
+    url(r'^queue/closed/orderitems/$',
+        order_view.ClosedOrderItemQueueVeiw.as_view(), name='queue-closed-orderitems'),
+
+    url(r'^queue/orderitem/(?P<pk>\d+)/detail/$',
+        order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
+
+    url(r'^queue/order/(?P<pk>\d+)/details/$',
+        order_view.OrderDetailVeiw.as_view(), name='order-detail'),
+
+    url(r'^queue/orderitem/downloadascsv/$',
+        order_view.ActionOrderItemView.as_view(),
+        name='action-orderitem-view'),
 ]

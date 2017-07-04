@@ -29,14 +29,15 @@ PAYMENT_MODE = (
 OI_OPS_STATUS = (
     # for flow 1 - 29
     (0, 'Default'),
-    (1, 'Welcome Call Pending'),
-    (2, 'Welcome Call Done'),
-    (3, 'Assigned'),
-    (4, 'Resume Not Uploaded'),
+    (1, 'Assigned'),
+    (2, 'Resume Not Uploaded'),
+    (3, 'Upload Draft'),
+    (4, 'Draft Uploaded'),
     (5, 'Pending Approval'),
     (6, 'Approved'),
     (7, 'Rejected By Admin'),
     (8, 'Rejected By Candidate'),
     (9, 'Closed'),
+    (10, 'Resume Uploded'),
 
 )

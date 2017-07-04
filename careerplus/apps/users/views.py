@@ -28,6 +28,19 @@ class RegistrationApiView(FormView):
     success_url = '/'
     form_class = RegistrationForm
 
+    def get_context_data(self, **kwargs):
+        context = super(self.RegistrationApiView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        form = self.get_form()
+        context.update({
+            'messages': alert,
+            'form': form
+        })
+        return context
+
+    def get(self, request, *args, **kwargs):
+        return super(self.RegistrationApiView, self).get(request, args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         login_dict, post_data = {}, {}
