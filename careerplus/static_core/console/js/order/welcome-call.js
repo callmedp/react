@@ -9,12 +9,12 @@ $(function(){
         }
         else{
         	var selected = new Array();
-            $('#welcome-table input:checked').each(function() {
+            $('#body-table-list input[name="table_records"]:checked').each(function() {
                 selected.push($(this).prop('name'));
             });
 
-            if ((selected.length - 1) > 0){
-            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected  '+ (selected.length - 1) +' orders to do action' + ' ?</div>');
+            if ( selected.length > 0){
+            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected ' + selected.length + ' orders to do action' + ' ?</div>');
                 $('#action_welcome').show();
                 $('#actionModal').modal("show");
             }
@@ -43,11 +43,11 @@ $(function(){
         }
         else{
         	var selected = new Array();
-            $('#welcome-table input:checked').each(function() {
+            $('#body-table-list input[name="table_records"]:checked').each(function() {
                 selected.push($(this).prop('name'));
             });
 
-            if ((selected.length -1) > 0){
+            if (selected.length > 0){
             	$("#welcome_table_form").submit();
             	$('#actionModal').modal("hide");
             }

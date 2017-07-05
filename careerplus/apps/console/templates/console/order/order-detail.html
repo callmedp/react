@@ -52,6 +52,7 @@
                       <th>Name</th>
                       <th>Payment Status</th>
                       <th>Payment Mode</th>
+                      <th>Payment Date</th>
                       <th>Welcome Call</th>
                       <th>Added On</th>
                       <th>Closed On</th>
@@ -65,6 +66,7 @@
                       <td>{{order.first_name}} {{order.last_name}}</td>
                       <td>{{order.get_status}}</td>
                       <td>{{order.get_payment_mode}}</td>
+                      <td>{{order.payment_date}}</td>
                       <td>{% if order.welcome_call_done %}Done{% else %}Not Done{% endif %}</td>
                       <td>{{order.date_placed}}</td>
                       <td>{% if order.closed_on %}{{order.closed_on}}{% else %}Not Closed Yet.{% endif %}</td>

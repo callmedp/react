@@ -286,7 +286,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_queryset(self):
         queryset = OrderItem.objects.all().select_related('order', 'product')
         queryset = queryset.filter(
-            order__status=1, product__type_flow__in=[1, 3], oi_resume__in=['', None]).exclude(oi_status=4)
+            order__status=1, no_process=False, product__type_flow__in=[1, 3], oi_resume__in=['', None]).exclude(oi_status=4)
 
         try:
             if self.query:
@@ -382,12 +382,6 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                                 assigned_to=obj.assigned_to,
                                 added_by=request.user
                             )
-                            obj.orderitemoperation_set.create(
-                                oi_status=obj.oi_status,
-                                last_oi_status=1,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user
-                            )
 
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
@@ -416,7 +410,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow__in=[1, 3], oi_draft__in=['', None]).exclude(oi_resume='').exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3], oi_draft__in=['', None]).exclude(oi_resume='').exclude(oi_status=4)
         user = self.request.user
         if user.is_superuser:
             pass
@@ -608,7 +602,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovalQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=23, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=23, product__type_flow__in=[1, 3])
         user = self.request.user
        
         if user.has_perm('order.can_view_all_approval_list'):
@@ -712,7 +706,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=24, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=24, product__type_flow__in=[1, 3])
         user = self.request.user
 
         if user.has_perm('order.can_view_all_approved_list'):
@@ -816,7 +810,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByAdminQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=25, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=25, product__type_flow__in=[1, 3])
 
         user = self.request.user
 
@@ -924,7 +918,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByCandidateQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=26, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=26, product__type_flow__in=[1, 3])
 
         user = self.request.user
 
@@ -1025,7 +1019,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow__in=[1, 3]).exclude(assigned_to=None).exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3]).exclude(assigned_to=None).exclude(oi_status=4)
         user = self.request.user
 
         if user.has_perm('order.can_view_all_allocated_list'):
@@ -1114,7 +1108,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ClosedOrderItemQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=4)
+        queryset = queryset.filter(order__status=1, oi_status=4, no_process=False)
         user = self.request.user
 
         if user.has_perm('order.can_view_all_closed_oi_list'):
