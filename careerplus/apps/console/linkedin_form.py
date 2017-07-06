@@ -1,6 +1,10 @@
 from django import forms
+from django.conf import settings
 from ckeditor.widgets import CKEditorWidget
 from django.contrib.auth import get_user_model
+from cart.choices import DELIVERY_TYPE
+from order.choices import OI_OPS_STATUS
+
 
 User = get_user_model()
 
@@ -322,6 +326,82 @@ class LinkedinInboxActionForm(forms.Form):
         self.fields['action'].required = True
         self.fields['action'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['action'].queryset = users
+
+
+class LinkedinOIFilterForm(forms.Form):
+
+    writer = forms.ModelChoiceField(
+        label=("By Expert:"), required=False,
+        queryset=User.objects.none(),
+        empty_label="Select Expert",
+        to_field_name='pk',
+        widget=forms.Select())
+
+    added_on = forms.CharField(
+        label=("Added On:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
+    delivery_type = forms.ChoiceField(
+        label=("Delivery Type:"), choices=[],
+        required=False,
+        initial=-1,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
+
+    updated_on = forms.CharField(
+        label=("Modified On:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
+    draft_level = forms.ChoiceField(
+        label=("Draft Level:"), choices=[],
+        required=False,
+        initial=-1,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
+
+    oi_status = forms.ChoiceField(
+        label=("Op Status:"), choices=[],
+        required=False,
+        initial=-1,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(LinkedinOIFilterForm, self).__init__(*args, **kwargs)
+        from django.contrib.auth.models import Permission
+        from django.db.models import Q
+
+        perm = Permission.objects.get(codename='writer_assignment_linkedin_action')
+        users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        self.fields['writer'].widget.attrs['class'] = 'form-control'
+        self.fields['writer'].queryset = users
+
+        NEW_DELIVERY_TYPE = ((-1, 'Select Delivery'),) + DELIVERY_TYPE
+        self.fields['delivery_type'].choices = NEW_DELIVERY_TYPE
+
+        NEW_OI_OPS_STATUS = ((-1, 'Select Status'),) + OI_OPS_STATUS
+        self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
+
+        draft_choices = [(-1, "Select Draft Level")]
+        for i in range(1, settings.DRAFT_MAX_LIMIT + 1):
+            if i == settings.DRAFT_MAX_LIMIT:
+                level = "Draft Level " + "Final"
+            else:
+                level = "Draft Level " + str(i)
+            draft_choices.append((i, level))
+
+        self.fields['draft_level'].choices = draft_choices
+
+    class Meta:
+        fields = ['writer', 'added_on', 'delivery_type', 'updated_on', 'draft_level']
 
 
 class OrganizationInlineFormSet(forms.BaseInlineFormSet):

@@ -7,7 +7,7 @@ from datetime import datetime
 from shine.core import ShineToken, ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from .utills import ques_dict
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem, OrderItemOperation
 from quizs.models import QuizResponse
 
 class AutoLoginView(View):
@@ -96,4 +96,61 @@ class DraftView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DraftView, self).get_context_data(**kwargs)
         context['ques_dict'] = ques_dict
+        return context
+
+
+class LinkedinDraftView(TemplateView):
+    template_name = "linkedin/linkedin_draft.html"
+    
+    def get(self,request,*args,**kwargs):
+        return super(LinkedinDraftView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(LinkedinDraftView, self).get_context_data(**kwargs)
+        orderitem_id = kwargs.get('order_item', '')
+        try:
+            oi = OrderItem.objects.get(pk=orderitem_id)
+            drft = oi.oio_linkedin
+            op_id = OrderItemOperation.objects.get(linkedin=drft)
+            try:
+                draft = ''
+                if op_id:    
+                    draft = op_id.linkedin
+                    flag2 = False
+                    skill_list = draft.key_skills
+                    organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
+                    education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
+                    current_org = draft.from_organization.filter(org_current=True)
+                    current_edu = draft.from_education.filter(edu_current=True)
+                    if current_edu:
+                        current_edu = current_edu[0]
+                    if current_org:
+                        current_org = current_org[0]
+                    if draft.profile_photo:
+                        flag2 = True
+                    if draft.public_url:
+                        flag2 = True
+                    if draft.recommendation:
+                        flag2 - True
+                    if draft.follow_company:
+                        flag2 = True
+                    if draft.join_group:
+                        flag2 = True
+                    context.update({
+                        'flag2': flag2,
+                        'orderitem': oi,
+                        'draft': draft,
+                        'skill_list': skill_list.split(','),
+                        'organization_list': organization_list,
+                        'education_list': education_list,
+                        'current_edu': current_edu,
+                        'current_org': current_org
+                    })
+                else:
+                    context.update({'draft':''})
+            except:
+                context.update({'draft':''})        
+            
+        except:
+            context.update({'draft':''})
         return context

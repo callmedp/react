@@ -6,7 +6,7 @@ from .views import AjaxCommentLoadMoreView, CmsShareView,\
     AjaxProductLoadMoreView, AjaxReviewLoadMoreView,\
     EmailExistView, AjaxStateView, AjaxOrderItemCommentView,\
     ApproveByAdminDraft, RejectByAdminDraft, UploadDraftView,\
-    SaveWaitingInput
+    SaveWaitingInput, ApproveDraftByLinkedinAdmin, RejectDraftByLinkedinAdmin
 
 urlpatterns = [
     url(r'^page/load-more/$',
@@ -48,6 +48,12 @@ urlpatterns = [
 
     url(r'^orderitem/waiting-input-save/$',
         SaveWaitingInput.as_view(), name='oi-waiting-input'),
+
+    url(r'^orderitem/linkedin-approve-draft/$',
+        ApproveDraftByLinkedinAdmin.as_view(), name='linkedin-approve-draft'),
+
+    url(r'^orderitem/linkedin-reject-draft/$',
+        RejectDraftByLinkedinAdmin.as_view(), name='linkedin-reject-draft'),
 ]
 
 

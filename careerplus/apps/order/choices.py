@@ -40,6 +40,12 @@ OI_OPS_STATUS = (
     #for linkedin flow
     (30, 'Counselling Form Not Submitted'),
     (31, 'Counselling Form Submitted'),
+    (32, 'Linkedin Draft Create'),
+    (33, 'Linkedin Draft Created'),
+    (36, 'Linkedin Pending Approval'),
+    (37, 'Linkedin Approved'),
+    (38, 'Linkedin Rejected By Admin'),
+    (39, 'Linkedi Rejected By Candidate'),
     (9, 'Closed'),
     (10, 'Resume Uploded'),
 

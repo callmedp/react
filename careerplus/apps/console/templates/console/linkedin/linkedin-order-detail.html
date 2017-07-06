@@ -90,37 +90,27 @@
 
                 <table class="table table-bordered">
                   <tbody>
-                    {% if object.oi_resume %}
+                    
                     <tr>
                       <th>Candidate Resume</th>
-                      <td><a href="{{object.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
+                      <td><a href="#" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
                     </tr>
-                    {% endif %}
+                    
                     {% for draft in drafts %}
                         <tr>
                         <th>Draft {% if draft.draft_counter == max_limit_draft %}Final{% else %}{{draft.draft_counter}}{% endif %}</th>
-                        <td><a href="{{draft.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td></tr>
+                        <td><a href="#" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td></tr>
                     {% endfor %}
                   </tbody>
                 </table>
 
-                {% if object.oi_status == 5 %}
-                    <form role="form" method="post" id="accept-reject-form{{object.id}}">{% csrf_token %}
-                    <input type="hidden" name="oi_pk" id="oi_id" value="{{object.pk}}">
-                    </form>
-                    <center>
-                        <button type="button" onclick="acceptDraftByAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
-                        <button type="button" onclick="rejectDraftByAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Reject Draft</button>
-                    </center>
-                {% endif %}
-
-                {% if object.draft_counter < max_limit_draft %}
-                    <h2>Upload Draft</h2>
-                    <form data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">{% csrf_token %}
-                          {{draft_form.file}}
-                          <button type="submit" class="btn btn-success btn-xs">Submit</button>
-                    </form>
-                {% endif %}
+                <form role="form" method="post" id="accept-reject-form{{object.id}}">{% csrf_token %}
+                <input type="hidden" name="oi_pk" id="oi_id" value="{{object.pk}}">
+                </form>
+                <center>
+                    <button type="button" onclick="acceptDraftByAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
+                    <button type="button" onclick="rejectDraftByLinkedinAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                </center>
               </div>
             </div>
           </div>
@@ -155,7 +145,6 @@
                     {% endfor %}
                   </tbody>
                 </table>
-
               </div>
             </div>
           </div>
@@ -186,10 +175,7 @@
                           </a>
                         </li>
                     {% endfor %}
-                    
-
                   </ul>
-
                   <form id="message-add-form" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                         <fieldset>
                             {% for field in message_form %}
@@ -229,6 +215,10 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/order-item-detail.js" %}"></script>
+  <script type="text/javascript" 
+    src="{% static "packages/parsleyjs/parsley.min.js" %}">
+  </script>
+  <script type="text/javascript" 
+    src="{% static "console/js/linkedin/linkedin_order_detail.js" %}">
+  </script>
 {% endblock js_block %}

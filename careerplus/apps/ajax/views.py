@@ -300,3 +300,47 @@ class SaveWaitingInput(View):
                 data['message'] = str(e)
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
+
+
+class ApproveDraftByLinkedinAdmin(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax():
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                obj.oi_status = 37
+                obj.save()
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=last_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=request.user)
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class RejectDraftByLinkedinAdmin(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax():
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                obj.oi_status = 38
+                obj.save()
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=last_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=request.user)
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()

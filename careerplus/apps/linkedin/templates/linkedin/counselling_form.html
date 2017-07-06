@@ -1,29 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-{% if quiz_resp %}
-  {% if flag %}
-  	<h2>Counselling Form is submitted</h2>
-  	<ol>
-  		<p class="question">{{ques_dict.q1}}</p>                        
-		<textarea rows="5" cols="50" class="js-answer" 
-		name="q1">{{quiz_resp.anser1}}</textarea>
-		<p class="question">{{ques_dict.q2}}</p>                        
-		<textarea rows="5" cols="50" class="js-answer" 
-		name="q1">{{quiz_resp.anser2}}</textarea>
-		<p class="question">{{ques_dict.q3}}</p>                        
-		<textarea rows="5" cols="50" class="js-answer" 
-		name="q1">{{quiz_resp.anser3}}</textarea>
-		<p class="question">{{ques_dict.q4}}</p>                        
-		<textarea rows="5" cols="50" class="js-answer" 
-		name="q1">{{quiz_resp.anser4}}</textarea>
-		<p class="question">{{ques_dict.q5}}</p>                        
-		<textarea rows="5" cols="50" class="js-answer" 
-		name="q1">{{quiz_resp.anser5}}</textarea>
-  	</ol>
-  	<a href="/console/">Back to Console</a>
-  
-  {% else %}
+<h2>Linked In Counselling Form Updation</h2>
 	<form method="post">
 		{% csrf_token %}
 	  <ol>
@@ -56,11 +34,13 @@
 			<textarea class="js-answer" rows="5" cols="50" class="js-answer"
 			name="q5">{{ans}}</textarea>
 			<p class='submit-error'></p>         
-		</li>
+		</li>  
 	 </ol>
-	<button type="submit">submit</button>
+         	<button type="submit" class="grp-button grp-default js-click " style="width: 150px;float: left;">Save</button>
+            {% if not flag  %}
+                 <button type="submit" class="grp-button grp-default js-submit " style="width: 150px;float: right;background-image: linear-gradient(#FF8D00,#FF2300); ">Submit</button>
+            {% endif %}                   
+	<!--<button type="submit">submit</button>-->
 	</form>
-	{% endif %}
-{% endif %}
 </body>
 </html>

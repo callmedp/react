@@ -177,11 +177,19 @@ urlpatterns += [
         linkedin_view.ChangeDraftView.as_view(),
         name='change-draft'),
 
-    url(r'^linkedin/orderitem/(?P<pk>\d+)/detail/$',
+    url(r'^linkedin/order/(?P<pk>\d+)/detail/$',
         linkedin_view.LinkedinOrderDetailVeiw.as_view(), name='linkedin-order-detail'),
+
+    url(r'^linkedin/rejected-by-admin/$',
+        linkedin_view.LinkedinRejectedByAdminView.as_view(),
+        name='linkedin-rejectedbylinkedinadmin'),
+
+    url(r'^linkedin/rejectedbycandidate/$',
+        linkedin_view.LinkedinRejectedByCandidateView.as_view(),
+        name='linkedin-rejectedbylinkedincandidate'),
+
+    url(r'^linkedin/linkedin-approval/$',
+        linkedin_view.LinkedinApprovalVeiw.as_view(),
+        name='linkedin-approval'),
 ]
-
-
-
-
 

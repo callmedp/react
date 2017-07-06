@@ -30,7 +30,7 @@ $(function(){
 	});
 
 
-	$('#action_welcome').click(function(){
+	$('#action_inbox').click(function(){
         var action = $('#id_action').val();
 
         $('#action_type_id').val(action);
@@ -42,24 +42,34 @@ $(function(){
             $('#actionModal').modal("show");
         }
         else{
-        	var selected = new Array();
-            $('#inbox-table input:checked').each(function() {
-                selected.push($(this).prop('name'));
+            var selected = new Array();
+            $('#body-table-inbox input[name="table_records"]:checked').each(function() {
+                selected.push($(this).prop('value'));
             });
 
             if (selected.length > 0){
-            	$("#linkedin_form").submit();
-            	$('#actionModal').modal("hide");
+                $('#actionModal').modal("hide");
+                $.ajax({
+                    url: '/console/linkedin/inbox/',
+                    type: "POST",
+                    data : {"selected_id": selected, "action_type": action},
+                    dataType: 'json',
+                    success: function(data) {
+                        var message = data.display_message
+                        alert(message);
+                        window.location.reload();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert("Something went wrong. Try again later");
+                    }
+                });
+
             }
             else{
                 $('#myModalbody').html('<div class="alert alert-danger">You have selected no orderitem, Please select orderitems first.</div>');
-	            $('#action_inbox').hide();
-	            $('#actionModal').modal("show");
+                $('#action_inbox').hide();
+                $('#actionModal').modal("show");
             } 
-        }
-        
-
-      
+        }   
     });
-
 });

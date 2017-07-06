@@ -180,7 +180,7 @@ class OrderItem(models.Model):
 
     closed_on = models.DateTimeField(null=True, blank=True)
     draft_added_on = models.DateTimeField(null=True, blank=True)
-
+    
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -201,6 +201,9 @@ class OrderItem(models.Model):
             # for linkedin flow
             ("writer_assignment_linkedin_action", "Can Assign to Other linkedin writer"),
             ("can_assigned_to_linkedin_writer", "Can Assigned To This linkedin Writer"),
+            ("can_show_linkedinrejectedbyadmin_queue", "Can View Linkedin Rejected By Admin Queue"),
+            ("can_show_linkedinrejectedbycandidate_queue", "Can View LinkedinRejected By Candidate Queue"),
+            ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),
             # Appoved Queue
@@ -255,9 +258,9 @@ class OrderItem(models.Model):
         return ''
 
 
-
 class OrderItemOperation(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
+    linkedin = models.ForeignKey(Draft, null=True, blank=True)
     oi_resume = models.FileField(
         max_length=255, upload_to='oio_resume/', null=True, blank=True)
 
