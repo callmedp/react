@@ -24,7 +24,7 @@ $().ready(function() {
             return emailresponse;
 
         },
-        "This email id already taken."
+        "This email id is already taken."
     );
 
     $("#register_form").validate({

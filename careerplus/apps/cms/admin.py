@@ -65,7 +65,7 @@ class PageAdmin(admin.ModelAdmin):
 #   # raw_id_fields = ('created_by', 'last_modified_by', 'page', 'widget')
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'page', 'candidate_id', 'created_on', 'is_published',
+    list_display = ('id', 'page', 'candidate_id', 'name', 'created_on', 'is_published',
         'message', 'is_removed', 'replied_to')
     list_filter = ()
     search_fields = ('id', 'message')

@@ -35,6 +35,7 @@ function uploadDraft(oi_id, ){
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong. Try again later");
+                     window.location.reload();
                 }
             });
         }
@@ -60,10 +61,12 @@ function submitMessage(oi_id, ){
                     }
                     else{
                         alert("Something went wrong. Try again later");
+                         window.location.reload();
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong. Try again later");
+                     window.location.reload();
                 }
             });
         }
@@ -86,6 +89,7 @@ function saveWaitingForInput(oi_id, ){
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong. Try again later");
+                     window.location.reload();
                 }
             });
         }
@@ -120,10 +124,12 @@ function approveDraftByAdmin(oi_id, ){
                 }
                 else{
                     alert("Something went wrong. Try again later");
+                     window.location.reload();
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong. Try again later");
+                 window.location.reload();
             }
         });
     }
@@ -153,14 +159,15 @@ function rejectDraftByAdmin(oi_id, ){
             success: function(json) {
                 if (json.status == 1){
                     alert('Draft rejected successfully');
-                    window.location.reload();
                 }
                 else{
                     alert("Something went wrong. Try again later");
                 }
+                window.location.reload();
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong. Try again later");
+                window.location.reload();
             }
         });
     }

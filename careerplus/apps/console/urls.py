@@ -151,6 +151,9 @@ urlpatterns += [
     url(r'^queue/allocated/$',
         order_view.AllocatedQueueVeiw.as_view(), name='queue-allocated'),
 
+    url(r'^queue/closed/orderitems/$',
+        order_view.ClosedOrderItemQueueVeiw.as_view(), name='queue-closed-orderitems'),
+
     url(r'^queue/orderitem/(?P<pk>\d+)/detail/$',
         order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
 

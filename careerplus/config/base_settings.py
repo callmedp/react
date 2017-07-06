@@ -188,3 +188,9 @@ CKEDITOR_CONFIGS = {
 #     REDIS_CON = None
 
 DRAFT_MAX_LIMIT = 3
+
+# HTMSL for SMS
+HTMSL_USER = 'sumo'
+HTMSL_PASS = 'w1XN75L'
+HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
+ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'

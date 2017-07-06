@@ -24,6 +24,7 @@ def clean_password_util(password):
         raise forms.ValidationError("Ensure this field has no more than 15 characters.")
     return password
 
+
 class LoginApiForm(forms.Form):
     email = forms.CharField(max_length=50,
                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))

@@ -158,6 +158,14 @@ class OIFilterForm(forms.Form):
             'placeholder': "from date - to date",
             "readonly": True, }))
 
+    payment_date = forms.CharField(
+        label=("Payment Date:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
     delivery_type = forms.ChoiceField(
         label=("Delivery Type:"), choices=[],
         required=False,
@@ -214,17 +222,24 @@ class OIFilterForm(forms.Form):
         self.fields['draft_level'].choices = draft_choices
 
     class Meta:
-        fields = ['writer', 'added_on', 'delivery_type', 'updated_on', 'draft_level']
+        fields = ['writer', 'payment_date', 'added_on', 'delivery_type', 'updated_on', 'draft_level']
 
 
 class OIActionForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
+        queue_name = kwargs.pop('queue_name', None)
         super(OIActionForm, self).__init__(*args, **kwargs)
+
         ACTION_CHOICES = (
             (0, "Select Action"),
-            (-1, "Export As Csv"),
         )
+
+        if queue_name == 'midout':
+            ACTION_CHOICES += ((-2, "Send Midout Mail"),)
+        else:
+            ACTION_CHOICES += ((-1, "Export As Csv"),)
+
         self.fields['action'] = forms.ChoiceField(
             label=("Action:"), choices=ACTION_CHOICES,
             required=True,

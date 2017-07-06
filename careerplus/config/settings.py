@@ -143,12 +143,14 @@ SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
 SHINE_API_TIMEOUT = 60
 
+
+# Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'upendra.rockon@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = '9616744875'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 ENCODE_SALT = 'xfxa'
