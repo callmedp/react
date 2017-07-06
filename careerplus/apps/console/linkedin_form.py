@@ -147,8 +147,9 @@ class OrganizationForm(forms.ModelForm):
     work_to = forms.DateField(
           widget=forms.DateInput(attrs={'class': 'form-control work_to'}))
 
-    org_current = forms.BooleanField(label=("Current Organization"), required=False, widget=forms.CheckboxInput(
-        attrs={'class': 'checkbox'}))
+    org_current = forms.BooleanField(label=("Current Organization"),
+        widget=forms.CheckboxInput(attrs={'class': 'checkbox'}),
+        initial=False, required=False)
 
     class Meta:
         model = Organization
@@ -162,7 +163,7 @@ class OrganizationForm(forms.ModelForm):
         self.fields['org_desc'].widget.attrs.update({'required':'required'})
         self.fields['work_from'].widget.attrs.update({'required':'required'})
         self.fields['work_to'].widget.attrs.update({'required':'required'})
-        self.fields['org_current'].widget.attrs.update({'required':'required'})
+        # self.fields['org_current'].widget.attrs.update({'required':'required'})
 
     def clean_org_name(self):
         org_name = self.cleaned_data.get('org_name', '')
@@ -197,11 +198,11 @@ class OrganizationForm(forms.ModelForm):
             raise forms.ValidationError("End date should be greater than from date.")
         return work_to
 
-    def clean_org_current(self):
-        org_current = self.cleaned_data.get('org_current', '')
-        if org_current is False:
-            raise forms.ValidationError("This field is required.")
-        return org_current
+    # def clean_org_current(self):
+    #     org_current = self.cleaned_data.get('org_current', '')
+    #     if org_current is False:
+    #         raise forms.ValidationError("This field is required.")
+    #     return org_current
 
     def save(self, commit=True):
         org = super(OrganizationForm, self).save(commit=False)
@@ -234,8 +235,9 @@ class EducationForm(forms.ModelForm):
     study_to = forms.DateField(
           widget=forms.DateInput(attrs={'class': 'form-control study_to'}))
 
-    edu_current = forms.BooleanField(
-        required=False, widget=forms.CheckboxInput(attrs={'class':'checkbox'}))
+    edu_current = forms.BooleanField(label=("Current Education"),
+        widget=forms.CheckboxInput(attrs={'class':'checkbox'}),
+        initial=False, required=False)
 
     class Meta:
         model = Education
@@ -250,7 +252,7 @@ class EducationForm(forms.ModelForm):
         self.fields['edu_desc'].widget.attrs.update({'required':'required'})
         self.fields['study_from'].widget.attrs.update({'required':'required'})
         self.fields['study_to'].widget.attrs.update({'required':'required'})
-        self.fields['edu_current'].widget.attrs.update({'required':'required'})
+        # self.fields['edu_current'].widget.attrs.update({'required':'required'})
 
     def clean_school_name(self):
         school_name = self.cleaned_data.get('school_name', '')
@@ -297,11 +299,11 @@ class EducationForm(forms.ModelForm):
             raise forms.ValidationError("End date should be greater than start date.")
         return study_to
 
-    def clean_edu_current(self):
-        edu_current = self.cleaned_data.get('edu_current', '')
-        if edu_current is False:
-            raise forms.ValidationError("This field is required.")
-        return edu_current
+    # def clean_edu_current(self):
+    #     edu_current = self.cleaned_data.get('edu_current', '')
+    #     if edu_current is False:
+    #         raise forms.ValidationError("This field is required.")
+    #     return edu_current
 
     def save(self, commit=True):
         edu = super(EducationForm, self).save(commit=False)
