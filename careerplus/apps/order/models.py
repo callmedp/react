@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
-    PAYMENT_MODE, OI_OPS_STATUS
+    PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
 
 from linkedin.models import Draft
 
@@ -152,7 +152,9 @@ class OrderItem(models.Model):
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
-
+    #counselling form status
+    counselling_form_status = models.PositiveSmallIntegerField(
+        default=0, choices=COUNSELLING_FORM_STATUS)
     # operation fields
     oi_status = models.PositiveIntegerField(
         _("Operation Status"), default=0, choices=OI_OPS_STATUS)

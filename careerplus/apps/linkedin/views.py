@@ -81,7 +81,7 @@ class CounsellingSubmit(TemplateView):
             quiz_obj.save()
             if not orderitem.tat_date:
                 orderitem.tat_date = datetime.now()
-                orderitem.oi_status = 31
+                orderitem.counselling_form_status = 42
                 orderitem.save()
             return HttpResponseRedirect(reverse('dashboard'))
 

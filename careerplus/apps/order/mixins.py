@@ -54,7 +54,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
                 self.createOrderitems(order, cart_obj)
-
+                order_items = order.orderitems.filter(product__type_flow__in=[8])
                 # mai and sms
                 if order.orderitems.filter(product__type_flow__in=[1, 3]) and order.status == 1:
                     to_emails = [order.email]
@@ -77,8 +77,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                     except Exception as e:
                         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                elif order.orderitems.filter(product__type_flow__in=[8]):
+                elif order_items:
                     # associate draft object with order
+                    order_item = order_items.first()
                     draft_obj = Draft.objects.create()
                     org_obj = Organization()
                     org_obj.draft = draft_obj
@@ -92,7 +93,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                     quiz_rsp.oi = order_item
                     quiz_rsp.save()
 
-                    order_item.oi_status = 30
+                    order_item.counselling_form_status = 41
                     order_item.oio_linkedin = draft_obj
                     order_item.save()
                 return order

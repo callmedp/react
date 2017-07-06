@@ -403,13 +403,66 @@ class ApproveDraftByLinkedinAdmin(View):
                 obj = OrderItem.objects.get(pk=oi_pk)
                 data['status'] = 1
                 last_status = obj.oi_status
-                obj.oi_status = 37
-                obj.save()
-                obj.orderitemoperation_set.create(
-                    oi_status=obj.oi_status,
-                    last_oi_status=last_status,
-                    assigned_to=obj.assigned_to,
-                    added_by=request.user)
+                if obj.product.type_flow == 8:
+                    if obj.draft_counter == 3:
+                        obj.oi_status = 4
+                        obj.closed_on = timezone.now()
+                    else:
+                        obj.oi_status = 46
+                    obj.approved_on = timezone.now()
+                    obj.save()
+
+                    # mail to candidate
+                    to_emails = [obj.order.email]
+                    email_dict = {}
+                    email_dict.update({
+                        "info": 'Auto closer Email',
+                        "draft_level": obj.draft_counter,
+                        "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        "mobile": obj.order.mobile,
+                    })
+
+                    if obj.draft_counter < 3:
+                        mail_type = 'REMINDER'
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_dict)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    else:
+                        mail_type = 'AUTO_CLOSER'
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_dict)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            
+                    if obj.oi_status == 4:
+                        obj.orderitemoperation_set.create(
+                            oi_status=46,
+                            last_oi_status=last_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=46,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+                    else:
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=last_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)     
             except:
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -425,7 +478,7 @@ class RejectDraftByLinkedinAdmin(View):
                 obj = OrderItem.objects.get(pk=oi_pk)
                 data['status'] = 1
                 last_status = obj.oi_status
-                obj.oi_status = 38
+                obj.oi_status = 47
                 obj.save()
                 obj.orderitemoperation_set.create(
                     oi_status=obj.oi_status,

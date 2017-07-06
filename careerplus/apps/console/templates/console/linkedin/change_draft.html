@@ -60,7 +60,6 @@
             </ul>
             <div class="clearfix"></div>
           </div>
-          {{ form.media }}
           <div class="x_content">
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.candidate_name.id_for_label }}">Candidate Name</label>
@@ -306,7 +305,7 @@
 
     function orgAddForm(btn, prefix) {
       var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-      var row = $('.org-add:first').clone(true).get(0);
+      var row = $('.org-add:first').clone(false).get(0);
       $(row).removeAttr('id').insertAfter($('.org-add:last')).children('.hidden').removeClass('hidden');
 
       $(row).children().not(':last').children().each(function() {

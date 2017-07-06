@@ -251,7 +251,7 @@
                       </td>
 
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
-                      {% if obj.oi_status == 31 %}
+                      {% if obj.counselling_form_status == 42 %}
                       <td>
                         <a href="{% url 'counselling-form' obj.pk %}" 
                         style="color:red">

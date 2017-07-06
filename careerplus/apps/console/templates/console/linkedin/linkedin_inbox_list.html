@@ -227,7 +227,7 @@
                         </i>Download Document</button></a>
                       </td>
                       <td>
-                        <a target="_blank" href="{% url "console:linkedin-order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs">
+                        <a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.id %}"><button type="button" class="btn btn-success btn-xs">
                         <i class="fa fa-eye"></i>
                         Detailed Information</button></a>
                       </td>
@@ -236,7 +236,7 @@
                         <b>Updated On: {{obj.updated_on}}</b>
                       </td>
 
-                      {% if obj.oi.submitted %}
+                      {% if obj.counselling_form_status == 42 %}
                       <td><a href="{% url 'counselling-form' obj.pk %}" style="color:green">
                         Counselling Form Submitted</a>
                       </td>

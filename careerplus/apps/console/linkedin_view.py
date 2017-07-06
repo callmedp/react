@@ -94,15 +94,15 @@ class LinkedinQueueView(ListView, PaginationMixin):
                                 added_by=request.user
                             )
                             # mail to user about writer information
-                            # order_id = orderitem_objs.first()
-                            # email_to = request.session.get('email', '')
-                            # mail_type = '2'
-                            # data = {
-                            #     'orderitem': order_id.id,
-                            #     'cc': writer.email,
-                            #     'candidateid': request.session.get('candidate_id', '') 
-                            # }
-                            # SendMail().send([email_to], mail_type, data)
+                            order_id = orderitem_objs.first()
+                            email_to = request.session.get('email', '')
+                            mail_type = '2'
+                            data = {
+                                'orderitem': order_id.id,
+                                'cc': writer.email,
+                                'candidateid': request.session.get('candidate_id', '') 
+                            }
+                            SendMail().send([email_to], mail_type, data)
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
                         data['display_message'] = str(e)
@@ -113,7 +113,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=2, product__type_flow__in=[8]).exclude(oi_status=9)
+        queryset = queryset.filter(order__status=2, product__type_flow__in=[8]).exclude(oi_resume='').exclude(oi_status=4)
         user = self.request.user
         if user.has_perm('order.can_show_unassigned_inbox'):
             queryset = queryset.filter(assigned_to=None)
@@ -297,6 +297,7 @@ class ChangeDraftView(DetailView):
                 if draft_form.is_valid() and org_formset.is_valid() and edu_formset.is_valid():
                     draft_obj = draft_form.save()
 
+                    import ipdb; ipdb.set_trace()
                     for form in org_formset.forms:
                         org_obj = form.save(commit=False)
                         org_obj.draft = draft_obj
@@ -312,27 +313,26 @@ class ChangeDraftView(DetailView):
 
                     for form in edu_formset.deleted_forms:
                         form.instance.delete()
-                    import ipdb; ipdb.set_trace()
                     # for update oi status
                     last_status = ord_obj.oi_status  
                     if ord_obj.oi_status == 8:
                         ord_obj.draft_counter += 1
                     elif not ord_obj.draft_counter:
                         ord_obj.draft_counter += 1
-                    ord_obj.oi_status = 36  # pending Approval
+                    ord_obj.oi_status = 45  # pending Approval
                     ord_obj.last_oi_status = last_status
                     ord_obj.draft_added_on = timezone.now()
                     ord_obj.save()
                     ord_obj.orderitemoperation_set.create(
                         linkedin = draft_obj,
                         draft_counter=ord_obj.draft_counter,
-                        oi_status=33,
+                        oi_status=44,
                         last_oi_status=last_status,
                         assigned_to=ord_obj.assigned_to,
                         added_by=request.user)
                     ord_obj.orderitemoperation_set.create(
                         oi_status=ord_obj.oi_status,
-                        last_oi_status=33,
+                        last_oi_status=44,
                         assigned_to=ord_obj.assigned_to,
                         added_by=request.user)
 
@@ -355,8 +355,6 @@ class ChangeDraftView(DetailView):
             return render(request, self.template_name, context)
 
 
-
-# @method_decorator(permission_required('', login_url='/console/login/'), name='dispatch')
 class LinkedinRejectedByAdminView(ListView, PaginationMixin):
     context_object_name = 'rejectedbylinkedinadmin_list'
     template_name = 'console/linkedin/rejectedbylinkedinadmin-list.html'
@@ -403,7 +401,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByAdminView, self).get_queryset()
-        queryset = queryset.filter(order__status=2, oi_status=38, product__type_flow__in=[8])
+        queryset = queryset.filter(order__status=2, oi_status=47, product__type_flow__in=[8])
 
         try:
             if self.query:
@@ -451,7 +449,6 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
 
 
-@method_decorator(permission_required('', login_url='/console/login/'), name='dispatch')
 class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
     context_object_name = 'rejectedbylinkedincandidate_list'
     template_name = 'console/linkedin/reject-linkedin-candidate.html'
@@ -501,7 +498,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByCandidateView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=8, product__type_flow__in=[1])
+        queryset = queryset.filter(order__status=1, oi_status=48, product__type_flow__in=[1])
 
         try:
             if self.query:
@@ -550,7 +547,6 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
 
 
-# @method_decorator(permission_required('', login_url='/console/login/'), name='dispatch')
 class LinkedinApprovalVeiw(ListView, PaginationMixin):
     context_object_name = 'approval_list'
     template_name = 'console/linkedin/linkedin-approval-list.html'
@@ -599,7 +595,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinApprovalVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=2, oi_status=36, product__type_flow__in=[8]).exclude(oi_status=9)
+        queryset = queryset.filter(order__status=2, oi_status=45, product__type_flow__in=[8]).exclude(oi_status=9)
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |
