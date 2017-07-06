@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     'sekizai',
     'sorl.thumbnail',
     'rest_framework',
+    'haystack',
 ]
 
 # Apps specific for this project go here.
@@ -79,6 +80,7 @@ LOCAL_APPS = [
     'blog',
     'homepage',
     'microsite',
+    'search'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -200,3 +202,17 @@ CART_MAX_LIMIT = 5
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+
+############ SOLR SETTINGS #######################
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr',
+        'INCLUDE_SPELLING': False,
+    },
+}
+
+HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 50
+HAYSTACK_BATCH_SIZE = 100
+HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
