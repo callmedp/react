@@ -57,6 +57,7 @@ urlpatterns += [
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^search/', include('search.urls', namespace='search')),
     # partner url
     url(r'^partner/', include('partner.urls')),
     url(r'^partner/', include('microsite.urls')),

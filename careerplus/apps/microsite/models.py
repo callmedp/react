@@ -18,7 +18,7 @@ class MicrositeBanner(models.Model):
         return '%s' % self.name
 
     def save(self, *args, **kwargs):
-        from core.common import ImageCompressedMixin
+        from core.mixins import ImageCompressedMixin
         ImageCompressedMixin().save_image(self.image, 'medium')
         super(MicrositeBanner, self).save(*args, **kwargs)
 
