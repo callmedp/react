@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class AbstractAutoDate(models.Model):
-    created = models.DateTimeField(editable=False)
+    created = models.DateTimeField(editable=False, default=timezone.now())
     modified = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -46,7 +46,6 @@ class AbstractSEO(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-
         pk_field_name = self._meta.pk.name
         url_value_name = getattr(self, 'url_value_name', 'name')
         url_slug_name = getattr(self, 'url_slug_name', 'slug')

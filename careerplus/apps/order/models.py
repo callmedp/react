@@ -5,6 +5,8 @@ from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
 
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+
 from linkedin.models import Draft
 
 class Order(AbstractAutoDate):
@@ -188,6 +190,14 @@ class OrderItem(models.Model):
 
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    ## THESE STATUS FIELDS ARE FROM UNMERGED - COMMIT 2fd291f37aca6bae266f36d9d23ab2a9068bdf9e from amar
+    ## WHILE MERGING CHECK COMPLETE FLOW
+    # Find usage in careerplus/apps/console/order/partials/views.py and corresponding serializer and view mixin.
+    oi_status = models.PositiveIntegerField(
+        _("Operation Status"), default=0, choices=OI_OPS_STATUS)
+    last_oi_status = models.PositiveIntegerField(
+        _("Last Operation Status"), default=0, choices=OI_OPS_STATUS)
 
     class Meta:
         app_label = 'order'

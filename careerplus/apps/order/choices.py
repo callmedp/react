@@ -33,6 +33,8 @@ OI_OPS_STATUS = (
     (2, 'Resume Not Uploaded'),
     (3, 'Resume Uploded'),
     (4, 'Closed'),
+    (10, 'On Hold by Vendor'),
+    (11, 'Archived'),
 
     # flow1 and flow3 21 - 40
     (21, 'Upload Draft'),
@@ -49,8 +51,6 @@ OI_OPS_STATUS = (
     (46, 'Linkedin Approved'),
     (47, 'Linkedin Rejected By Admin'),
     (48, 'Linkedi Rejected By Candidate'),
-
-
 )
 
 COUNSELLING_FORM_STATUS=(

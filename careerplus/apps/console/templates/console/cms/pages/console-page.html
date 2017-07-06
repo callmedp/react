@@ -1,0 +1,47 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} 
+    <title> CMS Management Console </title>
+  {% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
+{% endblock css_block %}
+
+{% block pagecontent %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+	{% include partial_template %}
+</div>
+<!-- /page content -->
+
+{% endblock pagecontent %}
+
+
+{% block js_block %}
+    {{block.super}}
+    <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+  	<script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
+	<script type="text/javascript">
+     window.onload = function(){
+      $.each($("select[multiple]"), function () {
+        // "Locations" can be any label you want
+        if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
+      });
+      $('.input-group.date #id_page_publishing').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_page_expiry').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+      $('.input-group.date #id_pagecounter_period').datetimepicker({format: 'YYYY-MM-DD'});
+      $('ul.nav.child_menu>li>a[data-pjax], tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax], .right_col form button[data-pjax]').pjax();
+      $('textarea').ckeditor()
+    }
+	</script>
+  <script type="text/javascript" src='/static/console/js/ckeditor/ckeditor-init.js'></script>
+  <script type="text/javascript" src='/static/console/js/ckeditor/ckeditor/ckeditor.js'></script>
+  <script type="text/javascript" src='/static/console/js/ckeditor/ckeditor/adapters/jquery.js'></script>
+  <script type="text/javascript">window.CKEDITOR_BASEPATH = '/static/console/js/ckeditor/ckeditor/';</script>
+
+{% endblock js_block %}

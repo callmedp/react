@@ -62,6 +62,8 @@ class ArticleShareView(View):
                 pass
             data = {"status": "success"}
             return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            return HttpResponseForbidden
 
 
 class AjaxCommentLoadMoreView(View, LoadMoreMixin):

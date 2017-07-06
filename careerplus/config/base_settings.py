@@ -52,7 +52,9 @@ THIRD_PARTY_APPS = [
     'django_mobile',
     'meta',
     'requests',
+    'sekizai',
     'sorl.thumbnail',
+    'rest_framework',
 ]
 
 # Apps specific for this project go here.
@@ -113,6 +115,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django_mobile.context_processors.flavour',
                 'careerplus.config.context_processors.common_context_processor',
+                'sekizai.context_processors.sekizai',
+                'core.context_processors.js_settings'
             ],
             'loaders': [
                 # ('django_mobile.loader.CachedLoader', [
@@ -166,6 +170,14 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser'
+    ],
+    'PAGE_SIZE': 10
+}
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
 CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
@@ -194,3 +206,9 @@ HTMSL_USER = 'sumo'
 HTMSL_PASS = 'w1XN75L'
 HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
 ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
+
+CART_MAX_LIMIT = 5
+
+########## DOMAIN SETTINGS ######################
+MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
+MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)

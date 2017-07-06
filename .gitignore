@@ -91,5 +91,7 @@ ENV/
 # Rope project settings
 .ropeproject
 
+#Local Env
+careerplus/templates/.gitignore
 # Pycharm files
 .idea

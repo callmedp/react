@@ -60,7 +60,7 @@ class RegistrationForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
 
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
-        attrs={'class': 'form-control pull-left number', 'placeholder': 'Mobile'}), max_length=15)
+        attrs={'class': 'form-control', 'placeholder': 'Mobile'}), max_length=15)
 
     vendor_id = forms.CharField(
         max_length=30, required=True, initial=settings.CP_VENDOR_ID, widget=forms.HiddenInput(
@@ -72,6 +72,12 @@ class RegistrationForm(forms.Form):
         password = self.cleaned_data.get('raw_password')
         password = clean_password_util(password)
         return password
+
+    def __init__(self, *args, **kwargs):
+        flavour = kwargs.pop('flavour', None)
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        if flavour == 'mobile':
+            self.fields['cell_phone'].widget.attrs = {'class': 'form-control pull-left number'}
 
 
 class ModalLoginApiForm(LoginApiForm):

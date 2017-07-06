@@ -8,3 +8,8 @@ def get_instance(form_set):
     except:
         pass    
     return False
+
+
+@register.filter(name='get_item')
+def get_item(dictionary, key):
+    return dictionary.get(key)

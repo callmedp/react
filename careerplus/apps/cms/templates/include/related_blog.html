@@ -1,77 +1,23 @@
-{% load static %}
-{% load thumbnail %}
+{% load static thumbnail %}
 
 {% if related_arts %}
 <div class="related box-panel mb-40">
     <h2 class="heading-right">{{heading}}</h2>
     {% for art in related_arts %}
         <div class="media">
-          <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
-            {% if art.image %}
-	            <div class="media-left">
-	                {% thumbnail art.image "98x64" crop="center" as im %}
-                        <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
-                    {% endthumbnail %}
-	            </div>
-            {% endif %}
-            <div class="media-body">
-              {{art.display_name}}
-            </div>
-          </a>
+            <a href="{% url 'blog:articles-deatil' art.slug art.pk %}">
+                {% if art.image %}
+                    <div class="media-left">
+                        {% thumbnail art.image "98x64" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                        {% endthumbnail %}
+                    </div>
+                {% endif %}
+                <div class="media-body">
+                    {{art.display_name}}
+                </div>
+            </a>
         </div>
     {% endfor %}
-
-        {% comment %}
-        <div class="media">
-          <a href="#">
-            <div class="media-left">
-                <img class="media-object" src="{% static 'console/images/cms/related-pic1.jpg' %}" alt="Related">
-            </div>
-            <div class="media-body">
-              8 Reasons to consider a career change
-            </div>
-          </a>
-        </div>
-        <div class="media">
-          <a href="#">
-            <div class="media-left">
-                <img class="media-object" src="{% static 'console/images/cms/related-pic2.jpg' %}" alt="Related">
-            </div>
-            <div class="media-body">
-              6 Things to be removed from Your Resume
-            </div>
-          </a>
-        </div>
-        <div class="media">
-          <a href="#">
-            <div class="media-left">
-                <img class="media-object" src="{% static 'console/images/cms/related-pic3.jpg' %}" alt="Related">
-            </div>
-            <div class="media-body">
-              The best way to resign
-            </div>
-          </a>
-        </div>
-        <div class="media">
-          <a href="#">
-            <div class="media-left">
-                <img class="media-object" src="{% static 'console/images/cms/related-pic4.jpg' %}" alt="Related">
-            </div>
-            <div class="media-body">
-              5 Salary Negotiation Mistakes
-            </div>
-          </a>
-        </div>
-        <div class="media">
-          <a href="#">
-            <div class="media-left">
-                <img class="media-object" src="{% static 'console/images/cms/related-pic5.jpg' %}" alt="Related">
-            </div>
-            <div class="media-body">
-              Tell Me Something About Yourself
-            </div>
-          </a>
-        </div>
-        {% endcomment %}
 </div>
 {% endif %}

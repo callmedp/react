@@ -1,0 +1,69 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} 
+    <title> CMS Management </title>
+  {% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
+{% endblock css_block %}
+
+{% block pagecontent %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+  {% include partial_template %}
+</div>
+<!-- /page content -->
+
+{% endblock pagecontent %}
+
+
+{% block js_block %}
+    {{block.super}}
+    <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+    <script type="text/javascript">
+      function renderCachedCities(cached){
+        var parsed = JSON.parse(cached);
+        if (parsed instanceof Array) {
+          var formedString = '<option value="" selected="">Select City</option>';
+          $.map(parsed, function(val){formedString+=('<option value="'+ val['id'] +'">'+ val['name'] +'</option>');})
+          $('#vendor-city').html(formedString);
+        }
+      }
+      function renderCities(event){
+        var country = String(event.target.value);
+        var cached = localStorage.getItem('savedcities - ' + country);
+        if (!(cached && JSON.parse(cached) && (JSON.parse(cached) instanceof Array))) {
+          $.ajax({
+            url: '/geolocation/api/v1/city/?country=' + String(country),
+            type: 'GET',
+            accept: 'application/json',
+            success: function(data){
+              if (data) {
+                var responseData = JSON.stringify(data);
+                if (responseData){
+                  localStorage.setItem('savedcities - ' + country, responseData);
+                  renderCachedCities(responseData);
+                }
+              }
+            }
+          });
+        }
+        else {
+          renderCachedCities(cached);
+        } 
+      }
+      window.onload = function(){
+        $.each($("select[multiple]"), function () {
+          // "Locations" can be any label you want
+          if (this.id && this.name) SelectFilter.init(this.id, this.name, 0, "/media/");
+         });
+         $('ul.nav.child_menu>li>a[data-pjax], tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax], .right_col form button[data-pjax]').pjax();
+        $('#vendor-country').change(renderCities);
+      };
+    </script>
+{% endblock js_block %}
