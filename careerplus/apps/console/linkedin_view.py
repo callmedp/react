@@ -293,11 +293,8 @@ class ChangeDraftView(DetailView):
                 org_formset = OrganizationFormset(request.POST, instance=self.get_object())
                 edu_formset = EducationFormset(request.POST, instance=self.get_object())
                 draft_form = DraftForm(request.POST, instance=self.get_object())
-
                 if draft_form.is_valid() and org_formset.is_valid() and edu_formset.is_valid():
                     draft_obj = draft_form.save()
-
-                    import ipdb; ipdb.set_trace()
                     for form in org_formset.forms:
                         org_obj = form.save(commit=False)
                         org_obj.draft = draft_obj

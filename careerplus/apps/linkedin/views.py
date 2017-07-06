@@ -108,10 +108,10 @@ class LinkedinDraftView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LinkedinDraftView, self).get_context_data(**kwargs)
         orderitem_id = kwargs.get('order_item', '')
+        op_id = kwargs.get('op_id', '')
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
-            drft = oi.oio_linkedin
-            op_id = OrderItemOperation.objects.get(linkedin=drft)
+            op_id = oi.orderitemoperation_set.get(pk = op_id)
             try:
                 draft = ''
                 if op_id:    
