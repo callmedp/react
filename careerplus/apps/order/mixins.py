@@ -4,144 +4,191 @@ from django.utils import timezone
 
 from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
+from emailers.email import SendMail
+from emailers.sms import SendSMS
 
 from .models import Order, OrderItem
+from linkedin.models import Draft, Organization, Education
+from quizs.models import QuizResponse
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
 
-	def fridge_cart(self, cart_obj):
-		if cart_obj:
-			cart_obj.date_submitted = timezone.now()
-			cart_obj.is_submitted = True
-			cart_obj.date_frozen = timezone.now()
-			cart_obj.last_status = cart_obj.status
-			cart_obj.status = 4
-			cart_obj.save()
-			return cart_obj
+    def fridge_cart(self, cart_obj):
+        if cart_obj:
+            cart_obj.date_submitted = timezone.now()
+            cart_obj.is_submitted = True
+            cart_obj.date_frozen = timezone.now()
+            cart_obj.last_status = cart_obj.status
+            cart_obj.status = 4
+            cart_obj.save()
+            return cart_obj
 
-	def get_cart_last_status(self, cart_obj):
-		cart_status = cart_obj.status
-		cart_obj.status = cart_obj.last_status
-		cart_obj.last_status = cart_status
-		cart_obj.save()
-		return cart_obj
+    def get_cart_last_status(self, cart_obj):
+        cart_status = cart_obj.status
+        cart_obj.status = cart_obj.last_status
+        cart_obj.last_status = cart_status
+        cart_obj.save()
+        return cart_obj
 
-	def createOrder(self, cart_obj):
-		try:
-			candidate_id = self.request.session.get('candidate_id')
-			if cart_obj:
-				order = Order.objects.create(cart=cart_obj, date_placed=timezone.now())
-				order.number = 'CP' + str(order.pk)
-				
-				if candidate_id:
-					order.candidate_id = candidate_id
-				
-				order.email = cart_obj.email
-				order.first_name = cart_obj.first_name
-				order.last_name = cart_obj.last_name
-				order.country_code = cart_obj.country_code
-				order.mobile = cart_obj.mobile
-				order.address = cart_obj.address
-				order.pincode = cart_obj.pincode
-				order.state = cart_obj.state
-				order.country = cart_obj.country
+    def createOrder(self, cart_obj):
+        try:
+            candidate_id = self.request.session.get('candidate_id')
+            if cart_obj:
+                order = Order.objects.create(cart=cart_obj, date_placed=timezone.now())
+                order.number = 'CP' + str(order.pk)
+                
+                if candidate_id:
+                    order.candidate_id = candidate_id
+                
+                order.email = cart_obj.email
+                order.first_name = cart_obj.first_name
+                order.last_name = cart_obj.last_name
+                order.country_code = cart_obj.country_code
+                order.mobile = cart_obj.mobile
+                order.address = cart_obj.address
+                order.pincode = cart_obj.pincode
+                order.state = cart_obj.state
+                order.country = cart_obj.country
 
-				order.total_excl_tax = self.getTotalAmount()
-				order.save()
-				self.createOrderitems(order, cart_obj)
-				return order
-		except Exception as e:
-			logging.getLogger('error_log').error(str(e))
+                order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
+                order.save()
+                self.createOrderitems(order, cart_obj)
+                order_items = order.orderitems.filter(product__type_flow__in=[8])
+                # mai and sms
+                if order.orderitems.filter(product__type_flow__in=[1, 3]) and order.status == 1:
+                    to_emails = [order.email]
+                    mail_type = "MIDOUT"
+                    data = {}
+                    data.update({
+                        "info": 'Upload Your resume',
+                        "subject": 'Upload Your Resume',
+                        "name": order.first_name + ' ' + order.last_name,
+                        "mobile": order.mobile,
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                        order.midout_sent_on = timezone.now()
+                    except Exception as e:
+                        logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
-	def createOrderitems(self, order, cart_obj):
-		try:
-			if order and cart_obj:
-				cart_items = self.get_cart_items()
-				for item in cart_items:
-					parent_li = item.get('li')
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-					if parent_li and parent_li.product.type_product == 3:
-						p_oi = OrderItem.objects.create(
-							order=order,
-							product=parent_li.product,
-							title=parent_li.product.name,
-							partner=parent_li.product.vendor,
-							is_combo=True,
-							no_process=True,
-						)
-						p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-						p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
-						p_oi.save()
+                elif order_items:
+                    # associate draft object with order
+                    order_item = order_items.first()
+                    draft_obj = Draft.objects.create()
+                    org_obj = Organization()
+                    org_obj.draft = draft_obj
+                    org_obj.save()
 
-						combos = self.get_combos(parent_li.product).get('combos')
+                    edu_obj = Education()
+                    edu_obj.draft = draft_obj
+                    edu_obj.save()
 
-						for product in combos:
-							oi = OrderItem.objects.create(
-								order=order,
-								product=product,
-								title=product.pv_name,
-								partner=product.vendor
-							)
-							oi.upc = str(order.pk) + "_" + str(oi.pk)
-							oi.parent = p_oi
-							oi.is_combo = True
-							oi.oi_price_before_discounts_excl_tax = product.get_price()
-							oi.save()
+                    quiz_rsp = QuizResponse()
+                    quiz_rsp.oi = order_item
+                    quiz_rsp.save()
 
-						addons = item.get('addons')
-						for addon in addons:
-							oi = OrderItem.objects.create(
-								order=order,
-								product=addon.product,
-								title=addon.product.name,
-								partner=addon.product.vendor
-								)
-							oi.upc = str(order.pk) + "_" + str(oi.pk)
-							oi.parent = p_oi
-							oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
-							oi.save()
+                    order_item.counselling_form_status = 41
+                    order_item.oio_linkedin = draft_obj
+                    order_item.save()
+                return order
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
 
-					elif parent_li:
-						p_oi = OrderItem.objects.create(
-							order=order,
-							product=parent_li.product,
-							title=parent_li.product.name,
-							partner=parent_li.product.vendor,
-							no_process=parent_li.no_process,
-						)
-						p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-						p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
-						p_oi.save()
+    def createOrderitems(self, order, cart_obj):
+        try:
+            if order and cart_obj:
+                cart_items = self.get_cart_items()
+                for item in cart_items:
+                    parent_li = item.get('li')
 
-						addons = item.get('addons')
-						for addon in addons:
-							oi = OrderItem.objects.create(
-								order=order,
-								product=addon.product,
-								title=addon.product.name,
-								partner=addon.product.vendor
-								)
-							oi.upc = str(order.pk) + "_" + str(oi.pk)
-							oi.parent = p_oi
-							oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
-							oi.save()
+                    if parent_li and parent_li.product.type_product == 3:
+                        p_oi = OrderItem.objects.create(
+                            order=order,
+                            product=parent_li.product,
+                            title=parent_li.product.name,
+                            partner=parent_li.product.vendor,
+                            is_combo=True,
+                            no_process=True,
+                        )
+                        p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
+                        p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
+                        p_oi.save()
 
-						variations = item.get('variations')
-						for var in variations:
-							oi = OrderItem.objects.create(
-								order=order,
-								product=var.product,
-								title=var.product.name,
-								partner=var.product.vendor
-								)
-							oi.upc = str(order.pk) + "_" + str(oi.pk)
-							oi.parent = p_oi
-							oi.oi_price_before_discounts_excl_tax = var.price_excl_tax
-							oi.is_variation = True
-							oi.save()
-				self.request.session.update({
-	                "order_pk": order.pk,
-	            })
-		except Exception as e:
-			logging.getLogger('error_log').error(str(e))
+                        combos = self.get_combos(parent_li.product).get('combos')
+
+                        for product in combos:
+                            oi = OrderItem.objects.create(
+                                order=order,
+                                product=product,
+                                title=product.pv_name,
+                                partner=product.vendor
+                            )
+                            oi.upc = str(order.pk) + "_" + str(oi.pk)
+                            oi.parent = p_oi
+                            oi.is_combo = True
+                            oi.oi_price_before_discounts_excl_tax = product.get_price()
+                            oi.save()
+
+                        addons = item.get('addons')
+                        for addon in addons:
+                            oi = OrderItem.objects.create(
+                                order=order,
+                                product=addon.product,
+                                title=addon.product.name,
+                                partner=addon.product.vendor
+                            )
+                            oi.upc = str(order.pk) + "_" + str(oi.pk)
+                            oi.parent = p_oi
+                            oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
+                            oi.save()
+
+                    elif parent_li:
+                        p_oi = OrderItem.objects.create(
+                            order=order,
+                            product=parent_li.product,
+                            title=parent_li.product.name,
+                            partner=parent_li.product.vendor,
+                            no_process=parent_li.no_process,
+                        )
+                        p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
+                        p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
+                        p_oi.save()
+
+                        variations = item.get('variations')
+                        for var in variations:
+                            oi = OrderItem.objects.create(
+                                order=order,
+                                product=var.product,
+                                title=var.product.name,
+                                partner=var.product.vendor
+                            )
+                            oi.upc = str(order.pk) + "_" + str(oi.pk)
+                            oi.parent = p_oi
+                            oi.oi_price_before_discounts_excl_tax = var.price_excl_tax
+                            oi.is_variation = True
+                            oi.save()
+
+                        addons = item.get('addons')
+                        for addon in addons:
+                            oi = OrderItem.objects.create(
+                                order=order,
+                                product=addon.product,
+                                title=addon.product.name,
+                                partner=addon.product.vendor
+                            )
+                            oi.upc = str(order.pk) + "_" + str(oi.pk)
+                            oi.parent = p_oi
+                            oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
+                            oi.save()
+
+                self.request.session.update({
+                    "order_pk": order.pk,
+                })
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))

@@ -78,8 +78,12 @@ class CMSPageView(DetailView, LoadMoreMixin):
             except Exception:
                 raise Http404
             if request.session.get('candidate_id') and message and self.page_obj:
-                Comment.objects.create(candidate_id=request.session.get('candidate_id'), message=message,
-                                       page=self.page_obj)
+                name = ''
+                if request.session.get('first_name'):
+                    name = request.session.get('first_name')
+                if request.session.get('last_name'):
+                    name += ' ' + request.session.get('last_name')
+                Comment.objects.create(candidate_id=request.session.get('candidate_id'), message=message, name=name, page=self.page_obj)
                 self.page_obj.comment_count += 1
                 self.page_obj.save()
                 today = timezone.now()
@@ -146,7 +150,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
             context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
 
         comments = page_obj.comment_set.filter(is_published=True, is_removed=False)
-        context['comment_listing'] = self.pagination_method(page=self.page, comment_list=comments, page_obj=self.page_obj)
+        context['comment_listing'] = self.pagination_method(
+            page=self.page, comment_list=comments, page_obj=page_obj)
         context['total_comment'] = comments.count()
         context.update({
             "hostname": settings.SITE_DOMAIN,

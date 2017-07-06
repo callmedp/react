@@ -80,7 +80,10 @@ LOCAL_APPS = [
     'blog',
     'homepage',
     'microsite',
-    'search'
+    'search',
+    'linkedin',
+    'emailers',
+    'quizs',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -113,6 +116,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django_mobile.context_processors.flavour',
+                'careerplus.config.context_processors.common_context_processor',
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings'
             ],
@@ -196,6 +200,14 @@ CKEDITOR_CONFIGS = {
 #     REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
 # except:
 #     REDIS_CON = None
+
+DRAFT_MAX_LIMIT = 3
+
+# HTMSL for SMS
+HTMSL_USER = 'sumo'
+HTMSL_PASS = 'w1XN75L'
+HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
+ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
 
 CART_MAX_LIMIT = 5
 

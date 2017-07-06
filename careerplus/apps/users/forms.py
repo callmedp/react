@@ -4,7 +4,9 @@ from django import forms
 from django.db.models import Q
 from django.conf import settings
 
-# Third party imports
+from .models import User
+from .mixins import RegistrationLoginApi
+
 from geolocation.models import Country
 
 mobile_validators = RegexValidator(r'^[0-9]{10,15}$',

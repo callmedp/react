@@ -19,9 +19,11 @@ from django.conf import settings
 from filebrowser.sites import site
 from django.conf.urls.static import static
 
-from users.views import (DashboardView, RegistrationApiView, LoginApiView, LogoutApiView)
-from homepage.views import HomePageView
+from users.views import (DashboardView,
+    RegistrationApiView, LoginApiView, LogoutApiView)
 
+from homepage.views import HomePageView
+from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 
 urlpatterns = []
@@ -59,11 +61,12 @@ urlpatterns += [
     # partner url
     url(r'^partner/', include('partner.urls')),
     url(r'^partner/', include('microsite.urls')),
+    url(r'^linkdin/', include('linkedin.urls')),
     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
-
+    url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(

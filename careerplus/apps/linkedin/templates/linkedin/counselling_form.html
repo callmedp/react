@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Linked In Counselling Form Updation</h2>
+	<form method="post">
+		{% csrf_token %}
+	  <ol>
+		<li>
+			<p class="question">{{ques_dict.q1}}</p>                        
+			<textarea rows="5" cols="50" class="js-answer" 
+			name="q1">{{ans}}</textarea>
+			<p class='submit-error'></p>        
+		</li>
+		<li>
+			<p class="question">{{ques_dict.q2}}</p>                        
+			<textarea class="js-answer " rows="5" cols="50" class="js-answer"
+			name="q2">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>
+		<li>
+			<p class="question">{{ques_dict.q3}}</p>                        
+			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
+			name="q3">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>
+		<li>
+			<p class="question1">{{ques_dict.q4}}</p>                        
+			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
+			name="q4">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>
+		<li>
+			<p class="question">{{ques_dict.q5}}</p>                        
+			<textarea class="js-answer" rows="5" cols="50" class="js-answer"
+			name="q5">{{ans}}</textarea>
+			<p class='submit-error'></p>         
+		</li>  
+	 </ol>
+         	<button type="submit" class="grp-button grp-default js-click " style="width: 150px;float: left;">Save</button>
+            {% if not flag  %}
+                 <button type="submit" class="grp-button grp-default js-submit " style="width: 150px;float: right;background-image: linear-gradient(#FF8D00,#FF2300); ">Submit</button>
+            {% endif %}                   
+	<!--<button type="submit">submit</button>-->
+	</form>
+</body>
+</html>

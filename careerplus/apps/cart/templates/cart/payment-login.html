@@ -72,7 +72,7 @@
 
                 {% if email_exist %}
                     <strong class="personal-details-heading col-sm-12">Login with your email id</strong>
-                    <label id="non-field-error" class="error">{{non_field_error}}</label>
+                    <p id="non-field-error" class="error">{{non_field_error}}</p>
                     <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
                       <input type="email" name="email" value="{{email}}" readonly class="form-control" placeholder="Enter your email id">
                       <span class="error-txt">{{email_error}}</span>
@@ -86,7 +86,7 @@
                     </div>
                 {% else %}
                     <strong class="personal-details-heading col-sm-12">Enter your email id</strong>
-                    <label id="non-field-error" class="error">{{non_field_error}}</label>
+                    <p id="non-field-error" class="error">{{non_field_error}}</p>
                     <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
                       <input type="email" name="email" class="form-control" placeholder="Enter your email id">
                       <span class="error-txt">{{email_error}}</span>
@@ -95,21 +95,6 @@
                       <button type="submit">Continue</button>
                     </div>
                 {% endif %}
-                {% comment %}
-                <strong class="personal-details-heading col-sm-12">Enter your email id</strong>
-                <label id="non-field-error" class="error">{{non_field_error}}</label>
-                <div class="form-group col-sm-12 {% if form.email.errors %}error{% endif %}">
-                  {{form.email}}
-                <span class="error-txt">{{form.email.errors.0}}</span>
-                </div>
-                <div class="form-group col-sm-12 {% if form.password.errors %}error{% endif %}">
-                  {{form.password}}
-                  <span class="error-txt">{{form.password.errors.0}}</span>
-                </div>
-                <div class="continue col-sm-12">
-                  <button type="submit">Continue</button>
-                </div>
-                {% endcomment %}
             </form>
 
         </div>
@@ -124,7 +109,7 @@
 
 {% block js_section %}
    {{ block.super }}
-   <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
+   <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
    <script type="text/javascript">
       function toggler(divId) {
           $("#" + divId).toggle();

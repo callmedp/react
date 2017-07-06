@@ -3,6 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from seo.models import AbstractAutoDate
 
+from .config import PAGECHOICES
+
 
 class TopTrending(AbstractAutoDate):
     name = models.CharField(max_length=255, unique=True)
@@ -20,7 +22,7 @@ class TopTrending(AbstractAutoDate):
     priority = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ['-priority']
+        ordering = ['priority']
 
     def __str__(self):
         return self.name
@@ -45,7 +47,33 @@ class TrendingProduct(AbstractAutoDate):
 
     class Meta:
         unique_together = ('trendingcourse', 'product')
-        ordering = ['-priority']
+        ordering = ['priority']
 
     def __str__(self):
         return self.trendingcourse.name + '-' + self.product.name
+
+
+class Testimonial(AbstractAutoDate):
+    page = models.PositiveIntegerField(default=1, choices=PAGECHOICES)
+    user_id = models.CharField(
+        max_length=100,
+        verbose_name=_("User ID"),)
+    user_name = models.CharField(
+        max_length=100,
+        verbose_name=_("User Name"))
+    title = models.CharField(max_length=255, null=True, blank=True)
+    review = models.TextField(max_length=1024)
+    rating = models.DecimalField(
+        max_digits=8, decimal_places=2,
+        default=2.5)
+    designation = models.CharField(max_length=200)
+    company = models.CharField(max_length=200, null=True, blank=True)
+    image = models.ImageField(
+        _('Profile Image'),
+        upload_to='images/testimonial/', null=True, blank=True)
+    priority = models.IntegerField(default=0)
+
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['priority']

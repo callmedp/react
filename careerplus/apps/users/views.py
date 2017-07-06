@@ -15,11 +15,11 @@ class DashboardView(TemplateView):
     template_name = "users/loginsuccess.html"
 
     def get_context(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(DashboardView, self).get_context_data(**kwargs)
         return context
 
     def get(self, request, *args, **kwargs):
-        return super(self.__class__, self).get(request, args, **kwargs)
+        return super(DashboardView, self).get(request, args, **kwargs)
 
 
 class RegistrationApiView(FormView):
@@ -27,6 +27,19 @@ class RegistrationApiView(FormView):
     http_method_names = [u'get', u'post']
     success_url = '/'
     form_class = RegistrationForm
+
+    def get_context_data(self, **kwargs):
+        context = super(RegistrationApiView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        form = self.get_form()
+        context.update({
+            'messages': alert,
+            'form': form
+        })
+        return context
+
+    def get(self, request, *args, **kwargs):
+        return super(RegistrationApiView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -84,14 +97,15 @@ class LoginApiView(FormView):
         
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
-            if user_exist['exists']:
+            if user_exist.get('exists', ''):
                 login_resp = RegistrationLoginApi.user_login(login_dict) # TODO: Do we need this check here
                                                                         # TODO: if we have that check on frontend?
-
                 if login_resp['response'] == 'login_user':
+
                     resp_status = ShineCandidateDetail().get_status_detail(email=None,
-                                                                           shine_id=login_resp['candidate_id'])
-                    self.request.session.update(resp_status)
+                        shine_id=login_resp.get('candidate_id', ''))
+                    if resp_status:
+                        self.request.session.update(resp_status)
 
                     if remember_me:
                         self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
@@ -102,9 +116,13 @@ class LoginApiView(FormView):
                 elif not login_resp['response']:
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(self.request, self.template_name, {'form': form})
-            else:
-                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
 
+            elif not user_exist.get('response', ''):
+                messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+                return render(self.request, self.template_name, {'form': form})
+
+            elif not user_exist.get('exists', ''):
+                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
                 return render(self.request, self.template_name, {'form': form})
 
         except Exception as e:

@@ -15,6 +15,10 @@ from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
+from order.models import OrderItem
+from console.order_form import FileUploadForm
+from emailers.email import SendMail
+from emailers.sms import SendSMS
 
 
 class ArticleCommentView(View):
@@ -23,10 +27,16 @@ class ArticleCommentView(View):
         if request.is_ajax():
             try:
                 message = request.POST.get('message').strip()
-                slug = request.POST.get('slug').strip()
-                blog = Blog.objects.get(slug=slug)
+                pk = request.POST.get('pk', None)
+                blog = Blog.objects.get(pk=pk, is_active=True)
+
                 if request.session.get('candidate_id') and message:
-                    Comment.objects.create(blog=blog, message=message, candidate_id=request.session.get('candidate_id'))
+                    name = ''
+                    if request.session.get('first_name'):
+                        name = request.session.get('first_name')
+                    if request.session.get('last_name'):
+                        name += ' ' + request.session.get('last_name')
+                    Comment.objects.create(blog=blog, message=message, name=name, candidate_id=request.session.get('candidate_id'))
                     status = 1
                     blog.no_comment += 1
                     blog.save()
@@ -60,10 +70,10 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
-            slug = request.POST.get('slug', '')
+            pk = request.POST.get('pk', None)
             page = int(request.POST.get('page', 1))
             try:
-                page_obj = Page.objects.get(slug=slug, is_active=True)
+                page_obj = Page.objects.get(pk=pk, is_active=True)
                 comments = page_obj.comment_set.filter(is_published=True,
                     is_removed=False)
                 comment_list = self.pagination_method(page=page,
@@ -71,12 +81,11 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
                 return HttpResponse(json.dumps({'comment_list': comment_list}))
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
-        else:
-            return HttpResponseForbidden
+        return HttpResponseForbidden()
 
 
 class CmsShareView(View):
-    
+
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             page_id = request.GET.get('page_id')
@@ -170,3 +179,315 @@ class AjaxStateView(View):
         except:
             pass
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class AjaxOrderItemCommentView(View):
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax() and request.user.is_active:
+            try:
+                data = {"status": 0}
+                if request.is_ajax():
+                    oi_pk = request.POST.get('pk', None)
+                    message = request.POST.get('message', '').strip()
+                    is_internal = request.POST.get('is_internal', False)
+                    if is_internal:
+                        is_internal = True
+                    else:
+                        is_internal = False
+                    if oi_pk and message:
+                        oi_obj = OrderItem.objects.get(pk=oi_pk)
+                        oi_obj.message_set.create(
+                            message=message,
+                            added_by=request.user,
+                            is_internal=is_internal)
+                        data['status'] = 1
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class ApproveByAdminDraft(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax() and request.user.is_active:
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                product_flow = obj.product.type_flow
+
+                if product_flow == 3:
+                    obj.oi_status = 4
+                    obj.closed_on = timezone.now()
+                    obj.save()
+
+                    # mail to candidate
+                    to_emails = [obj.order.email]
+                    email_dict = {}
+                    email_dict.update({
+                        "subject": 'Sharing of Evaluated Resume',
+                        "info": 'Auto closer Email',
+                        "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        "mobile": obj.order.mobile,
+                    })
+
+                    mail_type = 'RESUME_CRITIQUE'
+                    try:
+                        SendMail().send(to_emails, mail_type, email_dict)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                elif product_flow == 1:
+                    if obj.draft_counter == 3:
+                        obj.oi_status = 4
+                        obj.closed_on = timezone.now()
+                    else:
+                        obj.oi_status = 24
+                    obj.approved_on = timezone.now()
+                    obj.save()
+
+                    # mail to candidate
+                    to_emails = [obj.order.email]
+                    email_dict = {}
+                    email_dict.update({
+                        "info": 'Auto closer Email',
+                        "draft_level": obj.draft_counter,
+                        "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        "mobile": obj.order.mobile,
+                    })
+                    if obj.draft_counter < 3:
+                        mail_type = 'REMINDER'
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_dict)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                    else:
+                        mail_type = 'AUTO_CLOSER'
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_dict)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                    if obj.oi_status == 4:
+                        obj.orderitemoperation_set.create(
+                            oi_status=24,
+                            last_oi_status=last_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=24,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+                    else:
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=last_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class RejectByAdminDraft(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax() and request.user.is_active:
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                obj.oi_status = 25
+                obj.save()
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=last_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=request.user)
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class UploadDraftView(View):
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax() and request.user.is_active:
+            data = {'display_message': "", }
+            form = FileUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    oi_pk = request.POST.get('oi_pk', None)
+                    obj = OrderItem.objects.get(pk=oi_pk)
+
+                    last_status = obj.oi_status
+                    obj.oi_draft = request.FILES.get('file', '')
+                    if obj.oi_status == 26:
+                        obj.draft_counter += 1
+                    elif not obj.draft_counter:
+                        obj.draft_counter += 1
+                    obj.oi_status = 23  # pending Approval
+                    obj.last_oi_status = last_status
+                    obj.draft_added_on = timezone.now()
+                    obj.save()
+                    data['display_message'] = 'Draft uploded Successfully.'
+                    obj.orderitemoperation_set.create(
+                        oi_draft=obj.oi_draft,
+                        draft_counter=obj.draft_counter,
+                        oi_status=22,
+                        last_oi_status=last_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=22,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                except Exception as e:
+                    data['display_message'] = str(e)
+            else:
+                error_message = form.errors.get('file')
+                if error_message:
+                    data['display_message'] = error_message
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class SaveWaitingInput(View):
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax() and request.user.is_active:
+            data = {"message": "Waiting input Not Updated"}
+            oi_pk = request.POST.get('oi_pk', None)
+            waiting_input = request.POST.get('waiting_input', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                if waiting_input:
+                    obj.waiting_for_input = True
+                else:
+                    obj.waiting_for_input = False
+                obj.save()
+                data['message'] = 'Waiting Input Updated Successfully.'
+            except Exception as e:
+                data['message'] = str(e)
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class ApproveDraftByLinkedinAdmin(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax():
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                if obj.product.type_flow == 8:
+                    if obj.draft_counter == 3:
+                        obj.oi_status = 4
+                        obj.closed_on = timezone.now()
+                    else:
+                        obj.oi_status = 46
+                    obj.approved_on = timezone.now()
+                    obj.save()
+
+                    # mail to candidate
+                    to_emails = [obj.order.email]
+                    email_dict = {}
+                    email_dict.update({
+                        "info": 'Auto closer Email',
+                        "draft_level": obj.draft_counter,
+                        "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        "mobile": obj.order.mobile,
+                    })
+
+                    if obj.draft_counter < 3:
+                        mail_type = 'REMINDER'
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_dict)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    else:
+                        mail_type = 'AUTO_CLOSER'
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_dict)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            
+                    if obj.oi_status == 4:
+                        obj.orderitemoperation_set.create(
+                            oi_status=46,
+                            last_oi_status=last_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=46,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+                    else:
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=last_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)     
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class RejectDraftByLinkedinAdmin(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        if request.is_ajax():
+            oi_pk = request.POST.get('oi_pk', None)
+            try:
+                obj = OrderItem.objects.get(pk=oi_pk)
+                data['status'] = 1
+                last_status = obj.oi_status
+                obj.oi_status = 47
+                obj.save()
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=last_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=request.user)
+            except:
+                pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()

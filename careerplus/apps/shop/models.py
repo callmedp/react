@@ -597,7 +597,6 @@ class Product(AbstractProduct, ModelMeta):
             return self.name + ' ( ' + self.get_exp + ' ) '
         elif self.type_service == 3:
             return self.name + ' by ' + self.vendor.name
-        
         return self.name
 
     def get_meta_desc(self, description=''):
