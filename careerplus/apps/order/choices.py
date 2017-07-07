@@ -42,4 +42,11 @@ OI_OPS_STATUS = (
     (25, 'Rejected By Admin'),
     (26, 'Rejected By Candidate'),
 
+    # flow8 41 - 60
+
+
+    # flow7 61 - 80
+    (61, "Will start once resume is made"),
+    (62, "Resume Boosted"),
+
 )
