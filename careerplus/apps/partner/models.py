@@ -57,6 +57,10 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     website = models.CharField(
         _('Website.'), blank=True,
         max_length=20, help_text=_('Website'))
+    prd_add_class = models.ManyToManyField(
+        'shop.ProductClass',
+        verbose_name=_('Product Add-Types'),
+        blank=True)
     employees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through='VendorHierarchy',

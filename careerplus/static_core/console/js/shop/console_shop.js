@@ -727,6 +727,42 @@
 			      this.$element.closest('.item').addClass('bad');
 			    }
 			});
+		};
+
+		if($('#change-product-price-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-price-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};
+
+		if($('#change-product-attribute-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#change-product-attribute-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
 		};	  
 	  	
 	  };
@@ -752,7 +788,7 @@
 	  };
 	  
 	  function init_product_attr_change() {
-	  	if($('#change-product-attr-form').length > 0){
+	  	/*if($('#change-product-attribute-form').length > 0){
 	  		var parsleyConfig = {
 		        errorsContainer: function(parsleyField) {
 		            var $errfield = parsleyField.$element.parent().siblings('.alert');
@@ -760,7 +796,7 @@
 		        },
 		    };
 			
-		  	$('#change-product-attr-form').parsley(parsleyConfig).on('field:validated', function() {
+		  	$('#change-product-attribute-form').parsley(parsleyConfig).on('field:validated', function() {
 				if (this.validationResult === true) {
 			      this.$element.closest('.item').removeClass('bad');
 
@@ -768,7 +804,7 @@
 			      this.$element.closest('.item').addClass('bad');
 			    }
 			});
-		};	  
+		};*/	  
 	  	
 	  };
 	  	  

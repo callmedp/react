@@ -562,7 +562,6 @@ class AddAttributeView(FormView):
         return super(AddAttributeView, self).form_invalid(form)
 
 
-
 @Decorate(check_permission('faq.console_change_faq'))
 class ListFaqView(ListView, PaginationMixin):
     model = FAQuestion
@@ -1273,7 +1272,6 @@ class ChangeKeywordView(DetailView):
         return HttpResponseBadRequest()
 
 
-
 @Decorate(check_permission('shop.console_change_product'))
 class ListProductView(ListView, PaginationMixin):
     model = Product
@@ -1718,18 +1716,18 @@ class ChangeProductPriceView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ChangeProductPriceView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
-        ProductPriceFormSet = inlineformset_factory(
-            Product, Product.prices.through, fk_name='product',
-            form=ProductPriceForm,
-            can_delete=False,
-            formset=PriceInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
+        # ProductPriceFormSet = inlineformset_factory(
+        #     Product, Product.prices.through, fk_name='product',
+        #     form=ProductPriceForm,
+        #     can_delete=False,
+        #     formset=PriceInlineFormSet, extra=1,
+        #     max_num=20, validate_max=True)
         countryform = ProductCountryForm(instance=self.get_object())
-        if self.object:
-            prdprice_formset = ProductPriceFormSet(
-                instance=self.get_object(),
-                form_kwargs={'object': self.get_object()})
-            context.update({'prdprice_formset': prdprice_formset})
+        # if self.object:
+        #     prdprice_formset = ProductPriceFormSet(
+        #         instance=self.get_object(),
+        #         form_kwargs={'object': self.get_object()})
+        #     context.update({'prdprice_formset': prdprice_formset})
         context.update({
             'messages': alert,
             'country_form': countryform})

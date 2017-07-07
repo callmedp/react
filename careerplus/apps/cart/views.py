@@ -149,11 +149,7 @@ class PaymentLoginView(TemplateView):
                 user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
                 if user_exist.get('exists') and password:
-<<<<<<< HEAD
                     login_resp = RegistrationLoginApi.user_login(login_dict)
-=======
-                    login_resp = RegistrationLoginApi().user_login(login_dict)
->>>>>>> flow1
 
                     if login_resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
@@ -327,7 +323,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-<<<<<<< HEAD
         if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
             context.update({
                 "cart_items": self.get_cart_items(),
@@ -396,8 +391,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
         context.update({
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
-=======
->>>>>>> flow1
         context.update({
             "cart_items": self.get_cart_items(cart_obj=self.cart_obj),
             "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),

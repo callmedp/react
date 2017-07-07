@@ -6,18 +6,6 @@ RELATION_CHOICES = (
     (2, 'Recommendation'),
     (3, 'CrossSell'),)
 
-ATTRIBUTE_CHOICES = (
-    (0, _("Text")),
-    (1, _("Integer")),
-    (2, _("True / False")),
-    (3, _("Float")),
-    (4, _("Rich Text")),
-    (5, _("Date")),
-    (6, _("Option")),
-    (7, _("Entity")),
-    (8, _("File")),
-    (9, _("Image")),)
-
 SERVICE_CHOICES = (
     (0, 'Default'),
     (1, 'Writing Services'),
@@ -32,14 +20,14 @@ CATEGORY_CHOICES = (
     (3, 'Level 3'),
     (4, 'Level 4'),)
 
-PRODUCT_CHOICES = (
+PRODUCT_VENDOR_CHOICES = (
     (0, 'Standalone/Simple'),
-    (1, 'Variable-Parent'),
-    (2, 'Variable-Child'),
+    (1, 'Variation-Parent'),)
+
+PRODUCT_CHOICES = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
     (3, 'Combo'),
     (4, 'No-Direct-Sell/Virtual'),
-    (5, 'Bundle'),
-    (6, 'Downloadable'),)
+    (5, 'Downloadable'),)
 
 FLOW_CHOICES = (
     (0, 'Default'),

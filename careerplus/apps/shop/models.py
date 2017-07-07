@@ -2,7 +2,8 @@ from django.utils import timezone
 
 from decimal import Decimal
 from django.db import models
-
+from django.utils.html import strip_tags
+from django.utils import six        
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes import fields
@@ -22,18 +23,39 @@ from .functions import (
     get_upload_path_product_banner,
     get_upload_path_product_icon,
     get_upload_path_product_image,
-    get_upload_path_product_file,)
+    get_upload_path_product_file,
+    ScreenProductAttributesContainer)
 from .choices import (
     SERVICE_CHOICES,
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
     EXP_CHOICES,
-    ATTRIBUTE_CHOICES,
     RELATION_CHOICES,
     COURSE_TYPE_CHOICES,
     MODE_CHOICES,
     BG_CHOICES)
+
+
+class ProductClass(AbstractAutoDate,AbstractSEO,):
+    name = models.CharField(
+        _('Name'), max_length=100,
+        help_text=_('Unique name going to decide the slug'))
+    slug = models.CharField(
+        _('Slug'), unique=True,
+        max_length=100, help_text=_('Unique slug'))
+    
+    class Meta:
+        ordering = ['name']
+        verbose_name = _("Product Class")
+        verbose_name_plural = _("Product Classes")
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def has_attributes(self):
+        return self.attributes.exists()
 
 
 class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -301,7 +323,7 @@ class CategoryRelationship(AbstractAutoDate):
 
 
 class AttributeOptionGroup(models.Model):
-    name = models.CharField(_('Name'), max_length=128)
+    name = models.CharField(_('Name'), unique=True, max_length=128)
 
     def __str__(self):
         return self.name
@@ -332,16 +354,49 @@ class AttributeOption(models.Model):
 
 
 class Attribute(AbstractAutoDate):
+    product_class = models.ForeignKey(
+        ProductClass,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        verbose_name=_('Product Class'), related_name="attributes",
+        help_text=_("Choose what type of product this is"))
     type_service = models.PositiveSmallIntegerField(
         _('Service'), choices=SERVICE_CHOICES, default=0)
     name = models.CharField(
         _('Name'), max_length=100,
+        unique=True,
         help_text=_('Unique name going to decide the slug'))
     display_name = models.CharField(
         _('Display Name'), max_length=100,
-        help_text=_('Unique name going to decide the slug'))
-    type_attribute = models.PositiveSmallIntegerField(
-        _('Type'), choices=ATTRIBUTE_CHOICES, default=0)
+        help_text=_('Name going to displayed'))
+    TEXT = "text"
+    INTEGER = "integer"
+    BOOLEAN = "boolean"
+    FLOAT = "float"
+    RICHTEXT = "richtext"
+    DATE = "date"
+    OPTION = "option"
+    MULTI_OPTION = "multi_option"
+    ENTITY = "entity"
+    FILE = "file"
+    IMAGE = "image"
+    TYPE_CHOICES = (
+        (TEXT, _("Text")),
+        (INTEGER, _("Integer")),
+        (BOOLEAN, _("True / False")),
+        (FLOAT, _("Float")),
+        (RICHTEXT, _("Rich Text")),
+        (DATE, _("Date")),
+        (OPTION, _("Option")),
+        (MULTI_OPTION, _("Multi Option")),
+        (ENTITY, _("Entity")),
+        (FILE, _("File")),
+        (IMAGE, _("Image")),
+    )
+    type_attribute = models.CharField(
+        choices=TYPE_CHOICES, default=TYPE_CHOICES[0][0],
+        max_length=20, verbose_name=_("Type"))
     required = models.BooleanField(_('Required'), default=False)
     option_group = models.ForeignKey(
         'shop.AttributeOptionGroup', blank=True, null=True,
@@ -373,17 +428,144 @@ class Attribute(AbstractAutoDate):
             ("console_change_attribute", "Can Change Attribute From Console"),
         )
 
+    def _get_value(self):
+        value = getattr(self, 'value_%s' % self.attribute.type_attribute)
+        if hasattr(value, 'all'):
+            value = value.all()
+        return value
+
+    def _set_value(self, new_value):
+        if self.attribute.is_option and isinstance(new_value, six.string_types):
+            new_value = self.attribute.option_group.options.get(
+                option=new_value)
+        setattr(self, 'value_%s' % self.attribute.type_attribute, new_value)
+
+    value = property(_get_value, _set_value)
+
     
     def __str__(self):
         return self.name
 
     @property
-    def get_entity(self):
-        return dict(SERVICE_CHOICES).get(self.type_service)
+    def is_option(self):
+        return self.type_attribute == self.OPTION
 
     @property
-    def get_type(self):
-        return dict(ATTRIBUTE_CHOICES).get(self.type_attribute)
+    def is_multi_option(self):
+        return self.type_attribute == self.MULTI_OPTION
+
+    @property
+    def is_file(self):
+        return self.type_attribute in [self.FILE, self.IMAGE]
+
+    def __str__(self):
+        return self.name
+
+    def save_screen_value(self, productscreen, value):
+
+        from shop.models import ProductAttributeScreen
+        try:
+            value_obj = productscreen.screenattributes.get(attribute=self)
+        except ProductAttributeScreen.DoesNotExist:
+            delete_file = self.is_file and value is False
+            if value is None or value == '' or delete_file:
+                return
+            value_obj = ProductAttributeScreen.objects.create(
+                product=productscreen, attribute=self)
+
+        if self.is_file:
+            if value is None:
+                return
+            elif value is False:
+                value_obj.delete()
+            else:
+                value_obj.value = value
+                value_obj.save()
+        elif self.is_multi_option:
+            if value is None:
+                value_obj.delete()
+                return
+            try:
+                count = value.count()
+            except (AttributeError, TypeError):
+                count = len(value)
+            if count == 0:
+                value_obj.delete()
+            else:
+                value_obj.value = value
+                value_obj.save()
+        else:
+            if value is None or value == '':
+                value_obj.delete()
+                return
+            if value != value_obj.value:
+                value_obj.value = value
+                value_obj.save()
+
+    def validate_screen_value(self, value):
+        validator = getattr(self, '_validate_%s' % self.type_atrribute)
+        validator(value)
+
+    def _validate_text(self, value):
+        from django.utils import six
+        if not isinstance(value, six.string_types):
+            raise ValidationError(_("Must be str or unicode"))
+    _validate_richtext = _validate_text
+
+    def _validate_float(self, value):
+        try:
+            float(value)
+        except ValueError:
+            raise ValidationError(_("Must be a float"))
+
+    def _validate_integer(self, value):
+        try:
+            int(value)
+        except ValueError:
+            raise ValidationError(_("Must be an integer"))
+
+    def _validate_date(self, value):
+        if not (isinstance(value, datetime) or isinstance(value, date)):
+            raise ValidationError(_("Must be a date or datetime"))
+
+    def _validate_boolean(self, value):
+        if not type(value) == bool:
+            raise ValidationError(_("Must be a boolean"))
+
+    def _validate_entity(self, value):
+        if not isinstance(value, models.Model):
+            raise ValidationError(_("Must be a model instance"))
+
+    def _validate_multi_option(self, value):
+        try:
+            values = iter(value)
+        except TypeError:
+            raise ValidationError(
+                _("Must be a list or AttributeOption queryset"))
+        valid_values = self.option_group.options.values_list(
+            'option', flat=True)
+        for value in values:
+            self._validate_option(value, valid_values=valid_values)
+
+    def _validate_option(self, value, valid_values=None):
+        if not isinstance(value, get_model('shop', 'AttributeOption')):
+            raise ValidationError(
+                _("Must be an AttributeOption model object instance"))
+        if not value.pk:
+            raise ValidationError(_("AttributeOption has not been saved yet"))
+        if valid_values is None:
+            valid_values = self.option_group.options.values_list(
+                'option', flat=True)
+        if value.option not in valid_values:
+            raise ValidationError(
+                _("%(enum)s is not a valid choice for %(attr)s") %
+                {'enum': value, 'attr': self})
+
+    def _validate_file(self, value):
+        if value and not isinstance(value, File):
+            raise ValidationError(_("Must be a file field"))
+    _validate_image = _validate_file
+
 
 
 class Keyword(AbstractAutoDate):
@@ -399,11 +581,11 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
+    type_service = models.PositiveSmallIntegerField(
+        _('Service'), choices=SERVICE_CHOICES, default=0)
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
-    type_service = models.PositiveSmallIntegerField(
-        _('Service'), choices=SERVICE_CHOICES, default=0)
     type_product = models.PositiveSmallIntegerField(
         _('Type'), choices=PRODUCT_CHOICES, default=0)
     type_flow = models.PositiveSmallIntegerField(
@@ -479,8 +661,71 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     class Meta:
         abstract = True
 
+    @property
+    def get_type(self):
+        return dict(PRODUCT_CHOICES).get(self.type_product)
+
+    def get_product_class(self):
+        return self.product_class
+    get_product_class.short_description = _("Product class")
+
+    @property
+    def var_child(self, *args, **kwargs):
+        return self.type_product == 2
+
+    @property
+    def var_parent(self, *args, **kwargs):
+        return self.type_product == 1
+
+    @property
+    def is_combo(self, *args, **kwargs):
+        return self.type_product == 3
+
+    @property
+    def is_virtual(self, *args, **kwargs):
+        return self.type_product == 4
+
+    def save(self, *args, **kwargs):
+
+        if self.name:
+            if not self.title:
+                self.title = self.name
+            if not self.heading:
+                self.heading = self.name
+            if not self.image_alt:
+                self.image_alt = self.name
+        if self.description:
+            if not self.meta_desc:
+                self.meta_desc = self.get_meta_desc(self.description)
+                
+        super(AbstractProduct, self).save(*args, **kwargs)
+
+    def get_meta_desc(self, description=''):
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(self.description, 'html.parser')
+            cleantext = soup.get_text()
+            cleantext = cleantext.strip()
+        except:
+            cleantext = ''
+        return cleantext
+
+    def get_keywords(self):
+        return self.meta_keywords.strip().split(",")
+
+    @property
+    def has_attributes(self):
+        return self.attributes.exists()
+
 
 class Product(AbstractProduct, ModelMeta):
+    product_class = models.ForeignKey(
+        ProductClass,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        verbose_name=_('Product Class'), related_name="products",
+        help_text=_("Choose what type of product this is"))
     avg_rating = models.DecimalField(
         _('Average Rating'),
         max_digits=8, decimal_places=2,
@@ -578,60 +823,15 @@ class Product(AbstractProduct, ModelMeta):
             ("console_add_product", "Can Add Product From Console"),
             ("console_change_product", "Can Change Product From Console"),
             ("console_moderate_product", "Can Moderate Product From Console"),
-            ("console_delete_product_relations", "Can Live Product From Console"),
+            ("console_delete_product_relations", "Can Delete Product From Console"),
             ("console_live_product", "Can Live Product From Console"),
         )
+
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-
-        if self.name:
-            if not self.title:
-                self.title = self.name
-            if not self.heading:
-                self.heading = self.name
-            if not self.image_alt:
-                self.image_alt = self.name
-        if self.description:
-            if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description)
-                
-        super(Product, self).save(*args, **kwargs)
-
-    @property
-    def var_child(self, *args, **kwargs):
-        return self.type_product == 2
-
-    @property
-    def var_parent(self, *args, **kwargs):
-        return self.type_product == 1
-
-    @property
-    def is_combo(self, *args, **kwargs):
-        return self.type_product == 3
-
-    @property
-    def is_virtual(self, *args, **kwargs):
-        return self.type_product == 4
-
-    @property
-    def is_course(self, *args, **kwargs):
-        return self.type_service == 3
-
-    @property
-    def is_writing(self, *args, **kwargs):
-        return self.type_service == 1
-
-    @property
-    def is_service(self, *args, **kwargs):
-        return self.type_service == 2
-
-    @property
-    def is_others(self, *args, **kwargs):
-        return self.type_service == 4
-
+    
     @property
     def get_bg(self, *args, **kwargs):
         return dict(BG_CHOICES).get(self.image_bg)
@@ -649,16 +849,6 @@ class Product(AbstractProduct, ModelMeta):
             return self.name + ' by ' + self.vendor.name
         
         return self.name
-
-    def get_meta_desc(self, description=''):
-        if description:
-            try:
-                import re
-                cleanr = re.compile('<.*?>')
-                cleantext = re.sub(cleanr, '', description)
-            except:
-                cleantext = ''
-        return cleantext
 
     def get_price(self, *args, **kwargs):
         prices = self.productprices.filter(currency__value=0, active=True)
@@ -724,9 +914,6 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
 
-    def get_keywords(self):
-        return self.meta_keywords.strip().split(",")
-
     def create_icon(self):
         if not self.image:
             return
@@ -785,22 +972,38 @@ class Product(AbstractProduct, ModelMeta):
     def get_avg_ratings(self):
         return round(self.avg_rating, 1)
 
-    @property
-    def has_attributes(self):
-        return self.attributes.exists()
-
-    @property
-    def get_type(self):
-        return dict(PRODUCT_CHOICES).get(self.type_product)
-
+    
+    
 
 class ProductScreen(AbstractProduct):
+    product_class = models.ForeignKey(
+        ProductClass,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        verbose_name=_('Product Class'), related_name="productscreens",
+        help_text=_("Choose what type of product this is"))
     product = models.ForeignKey(
         Product,
         verbose_name=_('Original Product'),
         on_delete=models.SET_NULL,
         related_name='screenproduct',
         null=True)
+    comment = RichTextField(
+        verbose_name=_('Comments'), blank=True, default='')
+    
+    STATUS_CHOICES = (
+        (4, _('InActive')),
+        (3, _('Active')),
+        (2, _('Moderation')),
+        (1, _('Changed')),
+        (0, _('Added')),)
+    status = models.IntegerField(
+        _('status'),
+        choices=STATUS_CHOICES,
+        default=0,
+        help_text=_("Only product with their status set to 'Active' will be "
+                    "displayed."))
     vendor = models.ForeignKey(
         'partner.Vendor', related_name='screenvendor', blank=True,
         null=True, verbose_name=_("Product Vendor"))
@@ -809,7 +1012,6 @@ class ProductScreen(AbstractProduct):
         verbose_name=_('Country Available'),
         related_name='countryscreen',
         blank=True)
-    
     variation = models.ManyToManyField(
         'self',
         through='VariationProductScreen',
@@ -835,15 +1037,42 @@ class ProductScreen(AbstractProduct):
         through='ProductAttributeScreen',
         through_fields=('product', 'attribute'),
         blank=True)
+    
     class Meta:
         verbose_name = _('Product Screen')
         verbose_name_plural = _('Product Screens ')
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
 
+    def __init__(self, *args, **kwargs):
+        super(ProductScreen, self).__init__(*args, **kwargs)
+        self.attr = ScreenProductAttributesContainer(product=self)
+
+    def save(self, *args, **kwargs):
+        super(ProductScreen, self).save(*args, **kwargs)
+        self.attr.save()
+
+
     def __str__(self):
         return self.name
     
+    def create_product(self):
+        if self.name and self.product_class and self.type_product:
+            product = Product.objects.create(
+                name=self.name,
+                product_class=self.product_class,
+                type_product=self.type_product,
+                upc=self.upc,
+                inr_price=self.inr_price)
+            self.product = product
+            self.save()
+
+    @property
+    def get_status(self):
+        return dict(self.STATUS_CHOICES).get(self.status)
+
+    
+
 # class ProductArchive(AbstractProduct):
 #     product = models.ForeignKey(
 #         Product,
@@ -1016,27 +1245,29 @@ class ProductAttribute(AbstractAutoDate):
         related_name='productattributes',
         on_delete=models.CASCADE)
     value_text = models.CharField(
-        _('Value Text'), max_length=100,
+        _('Text'), max_length=100,
         blank=True)
     value_integer = models.PositiveSmallIntegerField(
-        _('Value Integer'), default=0)
+        _('Integer'), default=0)
     value_image = models.ImageField(
-        _('Value Image'), upload_to=get_upload_path_product_image,
+        _('Image'), upload_to=get_upload_path_product_image,
         blank=True, null=True)
+    value_boolean = models.BooleanField(
+        _('Boolean'), default=False)
     value_file = models.ImageField(
-        _('Value File'), upload_to=get_upload_path_product_file,
+        _('File'), upload_to=get_upload_path_product_file,
         blank=True, null=True)
     value_date = models.DateTimeField(
-        _('Value Date'), blank=True, null=True)
-    value_decimal = models.DecimalField(
-        _('Value Date'),
-        max_digits=8, decimal_places=2,
-        default=0.0)
+        _('Date'), blank=True, null=True)
     value_ltext = RichTextField(
-        verbose_name=_('Value Large Text'), blank=True, default='')
+        verbose_name=_('Rich Text'), blank=True, default='')
     value_option = models.ForeignKey(
         'shop.AttributeOption', blank=True, null=True,
         verbose_name=_("Value option"))
+    value_multi_option = models.ManyToManyField(
+        'shop.AttributeOption', blank=True,
+        related_name='multi_valued_attribute_screen_values',
+        verbose_name=_("Value multi option"))
     value_file = models.FileField(
         upload_to=get_upload_path_product_file, max_length=255,
         blank=True, null=True)
@@ -1052,10 +1283,45 @@ class ProductAttribute(AbstractAutoDate):
 
     active = models.BooleanField(default=True)
 
+    def _get_value(self):
+        value = getattr(self, 'value_%s' % self.attribute.type_attribute)
+        if hasattr(value, 'all'):
+            value = value.all()
+        return value
+
+    def _set_value(self, new_value):
+        if self.attribute.is_option and isinstance(new_value, six.string_types):
+            new_value = self.attribute.option_group.options.get(
+                option=new_value)
+        setattr(self, 'value_%s' % self.attribute.type_attribute, new_value)
+
+    value = property(_get_value, _set_value)
+
+
     def __str__(self):
         return _("%(product)s to '%(attribute)s'") % {
             'product': self.product,
-            'attribute': self.attribute}
+            'attribute': self.summary()}
+
+    def summary(self):
+        return u"%s: %s" % (self.attribute.name, self.value_as_text)
+
+    @property
+    def value_as_text(self):
+        property_name = '_%s_as_text' % self.attribute.type_attribute
+        return getattr(self, property_name, self.value)
+
+    @property
+    def _multi_option_as_text(self):
+        return ', '.join(str(option) for option in self.value_multi_option.all())
+
+    @property
+    def _richtext_as_text(self):
+        return strip_tags(self.value)
+
+    @property
+    def _entity_as_text(self):
+        return six.text_type(self.value)
 
 
 class ProductAttributeScreen(AbstractAutoDate):
@@ -1077,6 +1343,8 @@ class ProductAttributeScreen(AbstractAutoDate):
     value_image = models.ImageField(
         _('Value Image'), upload_to=get_upload_path_product_image,
         blank=True, null=True)
+    value_boolean = models.BooleanField(
+        _('Boolean'), default=False)
     value_file = models.ImageField(
         _('Value File'), upload_to=get_upload_path_product_file,
         blank=True, null=True)
@@ -1091,6 +1359,10 @@ class ProductAttributeScreen(AbstractAutoDate):
     value_option = models.ForeignKey(
         'shop.AttributeOption', blank=True, null=True,
         verbose_name=_("Value option"))
+    value_multi_option = models.ManyToManyField(
+        'shop.AttributeOption', blank=True,
+        related_name='multi_valued_attribute_values',
+        verbose_name=_("Value multi option"))
     value_file = models.FileField(
         upload_to=get_upload_path_product_file, max_length=255,
         blank=True, null=True)
@@ -1106,10 +1378,45 @@ class ProductAttributeScreen(AbstractAutoDate):
 
     active = models.BooleanField(default=True)
 
+    def _get_value(self):
+        value = getattr(self, 'value_%s' % self.attribute.type_attribute)
+        if hasattr(value, 'all'):
+            value = value.all()
+        return value
+
+    def _set_value(self, new_value):
+        if self.attribute.is_option and isinstance(new_value, six.string_types):
+            new_value = self.attribute.option_group.options.get(
+                option=new_value)
+        setattr(self, 'value_%s' % self.attribute.type_attribute, new_value)
+
+    value = property(_get_value, _set_value)
+
+
     def __str__(self):
         return _("%(product)s to '%(attribute)s'") % {
             'product': self.product,
-            'attribute': self.attribute}
+            'attribute': self.summary()}
+
+    def summary(self):
+        return u"%s: %s" % (self.attribute.name, self.value_as_text)
+
+    @property
+    def value_as_text(self):
+        property_name = '_%s_as_text' % self.attribute.type_attribute
+        return getattr(self, property_name, self.value)
+
+    @property
+    def _multi_option_as_text(self):
+        return ', '.join(str(option) for option in self.value_multi_option.all())
+
+    @property
+    def _richtext_as_text(self):
+        return strip_tags(self.value)
+
+    @property
+    def _entity_as_text(self):
+        return six.text_type(self.value)
 
 
 class FAQProduct(AbstractAutoDate):

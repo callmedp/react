@@ -110,6 +110,7 @@ class ProductExtraInfoAdmin(admin.ModelAdmin):
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute)
 admin.site.register(models.Keyword)
+admin.site.register(models.ProductClass)
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)

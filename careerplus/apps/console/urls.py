@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
+from . import shop_view, vendor_view, blog_view, order_view
+from geolocation import adminviews
 
 urlpatterns = [
     url(r'^$', ConsoleDashboardView.as_view(), name='dashboard'),
@@ -8,8 +10,21 @@ urlpatterns = [
 ]
 
 
-from . import shop_view
+urlpatterns += [
+    url(r'^screenproduct/list/$',
+        vendor_view.ListScreenProductView.as_view(), name='screenproduct-list'),
+    url(r'^screenproduct/add/$',
+        vendor_view.AddScreenProductView.as_view(), name='screenproduct-add'),
+    url(r'^screenproduct/change/(?P<pk>[\d]+)/$',
+        vendor_view.ChangeScreenProductView.as_view(), name='screenproduct-change'),
+    
+    url(r'^screenfaq/list/$',
+        vendor_view.ListScreenFaqView.as_view(), name='screenfaq-list'),
+        
+    url(r'^screenchapter/list/$',
+        vendor_view.ListScreenChapterView.as_view(), name='screenchapter-list'),
 
+]
 
 urlpatterns += [
     url(r'^category/add/$',
@@ -21,10 +36,9 @@ urlpatterns += [
         name='category-relation-list'),
     url(r'^category/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeCategoryView.as_view(), name='category-change'),
+    
     url(r'^product/add/$',
         shop_view.AddProductView.as_view(), name='product-add'),
-    url(r'^product/list/$',
-        shop_view.ListProductView.as_view(), name='product-list'),
     url(r'^product/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeProductView.as_view(), name='product-change'),
     url(r'^product/structurechange/(?P<pk>[\d]+)/$',
@@ -43,8 +57,6 @@ urlpatterns += [
 
     url(r'^faq/add/$',
         shop_view.AddFaqView.as_view(), name='faquestion-add'),
-    url(r'^faq/list/$',
-        shop_view.ListFaqView.as_view(), name='faquestion-list'),
     url(r'^faq/moderation-list/$',
         shop_view.ListModerationFaqView.as_view(), name='mfaquestion-list'),
     url(r'^faq/change/(?P<pk>[\d]+)/$',
@@ -55,8 +67,6 @@ urlpatterns += [
 
     url(r'^chapter/add/$',
         shop_view.AddChapterView.as_view(), name='chapter-add'),
-    url(r'^chapter/list/$',
-        shop_view.ListChapterView.as_view(), name='chapter-list'),
     url(r'^chapter/moderation-list/$',
         shop_view.ListModerationChapterView.as_view(), name='mchapter-list'),
     url(r'^chapter/change/(?P<pk>[\d]+)/$',
@@ -92,8 +102,6 @@ urlpatterns += [
 ]
 
 
-from . import blog_view
-
 urlpatterns += [
     url(r'^blog/tag/$',
         blog_view.TagListView.as_view(), name='blog-tag-list'),
@@ -125,7 +133,6 @@ urlpatterns += [
 ]
 
 
-from geolocation import adminviews
 
 urlpatterns += [
     url(r'^geolocation/country/$',
@@ -135,8 +142,6 @@ urlpatterns += [
         adminviews.CountryUpdateView.as_view(), name='geo-country-update'),
 ]
 
-
-from . import order_view
 
 urlpatterns += [
     url(r'^queue/orders/$',

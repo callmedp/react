@@ -100,13 +100,13 @@
                 <div class="alert">{{form.name.errors}}</div>
               </div>
 
-              <div class="item form-group {% if form.type_service.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_service.id_for_label }}">Entity <span class="required">*</span>
+              <div class="item form-group {% if form.product_class.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.product_class.id_for_label }}">Class <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  {{form.type_service}}
+                  {{form.product_class}}
                 </div>
-                <div class="alert">{{form.type_service.errors}}</div>
+                <div class="alert">{{form.product_class.errors}}</div>
               </div>
 
               <div class="item form-group {% if form.type_product.errors %}bad{% endif %}">
@@ -129,7 +129,7 @@
               
 
               <div class="item form-group {% if form.inr_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;INR Price&nbsp;<span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.inr_price.id_for_label }}">INR Price <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   {{form.inr_price}}
