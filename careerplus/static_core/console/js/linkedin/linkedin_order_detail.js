@@ -27,54 +27,54 @@ $(function(){
 });
 
 
-function acceptDraftByAdmin(oi_id, ){
-    if (oi_id){
-        var formData = $('#accept-reject-form' + oi_id).serialize();
-        $.ajax({
-            url: '/ajax/orderitem/approve-draft/',
-            type: "POST",
-            data : formData,
-            dataType: 'json',
-            success: function(json) {
-            	if (json.status == 1){
-	            	alert('Approved draft successfully');
-	            	window.location.reload();
-            	}
-            	else{
-            		alert("Something went wrong. Try again later");
-            	}
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                alert("Something went wrong. Try again later");
-            }
-        });
-    }
-};
+// function acceptDraftByAdmin(oi_id, ){
+//     if (oi_id){
+//         var formData = $('#accept-reject-form' + oi_id).serialize();
+//         $.ajax({
+//             url: '/ajax/orderitem/approve-draft/',
+//             type: "POST",
+//             data : formData,
+//             dataType: 'json',
+//             success: function(json) {
+//             	if (json.status == 1){
+// 	            	alert('Approved draft successfully');
+// 	            	window.location.reload();
+//             	}
+//             	else{
+//             		alert("Something went wrong. Try again later");
+//             	}
+//             },
+//             error: function(xhr, ajaxOptions, thrownError) {
+//                 alert("Something went wrong. Try again later");
+//             }
+//         });
+//     }
+// };
 
 
-function rejectDraftByLinkedinAdmin(oi_id, ){
-    if (oi_id){
-        var formData = $('#accept-reject-form' + oi_id).serialize();
-        $.ajax({
-            url: '/ajax/orderitem/linkedin-reject-draft/',
-            type: "POST",
-            data : formData,
-            dataType: 'json',
-            success: function(json) {
-            	if (json.status == 1){
-	            	alert('Draft rejected successfully');
-	            	window.location.reload();
-            	}
-            	else{
-            		alert("Something went wrong. Try again later");
-            	}
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                alert("Something went wrong. Try again later");
-            }
-        });
-    }
-};
+// function rejectDraftByAdmin(oi_id, ){
+//     if (oi_id){
+//         var formData = $('#accept-reject-form' + oi_id).serialize();
+//         $.ajax({
+//             url: '/ajax/orderitem/linkedin-reject-draft/',
+//             type: "POST",
+//             data : formData,
+//             dataType: 'json',
+//             success: function(json) {
+//             	if (json.status == 1){
+// 	            	alert('Draft rejected successfully');
+// 	            	window.location.reload();
+//             	}
+//             	else{
+//             		alert("Something went wrong. Try again later");
+//             	}
+//             },
+//             error: function(xhr, ajaxOptions, thrownError) {
+//                 alert("Something went wrong. Try again later");
+//             }
+//         });
+//     }
+// };
 
 
 function clickSubmitDraft(oi_id, ){
@@ -152,11 +152,11 @@ function clickApproveDraft(oi_id, ){
 };
 
 
-function approveDraftByAdmin(oi_id, ){
+function approveDraftByLinkedinAdmin(oi_id, ){
     if (oi_id){
         var formData = $('#accept-reject-form' + oi_id).serialize();
         $.ajax({
-            url: '/ajax/orderitem/approve-draft/',
+            url: '/ajax/orderitem/linkedin-approve-draft/',
             type: "POST",
             data : formData,
             dataType: 'json',

@@ -81,27 +81,35 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             obj.assigned_to = writer
                             obj.assigned_by = request.user
                             obj.save()
+
+                            # mail to user about writer information
+                            to_emails = [obj.order.email]
+                            mail_type = 'Writer_Information'
+                            data = {}
+                            data.update({
+                                "name": obj.order.first_name + ' ' + obj.order.last_name,
+                                "writer_name": writer.name,
+                                "writer_email": writer.email,
+                                "writer_mobile": writer.contact_number,
+                                "mobile": obj.order.mobile
+                            })
+
+                            try:
+                                SendMail().send(to_emails, mail_type, data)
+                            except Exception as e:
+                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=data)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
                             obj.orderitemoperation_set.create(
                                 oi_status=1,
                                 last_oi_status=obj.oi_status,
                                 assigned_to=obj.assigned_to,
                                 added_by=request.user
                             )
-                            obj.orderitemoperation_set.create(
-                                oi_status=obj.oi_status,
-                                last_oi_status=1,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user
-                            )
-                            # mail to user about writer information
-                            order_id = orderitem_objs.first()
-                            email_to = request.session.get('email', '')
-                            mail_type = '2'
-                            data = {
-                                'orderitem': order_id.id,
-                                'cc': writer.email,
-                                'candidateid': request.session.get('candidate_id', '') 
-                            }
                             SendMail().send([email_to], mail_type, data)
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
@@ -113,7 +121,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=2, product__type_flow__in=[8]).exclude(oi_resume='').exclude(oi_status=4)
+        queryset = queryset.filter(order__status=2, no_process=False, product__type_flow__in=[8]).exclude(oi_resume='').exclude(oi_status=4)
         user = self.request.user
         if user.has_perm('order.can_show_unassigned_inbox'):
             queryset = queryset.filter(assigned_to=None)
