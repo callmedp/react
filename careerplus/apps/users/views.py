@@ -11,7 +11,7 @@ from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 
 from shine.core import ShineCandidateDetail
-from core.common import TokenExpiry
+from core.mixins import TokenExpiry
 from order.models import OrderItem
 
 from .forms import RegistrationForm, LoginApiForm

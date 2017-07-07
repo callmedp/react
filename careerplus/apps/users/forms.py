@@ -85,4 +85,7 @@ class ModalLoginApiForm(LoginApiForm):
 
 
 class ModalRegistrationApiForm(RegistrationForm):
-    pass
+    
+    def __init__(self, *args, **kwargs):
+        super(ModalRegistrationApiForm, self).__init__(*args, **kwargs)
+        self.fields['cell_phone'].widget.attrs['class'] = 'form-control modal-form-control'

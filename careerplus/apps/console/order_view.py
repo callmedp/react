@@ -23,7 +23,7 @@ from order.models import Order, OrderItem
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
 from emailers.sms import SendSMS
-from core.common import TokenExpiry
+from core.mixins import TokenExpiry
 
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
