@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Inbox Order Item- Shinelearning</title>
+  <title>Boosted Order Item- Shinelearning</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -21,10 +21,10 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>My Inbox</h3>
+        <h3>Boosted Orderitems</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-inbox" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:queue-booster" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -33,13 +33,7 @@
                 <div style="display:none">
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.writer }}
-                        </div>
-                        <br/>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.added_on }}
+                            {{ filter_form.payment_date }}
                         </div>
                         <br/>
                     </div>
@@ -48,7 +42,6 @@
                 <span class="input-group-btn">
                   <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
                 </span>
-
               </div>
             </div>
           </div>
@@ -70,18 +63,11 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-inbox" %}" id="list-filter-form">
+                  <form class="form-group" method="GET" action="{% url "console:queue-booster" %}" id="list-filter-form">
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.writer.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.writer }}
-                            </div>
-                            <br/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.added_on.label }}</label></br>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.added_on }}
+                                {{ filter_form.payment_date }}
                             </div>
                             <br/>
                         </div>
@@ -124,39 +110,6 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            {% if perms.order.writer_assignment_action %}
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        {{action_form.action}}
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
-                        </span>
-                    </div>
-                </div>
-            {% endif %}
-            <!--h2>Select Comment to Change</h2-->
-            <!-- large modal -->
-
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                      </button>
-                      <h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
-                    </div>
-                    <div class="modal-body" id="myModalbody">
-                      Are You Sure???
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="action_inbox">Yes</button>
-                    </div>
-
-                  </div>
-                </div>
-            </div>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -166,11 +119,48 @@
 
           <div class="x_content">
 
+          {% if perms.order.oi_action_permission %}
+                <form method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view" %}">{% csrf_token %}
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        {{action_form.action}}
+                        <input type="hidden" name="queue_name" value="booster" />
+                        <input type="hidden" id="selected-id" name="selected_id" />
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                        </span>
+                    </div>
+                </div>
+                </form>
+            {% endif %}
+
+            <!-- modal action -->
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Action</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are You Sure???
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="action_button">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+
             <div class="table-responsive">
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
-                    {% if perms.order.writer_assignment_action %}
+                    {% if perms.order.oi_action_permission %}
                         <th>
                           <input type="checkbox" id="check-all" class="flat">
                         </th>
@@ -184,30 +174,21 @@
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
-
-                    <th class="column-title">Delivery Type</th>
-                    <th class="column-title">How Old</th>
-                    <th class="column-title">Order Details</th>
-                    <th class="column-title">Assigned</th>
-                    <th class="column-title">Added On</th>
-
-                    {% if perms.order.can_view_extra_field_inbox %}
-                        <th class="column-title">Candidate Doc</th>
-                        <th class="column-title">Upload Draft</th>
-                        <th class="column-title">Submit Msg</th>
-                        <th class="column-title">User Category</th>
-                        <th class="column-title">Waiting for input</th>
-                    {% endif %}
+                    <th class="column-title">Candidate Doc</th>
+                    <th class="column-title">Order Deatils</th>
+                    <th class="column-title">Uploded Draft</th>
+                    <th class="column-title">Submit Message</th>
+                    <th class="column-title">Payment Date</th>
                   </tr>
                 </thead>
 
-                <tbody id="body-table-inbox">
+                <tbody id="body-table-list">
                   {% for obj in page %}
                     <tr class="even pointer">
-                      {% if perms.order.writer_assignment_action %}
-                          <td class="a-center ">
+                      {% if perms.order.oi_action_permission %}
+                            <td class="a-center ">
                               <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
-                          </td>
+                            </td>
                       {% endif %}
                       <td>{{obj.pk}}</td>
                       <td>{{obj.order.id}}</td>
@@ -215,58 +196,18 @@
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
-                      <td>Delivery Type</td>
+                      <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>
+                      <td><a href="{{obj.parent.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploded Draft</button></a></td>
                       <td>
-                        {{obj.updated_on|naturaltime}}
-                        <b>Updated On: {{obj.updated_on}}</b>
-                      </td>
-                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
-
-                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
-
-                       <td>{{obj.added_on}}</td>
-
-                       {% if perms.order.can_view_extra_field_inbox %}
-                           <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
-                           <td>
-                            <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
-                                {{draft_form.file}}
-                                <div style="display:none">
-                                    <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                                </div>
-                                <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
-                            </form>
-                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
-                                <div class="modal-dialog modal-lg">
-                                  <div class="modal-content">
-
-                                    <div class="modal-header">
-                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                      </button>
-                                      <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
-                                    </div>
-                                    <div class="modal-body" id="myModalbody{{obj.pk}}">
-                                      Are You Sure???
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                      <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="uploadDraft('{{obj.pk}}',)">Yes</button>
-                                    </div>
-
-                                  </div>
-                                </div>
-                            </div>
-                          </td>
-                          <td>
-                            <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                          <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <fieldset>
-
                                     {% for field in message_form %}
                                         <div class="form-group"> 
                                             <div class="col-md-8">
                                                 {{ field }}
                                                 {% if field.help_text %}
-                                                    <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                    <small class="pull-left">{{ field.help_text }}</small>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -275,25 +216,14 @@
                                         <input type="hidden" name="pk" value="{{obj.pk}}">
                                     </div>
                                 </fieldset>
-                                  <div class="form-group">
+                                <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                       <center><button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button></center>
                                     </div>
                                 </div>
                             </form>
-                          </td>
-                         <td>User Category</td>
-                          <td>
-                            <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
-                                <div class="form-group">
-                                <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"></div>
-                                <div style="display:none">
-                                    <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                                </div>
-                                <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
-                            </form>
-                          </td>
-                       {% endif %}
+                      </td>
+                      <td>{{obj.order.payment_date}}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -372,16 +302,14 @@
         
 {% block js_block %}
   {{ block.super }}
-  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/inbox-list.js" %}"></script>
-
+  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
-
-  <script type="text/javascript">
+  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
+<script type="text/javascript">
 
     $(document).ready(function() {
         $('.date-range-picker').daterangepicker({

@@ -2,6 +2,7 @@ import json
 import csv
 import datetime
 import logging
+import textwrap
 
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.core.paginator import Paginator
@@ -22,6 +23,7 @@ from order.models import Order, OrderItem
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
 from emailers.sms import SendSMS
+from core.common import TokenExpiry
 
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
@@ -255,7 +257,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                         last_oi_status=last_status,
                         assigned_to=oi.assigned_to,
                         added_by=request.user)
-                messages.add_message(request, messages.SUCCESS, 'resume uploded Successfully')
+                messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
         else:
@@ -1098,7 +1100,6 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             "payment_date": self.payment_date, }
         filter_form = OIFilterForm(initial)
         context.update({
-            "action_form": InboxActionForm(),
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
@@ -1159,6 +1160,74 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
 
 
+@method_decorator(permission_required('order.can_show_booster_queue', login_url='/console/login/'), name='dispatch')
+class BoosterQueueVeiw(ListView, PaginationMixin):
+    context_object_name = 'booster_list'
+    template_name = 'console/order/booster-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        self.payment_date = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.payment_date = request.GET.get('payment_date', '')
+        return super(BoosterQueueVeiw, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(BoosterQueueVeiw, self).get_context_data(**kwargs)
+        paginator = Paginator(context['booster_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        initial = {
+            "payment_date": self.payment_date, }
+        filter_form = OIFilterForm(initial)
+        context.update({
+            "action_form": OIActionForm(queue_name='booster'),
+            "messages": alert,
+            "query": self.query,
+            "message_form": MessageForm(),
+            "filter_form": filter_form,
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(BoosterQueueVeiw, self).get_queryset()
+        queryset = queryset.filter(order__status=1, oi_status=62, no_process=False)
+
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+
+        try:
+            if self.payment_date:
+                date_range = self.added_on.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    order__payment_date__range=[start_date, end_date])
+        except:
+            pass
+
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+
+
 class ActionOrderItemView(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -1171,14 +1240,17 @@ class ActionOrderItemView(View):
         queue_name = request.POST.get('queue_name', '')
 
         if action == -1 and queue_name == 'approval':
-            csvfile = StringIO()
-            csv_writer = csv.writer(csvfile, delimiter=',', quotechar="'",
-                quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow(['Orderitem Id', 'OrderId', 'Name',
-                'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
-                'Expert Name', 'Updated_On', 'Draft Level',
-                'Draft Submited On', 'Payment Date'])
             try:
+                csvfile = StringIO()
+                csv_writer = csv.writer(
+                    csvfile, delimiter=',', quotechar="'",
+                    quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow([
+                    'Orderitem Id', 'OrderId', 'Name',
+                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Expert Name', 'Updated_On', 'Draft Level',
+                    'Draft Submited On', 'Payment Date'])
+            
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 if orderitems:
                     for oi in orderitems:
@@ -1213,14 +1285,17 @@ class ActionOrderItemView(View):
             return HttpResponseRedirect(reverse('console:queue-approval'))
 
         elif action == -1 and queue_name == 'rejectedbycandidate':
-            csvfile = StringIO()
-            csv_writer = csv.writer(csvfile, delimiter=',', quotechar="'",
-                quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow(['Orderitem Id', 'OrderId', 'Name',
-                'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
-                'Expert Name', 'Updated_On', 'Draft Level',
-                'Draft Submited On', 'Payment Date'])
             try:
+                csvfile = StringIO()
+                csv_writer = csv.writer(
+                    csvfile, delimiter=',', quotechar="'",
+                    quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow([
+                    'Orderitem Id', 'OrderId', 'Name',
+                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Expert Name', 'Updated_On', 'Draft Level',
+                    'Draft Submited On', 'Payment Date'])
+            
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 if orderitems:
                     for oi in orderitems:
@@ -1255,14 +1330,17 @@ class ActionOrderItemView(View):
             return HttpResponseRedirect(reverse('console:queue-rejectedbycandidate'))
 
         elif action == -1 and queue_name == 'rejectedbyadmin':
-            csvfile = StringIO()
-            csv_writer = csv.writer(csvfile, delimiter=',', quotechar="'",
-                quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow(['Orderitem Id', 'OrderId', 'Name',
-                'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
-                'Expert Name', 'Updated_On', 'Draft Level',
-                'Draft Submited On', 'Payment Date'])
             try:
+                csvfile = StringIO()
+                csv_writer = csv.writer(
+                    csvfile, delimiter=',', quotechar="'",
+                    quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow([
+                    'Orderitem Id', 'OrderId', 'Name',
+                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Expert Name', 'Updated_On', 'Draft Level',
+                    'Draft Submited On', 'Payment Date'])
+            
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 if orderitems:
                     for oi in orderitems:
@@ -1295,6 +1373,109 @@ class ActionOrderItemView(View):
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:queue-rejectedbyadmin'))
+
+        elif action == -1 and queue_name == 'booster':
+            try:
+                csvfile = StringIO()
+                csv_writer = csv.writer(
+                    csvfile, delimiter=',', quotechar="'",
+                    quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow([
+                    'Orderitem Id', 'OrderId', 'Name',
+                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Updated_On', 'Payment Date'])
+
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                if orderitems:
+                    for oi in orderitems:
+                        try:
+                            csv_writer.writerow([
+                                str(oi.pk),
+                                str(oi.order.id),
+                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(oi.order.email),
+                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.partner.name),
+                                str(oi.get_oi_status),
+                                str(oi.updated_on),
+                                str(oi.order.payment_date)])
+                        except:
+                            continue
+                    response = HttpResponse(csvfile.getvalue())
+                    file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
+                    response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
+                return response
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-booster'))
+
+        elif action == -3 and queue_name == 'booster':
+            try:
+                booster_ois = OrderItem.objects.filter(id__in=selected_id, oi_status=62).select_related('order')
+                days = 7
+                candidate_data = {}
+                recruiter_data = {}
+                mail_send = 0
+
+                for oi in booster_ois:
+                    token = TokenExpiry().encode(oi.order.email, oi.pk, days)
+                    candidate_data.update({
+                        "email": oi.order.email,
+                        "mobile": oi.order.mobile,
+                        "user_name": oi.order.first_name + ' ' + oi.order.last_name
+                    })
+
+                    if oi.parent and oi.parent.oi_draft and (oi.parent.oi_status == 4 or oi.parent.no_process):
+                        resumevar = "http://%s/user/resume/download/?token=%s" % (
+                            settings.SITE_DOMAIN, token)
+                        resumevar = textwrap.fill(resumevar, width=80)
+
+                        link_title = candidate_data.get('user_name') if candidate_data.get('user_name') else candidate_data.get('email')
+                        download_link = resumevar
+                        recruiter_data.update({
+                            "link_title": link_title,
+                            "download_link": download_link,
+                        })
+
+                        try:
+                            # send mail to rectuter
+                            recruiters = settings.BOOSTER_RECRUITERS
+                            SendMail().send(
+                                to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
+
+                            # send mail to candidate
+                            SendMail().send(
+                                to=[candidate_data.get('email')], mail_type="BOOSTER_CANDIDATE", data=candidate_data)
+
+                            # send sms to candidate
+                            SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
+                            last_oi_status = oi.oi_status
+                            oi.oi_status = 4
+                            oi.last_oi_status = last_oi_status
+                            oi.save()
+                            oi.orderitemoperation_set.create(
+                                oi_status=4,
+                                last_oi_status=last_oi_status,
+                                assigned_to=oi.assigned_to,
+                                added_by=request.user,
+                            )
+                            mail_send += 1
+
+                        except Exception as e:
+                            error_message = "Mail Action Failed on item id - %s due to %s" % (oi.id, str(e))
+                            messages.add_message(request, messages.ERROR, error_message)
+                    else:
+                        continue
+
+                success_message = "%s Mail sent Successfully." % (str(mail_send))
+                messages.add_message(request, messages.SUCCESS, success_message)
+                return HttpResponseRedirect(reverse('console:queue-booster'))
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-booster'))
 
         elif action == -2 and queue_name == 'midout':
             orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')

@@ -227,9 +227,12 @@ class OrderItem(models.Model):
             ("can_view_only_assigned_rejectedbycandidate_list", "Can View Only Assigned Rejected By Candidate List"),
 
             # Allocated Queue
-            ("can_show_allocated_queue", "Can View Allocated Queue"),
+            ("can_show_allocated_queue", "Can Show Allocated Queue"),
             ("can_view_all_allocated_list", "Can View All Allocated List"),
             ("can_view_only_assigned_allocated_list", "Can View Only Assigned Allocated List"),
+
+            # Booster Queue
+            ("can_show_booster_queue", "Can Show Booster Queue"),
 
             # Closed Permission
             ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),

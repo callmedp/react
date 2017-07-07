@@ -31,10 +31,6 @@ $(function(){
 
 	$('#action_button').click(function(){
         var action = $('#id_action').val();
-
-        $('#action_type_id').val(action);
-
-        
         if (action == 0){
             $('#myModalbody').html('<div class="alert alert-danger">Please select any action first.</div>');
             $('#action_button').hide();

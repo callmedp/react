@@ -31,13 +31,7 @@ def booster():
             "user_name": oi.order.first_name + ' ' + oi.order.last_name
         })
 
-        path = ''
         if oi.parent and oi.parent.oi_draft and (oi.parent.oi_status == 4 or oi.parent.no_process):
-            path = oi.parent.oi_draft
-        else:
-            continue
-
-        if path:
             resumevar = "http://%s/user/resume/download/?token=%s" % (
                 settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)
@@ -62,6 +56,15 @@ def booster():
 
                 # send sms to candidate
                 SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
+                last_oi_status = oi.oi_status
+                oi.oi_status = 62
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=62,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to,
+                )
 
             except Exception as e:
                 print (str(e))
