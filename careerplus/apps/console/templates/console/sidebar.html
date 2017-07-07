@@ -138,6 +138,10 @@
             {% if perms.order.can_show_closed_oi_queue %}
                 <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
             {% endif %}
+
+            {% if perms.order.can_show_booster_queue %}
+                <li><a href="{% url "console:queue-booster" %}">Booster</a></li>
+            {% endif %}
             
         </ul>
       </li>

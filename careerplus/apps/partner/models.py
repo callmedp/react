@@ -89,11 +89,10 @@ class VendorHierarchy(AbstractAutoDate):
     designation = models.PositiveSmallIntegerField(
         default=1)
 
-    class Meta:
-        #pass
-        # Comment this while initial migration
-        auto_created = True
-        #
+    # class Meta:
+    #     # pass
+    #     # Comment this while initial migration
+    #     auto_created = True
 
     def __str__(self):
         return _("%(vendor)s to '%(employee)s'") % {

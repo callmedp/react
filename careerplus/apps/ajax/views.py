@@ -210,7 +210,7 @@ class AjaxOrderItemCommentView(View):
 class ApproveByAdminDraft(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax() and request.user.is_active:
+        if request.is_ajax() and request.user.is_authenticated:
             oi_pk = request.POST.get('oi_pk', None)
             try:
                 obj = OrderItem.objects.get(pk=oi_pk)
@@ -314,7 +314,7 @@ class ApproveByAdminDraft(View):
 class RejectByAdminDraft(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax() and request.user.is_active:
+        if request.is_ajax() and request.user.is_authenticated:
             oi_pk = request.POST.get('oi_pk', None)
             try:
                 obj = OrderItem.objects.get(pk=oi_pk)
@@ -335,7 +335,7 @@ class RejectByAdminDraft(View):
 
 class UploadDraftView(View):
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_active:
+        if request.is_ajax() and request.user.is_authenticated:
             data = {'display_message': "", }
             form = FileUploadForm(request.POST, request.FILES)
             if form.is_valid():
@@ -378,7 +378,7 @@ class UploadDraftView(View):
 
 class SaveWaitingInput(View):
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_active:
+        if request.is_ajax() and request.user.is_authenticated:
             data = {"message": "Waiting input Not Updated"}
             oi_pk = request.POST.get('oi_pk', None)
             waiting_input = request.POST.get('waiting_input', None)

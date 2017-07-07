@@ -31,10 +31,6 @@ $(function(){
 
 	$('#action_inbox').click(function(){
         var action = $('#id_action').val();
-
-        $('#action_type_id').val(action);
-
-        
         if (action == 0){
             $('#myModalbody').html('<div class="alert alert-danger">Please select any action first.</div>');
             $('#action_inbox').hide();
@@ -47,13 +43,15 @@ $(function(){
             });
 
             if (selected.length > 0){
-            	$('#actionModal').modal("hide");
+                $('#myModalbody').html('<div class="alert alert-success">Assignment Actions are happening...</div>');
+            	$('#action_inbox').hide();
                 $.ajax({
                     url: '/console/queue/inbox/',
                     type: "POST",
                     data : {"selected_id": selected, "action_type": action},
                     dataType: 'json',
                     success: function(data) {
+                        $('#actionModal').modal("hide");
                         var message = data.display_message
                         alert(message);
                         window.location.reload();

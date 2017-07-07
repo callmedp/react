@@ -5,9 +5,8 @@ from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
 
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-
 from linkedin.models import Draft
+
 
 class Order(AbstractAutoDate):
     number = models.CharField(
@@ -154,6 +153,7 @@ class OrderItem(models.Model):
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
+
     #counselling form status
     counselling_form_status = models.PositiveSmallIntegerField(
         default=0, choices=COUNSELLING_FORM_STATUS)
@@ -191,13 +191,6 @@ class OrderItem(models.Model):
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
-    ## THESE STATUS FIELDS ARE FROM UNMERGED - COMMIT 2fd291f37aca6bae266f36d9d23ab2a9068bdf9e from amar
-    ## WHILE MERGING CHECK COMPLETE FLOW
-    # Find usage in careerplus/apps/console/order/partials/views.py and corresponding serializer and view mixin.
-    oi_status = models.PositiveIntegerField(
-        _("Operation Status"), default=0, choices=OI_OPS_STATUS)
-    last_oi_status = models.PositiveIntegerField(
-        _("Last Operation Status"), default=0, choices=OI_OPS_STATUS)
 
     class Meta:
         app_label = 'order'
@@ -250,9 +243,12 @@ class OrderItem(models.Model):
             ("can_view_only_assigned_rejectedbycandidate_list", "Can View Only Assigned Rejected By Candidate List"),
 
             # Allocated Queue
-            ("can_show_allocated_queue", "Can View Allocated Queue"),
+            ("can_show_allocated_queue", "Can Show Allocated Queue"),
             ("can_view_all_allocated_list", "Can View All Allocated List"),
             ("can_view_only_assigned_allocated_list", "Can View Only Assigned Allocated List"),
+
+            # Booster Queue
+            ("can_show_booster_queue", "Can Show Booster Queue"),
 
             # Closed Permission
             ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),
