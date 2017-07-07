@@ -3,7 +3,8 @@
 {% block title %}Login Shine learning{% endblock %}
 {% block css_section %}
 {{ block.super }}
-<link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
 {% endblock css_section %}
 
 
@@ -32,9 +33,10 @@
                     {% endfor %}
 
                     <div class="form-group">
-                        <label class="c9">
-                            <input type="checkbox"> Remember me
-                        </label>
+                        <p class="c9 pb-0">
+                            <input type="checkbox" id="test10">
+                            <label for="test10">Remember me</label>
+                        </p>
                     </div>
 
                     <div class="form-group text-center">

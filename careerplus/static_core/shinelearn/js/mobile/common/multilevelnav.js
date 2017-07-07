@@ -32,6 +32,7 @@
         backButton: '.backthis',
         defaultButton: '#sidebar-main-trigger',
         rightButton: '#sidebar-secondary-trigger',
+        countriesButton: '#sidebar-countries-trigger',
         navClass: 'fixed-nav',
         opacityClass: 'opacity-add',
         menuByClass: '.sb-menu',
@@ -57,6 +58,16 @@
 
         $('#sidebar-secondary').simplerSidebar({
             opener: defaults.rightButton,
+            animation: {
+                easing: "easeOutQuint"
+            },
+            sidebar: {
+                align: 'right'
+            }
+        });
+
+        $('#sidebar-countries').simplerSidebar({
+            opener: defaults.countriesButton,
             animation: {
                 easing: "easeOutQuint"
             },

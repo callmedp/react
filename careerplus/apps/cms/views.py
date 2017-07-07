@@ -24,10 +24,8 @@ from .mixins import UploadInFile, LoadMoreMixin
 class CMSPageView(DetailView, LoadMoreMixin):
     model = Page
     template_name = "cms/cms_page.html"
-
-    def __init__(self):
-        self.page_obj = None
-        self.page = 1
+    page_obj = None
+    page = 1
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
@@ -66,8 +64,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
         pg_counter, created = self.object.pagecounter_set.get_or_create(count_period=today_date)
         pg_counter.no_views += 1
         pg_counter.save()
-        context = super(CMSPageView, self).get(request, *args, **kwargs)
-        return context
+        response = super(CMSPageView, self).get(request, *args, **kwargs)
+        return response
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -107,13 +105,10 @@ class CMSPageView(DetailView, LoadMoreMixin):
         context['right_widgets'] = ''
         context['page_obj'] = page_obj
         context['page_heading'] = page_obj.name
-        country_choices = [(m.id, m.phone + '-' + '(' + m.code3 + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+
+        country_choices = [(m.id, m.phone + '-' + '(' + m.code3 + ')') for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(name='India', phone='91')[0].pk
-        
-        if self.request.session.get('candidate_id'):
-            download_pop_up = "no"
-        else:
-            download_pop_up = "yes"
 
         download_docs = page_obj.document_set.filter(is_active=True)
         csrf_token_value = get_token(self.request)
@@ -125,27 +120,29 @@ class CMSPageView(DetailView, LoadMoreMixin):
             })
 
         for left in left_widgets:
+            if self.request.flavour == 'mobile' and left.widget.widget_type in [6, 7]:
+                continue
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
                 'widget': left.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
-                'download_pop_up': download_pop_up,
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })
             widget_context.update(left.widget.get_widget_data())
-            context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context)
+            context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context, request=self.request)
 
         for right in right_widgets:
+            if self.request.flavour == 'mobile' and right.widget.widget_type in [6, 7]:
+                continue
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
                 'widget': right.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
-                'download_pop_up': download_pop_up,
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })

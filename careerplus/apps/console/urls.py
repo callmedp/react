@@ -1,15 +1,22 @@
+from django.conf.urls import url, include
+
+urlpatterns = [
+    url(r'^cms/', include('console.cms.urls', namespace='cms')),
+    url(r'^order/', include('console.order.urls', namespace='order')),
+    url(r'^partner/', include('console.partner.urls', namespace='partner')),
+    url(r'^operations/', include('console.operations.urls', namespace='operations')),
+]
+
 from django.conf.urls import url
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
 
-urlpatterns = [
+urlpatterns += [
     url(r'^$', ConsoleDashboardView.as_view(), name='dashboard'),
     url(r'^login/$', ConsoleLoginView.as_view(), name='login'),
     url(r'^logout/$', ConsoleLogoutView.as_view(), name='logout'),
 ]
 
-
 from . import shop_view
-
 
 urlpatterns += [
     url(r'^category/add/$',
@@ -77,8 +84,7 @@ urlpatterns += [
         name='attributeoption-add'),
     url(r'^attributeoption/list/$',
         shop_view.ListAttributeOptionGroupView.as_view(),
-        name='attributeoption-list'),
-
+        name='attributeoption-list'),    
 ]
 
 
@@ -169,4 +175,35 @@ urlpatterns += [
     url(r'^queue/orderitem/downloadascsv/$',
         order_view.ActionOrderItemView.as_view(),
         name='action-orderitem-view'),
+]
+
+from . import linkedin_view
+
+urlpatterns += [
+    url(r'^linkedin/inbox/$',
+        linkedin_view.LinkedinQueueView.as_view(),
+        name='linkedin-inbox'),
+
+    url(r'^linkedin/draft-listing/$',
+        linkedin_view.DraftListing.as_view(),
+        name='draft-listing'),
+
+    url(r'^linkedin/change-draft/(?P<pk>\d+)/draft/$',
+        linkedin_view.ChangeDraftView.as_view(),
+        name='change-draft'),
+
+    url(r'^linkedin/order/(?P<pk>\d+)/detail/$',
+        linkedin_view.LinkedinOrderDetailVeiw.as_view(), name='linkedin-order-detail'),
+
+    url(r'^linkedin/rejected-by-admin/$',
+        linkedin_view.LinkedinRejectedByAdminView.as_view(),
+        name='linkedin-rejectedbylinkedinadmin'),
+
+    url(r'^linkedin/rejectedbycandidate/$',
+        linkedin_view.LinkedinRejectedByCandidateView.as_view(),
+        name='linkedin-rejectedbylinkedincandidate'),
+
+    url(r'^linkedin/linkedin-approval/$',
+        linkedin_view.LinkedinApprovalVeiw.as_view(),
+        name='linkedin-approval'),
 ]

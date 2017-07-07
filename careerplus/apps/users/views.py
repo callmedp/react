@@ -2,17 +2,15 @@ import logging
 import mimetypes
 
 from django.shortcuts import render
-from django.conf import settings
 from wsgiref.util import FileWrapper
-from django.contrib.auth import authenticate, login, logout
-from django.http import (HttpResponse,
-    HttpResponseRedirect)
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,)
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 
 from shine.core import ShineCandidateDetail
-
 from core.common import TokenExpiry
 from order.models import OrderItem
 
@@ -24,11 +22,11 @@ class DashboardView(TemplateView):
     template_name = "users/loginsuccess.html"
 
     def get_context(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(DashboardView, self).get_context_data(**kwargs)
         return context
 
     def get(self, request, *args, **kwargs):
-        return super(self.__class__, self).get(request, args, **kwargs)
+        return super(DashboardView, self).get(request, args, **kwargs)
 
 
 class RegistrationApiView(FormView):
@@ -38,7 +36,7 @@ class RegistrationApiView(FormView):
     form_class = RegistrationForm
 
     def get_context_data(self, **kwargs):
-        context = super(self.RegistrationApiView, self).get_context_data(**kwargs)
+        context = super(RegistrationApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()
         context.update({
@@ -48,39 +46,46 @@ class RegistrationApiView(FormView):
         return context
 
     def get(self, request, *args, **kwargs):
-        return super(self.RegistrationApiView, self).get(request, args, **kwargs)
+        return super(RegistrationApiView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         login_dict, post_data = {}, {}
-
         post_data.update({
             "email": request.POST.get('email'),
             "raw_password": request.POST.get('raw_password'),
             "cell_phone": request.POST.get('cell_phone'),
             "country_code": request.POST.get('country_code'),
             "vendor_id": request.POST.get('vendor_id'),
+            "is_job_seeker": request.POST.get('is_job_seeker') == 'on'
         })
         user_resp = RegistrationLoginApi.user_registration(post_data)
 
         if user_resp['response'] == 'new_user':
             login_dict.update({
                 "email": request.POST.get('email'),
-                "password": request.POST.get('password') if request.POST.get('password') else request.POST.get('raw_password'),
+                "password": request.POST.get('password') if request.POST.get('password')
+                            else request.POST.get('raw_password'),
             })
             resp = RegistrationLoginApi.user_login(login_dict)
             
             if resp['response'] == 'login_user':
-                resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
+                resp_status = ShineCandidateDetail().get_status_detail(shine_id=resp['candidate_id'])
                 request.session.update(resp_status)
-                return HttpResponseRedirect(reverse('dashboard'))
+                return HttpResponseRedirect(self.success_url)
 
         elif user_resp['response'] == 'exist_user':
-            messages.add_message(self.request, messages.SUCCESS, user_resp["non_field_errors"][0])
+            messages.add_message(self.request, messages.ERROR, "This user already exists", 'danger')
             return HttpResponseRedirect(reverse('login'))
 
-        elif user_resp['response'] == 'form_error':
-            return render(self.request, self.template_name, {'form': form})
+        elif not user_resp['response']:
+            messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+        return render(self.request, self.template_name, {'form': form})
+
+    def get_form_kwargs(self):
+        kwargs = super(RegistrationApiView, self).get_form_kwargs()
+        kwargs['flavour'] = self.request.flavour
+        return kwargs
 
 
 class LoginApiView(FormView):
@@ -99,14 +104,15 @@ class LoginApiView(FormView):
         
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
-            if user_exist['exists']:
-                login_resp = RegistrationLoginApi.user_login(login_dict)  # TODO: Do we need this check here
+            if user_exist.get('exists', ''):
+                login_resp = RegistrationLoginApi.user_login(login_dict) # TODO: Do we need this check here
                                                                         # TODO: if we have that check on frontend?
-
                 if login_resp['response'] == 'login_user':
+
                     resp_status = ShineCandidateDetail().get_status_detail(email=None,
-                                                                           shine_id=login_resp['candidate_id'])
-                    self.request.session.update(resp_status)
+                        shine_id=login_resp.get('candidate_id', ''))
+                    if resp_status:
+                        self.request.session.update(resp_status)
 
                     if remember_me:
                         self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
@@ -117,9 +123,13 @@ class LoginApiView(FormView):
                 elif not login_resp['response']:
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(self.request, self.template_name, {'form': form})
-            else:
-                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
 
+            elif not user_exist.get('response', ''):
+                messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+                return render(self.request, self.template_name, {'form': form})
+
+            elif not user_exist.get('exists', ''):
+                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
                 return render(self.request, self.template_name, {'form': form})
 
         except Exception as e:

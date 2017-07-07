@@ -8,6 +8,8 @@ from emailers.email import SendMail
 from emailers.sms import SendSMS
 
 from .models import Order, OrderItem
+from linkedin.models import Draft, Organization, Education
+from quizs.models import QuizResponse
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -52,7 +54,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
                 self.createOrderitems(order, cart_obj)
-
+                order_items = order.orderitems.filter(product__type_flow__in=[8])
                 # mai and sms
                 if order.orderitems.filter(product__type_flow__in=[1, 3]) and order.status == 1:
                     to_emails = [order.email]
@@ -74,6 +76,26 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
                         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                elif order_items:
+                    # associate draft object with order
+                    order_item = order_items.first()
+                    draft_obj = Draft.objects.create()
+                    org_obj = Organization()
+                    org_obj.draft = draft_obj
+                    org_obj.save()
+
+                    edu_obj = Education()
+                    edu_obj.draft = draft_obj
+                    edu_obj.save()
+
+                    quiz_rsp = QuizResponse()
+                    quiz_rsp.oi = order_item
+                    quiz_rsp.save()
+
+                    order_item.counselling_form_status = 41
+                    order_item.oio_linkedin = draft_obj
+                    order_item.save()
                 return order
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

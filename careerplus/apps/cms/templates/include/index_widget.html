@@ -1,5 +1,4 @@
-{% load static %}
-{% load look_up_tags %}
+{% load static look_up_tags %}
 <div class="col-sm-12 box-panel mb-40 download-resume">
   <h2>{{indexer_heading}}</h2>
   {% for key, value in column_data.items %}
@@ -13,31 +12,3 @@
        </div>
    {% endfor %}
 </div>
-
-{% comment %}
-<div class="col-sm-12 box-panel mb-40 download-resume">
-  <h2>Choose and Download Resume Format and Samples Written by our Experts</h2>
-  <div class="col-sm-12 col-md-6 no-pad">
-    <h3>Choose Functional Area</h3>
-    <ul>
-       <li><a href="#">IT software</a></li>
-       <li><a href="#">IT hardware</a></li>
-       <li><a href="#">Sales</a></li>
-       <li><a href="#">Marketing</a></li>
-       <li><a href="#">Finance</a></li>
-       <li><a href="#">Operation</a></li>
-    </ul>
-  </div>
-  <div class="col-sm-12 col-md-6 no-pad">
-    <h3>Choose other formats</h3>
-    <ul>
-       <li><a href="#">Cover letter</a></li>
-       <li><a href="#">Resume summary statement</a></li>
-       <li><a href="#">Executive Summary</a></li>
-       <li><a href="#">LinkedIn profile summary</a></li>
-       <li><a href="#">Resignation letter</a></li>
-       <li><a href="#">Statement of purpose</a></li>
-    </ul>
-  </div>
-</div>
-{% endcomment %}
