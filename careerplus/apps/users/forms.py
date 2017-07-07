@@ -43,9 +43,9 @@ class LoginApiForm(forms.Form):
 
 
 class RegistrationForm(forms.Form):
-    country_choices = [(m.pk, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-    indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if \
-        Country.objects.filter(name='India', phone='91').exists() else None
+    # country_choices = [(m.pk, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    # indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if \
+    #     Country.objects.filter(name='India', phone='91').exists() else None
 
     email = forms.EmailField(
         max_length=60, required=True, widget=forms.TextInput(
@@ -55,9 +55,8 @@ class RegistrationForm(forms.Form):
         max_length=16, required=True, widget=forms.PasswordInput(
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
 
-    country_code = forms.ChoiceField(
-        label="Country:", required=True, choices=country_choices,
-        widget=forms.Select(attrs={'class': 'form-control'}), initial=indian_obj)
+    country_code = forms.ChoiceField(label=("Country:"), required=True,
+        widget=forms.Select(attrs={'class': 'form-control'}))
 
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile'}), max_length=15)
@@ -76,6 +75,15 @@ class RegistrationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         flavour = kwargs.pop('flavour', None)
         super(RegistrationForm, self).__init__(*args, **kwargs)
+
+        try:
+            country_choices = [(m.pk, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None
+        except:
+            country_choices, indian_obj = [], None
+        self.fields['country_code'].choices = country_choices
+        self.fields['country_code'].initial = indian_obj
+
         if flavour == 'mobile':
             self.fields['cell_phone'].widget.attrs = {'class': 'form-control pull-left number'}
 
@@ -88,4 +96,12 @@ class ModalRegistrationApiForm(RegistrationForm):
     
     def __init__(self, *args, **kwargs):
         super(ModalRegistrationApiForm, self).__init__(*args, **kwargs)
+        try:
+            country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
+        except:
+            country_choices, indian_obj = [], None
+        self.fields['country_code'].choices = country_choices
+        self.fields['country_code'].initial = indian_obj
+
         self.fields['cell_phone'].widget.attrs['class'] = 'form-control modal-form-control'
