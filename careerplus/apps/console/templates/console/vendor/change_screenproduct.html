@@ -48,11 +48,17 @@
     <div class="clearfix"></div>
     <div class="row top_tiles">
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:screenproductstructure-change" object.pk %}">
+        <a class="btn btn-app" href="{% url "console:productstructure-change" object.pk %}">
           <i class="fa fa-list-alt"></i> Product Content</a>
       </div>
+      {% if object.type_product == 1 %}
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <a class="btn btn-app" href="{% url "console:login"  %}">
+            <i class="fa fa-paper-plane-o"></i> Add Variants</a>
+        </div>
+      {% endif %}
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:screenproductstructure-change" object.pk %}">
+        <a class="btn btn-app" href="{% url "console:login"  %}">
           <i class="fa fa-paper-plane-o"></i> Send for Approval</a>
       </div>
     </div>
