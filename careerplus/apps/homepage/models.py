@@ -15,7 +15,7 @@ class TopTrending(AbstractAutoDate):
 
     view_all = models.CharField(
         max_length=255,
-        help_text=_('provide full url to redirect on click.'))
+        help_text=_('provide full url with http:// to redirect on click.'))
 
     is_jobassistance = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
