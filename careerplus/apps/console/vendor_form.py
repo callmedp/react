@@ -6,14 +6,15 @@ from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from shop.models import (
     ProductClass,
-    ProductScreen, ProductChapter,
-    FAQProduct, VariationProduct)
+    ProductScreen, 
+    FAQProductScreen, VariationProduct)
+from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
+from faq.models import ScreenFAQ
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
-
 
 def _attribute_text_field(attribute):
     return forms.CharField(
@@ -61,9 +62,11 @@ def _attribute_option_field(attribute):
         label=attribute.display_name,
         required=attribute.required,
         queryset=attribute.option_group.options.all(),
+        empty_label = 'Select',
         widget=forms.widgets.Select(
             attrs={'class': 'form-control col-md-7 col-xs-12',
                 'data-parsley-notdefault': ''}),)
+
 
 def _attribute_multi_option_field(attribute):
     return forms.ModelMultipleChoiceField(
@@ -94,6 +97,118 @@ def _attribute_image_field(attribute):
             attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
                 'data-parsley-max-file-size': 250,
                 'data-parsley-filemimetypes': 'image/jpeg, image/png, image/jpg, image/svg'}),)
+
+
+FIELD_FACTORIES = {
+        "text": _attribute_text_field,
+        "richtext": _attribute_textarea_field,
+        "integer": _attribute_integer_field,
+        "boolean": _attribute_boolean_field,
+        "float": _attribute_float_field,
+        "date": _attribute_date_field,
+        "option": _attribute_option_field,
+        "multi_option": _attribute_multi_option_field,
+        "numeric": _attribute_numeric_field,
+        "file": _attribute_file_field,
+        "image": _attribute_image_field,
+    }
+
+class AddScreenFaqForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AddScreenFaqForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['text'].widget.attrs['class'] = form_class
+        self.fields['text'].widget.attrs['maxlength'] = 200
+        self.fields['text'].widget.attrs['placeholder'] = 'Add question'
+        self.fields['text'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['text'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['text'].widget.attrs['data-parsley-length'] = "[4, 200]"
+        
+        self.fields['answer'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-200 characters.'
+        self.fields['answer'].widget.attrs['required'] = 'required'
+
+        self.fields['answer'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+
+        
+    class Meta:
+        model = ScreenFAQ
+        fields = ('text', 'answer')
+
+        
+    def clean_text(self):
+        text = self.cleaned_data.get('text', '')
+        if text:
+            if len(text) < 4 or len(text) > 200:
+                raise forms.ValidationError(
+                    "Name should be between 4-200 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return text
+
+    def clean_answer(self):
+        answer = self.cleaned_data.get('answer', '')
+        if answer:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return answer
+
+    def save(self, commit=True, *args, **kwargs):
+        faq = super(AddScreenFaqForm, self).save(
+            commit=True, *args, **kwargs)
+        return faq
+
+
+class ChangeScreenFaqForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeScreenFaqForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['text'].widget.attrs['class'] = form_class
+        self.fields['sort_order'].widget.attrs['class'] = form_class
+        self.fields['text'].widget.attrs['maxlength'] = 200
+        self.fields['text'].widget.attrs['placeholder'] = 'Add question'
+        self.fields['text'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['text'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['text'].widget.attrs['data-parsley-length'] = "[4, 200]"
+        self.fields['answer'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-200 characters.'
+        self.fields['answer'].widget.attrs['required'] = 'required'
+        self.fields['answer'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+
+        
+    class Meta:
+        model = ScreenFAQ
+        fields = ('text', 'answer', 'sort_order')
+
+    def clean_text(self):
+        text = self.cleaned_data.get('text', '')
+        if text:
+            if len(text) < 4 or len(text) > 200:
+                raise forms.ValidationError(
+                    "Name should be between 4-200 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return text
+
+    def clean_answer(self):
+        answer = self.cleaned_data.get('answer', '')
+        if answer:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return answer
+
+    def save(self, commit=True, *args, **kwargs):
+        faq = super(ChangeScreenFaqForm, self).save(
+            commit=True, *args, **kwargs)
+        faq.status = 0
+        faq.save()
+        return faq
 
 
 class AddScreenProductForm(forms.ModelForm):
@@ -216,14 +331,13 @@ class AddScreenProductForm(forms.ModelForm):
 
 class ChangeScreenProductForm(forms.ModelForm):
 
-
     class Meta:
         model = ProductScreen
         fields = [
             'name', 
             'type_product', 'upc', 
             'about', 'description',
-            'buy_shine', ]
+            'buy_shine','prg_structure' ]
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -308,6 +422,15 @@ class ChangeScreenProductForm(forms.ModelForm):
                 "This field is required.")
         return about
 
+    def clean_prg_structure(self):
+        about = self.cleaned_data.get('prg_structure', '')
+        if about:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return about
+
     def clean_buy_shine(self):
         buy_shine = self.cleaned_data.get('buy_shine', '')
         if buy_shine:
@@ -321,6 +444,8 @@ class ChangeScreenProductForm(forms.ModelForm):
     def save(self, commit=True, *args, **kwargs):
         productscreen = super(ChangeScreenProductForm, self).save(
             commit=True, *args, **kwargs)
+        productscreen.status = 1
+        productscreen.save()
         return productscreen
 
 
@@ -465,8 +590,9 @@ class ScreenProductPriceForm(forms.ModelForm):
     def save(self, commit=True, *args, **kwargs):
         productscreen = super(ScreenProductPriceForm, self).save(
             commit=True, *args, **kwargs)
+        productscreen.status = 1
+        productscreen.save()
         return productscreen
-
 
 class ScreenProductCountryForm(forms.ModelForm):
 
@@ -498,21 +624,8 @@ class ScreenProductCountryForm(forms.ModelForm):
 
 
 class ScreenProductAttributeForm(forms.ModelForm):
-    FIELD_FACTORIES = {
-        "text": _attribute_text_field,
-        "richtext": _attribute_textarea_field,
-        "integer": _attribute_integer_field,
-        "boolean": _attribute_boolean_field,
-        "float": _attribute_float_field,
-        "date": _attribute_date_field,
-        "option": _attribute_option_field,
-        "multi_option": _attribute_multi_option_field,
-        "numeric": _attribute_numeric_field,
-        "file": _attribute_file_field,
-        "image": _attribute_image_field,
-    }
+    FIELD_FACTORIES = FIELD_FACTORIES
 
-    
     def __init__(self, *args, **kwargs):
         super(ScreenProductAttributeForm, self).__init__(*args, **kwargs)
 
@@ -566,70 +679,288 @@ class ScreenProductAttributeForm(forms.ModelForm):
                 setattr(self.instance.attr, attribute.name, value)
         super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
 
+class ScreenProductFAQForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        user = kwargs.pop('user', None)
+        super(ScreenProductFAQForm, self).__init__(*args, **kwargs)
+        queryset = ScreenFAQ.objects.filter(status=2)
+        vendor = user.get_vendor()
+        if not vendor:
+            queryset = queryset.none()
+        else:
+            queryset = queryset.filter(vendor=vendor)
+        
+        self.fields['question'].queryset = queryset
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['question'].widget.attrs['class'] = form_class
+        self.fields['question'].required = True        
+        self.fields['question_order'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        
+    class Meta:
+        model = FAQProductScreen
+        fields = (
+            'question', 'question_order', 'active',)
+
+    def clean(self):
+        super(ScreenProductFAQForm, self).clean()
+
+
+    def clean_question(self):
+        question = self.cleaned_data.get('question', None)
+        if question:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return question
+
+class ScreenFAQInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(ScreenFAQInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        questions = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                question = form.cleaned_data['question']
+                product = form.cleaned_data['product']
+                if question in questions:
+                    duplicates = True
+                questions.append(question)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'FAQs must be unique.',
+                        code='duplicate_parent'
+                    )
+        return
+
+class AddScreenProductVariantForm(forms.ModelForm):
+    FIELD_FACTORIES = FIELD_FACTORIES
     
-# class ProductVariationForm(forms.ModelForm):
+    class Meta:
+        model = ProductScreen
+        fields = [
+            'name', 'upc',
+            'inr_price', 'fake_inr_price',
+            'usd_price', 'fake_usd_price', 
+            'aed_price', 'fake_aed_price',
+            'gbp_price', 'fake_gbp_price',
+            ]
 
-#     def __init__(self, *args, **kwargs):
-#         obj = kwargs.pop('object', None)
-#         super(ProductVariationForm, self).__init__(*args, **kwargs)
-#         if obj:
-#             qs = Product.objects.exclude(pk=obj.pk)
-#             # if obj.type_ == 0 or obj.type_level == 1:
-#             #     qs = qs.none()
-#             # elif obj.type_level == 2:
-#             #     qs = qs.filter(type_level=1)
-#             # elif obj.type_level == 3:
-#             #     qs = qs.filter(type_level=2)
-#             # elif obj.type_level == 4:
-#             #     qs = qs.filter(type_level=3)
-#             self.fields['sibling'].queryset = qs
-#         form_class = 'form-control col-md-7 col-xs-12'
-#         self.fields['sibling'].widget.attrs['class'] = form_class
-#         self.fields['sibling'].required = True
-#         self.fields['sort_order'].widget.attrs['class'] = form_class
-#         self.fields['active'].widget.attrs['class'] = 'js-switch'
-#         self.fields['active'].widget.attrs['data-switchery'] = 'true'
+    def __init__(self, *args, **kwargs):
+        parent = kwargs.pop('parent', None)
+        user = kwargs.pop('user', None)
+        self.set_initial(parent.product_class, kwargs)
+        
+        super(AddScreenProductVariantForm, self).__init__(*args, **kwargs)
+        if not parent:
+            return
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.currency = parent.countries.values_list('currency__value',flat=True).distinct()
+        self.currency = set(self.currency)
+        self.parent = parent
+        self.add_attribute_fields(parent.product_class)
+        
+        self.fields['name'].widget.attrs['class'] = form_class
+        self.fields['name'].widget.attrs['maxlength'] = 80
+        self.fields['name'].widget.attrs['placeholder'] = 'Add Product Name'
+        self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['upc'].widget.attrs['class'] = form_class
+        self.fields['upc'].widget.attrs['maxlength'] = 80
+        self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
+        self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['upc'].widget.attrs['data-parsley-length'] = "[4, 60]"
+        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['inr_price'].widget.attrs['class'] = form_class
+        self.fields['inr_price'].required = True
+        self.fields['usd_price'].widget.attrs['class'] = form_class
+        self.fields['aed_price'].widget.attrs['class'] = form_class
+        self.fields['gbp_price'].widget.attrs['class'] = form_class
+        self.fields['fake_inr_price'].widget.attrs['class'] = form_class
+        self.fields['fake_usd_price'].widget.attrs['class'] = form_class
+        self.fields['fake_aed_price'].widget.attrs['class'] = form_class
+        self.fields['fake_gbp_price'].widget.attrs['class'] = form_class
 
-#     class Meta:
-#         model = VariationProduct
-#         fields = (
-#             'sibling', 'sort_order', 'active', )
+    def clean(self):
+        
+        super(AddScreenProductVariantForm, self).clean()
+        if any(self.errors):
+            return
+        inr_price = self.cleaned_data.get('inr_price', '')
+        usd_price = self.cleaned_data.get('usd_price', '')
+        aed_price = self.cleaned_data.get('aed_price', '')
+        gbp_price = self.cleaned_data.get('gbp_price', '')
 
-#     def clean(self):
-#         super(ProductVariationForm, self).clean()
+        if 0 in self.currency and inr_price <= 0:
+            raise forms.ValidationError(
+                "INR Price is required as product is visible in respective country.")
+        if 1 in self.currency and usd_price <= 0:
+            raise forms.ValidationError(
+                "USD Price is required as product is visible in respective country.")
+        if 2 in self.currency and aed_price <= 0:
+            raise forms.ValidationError(
+                "AED Price is required as product is visible in respective country.")
+        if 3 in self.currency and gbp_price <= 0:
+            raise forms.ValidationError(
+                "GBP Price is required as product is visible in respective country.")
 
-#     def clean_sibling(self):
-#         sibling = self.cleaned_data.get('sibling', None)
-#         if sibling:
-#             pass
-#         else:
-#             raise forms.ValidationError(
-#                 "This field is required.")
-#         return sibling
+        
+    def clean_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        if inr_price:
+            if inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return inr_price
 
+    def clean_usd_price(self):
+        usd_price = self.cleaned_data.get('usd_price', '')
+        if usd_price:
+            if usd_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return usd_price
 
-# class VariationInlineFormSet(forms.BaseInlineFormSet):
-#     def clean(self):
-#         super(VariationInlineFormSet, self).clean()
-#         if any(self.errors):
-#             return
-#         variations = []
-#         duplicates = False
-#         for form in self.forms:
-#             if form.cleaned_data:
-#                 var = form.cleaned_data['sibling']
-#                 product = form.cleaned_data['main']
-#                 if var in variations:
-#                     duplicates = True
-#                 variations.append(var)
-#                 if var == product:
-#                     raise forms.ValidationError(
-#                         'Variations must be different.',
-#                         code='duplicate_parent'
-#                     )
-#                 if duplicates:
-#                     raise forms.ValidationError(
-#                         'Variations must be unique.',
-#                         code='duplicate_parent'
-#                     )
-#         return
+    def clean_aed_price(self):
+        aed_price = self.cleaned_data.get('aed_price', '')
+        if aed_price:
+            if aed_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return aed_price
+
+    def clean_gbp_price(self):
+        gbp_price = self.cleaned_data.get('gbp_price', '')
+        if gbp_price:
+            if gbp_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return gbp_price
+
+    def clean_fake_usd_price(self):
+        usd_price = self.cleaned_data.get('usd_price', '')
+        fake_usd_price = self.cleaned_data.get('fake_usd_price', '')
+        if fake_usd_price:
+            if fake_usd_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_usd_price > Decimal(0):
+                if fake_usd_price <= usd_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_usd_price
+
+    def clean_fake_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        fake_inr_price = self.cleaned_data.get('fake_inr_price', '')
+        if fake_inr_price:
+            if fake_inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_inr_price > Decimal(0):
+                if fake_inr_price <= inr_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_inr_price
+
+    def clean_fake_aed_price(self):
+        aed_price = self.cleaned_data.get('aed_price', '')
+        fake_aed_price = self.cleaned_data.get('fake_aed_price', '')
+        if fake_aed_price:
+            if fake_aed_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_aed_price > Decimal(0):
+                if fake_aed_price <= aed_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_aed_price
+
+    def clean_fake_gbp_price(self):
+        gbp_price = self.cleaned_data.get('gbp_price', '')
+        fake_gbp_price = self.cleaned_data.get('fake_gbp_price', '')
+        if fake_gbp_price:
+            if fake_gbp_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_gbp_price > Decimal(0):
+                if fake_gbp_price <= gbp_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_gbp_price
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
+        if name:
+            if len(name) < 4 or len(name) > 60:
+                raise forms.ValidationError(
+                    "Name should be between 4-60 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return name
+
+    def clean_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        if inr_price:
+            if inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return inr_price
+    
+    def save(self, commit=True, *args, **kwargs):
+        parent = self.parent
+        self.instance.product_class = parent.product_class
+        self.instance.attr.initiate_attributes()
+        for attribute in self.instance.attr.get_all_attributes():
+            field_name = 'attribute_%s' % attribute.name
+            if field_name in self.cleaned_data:
+                value = self.cleaned_data[field_name]
+                setattr(self.instance.attr, attribute.name, value)
+        productscreen = super(AddScreenProductVariantForm, self).save(
+            commit=True, *args, **kwargs)
+        return productscreen    
+
+    def add_attribute_fields(self, product_class):
+        for attribute in product_class.attributes.filter(active=True):
+            field = self.get_attribute_field(attribute)
+            if field:
+                self.fields['attribute_%s' % attribute.name] = field
+                
+    def get_attribute_field(self, attribute):
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+
+    def set_initial(self, product_class, kwargs):
+        if 'initial' not in kwargs:
+            kwargs['initial'] = {}
+        self.set_initial_attribute_values(product_class, kwargs)
+        
+    def set_initial_attribute_values(self, product_class, kwargs):
+        instance = kwargs.get('instance')
+        if instance is None:
+            return
+        for attribute in product_class.attributes.filter(active=True):
+            try:
+                value = instance.screenattributes.get(
+                    attribute=attribute).value
+            except exceptions.ObjectDoesNotExist:
+                pass
+            else:
+                kwargs['initial']['attribute_%s' % attribute.name] = value
+

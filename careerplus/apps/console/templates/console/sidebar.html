@@ -106,11 +106,8 @@
         </ul>
       </li>
     {% endif %}
-
-
-
-    {% if request.user|has_group:"Vendor" %} 
-        <h3>Product</h3>
+    {% if request.user|has_group:"Product" %}
+        <h3>Live Products</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
           
@@ -124,8 +121,44 @@
               {% if perms.faq.console_change_faq %}
                 <li><a href="{% url 'console:screenfaq-list' %}">FAQs</a></li>
               {% endif %}
-              {% if perms.faq.console_change_chapter %}
-                <li><a href="{% url 'console:screenchapter-list' %}">Chapters</a></li>
+              </ul>
+            </li>
+          {% endif %}
+        </ul>
+        <h3>Product Moderation</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+          
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:screenproduct-list' %}">Product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+              {% if perms.faq.console_change_faq %}
+                <li><a href="{% url 'console:screenfaq-list' %}">FAQs</a></li>
+              {% endif %}
+              </ul>
+            </li>
+          {% endif %}
+        </ul>
+    
+
+    {% elif request.user|has_group:"Vendor" %} 
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+          
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:screenproduct-list' %}">Product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+              {% if perms.faq.console_change_faq %}
+                <li><a href="{% url 'console:screenfaq-list' %}">FAQs</a></li>
               {% endif %}
               </ul>
             </li>

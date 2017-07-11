@@ -51,8 +51,8 @@ class FAQuestion(AbstractAutoDate):
     objects = FAQuestionManager()
     
     class Meta:
-        verbose_name = _("Frequent asked question")
-        verbose_name_plural = _("Frequently asked questions")
+        verbose_name = _("FAQ")
+        verbose_name_plural = _("FAQs")
         ordering = ['sort_order', 'created']
         permissions = (
             ("console_add_faq", "Can Add FAQ From Console"),
@@ -119,6 +119,13 @@ class Chapter(AbstractAutoDate):
 
 class ScreenFAQ(AbstractAutoDate):
 
+    faq = models.ForeignKey(
+        FAQuestion,
+        verbose_name=_('Original faq'),
+        on_delete=models.SET_NULL,
+        related_name='screenfaq',
+        null=True)
+    
     STATUS_CHOICES = (
         (2, _('Active')),
         (1, _('Inactive')),
@@ -144,8 +151,8 @@ class ScreenFAQ(AbstractAutoDate):
     objects = FAQuestionManager()
     
     class Meta:
-        verbose_name = _("Frequent asked question")
-        verbose_name_plural = _("Frequently asked questions")
+        verbose_name = _("Screen FAQ")
+        verbose_name_plural = _("Screen FAQs")
         ordering = ['sort_order', 'created']
 
     def __str__(self):
@@ -157,6 +164,15 @@ class ScreenFAQ(AbstractAutoDate):
     @property
     def get_status(self):
         return dict(self.STATUS_CHOICES).get(self.status)
+
+    def create_faq(self):
+        if self.text and self.answer and self.vendor:
+            faq = FAQuestion.objects.create(
+                text=self.text,
+                answer=self.answer,
+                vendor=self.vendor)
+            self.faq = faq
+            self.save()
 
 
 class ScreenChapter(AbstractAutoDate):

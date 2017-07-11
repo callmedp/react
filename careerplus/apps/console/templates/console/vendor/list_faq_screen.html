@@ -33,7 +33,7 @@
     {% if perms.faq.console_add_faq %}
       <div class="row top_tiles">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-          <a class="btn btn-app" href="{% url "console:faquestion-add" %}">
+          <a class="btn btn-app" href="{% url "console:screenfaq-add" %}">
             <i class="fa fa-edit"></i> Add New Faq</a>
         </div>
       </div>
@@ -108,7 +108,7 @@
                     {% if perms.faq.console_moderate_faq %}
                       <a href="{% url "console:faquestion-moderate" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                     {% elif perms.faq.console_change_faq %}
-                      <a href="{% url "console:faquestion-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>  
+                      <a href="{% url "console:screenfaq-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>  
                     {% endif %}
                     
                   </td>

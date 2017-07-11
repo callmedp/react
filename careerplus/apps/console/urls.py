@@ -17,13 +17,17 @@ urlpatterns += [
         vendor_view.AddScreenProductView.as_view(), name='screenproduct-add'),
     url(r'^screenproduct/change/(?P<pk>[\d]+)/$',
         vendor_view.ChangeScreenProductView.as_view(), name='screenproduct-change'),
-    
+    url(r'^screenproduct/variantadd/(?P<pk>[\d]+)/$',
+        vendor_view.AddScreenProductVariantView.as_view(), name='screenproductvariant-add'),
+    url(r'^screenproduct/variantchange/(?P<pk>[\d]+)/(?P<parent>[\d]+)/$',
+        vendor_view.ChangeScreenProductVariantView.as_view(), name='screenproductvariant-change'),
     url(r'^screenfaq/list/$',
         vendor_view.ListScreenFaqView.as_view(), name='screenfaq-list'),
-        
-    url(r'^screenchapter/list/$',
-        vendor_view.ListScreenChapterView.as_view(), name='screenchapter-list'),
-
+    url(r'^screenfaq/add/$',
+        vendor_view.AddScreenFaqView.as_view(), name='screenfaq-add'),
+    url(r'^screenfaq/change/(?P<pk>[\d]+)/$',
+        vendor_view.ChangeScreenFaqView.as_view(), name='screenfaq-change'),
+    
 ]
 
 urlpatterns += [

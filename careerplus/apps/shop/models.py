@@ -625,6 +625,9 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         verbose_name=_('Welcome Mail Description'), blank=True, default='')
     call_desc = RichTextField(
         verbose_name=_('Welcome Call Description'), blank=True, default='')
+    prg_structure = RichTextField(
+        verbose_name=_('Program Structure'), blank=True, default='')
+    
     inr_price = models.DecimalField(
         _('INR Price'),
         max_digits=12, decimal_places=2,
@@ -753,14 +756,14 @@ class Product(AbstractProduct, ModelMeta):
     related = models.ManyToManyField(
         'self',
         through='RelatedProduct',
-        related_name='relatedproduct+',
+        related_name='relatedproduct',
         through_fields=('primary', 'secondary'),
         verbose_name=_('Related Product'),
         symmetrical=False, blank=True)    
     childs = models.ManyToManyField(
         'self',
         through='ChildProduct',
-        related_name='comboproduct+',
+        related_name='comboproduct',
         through_fields=('father', 'children'),
         verbose_name=_('Child Product'),
         symmetrical=False, blank=True)
@@ -776,7 +779,7 @@ class Product(AbstractProduct, ModelMeta):
     variation = models.ManyToManyField(
         'self',
         through='VariationProduct',
-        related_name='variationproduct+',
+        related_name='variationproduct',
         through_fields=('main', 'sibling'),
         verbose_name=_('Variation Product'),
         symmetrical=False, blank=True)
@@ -972,8 +975,6 @@ class Product(AbstractProduct, ModelMeta):
     def get_avg_ratings(self):
         return round(self.avg_rating, 1)
 
-    
-    
 
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(
@@ -1015,7 +1016,7 @@ class ProductScreen(AbstractProduct):
     variation = models.ManyToManyField(
         'self',
         through='VariationProductScreen',
-        related_name='variationproduct+',
+        related_name='variationproduct',
         through_fields=('main', 'sibling'),
         verbose_name=_('Variation Product'),
         symmetrical=False, blank=True)
@@ -1066,6 +1067,16 @@ class ProductScreen(AbstractProduct):
                 inr_price=self.inr_price)
             self.product = product
             self.save()
+
+    def add_variant(self, variant):
+        if self.type_product == 1:
+            if variant.type_product == 2:
+                variation, created = VariationProductScreen.objects.get_or_create(
+                    main=self,
+                    sibling=variant,)
+                return True
+        return False
+
 
     @property
     def get_status(self):
