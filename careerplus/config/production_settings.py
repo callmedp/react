@@ -1,16 +1,12 @@
-from .base_settings import *  # noqa
+from .base_settings import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-<<<<<<< Updated upstream
-# SITE_DOMAIN = '127.0.0.1:8000'
-SITE_DOMAIN = 'careerplus1.shine.com'
-=======
+
 SITE_DOMAIN = '127.0.0.1:8000'
->>>>>>> Stashed changes
 
 # Database
 DATABASES = {
@@ -23,19 +19,6 @@ DATABASES = {
         'PORT': '',
     },
 }
-
-# Apps specific for this project go here.
-DEV_APPS = [
-    'debug_toolbar'
-]
-
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DEV_APPS
-
-DEV_MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
-
-MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
@@ -66,8 +49,8 @@ ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
 if DEBUG or not IS_LIVE:
     # ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
     # ROUNDONE_API_BASEURL = "http://api.roundone.asia"
-    ROUNDONE_API_BASEURL = "http://api.roundone.in" #"http://api.roundone.asia"
-    ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in" #"http://testing.roundone.asia"
+    ROUNDONE_API_BASEURL = "http://api.roundone.in"  # "http://api.roundone.asia"
+    ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in"  # "http://testing.roundone.asia"
     ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
     ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
     ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
@@ -122,7 +105,7 @@ ROUNDONE_API_DICT = {
 
 
 # Shine settings
-SHINE_SITE = 'https://sumosc1.shine.com'
+SHINE_SITE = 'https://shine.com'
 CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
 CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
 SHINE_API_USER = 'scpapiuser@gmail.com'
@@ -131,7 +114,6 @@ SHINE_API_TIMEOUT = 60
 
 
 # Email settings
-ENCODE_SALT = 'xfxa'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #  email backend as console.
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_USE_TLS = True

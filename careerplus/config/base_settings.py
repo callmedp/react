@@ -33,7 +33,6 @@ TEMPLATE_DEBUG = False  # django sorl required
 
 # Application definition
 DJANGO_APPS = [
-    'grappelli',
     'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -172,6 +171,19 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+
+DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
+DOWNLOAD_URL = '/download/'
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -216,15 +228,17 @@ MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
 ############ SOLR SETTINGS #######################
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://127.0.0.1:8983/solr',
-        'INCLUDE_SPELLING': False,
-    },
-}
-
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 50
 HAYSTACK_BATCH_SIZE = 100
 HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
+
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+CITIES_LIGHT_APP_NAME = 'geolocation'
+
+# encode decode settings
+EMAIL_SMS_TOKEN_EXPIRY = 7
+ENCODE_SALT = 'xfxa'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
