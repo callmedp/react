@@ -11,6 +11,8 @@ class SendSMS(object):
 
     def base_send_sms(self, mob, message):
         try:
+            if settings.DEBUG:
+                mob = '9654947449'
             payload = {
                 'accesskey': settings.ACCESSKEY, 'to': mob, 'text': message}
             resp = requests.get(settings.HTMSL_URL, params=payload)
