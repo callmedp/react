@@ -1,4 +1,6 @@
 from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.views.decorators.cache import patch_cache_control
+
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
 from functools import wraps
@@ -48,3 +50,16 @@ def check_group(grp_list):
             return HttpResponseRedirect(reverse_lazy('console:login'))
         return wrapper
     return _check_group
+
+
+def stop_browser_cache():
+    def _stop_browser_cache(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            response = view_func(request, *args, **kwargs)
+            patch_cache_control(
+                response, no_cache=True, no_store=True, must_revalidate=True,
+                max_age=0)
+            return response
+        return wrapper
+    return _stop_browser_cache

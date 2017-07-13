@@ -1,23 +1,26 @@
+import json
+
 from collections import OrderedDict
 
 from django.views.generic import (
-    FormView, TemplateView, ListView, DetailView)
+    View, FormView, TemplateView, ListView, DetailView)
 from django.http import (
-    HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest)
+    HttpResponseForbidden, HttpResponse,
+    HttpResponseRedirect, HttpResponseBadRequest)
 from django.core import exceptions
 
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
-from .decorators import Decorate, check_permission, check_group
+from .decorators import Decorate, check_permission, check_group, stop_browser_cache
 from django.core.paginator import Paginator
 from django.db.models import Q
 from shop.choices import PRODUCT_VENDOR_CHOICES
 from blog.mixins import PaginationMixin
 from shop.models import (
     Product, ProductScreen)
-from faq.models import ScreenFAQ, ScreenChapter
+from faq.models import ScreenFAQ, FAQuestion
 from .vendor_form import (
     AddScreenProductForm,
     ChangeScreenProductForm,
@@ -31,7 +34,8 @@ from .vendor_form import (
     ScreenFAQInlineFormSet,)
 
 
-@Decorate(check_group(['Vendor']))
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('faq.console_change_faq'))
 class ChangeScreenFaqView(DetailView):
     template_name = 'console/vendor/change_screenfaq.html'
@@ -100,7 +104,8 @@ class ChangeScreenFaqView(DetailView):
         return HttpResponseBadRequest()
 
 
-@Decorate(check_group(['Vendor']))
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('faq.console_add_faq'))
 class AddScreenFaqView(FormView):
     form_class = AddScreenFaqForm
@@ -152,8 +157,8 @@ class AddScreenFaqView(FormView):
         return super(AddScreenFaqView, self).form_invalid(form)
 
 
-
-@Decorate(check_group(['Vendor']))
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('faq.console_change_faq'))
 class ListScreenFaqView(ListView, PaginationMixin):
     model = ScreenFAQ
@@ -175,11 +180,17 @@ class ListScreenFaqView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ListScreenFaqView, self).get_queryset()
+        queryset = queryset.exclude(status=2)
+        
         vendor = self.request.user.get_vendor()
-        if not vendor:
-            queryset = queryset.none()
+        if self.request.user.groups.filter(name='Product').exists():
+            pass
         else:
-            queryset = queryset.filter(vendor=vendor)
+            vendor = self.request.user.get_vendor()
+            if not vendor:
+                queryset = queryset.none()
+            else:
+                queryset = queryset.filter(vendor=vendor, type_product__in=dict(PRODUCT_VENDOR_CHOICES).keys())
         try:
             if self.query:
                 queryset = queryset.filter(Q(text__icontains=self.query))
@@ -200,8 +211,53 @@ class ListScreenFaqView(ListView, PaginationMixin):
         })
         return context
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Product']))
+@Decorate(check_permission('faq.console_change_faq'))
+class ListModerationScreenFaqView(ListView, PaginationMixin):
+    model = ScreenFAQ
+    context_object_name = 'screenfaq_list'
+    template_name = 'console/vendor/list_faq_screen.html'
+    http_method_names = [u'get', ]
 
-@Decorate(check_group(['Vendor']))
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(
+            ListModerationScreenFaqView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListModerationScreenFaqView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListModerationScreenFaqView, self).get_queryset()
+        queryset = queryset.filter(status=2)
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(text__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListModerationScreenFaqView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['screenfaq_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+            "moderation": True
+        })
+        return context
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('shop.console_change_product'))
 class ListScreenProductView(ListView, PaginationMixin):
     model = ProductScreen
@@ -224,11 +280,17 @@ class ListScreenProductView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ListScreenProductView, self).get_queryset()
-        vendor = self.request.user.get_vendor()
-        if not vendor:
-            queryset = queryset.none()
+        queryset = queryset.exclude(type_product=2)
+        queryset = queryset.exclude(status=2)
+        
+        if self.request.user.groups.filter(name='Product').exists():
+            pass
         else:
-            queryset = queryset.filter(vendor=vendor, type_product__in=dict(PRODUCT_VENDOR_CHOICES).keys())
+            vendor = self.request.user.get_vendor()
+            if not vendor:
+                queryset = queryset.none()
+            else:
+                queryset = queryset.filter(vendor=vendor, type_product__in=dict(PRODUCT_VENDOR_CHOICES).keys())
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
@@ -252,7 +314,58 @@ class ListScreenProductView(ListView, PaginationMixin):
         return context
 
 
-@Decorate(check_group(['Vendor']))
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Product']))
+@Decorate(check_permission('shop.console_change_product'))
+class ListModerationScreenProductView(ListView, PaginationMixin):
+    model = ProductScreen
+    context_object_name = 'productscreen_list'
+    template_name = 'console/vendor/list_product_screen.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(
+            ListModerationScreenProductView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(
+            ListModerationScreenProductView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListModerationScreenProductView, self).get_queryset()
+        queryset = queryset.exclude(type_product=2)
+        queryset = queryset.filter(status=2)
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except:
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            ListModerationScreenProductView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(
+            context['productscreen_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+            "moderation": True
+        })
+        return context
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('shop.console_add_product'))
 class AddScreenProductView(FormView):
     form_class = AddScreenProductForm
@@ -315,7 +428,8 @@ class AddScreenProductView(FormView):
             AddScreenProductView, self).form_invalid(form)
 
 
-@Decorate(check_group(['Vendor']))
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('shop.console_change_product'))
 class ChangeScreenProductView(DetailView):
     template_name = 'console/vendor/change_screenproduct.html'
@@ -524,7 +638,8 @@ class ChangeScreenProductView(DetailView):
         return HttpResponseBadRequest()
 
 
-@Decorate(check_group(['Vendor']))
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('shop.console_change_product'))
 class AddScreenProductVariantView(DetailView):
     template_name = 'console/vendor/add_screenvariant.html'
@@ -612,7 +727,8 @@ class AddScreenProductVariantView(DetailView):
         return HttpResponseBadRequest()
 
 
-@Decorate(check_group(['Vendor']))
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('shop.console_change_product'))
 class ChangeScreenProductVariantView(DetailView):
     template_name = 'console/vendor/change_screenvariant.html'
@@ -704,3 +820,82 @@ class ChangeScreenProductVariantView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
         return HttpResponseBadRequest()
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_permission('shop.console_change_product'))
+class ActionScreenFaqView(DetailView):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            form_data = self.request.POST
+            
+            action = form_data.get('action', None)
+            pk_obj = form_data.get('screenfaq', None)
+            allowed_action = []
+            groups = self.request.user.groups.all().values_list('name', flat=True)
+            if 'Product' in groups:
+                allowed_action = ['approval', 'live', 'revert', 'reject']
+            elif 'Vendor' in groups:
+                allowed_action = ['approval']
+
+            if action and action in allowed_action:
+                try:
+                    screenfaq = ScreenFAQ.objects.get(pk=pk_obj)
+                    faq = screenfaq.faq
+                    if not faq:
+                        faq = screenfaq.create_faq()
+                    if action == "approval":
+                        screenfaq.status = 2
+                        screenfaq.save()
+                        messages.success(
+                            self.request,
+                                "FAQ is assigned to product for moderation!") 
+                        data = {'success': 'True', 'next_url': reverse('console:screenfaq-list') }
+                    elif action == "live":
+                        faq.text = screenfaq.text
+                        faq.answer = screenfaq.answer
+                        faq.vendor = screenfaq.vendor
+                        faq.sort_order = screenfaq.sort_order
+                        screenfaq.status = 3
+                        screenfaq.save()
+                        faq.status = 2
+                        faq.save()
+                        messages.success(
+                            self.request,
+                                "FAQ is copied to live!") 
+                        data = {'success': 'True', 'next_url': reverse('console:screenfaq-moderationlist') }
+                    elif action == "reject":
+                        screenfaq.status = 5
+                        screenfaq.save()
+                        messages.success(
+                            self.request,
+                                "FAQ changes is rejected!") 
+                        data = {'success': 'True', 'next_url': reverse('console:screenfaq-moderationlist') }
+                    elif action == "revert":
+                        screenfaq.text = faq.text
+                        screenfaq.answer = faq.answer
+                        screenfaq.vendor = faq.vendor
+                        screenfaq.sort_order = screenfaq.sort_order
+                        screenfaq.status = 6
+                        screenfaq.save()
+                        messages.success(
+                            self.request,
+                                "FAQ changes is reverted!") 
+                        data = {'success': 'True', 'next_url': reverse('console:screenfaq-moderationlist') }
+                except:
+                    data = {'error': 'True'}
+                    messages.error(
+                        self.request,
+                        "Object Do not Exists!")    
+            else:
+                data = {'error': 'True'}
+                messages.error(
+                    self.request,
+                    "Invalid Action, Do not have permission!")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        except:
+            pass
+        data = {'error': 'True'}
+        return HttpResponse(json.dumps(data), content_type="application/json")

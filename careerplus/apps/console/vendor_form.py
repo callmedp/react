@@ -206,7 +206,7 @@ class ChangeScreenFaqForm(forms.ModelForm):
     def save(self, commit=True, *args, **kwargs):
         faq = super(ChangeScreenFaqForm, self).save(
             commit=True, *args, **kwargs)
-        faq.status = 0
+        faq.status = 1
         faq.save()
         return faq
 
@@ -226,8 +226,10 @@ class AddScreenProductForm(forms.ModelForm):
         form_class = 'form-control col-md-7 col-xs-12'
         vendor = self.user.get_vendor()
         self.fields['type_product'].widget.attrs['class'] = form_class
-        if self.user.is_superuser:
-            pass
+        if self.user.groups.filter(name='Product').exists() or self.user.is_superuser:
+            self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
+                (4, 'No-Direct-Sell/Virtual'),
+                (5, 'Downloadable'),)
         else:
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES
         self.fields['product_class'].widget.attrs['class'] = form_class
@@ -235,7 +237,10 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['product_class'].required = True
         
         if not vendor:
-            self.fields['product_class'].queryset = ProductClass.objects.none()
+            if self.user.groups.filter(name='Product').exists() or self.user.is_superuser:
+                pass
+            else:
+                self.fields['product_class'].queryset = ProductClass.objects.none()
         else:
             self.fields['product_class'].queryset = vendor.prd_add_class.all()
                        
@@ -344,8 +349,10 @@ class ChangeScreenProductForm(forms.ModelForm):
         super(ChangeScreenProductForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['type_product'].widget.attrs['class'] = form_class
-        if self.user.is_superuser:
-            pass
+        if self.user.groups.filter(name='Product').exists() or self.user.is_superuser:
+            self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
+                (4, 'No-Direct-Sell/Virtual'),
+                (5, 'Downloadable'),)
         else:
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES
                        

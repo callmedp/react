@@ -53,7 +53,7 @@ class FAQuestion(AbstractAutoDate):
     class Meta:
         verbose_name = _("FAQ")
         verbose_name_plural = _("FAQs")
-        ordering = ['sort_order', 'created']
+        ordering = ['-modified']
         permissions = (
             ("console_add_faq", "Can Add FAQ From Console"),
             ("console_change_faq", "Can Change FAQ From Console"),
@@ -127,9 +127,13 @@ class ScreenFAQ(AbstractAutoDate):
         null=True)
     
     STATUS_CHOICES = (
-        (2, _('Active')),
-        (1, _('Inactive')),
-        (0, _('Moderation')),)
+        (6, _('Reverted')),
+        (5, _('Rejected')),
+        (4, _('InActive')),
+        (3, _('Active')),
+        (2, _('Moderation')),
+        (1, _('Changed')),
+        (0, _('Added')),)
 
     text = models.TextField(
         _('question'), help_text=_('The actual question itself.'))
@@ -153,7 +157,7 @@ class ScreenFAQ(AbstractAutoDate):
     class Meta:
         verbose_name = _("Screen FAQ")
         verbose_name_plural = _("Screen FAQs")
-        ordering = ['sort_order', 'created']
+        ordering = ['-modified']
 
     def __str__(self):
         return self.text
@@ -173,6 +177,8 @@ class ScreenFAQ(AbstractAutoDate):
                 vendor=self.vendor)
             self.faq = faq
             self.save()
+            return faq
+        return None
 
 
 class ScreenChapter(AbstractAutoDate):

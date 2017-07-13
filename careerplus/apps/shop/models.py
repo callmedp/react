@@ -331,6 +331,8 @@ class AttributeOptionGroup(models.Model):
     class Meta:
         verbose_name = _('Attribute option group')
         verbose_name_plural = _('Attribute option groups')
+        
+
 
     @property
     def option_summary(self):
@@ -351,6 +353,7 @@ class AttributeOption(models.Model):
         unique_together = ('group', 'option')
         verbose_name = _('Attribute option')
         verbose_name_plural = _('Attribute options')
+
 
 
 class Attribute(AbstractAutoDate):
@@ -427,6 +430,18 @@ class Attribute(AbstractAutoDate):
             ("console_add_attribute", "Can Add Attribute From Console"),
             ("console_change_attribute", "Can Change Attribute From Console"),
         )
+
+    @property
+    def get_class(self):
+        if self.product_class:
+            return self.product_class.name
+        return ''
+
+    @property
+    def get_type(self):
+        return self.type_attribute
+        
+
 
     def _get_value(self):
         value = getattr(self, 'value_%s' % self.attribute.type_attribute)
@@ -575,6 +590,16 @@ class Keyword(AbstractAutoDate):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _('Keyword')
+        verbose_name_plural = _('Keywords')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+        permissions = (
+            ("console_add_keyword", "Can Add Keyword From Console"),
+            ("console_change_keyword", "Can Change Keyword From Console"),
+        )
 
 
 class AbstractProduct(AbstractAutoDate, AbstractSEO):
@@ -783,12 +808,6 @@ class Product(AbstractProduct, ModelMeta):
         through_fields=('main', 'sibling'),
         verbose_name=_('Variation Product'),
         symmetrical=False, blank=True)
-    chapters = models.ManyToManyField(
-        Chapter,
-        verbose_name=_('Product Structure'),
-        through='ProductChapter',
-        through_fields=('product', 'chapter'),
-        blank=True)
     faqs = models.ManyToManyField(
         FAQuestion,
         verbose_name=_('Product FAQ'),
@@ -994,6 +1013,8 @@ class ProductScreen(AbstractProduct):
         verbose_name=_('Comments'), blank=True, default='')
     
     STATUS_CHOICES = (
+        (6, _('Reverted')),
+        (5, _('Rejected')),
         (4, _('InActive')),
         (3, _('Active')),
         (2, _('Moderation')),
@@ -1020,12 +1041,6 @@ class ProductScreen(AbstractProduct):
         through_fields=('main', 'sibling'),
         verbose_name=_('Variation Product'),
         symmetrical=False, blank=True)
-    chapters = models.ManyToManyField(
-        ScreenChapter,
-        verbose_name=_('Product Structure'),
-        through='ProductChapterScreen',
-        through_fields=('product', 'chapter'),
-        blank=True)
     faqs = models.ManyToManyField(
         ScreenFAQ,
         verbose_name=_('Product FAQ'),
@@ -1058,15 +1073,16 @@ class ProductScreen(AbstractProduct):
         return self.name
     
     def create_product(self):
-        if self.name and self.product_class and self.type_product:
-            product = Product.objects.create(
-                name=self.name,
-                product_class=self.product_class,
-                type_product=self.type_product,
-                upc=self.upc,
-                inr_price=self.inr_price)
-            self.product = product
-            self.save()
+        if not self.product:
+            if self.name and self.product_class:
+                product = Product.objects.create(
+                    name=self.name,
+                    product_class=self.product_class,
+                    type_product=self.type_product,
+                    upc=self.upc,
+                    inr_price=self.inr_price)
+                self.product = product
+                self.save()
 
     def add_variant(self, variant):
         if self.type_product == 1:
@@ -1176,8 +1192,8 @@ class VariationProductScreen(AbstractAutoDate):
 
     class Meta:
         unique_together = ('main', 'sibling')
-        verbose_name = _('Product Variation')
-        verbose_name_plural = _('Product Variations')
+        verbose_name = _('Product Screen Variation')
+        verbose_name_plural = _('Product Screen Variations')
 
 class RelatedProduct(AbstractAutoDate):
     primary = models.ForeignKey(
@@ -1479,59 +1495,9 @@ class FAQProductScreen(AbstractAutoDate):
 
     class Meta:
         unique_together = ('product', 'question')
-        verbose_name = _('Product FAQ')
+        verbose_name = _('Product Screen FAQ')
         ordering = ('-question_order', 'pk')
-        verbose_name_plural = _('Product FAQs')
-
-
-class ProductChapter(AbstractAutoDate):
-    product = models.ForeignKey(
-        Product,
-        related_name='productstructure',
-        on_delete=models.CASCADE)
-    chapter = models.ForeignKey(
-        Chapter,
-        related_name='productstructure',
-        on_delete=models.CASCADE)
-    sort_order = models.PositiveIntegerField(
-        _('Sort Order'), default=1)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return _("%(top)s to '%(cp)s'") % {
-            'top': self.product,
-            'cp': self.chapter}
-    
-    class Meta:
-        unique_together = ('product', 'chapter')
-        verbose_name = _('Product Chapter')
-        ordering = ('-sort_order', 'pk')
-        verbose_name_plural = _('Product Chapters')
-
-
-class ProductChapterScreen(AbstractAutoDate):
-    product = models.ForeignKey(
-        ProductScreen,
-        related_name='screenstructure',
-        on_delete=models.CASCADE)
-    chapter = models.ForeignKey(
-        ScreenChapter,
-        related_name='screenstructure',
-        on_delete=models.CASCADE)
-    sort_order = models.PositiveIntegerField(
-        _('Sort Order'), default=1)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return _("%(top)s to '%(cp)s'") % {
-            'top': self.product,
-            'cp': self.chapter}
-    
-    class Meta:
-        unique_together = ('product', 'chapter')
-        verbose_name = _('Product Chapter')
-        ordering = ('-sort_order', 'pk')
-        verbose_name_plural = _('Product Chapters')
+        verbose_name_plural = _('Product Screen FAQs')
 
 
 class ProductExtraInfo(models.Model):
@@ -1559,35 +1525,3 @@ class ProductExtraInfo(models.Model):
     def __str__(self):
         return '{0} - {1}'.format(self.product, self.type)
 
-
-class ProductPrice(AbstractAutoDate):
-    value = models.DecimalField(
-        _('Value Price'),
-        max_digits=8, decimal_places=2,
-        default=0.0)
-    fake_value = models.DecimalField(
-        _('Value Fake Price'),
-        max_digits=8, decimal_places=2,
-        default=0.0)
-    active = models.BooleanField(default=True)
-    currency = models.ForeignKey(
-        Currency,
-        verbose_name=_('Currency'),
-        related_name='productprices',
-        on_delete=models.CASCADE)
-    product = models.ForeignKey(
-        Product,
-        verbose_name=_('Product'),
-        related_name='productprices',
-        on_delete=models.CASCADE)
-
-    def __str__(self):
-        return _("%(product)s to '%(currency)s'") % {
-            'product': self.product,
-            'currency': self.currency}
-
-    class Meta:
-        unique_together = ('product', 'currency')
-        verbose_name = _('Product Currency')
-        ordering = ('pk',)
-        verbose_name_plural = _('Product Currencies')

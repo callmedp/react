@@ -18,10 +18,6 @@ class AddCategoryForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
 
 
-        self.fields['type_service'].widget.attrs['class'] = form_class
-        self.fields['type_service'].widget.attrs['data-parsley-notdefault'] = ''
-        
-
         self.fields['type_level'].widget.attrs['class'] = form_class
         self.fields['type_level'].widget.attrs['data-parsley-notdefault'] = ''
         
@@ -29,16 +25,13 @@ class AddCategoryForm(forms.ModelForm):
         self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 30
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
         
-        # self.fields['image'].widget.attrs['required'] = 'required'
-        # self.fields['image'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-
         self.fields['banner'].widget.attrs['class'] = form_class
         self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 100
         self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
 
     class Meta:
         model = Category
-        fields = ('name', 'type_service', 'type_level',
+        fields = ('name', 'type_level',
             'banner', 'image')
 
     def clean_name(self):
@@ -51,17 +44,6 @@ class AddCategoryForm(forms.ModelForm):
             raise forms.ValidationError(
                 "This field is required.")
         return name
-
-    def clean_type_service(self):
-        service = self.cleaned_data.get('type_service', '')
-        if service:
-            if int(service) == 0:
-                raise forms.ValidationError(
-                    "This should not be default.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return service
 
     def clean_type_level(self):
         level = self.cleaned_data.get('type_level', '')
@@ -130,10 +112,6 @@ class ChangeCategoryForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
 
 
-        self.fields['type_service'].widget.attrs['class'] = form_class
-        self.fields['type_service'].widget.attrs['data-parsley-notdefault'] = ''
-        
-
         self.fields['type_level'].widget.attrs['class'] = form_class
         self.fields['type_level'].widget.attrs['data-parsley-notdefault'] = ''
         
@@ -160,7 +138,7 @@ class ChangeCategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        fields = ('name', 'type_service', 'type_level',
+        fields = ('name', 'type_level',
             'banner', 'image', 'icon', 'active', 'display_order')
 
     def clean_name(self):
@@ -173,27 +151,6 @@ class ChangeCategoryForm(forms.ModelForm):
             raise forms.ValidationError(
                 "This field is required.")
         return name
-
-    def clean_type_service(self):
-        service = self.cleaned_data.get('type_service', '')
-        if service:
-            if int(service) == 0:
-                raise forms.ValidationError(
-                    "This should not be default.")
-            inst = self.instance
-            if inst.type_service != service:
-                parent = inst.get_parent()
-                childrens = inst.get_childrens()
-                if parent:
-                    raise forms.ValidationError(
-                        "You already have parent relation based on current entity.")
-                if childrens:
-                    raise forms.ValidationError(
-                        "You already have child relation based on current entity.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return service
 
     def clean_type_level(self):
         level = self.cleaned_data.get('type_level', '')
@@ -427,11 +384,11 @@ class CategoryRelationshipForm(forms.ModelForm):
             if obj.type_level == 0 or obj.type_level == 1:
                 qs = qs.none()
             elif obj.type_level == 2:
-                qs = qs.filter(type_level=1, type_service=obj.type_service)
+                qs = qs.filter(type_level=1)
             elif obj.type_level == 3:
-                qs = qs.filter(type_level=2, type_service=obj.type_service)
+                qs = qs.filter(type_level=2)
             elif obj.type_level == 4:
-                qs = qs.filter(type_level=3, type_service=obj.type_service)
+                qs = qs.filter(type_level=3)
             self.fields['related_to'].queryset = qs
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['related_to'].widget.attrs['class'] = form_class
@@ -476,11 +433,11 @@ class RelationshipInlineFormSet(forms.BaseInlineFormSet):
                 is_main = form.cleaned_data['is_main_parent']
                 child = form.cleaned_data['related_from']
                 
-                if parent.type_service != child.type_service:
-                    raise forms.ValidationError(
-                        'Parent and child should have to same entity',
-                        code='diff entity'
-                    )
+                # if parent.type_service != child.type_service:
+                #     raise forms.ValidationError(
+                #         'Parent and child should have to same entity',
+                #         code='diff entity'
+                #     )
 
                 if child.type_level == 0 or child.type_level == 1:
                     raise forms.ValidationError(

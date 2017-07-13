@@ -24,6 +24,7 @@ PRODUCT_VENDOR_CHOICES = (
     (0, 'Standalone/Simple'),
     (1, 'Variation-Parent'),)
 
+
 PRODUCT_CHOICES = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
     (3, 'Combo'),
     (4, 'No-Direct-Sell/Virtual'),

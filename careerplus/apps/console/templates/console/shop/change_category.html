@@ -65,39 +65,19 @@
 
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-          <div class="x_title">
-            <h2><i class="fa fa-bookmark"></i> Change Category</h2>
-            <ul class="nav navbar-right panel_toolbox">
-              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-              </li>
-              
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-
-            <div class="" role="tabpanel" data-example-id="togglable-tabs">
-              <ul id="myTab1" class="nav nav-tabs bar_tabs right" role="tablist">
-                {% if perms.shop.console_change_category_main %}
+          {% if perms.shop.console_change_category_main %}
                 
-                <li role="presentation" class="active"><a href="#tab_content11" id="home-tabb" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Main</a>
-                </li>
-                
-                <li role="presentation" class=""><a href="#tab_content22" role="tab" id="profile-tabb3" data-toggle="tab" aria-controls="profile" aria-expanded="false">Skillpage</a>
-                </li>
-                {% endif %}
-                {% if perms.shop.console_change_category_seo %}
-      
-                <li role="presentation" class=""><a href="#tab_content33" role="tab" id="profile-tabb" data-toggle="tab" aria-controls="profile" aria-expanded="false">SEO</a>
-                </li>
-                {% endif %}
-                
-              </ul>
-              <div id="myTabContent2" class="tab-content">
-                {% if perms.shop.console_change_category_main %}
-                
-                <div role="tabpanel" class="tab-pane fade active in" id="tab_content11" aria-labelledby="home-tab">
+            <div class="x_panel">
+                <div class="x_title">
+                      <h2><i class="fa fa-thumb-tack"></i> Main</h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                  
                   <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-form">
                     {% csrf_token %}
                     {% if form.non_field_errors %}
@@ -140,15 +120,6 @@
                       <div class="col-md-6 col-sm-6 col-xs-12">
                         <label style="padding-top:8px;">{{object.slug}}</label>
                       </div>
-                    </div>
-
-                    <div class="item form-group {% if form.type_service.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_service.id_for_label }}">Entity <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{form.type_service}}
-                      </div>
-                      <div class="alert">{{form.type_service.errors}}</div>
                     </div>
 
                     <div class="item form-group {% if form.type_level.errors %}bad{% endif %}">
@@ -207,11 +178,116 @@
                       </div>
                     </div>
                   </form>
-                </div>
-                
-                
-                <div role="tabpanel" class="tab-pane fade" id="tab_content22" aria-labelledby="profile-tab">
-                <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-skill-form">
+                  </div>
+              </div>
+          {% endif %}
+          {% if perms.shop.console_change_category_seo %}
+              <div class="x_panel">
+                <div class="x_title">
+                      <h2><i class="fa fa-thumb-tack"></i>SkillPage</h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                      <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-seo-form">
+                        {{form.media}}
+                        {% csrf_token %}
+                        
+                        {% if seo_form.non_field_errors %}
+                          <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                            </button>
+                            {{seo_form.non_field_errors}}
+                          </div>
+                        {% endif %}
+
+                        <div class="item form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Url</label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <a href="{{object.url}}" style="padding-top:8px;">{{object.url}}</a>
+                          </div>
+                        </div>
+
+                        <div class="item form-group {% if seo_form.title.errors %}bad{% endif %}">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.title.id_for_label }}">Title <span class="required">*</span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{seo_form.title}}
+                          </div>
+                          <div class="alert">{{seo_form.title.errors}}</div>
+                        </div>
+
+                        <div class="item form-group {% if seo_form.meta_desc.errors %}bad{% endif %}">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_desc.id_for_label }}">Meta Description <span class="required"></span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{seo_form.meta_desc}}
+                          </div>
+                          <div class="alert">{{seo_form.meta_desc.errors}}</div>
+                        </div>
+                        
+                        <div class="item form-group {% if seo_form.meta_keywords.errors %}bad{% endif %}">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_keywords.id_for_label }}">Meta Keywords <span class="required"></span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{seo_form.meta_keywords}}
+                          </div>
+                          <div class="alert">{{seo_form.meta_keywords.errors}}</div>
+                        </div>
+                        
+                        <div class="item form-group {% if seo_form.heading.errors %}bad{% endif %}">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.heading.id_for_label }}">Heading <span class="required">*</span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{seo_form.heading}}
+                          </div>
+                          <div class="alert">{{seo_form.heading.errors}}</div>
+                        </div>
+                        
+                        <div class="item form-group {% if seo_form.image_alt.errors %}bad{% endif %}">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.image_alt.id_for_label }}">Image Alt <span class="required"></span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{seo_form.image_alt}}
+                          </div>
+                          <div class="alert">{{seo_form.image_alt.errors}}</div>
+                        </div>
+                        
+                        
+
+
+                        <input type="hidden" name="category" value="{{object.pk}}">
+                        <input type="hidden" name="slug" value="seo">
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                          <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                          </div>
+                        </div>
+                      </form>
+                  </div>
+              </div>
+          
+
+          {% endif %}
+          
+          {% if perms.shop.console_change_category_main %}
+                 
+          <div class="x_panel">
+                <div class="x_title">
+                      <h2><i class="fa fa-thumb-tack"></i>SkillPage</h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                  
+                  <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-skill-form">
                     {{skill_form.media}}
                     {% csrf_token %}
                     
@@ -284,97 +360,11 @@
                       </div>
                     </div>
                   </form>
-
-               </div>
-                {% endif %}
-               {% if perms.shop.console_change_category_seo %}
-                
-      
-                <div role="tabpanel" class="tab-pane fade" id="tab_content33" aria-labelledby="profile-tab">
-                  <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-seo-form">
-                    {{form.media}}
-                    {% csrf_token %}
-                    
-                    {% if seo_form.non_field_errors %}
-                      <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                        </button>
-                        {{seo_form.non_field_errors}}
-                      </div>
-                    {% endif %}
-
-                    <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Url</label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <a href="{{object.url}}" style="padding-top:8px;">{{object.url}}</a>
-                      </div>
-                    </div>
-
-                    <div class="item form-group {% if seo_form.title.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.title.id_for_label }}">Title <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{seo_form.title}}
-                      </div>
-                      <div class="alert">{{seo_form.title.errors}}</div>
-                    </div>
-
-                    <div class="item form-group {% if seo_form.meta_desc.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_desc.id_for_label }}">Meta Description <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{seo_form.meta_desc}}
-                      </div>
-                      <div class="alert">{{seo_form.meta_desc.errors}}</div>
-                    </div>
-                    
-                    <div class="item form-group {% if seo_form.meta_keywords.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.meta_keywords.id_for_label }}">Meta Keywords <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{seo_form.meta_keywords}}
-                      </div>
-                      <div class="alert">{{seo_form.meta_keywords.errors}}</div>
-                    </div>
-                    
-                    <div class="item form-group {% if seo_form.heading.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.heading.id_for_label }}">Heading <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{seo_form.heading}}
-                      </div>
-                      <div class="alert">{{seo_form.heading.errors}}</div>
-                    </div>
-                    
-                    <div class="item form-group {% if seo_form.image_alt.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.image_alt.id_for_label }}">Image Alt <span class="required"></span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{seo_form.image_alt}}
-                      </div>
-                      <div class="alert">{{seo_form.image_alt.errors}}</div>
-                    </div>
-                    
-                    
-
-
-                    <input type="hidden" name="category" value="{{object.pk}}">
-                    <input type="hidden" name="slug" value="seo">
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-               {%endif%}
+                  </div>
               </div>
-            </div>
-
-          </div>
-        </div>
-
+            {% endif %}
+                
+        
         {% if perms.shop.console_change_category_main %}
                 
         {% if relationship_formset  %}

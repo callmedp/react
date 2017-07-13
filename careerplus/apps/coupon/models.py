@@ -146,3 +146,8 @@ class CouponUser(AbstractAutoDate):
 
     def __str__(self):
         return str(self.user)
+
+    class Meta:
+        ordering = ['pk']
+        verbose_name = _("Coupon User")
+        verbose_name_plural = _("Coupon Users")

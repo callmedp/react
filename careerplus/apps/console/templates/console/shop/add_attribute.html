@@ -105,13 +105,13 @@
                 <div class="alert">{{form.display_name.errors}}</div>
               </div>
 
-              <div class="item form-group {% if form.type_service.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_service.id_for_label }}"> Entity<span class="required"></span>
+              <div class="item form-group {% if form.product_class.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.product_class.id_for_label }}"> Class<span class="required"></span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  {{form.type_service}}
+                  {{form.product_class}}
                 </div>
-                <div class="alert">{{form.type_service.errors}}</div>
+                <div class="alert">{{form.product_class.errors}}</div>
               </div>
 
               <div class="item form-group {% if form.type_attribute.errors %}bad{% endif %}">
@@ -168,15 +168,6 @@
                 <div class="alert">{{form.is_indexable.errors}}</div>
               </div>
 
-              <div class="item form-group {% if form.is_comparable.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_comparable.id_for_label }}"> Is Comparable? <span class="required"></span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                  {{form.is_comparable}}
-                </div>
-                <div class="alert">{{form.is_comparable.errors}}</div>
-              </div>
-
               <div class="item form-group {% if form.is_visible.errors %}bad{% endif %}">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_visible.id_for_label }}"> Is Visible? <span class="required"></span>
                 </label>
@@ -216,7 +207,6 @@
               <div class="ln_solid"></div>
               <div class="form-group">
                 <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                  <button type="reset" class="btn btn-primary">Reset</button>
                   <button type="submit" class="btn btn-success">Submit</button>
                 </div>
               </div>

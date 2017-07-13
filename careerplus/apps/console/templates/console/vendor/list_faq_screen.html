@@ -105,9 +105,7 @@
                   </td>
                   
                   <td>
-                    {% if perms.faq.console_moderate_faq %}
-                      <a href="{% url "console:faquestion-moderate" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                    {% elif perms.faq.console_change_faq %}
+                    {%if perms.faq.console_change_faq %}
                       <a href="{% url "console:screenfaq-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>  
                     {% endif %}
                     

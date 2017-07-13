@@ -53,10 +53,37 @@
             <i class="fa fa-code-fork"></i> Add Product Variants</a>
         </div>
       {% endif %}
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:login"  %}">
-          <i class="fa fa-paper-plane-o"></i> Send for Approval</a>
-      </div>
+      {% if object.status == 2 %}
+    
+        {% if request.user|has_group:"Product" %}
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" data-msg="live">
+              <a class="btn btn-app click-modal" href="javascript:void(0);">
+                <i class="fa fa-copy"></i> Copy to Live</a>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" data-msg="reject">
+              <a class="btn btn-app click-modal" href="javascript:void(0);">
+                <i class="fa fa-ban"></i> Reject Changes</a>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" data-msg="revert">
+              <a class="btn btn-app click-modal" href="javascript:void(0);">
+                <i class="fa fa-backward"></i> Revert Changes</a>
+            </div>
+        {% else %}  
+          <div class="row top_tiles">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="btn btn-app click-modal" href="javascript:void(0);" data-msg="approval">
+              <i class="fa fa-paper-plane-o"></i> Send for Approval</a>
+          </div>
+        </div>
+        {% endif %}
+      {% else %}
+     <div class="row top_tiles">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="btn btn-app click-modal" on-click="showAlertModal();" data-msg="approval">
+              <i class="fa fa-paper-plane-o"></i> Send for Approval</a>
+          </div>
+        </div>
+    {% endif %}
     </div>
 
 

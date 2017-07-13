@@ -16,7 +16,7 @@
         <h3>FAQs</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:faquestion-list" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:faq-list" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -30,14 +30,6 @@
       </form>
     </div>
     
-    {% if perms.faq.console_add_faq %}
-      <div class="row top_tiles">
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-          <a class="btn btn-app" href="{% url "console:faquestion-add" %}">
-            <i class="fa fa-edit"></i> Add New Faq</a>
-        </div>
-      </div>
-    {% endif %}
     
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -105,11 +97,7 @@
                   </td>
                   
                   <td>
-                    {% if perms.faq.console_moderate_faq %}
-                      <a href="{% url "console:faquestion-moderate" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                    {% elif perms.faq.console_change_faq %}
                       <a href="{% url "console:faquestion-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>  
-                    {% endif %}
                     
                   </td>
                 </tr>

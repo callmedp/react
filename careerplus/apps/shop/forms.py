@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from shop.models import (
     Keyword, AttributeOptionGroup, AttributeOption,
     Attribute, Product, Category, ProductCategory,
-    ProductChapter, FAQProduct, ProductPrice,
+    FAQProduct, 
     ChildProduct, VariationProduct, RelatedProduct)
 from partner.models import Vendor
 from geolocation.models import Country
@@ -55,7 +55,7 @@ class AddAttributeForm(forms.ModelForm):
 
     class Meta:
         model = Attribute
-        fields = ['name', 'type_service', 'display_name',
+        fields = ['name', 'product_class', 'display_name',
             'type_attribute', 'required', 'is_visible',
             'is_sortable', 'is_multiple', 'is_searchable',
             'is_filterable', 'is_indexable', 'active', 'option_group']
@@ -65,9 +65,8 @@ class AddAttributeForm(forms.ModelForm):
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['type_attribute'].widget.attrs['class'] = form_class
 
-        self.fields['type_service'].widget.attrs['class'] = form_class
-        self.fields['type_service'].widget.attrs['data-parsley-notdefault'] = ''
-        
+        self.fields['product_class'].widget.attrs['class'] = form_class
+        self.fields['product_class'].required=True
         self.fields['option_group'].widget.attrs['class'] = form_class
         
         self.fields['active'].widget.attrs['class'] = 'js-switch'
@@ -113,7 +112,7 @@ class AddAttributeForm(forms.ModelForm):
         if any(self.errors):
             return
         value = self.cleaned_data['type_attribute']
-        if value == 6:
+        if value == 'option' or value == 'multi_option' :
             if not self.cleaned_data['option_group']:
                 raise forms.ValidationError(
                     'Option Group is required.')
@@ -141,21 +140,12 @@ class AddAttributeForm(forms.ModelForm):
                 "This field is required.")
         return name
 
-    def clean_type_service(self):
-        service = self.cleaned_data.get('type_service', '')
-        if service:
-            if int(service) == 0:
-                raise forms.ValidationError(
-                    "This should not be default.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return service
-
     def save(self, commit=True):
         attribute = super(AddAttributeForm, self).save(commit=False)
         if commit:
-            if attribute.type_attribute != 6:
+            if attribute.type_attribute == 'option' or attribute.type_attribute == 'multi_option':
+                pass
+            else:
                 attribute.option_group = None
             attribute.save()
         return attribute
@@ -708,71 +698,6 @@ class CategoryInlineFormSet(forms.BaseInlineFormSet):
         return
 
 
-class ProductStructureForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        obj = kwargs.pop('object', None)
-        super(ProductStructureForm, self).__init__(*args, **kwargs)
-        # if obj:
-        #     qs = Category.objects.all()
-        #     if obj.type_ == 0 or obj.type_level == 1:
-        #         qs = qs.none()
-        #     elif obj.type_level == 2:
-        #         qs = qs.filter(type_level=1)
-        #     elif obj.type_level == 3:
-        #         qs = qs.filter(type_level=2)
-        #     elif obj.type_level == 4:
-        #         qs = qs.filter(type_level=3)
-            # self.fields['related_to'].queryset = qs
-        form_class = 'form-control col-md-7 col-xs-12'
-        self.fields['chapter'].widget.attrs['class'] = form_class
-        self.fields['chapter'].required = True        
-        self.fields['sort_order'].widget.attrs['class'] = form_class
-        self.fields['active'].widget.attrs['class'] = 'js-switch'
-        self.fields['active'].widget.attrs['data-switchery'] = 'true'
-        
-    class Meta:
-        model = ProductChapter
-        fields = (
-            'chapter', 'sort_order', 'active',)
-
-    def clean(self):
-        super(ProductStructureForm, self).clean()
-
-
-    def clean_chapter(self):
-        chapter = self.cleaned_data.get('chapter', None)
-        if chapter:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return chapter
-
-
-class ChapterInlineFormSet(forms.BaseInlineFormSet):
-    def clean(self):
-        super(ChapterInlineFormSet, self).clean()
-        if any(self.errors):
-            return
-        chapters = []
-        duplicates = False
-        for form in self.forms:
-            if form.cleaned_data:
-                chapter = form.cleaned_data['chapter']
-                product = form.cleaned_data['product']
-                if chapter in chapters:
-                    duplicates = True
-                chapters.append(chapter)
-
-                if duplicates:
-                    raise forms.ValidationError(
-                        'Chapters must be unique.',
-                        code='duplicate_parent'
-                    )
-
-        return
-
 
 class ProductFAQForm(forms.ModelForm):
 
@@ -839,78 +764,78 @@ class FAQInlineFormSet(forms.BaseInlineFormSet):
         return
 
 
-class ProductPriceForm(forms.ModelForm):
+# class ProductPriceForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        obj = kwargs.pop('object', None)
-        super(ProductPriceForm, self).__init__(*args, **kwargs)
-        # if obj:
-        #     qs = Category.objects.all()
-        #     if obj.type_ == 0 or obj.type_level == 1:
-        #         qs = qs.none()
-        #     elif obj.type_level == 2:
-        #         qs = qs.filter(type_level=1)
-        #     elif obj.type_level == 3:
-        #         qs = qs.filter(type_level=2)
-        #     elif obj.type_level == 4:
-        #         qs = qs.filter(type_level=3)
-            # self.fields['related_to'].queryset = qs
-        form_class = 'form-control col-md-7 col-xs-12'
-        self.fields['currency'].widget.attrs['class'] = form_class
-        self.fields['currency'].required = True        
-        self.fields['value'].widget.attrs['class'] = form_class
-        self.fields['fake_value'].widget.attrs['class'] = form_class
-        self.fields['active'].widget.attrs['class'] = 'js-switch'
-        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+#     def __init__(self, *args, **kwargs):
+#         obj = kwargs.pop('object', None)
+#         super(ProductPriceForm, self).__init__(*args, **kwargs)
+#         # if obj:
+#         #     qs = Category.objects.all()
+#         #     if obj.type_ == 0 or obj.type_level == 1:
+#         #         qs = qs.none()
+#         #     elif obj.type_level == 2:
+#         #         qs = qs.filter(type_level=1)
+#         #     elif obj.type_level == 3:
+#         #         qs = qs.filter(type_level=2)
+#         #     elif obj.type_level == 4:
+#         #         qs = qs.filter(type_level=3)
+#             # self.fields['related_to'].queryset = qs
+#         form_class = 'form-control col-md-7 col-xs-12'
+#         self.fields['currency'].widget.attrs['class'] = form_class
+#         self.fields['currency'].required = True        
+#         self.fields['value'].widget.attrs['class'] = form_class
+#         self.fields['fake_value'].widget.attrs['class'] = form_class
+#         self.fields['active'].widget.attrs['class'] = 'js-switch'
+#         self.fields['active'].widget.attrs['data-switchery'] = 'true'
 
         
-    class Meta:
-        model = ProductPrice
-        fields = (
-            'currency', 'value', 'fake_value', 'active',)
+#     class Meta:
+#         model = ProductPrice
+#         fields = (
+#             'currency', 'value', 'fake_value', 'active',)
 
-    def clean(self):
-        super(ProductPriceForm, self).clean()
+#     def clean(self):
+#         super(ProductPriceForm, self).clean()
         
-    def clean_currency(self):
-        currency = self.cleaned_data.get('currency', None)
-        if currency:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return currency
+#     def clean_currency(self):
+#         currency = self.cleaned_data.get('currency', None)
+#         if currency:
+#             pass
+#         else:
+#             raise forms.ValidationError(
+#                 "This field is required.")
+#         return currency
 
 
-class PriceInlineFormSet(forms.BaseInlineFormSet):
-    def clean(self):
-        super(PriceInlineFormSet, self).clean()
-        if any(self.errors):
-            return
-        currencies = []
-        duplicates = False
-        for form in self.forms:
-            if form.cleaned_data:
-                value = form.cleaned_data['value']
-                f_value = form.cleaned_data['fake_value']
-                from decimal import Decimal
-                if f_value > Decimal("0.00"):
-                    if f_value < value:
-                        raise forms.ValidationError(
-                            'Fake Price Value Should be Greater than Original Price.',
-                            code='fake more' )
-                currency = form.cleaned_data['currency']
-                product = form.cleaned_data['product']
-                if currency in currencies:
-                    duplicates = True
-                currencies.append(currency)
+# class PriceInlineFormSet(forms.BaseInlineFormSet):
+#     def clean(self):
+#         super(PriceInlineFormSet, self).clean()
+#         if any(self.errors):
+#             return
+#         currencies = []
+#         duplicates = False
+#         for form in self.forms:
+#             if form.cleaned_data:
+#                 value = form.cleaned_data['value']
+#                 f_value = form.cleaned_data['fake_value']
+#                 from decimal import Decimal
+#                 if f_value > Decimal("0.00"):
+#                     if f_value < value:
+#                         raise forms.ValidationError(
+#                             'Fake Price Value Should be Greater than Original Price.',
+#                             code='fake more' )
+#                 currency = form.cleaned_data['currency']
+#                 product = form.cleaned_data['product']
+#                 if currency in currencies:
+#                     duplicates = True
+#                 currencies.append(currency)
 
-                if duplicates:
-                    raise forms.ValidationError(
-                        'Currencies must be unique.',
-                        code='duplicate_parent'
-                    )
-        return
+#                 if duplicates:
+#                     raise forms.ValidationError(
+#                         'Currencies must be unique.',
+#                         code='duplicate_parent'
+#                     )
+#         return
 
 
 class ProductCountryForm(forms.ModelForm):
