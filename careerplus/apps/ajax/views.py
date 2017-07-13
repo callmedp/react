@@ -19,6 +19,7 @@ from order.models import OrderItem
 from console.order_form import FileUploadForm
 from emailers.email import SendMail
 from emailers.sms import SendSMS
+from core.mixins import TokenGeneration
 
 
 class ArticleCommentView(View):
@@ -489,5 +490,24 @@ class RejectDraftByLinkedinAdmin(View):
                     added_by=request.user)
             except:
                 pass
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class GenerateAutoLoginToken(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0, "display_message": ''}
+        if request.is_ajax() and request.user.is_authenticated:
+            try:
+                email = request.POST.get('email', '')
+                enc_type = int(request.POST.get('type', 1))
+                exp_days = int(request.POST.get('expires', 30))
+                token = TokenGeneration().encode(email, enc_type, exp_days)
+                data.update({
+                    "token": token,
+                })
+                data["status"] = 1
+            except Exception as e:
+                data['display_message'] = str(e)
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()

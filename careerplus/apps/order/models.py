@@ -250,6 +250,14 @@ class OrderItem(models.Model):
             # Booster Queue
             ("can_show_booster_queue", "Can Show Booster Queue"),
 
+            # Domestic Profile Update Queue Permissions
+            ("can_show_domestic_profile_update_queue", "Can Show Domestic Profile Update Queue"),
+            ("domestic_profile_update_assigner", "Domestic Profile Update Assigner"),
+            ("domestic_profile_update_assignee", "Domestic Profile Update Assignee"),
+
+            # Domestic Profile Approval Queue Permissions
+            ("can_show_domestic_profile_approval_queue", "Can Show Domestic Profile Approval Queue"),
+
             # Closed Permission
             ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),
             ("can_view_all_closed_oi_list", "Can View All Closed Orderitem List"),
@@ -292,8 +300,20 @@ class OrderItem(models.Model):
         if self.draft_counter == settings.DRAFT_MAX_LIMIT:
             return 'Final Draft'
         elif self.draft_counter:
-            return 'Draft %s' %(self.draft_counter)
+            return 'Draft %s' % (self.draft_counter)
         return ''
+
+    def check_featured_profile_dependency(self):
+        order = self.order
+        ois = order.orderitems.filter(product__id__in=settings.RESUME_WRITING_INDIA)
+        if ois.exists():
+            closed_ois = ois.filter(oi_status=4)
+            if closed_ois.exists():
+                return closed_ois[0]
+            else:
+                return None
+        else:
+            return self
 
 
 class OrderItemOperation(AbstractAutoDate):

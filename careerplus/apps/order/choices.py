@@ -36,7 +36,7 @@ OI_OPS_STATUS = (
     (10, 'On Hold by Vendor'),
     (11, 'Archived'),
 
-    # flow1 and flow3 21 - 40
+    # flow1, flow3 and flow 5 status 21 - 40
     (21, 'Upload Draft'),
     (22, 'Draft Uploaded'),
     (23, 'Pending Approval'),
@@ -55,6 +55,7 @@ OI_OPS_STATUS = (
     # flow7 61 - 80
     (61, "Will start once resume is made"),
     (62, "Resume Boosted"),
+
 )
 
 COUNSELLING_FORM_STATUS = (

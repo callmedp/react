@@ -242,6 +242,16 @@ class OIActionForm(forms.Form):
                 (-1, "Export As Csv"),
                 (-3, "Send Booster Mail"),
             )
+        elif queue_name == 'domesticprofileupdate':
+            ACTION_CHOICES += (
+                (-4, "Send for approval to ops"),  # send domestic Profile Update for approval
+            )
+        elif queue_name == 'domesticprofileapproval':
+            ACTION_CHOICES += (
+                (-5, "Approve Domestic Profile Update"),  # domestic Profile Update approved
+                (-6, "Reject Domestic Profile Update"),
+            )
+
         else:
             ACTION_CHOICES += ((-1, "Export As Csv"),)
 
@@ -254,3 +264,21 @@ class OIActionForm(forms.Form):
 
     class Meta:
         fields = ['action', ]
+
+
+class AssignmentActionForm(forms.Form):
+    assign_to = forms.ModelChoiceField(
+        queryset=User.objects.none(),
+        empty_label="Select User",
+        to_field_name='pk',
+        required=True, widget=forms.Select())
+
+    def __init__(self, *args, **kwargs):
+        super(AssignmentActionForm, self).__init__(*args, **kwargs)
+        from django.contrib.auth.models import Permission
+        from django.db.models import Q
+        perm = Permission.objects.get(codename='domestic_profile_update_assignee')
+        users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        self.fields['assign_to'].required = True
+        self.fields['assign_to'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['assign_to'].queryset = users

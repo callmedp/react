@@ -36,8 +36,8 @@ class SendSMS(object):
 
     def send(self, sms_type=None, data=None):
         send_dict = {}
-        if sms_type == "Writer_Information":
-            template_name = data.get('template_name', 'writer_info.html')
+        if sms_type == "ASSIGNMENT_ACTION":
+            template_name = data.get('template_name', 'assignment_action.html')
             send_dict['template'] = 'sms/' + template_name
             self.process(send_dict, data)
 
@@ -58,5 +58,10 @@ class SendSMS(object):
 
         elif sms_type == "BOOSTER_CANDIDATE":
             template_name = data.get('template_name', 'booster_candidate.html')
+            send_dict['template'] = 'sms/' + template_name
+            self.process(send_dict, data)
+
+        elif sms_type == "FEATURED_UPDATE_MAIL":
+            template_name = data.get('template_name', 'featured_profile.html')
             send_dict['template'] = 'sms/' + template_name
             self.process(send_dict, data)
