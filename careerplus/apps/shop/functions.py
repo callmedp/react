@@ -2,6 +2,7 @@ import os
 import time
 from django.core.exceptions import ValidationError
 from random import random
+from django.utils.translation import ugettext_lazy as _
 
 
 def get_file_name(f_obj):
@@ -43,68 +44,5 @@ def get_upload_path_vendor(instance, filename):
         ven_id=instance.id, filename=get_file_name(filename))
 
 
-from django.utils.translation import ugettext_lazy as _
 
-
-class ScreenProductAttributesContainer(object):
-
-    def __setstate__(self, state):
-        self.__dict__ = state
-        self.initialised = False
-
-    def __init__(self, product):
-        self.product = product
-        self.initialised = False
-
-    def initiate_attributes(self):
-        values = self.get_values().select_related('attribute')
-        for v in values:
-            setattr(self, v.attribute.name, v.value)
-        self.initialised = True
-
-    def __getattr__(self, name):
-        if not name.startswith('_') and not self.initialised:
-            self.initiate_attributes()
-            return getattr(self, name)
-        raise AttributeError(
-            _("%(obj)s has no attribute named '%(attr)s'") % {
-                'obj': self.product.get_product_class(), 'attr': name})
-
-    def validate_attributes(self):
-        for attribute in self.get_all_attributes():
-            value = getattr(self, attribute.name, None)
-            if value is None:
-                if attribute.required:
-                    raise ValidationError(
-                        _("%(attr)s attribute cannot be blank") %
-                        {'attr': attribute.name})
-            else:
-                try:
-                    attribute.validate_value(value)
-                except ValidationError as e:
-                    raise ValidationError(
-                        _("%(attr)s attribute %(err)s") %
-                        {'attr': attribute.name, 'err': e})
-
-    def get_values(self):
-        return self.product.screenattributes.all()
-
-    def get_value_by_attribute(self, attribute):
-        return self.get_values().get(attribute=attribute)
-
-    def get_all_attributes(self):
-        return self.product.get_product_class().attributes.filter(active=True)
-
-    def get_attribute_by_name(self, name):
-        return self.get_all_attributes().get(name=name)
-
-    def __iter__(self):
-        return iter(self.get_values())
-
-    def save(self):
-        for attribute in self.get_all_attributes():
-            if hasattr(self, attribute.name):
-                value = getattr(self, attribute.name)
-                attribute.save_screen_value(self.product, value)
-
-        
+    

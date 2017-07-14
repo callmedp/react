@@ -1,5 +1,6 @@
 from django import template                                                                      
 from django.contrib.auth.models import Group
+from django.core.urlresolvers import reverse_lazy, reverse
 
 
 register = template.Library()
@@ -11,6 +12,19 @@ def get_instance(form_set):
     except:
         pass    
     return False
+
+@register.filter
+def get_edit_url(form_set):
+    try:
+        if form_set.instance:
+            instance = form_set.instance
+            return reverse('console:screenproductvariant-change', kwargs={
+                'pk': instance.sibling.pk,
+                'parent': instance.main.pk}) 
+    except:
+        pass    
+    return ''
+
 
 @register.filter(name='has_group')
 def has_group(user, group_name):

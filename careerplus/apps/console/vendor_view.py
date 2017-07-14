@@ -21,6 +21,7 @@ from blog.mixins import PaginationMixin
 from shop.models import (
     Product, ProductScreen)
 from faq.models import ScreenFAQ, FAQuestion
+from shop.utils import ProductModeration
 from .vendor_form import (
     AddScreenProductForm,
     ChangeScreenProductForm,
@@ -31,7 +32,9 @@ from .vendor_form import (
     ScreenProductPriceForm,
     ScreenProductAttributeForm,
     ScreenProductFAQForm,
-    ScreenFAQInlineFormSet,)
+    ScreenFAQInlineFormSet,
+    ScreenProductVariationForm,
+    ScreenVariationInlineFormSet,)
 
 
 @Decorate(stop_browser_cache())
@@ -462,7 +465,11 @@ class ChangeScreenProductView(DetailView):
         obj = self.get_object()
         attribute_form = ScreenProductAttributeForm(
             instance=self.get_object(),)
-
+        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+            vendor = self.get_object().vendor
+        else:
+            vendor  = self.request.user.get_vendor()
+        
         ScreenProductFAQFormSet = inlineformset_factory(
             ProductScreen, ProductScreen.faqs.through, fk_name='product',
             form=ScreenProductFAQForm,
@@ -473,16 +480,27 @@ class ChangeScreenProductView(DetailView):
             prdfaq_formset = ScreenProductFAQFormSet(
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object(),
-                    'user':self.request.user },)
+                    'vendor':vendor },)
             context.update({'prdfaq_formset': prdfaq_formset})
-        
+        if self.object.type_product == 1:
+            ScreenProductVariationFormSet = inlineformset_factory(
+                ProductScreen, ProductScreen.variation.through, fk_name='main',
+                form=ScreenProductVariationForm,
+                can_delete=False,
+                formset=ScreenVariationInlineFormSet, extra=0,
+                max_num=20, validate_max=True)
+            if self.object:
+                prdvar_formset = ScreenProductVariationFormSet(
+                    instance=self.get_object(),
+                    form_kwargs={'object': self.get_object()})
+                context.update({'prdvars_formset': prdvar_formset})
+            
         context.update({
             'messages': alert,
             'form': main_change_form,
             'country_form': country_form,
             'price_form': price_form,
             'attribute_form': attribute_form,
-            'variations': self.object.variation.filter()
             })
         return context
 
@@ -589,7 +607,7 @@ class ChangeScreenProductView(DetailView):
                             ProductScreen, ProductScreen.faqs.through, fk_name='product',
                             form=ScreenProductFAQForm,
                             can_delete=False,
-                            formset=ScreenFAQInlineFormSet, extra=1,
+                            formset=ScreenFAQInlineFormSet, extra=0,
                             max_num=20, validate_max=True)
                         formset = ScreenProductFAQFormSet(
                             request.POST, instance=obj,
@@ -624,6 +642,46 @@ class ChangeScreenProductView(DetailView):
                                 request, [
                                     "console/shop/change_screenproduct.html"
                                 ], context)
+                    elif slug == 'vars':
+                        ScreenProductVariationFormSet = inlineformset_factory(
+                            ProductScreen, ProductScreen.variation.through, fk_name='main',
+                            form=ScreenProductVariationForm,
+                            can_delete=False,
+                            formset=ScreenVariationInlineFormSet, extra=1,
+                            max_num=20, validate_max=True)
+                        formset = ScreenProductVariationFormSet(
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj},)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                                formset.save_m2m()
+                                obj.status = 1
+                                obj.save()        
+                                
+                            messages.success(
+                                self.request,
+                                "Product Variation changed Successfully")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prdvars_formset': formset})
+                            messages.error(
+                                self.request,
+                                "Product Variation Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_screenproduct.html"
+                                ], context)
+                    
                     messages.error(
                         self.request,
                         "Object Does Not Exists")
@@ -822,10 +880,9 @@ class ChangeScreenProductVariantView(DetailView):
         return HttpResponseBadRequest()
 
 
-@Decorate(stop_browser_cache())
 @Decorate(check_group(['Vendor', 'Product']))
 @Decorate(check_permission('shop.console_change_product'))
-class ActionScreenFaqView(DetailView):
+class ActionScreenFaqView(View):
 
     def post(self, request, *args, **kwargs):
         try:
@@ -884,6 +941,106 @@ class ActionScreenFaqView(DetailView):
                             self.request,
                                 "FAQ changes is reverted!") 
                         data = {'success': 'True', 'next_url': reverse('console:screenfaq-moderationlist') }
+                except:
+                    data = {'error': 'True'}
+                    messages.error(
+                        self.request,
+                        "Object Do not Exists!")    
+            else:
+                data = {'error': 'True'}
+                messages.error(
+                    self.request,
+                    "Invalid Action, Do not have permission!")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        except:
+            pass
+        data = {'error': 'True'}
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_permission('shop.console_change_product'))
+class ActionScreenProductView(View, ProductModeration):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            form_data = self.request.POST
+            
+            action = form_data.get('action', None)
+            pk_obj = form_data.get('screenproduct', None)
+            allowed_action = []
+            groups = self.request.user.groups.all().values_list('name', flat=True)
+            if 'Product' in groups:
+                allowed_action = ['approval', 'live', 'revert', 'reject']
+            elif 'Vendor' in groups:
+                allowed_action = ['approval']
+
+            if action and action in allowed_action:
+                try:
+                    productscreen = ProductScreen.objects.get(pk=pk_obj)
+                    product = productscreen.product
+                    if not product:
+                        product = productscreen.create_product()
+                    if action == "approval":
+                        if self.validate_screenproduct(
+                            request=self.request,productscreen=productscreen): 
+                            productscreen.status = 2
+                            productscreen.save()
+                            messages.success(
+                                self.request,
+                                    "Product is assigned to product for moderation!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:screenproduct-list') }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "reject":
+                        productscreen.status = 5
+                        productscreen.save()
+                        messages.success(
+                            self.request,
+                                "Product changes is rejected!") 
+                        data = {'success': 'True',
+                            'next_url': reverse('console:screenproduct-moderationlist') }
+                    elif action == "live":
+                        if self.validate_screenproduct(
+                            request=self.request,productscreen=productscreen): 
+                            copyproduct = self.copy_to_product(
+                                product=product, screen=productscreen)
+                            if copyproduct:
+                                productscreen.status = 3
+                                productscreen.save()
+                                product.is_indexable = False
+                                product.save()
+                                messages.success(
+                                    self.request,
+                                        "Product Screen is copied to live! Please validate fields in live product") 
+                                data = {'success': 'True',
+                                    'next_url': reverse('console:screenfaq-moderationlist') }
+                            else:
+                                messages.error(
+                                    self.request,
+                                        "Product Screen copy Failed!") 
+                                data = {'error': True,}
+                        else:
+                            messages.error(
+                                    self.request,
+                                        "Product Screen copy Failed!") 
+                            data = {'error': 'True'}
+                    elif action == "revert":
+                        copyscreen = self.copy_to_screen(
+                            product=product, screen=productscreen)
+                        if copyscreen:
+                            productscreen.status = 6
+                            productscreen.save()
+                            messages.success(
+                                self.request,
+                                    "Product Screen is changes is reverated!") 
+                            data = {'success': 'True', 'next_url': reverse('console:screenproduct-moderationlist') }
+                        else:
+                            messages.error(
+                                self.request,
+                                    "Product Screen revert Failed!") 
+                            data = {'error': True,}
                 except:
                     data = {'error': 'True'}
                     messages.error(

@@ -163,7 +163,7 @@ class ScreenFAQ(AbstractAutoDate):
         return self.text
 
     def is_active(self):
-        return self.status == 2
+        return self.status == 3
 
     @property
     def get_status(self):

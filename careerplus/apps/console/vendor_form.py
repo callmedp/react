@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from shop.models import (
     ProductClass,
     ProductScreen, 
-    FAQProductScreen, VariationProduct)
+    FAQProductScreen, VariationProductScreen)
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
@@ -290,21 +290,6 @@ class AddScreenProductForm(forms.ModelForm):
                 "This field is required.")
         return prd_class
     
-    def clean_type_flow(self):
-        flow = self.cleaned_data.get('type_flow', '')
-        if flow:
-            if self.user.is_superuser:
-                pass
-            elif flow in dict(PRODUCT_VENDOR_CHOICES).keys():
-                pass
-            else:
-                raise forms.ValidationError(
-                    "This value is invalid.")    
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return flow
-
     def clean_upc(self):
         upc = self.cleaned_data.get('upc', '')
         if upc:
@@ -340,7 +325,7 @@ class ChangeScreenProductForm(forms.ModelForm):
         model = ProductScreen
         fields = [
             'name', 
-            'type_product', 'upc', 
+            'upc', 
             'about', 'description',
             'buy_shine','prg_structure' ]
 
@@ -348,13 +333,6 @@ class ChangeScreenProductForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super(ChangeScreenProductForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
-        self.fields['type_product'].widget.attrs['class'] = form_class
-        if self.user.groups.filter(name='Product').exists() or self.user.is_superuser:
-            self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
-                (4, 'No-Direct-Sell/Virtual'),
-                (5, 'Downloadable'),)
-        else:
-            self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES
                        
         self.fields['name'].widget.attrs['class'] = form_class
         self.fields['name'].widget.attrs['maxlength'] = 80
@@ -384,21 +362,7 @@ class ChangeScreenProductForm(forms.ModelForm):
                 "This field is required.")
         return name
 
-    def clean_type_flow(self):
-        flow = self.cleaned_data.get('type_flow', '')
-        if flow:
-            if self.user.is_superuser:
-                pass
-            elif flow in dict(PRODUCT_VENDOR_CHOICES).keys():
-                pass
-            else:
-                raise forms.ValidationError(
-                    "This value is invalid.")    
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return flow
-
+    
     def clean_upc(self):
         upc = self.cleaned_data.get('upc', '')
         if upc:
@@ -601,6 +565,7 @@ class ScreenProductPriceForm(forms.ModelForm):
         productscreen.save()
         return productscreen
 
+
 class ScreenProductCountryForm(forms.ModelForm):
 
     countries = forms.ModelMultipleChoiceField(
@@ -684,16 +649,15 @@ class ScreenProductAttributeForm(forms.ModelForm):
             if field_name in self.cleaned_data:
                 value = self.cleaned_data[field_name]
                 setattr(self.instance.attr, attribute.name, value)
-        super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
-
+        productscreen = super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
+        return productscreen
 class ScreenProductFAQForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
-        user = kwargs.pop('user', None)
+        vendor = kwargs.pop('vendor', None)
         super(ScreenProductFAQForm, self).__init__(*args, **kwargs)
-        queryset = ScreenFAQ.objects.filter(status=2)
-        vendor = user.get_vendor()
+        queryset = ScreenFAQ.objects.filter(status=3)
         if not vendor:
             queryset = queryset.none()
         else:
@@ -971,3 +935,29 @@ class AddScreenProductVariantForm(forms.ModelForm):
             else:
                 kwargs['initial']['attribute_%s' % attribute.name] = value
 
+
+class ScreenProductVariationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ScreenProductVariationForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['sort_order'].widget.attrs['class'] = form_class
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+    class Meta:
+        model = VariationProductScreen
+        fields = (
+            'sort_order', 'active', )
+
+    def clean(self):
+        super(ScreenProductVariationForm, self).clean()
+
+
+class ScreenVariationInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(ScreenVariationInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        

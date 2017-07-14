@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from ckeditor.fields import RichTextField
-
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from partner.models import Vendor
@@ -17,14 +16,13 @@ from faq.models import (
     FAQuestion, Chapter,
     ScreenFAQ, ScreenChapter)
 from geolocation.models import Country, Currency
-
+from .utils import ProductAttributesContainer
 from .functions import (
     get_upload_path_category,
     get_upload_path_product_banner,
     get_upload_path_product_icon,
     get_upload_path_product_image,
-    get_upload_path_product_file,
-    ScreenProductAttributesContainer)
+    get_upload_path_product_file,)
 from .choices import (
     SERVICE_CHOICES,
     CATEGORY_CHOICES,
@@ -517,10 +515,53 @@ class Attribute(AbstractAutoDate):
                 value_obj.value = value
                 value_obj.save()
 
-    def validate_screen_value(self, value):
-        validator = getattr(self, '_validate_%s' % self.type_atrribute)
+    
+    def validate_value(self, value):
+        validator = getattr(self, '_validate_%s' % self.type_attribute)
         validator(value)
 
+    def save_value(self, product, value):
+
+        from shop.models import ProductAttribute
+        try:
+            value_obj = product.productattributes.get(attribute=self)
+        except ProductAttribute.DoesNotExist:
+            delete_file = self.is_file and value is False
+            if value is None or value == '' or delete_file:
+                return
+            value_obj = ProductAttribute.objects.create(
+                product=product, attribute=self)
+
+        if self.is_file:
+            if value is None:
+                return
+            elif value is False:
+                value_obj.delete()
+            else:
+                value_obj.value = value
+                value_obj.save()
+        elif self.is_multi_option:
+            if value is None:
+                value_obj.delete()
+                return
+            try:
+                count = value.count()
+            except (AttributeError, TypeError):
+                count = len(value)
+            if count == 0:
+                value_obj.delete()
+            else:
+                value_obj.value = value
+                value_obj.save()
+        else:
+            if value is None or value == '':
+                value_obj.delete()
+                return
+            if value != value_obj.value:
+                value_obj.value = value
+                value_obj.save()
+
+    
     def _validate_text(self, value):
         from django.utils import six
         if not isinstance(value, six.string_types):
@@ -563,7 +604,8 @@ class Attribute(AbstractAutoDate):
             self._validate_option(value, valid_values=valid_values)
 
     def _validate_option(self, value, valid_values=None):
-        if not isinstance(value, get_model('shop', 'AttributeOption')):
+        from shop.models import AttributeOption
+        if not isinstance(value, AttributeOption):
             raise ValidationError(
                 _("Must be an AttributeOption model object instance"))
         if not value.pk:
@@ -689,14 +731,17 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     class Meta:
         abstract = True
 
+    def clean(self):
+        self.attr.validate_attributes()
+
+
     @property
     def get_type(self):
         return dict(PRODUCT_CHOICES).get(self.type_product)
 
     def get_product_class(self):
         return self.product_class
-    get_product_class.short_description = _("Product class")
-
+    
     @property
     def var_child(self, *args, **kwargs):
         return self.type_product == 2
@@ -712,21 +757,6 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     @property
     def is_virtual(self, *args, **kwargs):
         return self.type_product == 4
-
-    def save(self, *args, **kwargs):
-
-        if self.name:
-            if not self.title:
-                self.title = self.name
-            if not self.heading:
-                self.heading = self.name
-            if not self.image_alt:
-                self.image_alt = self.name
-        if self.description:
-            if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description)
-                
-        super(AbstractProduct, self).save(*args, **kwargs)
 
     def get_meta_desc(self, description=''):
         try:
@@ -849,11 +879,27 @@ class Product(AbstractProduct, ModelMeta):
             ("console_live_product", "Can Live Product From Console"),
         )
 
+    def __init__(self, *args, **kwargs):
+        super(Product, self).__init__(*args, **kwargs)
+        self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):
         return self.name
 
-    
+    def save(self, *args, **kwargs):
+        if self.name:
+            if not self.title:
+                self.title = self.name
+            if not self.heading:
+                self.heading = self.name
+            if not self.image_alt:
+                self.image_alt = self.name
+        if self.description:
+            if not self.meta_desc:
+                self.meta_desc = self.get_meta_desc(self.description)
+        super(Product, self).save(*args, **kwargs)
+        self.attr.save()
+
     @property
     def get_bg(self, *args, **kwargs):
         return dict(BG_CHOICES).get(self.image_bg)
@@ -1062,11 +1108,11 @@ class ProductScreen(AbstractProduct):
 
     def __init__(self, *args, **kwargs):
         super(ProductScreen, self).__init__(*args, **kwargs)
-        self.attr = ScreenProductAttributesContainer(product=self)
+        self.attr = ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
         super(ProductScreen, self).save(*args, **kwargs)
-        self.attr.save()
+        self.attr.save_screen()
 
 
     def __str__(self):

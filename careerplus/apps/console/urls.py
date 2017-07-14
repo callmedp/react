@@ -29,7 +29,10 @@ urlpatterns += [
     url(r'^screenproduct/moderation-list/$',
         vendor_view.ListModerationScreenProductView.as_view(),
         name='screenproduct-moderationlist'),
-
+    url(r'^screenproduct/action/(?P<action>[\w-]+)/$',
+        vendor_view.ActionScreenProductView.as_view(),
+        name='screenproduct-action'),
+    
     
     url(r'^screenfaq/list/$',
         vendor_view.ListScreenFaqView.as_view(),
@@ -46,7 +49,6 @@ urlpatterns += [
     url(r'^screenfaq/action/(?P<action>[\w-]+)/$',
         vendor_view.ActionScreenFaqView.as_view(),
         name='screenfaq-action'),
-    
     
 ]
 
