@@ -3,7 +3,14 @@ function clickSubmitDraft(oi_id, ){
     if (oi_id){
     	$('#draft-upload-form' + oi_id).parsley().validate();
         if ($('#draft-upload-form' + oi_id).parsley().isValid()){
-        	$('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload draft and send for approval???</div>');
+            var queue_name = $('#queue-id' + oi_id).val();
+            console.log(queue_name);
+            if (queue_name && queue_name == "partnerinbox"){
+                $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload document and close orderitem?</div>');
+            }
+            else{
+                $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload draft and send for approval?</div>');
+            }
             $('#uploadDraftAction' + oi_id).show();
             $('#draftmodal' + oi_id).modal("show");
         }
@@ -13,7 +20,6 @@ function clickSubmitDraft(oi_id, ){
 function uploadDraft(oi_id, ){
     if (oi_id){
         $('#draftmodal' + oi_id).modal("hide");
-        console.log("hello");
     	$('#draft-upload-form' + oi_id).parsley().validate();
         if ($('#draft-upload-form' + oi_id).parsley().isValid()){
             var formData = new FormData($('#draft-upload-form' + oi_id)[0]);
@@ -21,8 +27,8 @@ function uploadDraft(oi_id, ){
                 url: '/ajax/orderitem/upload-draft/',
                 type: "POST",
                 cache: false,
-                processData: false, // important
-                contentType: false, // important
+                processData: false,
+                contentType: false,
                 async: false,
                 data : formData,
                 enctype: "multipart/form-data",

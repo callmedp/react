@@ -1724,6 +1724,49 @@ class ActionOrderItemView(View):
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
+        elif action == -7 and queue_name == "partnerinbox":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                hold = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 10  # on Hold
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    hold += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(hold) + ' orderitems are placed on hold.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:partner:' + queue_name))
+
+        elif action == -8 and queue_name == "partnerholdqueue":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                unhold = 0
+                for obj in orderitems:
+                    prev_status = obj.last_oi_status
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = prev_status  # UnHold
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    unhold += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(unhold) + ' orderitems are unhold.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:partner:' + queue_name))
+
         elif action == -2 and queue_name == 'midout':
             orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
             for oi in orderitems:
@@ -1752,7 +1795,10 @@ class ActionOrderItemView(View):
             return HttpResponseRedirect(reverse('console:queue-midout'))
 
         messages.add_message(request, messages.ERROR, "Select Valid Action")
-        return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+        try:
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+        except:
+            return HttpResponseForbidden()
 
 
 class AssignmentOrderItemView(View):

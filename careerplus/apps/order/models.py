@@ -191,7 +191,6 @@ class OrderItem(models.Model):
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
-
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -213,7 +212,7 @@ class OrderItem(models.Model):
 
             # oirder item detail permission
             ("can_view_order_item_detail", "Can View Order Item Detail"),
-            
+
             # for linkedin flow
             ("writer_assignment_linkedin_action", "Can Assign to Other linkedin writer"),
             ("can_assigned_to_linkedin_writer", "Can Assigned To This linkedin Writer"),

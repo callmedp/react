@@ -36,7 +36,7 @@ OI_OPS_STATUS = (
     (10, 'On Hold by Vendor'),
     (11, 'Archived'),
 
-    # flow1, flow3 and flow 5 status 21 - 40
+    # flow1, flow3, and flow 5 status 21 - 40
     (21, 'Upload Draft'),
     (22, 'Draft Uploaded'),
     (23, 'Pending Approval'),

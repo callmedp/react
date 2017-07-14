@@ -3,7 +3,9 @@
   <div class="menu_section">
     <h3>Catalog</h3>
     <ul class="nav side-menu">
-    {% if is_vendee %}
+
+      {% comment %}
+      {% if is_vendee %}
       <li><a><i class="fa fa-bookmark"></i> Inbox <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             <li><a href="{% url 'console:partner:pages:neworders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>New Orders</a></li>
@@ -12,6 +14,7 @@
         </ul>
       </li>
       {% endif %}
+      {% endcomment %}
       <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
           <li><a href="{% url 'console:category-list' %}">Category</a></li>
@@ -34,15 +37,17 @@
         </ul>
       </li>
 
-      {% if is_admin %}
-      <li><a><i class="fa fa-bookmark"></i> Orders <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-            <li><a href="{% url 'console:order:pages:neworders-list' %}" data-pjax='.right_col'>New Orders</a></li>
-          <li><a href="{% url 'console:order:pages:closedorders-list' %}" data-pjax='.right_col'>Closed Orders</a></li>
-          <li><a href="{% url 'console:order:pages:heldorders-list' %}" data-pjax='.right_col'>Hold Orders</a></li>
-        </ul>
-      </li>
-      {% endif %}
+      {% comment %}
+        {% if is_admin %}
+          <li><a><i class="fa fa-bookmark"></i> Orders <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+                <li><a href="{% url 'console:order:pages:neworders-list' %}" data-pjax='.right_col'>New Orders</a></li>
+              <li><a href="{% url 'console:order:pages:closedorders-list' %}" data-pjax='.right_col'>Closed Orders</a></li>
+              <li><a href="{% url 'console:order:pages:heldorders-list' %}" data-pjax='.right_col'>Hold Orders</a></li>
+            </ul>
+          </li>
+        {% endif %}
+      {% endcomment %}
 
       <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
@@ -104,21 +109,27 @@
 
       <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
+
             {% if perms.order.can_show_order_queue %}
                 <li><a href="{% url "console:queue-order" %}">Orders</a></li>
             {% endif %}
+
             {% if perms.order.can_show_welcome_queue %}
                 <li><a href="{% url "console:queue-welcome" %}">Welcome Call</a></li>
             {% endif %}
+
             {% if perms.order.can_show_welcome_queue %}
                 <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
             {% endif %}
+
             {% if perms.order.can_show_inbox_queue %}
                 <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
             {% endif %}
+
             {% if perms.order.can_show_approval_queue %}
                 <li><a href="{% url "console:queue-approval" %}">Approval</a></li>
             {% endif %}
+
             {% if perms.order.can_show_approved_queue %}
                 <li><a href="{% url "console:queue-approved" %}">Approved</a></li>
             {% endif %}
@@ -150,6 +161,14 @@
             {% if perms.order.can_show_closed_oi_queue %}
                 <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
             {% endif %}
+
+            <li>
+                <a href="{% url "console:partner:partnerinbox" %}">Partner Inbox</a>
+            </li>
+
+            <li>
+                <a href="{% url "console:partner:partnerholdqueue" %}">Hold Items</a>
+            </li>
             
         </ul>
       </li>

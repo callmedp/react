@@ -78,6 +78,29 @@ class FileUploadForm(forms.Form):
         return file
 
 
+class VendorFileUploadForm(forms.Form):
+    file = forms.FileField(max_length=255, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(VendorFileUploadForm, self).__init__(*args, **kwargs)
+
+    def clean_file(self):
+        file = self.files.get('file', '')
+        if not file:
+            raise forms.ValidationError(
+                "file is required.")
+        elif file:
+            name = file.name
+            extn = name.split('.')[-1]
+            if extn not in ['pdf', 'doc', 'docx', 'png', 'jpg']:
+                raise forms.ValidationError(
+                    "only pdf, doc, docx, png and jpg formats are allowed.")
+            elif file.size > 500 * 1024:
+                raise forms.ValidationError(
+                    "file is too large ( > 500kb ).")
+        return file
+
+
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
@@ -160,6 +183,14 @@ class OIFilterForm(forms.Form):
 
     payment_date = forms.CharField(
         label=("Payment Date:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
+    date_placed = forms.CharField(
+        label=("Placed Date:"), required=False,
         initial='',
         widget=forms.TextInput(attrs={
             'class': 'form-control date-range-picker',
@@ -250,6 +281,16 @@ class OIActionForm(forms.Form):
             ACTION_CHOICES += (
                 (-5, "Approve Domestic Profile Update"),  # domestic Profile Update approved
                 (-6, "Reject Domestic Profile Update"),
+            )
+
+        elif queue_name == 'partnerinbox':
+            ACTION_CHOICES += (
+                (-7, "Keep On Hold"),  # item on hold by vendor
+            )
+
+        elif queue_name == 'partnerholdqueue':
+            ACTION_CHOICES += (
+                (-8, "Unhold"),  # unhold orderitem
             )
 
         else:

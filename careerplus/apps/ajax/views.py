@@ -16,7 +16,7 @@ from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
 from order.models import OrderItem
-from console.order_form import FileUploadForm
+from console.order_form import FileUploadForm, VendorFileUploadForm
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
@@ -338,35 +338,84 @@ class UploadDraftView(View):
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and request.user.is_authenticated:
             data = {'display_message': "", }
-            form = FileUploadForm(request.POST, request.FILES)
+            queue_name = request.POST.get('queue_name', '').strip()
+            if queue_name == "partnerinbox":
+                form = VendorFileUploadForm(request.POST, request.FILES)
+            else:
+                form = FileUploadForm(request.POST, request.FILES)
             if form.is_valid():
                 try:
                     oi_pk = request.POST.get('oi_pk', None)
                     obj = OrderItem.objects.get(pk=oi_pk)
+                    if obj.product.type_flow in [2, 10]:
+                        last_oi_status = obj.last_oi_status
+                        obj.oi_status = 4  # closed orderitem
+                        obj.oi_draft = request.FILES.get('file', '')
+                        obj.last_oi_status = 22
+                        obj.closed_on = timezone.now()
+                        obj.save()
+                        data['display_message'] = 'Document uploded and orderitem closed Successfully.'
 
-                    last_status = obj.oi_status
-                    obj.oi_draft = request.FILES.get('file', '')
-                    if obj.oi_status == 26:
-                        obj.draft_counter += 1
-                    elif not obj.draft_counter:
-                        obj.draft_counter += 1
-                    obj.oi_status = 23  # pending Approval
-                    obj.last_oi_status = last_status
-                    obj.draft_added_on = timezone.now()
-                    obj.save()
-                    data['display_message'] = 'Draft uploded Successfully.'
-                    obj.orderitemoperation_set.create(
-                        oi_draft=obj.oi_draft,
-                        draft_counter=obj.draft_counter,
-                        oi_status=22,
-                        last_oi_status=last_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
-                    obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
-                        last_oi_status=22,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
+                        obj.orderitemoperation_set.create(
+                            oi_draft=obj.oi_draft,
+                            draft_counter=1,
+                            oi_status=22,
+                            last_oi_status=last_oi_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=22,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+
+                        # mail and sms to candidate
+                        to_emails = [obj.order.email]
+                        email_dict = {}
+                        email_dict.update({
+
+                            "info": 'Your service has been processed',
+                            "subject": 'Your service has been processed',
+                            "name": obj.order.first_name + ' ' + obj.order.last_name,
+                            "mobile": obj.order.mobile,
+                        })
+
+                        mail_type = 'COURSE_CLOSER_MAIL'
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_dict)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                    else:
+                        last_status = obj.oi_status
+                        obj.oi_draft = request.FILES.get('file', '')
+                        if obj.oi_status == 26:
+                            obj.draft_counter += 1
+                        elif not obj.draft_counter:
+                            obj.draft_counter += 1
+                        obj.oi_status = 23  # pending Approval
+                        obj.last_oi_status = last_status
+                        obj.draft_added_on = timezone.now()
+                        obj.save()
+                        data['display_message'] = 'Draft uploded Successfully.'
+                        obj.orderitemoperation_set.create(
+                            oi_draft=obj.oi_draft,
+                            draft_counter=obj.draft_counter,
+                            oi_status=22,
+                            last_oi_status=last_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=22,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
                 except Exception as e:
                     data['display_message'] = str(e)
             else:
@@ -465,7 +514,7 @@ class ApproveDraftByLinkedinAdmin(View):
                             oi_status=obj.oi_status,
                             last_oi_status=last_status,
                             assigned_to=obj.assigned_to,
-                            added_by=request.user)     
+                            added_by=request.user)
             except:
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
