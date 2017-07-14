@@ -1,7 +1,8 @@
 import json
-
+import logging
 from django.views.generic import TemplateView, View
 from django.http import HttpResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
 from django.utils.text import slugify
 from django.urls import reverse
@@ -9,8 +10,11 @@ from django.utils import timezone
 from datetime import datetime
 from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
+from shine.core import ShineCandidateDetail
+from .mixins import UpdateShineProfileMixin
 
 from microsite.roundoneapi import RoundOneAPI
+from microsite.common import ShineUserDetail
 from django.conf import settings
 
 
@@ -200,64 +204,107 @@ class DashboardSavedDeleteView(RoundOneAPI, View):
 
 
 
-class DashboardRoundoneProfileView(RoundOneAPI, TemplateView):
+class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView):
     template_name = "include/roundone_profile.html"
 
     def get_context_data(self, **kwargs):
-        context = super(DashboardRoundoneProfileView, self).get_context_data(**kwargs)
-        roundone_profile = self.get_roundone_profile(self.request)
-
-        if roundone_profile.get("response"):
-            rouser = roundone_profile.get("user")
-            employments = {}
-            education = {}
-            skill_list = []
-            if rouser:
-                education = rouser.get("education")
-                employments = rouser.get("employments")
-                skill_str = rouser.get("skills", "")
-                skill_list = skill_str.split(",")
-                csrf_token_value = get_token(self.request)
-
+        context = super(DashboardMyProfileView, self).get_context_data(**kwargs)
+        try:
+            request = self.request
+            shine_profile = request.session.get('candidate_profile', '')
+            if not shine_profile:
+                email = request.session.get('email', '')
+                shine_profile = self.get_candidate_detail(email=email)
+                f_area = self.get_functional_area(email=email)
+                request.session.update({
+                    'candidate_profile': shine_profile, 'f_area':f_area,
+                })
+            personal_detail = self.get_shine_user_profile_detail(request)
+            education_detail = shine_profile.get('education', '')
+            experience_detail = shine_profile.get('jobs', '')
+            total_exp = shine_profile.get('total_experience', '')
+            resumes = self.get_resume_file(request) #shine_profile.get('resumes', '')
+            skill_detail = self.get_skills(request)
             context.update({
-                "rouser": rouser, "education_list": education,
-                "employment_list": employments,
-                'csrf_token_value': csrf_token_value,
-                'skill_list': skill_list
+                "personal_detail": personal_detail,
+                "education_detail": education_detail,
+                "experience_detail": experience_detail,
+                "skill_detail": skill_detail,
+                'skill_len': len(skill_detail),
+                'total_exp':total_exp,
+                'years': [i for i in range(12)],
+                'csrf_token_value':get_token(request),
+                # 'f_area': f_area,
+                "resumes":resumes,
+                "passout_yr": [yr for yr in range(1960,2017)]
             })
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        context.update({"myprofile_active": True})
         return context
 
     def get(self, request, *args, **kwargs):
-        return super(DashboardRoundoneProfileView, self).get(request, *args, **kwargs)
+        return super(DashboardMyProfileView, self).get(request, *args, **kwargs)
 
 
-class RoundonePersonalSubmit(RoundOneAPI, View):
+class UpdateShineProfileView(UpdateShineProfileMixin, View):
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         try:
-            name = request.POST.get("name")
-            contact = request.POST.get("mobile")
-            total_exp = request.POST.get("total_exp")
-            roundone_profile = request.session.get("roundone_profile")
-            if not roundone_profile:
-                roundone_profile = self.get_roundone_profile(request)
-            if roundone_profile.get("response"):
-                rouser = roundone_profile.get("user")
-                rouser.update({
-                    "name": name,
-                    "mobile": contact,
-                    "total_exp": total_exp,
-                    "skills": request.POST.get("skill_str")
-                })
-                response_json = self.post_roundone_profile(
-                    request, roundone_profile)
-                if response_json.get("response"):
-                    request.session.update({
-                        "roundone_profile": roundone_profile})
-                    return HttpResponse(json.dumps({
-                        "status": True,
-                        "message": response_json.get("msg")}))
+            if request.is_ajax() and request.session.get('candidate_id'):
+                shine_id = request.session.get("candidate_id", '')
+                email = request.session.get('email', '')
+                user_access_token = request.session.get("user_access_token", '')
+                skill = request.POST.getlist('skill')
+                old_skill = request.POST.get('skilllength')
+                if not user_access_token:
+                    user_access_token = self.get_access_token(email, '123456')
+
+                client_token = self.get_client_token()
+                edit_for = request.POST.get('edit_type')
+                if shine_id and user_access_token and client_token and edit_for:
+                    if edit_for == "editpersonal":
+                        if len(skill)>len(old_skill):
+                            update_status, update_msg =\
+                                self.update_candidate_skills(
+                                    shine_id=shine_id,
+                                    user_access_token=user_access_token,
+                                    client_token=client_token, data=request.POST,
+                                    type_of='edit')
+                        else:
+                            update_status, update_msg =\
+                                self.update_candidate_personal(
+                                    shine_id=shine_id,
+                                    user_access_token=user_access_token,
+                                    client_token=client_token, data=request.POST,
+                                    type_of='edit')
+                            
+                    elif edit_for == "editeducation":
+                        update_status, update_msg =\
+                            self.update_candidate_education(
+                                shine_id=shine_id,
+                                user_access_token=user_access_token,
+                                client_token=client_token, data=request.POST,
+                                type_of='edit')
+
+                    elif edit_for == "editworkexp":
+                        update_status, update_msg = self.update_candidate_jobs(
+                            shine_id=shine_id,
+                            user_access_token=user_access_token,
+                            client_token=client_token, data=request.POST,
+                            type_of='edit')
+
+                    elif edit_for == "uploadresume":
+                        update_status, update_msg = self.upload_resume(
+                            shine_id=shine_id, 
+                            user_access_token=user_access_token,
+                            client_token=client_token, data=request.FILES,
+                            type_of='edit')
+
+                    if update_status:
+                        return HttpResponse(json.dumps({'status': True, "msg": update_msg}))
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
-        return HttpResponse(json.dumps({
-            "status": False, "message": "Profile Not Updated"}))
+            logging.getLogger("error_log").error(str(e))
+
+        return HttpResponse(json.dumps({'status': False, "msg": "Something went wrong, Please Try Again."}))

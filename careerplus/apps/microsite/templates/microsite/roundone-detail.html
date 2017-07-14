@@ -74,10 +74,11 @@
       {% endwith %}
       </div>
       {% if request.session.candidate_id %}
-        <a role="button" class="get-refferd pull-right" id="enrol-now-button" prod-id="8">Get Referred</a>
-         <!--<a href="#" class="get-refferd pull-right">Get Referred</a>-->
+        <a role="button" class="get-refferd pull-right enrol-now-button"
+        prod-id="8">Get Referred</a>
       {% else %}
-        <a href="#" class="get-refferd pull-right" data-toggle="modal" data-target=".bs-example-modal-sm">Get Referred</a>
+        <a role="button" class="get-refferd pull-right" 
+        data-toggle="modal" data-target=".bs-example-modal-sm">Get Referred</a>
       {% endif %}
     </div>      
     <!-- right content end -->

@@ -48,8 +48,8 @@
                         <img src="{% static 'shinelearn/images/user-pic.jpg' %}" class="img-responsive" alt="">
                     </div>
                     <div class="col-sm-10 col-md-10 user-info">
-                        <h1>Naveen Verma</h1>
-                        <p>Graphic Design System/Software, Website Designing</p>
+                        <h1>{{personal_detail.first_name}}</h1>
+                        <p>{{personal_detail.job_tilte}}</p>
                     </div>
                 </div>
             </div>
@@ -57,235 +57,435 @@
         <li>
             <div id="detail_roundone_personal" class="col-sm-12 bdr-bottom">
                 <h2 class="profile-head" data-id="personal">Personal Details</h2>
-                <button class="btn btn-profile" data-role="button" id="edit_roundone_personal">Edit</button>
+                <button class="btn btn-profile" data-role="button" 
+                id="edit_roundone_personal">Edit</button>
                 <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Name</div>
+                    <div class="col-sm-3 col-md-3">Email</div>
                     <div class="col-sm-9 col-md-9" data-role="input" 
                     data-editable data-name="name">
-                    {{rouser.name}}
+                    {{personal_detail.email}}
                     </div>
                 </div>
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Contact no</div>
-                    <div class="col-sm-9 col-md-9" data-role="mobile" data-editable data-name="contact">+91-{{rouser.mobile}}</div>
+                    <div class="col-sm-9 col-md-9" data-role="mobile" data-editable data-name="contact">+{{personal_detail.country_code}}-{{personal_detail.cell_phone}}</div>
                 </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Total Experience</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" 
-                    data-editable data-name="total_exp">{{rouser.total_exp}} years</div>
-                </div>
-              <!--  
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Designation</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>Visualizer Designer</div>
+                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                      {{personal_detail.resume_title}}
+                    </div>
                 </div>
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Gender</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>Male</div>
+                    {% if personal_detail.gender == 1 %}
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                        Male
+                      </div>
+                    {% elif personal_detail.gender == 2 %}
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                        Femail
+                      </div>
+                    {% endif %}
                 </div>
-              -->
+                <!--
+                <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Total Experience</div>
+                    <div class="col-sm-9 col-md-9" data-role="input" 
+                    data-editable data-name="total_exp">
+                      {{total_exp.0.experience_in_years}} years
+                      {{total_exp.0.experience_in_months}} months
+                    </div>
+                </div>
+                -->
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Skills</div>
                     <div class="col-sm-9 col-md-9">
-                       <div class="block-inline">
-                           <div class="skill-box" data-role="inputSelect" data-editable data-type="yrs">
-                           {% for skill in skill_list %}
-                               <div class="skill-name">
-                                   {{skill}}
-                               </div>
-                            {% endfor %}
-                           </div>
-                       </div>                        
+                      {% for skill in skill_detail %} 
+                        <div class="block-inline">
+                            <div class="skill-box"  data-role="inputSelect" data-editable data-type="yrs">
+                                <div class="skill-name"> 
+                                    {{skill.value}}
+                                </div>
+                                <div class="skill-time">
+                                    {{skill.years_of_experience}} years
+                                </div>
+                            </div>
+                        </div>
+                      {% endfor %}                      
                     </div>
                 </div>
                 <div class="row mt-10 save-event" style="display: none;">
                     <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
                         <a href="#" class="addElement">+ Add Skills</a>
+                    </div>
+                </div>
+                <div class="row mt-10 save-event" style="display: none;">
+                    <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                        <a id="cancel_roundone_personal" role="button" class="btn">Cancel</a>
                     </div>
                 </div>
             </div>
           <form id="form_roundone_personal" method="post" style="display:none;">
-              <div style="display:none"><input type="hidden" 
-                name="csrfmiddlewaretoken" value="{{csrf_token_value}}">
+              <div style="display:none">
+                <input type="hidden" name="csrfmiddlewaretoken" 
+                value="{{csrf_token_value}}">
               </div>
             <div class="col-sm-12 bdr-bottom">
+              <h2 class="profile-head" data-id="personal">Personal Details</h2>
               <div class="row mt-10">
-                <div class="col-sm-3 col-md-3">Name</div>
+                <div class="col-sm-3 col-md-3">Email</div>
                 <div class="col-sm-9 col-md-9" data-role="input" 
                 data-editable>
-                  <input class="pro-input" type="text" name="name" 
-                  value="{{rouser.name}}">
+                  <input class="pro-input" type="text" name="email" 
+                  value="{{personal_detail.email}}">
                 </div>
               </div>
               <div class="row mt-10">
                 <div class="col-sm-3 col-md-3">Contact no</div>
-                <div class="col-sm-9 col-md-9" data-role="input" 
+                <div class="col-sm-9 col-md-9" data-role="mobile" 
                 data-editable>
-                  <input class="pro-input" type="text" name="mobile" 
-                  value="{{rouser.mobile}}">
+                  <input class="pro-mob" type="text" name="mobile_country" 
+                  value="{{personal_detail.country_code}}">
+                  <input class="pro-input2" type="text" name="mobile" 
+                  value="{{personal_detail.cell_phone}}">
                 </div>
               </div>
+              <div class="row mt-10">
+                <div class="col-sm-3 col-md-3">Designation</div>
+                <div class="col-sm-9 col-md-9" data-role="input" 
+                data-editable>
+                  <input class="pro-input" type="text" name="resume_title" 
+                  value="{{personal_detail.resume_title}}">
+                </div>
+              </div>
+              <div class="row mt-10">
+                {% if personal_detail.gender == 1 %}
+                <div class="col-sm-3 col-md-3">Gender</div>
+                <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                  <input class="pro-input" type="text" name="gender" 
+                  value="Mail">
+                </div>
+                {% elif personal_detail.gender == 2 %}
+                <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                  <input class="pro-input" type="text" name="gender" 
+                  value="Femail">
+                </div>
+                {% endif %}
+              </div>
+              <!--
               <div class="row mt-10">
                 <div class="col-sm-3 col-md-3">Total Experience</div>
-                <div class="col-sm-9 col-md-9" data-role="input" 
-                data-editable>
-                  <input class="pro-input" type="text" name="total_exp" 
-                  value="{{rouser.total_exp}}">
+                <div class="col-sm-9 col-md-9" data-role="input2" data-editable>
+                  <input class="pro-input2" type="text" name="years" 
+                  value="{{total_exp.0.experience_in_years}}">
+                  <input class="pro-input2" type="text" name="months" 
+                  value="{{total_exp.0.experience_in_months}}">
                 </div>
               </div>
+              -->
               <div class="row mt-10">
+                  {% if skill_detail %}
                     <div class="col-sm-3 col-md-3">Skills</div>
                     <div class="col-sm-9 col-md-9">
-                       <div class="block-inline">
-                           <div class="skill-box" data-role="inputSelect" data-editable data-type="yrs">
-                            {% for skill in skill_list %}
-                               <div class="skill-name">
-                                   <input class="pro-input" type="text" 
-                                   name="skill_str" value="{{skill}}">
-                               </div>
+                      {% for skill in skill_detail %} 
+                        <div class="row mt-10">
+                          <div class="col-sm-9 col-md-9 mb-10" data-role="inputSelect" data-editable data-type="yrs">
+                            <input class="pro-input2" type="text" 
+                            name="skill" value="{{skill.value}}">
+                            <select class="pro-select2" name="level_id">
+                            {% for year in years %}
+                              {% if year == skill.years_of_experience %}
+                                <option selected>{{year}}</option>
+                              {% else %}
+                                <option>{{year}}</option>
+                              {% endif %}
                             {% endfor %}
-                           </div>
-                       </div>                        
+                            </select>
+                            <a href="#" class="removeElement">Remove</a>
+                          </div>
+                        </div>
+                      {% endfor %}                      
                     </div>
+                  {% endif %}
                 </div>
                 <div class="row mt-10 save-event">
                     <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
                         <a href="#" class="addElement">+ Add Skills</a>
                     </div>
                 </div>
-                <input type="hidden" name="profile_type" value="personal_details">
+                <input type="hidden" name="first" value="{{personal_detail.first_name}}">
+                <input type="hidden" name="last" value="{{personal_detail.last_name}}">
+                <input type="hidden" name="total_exp" value="{{personal_detail.last_name}}">
+                <input type="hidden" name="edit_type" value="editpersonal">
+                <input type="hidden" name="skilllength" value="{{skill_len}}">
                 <div class="row mt-10 save-event">
                     <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
                         <button class="btn btn-primary" type="submit">Save</button>
-                        <a href="#" class="btn">Cancel</a>
+                        <a id="cancel_roundone_personal" role="button" class="btn">Cancel</a>
                     </div>
                 </div>
             </div>
           </form>
-
-          <input type="hidden" name="post_personal_detail" value='{% url "dashboard:post_personal_detail" %}'>
-        </li>
+          <input type="hidden" name="post_personal_detail" value='{% url "dashboard:post_shine_detail" %}'>
+        </li> 
         <li>
-            <div class="col-sm-12 bdr-bottom">
-               <h2 class="profile-head" data-id="work">Work Experience</h2> 
-                <button class="btn btn-profile" data-role="button">Edit</button>
-                <div class="row mt-10 save-event" style="display: none;">
-                    <div class="col-sm-3 col-md-3">Are You</div>
-                    <div class="col-sm-9 col-md-9">
-                        <label class="block-inline mright20">
-                            <input type="radio" name="freshexp">
-                            Fresher
-                        </label>
-                        <label class="block-inline">
-                            <input type="radio" name="freshexp">
-                            Experience
-                        </label>
-                    </div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3" data-id="total">Total Experience</div> 
-                    <div class="col-sm-9 col-md-9" data-role="input2" data-editable data-type="yrmnth">5 years</div>
-                </div>
-
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Company</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>Himalaya Drugs Company</div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Job Title</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>Area Sales Manager</div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Function Area</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>Sales/BD Industry</div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Duration</div>
-                    <div class="col-sm-9 col-md-9" data-role="input2" data-editable>Medical/Healthcare</div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Years in job</div>
-                    <div class="col-sm-9 col-md-9"  data-role="input" data-editable>5Yrs</div>
-                </div>
-                <div class="row mt-10 save-event" style="display: none;">
-                    <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
-                        <label for="current" class="current-comp"><input type="checkbox" name="current"> I work here</label>
-                        <a href="#" class="btn btn-primary">Save</a>
-                        <a href="#" class="btn">Cancel</a>
-                    </div>
-                </div>
+          <div class="col-sm-12 bdr-bottom" id="div_workex">
+            <h2 class="profile-head" data-id="work">Work Experience</h2> 
+            <button class="btn btn-profile js_edit_workex_btn" data-role="button">
+            Edit</button>
+              <div class="row mt-10 save-event" style="display: none;">
+                  <div class="col-sm-3 col-md-3">Are You</div>
+                  {% for fresh_exp in total_exp %}
+                  <div class="col-sm-9 col-md-9">
+                      <label class="block-inline mright20">
+                          <input type="radio" name="freshexp"
+                          {% if fresh_exp.experience_in_months < 0 %} checked {% endif %}>
+                          Fresher
+                      </label>
+                      <label class="block-inline">
+                          <input type="radio" name="freshexp"
+                          {% if fresh_exp.experience_in_months > 0 %} checked {% endif %}>
+                          Experience
+                      </label>
+                  </div>
+                  {% endfor %}
+              </div>
+            {% for exp in experience_detail %}
+              <div class="row mt-10">
+                  <div class="col-sm-3 col-md-3">Company</div>
+                  <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                    {{exp.company_name}}
+                  </div>
+              </div>
+              <div class="row mt-10">
+                  <div class="col-sm-3 col-md-3">Job Title</div>
+                  <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                    {{exp.job_title}}
+                  </div>
+              </div>
+              <div class="row mt-10">
+                  <div class="col-sm-3 col-md-3">Duration</div>
+                  <div class="col-sm-9 col-md-9" data-role="input2" data-editable>{{exp.start_month}},{{exp.start_year}} to {% if exp.is_current %}Present{% else %} {{exp.end_month}}, {{exp.end_year}} {% endif %}</div>
+              </div>
+            {% endfor %}
+              <div class="row mt-10 save-event" style="display: none;">
+                  <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
+                      <label for="current" class="current-comp"><input type="checkbox" name="current"> I work here</label>
+                      <a href="#" class="btn btn-primary">Save</a>
+                      <a href="#" class="btn">Cancel</a>
+                  </div>
+              </div>
+          </div>
+          <form id="form_edit_workex" method="post" style="display:none;">
+            <div style="display:none">
+              <input type="hidden" name="csrfmiddlewaretoken" 
+              value="{{csrf_token_value}}">
             </div>
+            <div class="col-sm-12 bdr-bottom">
+              <h2 class="profile-head" data-id="work">Work Experience</h2>
+              <div class="row mt-10 save-event">
+                <div class="col-sm-3 col-md-3">Are You</div>
+                {% for fresh_exp in total_exp %}
+                <div class="col-sm-9 col-md-9">
+                    <label class="block-inline mright20">
+                        <input type="radio" name="freshexp"
+                        {% if fresh_exp.experience_in_months < 0 %} checked {% endif %}>
+                        Fresher
+                    </label>
+                    <label class="block-inline">
+                        <input type="radio" name="freshexp"
+                        {% if fresh_exp.experience_in_months > 0 %} checked {% endif %}>
+                        Experience
+                    </label>
+                </div>
+                {% endfor %}
+              </div>
+                {% for exp in experience_detail %}
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Company</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                        <input class="pro-input js_company" type="text" 
+                        name="company" value="{{exp.company_name}}">
+                      </div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Job Title</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                        <input class="pro-input js_position" type="text" 
+                        name="position" value="{{exp.job_title}}">
+                      </div>
+                  </div>
+                  {% if exp.is_current %}
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">From (Date)</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                      <input class="pro-input2" type="text" name="start_month"
+                      value="{{exp.start_month}}">
+                      <input class="pro-input2" type="text" name="start_year"
+                      value="{{exp.start_year}}">
+                      </div>
+                  </div>
+                  {% else %}
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">From (Date)</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                        <input class="pro-input2" type="text" name="start_month"
+                        value="{{exp.start_month}}">
+                        <input class="pro-input2" type="text" name="start_year"
+                        value="{{exp.start_year}}">
+                      </div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">To (Date)</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                      <input class="pro-input2" type="text" name="end_month"
+                      value="{{exp.end_month}}">
+                      <input class="pro-input2" type="text" name="end_year"
+                      value="{{exp.end_year}}">
+                      </div>
+                  </div>
+                  {% endif %}
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Is current Job?</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                        <label for="current" class="current-comp">
+                          <input type="checkbox" name="current" {% if exp.is_current %}checked{% endif %}> 
+                          I work here
+                        </label>
+                      </div>
+                  </div>
+                  <input type="hidden" name="industry_id" value="{{exp.industry_id}}">
+                  <input type="hidden" name="sub_field" value="{{exp.sub_field}}">
+                  <input type="hidden" name="id" value="{{exp.id}}">
+                {% endfor %}
+                <div class="row mt-10 save-event">
+                  <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
+                      <button class="btn btn-primary" type="submit">Save</button>
+                      <a href="#" class="btn">Cancel</a>
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" name="edit_type" value="editworkexp">
+          </form>
+          <input type="hidden" name="post_workex_detail" value='{% url "dashboard:post_shine_detail" %}'>
         </li>
         <li>
-            <div class="col-sm-12 bdr-bottom">
+            <div class="col-sm-12 bdr-bottom" id="div_education">
                 <h2 class="profile-head" data-id="education">Education Details</h2>
-              {% for education in education_list %}
-              <div id="div_education{{forloop.counter0}}">
-                <button class="btn btn-profile profile-edit js_edit_education_btn" data-idx={{forloop.counter0}} data-role="button">Edit</button>
+                <button class="btn btn-profile js_edit_education_btn" data-role="button">Edit</button>
+              {% for education in education_detail %}
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Qualification level</div>
-                    <div class="col-sm-9 col-md-9" data-role="select" data-editable  data-type="qualification">{{education.degree}}</div>
+                    <div class="col-sm-9 col-md-9" data-role="select" data-editable data-type="qualification">{{education.education_level}}</div>
                 </div>
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Education Stream</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>{{education.major}}</div>
+                    <div class="col-sm-9 col-md-9" data-role="input"
+                    data-editable>{{education.education_specialization}}</div>
                 </div>
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Institute Name</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>{{education.institute}}</div>
+                    <div class="col-sm-9 col-md-9" data-role="input"
+                    data-editable>{{education.institute_name}}</div>
                 </div>
                 <div class="row mt-10">
                     <div class="col-sm-3 col-md-3">Year of Passing</div>
-                    <div class="col-sm-9 col-md-9" data-role="select" data-editable data-type="year">{{education.year}}</div>
+                    <div class="col-sm-9 col-md-9" data-role="select"
+                    data-editable data-type="year">{{education.year_of_passout}}</div>
                 </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Marks Percentage</div>
-                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>{{education.marks}}</div>
-                </div>
+              {% endfor %}
+              <div class="row mt-10 save-event" style="display: none;">
+                  <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
+                      <label for="current" class="current-comp"><input type="checkbox" name="current"> I work here</label>
+                      <a href="#" class="btn btn-primary">Save</a>
+                      <a href="#" class="btn">Cancel</a>
+                  </div>
               </div>
-              <form id="form_edit_education{{forloop.counter0}}" data-url='{% url "dashboard:post_personal_detail" %}'
-               class="js_form_edit_education" style="display:none;">
-                  <div style="display:none"><input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token_value}}"></div>
+            </div>
+            <form id="form_edit_education" method="post" style="display:none;"
+              class="js_form_edit_education">
+                  <div style="display:none">
+                    <input type="hidden" name="csrfmiddlewaretoken" 
+                    value="{{csrf_token_value}}">
+                  </div>
+                  <h2 class="profile-head" data-id="education">Education Details</h2>
+                  {% for education in education_detail %}
                   <div class="row mt-10">
                       <div class="col-sm-3 col-md-3">Qualification level</div>
-                      <div class="col-sm-9 col-md-9" data-role="mobile" data-editable=""><input class="pro-input js_degree" type="text" name="degree{{forloop.counter0}}" value="{{education.degree}}"></div>
+                      <div class="col-sm-9 col-md-9" data-role="mobile" data-editable="">
+                        <input class="pro-input js_degree" type="text" 
+                        name="level" value="{{education.education_level}}">
+                      </div>
                   </div>
                   <div class="row mt-10">
                       <div class="col-sm-3 col-md-3">Education Stream</div>
-                      <div class="col-sm-9 col-md-9" data-role="input" data-editable=""><input class="pro-input js_major" type="text" name="major{{forloop.counter0}}" value="{{education.major}}"></div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                      <input class="pro-input js_major" type="text" name="specialization" 
+                      value="{{education.education_specialization}}">
+                      </div>
                   </div>
                   <div class="row mt-10">
                       <div class="col-sm-3 col-md-3">Institute</div>
-                      <div class="col-sm-9 col-md-9" data-role="input" data-editable=""><input class="pro-input js_institute" type="text" name="institute{{forloop.counter0}}" value="{{education.institute}}"></div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                      <input class="pro-input js_institute" type="text" name="institute" value="{{education.institute_name}}"></div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Marks</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                        <input class="pro-input" type="text" name="marks" value="">
+                      </div>
                   </div>
                   <div class="row mt-10">
                       <div class="col-sm-3 col-md-3">Year of Passing</div>
-                      <div class="col-sm-9 col-md-9" data-role="input" data-editable=""><input class="pro-input js_year" type="text" name="year{{forloop.counter0}}" value="{{education.year}}"></div>
-                  </div>
-                  <div class="row mt-10">
-                      <div class="col-sm-3 col-md-3">Marks (in %)</div>
-                      <div class="col-sm-9 col-md-9" data-role="input" data-editable=""><input class="pro-input js_marks" type="text" name="marks{{forloop.counter0}}" value="{{education.marks}}"></div>
-                  </div>
-                  <input type="hidden" name="profile_type" value="edu_details">
-                  <input type="hidden" name="el_id" value="{{forloop.counter0}}">
-                  <div class="row mt-10 save-event">
-                      <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
-                          <button id="save_edit_education{{forloop.counter0}}" class="btn btn-primary" data-idx="{{forloop.counter0}}" type="submit">Save</button>
-                          <a id="cancel_edit_education{{forloop.counter0}}" data-idx="{{forloop.counter0}}" class="btn js_cancel_edit_education">Cancel</a>
+                      <div class="col-sm-9 col-md-9" data-role="select" data-editable="" data-type="year">
+                        <select class="pro-select" name="passout_year">
+                          {% for year in passout_yr %}
+                            {% if year == education.year_of_passout %}
+                              <option selected>{{year}}</option>
+                            {% else %}
+                              <option>{{year}}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
                       </div>
                   </div>
-              </form>
-            </div>
-          {% endfor %}
+                  <input type="hidden" name="id" value="{{education.id}}">
+                  <input type="hidden" name="course_type" value="{{education.course_type}}">
+                  {% endfor %}
+                  <input type="hidden" name="edit_type" value="editeducation">
+                  <div class="row mt-10 save-event">
+                      <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
+                          <button id="save_edit_education" class="btn btn-primary" 
+                          type="submit">Save</button>
+                          <a id="cancel_edit_education" class="btn js_cancel_edit_education">Cancel
+                          </a>
+                      </div>
+                  </div>
+            </form>
+            <input type="hidden" name="post_education" value='{% url "dashboard:post_shine_detail" %}'>
         </li>
         <li>
             <div class="col-sm-12 gap-bottom">
                 <h2 class="profile-head" data-id="resume">Resume</h2> 
                 <div class="row mt-10">
                     <div class="col-sm-12">
-                        <div class="alert alert-resume"><a href="#">Naveenresume.doc</a> <div class="pull-right resume-close"><a href="#">X</a></div></div>
+                        <div class="alert alert-resume"><a href="#">{{resumes}}</a> 
+                        <div class="pull-right resume-close"><a href="#">X</a></div></div>
                     </div>
                 </div>
+                <form id="resume_form" method="post" data-url='{% url "dashboard:post_shine_detail" %}' enctype="multipart/form-data">
+                <div style="display:none">
+                    <input type="hidden" name="csrfmiddlewaretoken" 
+                    value="{{csrf_token_value}}">
+                  </div>
+                  <div class="col-sm-12">
+                      <input type="file" name="resume"><br>
+                      <button type="submit">Update</button>
+                  </div>
+                  <input type="hidden" name="edit_type" value="uploadresume">
+                </form>               
             </div>
         </li>
     </ul>
@@ -302,7 +502,7 @@
    {{ block.super }} 
     
     <script src="{% static 'shinelearn/js/dashboard/profile.js' %}"></script>
-    <!--<script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>-->
+    <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
     <script type="text/javascript">
       $('.nav-tabs > li > a').hover(function() {
           $(this).tab('show');

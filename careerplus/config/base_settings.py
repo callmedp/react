@@ -171,3 +171,5 @@ except:
     REDIS_CON = None
 
 CART_MAX_LIMIT = 5
+
+SHINE_API_URL = 'https://sumosc.shine.com'

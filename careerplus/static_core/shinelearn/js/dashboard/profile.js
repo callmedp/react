@@ -126,8 +126,8 @@ $(document).ready(function(){
 		e.preventDefault();
 		var inputsRow = '<div class="row mt10">' +
 						'<div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3 mb-10" data-role="inputSelect" data-editable="" data-type="yrs">' +
-							'<input class="pro-input2" value="" type="text">' +
-							'<select class="pro-select2"><option>0 years</option><option>1 years</option><option>2 years</option><option>3 years</option><option>4 years</option><option>5 years</option><option>6 years</option><option>7 years</option><option>8 years</option><option>9 years</option><option>10 years</option><option>11 years</option></select>' + 
+							'<input class="pro-input2" value="" type="text" name="skill">' +
+							'<select class="pro-select2" name="exp"><option>0 years</option><option>1 years</option><option>2 years</option><option>3 years</option><option>4 years</option><option>5 years</option><option>6 years</option><option>7 years</option><option>8 years</option><option>9 years</option><option>10 years</option><option>11 years</option></select>' + 
 							'<a href="#" class="removeElement">Remove</a>' +
 						'</div>' +
                         '</div>';
