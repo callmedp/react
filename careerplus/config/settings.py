@@ -2,17 +2,17 @@ from .base_settings import *  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+IS_LIVE = False
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
 SITE_DOMAIN = '127.0.0.1:8000'
-# SITE_DOMAIN = 'careerplus1.shine.com'
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careerplus',
+        'NAME': 'careerplus1',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '',
