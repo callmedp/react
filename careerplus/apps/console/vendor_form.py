@@ -11,107 +11,12 @@ from shop.models import (
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
-from faq.models import ScreenFAQ
+from faq.models import ScreenFAQ, FAQuestion
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
+from shop.utils import FIELD_FACTORIES
 
-def _attribute_text_field(attribute):
-    return forms.CharField(
-        label=attribute.display_name,
-        required=attribute.required,
-        widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
-
-def _attribute_textarea_field(attribute):
-    return forms.CharField(
-        label=attribute.display_name,
-        widget=forms.Textarea(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),
-        required=attribute.required)
-
-def _attribute_integer_field(attribute):
-    return forms.IntegerField(
-        label=attribute.display_name,
-        required=attribute.required,
-        widget=forms.NumberInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
-
-def _attribute_boolean_field(attribute):
-    return forms.BooleanField(
-        label=attribute.display_name,
-        required=False,
-        widget=forms.CheckboxInput(
-            attrs={'class': 'js-switch', 'data-switchery': True}),)
-
-def _attribute_float_field(attribute):
-    return forms.FloatField(
-        label=attribute.display_name,
-        required=attribute.required,
-        widget=forms.NumberInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
-
-def _attribute_date_field(attribute):
-    return forms.DateField(label=attribute.display_name,
-        required=attribute.required,
-        widget=forms.widgets.DateInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
-
-def _attribute_option_field(attribute):
-    return forms.ModelChoiceField(
-        label=attribute.display_name,
-        required=attribute.required,
-        queryset=attribute.option_group.options.all(),
-        empty_label = 'Select',
-        widget=forms.widgets.Select(
-            attrs={'class': 'form-control col-md-7 col-xs-12',
-                'data-parsley-notdefault': ''}),)
-
-
-def _attribute_multi_option_field(attribute):
-    return forms.ModelMultipleChoiceField(
-        label=attribute.display_name,
-        required=attribute.required,
-        queryset=attribute.option_group.options.all(),
-        widget=forms.widgets.SelectMultiple(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
-
-def _attribute_numeric_field(attribute):
-    return forms.FloatField(label=attribute.display_name,
-        required=attribute.required)
-
-def _attribute_file_field(attribute):
-    return forms.FileField(
-        label=attribute.display_name,
-        required=attribute.required,
-        widget=forms.widgets.ClearableFileInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
-                'data-parsley-max-file-size': 250}),)
-
-
-def _attribute_image_field(attribute):
-    return forms.ImageField(
-        label=attribute.display_name,
-        required=attribute.required,
-        widget=forms.widgets.ClearableFileInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
-                'data-parsley-max-file-size': 250,
-                'data-parsley-filemimetypes': 'image/jpeg, image/png, image/jpg, image/svg'}),)
-
-
-FIELD_FACTORIES = {
-        "text": _attribute_text_field,
-        "richtext": _attribute_textarea_field,
-        "integer": _attribute_integer_field,
-        "boolean": _attribute_boolean_field,
-        "float": _attribute_float_field,
-        "date": _attribute_date_field,
-        "option": _attribute_option_field,
-        "multi_option": _attribute_multi_option_field,
-        "numeric": _attribute_numeric_field,
-        "file": _attribute_file_field,
-        "image": _attribute_image_field,
-    }
 
 class AddScreenFaqForm(forms.ModelForm):
 
@@ -651,13 +556,14 @@ class ScreenProductAttributeForm(forms.ModelForm):
                 setattr(self.instance.attr, attribute.name, value)
         productscreen = super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
         return productscreen
+
 class ScreenProductFAQForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
         vendor = kwargs.pop('vendor', None)
         super(ScreenProductFAQForm, self).__init__(*args, **kwargs)
-        queryset = ScreenFAQ.objects.filter(status=3)
+        queryset = FAQuestion.objects.filter(status=2)
         if not vendor:
             queryset = queryset.none()
         else:

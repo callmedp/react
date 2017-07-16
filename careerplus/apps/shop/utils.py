@@ -1,3 +1,10 @@
+from decimal import Decimal
+from django import forms
+from django.core import exceptions
+from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
+from django.utils.html import format_html
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError, transaction
@@ -6,7 +13,102 @@ from decimal import Decimal
 from django.contrib import messages
 from shop.choices import PRODUCT_VENDOR_CHOICES
 
+def _attribute_text_field(attribute):
+    return forms.CharField(
+        label=attribute.display_name,
+        required=attribute.required,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+def _attribute_textarea_field(attribute):
+    return forms.CharField(
+        label=attribute.display_name,
+        widget=forms.Textarea(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}),
+        required=attribute.required)
+
+def _attribute_integer_field(attribute):
+    return forms.IntegerField(
+        label=attribute.display_name,
+        required=attribute.required,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+
+def _attribute_boolean_field(attribute):
+    return forms.BooleanField(
+        label=attribute.display_name,
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={'class': 'js-switch', 'data-switchery': True}),)
+
+def _attribute_float_field(attribute):
+    return forms.FloatField(
+        label=attribute.display_name,
+        required=attribute.required,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+
+def _attribute_date_field(attribute):
+    return forms.DateField(label=attribute.display_name,
+        required=attribute.required,
+        widget=forms.widgets.DateInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+
+def _attribute_option_field(attribute):
+    return forms.ModelChoiceField(
+        label=attribute.display_name,
+        required=attribute.required,
+        queryset=attribute.option_group.options.all(),
+        empty_label = 'Select',
+        widget=forms.widgets.Select(
+            attrs={'class': 'form-control col-md-7 col-xs-12',
+                'data-parsley-notdefault': ''}),)
+
+
+def _attribute_multi_option_field(attribute):
+    return forms.ModelMultipleChoiceField(
+        label=attribute.display_name,
+        required=attribute.required,
+        queryset=attribute.option_group.options.all(),
+        widget=forms.widgets.SelectMultiple(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+
+def _attribute_numeric_field(attribute):
+    return forms.FloatField(label=attribute.display_name,
+        required=attribute.required)
+
+def _attribute_file_field(attribute):
+    return forms.FileField(
+        label=attribute.display_name,
+        required=attribute.required,
+        widget=forms.widgets.ClearableFileInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
+                'data-parsley-max-file-size': 250}),)
+
+
+def _attribute_image_field(attribute):
+    return forms.ImageField(
+        label=attribute.display_name,
+        required=attribute.required,
+        widget=forms.widgets.ClearableFileInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
+                'data-parsley-max-file-size': 250,
+                'data-parsley-filemimetypes': 'image/jpeg, image/png, image/jpg, image/svg'}),)
+
+
+FIELD_FACTORIES = {
+        "text": _attribute_text_field,
+        "richtext": _attribute_textarea_field,
+        "integer": _attribute_integer_field,
+        "boolean": _attribute_boolean_field,
+        "float": _attribute_float_field,
+        "date": _attribute_date_field,
+        "option": _attribute_option_field,
+        "multi_option": _attribute_multi_option_field,
+        "numeric": _attribute_numeric_field,
+        "file": _attribute_file_field,
+        "image": _attribute_image_field,
+    }
 
 class ProductAttributesContainer(object):
 
@@ -130,7 +232,7 @@ class ProductModeration(object):
         return test_pass
 
     
-    def validate_childs(self, request, product):
+    def validate_variation(self, request, product):
         test_pass = False
         try:
             if request and request.user:
@@ -142,6 +244,9 @@ class ProductModeration(object):
                             return test_pass
                         for child in childs:
                             sibling = child.sibling
+                            if not sibling.product:
+                                messages.error(request, "Variation" + str(sibling) +" Product is not associated.")
+                                return test_pass
                             if not sibling.name:
                                 messages.error(request, "Variation" + str(sibling) +" Name is required")
                                 return test_pass
@@ -183,7 +288,7 @@ class ProductModeration(object):
                     test_pass = self.validate_fields(
                         request=request, product=productscreen)
                     if productscreen.type_product == 1:
-                        test_pass = self.validate_childs(
+                        test_pass = self.validate_variation(
                             request=request, product=productscreen)
                 else:
                     messages.error(request, "Object Do not Exists")
@@ -197,7 +302,6 @@ class ProductModeration(object):
     @transaction.atomic
     def copy_to_product(self, product, screen):
         copy = False
-        import ipdb;ipdb.set_trace()
         try:
             with transaction.atomic():
                 product.name = screen.name
@@ -218,21 +322,99 @@ class ProductModeration(object):
                 product.fake_aed_price = screen.fake_aed_price
                 product.gbp_price = screen.gbp_price
                 product.fake_gbp_price = screen.fake_gbp_price
-
+                product.vendor = screen.vendor
                 product.countries = screen.countries.all()
                 product.save()
+                screen.attr.initiate_attributes()
+                product.attr.initiate_attributes()
                 for attribute in screen.attr.get_all_attributes():
                     if hasattr(screen.attr, attribute.name):
                         value = getattr(screen.attr, attribute.name)
+                        setattr(product.attr, attribute.name, value)
+                
+                product.save()
+                from shop.models import FAQProduct, VariationProduct
+                productfaq = product.productfaqs.all()
+                screenfaq = screen.screenfaqs.all()
+                scfq = screen.faqs.all()
+                prdfq = product.faqs.all()
+                for faq in screenfaq:
+                    fqprd, created = FAQProduct.objects.get_or_create(
+                        product=product,
+                        question=faq.question)
+                    fqprd.active = faq.active
+                    fqprd.question_order = faq.question_order
+                    fqprd.save()
+                inactive_fq = [fq for fq in prdfq if fq not in scfq]
+                for faq in inactive_fq:
+                    fqprd, created = FAQProduct.objects.get_or_create(
+                        product=product,
+                        question=faq)
+                    fqprd.active = False
+                    fqprd.save()
+                
+                if screen.type_product == 1:
+                    screenvar = screen.variation.all()
+                    screenvariation = screen.mainproduct.all()
+                    productvar = product.variation.all()
+                    productvariation = product.mainproduct.all()
+                    screenvar = [scr.product for scr in screenvar]
+                    for scv in screenvariation:
+                        vscreen = scv.sibling
+                        vproduct = vscreen.product
+                        
+                        vproduct.name = vscreen.name
+                        vproduct.upc = vscreen.upc
+                        vproduct.product_class = vscreen.product_class
+                        vproduct.type_product = vscreen.type_product
+                        
+                        vproduct.inr_price = screen.inr_price
+                        vproduct.fake_inr_price = screen.fake_inr_price
+                        vproduct.usd_price = screen.usd_price
+                        vproduct.fake_usd_price = screen.fake_usd_price
+                        vproduct.aed_price = screen.aed_price
+                        vproduct.fake_aed_price = screen.fake_aed_price
+                        vproduct.gbp_price = screen.gbp_price
+                        vproduct.fake_gbp_price = vscreen.fake_gbp_price
+                        vproduct.vendor = vscreen.vendor
+                        vproduct.save()
+
+                        vscreen.attr.initiate_attributes()
+                        vproduct.attr.initiate_attributes()
+                        for attribute in vscreen.attr.get_all_attributes():
+                            if hasattr(vscreen.attr, attribute.name):
+                                value = getattr(vscreen.attr, attribute.name)
+                                setattr(vproduct.attr, attribute.name, value)
+                        vproduct.save()
+                        
+                        pv, created = VariationProduct.objects.get_or_create(
+                            main=product,
+                            sibling=vproduct,
+                            )
+                        pv.active = scv.active
+                        pv.sort_order = scv.sort_order
+                        pv.save()
+                    inactive_var = [var for var in productvar if var not in screenvar]
+                    for pvar in inactive_var:
+                        pv, created = VariationProduct.objects.get_or_create(
+                            main=product,
+                            sibling=pvar)
+                        pv.active = False
+                        pv.save()
+                for attribute in screen.attr.get_all_attributes():
+                    if hasattr(screen.attr, attribute.name):
+                        value = getattr(screen.attr, attribute.name)
+                        
                         attribute.save_value(product, value)
                 product.save()
                 
                 copy = True
-                return copy
-                
+                return (product, screen, copy)
         except IntegrityError:
             copy = False
-        return copy
+        except:
+            copy = False
+        return (product, screen, copy)
 
     @transaction.atomic
     def copy_to_screen(self, product, screen):
@@ -259,18 +441,88 @@ class ProductModeration(object):
                 screen.fake_gbp_price = product.fake_gbp_price
 
                 screen.countries = product.countries.all()
-
+                screen.vendor = product.vendor
                 screen.save()
+                screen.attr.initiate_attributes()
+                product.attr.initiate_attributes()
                 for attribute in product.attr.get_all_attributes():
                     if hasattr(product.attr, attribute.name):
                         value = getattr(product.attr, attribute.name)
-                        attribute.save_screen_value(screen, value)
+                        setattr(screen.attr, attribute.name, value)
                 screen.save()
                 
-
+                from shop.models import FAQProductScreen, VariationProductScreen
+                productfaq = product.productfaqs.all()
+                screenfaq = screen.screenfaqs.all()
+                scfq = screen.faqs.all()
+                prdfq = product.faqs.all()
+                for faq in productfaq:
+                    sfqprd, created = FAQProductScreen.objects.get_or_create(
+                        product=screen,
+                        question=faq.question)
+                    sfqprd.active = faq.active
+                    sfqprd.question_order = faq.question_order
+                    sfqprd.save()
+                inactive_fq = [fq for fq in scfq if fq not in prdfq]
+                for faq in inactive_fq:
+                    fqprd, created = FAQProductScreen.objects.get_or_create(
+                        product=screen,
+                        question=faq)
+                    fqprd.active = False
+                    fqprd.save()
+                if screen.type_product == 1:
+                    screenvar = screen.variation.all()
+                    screenvariation = screen.mainproduct.all()
+                    productvar = product.variation.all()
+                    productvariation = product.mainproduct.all()
+                    productvar = [pv.get_screen() for pv in productvar]
+                    for pv in productvariation:
+                        vproduct = pv.sibling
+                        vscreen = vproduct.get_screen()
+                        
+                        vscreen.name = vproduct.name
+                        vscreen.upc = vproduct.upc
+                        vscreen.product_class = vproduct.product_class
+                        vscreen.type_product = vproduct.type_product
+                        
+                        vscreen.inr_price = vproduct.inr_price
+                        vscreen.fake_inr_price = vproduct.fake_inr_price
+                        vscreen.usd_price = vproduct.usd_price
+                        vscreen.fake_usd_price = vproduct.fake_usd_price
+                        vscreen.aed_price = vproduct.aed_price
+                        vscreen.fake_aed_price = vproduct.fake_aed_price
+                        vscreen.gbp_price = vproduct.gbp_price
+                        vscreen.fake_gbp_price = vproduct.fake_gbp_price
+                        vscreen.vendor = vproduct.vendor
+                        vscreen.save()
+                        vscreen.attr.initiate_attributes()
+                        vproduct.attr.initiate_attributes()
+                        for attribute in vproduct.attr.get_all_attributes():
+                            if hasattr(vproduct.attr, attribute.name):
+                                value = getattr(vproduct.attr, attribute.name)
+                                setattr(vscreen.attr, attribute.name, value)
+                        vscreen.save()
+                        
+                        spv, created = VariationProductScreen.objects.get_or_create(
+                            main=screen,
+                            sibling=vscreen,
+                            )
+                        spv.active = pv.active
+                        spv.sort_order = pv.sort_order
+                        spv.save()
+                    inactive_svar = [var for var in screenvar if var not in productvar]
+                    for svar in inactive_svar:
+                        spv, created = VariationProductScreen.objects.get_or_create(
+                            main=screen,
+                            sibling=svar)
+                        spv.active = False
+                        spv.save()
+            
                 copy = True
-                return copy
+                return (product, screen, copy)
         
         except IntegrityError:
             copy = False
-        return copy
+        except:
+            copy = False
+        return (product, screen, copy)

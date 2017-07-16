@@ -597,12 +597,17 @@ class ChangeScreenProductView(DetailView):
                                 context.update({'attribute_form': form})
                             messages.error(
                                 self.request,
-                                "Product Prices Change Failed, Changes not Saved")
+                                "Product Attributes Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/vendor/change_screenproduct.html"
                                 ], context)
                     elif slug == 'faqs':
+                        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+                            vendor = self.get_object().vendor
+                        else:
+                            vendor  = self.request.user.get_vendor()
+                        
                         ScreenProductFAQFormSet = inlineformset_factory(
                             ProductScreen, ProductScreen.faqs.through, fk_name='product',
                             form=ScreenProductFAQForm,
@@ -612,7 +617,7 @@ class ChangeScreenProductView(DetailView):
                         formset = ScreenProductFAQFormSet(
                             request.POST, instance=obj,
                             form_kwargs={'object': obj,
-                                'user':self.request.user },)
+                                'vendor':vendor },)
                         from django.db import transaction
                         if formset.is_valid():
                             with transaction.atomic():
@@ -640,7 +645,7 @@ class ChangeScreenProductView(DetailView):
                                 "Product FAQ Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_screenproduct.html"
+                                    "console/vendor/change_screenproduct.html"
                                 ], context)
                     elif slug == 'vars':
                         ScreenProductVariationFormSet = inlineformset_factory(
@@ -679,7 +684,7 @@ class ChangeScreenProductView(DetailView):
                                 "Product Variation Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_screenproduct.html"
+                                    "console/vendor/change_screenproduct.html"
                                 ], context)
                     
                     messages.error(
@@ -1004,9 +1009,9 @@ class ActionScreenProductView(View, ProductModeration):
                     elif action == "live":
                         if self.validate_screenproduct(
                             request=self.request,productscreen=productscreen): 
-                            copyproduct = self.copy_to_product(
+                            product, productscreen, copied = self.copy_to_product(
                                 product=product, screen=productscreen)
-                            if copyproduct:
+                            if copied:
                                 productscreen.status = 3
                                 productscreen.save()
                                 product.is_indexable = False
@@ -1015,7 +1020,7 @@ class ActionScreenProductView(View, ProductModeration):
                                     self.request,
                                         "Product Screen is copied to live! Please validate fields in live product") 
                                 data = {'success': 'True',
-                                    'next_url': reverse('console:screenfaq-moderationlist') }
+                                    'next_url': reverse('console:screenproduct-moderationlist') }
                             else:
                                 messages.error(
                                     self.request,
@@ -1027,14 +1032,14 @@ class ActionScreenProductView(View, ProductModeration):
                                         "Product Screen copy Failed!") 
                             data = {'error': 'True'}
                     elif action == "revert":
-                        copyscreen = self.copy_to_screen(
+                        product, productscreen, copied = self.copy_to_screen(
                             product=product, screen=productscreen)
-                        if copyscreen:
+                        if copied:
                             productscreen.status = 6
                             productscreen.save()
                             messages.success(
                                 self.request,
-                                    "Product Screen is changes is reverated!") 
+                                    "Product Screen is changes is reverted!") 
                             data = {'success': 'True', 'next_url': reverse('console:screenproduct-moderationlist') }
                         else:
                             messages.error(

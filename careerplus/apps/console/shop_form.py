@@ -132,14 +132,14 @@ class ChangeCategoryForm(forms.ModelForm):
     
         self.fields['display_order'].widget.attrs['class'] = form_class
         
-        self.fields['active'].widget.attrs['class'] = 'js-switch'
-        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        # self.fields['active'].widget.attrs['class'] = 'js-switch'
+        # self.fields['active'].widget.attrs['data-switchery'] = 'true'
         
 
     class Meta:
         model = Category
         fields = ('name', 'type_level',
-            'banner', 'image', 'icon', 'active', 'display_order')
+            'banner', 'image', 'icon', 'display_order')
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')

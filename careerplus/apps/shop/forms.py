@@ -1,3 +1,9 @@
+from decimal import Decimal
+from django.core import exceptions
+from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
+from django.utils.html import format_html
+
 from django import forms
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
@@ -10,7 +16,8 @@ from shop.models import (
 from partner.models import Vendor
 from geolocation.models import Country
 from shop.choices import BG_CHOICES
-
+from shop.utils import FIELD_FACTORIES
+from faq.models import FAQuestion
 
 class AddKeywordForm(forms.ModelForm):
 
@@ -211,100 +218,6 @@ class DataColorChoiceField(forms.ChoiceField):
 
 
 
-class AddProductBaseForm(forms.ModelForm):
-
-    class Meta:
-        model = Product
-        fields = [
-            'name', 'type_service',
-            'type_product', 'upc']
-
-class AddProductForm(AddProductBaseForm):
-
-    inr_price = forms.DecimalField(max_digits=12, decimal_places=2)
-
-    class Meta(AddProductBaseForm.Meta):
-        fields = AddProductBaseForm.Meta.fields + ['inr_price']
-
-    def __init__(self, *args, **kwargs):
-        super(AddProductForm, self).__init__(*args, **kwargs)
-        form_class = 'form-control col-md-7 col-xs-12'
-        
-        self.fields['type_service'].widget.attrs['class'] = form_class
-        self.fields['type_service'].widget.attrs['data-parsley-notdefault'] = ''
-        self.fields['type_product'].widget.attrs['class'] = form_class
-                       
-        self.fields['inr_price'].widget.attrs['class'] = form_class
-        self.fields['inr_price'].required = True
-        
-        self.fields['name'].widget.attrs['class'] = form_class
-        self.fields['name'].widget.attrs['maxlength'] = 80
-        self.fields['name'].widget.attrs['placeholder'] = 'Add product name'
-        self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
-        
-        self.fields['upc'].widget.attrs['class'] = form_class
-        self.fields['upc'].widget.attrs['maxlength'] = 80
-        self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
-        self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['upc'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
-
-    def clean_name(self):
-        name = self.cleaned_data.get('name', '')
-        if name:
-            if len(name) < 4 or len(name) > 60:
-                raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return name
-
-    def clean_type_service(self):
-        service = self.cleaned_data.get('type_service', '')
-        if service:
-            if int(service) == 0:
-                raise forms.ValidationError(
-                    "This should not be default.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return service
-    
-    def clean_type_flow(self):
-        flow = self.cleaned_data.get('type_flow', '')
-        if flow:
-            if int(flow) == 0:
-                raise forms.ValidationError(
-                    "This should not be default.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return flow
-
-    def clean_upc(self):
-        upc = self.cleaned_data.get('upc', '')
-        if upc:
-            if len(upc) < 4 or len(upc) > 60:
-                raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return upc
-
-    
-    def save(self, commit=True, *args, **kwargs):
-        product = super(AddProductForm, self).save(
-            commit=True, *args, **kwargs)
-        return product
-
-
-
 class ChangeProductForm(forms.ModelForm):
 
     image_bg = DataColorChoiceField(choices=BG_CHOICES)
@@ -312,11 +225,10 @@ class ChangeProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
-            'name', 'type_service',
-            'type_product', 'type_flow',
+            'name', 'type_flow',
             'upc', 'image', 'image_bg', 'icon', 'banner', 'video_url',
-            'about', 'description',
-            'buy_shine', 'vendor', 'active']
+            'about', 'description', 'buy_shine', 'vendor', 'prg_structure',
+            'no_review', 'buy_count', 'avg_rating', 'num_jobs']
 
     def __init__(self, *args, **kwargs):
         super(ChangeProductForm, self).__init__(*args, **kwargs)
@@ -324,11 +236,6 @@ class ChangeProductForm(forms.ModelForm):
         self.fields['type_flow'].widget.attrs['class'] = form_class
         self.fields['type_flow'].widget.attrs['data-parsley-notdefault'] = ''
         
-        self.fields['type_service'].widget.attrs['class'] = form_class
-        self.fields['type_service'].widget.attrs['data-parsley-notdefault'] = ''
-
-        self.fields['type_product'].widget.attrs['class'] = form_class
-               
         self.fields['vendor'].widget.attrs['class'] = form_class
         self.fields['vendor'].empty_label = 'Select Vendor'
         self.fields['vendor'].required = True
@@ -352,19 +259,24 @@ class ChangeProductForm(forms.ModelForm):
         self.fields['banner'].widget.attrs['class'] = form_class + ' clearimg'
         self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 300
         self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        self.fields['image'].widget.attrs['class'] = form_class + ' clearimg'
+        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 300
+        self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
 
 
         self.fields['icon'].widget.attrs['class'] = form_class + ' clearimg'
         self.fields['icon'].widget.attrs['data-parsley-max-file-size'] = 100
         self.fields['icon'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
-        # self.fields['image_bg'].widget = DataColorSelect()
-        # self.fields['image_bg'].widget.attrs['class'] = form_class
         self.fields['video_url'].widget.attrs['class'] = form_class
         self.fields['video_url'].widget.attrs['maxlength'] = 80
         self.fields['video_url'].widget.attrs['placeholder'] = 'Add video url'
         self.fields['video_url'].widget.attrs['data-parsley-type'] = 'url'
-        self.fields['active'].widget.attrs['class'] = 'js-switch'
-        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        self.fields['avg_rating'].widget.attrs['class'] = form_class
+        self.fields['no_review'].widget.attrs['class'] = form_class
+        self.fields['buy_count'].widget.attrs['class'] = form_class
+        self.fields['num_jobs'].widget.attrs['class'] = form_class
+
+        
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -377,17 +289,6 @@ class ChangeProductForm(forms.ModelForm):
                 "This field is required.")
         return name
 
-    def clean_type_service(self):
-        service = self.cleaned_data.get('type_service', '')
-        if service:
-            if int(service) == 0:
-                raise forms.ValidationError(
-                    "This should not be default.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return service
-    
     def clean_type_flow(self):
         flow = self.cleaned_data.get('type_flow', '')
         if flow:
@@ -522,7 +423,6 @@ class ChangeProductSEOForm(forms.ModelForm):
         self.fields['heading'].widget.attrs['data-parsley-length'] = "[4, 60]"
         self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
 
-
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
 
@@ -558,36 +458,177 @@ class ChangeProductSEOForm(forms.ModelForm):
         return product
 
 
-# class ChangeProductAttributeForm(forms.ModelForm):
+class ProductPriceForm(forms.ModelForm):
 
-#     def __init__(self, *args, **kwargs):
-#         super(ChangeProductAttributeForm, self).__init__(*args, **kwargs)
-#         form_class = 'form-control col-md-7 col-xs-12'
-#         self.fields['duration_months'].widget.attrs['class'] = form_class
-#         self.fields['duration_days'].widget.attrs['class'] = form_class
-#         self.fields['certification'].widget.attrs['class'] = 'js-switch'
-#         self.fields['certification'].widget.attrs['data-switchery'] = 'true'
-#         self.fields['requires_delivery'].widget.attrs['class'] = 'js-switch'
-#         self.fields['requires_delivery'].widget.attrs['data-switchery'] = 'true'
+    class Meta:
+        model = Product
+        fields = [
+            'inr_price', 'fake_inr_price',
+            'usd_price', 'fake_usd_price', 
+            'aed_price', 'fake_aed_price',
+            'gbp_price', 'fake_gbp_price',]
+
+    def __init__(self, *args, **kwargs):
+        super(ProductPriceForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        instance = self.instance
+        self.currency = instance.countries.values_list('currency__value',flat=True).distinct()
+        self.currency = set(self.currency)
+        self.fields['inr_price'].widget.attrs['class'] = form_class
+        self.fields['inr_price'].required = True
+        self.fields['usd_price'].widget.attrs['class'] = form_class
+        self.fields['aed_price'].widget.attrs['class'] = form_class
+        self.fields['gbp_price'].widget.attrs['class'] = form_class
+        self.fields['fake_inr_price'].widget.attrs['class'] = form_class
+        self.fields['fake_usd_price'].widget.attrs['class'] = form_class
+        self.fields['fake_aed_price'].widget.attrs['class'] = form_class
+        self.fields['fake_gbp_price'].widget.attrs['class'] = form_class
+
+    def clean(self):
         
-#         self.fields['course_type'].widget.attrs['class'] = form_class
-#         self.fields['course_type'].widget.attrs['data-parsley-notdefault'] = ''
+        super(ProductPriceForm, self).clean()
+        if any(self.errors):
+            return
+        inr_price = self.cleaned_data.get('inr_price', '')
+        usd_price = self.cleaned_data.get('usd_price', '')
+        aed_price = self.cleaned_data.get('aed_price', '')
+        gbp_price = self.cleaned_data.get('gbp_price', '')
 
-#         self.fields['study_mode'].widget.attrs['class'] = form_class
-#         self.fields['study_mode'].widget.attrs['data-parsley-notdefault'] = ''
+        if 0 in self.currency and inr_price <= 0:
+            raise forms.ValidationError(
+                "INR Price is required as product is visible in respective country.")
+        if 1 in self.currency and usd_price <= 0:
+            raise forms.ValidationError(
+                "USD Price is required as product is visible in respective country.")
+        if 2 in self.currency and aed_price <= 0:
+            raise forms.ValidationError(
+                "AED Price is required as product is visible in respective country.")
+        if 3 in self.currency and gbp_price <= 0:
+            raise forms.ValidationError(
+                "GBP Price is required as product is visible in respective country.")
 
-#         self.fields['experience'].widget.attrs['class'] = form_class
-#         self.fields['study_mode'].widget.attrs['data-parsley-notdefault'] = ''
+            
 
-#     class Meta:
-#         model = Product
-#         fields = ('duration_months', 'duration_days', 'certification', 'course_type', 'study_mode', 'experience', 'requires_delivery')
+    def clean_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        if inr_price:
+            if inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return inr_price
 
-    
-#     def save(self, commit=True, *args, **kwargs):
-#         product = super(ChangeProductAttributeForm, self).save(
-#             commit=True, *args, **kwargs)
-#         return product
+    def clean_usd_price(self):
+        usd_price = self.cleaned_data.get('usd_price', '')
+        if usd_price:
+            if usd_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return usd_price
+
+    def clean_aed_price(self):
+        aed_price = self.cleaned_data.get('aed_price', '')
+        if aed_price:
+            if aed_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return aed_price
+
+    def clean_gbp_price(self):
+        gbp_price = self.cleaned_data.get('gbp_price', '')
+        if gbp_price:
+            if gbp_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return gbp_price
+
+    def clean_fake_usd_price(self):
+        usd_price = self.cleaned_data.get('usd_price', '')
+        fake_usd_price = self.cleaned_data.get('fake_usd_price', '')
+        if fake_usd_price:
+            if fake_usd_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_usd_price > Decimal(0):
+                if fake_usd_price <= usd_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_usd_price
+
+    def clean_fake_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        fake_inr_price = self.cleaned_data.get('fake_inr_price', '')
+        if fake_inr_price:
+            if fake_inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_inr_price > Decimal(0):
+                if fake_inr_price <= inr_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_inr_price
+
+    def clean_fake_aed_price(self):
+        aed_price = self.cleaned_data.get('aed_price', '')
+        fake_aed_price = self.cleaned_data.get('fake_aed_price', '')
+        if fake_aed_price:
+            if fake_aed_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_aed_price > Decimal(0):
+                if fake_aed_price <= aed_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_aed_price
+
+    def clean_fake_gbp_price(self):
+        gbp_price = self.cleaned_data.get('gbp_price', '')
+        fake_gbp_price = self.cleaned_data.get('fake_gbp_price', '')
+        if fake_gbp_price:
+            if fake_gbp_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_gbp_price > Decimal(0):
+                if fake_gbp_price <= gbp_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_gbp_price
+
+    def save(self, commit=True, *args, **kwargs):
+        product = super(ScreenProductPriceForm, self).save(
+            commit=True, *args, **kwargs)
+        return product
+
+
+class ProductCountryForm(forms.ModelForm):
+
+    countries = forms.ModelMultipleChoiceField(
+        queryset=Country.objects.filter(active=True),
+        to_field_name='pk',
+        widget=forms.SelectMultiple(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    def __init__(self, *args, **kwargs):
+        super(ProductCountryForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Product
+        fields = (
+            'countries',)
+
+    def clean(self):
+        super(ProductCountryForm, self).clean()
+
+    def clean_countries(self):
+        countries = self.cleaned_data.get('countries', None)
+        if countries:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return countries
 
 
 class ChangeProductOperationForm(forms.ModelForm):
@@ -595,21 +636,78 @@ class ChangeProductOperationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ChangeProductOperationForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
-        self.fields['mail_desc'].widget.attrs['class'] = form_class
         self.fields['call_desc'].widget.attrs['class'] = form_class
-        self.fields['avg_rating'].widget.attrs['class'] = form_class
-        self.fields['no_review'].widget.attrs['class'] = form_class
-        self.fields['buy_count'].widget.attrs['class'] = form_class
-        self.fields['num_jobs'].widget.attrs['class'] = form_class
-
+        
     class Meta:
         model = Product
-        fields = ('mail_desc', 'call_desc', 'avg_rating', 'no_review', 'buy_count', 'num_jobs',)
+        fields = ('call_desc',)
 
     
     def save(self, commit=True, *args, **kwargs):
         product = super(ChangeProductOperationForm, self).save(
             commit=True, *args, **kwargs)
+        return product
+
+
+class ProductAttributeForm(forms.ModelForm):
+    FIELD_FACTORIES = FIELD_FACTORIES
+
+    def __init__(self, *args, **kwargs):
+        super(ScreenProductAttributeForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['mail_desc'].widget.attrs['class'] = form_class
+        
+        
+
+    class Meta:
+        model = Product
+        fields = ('mail_desc',)
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        if instance is None:
+            return
+        self.set_initial(instance.product_class, kwargs)
+        super(ProductAttributeForm, self).__init__(*args, **kwargs)
+        self.add_attribute_fields(instance.product_class)
+
+    def set_initial(self, product_class, kwargs):
+        if 'initial' not in kwargs:
+            kwargs['initial'] = {}
+        self.set_initial_attribute_values(product_class, kwargs)
+        
+    def set_initial_attribute_values(self, product_class, kwargs):
+        instance = kwargs.get('instance')
+        if instance is None:
+            return
+        for attribute in product_class.attributes.filter(active=True):
+            try:
+                value = instance.productattributes.get(
+                    attribute=attribute).value
+            except exceptions.ObjectDoesNotExist:
+                pass
+            else:
+                kwargs['initial']['attribute_%s' % attribute.name] = value
+
+    def add_attribute_fields(self, product_class):
+        
+        for attribute in product_class.attributes.filter(active=True):
+            field = self.get_attribute_field(attribute)
+            if field:
+                self.fields['attribute_%s' % attribute.name] = field
+                
+    def get_attribute_field(self, attribute):
+        
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+
+    def save(self, commit=True, *args, **kwargs):
+        self.instance.attr.initiate_attributes()
+        for attribute in self.instance.attr.get_all_attributes():
+            field_name = 'attribute_%s' % attribute.name
+            if field_name in self.cleaned_data:
+                value = self.cleaned_data[field_name]
+                setattr(self.instance.attr, attribute.name, value)
+        product = super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
         return product
 
 
@@ -619,17 +717,6 @@ class ProductCategoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
         super(ProductCategoryForm, self).__init__(*args, **kwargs)
-        # if obj:
-        #     qs = Category.objects.all()
-        #     if obj.type_ == 0 or obj.type_level == 1:
-        #         qs = qs.none()
-        #     elif obj.type_level == 2:
-        #         qs = qs.filter(type_level=1)
-        #     elif obj.type_level == 3:
-        #         qs = qs.filter(type_level=2)
-        #     elif obj.type_level == 4:
-        #         qs = qs.filter(type_level=3)
-            # self.fields['related_to'].queryset = qs
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['category'].widget.attrs['class'] = form_class
         self.fields['category'].required=True        
@@ -703,18 +790,13 @@ class ProductFAQForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
+        vendor = kwargs.pop('vendor', None)
         super(ProductFAQForm, self).__init__(*args, **kwargs)
-        # if obj:
-        #     qs = Category.objects.all()
-        #     if obj.type_ == 0 or obj.type_level == 1:
-        #         qs = qs.none()
-        #     elif obj.type_level == 2:
-        #         qs = qs.filter(type_level=1)
-        #     elif obj.type_level == 3:
-        #         qs = qs.filter(type_level=2)
-        #     elif obj.type_level == 4:
-        #         qs = qs.filter(type_level=3)
-            # self.fields['related_to'].queryset = qs
+        queryset = FAQuestion.objects.filter(status=2)
+        if not vendor:
+            queryset = queryset.none()
+        else:
+            queryset = queryset.filter(vendor=vendor)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['question'].widget.attrs['class'] = form_class
         self.fields['question'].required = True        
@@ -764,110 +846,6 @@ class FAQInlineFormSet(forms.BaseInlineFormSet):
         return
 
 
-# class ProductPriceForm(forms.ModelForm):
-
-#     def __init__(self, *args, **kwargs):
-#         obj = kwargs.pop('object', None)
-#         super(ProductPriceForm, self).__init__(*args, **kwargs)
-#         # if obj:
-#         #     qs = Category.objects.all()
-#         #     if obj.type_ == 0 or obj.type_level == 1:
-#         #         qs = qs.none()
-#         #     elif obj.type_level == 2:
-#         #         qs = qs.filter(type_level=1)
-#         #     elif obj.type_level == 3:
-#         #         qs = qs.filter(type_level=2)
-#         #     elif obj.type_level == 4:
-#         #         qs = qs.filter(type_level=3)
-#             # self.fields['related_to'].queryset = qs
-#         form_class = 'form-control col-md-7 col-xs-12'
-#         self.fields['currency'].widget.attrs['class'] = form_class
-#         self.fields['currency'].required = True        
-#         self.fields['value'].widget.attrs['class'] = form_class
-#         self.fields['fake_value'].widget.attrs['class'] = form_class
-#         self.fields['active'].widget.attrs['class'] = 'js-switch'
-#         self.fields['active'].widget.attrs['data-switchery'] = 'true'
-
-        
-#     class Meta:
-#         model = ProductPrice
-#         fields = (
-#             'currency', 'value', 'fake_value', 'active',)
-
-#     def clean(self):
-#         super(ProductPriceForm, self).clean()
-        
-#     def clean_currency(self):
-#         currency = self.cleaned_data.get('currency', None)
-#         if currency:
-#             pass
-#         else:
-#             raise forms.ValidationError(
-#                 "This field is required.")
-#         return currency
-
-
-# class PriceInlineFormSet(forms.BaseInlineFormSet):
-#     def clean(self):
-#         super(PriceInlineFormSet, self).clean()
-#         if any(self.errors):
-#             return
-#         currencies = []
-#         duplicates = False
-#         for form in self.forms:
-#             if form.cleaned_data:
-#                 value = form.cleaned_data['value']
-#                 f_value = form.cleaned_data['fake_value']
-#                 from decimal import Decimal
-#                 if f_value > Decimal("0.00"):
-#                     if f_value < value:
-#                         raise forms.ValidationError(
-#                             'Fake Price Value Should be Greater than Original Price.',
-#                             code='fake more' )
-#                 currency = form.cleaned_data['currency']
-#                 product = form.cleaned_data['product']
-#                 if currency in currencies:
-#                     duplicates = True
-#                 currencies.append(currency)
-
-#                 if duplicates:
-#                     raise forms.ValidationError(
-#                         'Currencies must be unique.',
-#                         code='duplicate_parent'
-#                     )
-#         return
-
-
-class ProductCountryForm(forms.ModelForm):
-
-    countries = forms.ModelMultipleChoiceField(
-        queryset=Country.objects.filter(active=True),
-        required=True,
-        to_field_name='pk',
-        widget=forms.SelectMultiple(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
-
-    def __init__(self, *args, **kwargs):
-        super(ProductCountryForm, self).__init__(*args, **kwargs)
-
-    class Meta:
-        model = Product
-        fields = (
-            'countries',)
-
-    def clean(self):
-        super(ProductCountryForm, self).clean()
-
-    def clean_countries(self):
-        countries = self.cleaned_data.get('countries', None)
-        if countries:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return countries
-
-
 class ProductChildForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -875,14 +853,6 @@ class ProductChildForm(forms.ModelForm):
         super(ProductChildForm, self).__init__(*args, **kwargs)
         if obj:
             qs = Product.objects.exclude(pk=obj.pk)
-            # if obj.type_ == 0 or obj.type_level == 1:
-            #     qs = qs.none()
-            # elif obj.type_level == 2:
-            #     qs = qs.filter(type_level=1)
-            # elif obj.type_level == 3:
-            #     qs = qs.filter(type_level=2)
-            # elif obj.type_level == 4:
-            #     qs = qs.filter(type_level=3)
             self.fields['children'].queryset = qs
         
         form_class = 'form-control col-md-7 col-xs-12'
@@ -947,14 +917,6 @@ class ProductRelatedForm(forms.ModelForm):
         super(ProductRelatedForm, self).__init__(*args, **kwargs)
         if obj:
             qs = Product.objects.exclude(pk=obj.pk)
-            # if obj.type_ == 0 or obj.type_level == 1:
-            #     qs = qs.none()
-            # elif obj.type_level == 2:
-            #     qs = qs.filter(type_level=1)
-            # elif obj.type_level == 3:
-            #     qs = qs.filter(type_level=2)
-            # elif obj.type_level == 4:
-            #     qs = qs.filter(type_level=3)
             self.fields['secondary'].queryset = qs
         
         form_class = 'form-control col-md-7 col-xs-12'
@@ -1004,16 +966,6 @@ class RelatedInlineFormSet(forms.BaseInlineFormSet):
                         'Related must be different.',
                         code='duplicate_parent'
                     )
-                # if rel in relatives.keys:
-                #     if type_relation == 
-                #     duplicates = True
-                # childs.append(child)
-
-                # if duplicates:
-                #     raise forms.ValidationError(
-                #         'Childs must be unique.',
-                #         code='duplicate_parent'
-                #     )
         return
 
 
@@ -1022,20 +974,7 @@ class ProductVariationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
         super(ProductVariationForm, self).__init__(*args, **kwargs)
-        if obj:
-            qs = Product.objects.exclude(pk=obj.pk)
-            # if obj.type_ == 0 or obj.type_level == 1:
-            #     qs = qs.none()
-            # elif obj.type_level == 2:
-            #     qs = qs.filter(type_level=1)
-            # elif obj.type_level == 3:
-            #     qs = qs.filter(type_level=2)
-            # elif obj.type_level == 4:
-            #     qs = qs.filter(type_level=3)
-            self.fields['sibling'].queryset = qs
         form_class = 'form-control col-md-7 col-xs-12'
-        self.fields['sibling'].widget.attrs['class'] = form_class
-        self.fields['sibling'].required = True
         self.fields['sort_order'].widget.attrs['class'] = form_class
         self.fields['active'].widget.attrs['class'] = 'js-switch'
         self.fields['active'].widget.attrs['data-switchery'] = 'true'
@@ -1043,19 +982,10 @@ class ProductVariationForm(forms.ModelForm):
     class Meta:
         model = VariationProduct
         fields = (
-            'sibling', 'sort_order', 'active', )
+            'sort_order', 'active', )
 
     def clean(self):
         super(ProductVariationForm, self).clean()
-
-    def clean_sibling(self):
-        sibling = self.cleaned_data.get('sibling', None)
-        if sibling:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return sibling
 
 
 class VariationInlineFormSet(forms.BaseInlineFormSet):
@@ -1063,23 +993,312 @@ class VariationInlineFormSet(forms.BaseInlineFormSet):
         super(VariationInlineFormSet, self).clean()
         if any(self.errors):
             return
-        variations = []
-        duplicates = False
-        for form in self.forms:
-            if form.cleaned_data:
-                var = form.cleaned_data['sibling']
-                product = form.cleaned_data['main']
-                if var in variations:
-                    duplicates = True
-                variations.append(var)
-                if var == product:
+
+
+class ChangeProductVariantForm(forms.ModelForm):
+    FIELD_FACTORIES = FIELD_FACTORIES
+    
+    class Meta:
+        model = Product
+        fields = [
+            'name', 'upc',
+            'inr_price', 'fake_inr_price',
+            'usd_price', 'fake_usd_price', 
+            'aed_price', 'fake_aed_price',
+            'gbp_price', 'fake_gbp_price',
+            ]
+
+    def __init__(self, *args, **kwargs):
+        parent = kwargs.pop('parent', None)
+        user = kwargs.pop('user', None)
+        self.set_initial(parent.product_class, kwargs)
+        
+        super(ChangeProductVariantForm, self).__init__(*args, **kwargs)
+        if not parent:
+            return
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.currency = parent.countries.values_list('currency__value',flat=True).distinct()
+        self.currency = set(self.currency)
+        self.parent = parent
+        self.add_attribute_fields(parent.product_class)
+        
+        self.fields['name'].widget.attrs['class'] = form_class
+        self.fields['name'].widget.attrs['maxlength'] = 80
+        self.fields['name'].widget.attrs['placeholder'] = 'Add Product Name'
+        self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['upc'].widget.attrs['class'] = form_class
+        self.fields['upc'].widget.attrs['maxlength'] = 80
+        self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
+        self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['upc'].widget.attrs['data-parsley-length'] = "[4, 60]"
+        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['inr_price'].widget.attrs['class'] = form_class
+        self.fields['inr_price'].required = True
+        self.fields['usd_price'].widget.attrs['class'] = form_class
+        self.fields['aed_price'].widget.attrs['class'] = form_class
+        self.fields['gbp_price'].widget.attrs['class'] = form_class
+        self.fields['fake_inr_price'].widget.attrs['class'] = form_class
+        self.fields['fake_usd_price'].widget.attrs['class'] = form_class
+        self.fields['fake_aed_price'].widget.attrs['class'] = form_class
+        self.fields['fake_gbp_price'].widget.attrs['class'] = form_class
+
+    def clean(self):
+        
+        super(ChangeProductVariantForm, self).clean()
+        if any(self.errors):
+            return
+        inr_price = self.cleaned_data.get('inr_price', '')
+        usd_price = self.cleaned_data.get('usd_price', '')
+        aed_price = self.cleaned_data.get('aed_price', '')
+        gbp_price = self.cleaned_data.get('gbp_price', '')
+
+        if 0 in self.currency and inr_price <= 0:
+            raise forms.ValidationError(
+                "INR Price is required as product is visible in respective country.")
+        if 1 in self.currency and usd_price <= 0:
+            raise forms.ValidationError(
+                "USD Price is required as product is visible in respective country.")
+        if 2 in self.currency and aed_price <= 0:
+            raise forms.ValidationError(
+                "AED Price is required as product is visible in respective country.")
+        if 3 in self.currency and gbp_price <= 0:
+            raise forms.ValidationError(
+                "GBP Price is required as product is visible in respective country.")
+
+        
+    def clean_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        if inr_price:
+            if inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return inr_price
+
+    def clean_usd_price(self):
+        usd_price = self.cleaned_data.get('usd_price', '')
+        if usd_price:
+            if usd_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return usd_price
+
+    def clean_aed_price(self):
+        aed_price = self.cleaned_data.get('aed_price', '')
+        if aed_price:
+            if aed_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return aed_price
+
+    def clean_gbp_price(self):
+        gbp_price = self.cleaned_data.get('gbp_price', '')
+        if gbp_price:
+            if gbp_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        return gbp_price
+
+    def clean_fake_usd_price(self):
+        usd_price = self.cleaned_data.get('usd_price', '')
+        fake_usd_price = self.cleaned_data.get('fake_usd_price', '')
+        if fake_usd_price:
+            if fake_usd_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_usd_price > Decimal(0):
+                if fake_usd_price <= usd_price:
                     raise forms.ValidationError(
-                        'Variations must be different.',
-                        code='duplicate_parent'
-                    )
-                if duplicates:
+                        "This value should be greater than true price.")
+        return fake_usd_price
+
+    def clean_fake_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        fake_inr_price = self.cleaned_data.get('fake_inr_price', '')
+        if fake_inr_price:
+            if fake_inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_inr_price > Decimal(0):
+                if fake_inr_price <= inr_price:
                     raise forms.ValidationError(
-                        'Variations must be unique.',
-                        code='duplicate_parent'
-                    )
-        return
+                        "This value should be greater than true price.")
+        return fake_inr_price
+
+    def clean_fake_aed_price(self):
+        aed_price = self.cleaned_data.get('aed_price', '')
+        fake_aed_price = self.cleaned_data.get('fake_aed_price', '')
+        if fake_aed_price:
+            if fake_aed_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_aed_price > Decimal(0):
+                if fake_aed_price <= aed_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_aed_price
+
+    def clean_fake_gbp_price(self):
+        gbp_price = self.cleaned_data.get('gbp_price', '')
+        fake_gbp_price = self.cleaned_data.get('fake_gbp_price', '')
+        if fake_gbp_price:
+            if fake_gbp_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+            elif fake_gbp_price > Decimal(0):
+                if fake_gbp_price <= gbp_price:
+                    raise forms.ValidationError(
+                        "This value should be greater than true price.")
+        return fake_gbp_price
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
+        if name:
+            if len(name) < 4 or len(name) > 60:
+                raise forms.ValidationError(
+                    "Name should be between 4-60 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return name
+
+    def clean_inr_price(self):
+        inr_price = self.cleaned_data.get('inr_price', '')
+        if inr_price:
+            if inr_price < Decimal(0):
+                raise forms.ValidationError(
+                    "This value cannot be negative.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return inr_price
+    
+    def save(self, commit=True, *args, **kwargs):
+        parent = self.parent
+        self.instance.product_class = parent.product_class
+        self.instance.attr.initiate_attributes()
+        for attribute in self.instance.attr.get_all_attributes():
+            field_name = 'attribute_%s' % attribute.name
+            if field_name in self.cleaned_data:
+                value = self.cleaned_data[field_name]
+                setattr(self.instance.attr, attribute.name, value)
+        productscreen = super(ChangeProductVariantForm, self).save(
+            commit=True, *args, **kwargs)
+        return productscreen    
+
+    def add_attribute_fields(self, product_class):
+        for attribute in product_class.attributes.filter(active=True):
+            field = self.get_attribute_field(attribute)
+            if field:
+                self.fields['attribute_%s' % attribute.name] = field
+                
+    def get_attribute_field(self, attribute):
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+
+    def set_initial(self, product_class, kwargs):
+        if 'initial' not in kwargs:
+            kwargs['initial'] = {}
+        self.set_initial_attribute_values(product_class, kwargs)
+        
+    def set_initial_attribute_values(self, product_class, kwargs):
+        instance = kwargs.get('instance')
+        if instance is None:
+            return
+        for attribute in product_class.attributes.filter(active=True):
+            try:
+                value = instance.productattributes.get(
+                    attribute=attribute).value
+            except exceptions.ObjectDoesNotExist:
+                pass
+            else:
+                kwargs['initial']['attribute_%s' % attribute.name] = value
+        
+
+# class AddProductBaseForm(forms.ModelForm):
+
+#     class Meta:
+#         model = Product
+#         fields = [
+#             'name', 'type_service',
+#             'type_product', 'upc']
+
+# class AddProductForm(AddProductBaseForm):
+
+#     inr_price = forms.DecimalField(max_digits=12, decimal_places=2)
+
+#     class Meta(AddProductBaseForm.Meta):
+#         fields = AddProductBaseForm.Meta.fields + ['inr_price']
+
+#     def __init__(self, *args, **kwargs):
+#         super(AddProductForm, self).__init__(*args, **kwargs)
+#         form_class = 'form-control col-md-7 col-xs-12'
+        
+#         self.fields['type_service'].widget.attrs['class'] = form_class
+#         self.fields['type_service'].widget.attrs['data-parsley-notdefault'] = ''
+#         self.fields['type_product'].widget.attrs['class'] = form_class
+                       
+#         self.fields['inr_price'].widget.attrs['class'] = form_class
+#         self.fields['inr_price'].required = True
+        
+#         self.fields['name'].widget.attrs['class'] = form_class
+#         self.fields['name'].widget.attrs['maxlength'] = 80
+#         self.fields['name'].widget.attrs['placeholder'] = 'Add product name'
+#         self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
+#         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+#         self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
+#         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        
+#         self.fields['upc'].widget.attrs['class'] = form_class
+#         self.fields['upc'].widget.attrs['maxlength'] = 80
+#         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
+#         self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
+#         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+#         self.fields['upc'].widget.attrs['data-parsley-length'] = "[4, 60]"
+#         self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+
+#     def clean_name(self):
+#         name = self.cleaned_data.get('name', '')
+#         if name:
+#             if len(name) < 4 or len(name) > 60:
+#                 raise forms.ValidationError(
+#                     "Name should be between 4-60 characters.")
+#         else:
+#             raise forms.ValidationError(
+#                 "This field is required.")
+#         return name
+
+    
+#     def clean_type_flow(self):
+#         flow = self.cleaned_data.get('type_flow', '')
+#         if flow:
+#             if int(flow) == 0:
+#                 raise forms.ValidationError(
+#                     "This should not be default.")
+#         else:
+#             raise forms.ValidationError(
+#                 "This field is required.")
+#         return flow
+
+#     def clean_upc(self):
+#         upc = self.cleaned_data.get('upc', '')
+#         if upc:
+#             if len(upc) < 4 or len(upc) > 60:
+#                 raise forms.ValidationError(
+#                     "Name should be between 4-60 characters.")
+#         else:
+#             raise forms.ValidationError(
+#                 "This field is required.")
+#         return upc
+
+    
+#     def save(self, commit=True, *args, **kwargs):
+#         product = super(AddProductForm, self).save(
+#             commit=True, *args, **kwargs)
+#         return product
+

@@ -25,6 +25,18 @@ def get_edit_url(form_set):
         pass    
     return ''
 
+@register.filter
+def get_edit_purl(form_set):
+    try:
+        if form_set.instance:
+            instance = form_set.instance
+            return reverse('console:productvariant-change', kwargs={
+                'pk': instance.sibling.pk,
+                'parent': instance.main.pk}) 
+    except:
+        pass    
+    return ''
+
 
 @register.filter(name='has_group')
 def has_group(user, group_name):

@@ -29,22 +29,23 @@ from shop.forms import (
     AddKeywordForm,
     AddAttributeOptionForm,
     AddAttributeForm,
-    AddProductForm,
     ChangeProductForm,
     ChangeProductSEOForm,
-    # ChangeProductAttributeForm,
     ChangeProductOperationForm,
     ProductCategoryForm,
-    ProductFAQForm,
     CategoryInlineFormSet,
-    FAQInlineFormSet,
+    ProductPriceForm,
     ProductCountryForm,
-    ProductChildForm,
-    ProductRelatedForm,
+    ProductAttributeForm,
+    FAQInlineFormSet,
+    ProductFAQForm,
     ProductVariationForm,
     VariationInlineFormSet,
+    ProductChildForm,
     ChildInlineFormSet,
-    RelatedInlineFormSet)
+    ProductRelatedForm,
+    RelatedInlineFormSet,
+    ChangeProductVariantForm)
 
 from faq.forms import (
     AddFaqForm,
@@ -884,29 +885,94 @@ class ChangeProductView(DetailView):
         alert = messages.get_messages(self.request)
         main_change_form = ChangeProductForm(
             instance=self.get_object())
-        # seo_change_form = ChangeProductSEOForm(
-        #     instance=self.get_object())
-        # attr_change_form = ChangeProductAttributeForm(
-        #     instance=self.get_object())
-        # op_change_form = ChangeProductOperationForm(
-        #     instance=self.get_object())
-        # ProductCategoryFormSet = inlineformset_factory(
-        #     Product, Product.categories.through, fk_name='product',
-        #     form=ProductCategoryForm,
-        #     can_delete=False,
-        #     formset=CategoryInlineFormSet, extra=1,
-        #     max_num=20, validate_max=True)
-        # if self.object:
-        #     prdcat_formset = ProductCategoryFormSet(
-        #         instance=self.get_object(),
-        #         form_kwargs={'object': self.get_object()})
-        #     context.update({'prdcat_formset': prdcat_formset})
+        seo_change_form = ChangeProductSEOForm(
+            instance=self.get_object())
+        op_change_form = ChangeProductOperationForm(
+            instance=self.get_object())
+        con_change_form = ProductCountryForm(
+            instance=self.get_object())
+        price_change_form = ProductPriceForm(
+            instance=self.get_object())
+
+        attribute_form = ProductAttributeForm(
+            instance=self.get_object(),)
+        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+            vendor = self.get_object().vendor
+        else:
+            vendor  = self.request.user.get_vendor()
+        
+        
+        ProductCategoryFormSet = inlineformset_factory(
+            Product, Product.categories.through, fk_name='product',
+            form=ProductCategoryForm,
+            can_delete=False,
+            formset=CategoryInlineFormSet, extra=1,
+            max_num=20, validate_max=True)
+        if self.object:
+            prdcat_formset = ProductCategoryFormSet(
+                instance=self.get_object(),
+                form_kwargs={'object': self.get_object()})
+            context.update({'prdcat_formset': prdcat_formset})
+
+        ProductFAQFormSet = inlineformset_factory(
+            Product, Product.faqs.through, fk_name='product',
+            form=ProductFAQForm,
+            can_delete=False,
+            formset=FAQInlineFormSet, extra=1,
+            max_num=20, validate_max=True)
+        if self.object:
+            prdfaq_formset = ProductFAQFormSet(
+                instance=self.get_object(),
+                form_kwargs={'object': self.get_object(),
+                    'vendor':vendor },)
+            context.update({'prdfaq_formset': prdfaq_formset})
+        if self.object.type_product == 1:
+            ProductVariationFormSet = inlineformset_factory(
+                Product, Product.variation.through, fk_name='main',
+                form=ProductVariationForm,
+                can_delete=False,
+                formset=VariationInlineFormSet, extra=0,
+                max_num=20, validate_max=True)
+            if self.object:
+                prdvar_formset = ProductVariationFormSet(
+                    instance=self.get_object(),
+                    form_kwargs={'object': self.get_object()})
+                context.update({'prdvars_formset': prdvar_formset})
+        if self.object.type_product == 3:
+            ProductChildFormSet = inlineformset_factory(
+                Product, Product.childs.through, fk_name='father',
+                form=ProductChildForm,
+                can_delete=True,
+                formset=ChildInlineFormSet, extra=1,
+                max_num=20, validate_max=True)
+            if self.object:
+                prdchild_formset = ProductChildFormSet(
+                    instance=self.get_object(),
+                    form_kwargs={'object': self.get_object()})
+                context.update({'prdchild_formset': prdchild_formset})
+        if self.object.type_product in [0, 1, 3, 5]:
+            ProductRelatedFormSet = inlineformset_factory(
+                Product, Product.related.through, fk_name='primary',
+                form=ProductRelatedForm,
+                can_delete=True,
+                formset=RelatedInlineFormSet, extra=1,
+                max_num=20, validate_max=True)
+            if self.object:
+                prdrelated_formset = ProductRelatedFormSet(
+                    instance=self.get_object(),
+                    form_kwargs={'object': self.get_object()})
+                context.update({'prdrelated_formset': prdrelated_formset})
+        
+        
         context.update({
             'messages': alert,
-            'form': main_change_form,})
-            # 'seo_form': seo_change_form,
-            # 'attr_form': attr_change_form,
-            # 'op_form': op_change_form})
+            'form': main_change_form,
+            'seo_form': seo_change_form,
+            'op_form': op_change_form,
+            'country_form': con_change_form,
+            'price_form': price_change_form,
+            'attribute_form':attribute_form
+            })
         return context
 
     def post(self, request, *args, **kwargs):
@@ -926,7 +992,7 @@ class ChangeProductView(DetailView):
                             messages.success(
                                 self.request,
                                 "Product Object Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:product-list',))
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -946,7 +1012,7 @@ class ChangeProductView(DetailView):
                             messages.success(
                                 self.request,
                                 "Product SEO Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:product-list',))
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -966,7 +1032,7 @@ class ChangeProductView(DetailView):
                             messages.success(
                                 self.request,
                                 "Product Operation Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:product-list',))
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -978,25 +1044,65 @@ class ChangeProductView(DetailView):
                                 request, [
                                     "console/shop/change_product.html"
                                 ], context)
-                    elif slug == 'attribute':
-                        form = ChangeProductAttributeForm(
-                            request.POST, instance=obj)
+                    elif slug == 'country':
+                        form = ProductCountryForm(request.POST, instance=obj)
                         if form.is_valid():
-                            form.save()
+                            product = form.save()
                             messages.success(
                                 self.request,
-                                "Product Attribute Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:product-list',))
+                                "Product Countries Visible changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
-                                context.update({'attr_form': form})
+                                context.update({'country_form': form})
                             messages.error(
                                 self.request,
-                                "Product Attribute Change Failed, Changes not Saved")
+                                "Product Country Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'price':
+                        form = ProductPriceForm(request.POST, instance=obj)
+                        if form.is_valid():
+                            product = form.save()
+                            messages.success(
+                                self.request,
+                                "Product Prices changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'price_form': form})
+                            messages.error(
+                                self.request,
+                                "Product Prices Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'attribute':
+                        form = ProductAttributeForm(
+                                request.POST,
+                                request.FILES,
+                                instance=obj)
+                        if form.is_valid():
+                            product = form.save()
+                            messages.success(
+                                self.request,
+                                "Product Attributes changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'attribute_form': form})
+                            messages.error(
+                                self.request,
+                                "Product Attributes Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_screenproduct.html"
                                 ], context)
                     elif slug == 'prdcategory':
                         ProductCategoryFormSet = inlineformset_factory(
@@ -1035,122 +1141,22 @@ class ChangeProductView(DetailView):
                                 request, [
                                     "console/shop/change_product.html"
                                 ], context)
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:product-change', kwargs={'pk': prd}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:product-change', kwargs={'pk': prd}))
-        return HttpResponseBadRequest()
-
-
-@Decorate(stop_browser_cache())
-@Decorate(check_permission('shop.add_productchapter'))
-class ChangeProductStructureView(DetailView):
-    template_name = 'console/shop/change_productstructure.html'
-    model = Product
-
-    def dispatch(self, request, *args, **kwargs):
-        return super(ChangeProductStructureView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(ChangeProductStructureView, self).get(request, args, **kwargs)
-
-    def get_object(self, queryset=None):
-        if hasattr(self, 'object'):
-            return self.object
-        else:
-            return super(ChangeProductStructureView, self).get_object(queryset)
-
-    def get_context_data(self, **kwargs):
-        context = super(ChangeProductStructureView, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        ProductChapterFormSet = inlineformset_factory(
-            Product, Product.chapters.through, fk_name='product',
-            form=ProductStructureForm,
-            can_delete=True,
-            formset=ChapterInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
-        if self.object:
-            prdstruct_formset = ProductChapterFormSet(
-                instance=self.get_object(),
-                form_kwargs={'object': self.get_object()})
-            context.update({'prdstruct_formset': prdstruct_formset})
-        ProductFAQFormSet = inlineformset_factory(
-            Product, Product.faqs.through, fk_name='product',
-            form=ProductFAQForm,
-            can_delete=True,
-            formset=FAQInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
-        if self.object:
-            prdfaq_formset = ProductFAQFormSet(
-                instance=self.get_object(),
-                form_kwargs={'object': self.get_object()})
-            context.update({'prdfaq_formset': prdfaq_formset})
-        context.update({
-            'messages': alert})
-        return context
-
-    def post(self, request, *args, **kwargs):
-        if self.request.POST or self.request.FILES:
-            try:
-                obj = int(self.kwargs.get('pk', None))
-                prd = int(request.POST.get('product'))
-                if obj == prd:
-                    obj = self.object = self.get_object()
-                    slug = request.POST.get('slug', None)
-                    form = None
-                    if slug == 'structure':
-                        ProductChapterFormSet = inlineformset_factory(
-                            Product, Product.chapters.through,
-                            fk_name='product',
-                            form=ProductStructureForm,
-                            can_delete=True,
-                            formset=ChapterInlineFormSet, extra=1,
-                            max_num=20, validate_max=True)
-                        formset = ProductChapterFormSet(
-                            request.POST, instance=obj)
-                        from django.db import transaction
-                        if formset.is_valid():
-                            with transaction.atomic():
-                                formset.save(commit=False)
-                                saved_formset = formset.save(commit=False)
-                                for ins in formset.deleted_objects:
-                                    ins.delete()
-
-                                for form in saved_formset:
-                                    form.save()
-                                formset.save_m2m()
-
-                            messages.success(
-                                self.request,
-                                "Product Chapter changed Successfully")
-                            return HttpResponseRedirect(reverse('console:productstructure-change', kwargs={'pk': obj.pk}))
-                        else:
-                            context = self.get_context_data()
-                            if formset:
-                                context.update({'prdstruct_formset': formset})
-                            messages.error(
-                                self.request,
-                                "Product Structure Change Failed, Changes not Saved")
-                            return TemplateResponse(
-                                request, [
-                                    "console/shop/change_productstructure.html"
-                                ], context)
                     elif slug == 'faqs':
+                        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+                            vendor = self.get_object().vendor
+                        else:
+                            vendor  = self.request.user.get_vendor()
+                        
                         ProductFAQFormSet = inlineformset_factory(
                             Product, Product.faqs.through, fk_name='product',
                             form=ProductFAQForm,
-                            can_delete=True,
-                            formset=FAQInlineFormSet, extra=1,
+                            can_delete=False,
+                            formset=FAQInlineFormSet, extra=0,
                             max_num=20, validate_max=True)
                         formset = ProductFAQFormSet(
-                            request.POST, instance=obj)
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj,
+                                'vendor':vendor },)
                         from django.db import transaction
                         if formset.is_valid():
                             with transaction.atomic():
@@ -1162,11 +1168,13 @@ class ChangeProductStructureView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-
+                                obj.status = 1
+                                obj.save()        
+                                
                             messages.success(
                                 self.request,
                                 "Product FAQ changed Successfully")
-                            return HttpResponseRedirect(reverse('console:productstructure-change',kwargs={'pk': obj.pk}))
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if formset:
@@ -1176,78 +1184,18 @@ class ChangeProductStructureView(DetailView):
                                 "Product FAQ Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_productstructure.html"
+                                    "console/shop/change_product.html"
                                 ], context)
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:product-change', kwargs={'pk': prd}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:product-change', kwargs={'pk': prd}))
-        return HttpResponseBadRequest()
-
-
-@Decorate(stop_browser_cache())
-@Decorate(check_permission('shop.add_productprice'))
-class ChangeProductPriceView(DetailView):
-    template_name = 'console/shop/change_productprice.html'
-    model = Product
-
-    def dispatch(self, request, *args, **kwargs):
-        return super(ChangeProductPriceView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(ChangeProductPriceView, self).get(request, args, **kwargs)
-
-    def get_object(self, queryset=None):
-        if hasattr(self, 'object'):
-            return self.object
-        else:
-            return super(ChangeProductPriceView, self).get_object(queryset)
-
-    def get_context_data(self, **kwargs):
-        context = super(ChangeProductPriceView, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        # ProductPriceFormSet = inlineformset_factory(
-        #     Product, Product.prices.through, fk_name='product',
-        #     form=ProductPriceForm,
-        #     can_delete=False,
-        #     formset=PriceInlineFormSet, extra=1,
-        #     max_num=20, validate_max=True)
-        countryform = ProductCountryForm(instance=self.get_object())
-        # if self.object:
-        #     prdprice_formset = ProductPriceFormSet(
-        #         instance=self.get_object(),
-        #         form_kwargs={'object': self.get_object()})
-        #     context.update({'prdprice_formset': prdprice_formset})
-        context.update({
-            'messages': alert,
-            'country_form': countryform})
-        return context
-
-    def post(self, request, *args, **kwargs):
-        if self.request.POST or self.request.FILES:
-            try:
-                obj = int(self.kwargs.get('pk', None))
-                prd = int(request.POST.get('product'))
-                if obj == prd:
-                    obj = self.object = self.get_object()
-                    slug = request.POST.get('slug', None)
-                    form = None
-                    if slug == 'price':
-                        ProductPriceFormSet = inlineformset_factory(
-                            Product, Product.prices.through, fk_name='product',
-                            form=ProductPriceForm,
+                    elif slug == 'vars':
+                        ProductVariationFormSet = inlineformset_factory(
+                            Product, Product.variation.through, fk_name='main',
+                            form=ProductVariationForm,
                             can_delete=False,
-                            formset=PriceInlineFormSet, extra=1,
+                            formset=VariationInlineFormSet, extra=0,
                             max_num=20, validate_max=True)
-                        formset = ProductPriceFormSet(
-                            request.POST, instance=obj)
+                        formset = ProductVariationFormSet(
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj},)
                         from django.db import transaction
                         if formset.is_valid():
                             with transaction.atomic():
@@ -1259,113 +1207,25 @@ class ChangeProductPriceView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-
+                                obj.status = 1
+                                obj.save()        
+                                
                             messages.success(
                                 self.request,
-                                "Product Price changed Successfully")
-                            return HttpResponseRedirect(reverse('console:productprice-change', kwargs={'pk': obj.pk}))
+                                "Product Variation changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if formset:
-                                context.update({'prdprice_formset': formset})
+                                context.update({'prdvars_formset': formset})
                             messages.error(
                                 self.request,
-                                "Product Price Change Failed, Changes not Saved")
+                                "Product Variation Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_productprice.html"
+                                    "console/shop/change_product.html"
                                 ], context)
-
-                    elif slug == 'country':
-                        form = ProductCountryForm(request.POST, instance=obj)
-                        if form.is_valid():
-                            product = form.save(commit=True)
-                            messages.success(
-                                self.request,
-                                "Product Countries changed Successfully")
-                            return HttpResponseRedirect(reverse('console:productprice-change',kwargs={'pk': obj.pk}))
-                        else:
-                            context = self.get_context_data()
-                            if form:
-                                context.update({'country_form': form})
-                            messages.error(
-                                self.request,
-                                "Product Country Change Failed, Changes not Saved")
-                            return TemplateResponse(
-                                request, [
-                                    "console/shop/change_productprice.html"
-                                ], context)
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:productprice-change', kwargs={'pk': prd}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:productprice-change', kwargs={'pk': prd}))
-        return HttpResponseBadRequest()
-
-
-@Decorate(stop_browser_cache())
-@Decorate(check_permission('shop.add_variationproduct'))
-class ChangeProductChildView(DetailView):
-    template_name = 'console/shop/change_productchild.html'
-    model = Product
-
-    def dispatch(self, request, *args, **kwargs):
-        return super(ChangeProductChildView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        return super(ChangeProductChildView, self).get(request, args, **kwargs)
-
-    def get_object(self, queryset=None):
-        if hasattr(self, 'object'):
-            return self.object
-        else:
-            return super(ChangeProductChildView, self).get_object(queryset)
-
-    def get_context_data(self, **kwargs):
-        context = super(ChangeProductChildView, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        ProductChildFormSet = inlineformset_factory(
-            Product, Product.childs.through, fk_name='father',
-            form=ProductChildForm,
-            can_delete=True,
-            formset=ChildInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
-        if self.object:
-            prdchild_formset = ProductChildFormSet(
-                instance=self.get_object(),
-                form_kwargs={'object': self.get_object()})
-            context.update({'prdchild_formset': prdchild_formset})
-        ProductRelatedFormSet = inlineformset_factory(
-            Product, Product.related.through, fk_name='primary',
-            form=ProductRelatedForm,
-            can_delete=True,
-            formset=RelatedInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
-        if self.object:
-            prdrelated_formset = ProductRelatedFormSet(
-                instance=self.get_object(),
-                form_kwargs={'object': self.get_object()})
-            context.update({'prdrelated_formset': prdrelated_formset})
-        context.update({
-            'messages': alert})
-        return context
-
-    def post(self, request, *args, **kwargs):
-        if self.request.POST or self.request.FILES:
-            try:
-                obj = int(self.kwargs.get('pk', None))
-                prd = int(request.POST.get('product'))
-                if obj == prd:
-                    obj = self.object = self.get_object()
-                    slug = request.POST.get('slug', None)
-                    form = None
-                    if slug == 'child':
+                    elif slug == 'child':
                         ProductChildFormSet = inlineformset_factory(
                             Product, Product.childs.through, fk_name='father',
                             form=ProductChildForm,
@@ -1389,7 +1249,7 @@ class ChangeProductChildView(DetailView):
                             messages.success(
                                 self.request,
                                 "Product Child changed Successfully")
-                            return HttpResponseRedirect(reverse('console:productchild-change', kwargs={'pk': obj.pk}))
+                            return HttpResponseRedirect(reverse('console:product-change', kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if formset:
@@ -1399,7 +1259,7 @@ class ChangeProductChildView(DetailView):
                                 "Product Child Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_productchild.html"
+                                    "console/shop/change_product.html"
                                 ], context)
                     elif slug == 'relation':
                         ProductRelatedFormSet = inlineformset_factory(
@@ -1425,7 +1285,7 @@ class ChangeProductChildView(DetailView):
                             messages.success(
                                 self.request,
                                 "Product Related changed Successfully")
-                            return HttpResponseRedirect(reverse('console:productchild-change', kwargs={'pk': obj.pk}))
+                            return HttpResponseRedirect(reverse('console:product-change', kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if formset:
@@ -1435,117 +1295,115 @@ class ChangeProductChildView(DetailView):
                                 "Product Related Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_productchild.html"
+                                    "console/shop/change_product.html"
                                 ], context)
 
+                    
+                    
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
-                    reverse('console:productchild-change', kwargs={'pk': prd}))
+                    reverse('console:product-change', kwargs={'pk': prd}))
             except:
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
-                    reverse('console:productchild-change', kwargs={'pk': prd}))
+                    reverse('console:product-change', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_permission('shop.add_childproduct'))
-class ChangeProductVariationView(DetailView):
-    template_name = 'console/shop/change_productvariation.html'
+@Decorate(check_group(['Product',]))
+@Decorate(check_permission('shop.console_change_product'))
+class ChangeProductVariantView(DetailView):
+    template_name = 'console/shop/change_productvariant.html'
     model = Product
 
     def dispatch(self, request, *args, **kwargs):
-        return super(ChangeProductVariationView, self).dispatch(request, *args, **kwargs)
+        return super(
+            ChangeProductVariantView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return super(ChangeProductVariationView, self).get(request, args, **kwargs)
+        return super(
+            ChangeProductVariantView, self).get(request, args, **kwargs)
 
     def get_object(self, queryset=None):
         if hasattr(self, 'object'):
             return self.object
         else:
-            return super(ChangeProductVariationView, self).get_object(queryset)
+            return super(
+                ChangeProductVariantView, self).get_object(queryset)
 
     def get_context_data(self, **kwargs):
-        context = super(ChangeProductVariationView, self).get_context_data(**kwargs)
+        context = super(
+            ChangeProductVariantView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
-        ProductVariationFormSet = inlineformset_factory(
-            Product, Product.variation.through, fk_name='main',
-            form=ProductVariationForm,
-            can_delete=True,
-            formset=VariationInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
-        if self.object:
-            prdvar_formset = ProductVariationFormSet(
-                instance=self.get_object(),
-                form_kwargs={'object': self.get_object()})
-            context.update({'prdvars_formset': prdvar_formset})
+        pk_parent = kwargs.get('parent',None)
+        parent = self.get_object().variationproduct.filter(
+            mainproduct__sibling=self.get_object())
         
+        main_change_form = ChangeProductVariantForm(parent=parent[0],
+            user=self.request.user, instance=self.get_object())
         context.update({
-            'messages': alert,})
+            'messages': alert,
+            'form': main_change_form,
+            'parent': parent[0].pk
+            })
         return context
 
     def post(self, request, *args, **kwargs):
         if self.request.POST or self.request.FILES:
             try:
                 obj = int(self.kwargs.get('pk', None))
+                parent = int(self.kwargs.get('parent', None))
                 prd = int(request.POST.get('product'))
                 if obj == prd:
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
                     form = None
-                    if slug == 'vars':
-                        ProductVariationFormSet = inlineformset_factory(
-                            Product, Product.variation.through, fk_name='main',
-                            form=ProductVariationForm,
-                            can_delete=True,
-                            formset=VariationInlineFormSet, extra=1,
-                            max_num=20, validate_max=True)
-                        formset = ProductVariationFormSet(
-                            request.POST, instance=obj)
-                        from django.db import transaction
-                        if formset.is_valid():
-                            with transaction.atomic():
-                                formset.save(commit=False)
-                                saved_formset = formset.save(commit=False)
-                                for ins in formset.deleted_objects:
-                                    ins.delete()
+                    if slug == 'variant':
+                        parent = self.get_object().variationproduct.filter(
+                            mainproduct__sibling=self.get_object())
+                        form = ChangeProductVariantForm(
+                            request.POST, request.FILES,
+                            parent=parent[0],
+                            user=self.request.user,
+                            instance=obj)
 
-                                for form in saved_formset:
-                                    form.save()
-                                formset.save_m2m()
-
+                        if form.is_valid():
+                            product = form.save()
                             messages.success(
                                 self.request,
-                                "Product Variation changed Successfully")
-                            return HttpResponseRedirect(reverse('console:productvariation-change', kwargs={'pk': obj.pk}))
+                                "Product Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse('console:productvariant-change',
+                                    kwargs={'pk': obj.pk, 'parent': parent[0].pk}))
                         else:
                             context = self.get_context_data()
-                            if formset:
-                                context.update({'prdvars_formset': formset})
+                            if form:
+                                context.update({'form': form})
                             messages.error(
                                 self.request,
-                                "Product Variaiton Change Failed, Changes not Saved")
+                                "Product Variant Add Failed, Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_productvariation.html"
+                                    "console/shop/change_productvariant.html"
                                 ], context)
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
+                        messages.error(
+                        self.request,
+                        "Object Does Not Exists")
                 return HttpResponseRedirect(
-                    reverse('console:productvariation-change', kwargs={'pk': prd}))
+                    reverse('console:productvariant-change', kwargs={'pk': prd, 'parent': parent}))
             except:
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
-                    reverse('console:productvariation-change', kwargs={'pk': prd}))
+                    reverse('console:productvariant-change', kwargs={'pk': prd, 'parent': parent}))
         return HttpResponseBadRequest()
+
 
 # @Decorate(check_group(['Product']))
 # @Decorate(check_permission('shop.console_change_attribute'))

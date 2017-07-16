@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
@@ -901,6 +902,26 @@ class Product(AbstractProduct, ModelMeta):
         self.attr.save()
 
     @property
+    def is_course(self):
+        if self.product_class.slug in settings.COURSE_SLUG:
+            return True
+        else:
+            return False
+    @property
+    def is_writing(self):
+        if self.product_class.slug in settings.WRITING_SLUG:
+            return True
+        else:
+            return False
+
+    @property
+    def is_service(self):
+        if self.product_class.slug in settings.SERVICE_SLUG:
+            return True
+        else:
+            return False
+
+    @property
     def get_bg(self, *args, **kwargs):
         return dict(BG_CHOICES).get(self.image_bg)
 
@@ -1040,6 +1061,12 @@ class Product(AbstractProduct, ModelMeta):
     def get_avg_ratings(self):
         return round(self.avg_rating, 1)
 
+    def get_screen(self):
+        if self.screenproduct.all().exists():
+            return self.screenproduct.all()[0]
+        else:
+            return None
+
 
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(
@@ -1088,7 +1115,7 @@ class ProductScreen(AbstractProduct):
         verbose_name=_('Variation Product'),
         symmetrical=False, blank=True)
     faqs = models.ManyToManyField(
-        ScreenFAQ,
+        FAQuestion,
         verbose_name=_('Product FAQ'),
         through='FAQProductScreen',
         through_fields=('product', 'question'),
@@ -1521,7 +1548,7 @@ class FAQProduct(AbstractAutoDate):
 
 class FAQProductScreen(AbstractAutoDate):
     question = models.ForeignKey(
-        ScreenFAQ,
+        FAQuestion,
         verbose_name=_('FAQuestion'),
         related_name='screenfaqs',
         on_delete=models.CASCADE)
