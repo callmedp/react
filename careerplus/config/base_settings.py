@@ -209,7 +209,6 @@ HTMSL_PASS = 'w1XN75L'
 HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
 ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
 
-CART_MAX_LIMIT = 5
 
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
@@ -228,3 +227,12 @@ HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 50
 HAYSTACK_BATCH_SIZE = 100
 HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
+
+# encode decode constants
+TOKEN_DT_FORMAT = '%Y%m%d%H%M%S'
+LOGIN_TOKEN_EXPIRY = 30
+EMAIL_SMS_TOKEN_EXPIRY = 7
+ENCODE_SALT = 'xfxa'
+
+# resume writing India product List
+RESUME_WRITING_INDIA = [2]

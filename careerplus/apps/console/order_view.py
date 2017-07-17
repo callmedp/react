@@ -33,7 +33,8 @@ from .order_form import (
     MessageForm,
     OrderFilterForm,
     OIFilterForm,
-    OIActionForm,)
+    OIActionForm,
+    AssignmentActionForm,)
 
 
 @method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/'), name='dispatch')
@@ -247,16 +248,17 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                 order = oi.order
                 orderitems = order.orderitems.all()  # filter(product__type_flow__in=[1])
                 for oi in orderitems:
-                    oi.oi_resume = request.FILES.get('oi_resume', '')
-                    last_status = oi.oi_status
-                    oi.oi_status = 3
-                    oi.last_oi_status = last_status
-                    oi.save()
-                    oi.orderitemoperation_set.create(
-                        oi_status=oi.oi_status,
-                        last_oi_status=last_status,
-                        assigned_to=oi.assigned_to,
-                        added_by=request.user)
+                    if not oi.oi_resume:
+                        oi.oi_resume = request.FILES.get('oi_resume', '')
+                        last_status = oi.oi_status
+                        oi.oi_status = 3
+                        oi.last_oi_status = last_status
+                        oi.save()
+                        oi.orderitemoperation_set.create(
+                            oi_status=oi.oi_status,
+                            last_oi_status=last_status,
+                            assigned_to=oi.assigned_to,
+                            added_by=request.user)
                 messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
@@ -288,7 +290,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_queryset(self):
         queryset = OrderItem.objects.all().select_related('order', 'product')
         queryset = queryset.filter(
-            order__status=1, no_process=False, product__type_flow__in=[1, 3], oi_resume__in=['', None]).exclude(oi_status=4)
+            order__status=1, no_process=False, product__type_flow__in=[1, 3, 5], oi_resume='').exclude(oi_status=4)
 
         try:
             if self.query:
@@ -358,7 +360,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
                             # mail to user about writer information
                             to_emails = [obj.order.email]
-                            mail_type = 'Writer_Information'
+                            mail_type = 'ASSIGNMENT_ACTION'
                             data = {}
                             data.update({
                                 "name": obj.order.first_name + ' ' + obj.order.last_name,
@@ -412,7 +414,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3], oi_draft__in=['', None]).exclude(oi_resume='').exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3], oi_draft='').exclude(oi_resume='').exclude(oi_status=4)
         user = self.request.user
         if user.is_superuser:
             pass
@@ -708,7 +710,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=24, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=24, product__type_flow__in=[1, 3, 5])
         user = self.request.user
 
         if user.has_perm('order.can_view_all_approved_list'):
@@ -1145,7 +1147,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.payment_date:
-                date_range = self.added_on.split('-')
+                date_range = self.payment_date.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -1154,6 +1156,187 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
+        except:
+            pass
+
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+
+
+@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
+class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
+    context_object_name = 'object_list'
+    template_name = 'console/order/domestic-profile-update-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 20
+        self.query = ''
+        self.payment_date, self.updated_on = '', ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.payment_date = request.GET.get('payment_date', '')
+        self.updated_on = request.GET.get('updated_on', '')
+        return super(DomesticProfileUpdateQueueView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(DomesticProfileUpdateQueueView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['object_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        initial = {
+            "payment_date": self.payment_date,
+            "updated_on": self.updated_on, }
+        filter_form = OIFilterForm(initial)
+        context.update({
+            "assignment_form": AssignmentActionForm(),
+            "messages": alert,
+            "query": self.query,
+            "message_form": MessageForm(),
+            "filter_form": filter_form,
+            "action_form": OIActionForm(queue_name="domesticprofileupdate"),
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(DomesticProfileUpdateQueueView, self).get_queryset()
+        queryset = queryset.filter(order__status=1, product__type_flow=5, no_process=False).exclude(oi_status__in=[4, 23, 24])
+        queryset = queryset.exclude(oi_resume='')
+
+        user = self.request.user
+
+        if user.is_superuser or user.has_perm('order.domestic_profile_update_assigner'):
+            pass
+        elif user.has_perm('order.domestic_profile_update_assignee'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
+
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+
+        try:
+            if self.payment_date:
+                date_range = self.payment_date.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    order__payment_date__range=[start_date, end_date])
+        except:
+            pass
+
+
+        try:
+            if self.updated_on:
+                date_range = self.updated_on.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    updated_on__range=[start_date, end_date])
+        except:
+            pass
+
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+
+
+@method_decorator(permission_required('order.can_show_domestic_profile_approval_queue', login_url='/console/login/'), name='dispatch')
+class DomesticProfileApprovalQueue(ListView, PaginationMixin):
+    context_object_name = 'object_list'
+    template_name = 'console/order/domestic-profile-approval-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        self.payment_date, self.updated_on = '', ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.payment_date = request.GET.get('payment_date', '')
+        self.updated_on = request.GET.get('updated_on', '')
+        return super(DomesticProfileApprovalQueue, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(DomesticProfileApprovalQueue, self).get_context_data(**kwargs)
+        paginator = Paginator(context['object_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        initial = {
+            "payment_date": self.payment_date,
+            "updated_on": self.updated_on, }
+        filter_form = OIFilterForm(initial)
+        context.update({
+            "messages": alert,
+            "query": self.query,
+            "message_form": MessageForm(),
+            "filter_form": filter_form,
+            "action_form": OIActionForm(queue_name="domesticprofileapproval"),
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(DomesticProfileApprovalQueue, self).get_queryset()
+        queryset = queryset.filter(order__status=1, product__type_flow=5, oi_status=23, no_process=False)
+
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+
+        try:
+            if self.payment_date:
+                date_range = self.payment_date.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    order__payment_date__range=[start_date, end_date])
+        except:
+            pass
+
+
+        try:
+            if self.updated_on:
+                date_range = self.updated_on.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    updated_on__range=[start_date, end_date])
         except:
             pass
 
@@ -1213,7 +1396,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.payment_date:
-                date_range = self.added_on.split('-')
+                date_range = self.payment_date.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -1477,6 +1660,113 @@ class ActionOrderItemView(View):
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:queue-booster'))
 
+        elif action == -4 and queue_name == "domesticprofileupdate":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 23  # pending Approval
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=23,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems send for approval.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        elif action == -5 and queue_name == "domesticprofileapproval":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 24  # approved
+                    obj.last_oi_status = last_oi_status
+                    obj.approved_on = timezone.now()
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems approved.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        elif action == -6 and queue_name == "domesticprofileapproval":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 25  # rejected By Admin
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems rejected.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        elif action == -7 and queue_name == "partnerinbox":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                hold = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 10  # on Hold
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    hold += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(hold) + ' orderitems are placed on hold.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:partner:' + queue_name))
+
+        elif action == -8 and queue_name == "partnerholdqueue":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                unhold = 0
+                for obj in orderitems:
+                    prev_status = obj.last_oi_status
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = prev_status  # UnHold
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    unhold += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(unhold) + ' orderitems are unhold.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:partner:' + queue_name))
+
         elif action == -2 and queue_name == 'midout':
             orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
             for oi in orderitems:
@@ -1505,4 +1795,70 @@ class ActionOrderItemView(View):
             return HttpResponseRedirect(reverse('console:queue-midout'))
 
         messages.add_message(request, messages.ERROR, "Select Valid Action")
+        try:
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+        except:
+            return HttpResponseForbidden()
+
+
+class AssignmentOrderItemView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            user_pk = int(request.POST.get('assign_to', '0'))
+        except:
+            user_pk = 0
+
+        selected = request.POST.get('selected_id', '')
+        selected_id = json.loads(selected)
+        queue_name = request.POST.get('queue_name', '')
+
+        if user_pk:
+            try:
+                User = get_user_model()
+                assign_to = User.objects.get(pk=user_pk)
+                orderitem_objs = OrderItem.objects.filter(id__in=selected_id)
+                for obj in orderitem_objs:
+                    obj.assigned_to = assign_to
+                    obj.assigned_by = request.user
+                    obj.save()
+
+                    # mail to user about writer information
+                    to_emails = [obj.order.email]
+                    data = {}
+                    data.update({
+                        "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        "mobile": obj.order.mobile,
+                        "writer_name": assign_to.name,
+                        "writer_email": assign_to.email,
+                        "writer_mobile": assign_to.contact_number,
+                        "subject": "Information of your profile update service",
+
+                    })
+                    mail_type = 'ASSIGNMENT_ACTION'
+
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=1,
+                        last_oi_status=obj.oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user
+                    )
+
+                display_message = str(len(orderitem_objs)) + ' orderitems are Assigned.'
+                messages.add_message(request, messages.SUCCESS, display_message)
+                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        messages.add_message(request, messages.ERROR, "Please select valid assignment.")
         return HttpResponseRedirect(reverse('console:queue-' + queue_name))

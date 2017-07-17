@@ -6,7 +6,8 @@ from .views import AjaxCommentLoadMoreView, CmsShareView,\
     AjaxProductLoadMoreView, AjaxReviewLoadMoreView,\
     EmailExistView, AjaxStateView, AjaxOrderItemCommentView,\
     ApproveByAdminDraft, RejectByAdminDraft, UploadDraftView,\
-    SaveWaitingInput, ApproveDraftByLinkedinAdmin, RejectDraftByLinkedinAdmin
+    SaveWaitingInput, ApproveDraftByLinkedinAdmin, RejectDraftByLinkedinAdmin,\
+    GenerateAutoLoginToken
 
 urlpatterns = [
     url(r'^page/load-more/$',
@@ -33,6 +34,10 @@ urlpatterns = [
     url(r'^get-states/$',
         AjaxStateView.as_view(), name='indian-state'),
 
+    # auto login token for shine profile update
+    url(r'^autologin/tokengenerator/$',
+        GenerateAutoLoginToken.as_view(), name='autologin-tokengenerate'),
+
     # custom admin flow
     url(r'^orderitem/add-comment/$',
         AjaxOrderItemCommentView.as_view(), name='order-item-comment'),
@@ -54,8 +59,5 @@ urlpatterns = [
 
     url(r'^orderitem/linkedin-reject-draft/$',
         RejectDraftByLinkedinAdmin.as_view(), name='linkedin-reject-draft'),
+
 ]
-
-
-
-

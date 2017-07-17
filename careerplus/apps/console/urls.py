@@ -84,7 +84,7 @@ urlpatterns += [
         name='attributeoption-add'),
     url(r'^attributeoption/list/$',
         shop_view.ListAttributeOptionGroupView.as_view(),
-        name='attributeoption-list'),    
+        name='attributeoption-list'),
 ]
 
 
@@ -151,7 +151,8 @@ urlpatterns += [
         order_view.ApprovedQueueVeiw.as_view(), name='queue-approved'),
 
     url(r'^queue/rejectedbyadmin/$',
-        order_view.RejectedByAdminQueue.as_view(), name='queue-rejectedbyadmin'),
+        order_view.RejectedByAdminQueue.as_view(),
+        name='queue-rejectedbyadmin'),
 
     url(r'^queue/rejectedbycandidate/$',
         order_view.RejectedByCandidateQueue.as_view(),
@@ -163,8 +164,17 @@ urlpatterns += [
     url(r'^queue/booster/$',
         order_view.BoosterQueueVeiw.as_view(), name='queue-booster'),
 
+    url(r'^queue/domesticprofileupdate/$',
+        order_view.DomesticProfileUpdateQueueView.as_view(),
+        name='queue-domesticprofileupdate'),
+
+    url(r'^queue/domesticprofileapproval/$',
+        order_view.DomesticProfileApprovalQueue.as_view(),
+        name='queue-domesticprofileapproval'),
+
     url(r'^queue/closed/orderitems/$',
-        order_view.ClosedOrderItemQueueVeiw.as_view(), name='queue-closed-orderitems'),
+        order_view.ClosedOrderItemQueueVeiw.as_view(),
+        name='queue-closed-orderitems'),
 
     url(r'^queue/orderitem/(?P<pk>\d+)/detail/$',
         order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
@@ -172,9 +182,13 @@ urlpatterns += [
     url(r'^queue/order/(?P<pk>\d+)/details/$',
         order_view.OrderDetailVeiw.as_view(), name='order-detail'),
 
-    url(r'^queue/orderitem/downloadascsv/$',
+    url(r'^queue/orderitem/action/$',
         order_view.ActionOrderItemView.as_view(),
         name='action-orderitem-view'),
+
+    url(r'^queue/orderitem/assignment/$',
+        order_view.AssignmentOrderItemView.as_view(),
+        name='assignment-orderitem-view'),
 ]
 
 from . import linkedin_view

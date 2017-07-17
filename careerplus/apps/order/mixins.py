@@ -56,7 +56,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 self.createOrderitems(order, cart_obj)
                 order_items = order.orderitems.filter(product__type_flow__in=[8])
                 # mai and sms
-                if order.orderitems.filter(product__type_flow__in=[1, 3]) and order.status == 1:
+                if order.orderitems.filter(product__type_flow__in=[1, 3, 5]) and order.status == 1:
                     to_emails = [order.email]
                     mail_type = "MIDOUT"
                     data = {}
