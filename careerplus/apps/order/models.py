@@ -257,6 +257,14 @@ class OrderItem(models.Model):
             # Domestic Profile Approval Queue Permissions
             ("can_show_domestic_profile_approval_queue", "Can Show Domestic Profile Approval Queue"),
 
+            # International Profile Update Queue Permissions
+            ("can_show_international_profile_update_queue", "Can Show International Profile Update Queue"),
+            ("international_profile_update_assigner", "International Profile Update Assigner"),
+            ("international_profile_update_assignee", "International Profile Update Assignee"),
+
+            # International Profile Approval Queue Permissions
+            ("can_show_international_profile_approval_queue", "Can Show International Profile Approval Queue"),
+
             # Closed Permission
             ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),
             ("can_view_all_closed_oi_list", "Can View All Closed Orderitem List"),

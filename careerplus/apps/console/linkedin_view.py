@@ -22,7 +22,7 @@ from quizs.models import QuizResponse
 from .linkedin_form import (
     DraftForm, LinkedinInboxActionForm, OrganizationForm,
     EducationForm, OrganizationInlineFormSet, EducationInlineFormSet, 
-    LinkedinOIFilterForm)
+    LinkedinOIFilterForm, AssignmentInterNationalForm)
 from .order_form import MessageForm, OIActionForm
 from blog.mixins import PaginationMixin
 from order.models import OrderItem, Order
@@ -646,3 +646,201 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             pass
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+
+
+class InterNationalUpdateQueueView(ListView, PaginationMixin):
+    context_object_name = 'object_list'
+    template_name = 'console/order/international-profile-update-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 20
+        self.query = ''
+        self.payment_date, self.updated_on = '', ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.payment_date = request.GET.get('payment_date', '')
+        self.updated_on = request.GET.get('updated_on', '')
+        return super(InterNationalUpdateQueueView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(InterNationalUpdateQueueView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['object_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        initial = {
+            "payment_date": self.payment_date,
+            "updated_on": self.updated_on, }
+        filter_form = LinkedinOIFilterForm(initial)
+        context.update({
+            "assignment_form": AssignmentInterNationalForm(),
+            "messages": alert,
+            "query": self.query,
+            "message_form": MessageForm(),
+            "filter_form": filter_form,
+            "action_form": OIActionForm(queue_name="internationalprofileupdate"),
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(InterNationalUpdateQueueView, self).get_queryset()
+        queryset = queryset.filter(order__status=1, product__type_flow=5, no_process=False).exclude(oi_status__in=[4, 23, 24])
+        queryset = queryset.exclude(oi_resume='')
+
+        user = self.request.user
+
+        if user.is_superuser or user.has_perm('order.domestic_profile_update_assigner'):
+            pass
+        elif user.has_perm('order.domestic_profile_update_assignee'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
+
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+
+        try:
+            if self.payment_date:
+                date_range = self.payment_date.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    order__payment_date__range=[start_date, end_date])
+        except:
+            pass
+
+
+        try:
+            if self.updated_on:
+                date_range = self.updated_on.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    updated_on__range=[start_date, end_date])
+        except:
+            pass
+
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+
+
+class InterNationalApprovalQueue(ListView, PaginationMixin):
+    context_object_name = 'object_list'
+    template_name = 'console/order/domestic-profile-approval-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        self.payment_date, self.updated_on = '', ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.payment_date = request.GET.get('payment_date', '')
+        self.updated_on = request.GET.get('updated_on', '')
+        return super(InterNationalApprovalQueue, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(InterNationalApprovalQueue, self).get_context_data(**kwargs)
+        paginator = Paginator(context['object_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        initial = {
+            "payment_date": self.payment_date,
+            "updated_on": self.updated_on, }
+        filter_form = LinkedinOIFilterForm(initial)
+        context.update({
+            "messages": alert,
+            "query": self.query,
+            "message_form": MessageForm(),
+            "filter_form": filter_form,
+            "action_form": OIActionForm(queue_name="internationalprofileapproval"),
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(InterNationalApprovalQueue, self).get_queryset()
+        queryset = queryset.filter(order__status=1, product__type_flow=5, oi_status=23, no_process=False)
+
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__id__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except:
+            pass
+
+        try:
+            if self.payment_date:
+                date_range = self.payment_date.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    order__payment_date__range=[start_date, end_date])
+        except:
+            pass
+
+
+        try:
+            if self.updated_on:
+                date_range = self.updated_on.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    updated_on__range=[start_date, end_date])
+        except:
+            pass
+
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+
+
+class ProfileUpdationView(DetailView):
+    model = OrderItem
+    template_name = "console/order/updateprofile.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(ProfileUpdationView, self).get(request, *args, **kwargs)
+        return context
+    
+    def get_context_data(self, **kwargs):
+        context = super(OrderItemDetailVeiw, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        obj = self.get_object()
+        context.update({
+            "messages": alert,
+        })
+        return context

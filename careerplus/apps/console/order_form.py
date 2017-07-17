@@ -293,6 +293,11 @@ class OIActionForm(forms.Form):
                 (-8, "Unhold"),  # unhold orderitem
             )
 
+        elif queue_name == 'internationalprofileupdate':
+            ACTION_CHOICES += (
+                (-9, "Send for approval to ops"),  # send international Profile Update for approval
+            )
+
         else:
             ACTION_CHOICES += ((-1, "Export As Csv"),)
 

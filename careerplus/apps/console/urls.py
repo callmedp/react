@@ -220,4 +220,14 @@ urlpatterns += [
     url(r'^linkedin/linkedin-approval/$',
         linkedin_view.LinkedinApprovalVeiw.as_view(),
         name='linkedin-approval'),
+
+    url(r'^queue/internationalprofileupdate/$',
+        linkedin_view.InterNationalUpdateQueueView.as_view(),
+        name='queue-internationalprofileupdate'),
+
+    url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
+        linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),
+
+    url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
+        linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),
 ]

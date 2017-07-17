@@ -1,0 +1,151 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>International Profile Update Order Item- Shinelearning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>International Profile Update Orderitems</h3>
+      </div> 
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+    
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action" id="inbox-table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">OrderId</th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Resume</th>
+                    <th class="column-title">Website</th>
+                    <th class="column-title">Detailed Info</th>
+                    <th class="column-title">Status</th>
+                  </tr>
+                </thead>
+
+                <tbody id="body-table-list">
+                  {% for obj in page %}
+                    <tr>
+                      <td>{{obj.order.id}}</td>
+                      <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
+                      <td>{{obj.order.email}}</td>
+                      <td>
+                        <table>
+                          <tbody>
+                            <tr>
+                              <th class="column-title">Website</th>
+                              <th class="column-title">Website</th>
+                            </tr>
+                            <tr>    
+                              <td>
+                                <a target="_blank" href="http://jobs.monster.com/">jobs.monster.com</a>
+                              </td>
+                              <td>
+                                <a target="_blank" href="http://www.careerbuilder.com/">www.careerbuilder.com</a>
+                              </td>  
+                            </tr>
+                            <tr>
+                              <td>
+                                <form action="" method="POST" id="pro_update_1" class="">
+                                <input type="hidden" name="id" value="2168953">
+                                <input type="hidden" name="site" value="jobs.monster.com">
+                                <label>
+                                <input type="text" name="username" class="" value="" filled_data="upender" id="1_username"> :Username</label>
+                                <label>
+                                <input type="text" name="password" class="password data_required" value="" filled_data="123" id="1_password"> :Password</label>
+                                <label><input type="checkbox" name="flag" class="flag" id="jobs.monster.com_flag"> :Profile Updation Flag</label><br>
+                                <input class="update-button grp-default grp-button" for_site="1" type="button" name="save" value="Save" style="width: 40px;">
+                                </form>
+                              </td>
+                              <td>
+                                <form action="" method="POST" id="pro_update_1" class="">
+                                <input type="hidden" name="id" value="2168953">
+                                <input type="hidden" name="site" value="jobs.monster.com">
+                                <label>
+                                <input type="text" name="username" class="" value="" filled_data="upender" id="1_username"> :Username</label>
+                                <label>
+                                <input type="text" name="password" class="password data_required" value="" filled_data="123" id="1_password"> :Password</label>
+                                <label><input type="checkbox" name="flag" class="flag" id="jobs.monster.com_flag"> :Profile Updation Flag</label><br>
+                                <input class="update-button grp-default grp-button" for_site="1" type="button" name="save" value="Save" style="width: 40px;">
+                                </form>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                      <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>{{obj.get_oi_status}}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>    
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+<script type="text/javascript">
+</script>
+
+{% endblock js_block %}

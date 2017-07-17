@@ -1162,7 +1162,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
 
 
-@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
+# @method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
 class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/domestic-profile-update-list.html'
