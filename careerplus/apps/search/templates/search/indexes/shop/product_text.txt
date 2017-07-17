@@ -1,2 +1,6 @@
-{{ object.name }}
-
+{{ object.heading }}
+{{ object.categories.category.name }} parent
+{{ object.categories.category.name }} child
+{{ object.chapter.heading }}
+{{ object.chapter.answer }}
+{{ object.about }}
