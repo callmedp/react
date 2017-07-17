@@ -45,6 +45,7 @@ urlpatterns += [
     url(r'^$', HomePageView.as_view(), name='homepage'),
     url(r'^console/', include('console.urls', namespace='console')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
+    url(r'^user/', include('users.urls', namespace='users')),
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^skillpage/', include('skillpage.urls', namespace='skillpage')),
     url(r'^article/', include('blog.urls', namespace='blog')),

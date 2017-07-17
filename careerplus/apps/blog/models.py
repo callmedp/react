@@ -11,7 +11,7 @@ from meta.models import ModelMeta
 from ckeditor_uploader.fields import RichTextUploadingField
 from decimal import Decimal
 
-from cms.models import AbstractCommonModel
+from core.models import AbstractCommonModel
 from seo.models import AbstractSEO
 
 from .config import STATUS

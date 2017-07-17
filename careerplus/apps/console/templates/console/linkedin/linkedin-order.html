@@ -137,9 +137,11 @@
                                       {% endif %}
 
                                     {% for draft in obj.get_oi_drafts %}
+                                      {% if draft.linkedin %}
                                         <tr>
                                         <td>Draft {% if draft.draft_counter == max_limit_draft %}Final{% else %}{{draft.draft_counter}}{% endif %}</td>
-                                        <td><a href="{% url 'linkedin-draft' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td></tr>
+                                        <td><a href="{% url 'linkedin-draft' obj.pk draft.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td></tr>
+                                      {% endif %} 
                                     {% endfor %}
 
                                    </tbody>

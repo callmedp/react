@@ -55,3 +55,8 @@ class SendSMS(object):
             template_name = data.get('template_name', 'midout_sms.html')
             send_dict['template'] = 'sms/' + template_name
             self.process(send_dict, data)
+
+        elif sms_type == "BOOSTER_CANDIDATE":
+            template_name = data.get('template_name', 'booster_candidate.html')
+            send_dict['template'] = 'sms/' + template_name
+            self.process(send_dict, data)

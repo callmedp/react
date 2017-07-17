@@ -248,7 +248,7 @@
                           <b>Updated On: {{obj.updated_on}}</b>
                       </td>
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
-                      <td><a href="{% url 'linkedin-draft' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
+                      <td><a href="#" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
                       <td><a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.id %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
 
                       <td>
@@ -274,7 +274,7 @@
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                      <button type="button" id="approveAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="approveDraftByAdmin('{{obj.id}}',)">Yes</button>
+                                      <button type="button" id="approveAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="approveDraftByLinkedinAdmin('{{obj.id}}',)">Yes</button>
                                     </div>
 
                                   </div>

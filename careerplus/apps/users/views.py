@@ -1,11 +1,18 @@
 import logging
+import mimetypes
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from wsgiref.util import FileWrapper
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,)
 from django.contrib import messages
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
+
 from shine.core import ShineCandidateDetail
+from core.mixins import TokenExpiry
+from order.models import OrderItem
 
 from .forms import RegistrationForm, LoginApiForm
 from .mixins import RegistrationLoginApi
@@ -145,3 +152,35 @@ class LogoutApiView(TemplateView):
     def get(self, request, *args, **kwargs):
         request.session.flush()
         return HttpResponseRedirect(reverse('homepage'))
+
+
+class DownloadBoosterResume(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            token = request.GET.get('token', '')
+            email, oi_pk, valid = TokenExpiry().decode(token)
+            if valid:
+                oi = OrderItem.objects.get(pk=oi_pk)
+
+                if oi.parent and oi.parent.oi_draft and (oi.parent.oi_status == 4 or oi.parent.no_process):
+                    resume = oi.parent.oi_draft
+                    file_path = resume.path
+                    filename = resume.name
+                    extn = filename.split('.')[-1]
+                    newfilename = 'resume_' + oi.order.first_name + '.' + extn
+
+                    path = file_path
+                    try:
+                        fsock = FileWrapper(open(path, 'rb'))
+                    except IOError:
+                        raise Exception("Resume not found.")
+
+                    response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
+                    response['Content-Disposition'] = 'attachment; filename="%s"' % (newfilename)
+                    return response
+                else:
+                    raise Exception("Resume not found.")
+        except:
+            messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
+            response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            return response
