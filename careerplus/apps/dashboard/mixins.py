@@ -202,7 +202,6 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                             shine_id + "/?format=json"
                         personal_response = requests.put(
                             personal_url, data=personal_data, headers=request_header)
-
                         status, msg = self.roundone_personal_submit(data, self.request)
 
                     if personal_response.status_code in [200, 201] and status:
@@ -258,8 +257,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     except Exception:
                         end_year = ""
                         end_month = ""
-
-                    if data.get('current', False):
+                    if data.get('current', False) and end_year == "" and end_month == "":
                         jobs_data = {
                             "candidate_id": shine_id,
                             "sub_field": sub_field,
@@ -300,9 +298,9 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                             jobs_url, data=jobs_data, headers=request_header)
 
                         status, msg = self.roundone_edit_employment(
-                            data, self.request, jobs_data)
+                            data, self.request, job)
 
-                    if jobs_response.status_code in [200, 201] and status:
+                    if jobs_response.status_code in [200, 201]:
                         returnlist.append(True)
                 if False not in returnlist:
                     return True, ""

@@ -1,6 +1,7 @@
 $(function(){
 	var arr = []; 
 	arr["qualification"] = ["Post Graduation", "Graduation", "Intermediate", "Matriculation"];
+	arr["months"] = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	arr["year"] = [];
 	for(var yr = 1960; yr < 2017; yr++){
 		arr["year"].push(yr);
@@ -10,8 +11,8 @@ $(function(){
 		arr["yrs"].push(yrs + " years");
 	}
 
-	var _input = function(value, classValue, name){
-		return '<input class="' + classValue + '" type="text" value="' + value + '" name="' + name + '"/>';
+	var _input = function(value, classValue){
+		return '<input class="' + classValue + '" type="text" value="' + value + '"/>';
 	}
 	var _input2 = function(value1, value2){
 		var value2 = typeof value2 != "string" ? "" : value2;
@@ -19,20 +20,20 @@ $(function(){
 			input2 += _input(value2, "pro-input2");
 		return  input2;
 	}
-	var _inputMobile = function(value1, value2, name){
-		var mobinput = _input(value1, "pro-mob", name);
-			mobinput += _input(value2, "pro-input2", name);
+	var _inputMobile = function(value1, value2){
+		var mobinput = _input(value1, "pro-mob");
+			mobinput += _input(value2, "pro-input2");
 		return mobinput;
 	}
 	var _inputSelect = function(value1, value2, array){
 		var value2 = typeof value2 != "string" ? "" : value2;
 		var input2 = _input(value1,"pro-input2");
-			input2 += _select(value2, array, "pro-select2");
+			// input2 += _select(value2, array, "pro-select2");
 			input2 += '<a href="#" class="removeElement">Remove</a>';
 		return  input2;
 	}
 	var _select = function(value, array, classValue){  
-		var s = '<select class="' + classValue + '" name="experience">';
+		var s = '<select class="' + classValue + '">';
 			for(var i = 0; i < array.length; i++){
 				if(value == array[i]){
 					s += "<option selected>" + array[i] + "</option>";
@@ -51,8 +52,7 @@ $(function(){
 			switch(_type){
 				case "input": 
 					var _val = $(this).text();
-					var name = $(this).data("name")
-					$(this).html(_input(_val, "pro-input", name));
+					$(this).html(_input(_val, "pro-input"));
 					break;
 				case "input2":
 					var _val = $(this).text();
@@ -78,7 +78,6 @@ $(function(){
 					break;
 				case "mobile":
 					var _val = $(this).text().split("-");
-					var name = $(this).data("name")
 					$(this).html(_inputMobile(_val[0], _val[1]));
 					break;
 			}
@@ -126,8 +125,8 @@ $(document).ready(function(){
 		e.preventDefault();
 		var inputsRow = '<div class="row mt10">' +
 						'<div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3 mb-10" data-role="inputSelect" data-editable="" data-type="yrs">' +
-							'<input class="pro-input2" value="" type="text" name="skill">' +
-							'<select class="pro-select2" name="exp"><option>0 years</option><option>1 years</option><option>2 years</option><option>3 years</option><option>4 years</option><option>5 years</option><option>6 years</option><option>7 years</option><option>8 years</option><option>9 years</option><option>10 years</option><option>11 years</option></select>' + 
+							'<input class="pro-input2" value="" type="text">' +
+							// '<select class="pro-select2"><option>0 years</option><option>1 years</option><option>2 years</option><option>3 years</option><option>4 years</option><option>5 years</option><option>6 years</option><option>7 years</option><option>8 years</option><option>9 years</option><option>10 years</option><option>11 years</option></select>' + 
 							'<a href="#" class="removeElement">Remove</a>' +
 						'</div>' +
                         '</div>';

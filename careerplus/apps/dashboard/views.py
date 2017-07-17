@@ -17,6 +17,8 @@ from microsite.roundoneapi import RoundOneAPI
 from microsite.common import ShineUserDetail
 from django.conf import settings
 
+month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
+
 
 class RoundoneDashboardView(RoundOneAPI, TemplateView):
     template_name = 'roundone/dashboard-roundone.html'
@@ -233,7 +235,9 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
                 'skill_len': len(skill_detail),
                 'total_exp':total_exp,
                 'years': [i for i in range(12)],
+                'st_years': [i for i in range(1960,2017)],
                 'csrf_token_value':get_token(request),
+                'month_dict':month_dict,
                 # 'f_area': f_area,
                 "resumes":resumes,
                 "passout_yr": [yr for yr in range(1960,2017)]

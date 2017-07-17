@@ -174,17 +174,6 @@
                 </div>
                 {% endif %}
               </div>
-              <!--
-              <div class="row mt-10">
-                <div class="col-sm-3 col-md-3">Total Experience</div>
-                <div class="col-sm-9 col-md-9" data-role="input2" data-editable>
-                  <input class="pro-input2" type="text" name="years" 
-                  value="{{total_exp.0.experience_in_years}}">
-                  <input class="pro-input2" type="text" name="months" 
-                  value="{{total_exp.0.experience_in_months}}">
-                </div>
-              </div>
-              -->
               <div class="row mt-10">
                   {% if skill_detail %}
                     <div class="col-sm-3 col-md-3">Skills</div>
@@ -217,7 +206,7 @@
                 </div>
                 <input type="hidden" name="first" value="{{personal_detail.first_name}}">
                 <input type="hidden" name="last" value="{{personal_detail.last_name}}">
-                <input type="hidden" name="total_exp" value="{{personal_detail.last_name}}">
+                <input type="hidden" name="total_exp" value="{{total_exp.0.experience_in_years}}">
                 <input type="hidden" name="edit_type" value="editpersonal">
                 <input type="hidden" name="skilllength" value="{{skill_len}}">
                 <div class="row mt-10 save-event">
@@ -319,32 +308,94 @@
                   </div>
                   {% if exp.is_current %}
                   <div class="row mt-10">
-                      <div class="col-sm-3 col-md-3">From (Date)</div>
-                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
-                      <input class="pro-input2" type="text" name="start_month"
-                      value="{{exp.start_month}}">
-                      <input class="pro-input2" type="text" name="start_year"
-                      value="{{exp.start_year}}">
+                    <div class="col-sm-3 col-md-3">Duration</div>
+                      <div class="col-sm-9 col-md-9">
+                        From <div class="pro-select22" data-role="select" 
+                        data-editable="" data-type="year">
+                        <select class="pro-select" name="start_year">
+                        {% for st_year in st_years %}
+                          {% if st_year == exp.start_year %}
+                            <option selected>{{st_year}}</option>
+                          {% else %}
+                            <option>{{st_year}}</option>
+                          {% endif %}
+                        {% endfor %}
+                        </select>
                       </div>
+                      <div class="pro-select22" data-role="select" 
+                      data-editable="" data-type="months">
+                      <select class="pro-select" name="start_month">
+                       {% for key, val in month_dict.items %}
+                          {% if val == exp.start_month %}
+                            <option value="{{val}}" selected>{{key}}</option>
+                          {% else %}
+                            <option value="{{val}}">{{key}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                      </div>
+                    </div>
                   </div>
                   {% else %}
                   <div class="row mt-10">
-                      <div class="col-sm-3 col-md-3">From (Date)</div>
-                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
-                        <input class="pro-input2" type="text" name="start_month"
-                        value="{{exp.start_month}}">
-                        <input class="pro-input2" type="text" name="start_year"
-                        value="{{exp.start_year}}">
+                    <div class="col-sm-3 col-md-3">Duration</div>
+                      <div class="col-sm-9 col-md-9">
+                        <span>From</span>
+                        <div class="pro-select22" data-role="select" 
+                        data-editable="" data-type="year">
+                        <select class="pro-select" name="start_year">
+                        {% for st_year in st_years %}
+                          {% if st_year == exp.start_year %}
+                            <option selected>{{st_year}}</option>
+                          {% else %}
+                            <option>{{st_year}}</option>
+                          {% endif %}
+                        {% endfor %}
+                        </select>
                       </div>
+                      <div class="pro-select22" data-role="select" 
+                      data-editable="" data-type="months">
+                      <select class="pro-select" name="start_month">
+                       {% for key, val in month_dict.items %}
+                          {% if val == exp.start_month %}
+                            <option value="{{val}}" selected>{{key}}</option>
+                          {% else %}
+                            <option value="{{val}}">{{key}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                      </div>
+                    </div>
                   </div>
                   <div class="row mt-10">
-                      <div class="col-sm-3 col-md-3">To (Date)</div>
-                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
-                      <input class="pro-input2" type="text" name="end_month"
-                      value="{{exp.end_month}}">
-                      <input class="pro-input2" type="text" name="end_year"
-                      value="{{exp.end_year}}">
+                    <div class="col-sm-3 col-md-3"></div>
+                      <div class="col-sm-9 col-md-9">
+                        <span>To</span>
+                        <div class="pro-select22" data-role="select" 
+                        data-editable="" data-type="year">
+                        <select class="pro-select endyear" name="end_year">
+                        {% for st_year in st_years %}
+                          {% if st_year == exp.end_year %}
+                            <option selected>{{st_year}}</option>
+                          {% else %}
+                            <option>{{st_year}}</option>
+                          {% endif %}
+                        {% endfor %}
+                        </select>
                       </div>
+                      <div class="pro-select22" data-role="select" 
+                      data-editable="" data-type="months">
+                      <select class="pro-select endmonth" name="end_month">
+                       {% for key, val in month_dict.items %}
+                          {% if val == exp.end_month %}
+                            <option value="{{val}}" selected>{{key}}</option>
+                          {% else %}
+                            <option value="{{val}}">{{key}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                      </div>
+                    </div>
                   </div>
                   {% endif %}
                   <div class="row mt-10">
@@ -510,5 +561,17 @@
       $('.dropdown').hover(function(){ 
           $('.dropdown-toggle', this).trigger('click'); 
         });
+      $(document).ready(function(){
+        $('input[type="checkbox"]').click(function(){
+            if($(this).is(":checked")){
+              $(".endyear").hide();
+              $(".endmonth").hide();
+            }
+            else if($(this).is(":not(:checked)")){
+              $(".endyear").show();
+              $(".endmonth").show();
+            }
+        });
+      });
     </script>
 {% endblock js_section %}
