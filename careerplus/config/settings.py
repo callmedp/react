@@ -178,3 +178,11 @@ BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
 
 CP_VENDOR_ID = '12345'
 
+############ SOLR SETTINGS #######################
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'INCLUDE_SPELLING': False,
+    },
+}
