@@ -1,0 +1,87 @@
+from partner.models import Vendor, VendorHierarchy
+vendorOb = Vendor(**{
+	'name': 'Vendor Name',
+	'slug': 'vendor-name',
+	'email': 'vendor@FIRM1.com'
+})
+vendorOb.save()
+from users.models import User
+userOb0 = User(**{
+'name': 'User 1',
+'email'	: 'user1@FIRM1.com',
+'is_staff': True
+})
+userOb0.save()
+userOb1 = User(**{
+'name': 'User 2',
+'email'	: 'user2@FIRM1.com'
+})
+userOb1.save()
+VendorHierarchy(vendee=vendorOb, employee=userOb0).save()
+VendorHierarchy(vendee=vendorOb, employee=userOb1).save()
+from shop.models import Category, Product, ProductCategory
+catOb = Category(**{
+	'name': 'Cat Name',
+	'slug': 'cat-name',
+	'type_service': 3,
+	'type_level': 1,
+	'active': True
+})
+catOb.save()
+prodOb0 = Product(**{
+	'name': 'Tested Product',
+	'slug': 'tested-product',
+	'type_service': 3,
+	'type_product': 0,
+	'type_flow': 2,
+	'upc': 'BAD_STRING_HERE'
+})
+prodOb0.save()
+ProductCategory(category=catOb, product=prodOb0).save()
+prodOb1 = Product(**{
+	'name': 'Tested Product 2',
+	'slug': 'tested-product-2',
+	'type_service': 3,
+	'type_product': 0,
+	'type_flow': 2,
+	'upc': 'GOOD_STRING_HERE'
+})
+prodOb1.save()
+ProductCategory(category=catOb, product=prodOb1).save()
+from cart.models import Cart, LineItem
+cartOb = Cart(**{
+	'owner_id': '#OID',
+	'status': 5,
+	'owner_email': 'owner@email.com',
+	'email': 'owner@email.com'
+})
+cartOb.save()
+LineItem(**{
+	'cart': cartOb,
+	'product': prodOb0,
+}).save()
+LineItem(**{
+	'cart': cartOb,
+	'product': prodOb1,
+}).save()
+from order.models import Order, OrderItem
+from django.utils import timezone
+orderOb = Order(**{
+	'number': '#OrderNumber$tring111',
+	'cart': cartOb,
+	'date_placed': timezone.now(),
+	'status': 1,
+})
+orderOb.save()
+OrderItem(**{
+	'order': orderOb,
+	'product': prodOb0,
+	'title': prodOb0.title,
+	'partner': vendorOb
+}).save() 
+OrderItem(**{
+	'order': orderOb,
+	'product': prodOb1,
+	'title': prodOb1.title,
+	'partner': vendorOb
+}).save()

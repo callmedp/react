@@ -38,11 +38,7 @@
             </li>
 
             <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="{% url "console:geo-country" %}">Country</a></li>
-            </ul>
-          </li>
-
+            </li>
           {% endif %}
         </ul>
         <h3>Product Moderation</h3>
@@ -66,7 +62,7 @@
               </ul>
             </li>
             
-              {% endif %}
+          {% endif %}
         </ul>
     {% elif request.user|has_group:"Operation" %} 
         <h3>Product</h3>
@@ -112,6 +108,59 @@
             </ul>
           </li>
       
+
+      <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+          <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
+          <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
+          <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
+          <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
+        </ul>
+      </li>
+
+      {% if is_admin %}
+        <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url "console:cms:pages:indexerwidget-list" %}" data-pjax='.right_col'>Indexer Widget</a></li>
+              <li><a href="{% url "console:cms:pages:widget-list" %}" data-pjax='.right_col'>Widget</a></li>
+              <li><a href="{% url "console:cms:pages:page-list" %}" data-pjax='.right_col'>Page</a></li>
+              <li><a href="{% url "console:cms:pages:comment-list" %}" data-pjax='.right_col'>Moderate Comments</a></li>
+              <li><a href="{% url "console:cms:pages:pagewidget-list" %}" data-pjax='.right_col'>Page Widget</a></li>
+              <li><a href="{% url "console:cms:pages:pagecounter-list" %}" data-pjax='.right_col'>Page Counter</a></li>
+          </ul>
+        </li>
+        <li><a><i class="fa fa-edit"></i> Vendor <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url "console:partner:pages:vendor-list" %}" data-pjax='.right_col'>Vendor</a></li>
+            <li><a href="{% url "console:partner:pages:vendorhierarchy-list" %}" data-pjax='.right_col'>Vendor Hierarchy</a></li>
+          </ul>
+        </li>
+
+      {% endif %}
+
+      <li>
+      <a>
+        <i class="fa fa-edit"></i>Linkedin Queue<span class="fa fa-chevron-down"></span>
+      </a>
+      <ul class="nav child_menu">
+            <li>
+              <a href="{% url 'console:linkedin-inbox' %}">
+              Linkedin Inbox</a>
+            </li>
+            <li>
+              <a href="{% url 'console:linkedin-approval' %}">
+              Linkedin Aproval</a>
+            </li>
+            <li>
+              <a href="{% url 'console:linkedin-rejectedbylinkedincandidate' %}">
+              Linkedin Rejected By Candidate</a>
+            </li>
+            <li>
+              <a href="{% url 'console:linkedin-rejectedbylinkedinadmin' %}">
+              Linkedin Rejected By Admin</a>
+            </li>
+      </ul>
+      </li>
       <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
             {% if perms.order.can_show_order_queue %}
@@ -147,6 +196,10 @@
 
             {% if perms.order.can_show_closed_oi_queue %}
                 <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_booster_queue %}
+                <li><a href="{% url "console:queue-booster" %}">Booster</a></li>
             {% endif %}
             
         </ul>

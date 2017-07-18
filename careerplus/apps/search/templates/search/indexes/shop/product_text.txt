@@ -1,0 +1,12 @@
+{{ object.heading }}
+{% for category in object.categories.all %}
+{{ category.name }}
+{% endfor %}
+{{ object.meta_desc }}
+{{ object.meta_keywords }}
+{% for chapter in object.chapters.all %}
+{{ chapter.heading }}
+{{ chapter.answer }}
+{% endfor %}
+{{ object.about }}
+

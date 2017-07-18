@@ -73,16 +73,17 @@ class RegistrationLoginApi(object):
 
     @staticmethod
     def check_email_exist(email):
-        import ipdb;ipdb.set_trace()
-        response_json = {"response": False}
+        response_json = {"exists": False}
         email_url = "{}/api/v3/email-exists/?email={}&format=json".format(settings.SHINE_SITE, email)
         headers = {'Content-Type': 'application/json'}
         try:
             response = requests.get(email_url, headers=headers)
             if response.status_code == 200:
                 response_json = response.json()
-                response_json.update({'response': True})
 
+            if response.status_code:
+                logging.getLogger('error_log').error(
+                    "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))

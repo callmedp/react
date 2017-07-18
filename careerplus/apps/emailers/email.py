@@ -39,6 +39,18 @@ class SendMail():
             data['token'] = AutoLogin().encode(
                 'upender.singh@hindustantimes.com', '592be7a753c034509597de71')
             data['button_text'] = "click here to dashboard"
+
+            self.process(to, send_dict, data)
+
+
+        if str(mail_type) == "2":
+            send_dict['subject'] = "Linkedin Profile"
+            send_dict['template'] = 'emailers/payment_confirm.html'
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['cc_list'] = [data.get('cc')]
+            data['email'] = [to]
+            data['token'] = AutoLogin().encode(to, data.get('candidateid'), data.get('orderitem'))
+            data['button_text'] = "click here to dashboard"
             self.process(to, send_dict, data)
 
         elif mail_type == "Writer_Information":
@@ -72,4 +84,33 @@ class SendMail():
             template_name = data.get('template_name', 'midout_mail.html')
             send_dict['template'] = 'emailers/' + template_name
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)
+
+        elif mail_type == "RESUME_CRITIQUE":
+            send_dict['subject'] = data.get('subject', "Sharing of Evaluated Resume")
+            template_name = data.get('template_name', 'critique_mail.html')
+            send_dict['template'] = 'emailers/' + template_name
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)
+
+        elif mail_type == "BOOSTER_RECRUITER":
+            send_dict['subject'] = data.get('subject', "Candidate Resume")
+            template_name = data.get('template_name', 'booster_recruiter.html')
+            send_dict['template'] = 'emailers/' + template_name
+
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+
+            self.process(to, send_dict, data)
+
+        elif mail_type == "BOOSTER_CANDIDATE":
+            send_dict['subject'] = data.get('subject', "shine booster confirmation")
+            template_name = data.get('template_name', 'booster_candidate.html')
+            send_dict['template'] = 'emailers/' + template_name
+
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+
             self.process(to, send_dict, data)

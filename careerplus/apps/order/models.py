@@ -3,7 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
-    PAYMENT_MODE, OI_OPS_STATUS
+    PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
+
+from linkedin.models import Draft
 
 
 class Order(AbstractAutoDate):
@@ -152,6 +154,9 @@ class OrderItem(models.Model):
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
 
+    #counselling form status
+    counselling_form_status = models.PositiveSmallIntegerField(
+        default=0, choices=COUNSELLING_FORM_STATUS)
     # operation fields
     oi_status = models.PositiveIntegerField(
         _("Operation Status"), default=0, choices=OI_OPS_STATUS)
@@ -163,6 +168,9 @@ class OrderItem(models.Model):
     oi_draft = models.FileField(
         max_length=255, upload_to='oi_draft/', null=True, blank=True)
     draft_counter = models.PositiveIntegerField(default=0)
+    tat_date = models.DateTimeField(null=True, blank=True)
+
+    oio_linkedin = models.OneToOneField(Draft, null=True, blank=True)
 
     waiting_for_input = models.BooleanField(default=False)
 
@@ -183,6 +191,7 @@ class OrderItem(models.Model):
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
+
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -196,7 +205,7 @@ class OrderItem(models.Model):
 
             # inbox permission
             ("can_show_inbox_queue", "Can Show Inbox Queue"),
-            ("show_writer_inbox_view", "Show Writer Inbox View Fields"),
+            ("can_view_extra_field_inbox", "Can View Extra Fields Of Inbox"),
             ("can_show_assigned_inbox", "Can Show Only Assigned Inbox"),
             ("can_show_unassigned_inbox", "Can Show Only Unassigned Inbox"),
             ("writer_assignment_action", "Writer Assignment Action permission"),
@@ -204,11 +213,19 @@ class OrderItem(models.Model):
 
             # oirder item detail permission
             ("can_view_order_item_detail", "Can View Order Item Detail"),
+            
+            # for linkedin flow
+            ("writer_assignment_linkedin_action", "Can Assign to Other linkedin writer"),
+            ("can_assigned_to_linkedin_writer", "Can Assigned To This linkedin Writer"),
+            ("can_show_linkedinrejectedbyadmin_queue", "Can View Linkedin Rejected By Admin Queue"),
+            ("can_show_linkedinrejectedbycandidate_queue", "Can View LinkedinRejected By Candidate Queue"),
+            ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
 
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),
             ("can_view_all_approval_list", "Can View All Approval List"),
             ("can_view_only_assigned_approval_list", "Can View Only Assigned Approval List"),
+            ("can_approve_or_reject_draft", "Can Approve Or Reject Draft"),
 
             # Appoved Queue
             ("can_show_approved_queue", "Can View Approved Queue"),
@@ -226,9 +243,12 @@ class OrderItem(models.Model):
             ("can_view_only_assigned_rejectedbycandidate_list", "Can View Only Assigned Rejected By Candidate List"),
 
             # Allocated Queue
-            ("can_show_allocated_queue", "Can View Allocated Queue"),
+            ("can_show_allocated_queue", "Can Show Allocated Queue"),
             ("can_view_all_allocated_list", "Can View All Allocated List"),
             ("can_view_only_assigned_allocated_list", "Can View Only Assigned Allocated List"),
+
+            # Booster Queue
+            ("can_show_booster_queue", "Can Show Booster Queue"),
 
             # Closed Permission
             ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),
@@ -238,7 +258,6 @@ class OrderItem(models.Model):
             # Action Permission
             ("oi_action_permission", "OrderItem Action Permission"),
             ("oi_export_as_csv_permission", "Order Item Export As CSV Permission"),
-
         )
 
     def __str__(self):
@@ -279,6 +298,7 @@ class OrderItem(models.Model):
 
 class OrderItemOperation(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
+    linkedin = models.ForeignKey(Draft, null=True, blank=True)
     oi_resume = models.FileField(
         max_length=255, upload_to='oio_resume/', null=True, blank=True)
 

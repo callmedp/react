@@ -15,14 +15,14 @@ class TopTrending(AbstractAutoDate):
 
     view_all = models.CharField(
         max_length=255,
-        help_text=_('provide full url to redirect on click.'))
+        help_text=_('provide full url with http:// to redirect on click.'))
 
     is_jobassistance = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ['-priority']
+        ordering = ['priority']
 
     def __str__(self):
         return self.name
@@ -47,7 +47,7 @@ class TrendingProduct(AbstractAutoDate):
 
     class Meta:
         unique_together = ('trendingcourse', 'product')
-        ordering = ['-priority']
+        ordering = ['priority']
 
     def __str__(self):
         return self.trendingcourse.name + '-' + self.product.name
@@ -66,7 +66,7 @@ class Testimonial(AbstractAutoDate):
     rating = models.DecimalField(
         max_digits=8, decimal_places=2,
         default=2.5)
-    designation = models.CharField(max_length=200, null=True, blank=True)
+    designation = models.CharField(max_length=200)
     company = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(
         _('Profile Image'),
@@ -76,4 +76,4 @@ class Testimonial(AbstractAutoDate):
     is_active = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-priority']
+        ordering = ['priority']

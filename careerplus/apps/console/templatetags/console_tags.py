@@ -55,3 +55,7 @@ def widget_type(field):
   return field.field.widget.__class__.__name__
 
 
+
+@register.filter(name='get_item')
+def get_item(dictionary, key):
+    return dictionary.get(key)

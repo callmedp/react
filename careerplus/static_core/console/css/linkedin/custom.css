@@ -1,0 +1,15 @@
+.form-horizontal .checkbox, .form-horizontal .radio {
+    min-height: 27px;
+    margin-top: -28px;
+    margin-left: 146px;
+}
+
+.form-horizontal .organization_set {
+    margin-right: 25%;
+    margin-left: 25%;
+}
+
+.form-horizontal .education_set {
+    margin-right: 25%;
+    margin-left: 25%;
+}

@@ -1,0 +1,131 @@
+{% load rest_framework %}
+
+<div class="">
+<div class="page-title">
+  <div class="title_left">
+    <h3>Order Details</h3>
+  </div>
+  {% if is_admin %}
+    <div class="title_right"> 
+      <a class="col-md-3 col-sm-3 col-xs-3 pull-right" href="{% url 'console:order:pages:neworders-detail-change' serializer.data.id %}" data-pjax='.right_col'>Edit Order</a>
+    </div>
+  {% endif %}
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>New Order</h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+          </li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <br />
+
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Order Number String
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.number}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Order Item ID
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.id}}
+          </div>
+        </div>
+      </div>  
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Customer Name
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.first_name | default_if_none:""}} {{serializer.data.order.last_name| default_if_none:""}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Customer Email
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.email| default_if_none:""}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Product Name
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.product.name| default_if_none:""}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Price Charged (excluding taxes)
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.oi_price_excl_tax| default_if_none:""}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Quantity
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.quantity}}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Status
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+          {% load console_tags %}
+          {% if serializer.data.oi_status > 8 %}
+          {{serializer.fields.oi_status.choices|get_item:serializer.data.oi_status }}
+          {% elif serializer.data.order.status > -1 %}
+          {{serializer.fields.order.fields.status.choices|get_item:serializer.data.order.status }}
+          {% endif %} 
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <label class="col-md-6 col-sm-6 col-xs-12 control-label ">
+          Date Placed
+          </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">{{serializer.data.order.date_placed|slice:":10"}}
+          </div>
+        </div>
+      </div>        
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+{% block js %}
+  {% if doing_partial %}
+    <script type="text/javascript">
+      $('.right_col div.title_right>a[data-pjax]').pjax();
+    </script>
+  {% endif %}
+{% endblock js %}

@@ -1,0 +1,28 @@
+{% load static thumbnail %}
+<!-- Related articles Starts here -->
+{% if related_arts %}
+<div class="related-article row mb-30 mt-30">
+    <h2 class="mb-10">{{heading}}</h2>
+
+    <ul class="home-slider">
+        {% for art in related_arts %}
+        <li>
+            <div class="media">
+                <a href="{% url 'blog:articles-deatil' art.slug art.pk %}">
+                    {% if art.image %}
+                    <figure class="media-left">
+                        {% thumbnail art.image "98x64" crop="center" as im %}
+                            <img class="media-object w-auto" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                        {% endthumbnail %}
+                    </figure>
+                    {% endif %}
+                    <div class="media-body rel">
+                        <p class="mb-0">{{art.display_name}}</p>
+                    </div>
+                </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div><!-- Related articles Ends here -->
+{% endif %}

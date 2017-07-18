@@ -5,7 +5,7 @@ from geolocation.models import Country
 class StateForm(forms.Form):
     state_choices = [(-1, "Please select your state")]
     try:
-        india_obj = Country.objects.filter(name='India', phone='91')[0]
+        india_obj = Country.objects.filter(phone='91')[0]
         states = india_obj.state_set.all().order_by('name')
         for st in states:
             state_choices.append((st.id, st.name))

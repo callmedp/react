@@ -1,11 +1,18 @@
 import logging
+import mimetypes
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from wsgiref.util import FileWrapper
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,)
 from django.contrib import messages
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
+
 from shine.core import ShineCandidateDetail
+from core.mixins import TokenExpiry
+from order.models import OrderItem
 
 from .forms import RegistrationForm, LoginApiForm
 from .mixins import RegistrationLoginApi
@@ -15,11 +22,11 @@ class DashboardView(TemplateView):
     template_name = "users/loginsuccess.html"
 
     def get_context(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(DashboardView, self).get_context_data(**kwargs)
         return context
 
     def get(self, request, *args, **kwargs):
-        return super(self.__class__, self).get(request, args, **kwargs)
+        return super(DashboardView, self).get(request, args, **kwargs)
 
 
 class RegistrationApiView(FormView):
@@ -29,7 +36,7 @@ class RegistrationApiView(FormView):
     form_class = RegistrationForm
 
     def get_context_data(self, **kwargs):
-        context = super(self.RegistrationApiView, self).get_context_data(**kwargs)
+        context = super(RegistrationApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()
         context.update({
@@ -39,7 +46,7 @@ class RegistrationApiView(FormView):
         return context
 
     def get(self, request, *args, **kwargs):
-        return super(self.RegistrationApiView, self).get(request, args, **kwargs)
+        return super(RegistrationApiView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -97,14 +104,15 @@ class LoginApiView(FormView):
         
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
-            if user_exist['exists']:
+            if user_exist.get('exists', ''):
                 login_resp = RegistrationLoginApi.user_login(login_dict) # TODO: Do we need this check here
                                                                         # TODO: if we have that check on frontend?
-
                 if login_resp['response'] == 'login_user':
+
                     resp_status = ShineCandidateDetail().get_status_detail(email=None,
-                                                                           shine_id=login_resp['candidate_id'])
-                    self.request.session.update(resp_status)
+                        shine_id=login_resp.get('candidate_id', ''))
+                    if resp_status:
+                        self.request.session.update(resp_status)
 
                     if remember_me:
                         self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
@@ -115,9 +123,13 @@ class LoginApiView(FormView):
                 elif not login_resp['response']:
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(self.request, self.template_name, {'form': form})
-            else:
-                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
 
+            elif not user_exist.get('response', ''):
+                messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+                return render(self.request, self.template_name, {'form': form})
+
+            elif not user_exist.get('exists', ''):
+                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
                 return render(self.request, self.template_name, {'form': form})
 
         except Exception as e:
@@ -140,3 +152,35 @@ class LogoutApiView(TemplateView):
     def get(self, request, *args, **kwargs):
         request.session.flush()
         return HttpResponseRedirect(reverse('homepage'))
+
+
+class DownloadBoosterResume(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            token = request.GET.get('token', '')
+            email, oi_pk, valid = TokenExpiry().decode(token)
+            if valid:
+                oi = OrderItem.objects.get(pk=oi_pk)
+
+                if oi.parent and oi.parent.oi_draft and (oi.parent.oi_status == 4 or oi.parent.no_process):
+                    resume = oi.parent.oi_draft
+                    file_path = resume.path
+                    filename = resume.name
+                    extn = filename.split('.')[-1]
+                    newfilename = 'resume_' + oi.order.first_name + '.' + extn
+
+                    path = file_path
+                    try:
+                        fsock = FileWrapper(open(path, 'rb'))
+                    except IOError:
+                        raise Exception("Resume not found.")
+
+                    response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
+                    response['Content-Disposition'] = 'attachment; filename="%s"' % (newfilename)
+                    return response
+                else:
+                    raise Exception("Resume not found.")
+        except:
+            messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
+            response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            return response

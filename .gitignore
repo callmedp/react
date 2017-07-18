@@ -36,7 +36,6 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 media/
-migrations/
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -91,5 +90,7 @@ ENV/
 # Rope project settings
 .ropeproject
 
+#Local Env
+careerplus/templates/.gitignore
 # Pycharm files
 .idea

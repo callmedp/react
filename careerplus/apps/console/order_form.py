@@ -237,6 +237,11 @@ class OIActionForm(forms.Form):
 
         if queue_name == 'midout':
             ACTION_CHOICES += ((-2, "Send Midout Mail"),)
+        elif queue_name == 'booster':
+            ACTION_CHOICES += (
+                (-1, "Export As Csv"),
+                (-3, "Send Booster Mail"),
+            )
         else:
             ACTION_CHOICES += ((-1, "Export As Csv"),)
 

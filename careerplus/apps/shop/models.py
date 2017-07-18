@@ -842,7 +842,7 @@ class Product(AbstractProduct, ModelMeta):
         related_name='relatedproduct',
         through_fields=('primary', 'secondary'),
         verbose_name=_('Related Product'),
-        symmetrical=False, blank=True)    
+        symmetrical=False, blank=True)
     childs = models.ManyToManyField(
         'self',
         through='ChildProduct',
@@ -963,7 +963,6 @@ class Product(AbstractProduct, ModelMeta):
             return self.name + ' ( ' + self.get_exp + ' ) '
         elif self.type_service == 3:
             return self.name + ' by ' + self.vendor.name
-        
         return self.name
 
     def get_price(self, *args, **kwargs):

@@ -28,7 +28,10 @@
 
       <!-- Custom Theme Style -->
       <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
-      
+    
+      <!-- bootstrap-daterangepicker -->
+      <link href="{% static "/packages/bootstrap-daterangepicker/daterangepicker.css"  %}" rel="stylesheet" type="text/css">
+      <link href="{% static "/console/css/datepicker/bootstrap-datetimepicker.min.css"  %}" rel="stylesheet" type="text/css">
     {% endblock css_block %}
     
     </head>
@@ -174,6 +177,36 @@
 
       <script type="text/javascript" src="{% static "console/js/common.js" %}"></script>
 
+      <!-- PJAX -->
+      <script type="text/javascript" src="{% static "console/js/jquery.pjax.js" %}"></script>
+
+      <!-- bootstrap-daterangepicker -->
+      <script type="text/javascript" src="{% static "packages/moment/min/moment.min.js" %}"></script>
+      <script type="text/javascript" src="{% static "console/js/datepicker/bootstrap-datetimepicker.min.js" %}"></script>
+
+      <!-- Parsley -->
+      <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+      <script type="text/javascript">
+        function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+        }
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+      </script>
       <!--script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script-->
     {% endblock js_block %}
     

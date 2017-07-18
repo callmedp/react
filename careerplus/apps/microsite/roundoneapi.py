@@ -44,7 +44,7 @@ class RoundOneAPI(object):
                 "affiliateName": settings.ROUNDONE_API_DICT.get(
                     "affiliateName", 'CP'),
                 "username": email,
-                "password": password,
+                "password": password.candidate_id,
             }
 
             headers = {'content-type': 'application/json'}

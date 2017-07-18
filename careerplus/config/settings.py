@@ -2,17 +2,17 @@ from .base_settings import *  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+IS_LIVE = False
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-# SITE_DOMAIN = '127.0.0.1:8000'
-SITE_DOMAIN = 'careerplus1.shine.com'
+SITE_DOMAIN = '127.0.0.1:8000'
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careerplus',
+        'NAME': 'careerplus1',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '',
@@ -77,8 +77,8 @@ ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
 if DEBUG or not IS_LIVE:
     # ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
     # ROUNDONE_API_BASEURL = "http://api.roundone.asia"
-    ROUNDONE_API_BASEURL = "http://api.roundone.in" #"http://api.roundone.asia"
-    ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in" #"http://testing.roundone.asia"
+    ROUNDONE_API_BASEURL = "http://api.roundone.in"  # "http://api.roundone.asia"
+    ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in"  # "http://testing.roundone.asia"
     ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
     ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
     ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
@@ -142,16 +142,35 @@ CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
 SHINE_API_TIMEOUT = 60
-CP_VENDOR_ID = '12345'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'upendra.rockon@gmail.com'
-EMAIL_HOST_PASSWORD = '9616744875'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# Email settings
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #  email backend as console.
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'upendra.rockon@gmail.com'
+# EMAIL_HOST_PASSWORD = '9616744875'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# VARIABLE FOR SENDING RESUME SERVICES MAILS
+CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
+CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
+REPLY_TO = 'resume@shine.com'
+
+EMAIL_HOST = '172.22.65.55'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = 0
+SERVER_EMAIL = 'recruiter@shine.com'
+DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
+EMAIL_SERVER = 'http://localhost:8000'
+
+# encode decode settings
+EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
 
@@ -166,3 +185,17 @@ PRODUCT_GROUP_LIST = ['Product']
 OPERATION_GROUP_LIST = ['Operation']
 SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['Writer']
+
+# Booster Recruiters
+BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
+
+CP_VENDOR_ID = '12345'
+
+############ SOLR SETTINGS #######################
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'INCLUDE_SPELLING': False,
+    },
+}

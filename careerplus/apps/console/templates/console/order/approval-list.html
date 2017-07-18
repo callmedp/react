@@ -221,7 +221,9 @@
                     <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
                     <th class="column-title">Review Order</th>
+                    {% if perms.order.can_approve_or_reject_draft %}
                     <th class="column-title">Approve / Reject Draft</th>
+                    {% endif %}
                   </tr>
                 </thead>
 
@@ -249,8 +251,9 @@
                       </td>
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
 
+                      {% if perms.order.can_approve_or_reject_draft %}
                       <td>
                           <form role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
                           <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
@@ -303,6 +306,7 @@
                             </div>
                         
                         </td>
+                        {% endif %}
                     </tr>
                   {% endfor %}
                 </tbody>
