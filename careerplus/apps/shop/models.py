@@ -245,6 +245,12 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 active=True)
         return []
 
+    def get_products(self):
+        products = self.productcategories.filter(
+            active=True,
+            product__active=True)
+        return products
+
     def split_career_outcomes(self):
         return self.career_outcomes.split(',')
 
@@ -292,6 +298,18 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         except:
             pass
         return
+
+    def get_active(self):
+        if self.active:
+            return 'Active'
+        else:
+            return 'Inactive'
+
+    def get_skillpage(self):
+        if self.is_skill:
+            return 'Yes'
+        else:
+            return 'No'
 
 
 class CategoryRelationship(AbstractAutoDate):
@@ -620,6 +638,7 @@ class Attribute(AbstractAutoDate):
                 {'enum': value, 'attr': self})
 
     def _validate_file(self, value):
+        from django.core.files.base import File
         if value and not isinstance(value, File):
             raise ValidationError(_("Must be a file field"))
     _validate_image = _validate_file
@@ -732,10 +751,6 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     class Meta:
         abstract = True
 
-    def clean(self):
-        self.attr.validate_attributes()
-
-
     @property
     def get_type(self):
         return dict(PRODUCT_CHOICES).get(self.type_product)
@@ -771,6 +786,18 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
 
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
+
+    def get_active(self):
+        if self.active:
+            return 'Active'
+        else:
+            return 'Inactive'
+
+    def get_vendor(self):
+        if self.vendor:
+            return self.vendor.name
+        else:
+            return ''
 
     @property
     def has_attributes(self):
@@ -1211,7 +1238,7 @@ class ProductCategory(AbstractAutoDate):
         _('Category Order'), default=1)
 
     def __str__(self):
-        return _("%(product)s to '%(category)s'") % {
+        return _("%(category)s ==> '%(product)s'") % {
             'product': self.product,
             'category': self.category}
 

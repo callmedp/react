@@ -228,6 +228,7 @@ class ProductModeration(object):
             else:
                 return test_pass        
         except:
+            test_pass = False
             messages.error(request, "Error Validation, Contact Product Team")
         return test_pass
 
@@ -268,6 +269,7 @@ class ProductModeration(object):
             else:
                 return test_pass        
         except:
+            test_pass = False
             messages.error(request, "Error Validation, Contact Product Team")
         return test_pass
     
@@ -290,13 +292,15 @@ class ProductModeration(object):
                     if productscreen.type_product == 1:
                         test_pass = self.validate_variation(
                             request=request, product=productscreen)
+                    return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
                     return test_pass
             else:
                 return test_pass         
         except:
-            pass
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Product Team")
         return test_pass
 
     @transaction.atomic
@@ -526,3 +530,450 @@ class ProductModeration(object):
         except:
             copy = False
         return (product, screen, copy)
+
+
+class CategoryValidation(object):
+
+    def validate_before_active(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    test_pass = self.validate_fields(
+                        request=request, category=category)
+                    if category.type_level in [2, 3, 4]:
+                        test_pass = self.validate_parent(
+                            request=request, category=category)
+                    if category.is_skill:
+                        test_pass = self.validate_skillpage(
+                            request=request, category=category)
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+
+    def validate_before_inactive(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    if self.type_level in [1, 2, 3]:
+                        test_pass = self.validate_childs(
+                            request=request, category=category)
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            pass
+        return test_pass
+
+    def validate_before_skill(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    test_pass = self.validate_fields(
+                        request=request, category=category)
+                    if category.type_level in [2, 3, 4]:
+                        test_pass = self.validate_parent(
+                            request=request, category=category)
+                    test_pass = self.validate_skillpage(
+                        request=request, category=category)
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            pass
+        return test_pass
+
+    def validate_fields(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    if not category.name:
+                        messages.error(request, "Category Name is required")
+                        return test_pass
+                    if not category.heading:
+                        messages.error(request, "Category Display Heading is required")
+                        return test_pass
+                    if not category.type_level:
+                        messages.error(request, "Category Level is required")
+                        return test_pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    
+    def validate_parent(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    if category.type_level == 1:
+                        pass
+                    elif category.type_level == 2:
+                        parent = category.get_parent()
+                        if not parent:
+                            messages.error(request, "Level 1 parent is not assigned or active")
+                            return test_pass
+                    elif category.type_level == 3:
+                        parent = category.get_parent()
+                        if not parent:
+                            messages.error(request, "Level 2 parent is not assigned or active")
+                            return test_pass
+                    elif category.type_level == 4:
+                        parent = category.get_parent()
+                        if not parent:
+                            messages.error(request, "Level 3 parent is not assigned or active")
+                            return test_pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    
+    def validate_skillpage(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    if not category.description:
+                        messages.error(request, "Skill Description is required")
+                        return test_pass
+                    if not category.career_outcomes:
+                        messages.error(request, "Skill Career Outcomes is required")
+                        return test_pass
+                    if not category.get_products():
+                        messages.error(request, "Skill Products is required")
+                        return test_pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    
+    def validate_childs(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    if category.type_level == 1:
+                        childs = category.get_childrens()
+                        if childs:
+                            messages.error(request, "Level 2 childs exists. Please inactive relationship between them")
+                            return test_pass
+                    elif category.type_level == 2:
+                        childs = category.get_childrens()
+                        if childs:
+                            messages.error(request, "Level 3 childs exists. Please inactive relationship between them")
+                            return test_pass
+                    elif category.type_level == 3:
+                        childs = category.get_childrens()
+                        if childs:
+                            messages.error(request, "Level 4 childs exists. Please inactive relationship between them")
+                            return test_pass
+                    elif category.type_level == 4:
+                        pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+
+
+class ProductValidation(object):
+
+    def validate_before_active(self, request, product):
+        test_pass = False
+        try:
+            if request:
+                if product:
+                    if product.type_product in [2, 4]:
+                        messages.error(request, "Can't active child-variation and virtual product active!")
+                        return False
+                    
+                    if not self.validate_fields(
+                        request=request, product=product):
+                            return test_pass
+                    if not self.validate_category(
+                        request=request, product=product):
+                            return test_pass
+                    if product.type_product in [0, 3, 4, 5]:
+                        if not self.validate_attributes(
+                            request=request, product=product):
+                            return test_pass
+                    if product.type_product == 1:
+                        if not self.validate_variation(
+                            request=request, product=product):
+                            return test_pass
+                    if product.type_product == 3:
+                        if not self.validate_childs(
+                            request=request, product=product):
+                            return test_pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+
+    def validate_before_index(self, request, product):
+        test_pass = False
+        try:
+            if request:
+                if product:
+                    if product.type_product in [2, 4]:
+                        messages.error(request, "Can't index child-variation and virtual product!")
+                        return False
+                    
+                    if not self.validate_fields(
+                        request=request, product=product):
+                            return test_pass
+                    if not self.validate_category(
+                        request=request, product=product):
+                            return test_pass
+                    if product.type_product in [0, 3, 4, 5]:
+                        if not self.validate_attributes(
+                            request=request, product=product):
+                            return test_pass
+                    if product.type_product == 1:
+                        if not self.validate_variation(
+                            request=request, product=product):
+                            return test_pass
+                    if product.type_product == 3:
+                        if not self.validate_childs(
+                            request=request, product=product):
+                            return test_pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    def validate_fields(self, request, product):
+        test_pass = False
+        try:
+            if request:
+                if product:
+                    if not product.vendor:
+                        messages.error(request, "Product Vendor is Required")
+                        return test_pass
+
+                    if not product.name:
+                        messages.error(request, "Product Name is required")
+                        return test_pass
+                    if not product.product_class:
+                        messages.error(request, "Product Class is required")
+                        return test_pass
+                    if not product.upc:
+                        messages.error(request, "UPC is required")
+                        return test_pass
+                    if not product.type_flow:
+                        messages.error(request, "Product Flow is required")
+                        return test_pass
+                    
+                    if not product.inr_price:
+                        messages.error(request, "INR Price is required")
+                        return test_pass
+                    if not product.inr_price > Decimal(0):
+                        messages.error(request, "INR Price is negetive")
+                        return test_pass
+
+                    if not product.image:
+                        messages.error(request, "Product Image is Required")
+                        return test_pass
+                    
+                    if not product.heading:
+                        messages.error(request, "Product Display Heading is required")
+                        return test_pass
+                    
+
+                    if product.type_product in [0, 1, 3, 4]:
+                        if not product.description:
+                            messages.error(request, "Description is required")
+                            return test_pass
+                    if not product.countries.all().exists():
+                        messages.error(request, "Available Country is required")
+                        return test_pass
+                    
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    def validate_category(self, request, product):
+        test_pass = False
+        try:
+            if request:
+                if product:
+                    if not product.productcategories.filter(active=True, category__active=True).exists():
+                        messages.error(request, "Product Category is required")
+                        return test_pass   
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    
+    def validate_childs(self, request, product):
+        test_pass = False
+        try:
+            if request:
+                if product:
+                    if not product.parentproduct.filter(active=True).exists():
+                        messages.error(request, "Product Childs is required")
+                        return test_pass   
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    def validate_variation(self, request, product):
+        test_pass = False
+        try:
+            if request:
+                if product:
+                    if product.type_product != 1:
+                        return True
+                    varslist = product.mainproduct.filter(active=True)
+                    if not varslist:
+                        messages.error(request, "Product Variation is required")
+                        return test_pass
+                    for pv in varslist:
+                        sibling = pv.sibling
+                        if not sibling.name:
+                            messages.error(request, "Variation" + str(sibling) +" Name is required")
+                            return test_pass
+                        if not sibling.upc:
+                            messages.error(request, "Variation" + str(sibling) +" UPC is required")
+                            return test_pass
+                        if not sibling.inr_price:
+                            messages.error(request, "Variation" + str(sibling) +" INR Price is required")
+                            return test_pass
+                        if not sibling.inr_price > Decimal(0):
+                            messages.error(request, "Variation" + str(sibling) +" INR Price is negetive")
+                            return test_pass
+                        test_pass = self.validate_attributes(request=request, product=sibling)
+                        if not test_pass:
+                            test_pass = False
+                            return test_pass
+                           
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass
+
+    def validate_attributes(self, request, product):
+        test_pass = False
+        try:
+            if request:
+                if product:
+                    productattr = product.attr
+                    for attribute in productattr.get_all_attributes():
+                        value = getattr(productattr, attribute.name, None)
+                        if value is None:
+                            if attribute.required:
+                                messages.error(request, (
+                                    _("%(attr)s attribute cannot be blank") %
+                                    {'attr': attribute.name}))
+                        else:
+                            try:
+                                attribute.validate_value(value)
+                            except Exception as e:
+                                messages.error(request, (
+                                    _("%(attr)s attribute %(err)s") %
+                                    {'attr': attribute.name, 'err': e}))
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass         
+        except:
+            test_pass = False
+            messages.error(request, "Error Validation, Contact Tech Team")
+        return test_pass

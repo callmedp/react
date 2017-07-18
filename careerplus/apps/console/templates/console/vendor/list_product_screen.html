@@ -84,11 +84,10 @@
                     <th class="column-title"># </th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Status</th>
-                    {% if request.user|has_group:"Product" %} 
-    
                     <th class="column-title">Vendor</th>
-                    {% endif %}
+                    <th class="column-title">Icon</th>
                     <th class="column-title">Type</th>
+                    <th class="column-title">Active</th>
                     <th class="column-title">#Edit</th>
                     </tr>
                 </thead>
@@ -106,15 +105,16 @@
                   <td>
                     <button type="button" class="btn btn-success btn-xs">{{obj.get_status}}</button>
                   </td>
-                  {% if request.user|has_group:"Product" %} 
-    
                   <td>
-                    <button type="button" class="btn btn-success btn-xs">{{obj.vendor}}</button>
+                    <button type="button" class="btn btn-success btn-xs">{{obj.get_vendor}}</button>
                   </td>
-                  {% endif %}
                   <td>
                     <button type="button" class="btn btn-success btn-xs">{{obj.get_type}}</button>
                   </td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs">{{obj.get_active}}</button>
+                  </td>
+                  
                   <td>
                         <a href="{% url "console:screenproduct-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>  
                     

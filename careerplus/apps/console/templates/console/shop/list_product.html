@@ -1,5 +1,6 @@
 {% extends "console/base_console.html" %}
 {% load static %}
+{% load console_tags %}
 {% load humanize %}
 {% load thumbnail %}
 
@@ -72,8 +73,10 @@
                   <tr class="headings">
                     <th class="column-title"># </th>
                     <th class="column-title">Name</th>
+                    <th class="column-title">Vendor</th>
                     <th class="column-title">Icon</th>
                     <th class="column-title">Type</th>
+                    <th class="column-title">Active</th>
                     <th class="column-title">#Edit</th>
                     </tr>
                 </thead>
@@ -88,6 +91,10 @@
                     <br />
                     <small>Modified {{obj.modified|naturaltime}}</small>
                   </td>
+                  <td>
+                    <a >{{obj.get_vendor}}</a>
+                  </td>
+                  
                   <td>
                     <ul class="list-inline">
                       <li>
@@ -105,7 +112,17 @@
                     <button type="button" class="btn btn-success btn-xs">{{obj.get_type}}</button>
                   </td>
                   <td>
+                    <button type="button" class="btn btn-success btn-xs">{{obj.get_active}}</button>
+                  </td>
+                  
+                  <td>
+                  
+                  {% if request.user|has_group:"Product" %}
                     <a href="{% url "console:product-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                  {% elif request.user|has_group:"Operation" %}
+                    <a href="{% url "console:product-opschange" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                  {% endif %}
+                  
                   </td>
                 </tr>
                 {% endfor %}

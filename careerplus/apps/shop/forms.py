@@ -227,7 +227,7 @@ class ChangeProductForm(forms.ModelForm):
         fields = [
             'name', 'type_flow',
             'upc', 'image', 'image_bg', 'icon', 'banner', 'video_url',
-            'about', 'description', 'buy_shine', 'vendor', 'prg_structure',
+            'vendor',
             'no_review', 'buy_count', 'avg_rating', 'num_jobs']
 
     def __init__(self, *args, **kwargs):
@@ -326,37 +326,7 @@ class ChangeProductForm(forms.ModelForm):
             from django.core.validators import URLValidator
             val = URLValidator()
             val('https://' + link.strip())
-        else:
-            raise forms.ValidationError(
-                "This is required.")
         return link
-
-    def clean_description(self):
-        desc = self.cleaned_data.get('description', '')
-        if desc:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return desc
-
-    def clean_about(self):
-        about = self.cleaned_data.get('about', '')
-        if about:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return about
-
-    def clean_buy_shine(self):
-        buy_shine = self.cleaned_data.get('buy_shine', '')
-        if buy_shine:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return buy_shine
 
     def clean_image(self):
         file = self.cleaned_data.get('image')
@@ -428,7 +398,8 @@ class ChangeProductSEOForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('title', 'meta_desc', 'meta_keywords', 'heading', 'image_alt')
+        fields = ('title', 'meta_desc', 'meta_keywords', 'heading', 'image_alt',
+            'about', 'description', 'buy_shine', 'prg_structure',)
 
     def clean_title(self):
         title = self.cleaned_data.get('title', '')
@@ -451,6 +422,34 @@ class ChangeProductSEOForm(forms.ModelForm):
             raise forms.ValidationError(
                 "This field is required.")
         return heading
+
+    def clean_description(self):
+        desc = self.cleaned_data.get('description', '')
+        if desc:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return desc
+
+    def clean_about(self):
+        about = self.cleaned_data.get('about', '')
+        if about:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return about
+
+    def clean_buy_shine(self):
+        buy_shine = self.cleaned_data.get('buy_shine', '')
+        if buy_shine:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return buy_shine
+
 
     def save(self, commit=True, *args, **kwargs):
         product = super(ChangeProductSEOForm, self).save(
@@ -597,7 +596,7 @@ class ProductPriceForm(forms.ModelForm):
         return fake_gbp_price
 
     def save(self, commit=True, *args, **kwargs):
-        product = super(ScreenProductPriceForm, self).save(
+        product = super(ProductPriceForm, self).save(
             commit=True, *args, **kwargs)
         return product
 
@@ -707,7 +706,7 @@ class ProductAttributeForm(forms.ModelForm):
             if field_name in self.cleaned_data:
                 value = self.cleaned_data[field_name]
                 setattr(self.instance.attr, attribute.name, value)
-        product = super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
+        product = super(ProductAttributeForm, self).save(commit=True, *args, **kwargs)
         return product
 
 
@@ -718,6 +717,14 @@ class ProductCategoryForm(forms.ModelForm):
         obj = kwargs.pop('object', None)
         super(ProductCategoryForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
+        if self.instance.pk:
+            queryset = Category.objects.all()
+            self.fields['category'].queryset = queryset
+        else:
+            categories = obj.categories.all().values_list('pk', flat=True) 
+            queryset = Category.objects.filter(active=True).exclude(pk__in=categories)
+            self.fields['category'].queryset = queryset
+
         self.fields['category'].widget.attrs['class'] = form_class
         self.fields['category'].required=True        
         self.fields['prd_order'].widget.attrs['class'] = form_class
@@ -797,6 +804,14 @@ class ProductFAQForm(forms.ModelForm):
             queryset = queryset.none()
         else:
             queryset = queryset.filter(vendor=vendor)
+        
+        if self.instance.pk:
+            self.fields['question'].queryset = queryset
+        else:
+            faqs = obj.faqs.all().values_list('pk', flat=True) 
+            queryset = queryset.exclude(pk__in=faqs)
+            self.fields['question'].queryset = queryset
+
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['question'].widget.attrs['class'] = form_class
         self.fields['question'].required = True        
@@ -851,10 +866,14 @@ class ProductChildForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
         super(ProductChildForm, self).__init__(*args, **kwargs)
-        if obj:
-            qs = Product.objects.exclude(pk=obj.pk)
-            self.fields['children'].queryset = qs
-        
+        queryset = Product.objects.filter(active=True).exclude(pk=obj.pk)
+        if self.instance.pk:
+            self.fields['children'].queryset = queryset
+        else:
+            childs = obj.childs.all().values_list('pk', flat=True) 
+            queryset = queryset.exclude(pk__in=childs)
+            self.fields['children'].queryset = queryset
+
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['children'].widget.attrs['class'] = form_class
         self.fields['children'].required = True        
@@ -915,10 +934,14 @@ class ProductRelatedForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
         super(ProductRelatedForm, self).__init__(*args, **kwargs)
-        if obj:
-            qs = Product.objects.exclude(pk=obj.pk)
-            self.fields['secondary'].queryset = qs
-        
+        queryset = Product.objects.filter(active=True).exclude(pk=obj.pk)
+        if self.instance.pk:
+            self.fields['secondary'].queryset = queryset
+        else:
+            relations = obj.related.all().values_list('pk', flat=True) 
+            queryset = queryset.exclude(pk__in=relations)
+            self.fields['secondary'].queryset = queryset
+
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['secondary'].widget.attrs['class'] = form_class
         self.fields['secondary'].required = True

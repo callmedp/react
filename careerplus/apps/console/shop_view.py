@@ -1,8 +1,11 @@
+import json
 from collections import OrderedDict
 
-from django.views.generic import (
+from django.views.generic import ( View,
     FormView, TemplateView, ListView, DetailView)
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import (
+    HttpResponseForbidden, HttpResponse,
+    HttpResponseRedirect, HttpResponseBadRequest)
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
@@ -10,7 +13,7 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from .decorators import Decorate, check_permission, check_group, stop_browser_cache
 from django.core.paginator import Paginator
 from django.db.models import Q
-
+from django.conf import settings
 
 from blog.mixins import PaginationMixin
 from shop.models import (
@@ -47,6 +50,7 @@ from shop.forms import (
     RelatedInlineFormSet,
     ChangeProductVariantForm)
 
+from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
     AddFaqForm,
     ChangeFaqForm,)
@@ -55,7 +59,7 @@ from faq.models import FAQuestion
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_add_category'))
 class AddCategoryView(FormView):
     form_class = AddCategoryForm
@@ -90,7 +94,7 @@ class AddCategoryView(FormView):
         return super(AddCategoryView, self).form_invalid(form)
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_category'))
 class ChangeCategoryView(DetailView):
     template_name = 'console/shop/change_category.html'
@@ -268,7 +272,7 @@ class ChangeCategoryView(DetailView):
         return HttpResponseBadRequest()
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_category'))
 class ListCategoryView(ListView, PaginationMixin):
     model = Category
@@ -310,7 +314,7 @@ class ListCategoryView(ListView, PaginationMixin):
         return context
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_category'))
 class ListCategoryRelationView(TemplateView):
     template_name = "console/shop/tree_category.html"
@@ -340,20 +344,24 @@ class ListCategoryRelationView(TemplateView):
                                     level4.append(
                                         OrderedDict({
                                             'name': l4.name,
+                                            'url': l4.get_full_url(),
                                             'active': l4.active}))
                             level3.append(
                                 OrderedDict({
                                     'name': l3.name,
+                                    'url': l4.get_full_url(),
                                     'active': l3.active,
                                     'childrens': level4}))
                     level2.append(
                         OrderedDict({
                             'name': l2.name,
+                            'url': l2.get_full_url(),
                             'active': l2.active,
                             'childrens': level3}))
             level1.append(
                 OrderedDict({
                     'name': l1.name,
+                    'url': l1.get_full_url(),
                     'active': l1.active,
                     'childrens': level2}))
         context.update({
@@ -363,7 +371,7 @@ class ListCategoryRelationView(TemplateView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('faq.console_add_faq'))
 class AddFaqView(FormView):
     form_class = AddFaqForm
@@ -406,7 +414,7 @@ class AddFaqView(FormView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('faq.console_change_faq'))
 class ListFaqView(ListView, PaginationMixin):
     model = FAQuestion
@@ -449,7 +457,7 @@ class ListFaqView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('faq.console_change_faq'))
 class ChangeFaqView(DetailView):
     template_name = 'console/shop/change_faq.html'
@@ -519,7 +527,7 @@ class ChangeFaqView(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_add_keyword'))
 class AddKeywordView(FormView):
     form_class = AddKeywordForm
@@ -555,7 +563,7 @@ class AddKeywordView(FormView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_keyword'))
 class ListKeywordView(ListView, PaginationMixin):
     model = Keyword
@@ -598,7 +606,7 @@ class ListKeywordView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_keyword'))
 class ChangeKeywordView(DetailView):
     template_name = 'console/shop/change_keyword.html'
@@ -668,7 +676,7 @@ class ChangeKeywordView(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_add_attribute'))
 class AddAttributeView(FormView):
     form_class = AddAttributeForm
@@ -704,7 +712,7 @@ class AddAttributeView(FormView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_attribute'))
 class ListAttributeView(ListView, PaginationMixin):
     model = Attribute
@@ -748,7 +756,7 @@ class ListAttributeView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_attribute'))
 class ChangeAttributeView(DetailView):
     template_name = 'console/shop/change_attribute.html'
@@ -818,7 +826,7 @@ class ChangeAttributeView(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST, settings.OPERATION_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ListProductView(ListView, PaginationMixin):
     model = Product
@@ -862,7 +870,7 @@ class ListProductView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ChangeProductView(DetailView):
     template_name = 'console/shop/change_product.html'
@@ -984,6 +992,7 @@ class ChangeProductView(DetailView):
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
                     form = None
+                    import ipdb;ipdb.set_trace()
                     if slug == 'main':
                         form = ChangeProductForm(
                             request.POST, request.FILES, instance=obj)
@@ -1315,7 +1324,81 @@ class ChangeProductView(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product',]))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST, settings.OPERATION_GROUP_LIST ]))
+@Decorate(check_permission('shop.console_change_product'))
+class OPChangeProductView(DetailView):
+    template_name = 'console/shop/change_productops.html'
+    model = Product
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(OPChangeProductView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super(OPChangeProductView, self).get(request, args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if hasattr(self, 'object'):
+            return self.object
+        else:
+            return super(OPChangeProductView, self).get_object(queryset)
+
+    def get_context_data(self, **kwargs):
+        context = super(OPChangeProductView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        op_change_form = ChangeProductOperationForm(
+            instance=self.get_object())
+        
+        context.update({
+            'messages': alert,
+            'op_form': op_change_form,
+            })
+        return context
+
+    def post(self, request, *args, **kwargs ):
+        if self.request.POST or self.request.FILES:
+            try:
+                obj = int(self.kwargs.get('pk', None))
+                prd = int(request.POST.get('product'))
+                if obj == prd:
+                    obj = self.object = self.get_object()
+                    slug = request.POST.get('slug', None)
+                    form = None
+                    if slug == 'operation':
+                        form = ChangeProductOperationForm(
+                            request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Product Operation Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-opschange',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'op_form': form})
+                            messages.error(
+                                self.request,
+                                "Product Operation Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_productops.html"
+                                ], context)
+                    messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:product-changeops', kwargs={'pk': prd}))
+            except:
+                messages.error(
+                    self.request,
+                    "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:product-changeops', kwargs={'pk': prd}))
+        return HttpResponseBadRequest()
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST,]))
 @Decorate(check_permission('shop.console_change_product'))
 class ChangeProductVariantView(DetailView):
     template_name = 'console/shop/change_productvariant.html'
@@ -1405,7 +1488,162 @@ class ChangeProductVariantView(DetailView):
         return HttpResponseBadRequest()
 
 
-# @Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+@Decorate(check_permission('shop.console_change_category'))
+class ActionCategoryView(View, CategoryValidation):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            form_data = self.request.POST
+            action = form_data.get('action', None)
+            pk_obj = form_data.get('category', None)
+            allowed_action = []
+            groups = self.request.user.groups.all().values_list('name', flat=True)
+            if 'Product' in groups:
+                allowed_action = ['active', 'inactive','skill', 'noskill']
+            else:
+                allowed_action = []
+
+            if action and action in allowed_action:
+                try:
+                    category = Category.objects.get(pk=pk_obj)
+                    if action == "active":
+                        if self.validate_before_active(
+                            request=self.request,category=category):    
+                            category.active = True
+                            category.save()
+                            messages.success(
+                                self.request,
+                                    "Category is made active!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "inactive":
+                        if self.validate_before_inactive(
+                            request=self.request,category=category):
+                            category.active = False
+                            category.save()    
+                            messages.success(
+                                self.request,
+                                    "Category is made inactive!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "skill":
+                        if self.validate_before_skill(
+                            request=self.request,category=category):
+                            category.is_skill = True
+                            category.save()    
+                            messages.success(
+                                self.request,
+                                    "Category is made skill!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "noskill":
+                            category.is_skill = False
+                            category.save()    
+                            messages.success(
+                                self.request,
+                                    "Category is removed as skill!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                except:
+                    data = {'error': 'True'}
+                    messages.error(
+                        self.request,
+                        "Object Do not Exists!")    
+            else:
+                data = {'error': 'True'}
+                messages.error(
+                    self.request,
+                    "Invalid Action, Do not have permission!")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        except:
+            pass
+        data = {'error': 'True'}
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+@Decorate(check_permission('shop.console_change_product'))
+class ActionProductView(View, ProductValidation):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            form_data = self.request.POST
+            action = form_data.get('action', None)
+            pk_obj = form_data.get('product', None)
+            allowed_action = []
+            groups = self.request.user.groups.all().values_list('name', flat=True)
+            if 'Product' in groups:
+                allowed_action = ['active', 'inactive','index', 'unindex']
+            else:
+                allowed_action = []
+
+            if action and action in allowed_action:
+                try:
+                    product = Product.objects.get(pk=pk_obj)
+                    if action == "active":
+                        if self.validate_before_active(
+                            request=self.request,product=product):    
+                            product.active = True
+                            product.save()
+                            messages.success(
+                                self.request,
+                                    "Product is made active!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "inactive":
+                            product.active = False
+                            product.save()    
+                            messages.success(
+                                self.request,
+                                    "Product is made inactive!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
+                    elif action == "index":
+                        if self.validate_before_index(
+                            request=self.request,product=product):
+                            product.is_indexable = True
+                            product.save()    
+                            messages.success(
+                                self.request,
+                                    "Product will be indexing!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "unindex":
+                            product.is_indexable = False
+                            product.save()    
+                            messages.success(
+                                self.request,
+                                    "Product is removed from indexing!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
+                except:
+                    data = {'error': 'True'}
+                    messages.error(
+                        self.request,
+                        "Object Do not Exists!")    
+            else:
+                data = {'error': 'True'}
+                messages.error(
+                    self.request,
+                    "Invalid Action, Do not have permission!")
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        except:
+            pass
+        data = {'error': 'True'}
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+# @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 # @Decorate(check_permission('shop.console_change_attribute'))
 # class AddAttributeOptionView(FormView):
 #     form_class = AddAttributeOptionForm
@@ -1440,7 +1678,7 @@ class ChangeProductVariantView(DetailView):
 #         return super(AddAttributeOptionView, self).form_invalid(form)
 
 
-# @Decorate(check_group(['Product']))
+# @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 # @Decorate(check_permission('shop.console_change_attribute'))
 # class ListAttributeOptionGroupView(ListView, PaginationMixin):
 #     model = AttributeOptionGroup

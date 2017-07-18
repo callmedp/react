@@ -65,16 +65,24 @@ urlpatterns += [
     url(r'^category/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeCategoryView.as_view(),
         name='category-change'),
+    url(r'^category/action/(?P<action>[\w-]+)/$',
+        shop_view.ActionCategoryView.as_view(),
+        name='category-action'),
     
+
     url(r'^product/list/$',
         shop_view.ListProductView.as_view(), name='product-list'),
     url(r'^product/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeProductView.as_view(), name='product-change'),
+    url(r'^product/change-ops/(?P<pk>[\d]+)/$',
+        shop_view.OPChangeProductView.as_view(), name='product-opschange'),
     url(r'^product/variantchange/(?P<pk>[\d]+)/(?P<parent>[\d]+)/$',
         shop_view.ChangeProductVariantView.as_view(),
         name='productvariant-change'),
-    
-
+    url(r'^product/action/(?P<action>[\w-]+)/$',
+        shop_view.ActionProductView.as_view(),
+        name='product-action'),
+        
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(),
         name='faq-list'),
@@ -82,7 +90,6 @@ urlpatterns += [
         shop_view.ChangeFaqView.as_view(),
         name='faquestion-change'),
         
-
     url(r'^keyword/add/$',
         shop_view.AddKeywordView.as_view(),
         name='keyword-add'),
@@ -103,14 +110,6 @@ urlpatterns += [
     url(r'^attribute/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeAttributeView.as_view(),
         name='attribute-change'),
-    
-
-    # url(r'^attributeoption/add/$',
-    #     shop_view.AddAttributeOptionView.as_view(),
-    #     name='attributeoption-add'),
-    # url(r'^attributeoption/list/$',
-    #     shop_view.ListAttributeOptionGroupView.as_view(),
-    #     name='attributeoption-list'),
 
 ]
 

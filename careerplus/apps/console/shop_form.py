@@ -299,8 +299,8 @@ class ChangeCategorySkillForm(forms.ModelForm):
         super(ChangeCategorySkillForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
 
-        self.fields['is_skill'].widget.attrs['class'] = 'js-switch'
-        self.fields['is_skill'].widget.attrs['data-switchery'] = 'true'
+        # self.fields['is_skill'].widget.attrs['class'] = 'js-switch'
+        # self.fields['is_skill'].widget.attrs['data-switchery'] = 'true'
         self.fields['description'].widget.attrs['class'] = form_class
         self.fields['graph_image'].widget.attrs['class'] = form_class 
         self.fields['graph_image'].widget.attrs['data-parsley-max-file-size'] = 500
@@ -314,14 +314,14 @@ class ChangeCategorySkillForm(forms.ModelForm):
         self.fields['video_link'].widget.attrs['data-parsley-type'] = 'url'
         self.fields['video_link'].help_text = "Please add Video url without https/http"
         
-        self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        # self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 100]"
         self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
         
     class Meta:
         model = Category
         fields = (
-            'is_skill', 'description', 'video_link',
+            'description', 'video_link',
             'career_outcomes', 'graph_image')
 
     def clean(self):

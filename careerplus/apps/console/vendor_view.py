@@ -8,7 +8,7 @@ from django.http import (
     HttpResponseForbidden, HttpResponse,
     HttpResponseRedirect, HttpResponseBadRequest)
 from django.core import exceptions
-
+from django.conf import settings
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
@@ -38,7 +38,7 @@ from .vendor_form import (
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('faq.console_change_faq'))
 class ChangeScreenFaqView(DetailView):
     template_name = 'console/vendor/change_screenfaq.html'
@@ -108,7 +108,7 @@ class ChangeScreenFaqView(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('faq.console_add_faq'))
 class AddScreenFaqView(FormView):
     form_class = AddScreenFaqForm
@@ -161,7 +161,7 @@ class AddScreenFaqView(FormView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('faq.console_change_faq'))
 class ListScreenFaqView(ListView, PaginationMixin):
     model = ScreenFAQ
@@ -215,7 +215,7 @@ class ListScreenFaqView(ListView, PaginationMixin):
         return context
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('faq.console_change_faq'))
 class ListModerationScreenFaqView(ListView, PaginationMixin):
     model = ScreenFAQ
@@ -260,7 +260,7 @@ class ListModerationScreenFaqView(ListView, PaginationMixin):
         return context
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ListScreenProductView(ListView, PaginationMixin):
     model = ProductScreen
@@ -318,7 +318,7 @@ class ListScreenProductView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Product']))
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ListModerationScreenProductView(ListView, PaginationMixin):
     model = ProductScreen
@@ -368,7 +368,7 @@ class ListModerationScreenProductView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_add_product'))
 class AddScreenProductView(FormView):
     form_class = AddScreenProductForm
@@ -432,7 +432,7 @@ class AddScreenProductView(FormView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ChangeScreenProductView(DetailView):
     template_name = 'console/vendor/change_screenproduct.html'
@@ -702,7 +702,7 @@ class ChangeScreenProductView(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class AddScreenProductVariantView(DetailView):
     template_name = 'console/vendor/add_screenvariant.html'
@@ -791,7 +791,7 @@ class AddScreenProductVariantView(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ChangeScreenProductVariantView(DetailView):
     template_name = 'console/vendor/change_screenvariant.html'
@@ -885,7 +885,7 @@ class ChangeScreenProductVariantView(DetailView):
         return HttpResponseBadRequest()
 
 
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ActionScreenFaqView(View):
 
@@ -963,7 +963,7 @@ class ActionScreenFaqView(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-@Decorate(check_group(['Vendor', 'Product']))
+@Decorate(check_group([settings.VENDOR_GROUP_LIST, settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_product'))
 class ActionScreenProductView(View, ProductModeration):
 
@@ -993,7 +993,7 @@ class ActionScreenProductView(View, ProductModeration):
                             productscreen.save()
                             messages.success(
                                 self.request,
-                                    "Product is assigned to product for moderation!") 
+                                    "Product is assigned for moderation!") 
                             data = {'success': 'True',
                                 'next_url': reverse('console:screenproduct-list') }
                         else:
@@ -1020,7 +1020,7 @@ class ActionScreenProductView(View, ProductModeration):
                                     self.request,
                                         "Product Screen is copied to live! Please validate fields in live product") 
                                 data = {'success': 'True',
-                                    'next_url': reverse('console:screenproduct-moderationlist') }
+                                    'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
                             else:
                                 messages.error(
                                     self.request,

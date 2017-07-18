@@ -154,6 +154,15 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 ENCODE_SALT = 'xfxa'
 
+
+# Do Not Change #
 COURSE_SLUG = ['course',]
 WRITING_SLUG = ['writing',]
 SERVICE_SLUG = ['service',]
+
+
+VENDOR_GROUP_LIST = ['Vendor']
+PRODUCT_GROUP_LIST = ['Product']
+OPERATION_GROUP_LIST = ['Operation']
+SEO_GROUP_LIST = ['SEO']
+WRITING_GROUP_LIST = ['Writer']

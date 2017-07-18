@@ -2,64 +2,6 @@
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
   <div class="menu_section">
-    {% if  1 == 0 %}
-        <h3>Catalog</h3>
-      <ul class="nav side-menu">
-        
-          <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-              <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
-              <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
-              <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
-              <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
-            </ul>
-          </li>
-          
-        
-        
-                          
-      </ul>
-
-      <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-            {% if perms.order.can_show_order_queue %}
-                <li><a href="{% url "console:queue-order" %}">Orders</a></li>
-            {% endif %}
-            {% if perms.order.can_show_welcome_queue %}
-                <li><a href="{% url "console:queue-welcome" %}">Welcome Call</a></li>
-            {% endif %}
-            {% if perms.order.can_show_welcome_queue %}
-                <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
-            {% endif %}
-            {% if perms.order.can_show_inbox_queue %}
-                <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
-            {% endif %}
-            {% if perms.order.can_show_approval_queue %}
-                <li><a href="{% url "console:queue-approval" %}">Approval</a></li>
-            {% endif %}
-            {% if perms.order.can_show_approved_queue %}
-                <li><a href="{% url "console:queue-approved" %}">Approved</a></li>
-            {% endif %}
-
-            {% if perms.order.can_show_rejectedbyadmin_queue %}
-                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin</a></li>
-            {% endif %}
-
-            {% if perms.order.can_show_rejectedbycandidate_queue %}
-                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate</a></li>
-            {% endif %}
-
-            {% if perms.order.can_show_allocated_queue %}
-                <li><a href="{% url "console:queue-allocated" %}">Allocated</a></li>
-            {% endif %}
-
-            {% if perms.order.can_show_closed_oi_queue %}
-                <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
-            {% endif %}
-            
-        </ul>
-      </li>
-    {% endif %}
     {% if request.user|has_group:"Product" %}
         <h3>Live Catalog</h3>
         <ul class="nav side-menu">
@@ -126,13 +68,22 @@
             
               {% endif %}
         </ul>
-    
-
+    {% elif request.user|has_group:"Operation" %} 
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:product-list' %}">Product</a></li>
+              </ul>
+            </li>
+            
+          {% endif %}
+        </ul>
     {% elif request.user|has_group:"Vendor" %} 
         <h3>Product</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
-          
             <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:screenproduct-list' %}">Product</a></li>
@@ -145,15 +96,68 @@
               {% endif %}
               </ul>
             </li>
+            
           {% endif %}
         </ul>
     {% endif %}
-    
+    {% if  request.user|has_group:"Product" or request.user|has_group:"Operation" or request.user|has_group:"Writer" %}
+      <ul class="nav side-menu">
+        
+          <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
+              <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
+              <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
+              <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
+            </ul>
+          </li>
+      
+      <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+            {% if perms.order.can_show_order_queue %}
+                <li><a href="{% url "console:queue-order" %}">Orders</a></li>
+            {% endif %}
+            {% if perms.order.can_show_welcome_queue %}
+                <li><a href="{% url "console:queue-welcome" %}">Welcome Call</a></li>
+            {% endif %}
+            {% if perms.order.can_show_welcome_queue %}
+                <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
+            {% endif %}
+            {% if perms.order.can_show_inbox_queue %}
+                <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
+            {% endif %}
+            {% if perms.order.can_show_approval_queue %}
+                <li><a href="{% url "console:queue-approval" %}">Approval</a></li>
+            {% endif %}
+            {% if perms.order.can_show_approved_queue %}
+                <li><a href="{% url "console:queue-approved" %}">Approved</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_rejectedbyadmin_queue %}
+                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_rejectedbycandidate_queue %}
+                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_allocated_queue %}
+                <li><a href="{% url "console:queue-allocated" %}">Allocated</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_closed_oi_queue %}
+                <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
+            {% endif %}
+            
+        </ul>
+      </li>
+    {% endif %}
+        
       
       
       
                         
-    </ul>
+   
   </div>
 
 </div>
