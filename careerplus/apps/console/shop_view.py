@@ -10,7 +10,10 @@ from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
-from .decorators import Decorate, check_permission, check_group, stop_browser_cache
+from .decorators import (
+    has_group,
+    Decorate, check_permission,
+    check_group, stop_browser_cache)
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.conf import settings
@@ -93,6 +96,7 @@ class AddCategoryView(FormView):
         )
         return super(AddCategoryView, self).form_invalid(form)
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_category'))
@@ -126,18 +130,26 @@ class ChangeCategoryView(DetailView):
             instance=self.get_object())
         seo_change_form = ChangeCategorySEOForm(
             instance=self.get_object())
-        skill_change_form = ChangeCategorySkillForm(
+        if self.object.type_level in [2, 3, 4]:
+            skill_change_form = ChangeCategorySkillForm(
             instance=self.get_object())
+            context.update({'skill_form': skill_change_form})
+
         if self.object.type_level in [2, 3, 4]:
             relationship_formset = CategoryRelationshipFormSet(
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object()})
             context.update({'relationship_formset': relationship_formset})
+        childrens = self.object.category_set.filter(
+            from_category__related_to=self.object)
+        products = self.object.categoryproducts.all()
         context.update({
             'messages': alert,
             'form': main_change_form,
             'seo_form': seo_change_form,
-            'skill_form': skill_change_form})
+            "childrens": childrens,
+            "products": products
+            })
         return context
 
     def post(self, request, *args, **kwargs):
@@ -263,13 +275,13 @@ class ChangeCategoryView(DetailView):
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:category-change', kwargs={'pk': cat}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+            return HttpResponseRedirect(
                     reverse('console:category-change', kwargs={'pk': cat}))
         return HttpResponseBadRequest()
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
@@ -313,6 +325,7 @@ class ListCategoryView(ListView, PaginationMixin):
         })
         return context
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 @Decorate(check_permission('shop.console_change_category'))
@@ -343,23 +356,27 @@ class ListCategoryRelationView(TemplateView):
                                 for l4 in levelFour:
                                     level4.append(
                                         OrderedDict({
+                                            'pk':l4.pk,
                                             'name': l4.name,
                                             'url': l4.get_full_url(),
                                             'active': l4.active}))
                             level3.append(
                                 OrderedDict({
+                                    'pk':l3.pk,
                                     'name': l3.name,
-                                    'url': l4.get_full_url(),
+                                    'url': l3.get_full_url(),
                                     'active': l3.active,
                                     'childrens': level4}))
                     level2.append(
                         OrderedDict({
+                            'pk':l2.pk,
                             'name': l2.name,
                             'url': l2.get_full_url(),
                             'active': l2.active,
                             'childrens': level3}))
             level1.append(
                 OrderedDict({
+                    'pk':l1.pk,
                     'name': l1.name,
                     'url': l1.get_full_url(),
                     'active': l1.active,
@@ -517,10 +534,9 @@ class ChangeFaqView(DetailView):
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:faquestion-change', kwargs={'pk': faq}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:faquestion-change', kwargs={'pk': faq}))
         return HttpResponseBadRequest()
@@ -615,6 +631,7 @@ class ChangeKeywordView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         return super(ChangeKeywordView, self).dispatch(request, *args, **kwargs)
 
+
     def get(self, request, *args, **kwargs):
         return super(ChangeKeywordView, self).get(request, args, **kwargs)
 
@@ -666,10 +683,9 @@ class ChangeKeywordView(DetailView):
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:keyword-change', kwargs={'pk': key}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:keyword-change', kwargs={'pk': key}))
         return HttpResponseBadRequest()
@@ -816,11 +832,10 @@ class ChangeAttributeView(DetailView):
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:attribute-change', kwargs={'pk': attr}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
-                return HttpResponseRedirect(
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+            return HttpResponseRedirect(
                     reverse('console:attribute-change', kwargs={'pk': attr}))
         return HttpResponseBadRequest()
 
@@ -880,6 +895,9 @@ class ChangeProductView(DetailView):
         return super(ChangeProductView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if product.type_product == 2:
+            raise Http404
         return super(ChangeProductView, self).get(request, args, **kwargs)
 
     def get_object(self, queryset=None):
@@ -904,7 +922,7 @@ class ChangeProductView(DetailView):
 
         attribute_form = ProductAttributeForm(
             instance=self.get_object(),)
-        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             vendor = self.get_object().vendor
         else:
             vendor  = self.request.user.get_vendor()
@@ -992,7 +1010,12 @@ class ChangeProductView(DetailView):
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
                     form = None
-                    import ipdb;ipdb.set_trace()
+                    if obj.type_product == 2:
+                        messages.error(
+                        self.request,
+                        "Product is a child variation")
+                        return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                    
                     if slug == 'main':
                         form = ChangeProductForm(
                             request.POST, request.FILES, instance=obj)
@@ -1122,7 +1145,8 @@ class ChangeProductView(DetailView):
                             formset=CategoryInlineFormSet, extra=1,
                             max_num=20, validate_max=True)
                         formset = ProductCategoryFormSet(
-                            request.POST, instance=obj)
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj},)
                         from django.db import transaction
                         if formset.is_valid():
                             with transaction.atomic():
@@ -1151,7 +1175,7 @@ class ChangeProductView(DetailView):
                                     "console/shop/change_product.html"
                                 ], context)
                     elif slug == 'faqs':
-                        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+                        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                             vendor = self.get_object().vendor
                         else:
                             vendor  = self.request.user.get_vendor()
@@ -1242,7 +1266,8 @@ class ChangeProductView(DetailView):
                             formset=ChildInlineFormSet, extra=1,
                             max_num=20, validate_max=True)
                         formset = ProductChildFormSet(
-                            request.POST, instance=obj)
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj})
                         from django.db import transaction
                         if formset.is_valid():
                             with transaction.atomic():
@@ -1278,7 +1303,8 @@ class ChangeProductView(DetailView):
                             formset=RelatedInlineFormSet, extra=1,
                             max_num=20, validate_max=True)
                         formset = ProductRelatedFormSet(
-                            request.POST, instance=obj)
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj})
                         from django.db import transaction
                         if formset.is_valid():
                             with transaction.atomic():
@@ -1314,10 +1340,9 @@ class ChangeProductView(DetailView):
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:product-change', kwargs={'pk': prd}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:product-change', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
@@ -1334,6 +1359,9 @@ class OPChangeProductView(DetailView):
         return super(OPChangeProductView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if product.type_product == 2:
+            raise Http404
         return super(OPChangeProductView, self).get(request, args, **kwargs)
 
     def get_object(self, queryset=None):
@@ -1362,6 +1390,12 @@ class OPChangeProductView(DetailView):
                 if obj == prd:
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
+                    if obj.type_product == 2:
+                        messages.error(
+                        self.request,
+                        "Product is a child variation")
+                        return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                    
                     form = None
                     if slug == 'operation':
                         form = ChangeProductOperationForm(
@@ -1388,10 +1422,9 @@ class OPChangeProductView(DetailView):
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:product-changeops', kwargs={'pk': prd}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:product-changeops', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
@@ -1409,6 +1442,10 @@ class ChangeProductVariantView(DetailView):
             ChangeProductVariantView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if not product.type_product == 2:
+            raise Http404
+        
         return super(
             ChangeProductVariantView, self).get(request, args, **kwargs)
 
@@ -1446,6 +1483,12 @@ class ChangeProductVariantView(DetailView):
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
                     form = None
+                    if not obj.type_product == 2:
+                        messages.error(
+                        self.request,
+                        "Product is not a child variation")
+                        return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                    
                     if slug == 'variant':
                         parent = self.get_object().variationproduct.filter(
                             mainproduct__sibling=self.get_object())
@@ -1479,10 +1522,9 @@ class ChangeProductVariantView(DetailView):
                         "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:productvariant-change', kwargs={'pk': prd, 'parent': parent}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:productvariant-change', kwargs={'pk': prd, 'parent': parent}))
         return HttpResponseBadRequest()
@@ -1498,8 +1540,8 @@ class ActionCategoryView(View, CategoryValidation):
             action = form_data.get('action', None)
             pk_obj = form_data.get('category', None)
             allowed_action = []
-            groups = self.request.user.groups.all().values_list('name', flat=True)
-            if 'Product' in groups:
+            if has_group(user=self.request.user,
+                grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['active', 'inactive','skill', 'noskill']
             else:
                 allowed_action = []
@@ -1562,8 +1604,9 @@ class ActionCategoryView(View, CategoryValidation):
                     self.request,
                     "Invalid Action, Do not have permission!")
             return HttpResponse(json.dumps(data), content_type="application/json")
-        except:
-            pass
+        except Exception as e:
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -1578,8 +1621,8 @@ class ActionProductView(View, ProductValidation):
             action = form_data.get('action', None)
             pk_obj = form_data.get('product', None)
             allowed_action = []
-            groups = self.request.user.groups.all().values_list('name', flat=True)
-            if 'Product' in groups:
+            
+            if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['active', 'inactive','index', 'unindex']
             else:
                 allowed_action = []
@@ -1638,8 +1681,9 @@ class ActionProductView(View, ProductValidation):
                     self.request,
                     "Invalid Action, Do not have permission!")
             return HttpResponse(json.dumps(data), content_type="application/json")
-        except:
-            pass
+        except Exception as e:
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
 

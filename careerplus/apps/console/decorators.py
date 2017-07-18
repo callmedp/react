@@ -15,6 +15,16 @@ def flatlist(fatlist):
         else:
             yield element
 
+
+def has_group(user, grp_list):
+    if user.is_superuser:
+        return True
+    groups = user.groups.all().values_list('name', flat=True)
+    groups = set(groups)
+    flat_list = [ll for ll in flatlist(grp_list)]
+    flat_list = set(flat_list)
+    return flat_list.intersection(groups)
+
 def Decorate(decorator):
     def _inner(view_cls):
         old_dispatch = view_cls.dispatch

@@ -409,7 +409,7 @@ class Attribute(AbstractAutoDate):
         (RICHTEXT, _("Rich Text")),
         (DATE, _("Date")),
         (OPTION, _("Option")),
-        (MULTI_OPTION, _("Multi Option")),
+        # (MULTI_OPTION, _("Multi Option")),
         (ENTITY, _("Entity")),
         (FILE, _("File")),
         (IMAGE, _("Image")),
@@ -952,48 +952,48 @@ class Product(AbstractProduct, ModelMeta):
     def get_bg(self, *args, **kwargs):
         return dict(BG_CHOICES).get(self.image_bg)
 
-    @property
     def get_exp(self, *args, **kwargs):
-        return dict(EXP_CHOICES).get(self.experience)
+        return getattr(self.attr, 'experience', None)
+                        
 
     def pv_name(self, *args, **kwargs):
-        if self.type_service == 1:
+        if self.is_course:
             return self.name + ' ( ' + self.get_exp + ' ) '
-        elif self.type_service == 2:
+        elif self.is_writing:
             return self.name + ' ( ' + self.get_exp + ' ) '
-        elif self.type_service == 3:
+        elif self.is_course:
             return self.name + ' by ' + self.vendor.name
         return self.name
 
     def get_price(self, *args, **kwargs):
-        prices = self.productprices.filter(currency__value=0, active=True)
-        if prices:
-            return round(prices[0].value, 0)
+        
+        if self.inr_price:
+            return round(self.inr_price, 0)
         return 'Set Price'
 
     def get_fakeprice(self, *args, **kwargs):
-        prices = self.productprices.filter(currency__value=0, active=True)
-        if prices:
-            inr_price = prices[0].value
-            fake_inr_price = prices[0].fake_value
-            if inr_price:
-                if fake_inr_price > Decimal('0.00'):
-                    diff = float(fake_inr_price) - float(inr_price)
-                    percent_diff = round((diff / float(fake_inr_price)) * 100, 0)
-                    return (round(prices[0].fake_value, 0), percent_diff)
+        if self.inr_price:
+            inr_price = self.inr_price
+            fake_inr_price = self.fake_inr_price
+            if fake_inr_price > Decimal('0.00'):
+                diff = float(fake_inr_price) - float(inr_price)
+                percent_diff = round((diff / float(fake_inr_price)) * 100, 0)
+                return (round(fake_inr_price, 0), percent_diff)
         return None
 
     @property
     def category_slug(self):
         main_prod_cat = self.categories.filter(
             productcategories__is_main=True,
-            productcategories__active=True)
+            productcategories__active=True,
+            active=True)
         if main_prod_cat:
             return main_prod_cat[0]
         else:
             prod_cat = self.categories.filter(
                 productcategories__is_main=False,
-                productcategories__active=True)
+                productcategories__active=True,
+                active=True)
             if prod_cat:
                 return prod_cat[0]
         return None

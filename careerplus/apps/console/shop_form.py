@@ -341,7 +341,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
         if outcome:
             if len(outcome) < 4 or len(outcome) > 400:
                 raise forms.ValidationError(
-                    "Name should be between 4-400 characters.")
+                    "Career Outcomes should be between 4-400 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")

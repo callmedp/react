@@ -227,9 +227,10 @@ class ProductModeration(object):
                     return test_pass
             else:
                 return test_pass        
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Product Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     
@@ -268,9 +269,10 @@ class ProductModeration(object):
                     return test_pass
             else:
                 return test_pass        
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Product Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
     
 
@@ -298,9 +300,10 @@ class ProductModeration(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Product Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     @transaction.atomic
@@ -416,8 +419,10 @@ class ProductModeration(object):
                 return (product, screen, copy)
         except IntegrityError:
             copy = False
-        except:
+        except Exception as e:
             copy = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return (product, screen, copy)
 
     @transaction.atomic
@@ -527,8 +532,10 @@ class ProductModeration(object):
         
         except IntegrityError:
             copy = False
-        except:
+        except Exception as e:
             copy = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return (product, screen, copy)
 
 
@@ -553,9 +560,10 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
 
@@ -564,17 +572,23 @@ class CategoryValidation(object):
         try:
             if request:
                 if category:
-                    if self.type_level in [1, 2, 3]:
+                    if category.type_level in [1, 2, 3]:
                         test_pass = self.validate_childs(
                             request=request, category=category)
+                    if category.get_products():
+                        messages.error(request, "Products is associated please reassign")
+                        return test_pass
+                    test_pass = True
                     return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
                     return test_pass
             else:
                 return test_pass         
-        except:
-            pass
+        except Exception as e:
+            test_pass = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     def validate_before_skill(self, request, category):
@@ -595,8 +609,10 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
-            pass
+        except Exception as e:
+            test_pass = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     def validate_fields(self, request, category):
@@ -620,9 +636,10 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     
@@ -655,9 +672,10 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     
@@ -666,6 +684,9 @@ class CategoryValidation(object):
         try:
             if request:
                 if category:
+                    if category.type_level in [1, 2]:
+                        messages.error(request, "Level 1 Can't be made Skill")
+                        return test_pass
                     if not category.description:
                         messages.error(request, "Skill Description is required")
                         return test_pass
@@ -682,9 +703,10 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     
@@ -717,9 +739,10 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
 
@@ -760,9 +783,10 @@ class ProductValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
 
@@ -800,9 +824,10 @@ class ProductValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     def validate_fields(self, request, product):
@@ -858,9 +883,10 @@ class ProductValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     def validate_category(self, request, product):
@@ -878,9 +904,10 @@ class ProductValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     
@@ -899,9 +926,10 @@ class ProductValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     def validate_variation(self, request, product):
@@ -941,9 +969,10 @@ class ProductValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
     def validate_attributes(self, request, product):
@@ -957,14 +986,14 @@ class ProductValidation(object):
                         if value is None:
                             if attribute.required:
                                 messages.error(request, (
-                                    _("%(attr)s attribute cannot be blank") %
+                                    ("%(attr)s attribute cannot be blank") %
                                     {'attr': attribute.name}))
                         else:
                             try:
                                 attribute.validate_value(value)
                             except Exception as e:
                                 messages.error(request, (
-                                    _("%(attr)s attribute %(err)s") %
+                                    ("%(attr)s attribute %(err)s") %
                                     {'attr': attribute.name, 'err': e}))
                     test_pass = True
                     return test_pass
@@ -973,7 +1002,8 @@ class ProductValidation(object):
                     return test_pass
             else:
                 return test_pass         
-        except:
+        except Exception as e:
             test_pass = False
-            messages.error(request, "Error Validation, Contact Tech Team")
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass

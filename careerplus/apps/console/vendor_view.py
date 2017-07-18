@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from django.views.generic import (
     View, FormView, TemplateView, ListView, DetailView)
-from django.http import (
+from django.http import (Http404,
     HttpResponseForbidden, HttpResponse,
     HttpResponseRedirect, HttpResponseBadRequest)
 from django.core import exceptions
@@ -13,7 +13,9 @@ from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
-from .decorators import Decorate, check_permission, check_group, stop_browser_cache
+from .decorators import (
+    Decorate, check_permission, check_group,
+    stop_browser_cache, has_group)
 from django.core.paginator import Paginator
 from django.db.models import Q
 from shop.choices import PRODUCT_VENDOR_CHOICES
@@ -48,6 +50,18 @@ class ChangeScreenFaqView(DetailView):
         return super(ChangeScreenFaqView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        faq = self.get_object()
+        if not faq:
+            raise Http404
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+            pass
+        else:
+            user_vendor = self.request.user.get_vendor()
+            if not user_vendor:
+                return HttpResponseForbidden()
+            if user_vendor != faq.vendor:
+                return HttpResponseForbidden() 
+        
         return super(ChangeScreenFaqView, self).get(request, args, **kwargs)
 
     def get_object(self, queryset=None):
@@ -73,6 +87,21 @@ class ChangeScreenFaqView(DetailView):
                 faq = int(request.POST.get('faq'))
                 if obj == faq:
                     obj = self.object = self.get_object()
+                    if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+                        pass
+                    else:
+                        user_vendor = self.request.user.get_vendor()
+                        if not user_vendor:
+                            messages.error(
+                            self.request,
+                            "You are not associated to any vendor")
+                            return HttpResponseRedirect(reverse('console:screenfaq-list',))
+                        if user_vendor != obj.vendor:
+                            messages.error(
+                            self.request,
+                            "FAQ not associated to your vendor")
+                            return HttpResponseRedirect(reverse('console:screenfaq-list',))
+                        
                     form = None
                     form = ChangeScreenFaqForm(
                         request.POST, instance=obj)
@@ -98,10 +127,9 @@ class ChangeScreenFaqView(DetailView):
                     "Object Does Not Exists")
                 return HttpResponseRedirect(
                     reverse('console:screenfaq-change', kwargs={'pk': faq}))
-            except:
-                messages.error(
-                    self.request,
-                    "Object Does Not Exists")
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:screenfaq-change', kwargs={'pk': faq}))
         return HttpResponseBadRequest()
@@ -185,15 +213,14 @@ class ListScreenFaqView(ListView, PaginationMixin):
         queryset = super(ListScreenFaqView, self).get_queryset()
         queryset = queryset.exclude(status=2)
         
-        vendor = self.request.user.get_vendor()
-        if self.request.user.groups.filter(name='Product').exists():
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             pass
         else:
             vendor = self.request.user.get_vendor()
             if not vendor:
                 queryset = queryset.none()
             else:
-                queryset = queryset.filter(vendor=vendor, type_product__in=dict(PRODUCT_VENDOR_CHOICES).keys())
+                queryset = queryset.filter(vendor=vendor)
         try:
             if self.query:
                 queryset = queryset.filter(Q(text__icontains=self.query))
@@ -213,6 +240,7 @@ class ListScreenFaqView(ListView, PaginationMixin):
             "messages": alert,
         })
         return context
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
@@ -286,14 +314,14 @@ class ListScreenProductView(ListView, PaginationMixin):
         queryset = queryset.exclude(type_product=2)
         queryset = queryset.exclude(status=2)
         
-        if self.request.user.groups.filter(name='Product').exists():
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             pass
         else:
             vendor = self.request.user.get_vendor()
             if not vendor:
                 queryset = queryset.none()
             else:
-                queryset = queryset.filter(vendor=vendor, type_product__in=dict(PRODUCT_VENDOR_CHOICES).keys())
+                queryset = queryset.filter(vendor=vendor, type_product__in=[0, 1])
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
@@ -443,6 +471,22 @@ class ChangeScreenProductView(DetailView):
             ChangeScreenProductView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if not product:
+            raise Http404
+        
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+            if product.type_product == 2:
+                raise Http404
+        else:
+            user_vendor = self.request.user.get_vendor()
+            if not user_vendor:
+                return HttpResponseForbidden()
+            if user_vendor != product.vendor:
+                return HttpResponseForbidden()
+            if not product.type_product in [0, 1]:
+                raise Http404
+        
         return super(
             ChangeScreenProductView, self).get(request, args, **kwargs)
 
@@ -465,7 +509,7 @@ class ChangeScreenProductView(DetailView):
         obj = self.get_object()
         attribute_form = ScreenProductAttributeForm(
             instance=self.get_object(),)
-        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             vendor = self.get_object().vendor
         else:
             vendor  = self.request.user.get_vendor()
@@ -512,6 +556,27 @@ class ChangeScreenProductView(DetailView):
                 if obj == prd:
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
+                    if obj.type_product == 2:
+                        messages.error(
+                        self.request,
+                        "Product is a child variation")
+                        return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                    
+                    if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+                        pass
+                    else:
+                        user_vendor = self.request.user.get_vendor()
+                        if not user_vendor:
+                            messages.error(
+                            self.request,
+                            "You are not associated to any vendor")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        if user_vendor != obj.vendor:
+                            messages.error(
+                            self.request,
+                            "Product not associated to your vendor")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        
                     form = None
                     if slug == 'main':
                         form = ChangeScreenProductForm(
@@ -523,7 +588,7 @@ class ChangeScreenProductView(DetailView):
                             messages.success(
                                 self.request,
                                 "Product Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:screenproduct-list',))
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -603,7 +668,7 @@ class ChangeScreenProductView(DetailView):
                                     "console/vendor/change_screenproduct.html"
                                 ], context)
                     elif slug == 'faqs':
-                        if self.request.user.groups.filter(name='Product').exists() or self.request.user.is_superuser:
+                        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                             vendor = self.get_object().vendor
                         else:
                             vendor  = self.request.user.get_vendor()
@@ -687,15 +752,14 @@ class ChangeScreenProductView(DetailView):
                                     "console/vendor/change_screenproduct.html"
                                 ], context)
                     
-                    messages.error(
-                        self.request,
-                        "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:screenproduct-change', kwargs={'pk': prd}))
-            except:
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:screenproduct-change', kwargs={'pk': prd}))
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:screenproduct-change', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
@@ -713,6 +777,20 @@ class AddScreenProductVariantView(DetailView):
             AddScreenProductVariantView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if not product:
+            raise Http404
+        if not product.type_product == 1:
+            raise Http404
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+            pass
+        else:
+            user_vendor = self.request.user.get_vendor()
+            if not user_vendor:
+                return HttpResponseForbidden()
+            if user_vendor != product.vendor:
+                return HttpResponseForbidden() 
+        
         return super(
             AddScreenProductVariantView, self).get(request, args, **kwargs)
 
@@ -743,6 +821,27 @@ class AddScreenProductVariantView(DetailView):
                 if obj == prd:
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
+                    if not obj.type_product == 1:
+                        messages.error(
+                        self.request,
+                        "Product is not parent variation")
+                        return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        
+                    if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+                        pass
+                    else:
+                        user_vendor = self.request.user.get_vendor()
+                        if not user_vendor:
+                            messages.error(
+                            self.request,
+                            "You are not associated to any vendor")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        if user_vendor != obj.vendor:
+                            messages.error(
+                            self.request,
+                            "Product not associated to your vendor")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                    
                     form = None
                     if slug == 'variant':
                         form = AddScreenProductVariantForm(
@@ -764,7 +863,7 @@ class AddScreenProductVariantView(DetailView):
                             messages.success(
                                 self.request,
                                 "Product Changed Successfully")
-                            return HttpResponseRedirect(reverse('console:screenproduct-list',))
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -776,15 +875,14 @@ class AddScreenProductVariantView(DetailView):
                                 request, [
                                     "console/vendor/add_screenvariant.html"
                                 ], context)
-                        messages.error(
-                        self.request,
-                        "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:screenproductvariant-add', kwargs={'pk': prd}))
-            except:
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:screenproductvariant-add', kwargs={'pk': prd}))
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:screenproductvariant-add', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
@@ -802,6 +900,19 @@ class ChangeScreenProductVariantView(DetailView):
             ChangeScreenProductVariantView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if not product:
+            raise Http404
+        if not product.type_product == 2:
+            raise Http404
+        if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+            pass
+        else:
+            user_vendor = self.request.user.get_vendor()
+            if not user_vendor:
+                return HttpResponseForbidden()
+            if user_vendor != product.vendor:
+                return HttpResponseForbidden() 
         return super(
             ChangeScreenProductVariantView, self).get(request, args, **kwargs)
 
@@ -839,6 +950,28 @@ class ChangeScreenProductVariantView(DetailView):
                     obj = self.object = self.get_object()
                     slug = request.POST.get('slug', None)
                     form = None
+                    if not obj.type_product == 2:
+                        messages.error(
+                        self.request,
+                        "Product is not child variation")
+                        return HttpResponseRedirect(
+                            reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
+                    if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
+                        pass
+                    else:
+                        user_vendor = self.request.user.get_vendor()
+                        if not user_vendor:
+                            messages.error(
+                            self.request,
+                            "You are not associated to any vendor")
+                            return HttpResponseRedirect(
+                                reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
+                        if user_vendor != obj.vendor:
+                            messages.error(
+                            self.request,
+                            "Product not associated to your vendor")
+                            return HttpResponseRedirect(
+                                reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
                     if slug == 'variant':
                         parent = self.get_object().variationproduct.filter(
                             mainproduct__sibling=self.get_object())
@@ -871,15 +1004,14 @@ class ChangeScreenProductVariantView(DetailView):
                                 request, [
                                     "console/vendor/change_screenvariant.html"
                                 ], context)
-                        messages.error(
-                        self.request,
-                        "Object Does Not Exists")
-                return HttpResponseRedirect(
-                    reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
-            except:
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
+                return HttpResponseRedirect(
+                    reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
+            except Exception as e:
+                messages.error(request, (
+                    ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
                     reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
         return HttpResponseBadRequest()
@@ -896,10 +1028,9 @@ class ActionScreenFaqView(View):
             action = form_data.get('action', None)
             pk_obj = form_data.get('screenfaq', None)
             allowed_action = []
-            groups = self.request.user.groups.all().values_list('name', flat=True)
-            if 'Product' in groups:
+            if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['approval', 'live', 'revert', 'reject']
-            elif 'Vendor' in groups:
+            elif has_group(user=self.request.user, grp_list=settings.VENDOR_GROUP_LIST):
                 allowed_action = ['approval']
 
             if action and action in allowed_action:
@@ -957,8 +1088,9 @@ class ActionScreenFaqView(View):
                     self.request,
                     "Invalid Action, Do not have permission!")
             return HttpResponse(json.dumps(data), content_type="application/json")
-        except:
-            pass
+        except Exception as e:
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -975,9 +1107,9 @@ class ActionScreenProductView(View, ProductModeration):
             pk_obj = form_data.get('screenproduct', None)
             allowed_action = []
             groups = self.request.user.groups.all().values_list('name', flat=True)
-            if 'Product' in groups:
+            if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['approval', 'live', 'revert', 'reject']
-            elif 'Vendor' in groups:
+            if has_group(user=self.request.user, grp_list=settings.VENDOR_GROUP_LIST):
                 allowed_action = ['approval']
 
             if action and action in allowed_action:
@@ -1057,7 +1189,8 @@ class ActionScreenProductView(View, ProductModeration):
                     self.request,
                     "Invalid Action, Do not have permission!")
             return HttpResponse(json.dumps(data), content_type="application/json")
-        except:
-            pass
+        except Exception as e:
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")

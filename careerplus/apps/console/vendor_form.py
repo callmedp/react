@@ -4,6 +4,8 @@ from django.core import exceptions
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
+from django.conf import settings
+from .decorators import has_group
 from shop.models import (
     ProductClass,
     ProductScreen, 
@@ -130,19 +132,19 @@ class AddScreenProductForm(forms.ModelForm):
         super(AddScreenProductForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         vendor = self.user.get_vendor()
+        self.fields['product_class'].widget.attrs['class'] = form_class
+        self.fields['product_class'].empty_label = 'Select Product Class'
+        self.fields['product_class'].required = True
         self.fields['type_product'].widget.attrs['class'] = form_class
-        if self.user.groups.filter(name='Product').exists() or self.user.is_superuser:
+        if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
                 (4, 'No-Direct-Sell/Virtual'),
                 (5, 'Downloadable'),)
         else:
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES
-        self.fields['product_class'].widget.attrs['class'] = form_class
-        self.fields['product_class'].empty_label = 'Select Product Class'
-        self.fields['product_class'].required = True
         
         if not vendor:
-            if self.user.groups.filter(name='Product').exists() or self.user.is_superuser:
+            if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 pass
             else:
                 self.fields['product_class'].queryset = ProductClass.objects.none()
@@ -568,6 +570,13 @@ class ScreenProductFAQForm(forms.ModelForm):
             queryset = queryset.none()
         else:
             queryset = queryset.filter(vendor=vendor)
+        
+        if self.instance.pk:
+            self.fields['question'].queryset = queryset
+        else:
+            faqs = obj.faqs.all().values_list('pk', flat=True) 
+            queryset = queryset.exclude(pk__in=faqs)
+            self.fields['question'].queryset = queryset
         
         self.fields['question'].queryset = queryset
         form_class = 'form-control col-md-7 col-xs-12'

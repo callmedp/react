@@ -46,13 +46,16 @@
       </div>
     </div>
     <div class="clearfix"></div>
-    <div class="row top_tiles">
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-          <a class="btn btn-app" href="{% url "console:screenproduct-change" parent.pk  %}">
-            <i class="fa fa-location-arrow"></i> Return to Parent</a>
-        </div>
-    </div>
-
+    {% if parent %}
+      
+      <div class="row top_tiles">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="btn btn-app" href="{% url "console:screenproduct-change" parent  %}">
+              <i class="fa fa-location-arrow"></i> Return to Parent</a>
+          </div>
+      </div>
+    {% endif %}
+    
 
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">

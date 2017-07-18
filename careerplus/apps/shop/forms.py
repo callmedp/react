@@ -718,11 +718,11 @@ class ProductCategoryForm(forms.ModelForm):
         super(ProductCategoryForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         if self.instance.pk:
-            queryset = Category.objects.all()
+            queryset = Category.objects.filter(type_level__in=[3,4])
             self.fields['category'].queryset = queryset
         else:
             categories = obj.categories.all().values_list('pk', flat=True) 
-            queryset = Category.objects.filter(active=True).exclude(pk__in=categories)
+            queryset = Category.objects.filter(active=True, type_level__in=[3,4]).exclude(pk__in=categories)
             self.fields['category'].queryset = queryset
 
         self.fields['category'].widget.attrs['class'] = form_class
@@ -866,11 +866,11 @@ class ProductChildForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
         super(ProductChildForm, self).__init__(*args, **kwargs)
-        queryset = Product.objects.filter(active=True).exclude(pk=obj.pk)
+        queryset = Product.objects.filter(active=True, type_product__in=[0,4,5]).exclude(pk=obj.pk)
         if self.instance.pk:
             self.fields['children'].queryset = queryset
         else:
-            childs = obj.childs.all().values_list('pk', flat=True) 
+            childs = obj.childs.filter(type_product__in=[0,4,5]).values_list('pk', flat=True) 
             queryset = queryset.exclude(pk__in=childs)
             self.fields['children'].queryset = queryset
 
@@ -916,6 +916,12 @@ class ChildInlineFormSet(forms.BaseInlineFormSet):
                 if child in childs:
                     duplicates = True
                 childs.append(child)
+                if child.type_product in [1, 2, 3]:
+                    raise forms.ValidationError(
+                        'Childs can only be standalone, virtual product.',
+                        code='duplicate_parent'
+                    )
+                
                 if child == product:
                     raise forms.ValidationError(
                         'Childs must be different.',
