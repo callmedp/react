@@ -1,8 +1,10 @@
+import json
+import logging
 from collections import OrderedDict
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import (
-    FormView, TemplateView, ListView, DetailView, CreateView)
+    FormView, TemplateView, ListView, DetailView, CreateView, View)
 from django.http import (
     HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest,
     HttpResponse,)
@@ -19,14 +21,22 @@ from django.utils.decorators import method_decorator
 
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
+
 from .linkedin_form import (
-    DraftForm, LinkedinInboxActionForm, OrganizationForm,
-    EducationForm, OrganizationInlineFormSet, EducationInlineFormSet, 
-    LinkedinOIFilterForm, AssignmentInterNationalForm)
+    DraftForm,
+    LinkedinInboxActionForm,
+    OrganizationForm,
+    EducationForm,
+    OrganizationInlineFormSet,
+    EducationInlineFormSet, 
+    LinkedinOIFilterForm,
+    AssignmentInterNationalForm)
+
 from .order_form import MessageForm, OIActionForm
 from blog.mixins import PaginationMixin
 from order.models import OrderItem, Order
 from emailers.email import SendMail
+from emailers.sms import SendSMS
 from django.conf import settings
 
 
@@ -689,14 +699,13 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InterNationalUpdateQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=5, no_process=False).exclude(oi_status__in=[4, 23, 24])
+        queryset = queryset.filter(order__status=1, product__type_flow=4, no_process=False).exclude(oi_status__in=[4, 23, 24])
         queryset = queryset.exclude(oi_resume='')
 
         user = self.request.user
-
-        if user.is_superuser or user.has_perm('order.domestic_profile_update_assigner'):
+        if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
             pass
-        elif user.has_perm('order.domestic_profile_update_assignee'):
+        elif user.has_perm('order.international_profile_update_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
             queryset = queryset.none()
@@ -745,7 +754,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
 class InterNationalApprovalQueue(ListView, PaginationMixin):
     context_object_name = 'object_list'
-    template_name = 'console/order/domestic-profile-approval-list.html'
+    template_name = 'console/order/international-profile-approval-list.html'
     model = OrderItem
     http_method_names = [u'get', u'post']
 
@@ -783,7 +792,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InterNationalApprovalQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=5, oi_status=23, no_process=False)
+        queryset = queryset.filter(order__status=1, product__type_flow=4, oi_status=23, no_process=False)
 
         try:
             if self.query:
@@ -828,7 +837,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
 
 
 class ProfileUpdationView(DetailView):
-    model = OrderItem
+    model = Order
     template_name = "console/order/updateprofile.html"
 
     def get(self, request, *args, **kwargs):
@@ -837,10 +846,116 @@ class ProfileUpdationView(DetailView):
         return context
     
     def get_context_data(self, **kwargs):
-        context = super(OrderItemDetailVeiw, self).get_context_data(**kwargs)
+        context = super(ProfileUpdationView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         obj = self.get_object()
+        order = obj.orderitems.all()
+        ord_item = order.first()
+        profile_url = ord_item.product.profile_website.split(',')
         context.update({
             "messages": alert,
-        })
+            "order": order,
+            "profile_url": profile_url,
+            "action_form": OIActionForm(queue_name="internationalprofileupdate"),
+
+
+        }) 
         return context
+
+    def post(self, request, *args, **kwargs):
+        try:
+            action = int(request.POST.get('action', '0'))
+        except:
+            action = 0
+
+        selected = request.POST.get('selected_id', '')
+        selected_id = json.loads(selected)
+        queue_name = request.POST.get('queue_name', '')
+
+        if action == -9 and queue_name == "internationalprofileupdate":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 23  # pending Approval
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=23,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems send for approval.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('international_profile_update', kwargs={'pk':int(selected_id[0])}))
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProfileUpdationView, self).dispatch(request, *args, **kwargs)
+    
+
+class InterNationalAssignmentOrderItemView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            user_pk = int(request.POST.get('assign_to', '0'))
+        except:
+            user_pk = 0
+
+        selected = request.POST.get('selected_id', '')
+        selected_id = json.loads(selected)
+        queue_name = request.POST.get('queue_name', '')
+
+        if user_pk:
+            try:
+                User = get_user_model()
+                assign_to = User.objects.get(pk=user_pk)
+                orderitem_objs = OrderItem.objects.filter(id__in=selected_id)
+                for obj in orderitem_objs:
+                    obj.assigned_to = assign_to
+                    obj.assigned_by = request.user
+                    obj.save()
+
+                    # mail to user about writer information
+                    to_emails = [obj.order.email]
+                    data = {}
+                    data.update({
+                        "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        "mobile": obj.order.mobile,
+                        "writer_name": assign_to.name,
+                        "writer_email": assign_to.email,
+                        "writer_mobile": assign_to.contact_number,
+                        "subject": "Information of your profile update service",
+
+                    })
+                    mail_type = 'ASSIGNMENT_ACTION'
+
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=1,
+                        last_oi_status=obj.oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user
+                    )
+
+                display_message = str(len(orderitem_objs)) + ' orderitems are Assigned.'
+                messages.add_message(request, messages.SUCCESS, display_message)
+                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        messages.add_message(request, messages.ERROR, "Please select valid assignment.")
+        return HttpResponseRedirect(reverse('console:queue-' + queue_name))

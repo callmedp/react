@@ -513,6 +513,13 @@ class Product(AbstractProduct, ModelMeta):
         through_fields=('product', 'currency'),
         blank=True)
     active = models.BooleanField(default=False)
+    profile_website = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='comma separated(,) profile url, e.g. www.test1.com, www.test2.com')
+    country_name = models.CharField(
+        max_length=500, null=True, blank=True)
     _metadata_default = ModelMeta._metadata_default.copy()
     _metadata_default['locale'] = 'dummy_locale'
 

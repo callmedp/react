@@ -446,7 +446,7 @@ class AssignmentInterNationalForm(forms.Form):
         super(AssignmentInterNationalForm, self).__init__(*args, **kwargs)
         from django.contrib.auth.models import Permission
         from django.db.models import Q
-        perm = Permission.objects.get(codename='writer_assignment_linkedin_action')
+        perm = Permission.objects.get(codename='international_profile_update_assignee')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
         self.fields['assign_to'].required = True
         self.fields['assign_to'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'

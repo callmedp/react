@@ -52,6 +52,45 @@
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
             </ul>
+            <div class="col-lg-12">
+            <div class="pull-left">
+              {% if perms.order.oi_action_permission %}
+                <form method="POST" role="form" id="action_form" action="">
+                {% csrf_token %}
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            {{action_form.action}}
+                            <input type="hidden" name="queue_name" value="internationalprofileupdate" />
+                            <input type="hidden" id="selected-id" name="selected_id" />
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                            </span>
+                        </div>
+                    </div>
+                    </form>
+              {% endif %}
+                <!-- modal action -->
+                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Action</h4>
+                        </div>
+                        <div class="modal-body" id="myModalbody">
+                          Are You Sure???
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary" id="action_button">Yes</button>
+                        </div>
+
+                      </div>
+                    </div>
+                </div>
+            </div>
             <div class="clearfix"></div>
           </div>
 
@@ -60,6 +99,14 @@
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
+                    {% if perms.order.oi_action_permission %}
+                        <th>
+                          <input type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th class="bulk-actions" colspan="100%">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    {% endif %}
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Resume</th>
@@ -70,56 +117,70 @@
                 </thead>
 
                 <tbody id="body-table-list">
-                  {% for obj in page %}
-                    <tr>
+                  {% for obj in order %}
+                    <tr class="even pointer">
+                      {% if perms.order.oi_action_permission %}
+                            <td class="a-center ">
+                              <input type="checkbox" class="flat check_empty" name="table_records" value="{{obj.order.id}}" >
+                            </td>
+                      {% endif %}
                       <td>{{obj.order.id}}</td>
-                      <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
-                      <td>{{obj.order.email}}</td>
+                      <td>Profile Update({{obj.product.country_name}})</td>
+                      <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Resume</button></a></td>
                       <td>
                         <table>
                           <tbody>
                             <tr>
+                            {% for i in profile_url %}
                               <th class="column-title">Website</th>
-                              <th class="column-title">Website</th>
+                            {% endfor %}
                             </tr>
-                            <tr>    
+                            <tr>  
+                            {% for i in profile_url %} 
                               <td>
-                                <a target="_blank" href="http://jobs.monster.com/">jobs.monster.com</a>
+                                <a target="_blank" href="http://{{i}}/">
+                                  {{i}}
+                                </a>
                               </td>
-                              <td>
-                                <a target="_blank" href="http://www.careerbuilder.com/">www.careerbuilder.com</a>
-                              </td>  
+                            {% endfor %}  
                             </tr>
                             <tr>
+                            {% for i in profile_url %}
                               <td>
-                                <form action="" method="POST" id="pro_update_1" class="">
-                                <input type="hidden" name="id" value="2168953">
-                                <input type="hidden" name="site" value="jobs.monster.com">
-                                <label>
-                                <input type="text" name="username" class="" value="" filled_data="upender" id="1_username"> :Username</label>
-                                <label>
-                                <input type="text" name="password" class="password data_required" value="" filled_data="123" id="1_password"> :Password</label>
-                                <label><input type="checkbox" name="flag" class="flag" id="jobs.monster.com_flag"> :Profile Updation Flag</label><br>
-                                <input class="update-button grp-default grp-button" for_site="1" type="button" name="save" value="Save" style="width: 40px;">
+                                <form method="POST" 
+                                id="pro_update{{ forloop.counter }}"
+                                action="{% url "console:international_profile_update" obj.order.id %}">
+                                  <input type="hidden" name="site" 
+                                  value="{{i}}">
+                                  <input type="hidden" name="count" 
+                                  value="{{forloop.counter}}">
+                                  <input type="hidden" id="id_pk" 
+                                  value="{{obj.order.id}}">
+                                  <label>Username</label>
+                                    <input type="text" name="username{{ forloop.counter }}" value="">
+                                  <label>Password</label>
+                                    <input type="text" name="password{{ forloop.counter }}" value="">
+                                  <label>
+                                    <input type="checkbox" name="flag{{ forloop.counter }}">Profile Updation Flag
+                                  </label><br>
+                                  <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                      <center>
+                                        <button type="button" onclick="jobProfileUpdate({{ forloop.counter }},)" class="btn btn-success btn-xs">Update</button>
+                                      </center>
+                                    </div>
+                                  </div>
                                 </form>
                               </td>
-                              <td>
-                                <form action="" method="POST" id="pro_update_1" class="">
-                                <input type="hidden" name="id" value="2168953">
-                                <input type="hidden" name="site" value="jobs.monster.com">
-                                <label>
-                                <input type="text" name="username" class="" value="" filled_data="upender" id="1_username"> :Username</label>
-                                <label>
-                                <input type="text" name="password" class="password data_required" value="" filled_data="123" id="1_password"> :Password</label>
-                                <label><input type="checkbox" name="flag" class="flag" id="jobs.monster.com_flag"> :Profile Updation Flag</label><br>
-                                <input class="update-button grp-default grp-button" for_site="1" type="button" name="save" value="Save" style="width: 40px;">
-                                </form>
-                              </td>
+                            {% endfor %}
                             </tr>
                           </tbody>
                         </table>
                       </td>
-                      <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>
+                        Email : {{obj.order.email}}
+                        Phone : {{obj.order.mobile}}
+                      </td>
                       <td>{{obj.get_oi_status}}</td>
                     </tr>
                   {% endfor %}
@@ -145,7 +206,11 @@
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript" 
+    src="{% static "console/js/order/profile_update.js" %}">
+  </script>
 <script type="text/javascript">
+
 </script>
 
 {% endblock js_block %}

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
+from geolocation.models import Country
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
 
@@ -375,3 +376,14 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['added_on']
+
+class InterNationalProfileUser(models.Model):
+    oi = models.ForeignKey(OrderItem)
+    country =  models.ForeignKey(Country)
+    username = models.CharField(_('Username'), max_length=100)
+    Password = models.CharField(_('Password'), max_length=100)
+    candidateid = models.CharField(_('CandidateId'), max_length=100)
+    profile_status = models.BooleanField(default=False)
+
+    def __str__(self):
+        pass

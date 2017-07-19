@@ -290,7 +290,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_queryset(self):
         queryset = OrderItem.objects.all().select_related('order', 'product')
         queryset = queryset.filter(
-            order__status=1, no_process=False, product__type_flow__in=[1, 3, 5], oi_resume='').exclude(oi_status=4)
+            order__status=1, no_process=False, product__type_flow__in=[1, 3, 4, 5], oi_resume='').exclude(oi_status=4)
 
         try:
             if self.query:
@@ -1162,7 +1162,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
 
 
-# @method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
+@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
 class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/domestic-profile-update-list.html'
@@ -1704,6 +1704,49 @@ class ActionOrderItemView(View):
             return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
         elif action == -6 and queue_name == "domesticprofileapproval":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 25  # rejected By Admin
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems rejected.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        elif action == -10 and queue_name == "internationalprofileapproval":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 24  # approved
+                    obj.last_oi_status = last_oi_status
+                    obj.approved_on = timezone.now()
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems approved.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        elif action == -11 and queue_name == "internationalprofileapproval":
             try:
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 approval = 0

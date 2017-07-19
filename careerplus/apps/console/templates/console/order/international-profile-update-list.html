@@ -24,7 +24,7 @@
         <h3>International Profile Update Orderitems</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-domesticprofileupdate" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:queue-internationalprofileupdate" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -133,7 +133,8 @@
 
             <div class="col-lg-12">
             <div class="pull-left">
-                    <form method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view" %}">{% csrf_token %}
+              {% if perms.order.oi_action_permission %}
+                    <form method="POST" role="form" id="action_form" action="">{% csrf_token %}
                     <div class="col-sm-4">
                         <div class="input-group">
                             {{action_form.action}}
@@ -145,6 +146,7 @@
                         </div>
                     </div>
                     </form>
+            {% endif %}
                 <!-- modal action -->
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
                     <div class="modal-dialog modal-lg">
@@ -170,18 +172,20 @@
             </div>
 
             <div class="pull-right">
-                    <form method="POST" role="form" id="assignment_form" action="{% url "console:assignment-orderitem-view" %}">{% csrf_token %}
+              {% if perms.order.international_profile_update_assigner %}
+                    <form method="POST" role="form" id="assignment_form" action="{% url "console:international-assignment-orderitem-view" %}">{% csrf_token %}
                     <div class="col-sm-4">
                         <div class="input-group">
                             {{assignment_form.assign_to}}
                             <input type="hidden" id="selected-id-assign" name="selected_id" />
-                            <input type="hidden" name="queue_name" value="domesticprofileupdate" />
+                            <input type="hidden" name="queue_name" value="internationalprofileupdate" />
                             <span class="input-group-btn">
                               <button type="button" class="btn btn-primary" id="assignment_button_go">Assign To!</button>
                             </span>
                         </div>
                     </div>
                     </form>
+              {% endif %}
                 <!--h2>Select Comment to Change</h2-->
                 <!-- large modal -->
 
@@ -234,12 +238,11 @@
                     <th class="column-title">Flow Status</th>
                     <th class="column-title">Candidate Doc</th>
                     <th class="column-title">Order Deatils</th>
-                    <th class="column-title">Uploded Draft</th>
                     <th class="column-title">Submit Message</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">How Old</th>
-                    <th class="column-title">Auto Login</th>
                     <th class="column-title">Assigned To</th>
+                    <th class="column-title">Update Profile</th>
                   </tr>
                 </thead>
 
@@ -262,11 +265,6 @@
                       <td>{{obj.get_oi_status}}</td>
                       <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a></td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>
-                      <td>
-                          {% if dependency_obj.oi_draft %}
-                          <a href="{{dependency_obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploded Draft</button></a>
-                          {% endif %}
-                      </td>
                       <td>
                           <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <fieldset>
@@ -296,21 +294,10 @@
                           {{obj.updated_on|naturaltime}}
                           <b>Updated On: {{obj.updated_on}}</b>
                       </td>
-                      <td>
-                            <strong>Email:</strong></br>{{obj.order.email}}
-                            <form id="redirecShineForm{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
-                                <input type="hidden" value="{{obj.order.email}}" name="email" />
-                                <input type="hidden"  value="1" name="type"/>
-                                <input type="hidden"  value="30" name="expires" />  
-
-                                <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                      <center><button type="button" onclick="redirectToShineProfile('{{obj.pk}}',)" class="btn btn-success btn-xs">Login to shine</button></center>
-                                    </div>
-                                </div>
-                            </form>
-                      </td>
                       <td>{{obj.assigned_to}}</td>
+                      <td>
+                        <a href="{% url "console:international_profile_update" obj.order.id %}">Profile Update</a>
+                      </td>
                     </tr>
                     {% endif %}
                     {% endwith %}
@@ -396,8 +383,7 @@
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/linkedin/international-profile.js" %}"></script>
 <script type="text/javascript">
 
     $(document).ready(function() {

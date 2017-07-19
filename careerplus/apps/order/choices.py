@@ -43,6 +43,7 @@ OI_OPS_STATUS = (
     (24, 'Approved'),
     (25, 'Rejected By Admin'),
     (26, 'Rejected By Candidate'),
+    (27, 'Profile Update'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),

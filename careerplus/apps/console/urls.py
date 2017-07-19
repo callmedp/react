@@ -225,9 +225,17 @@ urlpatterns += [
         linkedin_view.InterNationalUpdateQueueView.as_view(),
         name='queue-internationalprofileupdate'),
 
-    url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
-        linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),
+    url(r'^queue/internationalapproval/$',
+        linkedin_view.InterNationalApprovalQueue.as_view(),
+        name='queue-internationalapproval'),
+
+    url(r'^queue/orderitem/internationalassignment/$',
+        linkedin_view.InterNationalAssignmentOrderItemView.as_view(),
+        name='international-assignment-orderitem-view'),
 
     url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
         linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),
+
+    # url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
+    #     linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),
 ]
