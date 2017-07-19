@@ -3,10 +3,13 @@ function clickSubmitDraft(oi_id, ){
     if (oi_id){
     	$('#draft-upload-form' + oi_id).parsley().validate();
         if ($('#draft-upload-form' + oi_id).parsley().isValid()){
-            var queue_name = $('#queue-id' + oi_id).val();
-            console.log(queue_name);
-            if (queue_name && queue_name == "partnerinbox"){
+            var flow_type = $('#flow-id' + oi_id).val();
+            console.log(flow_type);
+            if (flow_type && (flow_type == 2 || flow_type == 10)){
                 $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload document and close orderitem?</div>');
+            }
+            else if (flow_type && flow_type == 6){
+                $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload document?</div>');
             }
             else{
                 $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload draft and send for approval?</div>');
@@ -107,7 +110,7 @@ function clickApproveDraft(oi_id, ){
     if (oi_id){
         $('#accept-reject-form' + oi_id).parsley().validate();
         if ($('#accept-reject-form' + oi_id).parsley().isValid()){
-            $('#approveModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to approve draft???</div>');
+            $('#approveModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to approve draft?</div>');
             $('#approveAction' + oi_id).show();
             $('#approvemodal' + oi_id).modal("show");
         }
@@ -146,7 +149,7 @@ function clickRejectDraft(oi_id, ){
     if (oi_id){
         $('#accept-reject-form' + oi_id).parsley().validate();
         if ($('#accept-reject-form' + oi_id).parsley().isValid()){
-            $('#rejectModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to reject draft???</div>');
+            $('#rejectModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to reject draft?</div>');
             $('#rejectAction' + oi_id).show();
             $('#rejectmodal' + oi_id).modal("show");
         }

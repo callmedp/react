@@ -56,6 +56,9 @@ OI_OPS_STATUS = (
     (61, "Will start once resume is made"),
     (62, "Resume Boosted"),
 
+    # flow6 81 - 100
+    (81, "Pending Varification Reports"),
+
 )
 
 COUNSELLING_FORM_STATUS = (

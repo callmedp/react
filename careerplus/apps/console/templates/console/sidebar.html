@@ -118,7 +118,7 @@
                 <li><a href="{% url "console:queue-welcome" %}">Welcome Call</a></li>
             {% endif %}
 
-            {% if perms.order.can_show_welcome_queue %}
+            {% if perms.order.can_show_midout_queue %}
                 <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
             {% endif %}
 
@@ -162,13 +162,23 @@
                 <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
             {% endif %}
 
+            {% if perms.order.can_show_partner_inbox_queue %}
             <li>
                 <a href="{% url "console:partner:partnerinbox" %}">Partner Inbox</a>
             </li>
+            {% endif %}
 
+            {% if perms.order.can_show_hold_orderitem_queue %}
             <li>
                 <a href="{% url "console:partner:partnerholdqueue" %}">Hold Items</a>
             </li>
+            {% endif %}
+
+            {% if perms.order.can_show_varification_report_queue %}
+            <li>
+                <a href="{% url "console:partner:varificationreports" %}">Varification Reports</a>
+            </li>
+            {% endif %}
             
         </ul>
       </li>

@@ -25,14 +25,8 @@ class ShippingDetailUpdateForm(forms.ModelForm):
                 country_choices.append((m.phone, m.phone))
                 CHOICE_COUNTRY.append((m.name, m.name))
 
-            # indian_obj = Country.objects.filter(phone='91')[0]
-            # default_country = indian_obj.name
-            # default_code = indian_obj.phone
-
         except:
             country_choices, CHOICE_COUNTRY = [('91', '91')], [('India', 'India')]
-            # default_code = '91'
-            # default_country = 'India'
 
         form_class = 'form-control'
         self.fields['first_name'].required = True
@@ -51,7 +45,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['country_code'].required = True
         self.fields['country_code'].widget.attrs['class'] = form_class
         self.fields['country_code'].choices = country_choices
-        # self.fields['country_code'].initial = default_code
+        self.fields['country_code'].initial = '91'
 
         self.fields['mobile'].required = True
         self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile'
@@ -72,7 +66,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['country'].required = True
         self.fields['country'].widget.attrs['class'] = form_class
         self.fields['country'].choices = CHOICE_COUNTRY
-        # self.fields['country'].initial = default_country
+        self.fields['country'].initial = 'India'
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '').strip()

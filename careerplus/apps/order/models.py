@@ -76,6 +76,12 @@ class Order(AbstractAutoDate):
     welcome_call_done = models.BooleanField(default=False)
     midout_sent_on = models.DateTimeField(null=True, blank=True)
 
+    # cash or Faild trasnsaction manual paid by..
+    paid_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='order_paid_by',
+        null=True, blank=True)
+
     class Meta:
         app_label = 'order'
         ordering = ['-date_placed']
@@ -92,7 +98,10 @@ class Order(AbstractAutoDate):
 
             # order deatil permissions
             ("can_view_order_detail", "Can View Order Deatil"),
-            
+
+            # order Action permissions
+            ("can_mark_order_as_paid", "Can Mark Order As Paid"),
+
         )
 
     def __str__(self):
@@ -203,12 +212,10 @@ class OrderItem(models.Model):
             ("can_upload_candidate_resume", "Can Upload Candidate resume"),
 
             # inbox permission
-            ("can_show_inbox_queue", "Can Show Inbox Queue"),
-            ("can_view_extra_field_inbox", "Can View Extra Fields Of Inbox"),
-            ("can_show_assigned_inbox", "Can Show Only Assigned Inbox"),
-            ("can_show_unassigned_inbox", "Can Show Only Unassigned Inbox"),
-            ("writer_assignment_action", "Writer Assignment Action permission"),
-            ("can_assigned_to_writer", "Can Assigned To This Writer"),
+            ("can_show_inbox_queue", "Can Show Writer Inbox Queue"),
+            ("can_view_extra_field_inbox", "Can View Extra Fields Of Writer Inbox"),
+            ("writer_inbox_assigner", "Writer Inbox Assigner"),
+            ("writer_inbox_assignee", "Writer Inbox Assignee"),
 
             # oirder item detail permission
             ("can_view_order_item_detail", "Can View Order Item Detail"),
@@ -262,6 +269,16 @@ class OrderItem(models.Model):
             ("can_view_all_closed_oi_list", "Can View All Closed Orderitem List"),
             ("can_view_only_assigned_closed_oi_list", "Can View Only Assigned Closed Orderitem List"),
 
+            # partner inbox permission
+            ("can_show_partner_inbox_queue", "Can Show Partner Inbox Queue"),
+            ("show_test_status_fields", "Show Test Status Field For Studymate"),
+
+            # Hold queue permissions
+            ("can_show_hold_orderitem_queue", "Can Show Hold Orderitem Queue"),
+
+            # Varification report queue
+            ("can_show_varification_report_queue", "Can Show Varification Report Queue"),
+
             # Action Permission
             ("oi_action_permission", "OrderItem Action Permission"),
             ("oi_export_as_csv_permission", "Order Item Export As CSV Permission"),
@@ -313,6 +330,9 @@ class OrderItem(models.Model):
                 return None
         else:
             return self
+
+    def get_test_obj(self):
+        return self
 
 
 class OrderItemOperation(AbstractAutoDate):

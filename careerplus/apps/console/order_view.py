@@ -71,6 +71,7 @@ class OrderListView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
+            "not_paid_status": [0, 2],
         })
         return context
 
@@ -290,7 +291,10 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_queryset(self):
         queryset = OrderItem.objects.all().select_related('order', 'product')
         queryset = queryset.filter(
-            order__status=1, no_process=False, product__type_flow__in=[1, 3, 5], oi_resume='').exclude(oi_status=4)
+            order__status=1, no_process=False, product__type_flow__in=[1, 3, 5]).exclude(oi_status=4)
+
+        queryset = queryset.filter(Q(oi_resume__exact='') |
+            Q(oi_resume__isnull=True))
 
         try:
             if self.query:
@@ -418,9 +422,9 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         user = self.request.user
         if user.is_superuser:
             pass
-        elif user.has_perm('order.can_show_unassigned_inbox'):
-            queryset = queryset.filter(assigned_to=None)
-        elif user.has_perm('order.can_show_assigned_inbox'):
+        elif user.has_perm('order.writer_inbox_assigner'):
+            queryset = queryset.filter(assigned_to__isnull=True) | queryset.filter(assigned_to__exact='')
+        elif user.has_perm('order.writer_inbox_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
             queryset = queryset.none()
@@ -1023,7 +1027,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3]).exclude(assigned_to=None).exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3]).exclude(oi_status=4)
+        queryset = queryset.exclude(assigned_to__isnull=True).exclude(assigned_to__exact='')
         user = self.request.user
 
         if user.has_perm('order.can_view_all_allocated_list'):
@@ -1113,11 +1118,14 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         queryset = super(ClosedOrderItemQueueVeiw, self).get_queryset()
         queryset = queryset.filter(order__status=1, oi_status=4, no_process=False)
         user = self.request.user
+        vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
 
         if user.has_perm('order.can_view_all_closed_oi_list'):
             pass
         elif user.has_perm('order.can_view_only_assigned_closed_oi_list'):
             queryset = queryset.filter(assigned_to=user)
+        elif vendor_employee_list:
+            queryset = queryset.filter(partner__in=vendor_employee_list)
         else:
             queryset = queryset.none()
 
@@ -1205,12 +1213,14 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(DomesticProfileUpdateQueueView, self).get_queryset()
         queryset = queryset.filter(order__status=1, product__type_flow=5, no_process=False).exclude(oi_status__in=[4, 23, 24])
-        queryset = queryset.exclude(oi_resume='')
+        queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
 
         user = self.request.user
 
         if user.is_superuser or user.has_perm('order.domestic_profile_update_assigner'):
             pass
+        elif user.has_perm('order.domestic_profile_update_assigner'):
+            queryset = queryset.filter(assigned_to__isnull=True)
         elif user.has_perm('order.domestic_profile_update_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
@@ -1382,7 +1392,8 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(BoosterQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=62, no_process=False)
+        queryset = queryset.filter(order__status=1, product__type_flow=7, no_process=False).exclude(oi_status__in=[4, 62])
+        queryset = queryset.filter(parent__oi_status=4)
 
         try:
             if self.query:
@@ -1596,7 +1607,8 @@ class ActionOrderItemView(View):
 
         elif action == -3 and queue_name == 'booster':
             try:
-                booster_ois = OrderItem.objects.filter(id__in=selected_id, oi_status=62).select_related('order')
+                booster_ois = OrderItem.objects.filter(id__in=selected_id, product__type_flow=7).select_related('order')
+                booster_ois = booster_ois.exclude(oi_status__in=[4, 62])
                 days = 7
                 candidate_data = {}
                 recruiter_data = {}
@@ -1635,11 +1647,11 @@ class ActionOrderItemView(View):
                             # send sms to candidate
                             SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
                             last_oi_status = oi.oi_status
-                            oi.oi_status = 4
+                            oi.oi_status = 62
                             oi.last_oi_status = last_oi_status
                             oi.save()
                             oi.orderitemoperation_set.create(
-                                oi_status=4,
+                                oi_status=62,
                                 last_oi_status=last_oi_status,
                                 assigned_to=oi.assigned_to,
                                 added_by=request.user,

@@ -41,7 +41,7 @@ class ShineToken(object):
                                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
                     return headers
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('api_log').error(str(e))
         return None
 
 
@@ -64,7 +64,7 @@ class ShineCandidateDetail(ShineToken):
                         shine_id = shine_id_json[0].get("id", None)
                         return shine_id
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('api_log').error(str(e))
         return None
 
     def get_candidate_detail(self, email=None, shine_id=None):
@@ -88,7 +88,7 @@ class ShineCandidateDetail(ShineToken):
                     if detail_response.status_code == 200 and detail_response.json():
                         return detail_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('api_log').error(str(e))
         return None
 
     def get_status_detail(self, email=None, shine_id=None):
@@ -110,7 +110,7 @@ class ShineCandidateDetail(ShineToken):
                     if status_response.status_code == 200 and status_response.json():
                         return status_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('api_log').error(str(e))
         return None
 
 
@@ -132,5 +132,30 @@ class FeatureProfileUpdate(ShineToken):
                         if response.status_code == 200:
                             return True
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('api_log').error(str(e))
+        return False
+
+
+class UploadResumeToShine(ShineToken):
+
+    def sync_candidate_resume_to_shine(self, candidate_id=None, files={}, data={}, headers=None):
+        try:
+            if candidate_id:
+                if not headers:
+                    headers = self.get_api_headers()
+                    if data and headers:
+                        headers.update({
+                            "Accept": 'application/json',
+                        })
+                        api_url = settings.SHINE_API_URL +\
+                            '/api/v2/candidate/' +\
+                            candidate_id + '/resumefiles/'
+                        response = requests.post(
+                            api_url, files=files,
+                            data=data, headers=headers)
+                        if response.status_code in [200, 201]:
+                            return True
+        except Exception as e:
+            logging.getLogger('api_log').error(
+                "%s error in sync_candidate_resume_to_shine function" % (str(e)))
         return False

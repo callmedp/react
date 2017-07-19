@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Hold Order Item- Shinelearning</title>
+  <title> Varification Report Orderitems- Shinelearning</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -21,10 +21,10 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Hold Orderitems</h3>
+        <h3>Varification Reports</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:partner:partnerholdqueue" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -70,7 +70,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:partner:partnerholdqueue" %}" id="list-filter-form">
+                  <form class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -128,42 +128,6 @@
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
             </ul>
-            {% if perms.order.oi_action_permission %}
-            <form method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view" %}">{% csrf_token %}
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        {{action_form.action}}
-                        <input type="hidden" name="queue_name" value="partnerholdqueue" />
-                        <input type="hidden" id="selected-id" name="selected_id" />
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
-                        </span>
-                    </div>
-                </div>
-            </form>
-
-            <!-- modal action -->
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                      </button>
-                      <h4 class="modal-title" id="myModalLabel">Action</h4>
-                    </div>
-                    <div class="modal-body" id="myModalbody">
-                      Are You Sure???
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="action_button">Yes</button>
-                    </div>
-
-                  </div>
-                </div>
-            </div>
-            {% endif %}
             <div class="clearfix"></div>
           </div>
 
@@ -173,14 +137,6 @@
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
-                    {% if perms.order.oi_action_permission %}
-                    <th>
-                        <input type="checkbox" id="check-all" class="flat">
-                    </th>
-                    <th class="bulk-actions" colspan="100%">
-                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                    </th>
-                    {% endif %}
                     <th class="column-title">#ItemId</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
@@ -188,25 +144,19 @@
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Order Details</th>
+                    <th class="column-title">Initial Document</th>
+                    <th class="column-title">Upload verification Report</th>
                     <th class="column-title">Submit Msg</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">How Old</th>
-                    
-                    {% if perms.order.show_test_status_fields %}
-                    <th class="column-title">Test Status</th>
-                    <th class="column-title">Test Result </th>
-                    {% endif %}
                   </tr>
                 </thead>
 
                 <tbody id="body-table-list">
                   {% for obj in page %}
+                  {% with obj.get_test_obj as test_obj %}
                     <tr class="even pointer">
-                      {% if perms.order.oi_action_permission %}
-                      <td class="a-center ">
-                            <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
-                      </td>
-                      {% endif %}
+                      
                       <td>{{obj.pk}}</td>
                       <td>{{obj.order.id}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
@@ -215,7 +165,46 @@
                       <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
                       
                        <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
-                       
+
+                       <td>
+                           {% if obj.oi_draft %}
+                                <a target="_blank" href="{{obj.oi_draft.url}}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                           {% endif %}
+                        </td>
+
+                        <td>
+                            {% if obj.product.type_flow != 10 or test_obj %}
+                            <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                                {{draft_form.file}}
+                                <div style="display:none">
+                                    <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                                    <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="{{obj.product.type_flow}}" />
+                                </div>
+                                <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                            </form>
+                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                      </button>
+                                      <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+                                    </div>
+                                    <div class="modal-body" id="myModalbody{{obj.pk}}">
+                                      Are You Sure???
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="uploadDraft('{{obj.pk}}',)">Yes</button>
+                                    </div>
+
+                                  </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </td>
+
                         <td>
                             <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <fieldset>
@@ -248,11 +237,8 @@
                             {{obj.updated_on|naturaltime}}
                             <b>Updated On: {{obj.updated_on.date}}</b>
                         </td>
-                        {% if perms.order.show_test_status_fields %}
-                            <td>{% if test_obj %}Test taken{% else %}Test not taken{% endif %}</td>
-                            <td></td>
-                        {% endif %}
                     </tr>
+                  {% endwith %}
                   {% endfor %}
                 </tbody>
               </table>
