@@ -135,7 +135,7 @@
                 <div class="col-sm-4">
                     <div class="input-group">
                         {{action_form.action}}
-                        <input type="hidden" name="queue_name" value="internationalprofileapproval" />
+                        <input type="hidden" name="queue_name" value="internationalapproval" />
                         <input type="hidden" id="selected-id" name="selected_id" />
                         <span class="input-group-btn">
                           <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
@@ -327,7 +327,9 @@
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/linkedin/internatinal-profile.js" %}"></script>
+  <script type="text/javascript" 
+    src="{% static "console/js/linkedin/international_profile.js" %}">
+  </script>
 <script type="text/javascript">
 
     $(document).ready(function() {

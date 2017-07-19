@@ -64,7 +64,6 @@ $(function(){
 function jobProfileUpdate(oi_id, ){
     if (oi_id){
         var formData = $('#pro_update' + oi_id).serialize();
-        var pk = $("#id_pk").val();
         var formAction = $('#pro_update' + oi_id).attr('action');
         $.ajax({
             url: formAction,

@@ -298,7 +298,7 @@ class OIActionForm(forms.Form):
                 (-9, "Send for approval to ops"),  # send international Profile Update for approval
             )
 
-        elif queue_name == 'internationalprofileapproval':
+        elif queue_name == 'internationalapproval':
             ACTION_CHOICES += (
                 (-10, "Approve International Profile Update"),  # domestic Profile Update approved
                 (-11, "Reject International Profile Update"),

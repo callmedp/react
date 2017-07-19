@@ -234,8 +234,5 @@ urlpatterns += [
         name='international-assignment-orderitem-view'),
 
     url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
-        linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),
-
-    # url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
-    #     linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),
+        linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),   
 ]

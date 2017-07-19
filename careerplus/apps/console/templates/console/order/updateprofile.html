@@ -117,16 +117,15 @@
                 </thead>
 
                 <tbody id="body-table-list">
-                  {% for obj in order %}
                     <tr class="even pointer">
                       {% if perms.order.oi_action_permission %}
                             <td class="a-center ">
-                              <input type="checkbox" class="flat check_empty" name="table_records" value="{{obj.order.id}}" >
+                              <input type="checkbox" class="flat check_empty" name="table_records" value="{{order.pk}}" >
                             </td>
                       {% endif %}
-                      <td>{{obj.order.id}}</td>
-                      <td>Profile Update({{obj.product.country_name}})</td>
-                      <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Resume</button></a></td>
+                      <td>{{order.order.id}}</td>
+                      <td>Profile Update({{order.product.country_name}})</td>
+                      <td><a href="{{order.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Resume</button></a></td>
                       <td>
                         <table>
                           <tbody>
@@ -149,13 +148,13 @@
                               <td>
                                 <form method="POST" 
                                 id="pro_update{{ forloop.counter }}"
-                                action="{% url "console:international_profile_update" obj.order.id %}">
+                                action="{% url "console:international_profile_update" order.pk %}">
                                   <input type="hidden" name="site" 
                                   value="{{i}}">
                                   <input type="hidden" name="count" 
                                   value="{{forloop.counter}}">
-                                  <input type="hidden" id="id_pk" 
-                                  value="{{obj.order.id}}">
+                                  <input type="hidden" name="update" 
+                                  value="1">
                                   <label>Username</label>
                                     <input type="text" name="username{{ forloop.counter }}" value="">
                                   <label>Password</label>
@@ -178,12 +177,11 @@
                         </table>
                       </td>
                       <td>
-                        Email : {{obj.order.email}}
-                        Phone : {{obj.order.mobile}}
+                        Email : {{order.order.email}}
+                        Phone : {{order.order.mobile}}
                       </td>
-                      <td>{{obj.get_oi_status}}</td>
+                      <td>{{order.get_oi_status}}</td>
                     </tr>
-                  {% endfor %}
                 </tbody>
               </table>
             </div>    

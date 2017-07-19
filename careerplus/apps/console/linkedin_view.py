@@ -34,7 +34,7 @@ from .linkedin_form import (
 
 from .order_form import MessageForm, OIActionForm
 from blog.mixins import PaginationMixin
-from order.models import OrderItem, Order
+from order.models import OrderItem, Order, InterNationalProfileUser
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from django.conf import settings
@@ -131,7 +131,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=2, no_process=False, product__type_flow__in=[8]).exclude(oi_resume='').exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status=4)
         user = self.request.user
         if user.has_perm('order.can_show_unassigned_inbox'):
             queryset = queryset.filter(assigned_to=None)
@@ -700,7 +700,6 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(InterNationalUpdateQueueView, self).get_queryset()
         queryset = queryset.filter(order__status=1, product__type_flow=4, no_process=False).exclude(oi_status__in=[4, 23, 24])
-        queryset = queryset.exclude(oi_resume='')
 
         user = self.request.user
         if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
@@ -785,7 +784,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
             "query": self.query,
             "message_form": MessageForm(),
             "filter_form": filter_form,
-            "action_form": OIActionForm(queue_name="internationalprofileapproval"),
+            "action_form": OIActionForm(queue_name="internationalapproval"),
         })
 
         return context
@@ -837,7 +836,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
 
 
 class ProfileUpdationView(DetailView):
-    model = Order
+    model = OrderItem
     template_name = "console/order/updateprofile.html"
 
     def get(self, request, *args, **kwargs):
@@ -848,10 +847,8 @@ class ProfileUpdationView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProfileUpdationView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
-        obj = self.get_object()
-        order = obj.orderitems.all()
-        ord_item = order.first()
-        profile_url = ord_item.product.profile_website.split(',')
+        order = self.get_object()
+        profile_url = order.product.profile_website.split(',')
         context.update({
             "messages": alert,
             "order": order,
@@ -871,27 +868,37 @@ class ProfileUpdationView(DetailView):
         selected = request.POST.get('selected_id', '')
         selected_id = json.loads(selected)
         queue_name = request.POST.get('queue_name', '')
-
+        update_sub = request.POST.get('update', '')
+        
         if action == -9 and queue_name == "internationalprofileupdate":
             try:
-                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=int(selected_id[0]))
                 approval = 0
-                for obj in orderitems:
-                    last_oi_status = obj.oi_status
-                    obj.oi_status = 23  # pending Approval
-                    obj.last_oi_status = last_oi_status
-                    obj.save()
+                if orderitem:
+                    last_oi_status = orderitem.oi_status
+                    orderitem.oi_status = 23  # pending Approval
+                    orderitem.last_oi_status = last_oi_status
+                    orderitem.save()
                     approval += 1
-                    obj.orderitemoperation_set.create(
+                    orderitem.orderitemoperation_set.create(
                         oi_status=23,
                         last_oi_status=last_oi_status,
-                        assigned_to=obj.assigned_to,
+                        assigned_to=orderitem.assigned_to,
                         added_by=request.user)
                 msg = str(approval) + ' orderitems send for approval.'
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
-            return HttpResponseRedirect(reverse('international_profile_update', kwargs={'pk':int(selected_id[0])}))
+            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':int(selected_id[0])}))
+
+        # elif update_sub == "1":
+        #     orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=int(selected_id[0]))
+        #     count = request.POST.get('count')
+        #     username=request.POST.get('username'+count+'', None)
+        #     password=request.POST.get('password'+count+'', None)
+        #     site=request.POST.get('site'+count+'', None)
+        #     flag=request.POST.get('flag'+count+'', None)
+
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
