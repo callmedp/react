@@ -16,7 +16,6 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
-from filebrowser.sites import site
 from django.conf.urls.static import static
 
 from users.views import (DashboardView,
@@ -40,8 +39,6 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', HomePageView.as_view(), name='homepage'),
     url(r'^console/', include('console.urls', namespace='console')),
