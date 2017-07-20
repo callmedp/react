@@ -113,8 +113,9 @@ class ChangeScreenFaqForm(forms.ModelForm):
     def save(self, commit=True, *args, **kwargs):
         faq = super(ChangeScreenFaqForm, self).save(
             commit=True, *args, **kwargs)
-        faq.status = 1
-        faq.save()
+        if not faq.status == 2:
+            faq.status = 1
+            faq.save()
         return faq
 
 

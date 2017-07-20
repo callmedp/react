@@ -583,8 +583,9 @@ class ChangeScreenProductView(DetailView):
                             request.POST, instance=obj, user=self.request.user)
                         if form.is_valid():
                             productscreen = form.save()
-                            productscreen.status = 1
-                            productscreen.save()        
+                            if not productscreen.status == 2:    
+                                productscreen.status = 1
+                                productscreen.save()        
                             messages.success(
                                 self.request,
                                 "Product Changed Successfully")
@@ -604,8 +605,9 @@ class ChangeScreenProductView(DetailView):
                         form = ScreenProductCountryForm(request.POST, instance=obj)
                         if form.is_valid():
                             productscreen = form.save()
-                            productscreen.status = 1
-                            productscreen.save()        
+                            if not productscreen.status == 2:    
+                                productscreen.status = 1
+                                productscreen.save()        
                             
                             messages.success(
                                 self.request,
@@ -626,8 +628,9 @@ class ChangeScreenProductView(DetailView):
                         form = ScreenProductPriceForm(request.POST, instance=obj)
                         if form.is_valid():
                             productscreen = form.save()
-                            productscreen.status = 1
-                            productscreen.save()        
+                            if not productscreen.status == 2:    
+                                productscreen.status = 1
+                                productscreen.save()        
                             messages.success(
                                 self.request,
                                 "Product Prices changed Successfully")
@@ -650,8 +653,9 @@ class ChangeScreenProductView(DetailView):
                                 instance=obj)
                         if form.is_valid():
                             productscreen = form.save()
-                            productscreen.status = 1
-                            productscreen.save()        
+                            if not productscreen.status == 2:    
+                                productscreen.status = 1
+                                productscreen.save()        
                             messages.success(
                                 self.request,
                                 "Product Attributes changed Successfully")
@@ -694,8 +698,9 @@ class ChangeScreenProductView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-                                obj.status = 1
-                                obj.save()        
+                                if not obj.status == 2:    
+                                    obj.status = 1
+                                    obj.save()        
                                 
                             messages.success(
                                 self.request,
@@ -733,8 +738,9 @@ class ChangeScreenProductView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-                                obj.status = 1
-                                obj.save()        
+                                if not obj.status == 2:    
+                                    obj.status = 1
+                                    obj.save()        
                                 
                             messages.success(
                                 self.request,
@@ -848,9 +854,6 @@ class AddScreenProductVariantView(DetailView):
                                 request.POST, request.FILES,
                                 parent=obj,
                                 user=self.request.user)
-                        obj.status = 1
-                        obj.save()        
-                            
                         if form.is_valid():
                             prods = form.save()
                             prods.type_product = 2
@@ -860,6 +863,10 @@ class AddScreenProductVariantView(DetailView):
                             prods.save()
                             prods.create_product()
                             obj.add_variant(prods)
+                            if not obj.status == 2:    
+                                obj.status = 1
+                                obj.save()        
+                                
                             messages.success(
                                 self.request,
                                 "Product Changed Successfully")
@@ -985,8 +992,10 @@ class ChangeScreenProductVariantView(DetailView):
                             productscreen = form.save()
                             productscreen.status = 1
                             productscreen.save()        
-                            parent[0].status = 1
-                            parent[0].save()
+                            if not parent[0].status == 2:    
+                                parent[0].status = 1
+                                parent[0].save()
+
                             messages.success(
                                 self.request,
                                 "Product Changed Successfully")
