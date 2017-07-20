@@ -1,3 +1,8 @@
+import json
+import csv
+import datetime
+import logging
+
 from collections import OrderedDict
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -27,6 +32,7 @@ from .order_form import MessageForm, OIActionForm
 from blog.mixins import PaginationMixin
 from order.models import OrderItem, Order
 from emailers.email import SendMail
+from emailers.sms import SendSMS
 from django.conf import settings
 
 
@@ -110,7 +116,6 @@ class LinkedinQueueView(ListView, PaginationMixin):
                                 assigned_to=obj.assigned_to,
                                 added_by=request.user
                             )
-                            SendMail().send([email_to], mail_type, data)
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
                         data['display_message'] = str(e)
