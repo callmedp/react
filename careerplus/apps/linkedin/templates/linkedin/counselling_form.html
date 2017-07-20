@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <body>
 <h2>Linked In Counselling Form Updation</h2>
-	<form method="post">
+	<form method="post" id="counselling_form" 
+	action="{% url "counselling-form" orderitem.pk %}">
 		{% csrf_token %}
 	  <ol>
 		<li>
@@ -43,4 +45,33 @@
 	<!--<button type="submit">submit</button>-->
 	</form>
 </body>
+
+	<script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
+	<script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+	<script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+
+	<script type="text/javascript">
+	$().ready(function() {
+		var element = 'submit-error';
+    	$("#counselling_form").validate({
+        	submitHandler: function(form) {
+        		form.submit();
+        },
+        rules: {
+            q1:{ required:true,},
+            q2: { required:true,},
+            q3:{ required:true,},
+            q4: { required:true,},
+            q5:{ required:true,},        
+        },
+        messages:{
+            q1:{ required:"This field is required",},
+            q2:{ required:"This field is required",},
+            q3:{ required:"This field is required",},
+            q4:{ required:"This field is required",},
+            q5:{ required:"This field is required",},   
+        }
+    });
+});
+</script>
 </html>
