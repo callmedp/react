@@ -46,6 +46,12 @@ class Country(AbstractCountry):
     active = models.BooleanField(
         default=True)
 
+    profile_url = models.CharField(
+        max_length=400,
+        null=True,
+        blank=True,
+        help_text='comma separated(,) profile url, e.g. www.test1.com, www.test2.com')
+
 
 connect_default_signals(Country)
 

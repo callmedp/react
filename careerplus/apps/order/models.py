@@ -377,12 +377,14 @@ class Message(models.Model):
     class Meta:
         ordering = ['added_on']
 
-class InterNationalProfileUser(models.Model):
+class InternationalProfileCredential(models.Model):
     oi = models.ForeignKey(OrderItem)
     country =  models.ForeignKey(Country)
     username = models.CharField(_('Username'), max_length=100)
     Password = models.CharField(_('Password'), max_length=100)
     candidateid = models.CharField(_('CandidateId'), max_length=100)
+    candidate_email = models.CharField(_('Candidate Email'), max_length=100)
+    site_url = models.CharField(_('Site Url'), max_length=100, blank=True)
     profile_status = models.BooleanField(default=False)
 
     def __str__(self):
