@@ -61,7 +61,7 @@ class FAQuestion(AbstractAutoDate):
             )
 
     def __str__(self):
-        return self.text
+        return (self.text[:75] + '...') if len(self.text) > 75 else self.text
 
     def is_active(self):
         return self.status == 2
@@ -160,8 +160,8 @@ class ScreenFAQ(AbstractAutoDate):
         ordering = ['-modified']
 
     def __str__(self):
-        return self.text
-
+        return (self.text[:75] + '...') if len(self.text) > 75 else self.text
+        
     def is_active(self):
         return self.status == 3
 
