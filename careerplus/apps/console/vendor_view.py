@@ -120,7 +120,7 @@ class ChangeScreenFaqView(DetailView):
                             "FAQ Object Change Failed, Changes not Saved")
                         return TemplateResponse(
                             request, [
-                                "console/shop/change_screenfaq.html"
+                                "console/vendor/change_screenfaq.html"
                             ], context)
                 messages.error(
                     self.request,
