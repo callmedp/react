@@ -1,30 +1,17 @@
 from django.db import models
-from django.conf import settings
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from meta.models import ModelMeta
 
+from core.models import AbstractCommonModel
 from seo.models import AbstractSEO
+from blog.models import Blog
 
 from .config import WIDGET_CHOICES, SECTION, COLUMN_TYPE
 
 my_store = FileSystemStorage(location='careerplus/download/')
-
-
-class AbstractCommonModel(models.Model):
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
-        blank=True, related_name="%(app_label)s_%(class)s_created_by",
-        related_query_name="%(app_label)s_%(class)ss",)
-    created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    last_modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
-        blank=True, related_name="%(app_label)s_%(class)s_last_modified_by",
-        related_query_name="%(app_label)s_%(class)ss",)
-    last_modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
-
-    class Meta:
-        abstract = True
 
 
 class IndexerWidget(AbstractCommonModel):
@@ -51,9 +38,6 @@ class IndexColumn(models.Model):
 
     def __str__(self):
         return '%s' % self.name
-
-
-from blog.models import Blog
 
 
 class Widget(AbstractCommonModel):
@@ -207,7 +191,7 @@ class PageWidget(AbstractCommonModel):
 
     class Meta:
         # Comment this while initial migration
-        auto_created = True
+        # auto_created = True
         ordering = ['section', '-ranking']
         unique_together = ('page', 'widget')
 

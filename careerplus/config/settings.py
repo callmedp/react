@@ -2,17 +2,17 @@ from .base_settings import *  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+IS_LIVE = False
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
 SITE_DOMAIN = '127.0.0.1:8000'
-# SITE_DOMAIN = 'careerplus1.shine.com'
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careerplus',
+        'NAME': 'careerplus1',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '',
@@ -174,3 +174,12 @@ EMAIL_SERVER = 'http://localhost:8000'
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']
 
 CP_VENDOR_ID = '12345'
+
+############ SOLR SETTINGS #######################
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'INCLUDE_SPELLING': False,
+    },
+}
