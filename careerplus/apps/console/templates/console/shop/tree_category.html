@@ -120,26 +120,27 @@
                     <ul>
                       {% for l1 in level1 %}
                         <li>
-                            <span class="label label-default"><i class="fa fa-minus-square"></i> {{l1.name}}</span>{% if l1.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                            {{l1.get_full_url}}
+                            <span class="label label-default"><i class="fa fa-minus-square"></i> {{l1.name}}</span>{% if l1.active %}<a href="{{l1.url}}">Link</a>{% else %}<a href="{% url "console:category-change" l1.pk %}">Inactive</a>{% endif %}
                             {% if l1.childrens %}
                                 
                               <ul>
                                   {% for l2 in l1.childrens %}
                                     
                                     <li>
-                                      <span class="label label-primary" ><i class="fa fa-minus-square"></i> {{l2.name}}</span> {% if l2.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                      <span class="label label-primary" ><i class="fa fa-minus-square"></i> {{l2.name}}</span> {% if l2.active %}<a href="{{l2.url}}">Link</a>{% else %}<a href="{% url "console:category-change" l2.pk %}">Inactive</a>{% endif %}
                                         {% if l2.childrens %}
                                           
                                           <ul>
                                             {% for l3 in l2.childrens %}
                                               
                                               <li>
-                                                <span class="label label-success"><i class="fa fa-minus-square"></i> {{l3.name}}</span> {% if l3.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                                <span class="label label-success"><i class="fa fa-minus-square"></i> {{l3.name}}</span> {% if l3.active %}<a href="{{l3.url}}">Link</a>{% else %}<a href="{% url "console:category-change" l3.pk %}">Inactive</a>{% endif %}
                                                   {% if l3.childrens %}
                                                     <ul>
                                                         {% for l4 in l3.childrens  %}
                                                           <li>
-                                                            <span class="label label-info"><i class="fa fa-minus-square"></i> {{l4.name}}</span> {% if l4.active %}<a href="">Link</a>{% else %}<a href="">Inactive</a>{% endif %}
+                                                            <span class="label label-info"><i class="fa fa-minus-square"></i> {{l4.name}}</span> {% if l4.active %}<a href="{{l4.url}}">Link</a>{% else %}<a href="{% url "console:category-change" l4.pk %}">Inactive</a>{% endif %}
                                                           </li>
                                                         {% endfor %}
                                                     </ul>

@@ -1,5 +1,5 @@
 from cart.mixins import CartMixin
-
+from django.conf import settings
 
 def common_context_processor(request):
     context = {}

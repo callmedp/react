@@ -18,7 +18,7 @@ class Order(AbstractAutoDate):
         'cart.Cart', verbose_name=_("Cart"),
         null=True, blank=True, on_delete=models.SET_NULL)
 
-    # custome information
+    # customer information
     candidate_id = models.CharField(
         null=True,
         blank=True,

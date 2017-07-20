@@ -1,53 +1,104 @@
+{% load console_tags %}
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
   <div class="menu_section">
-    <h3>Catalog</h3>
-    <ul class="nav side-menu">
+    {% if request.user|has_group:"Product" %}
+        <h3>Live Catalog</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_category %}
+            <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:category-list' %}">Category</a></li>
+                <li><a href="{% url 'console:category-relation-list' %}">Category Relationship</a></li>
+              </ul>
+            </li>
+          {% endif %}
+          
+          {% if perms.shop.console_change_product %}
+          
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:product-list' %}">Product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+              {% if perms.faq.console_change_faq %}
+                <li><a href="{% url 'console:faq-list' %}">FAQs</a></li>
+              {% endif %}
+              {% if perms.shop.console_change_keyword %}
+                <li><a href="{% url 'console:keyword-list' %}">Keywords</a></li>
+              {% endif %}
+              {% if perms.shop.console_change_attribute %}
+                <li><a href="{% url 'console:attribute-list' %}">Attributes</a>
+                </li>
+              {% endif %}
+              
+              </ul>
+            </li>
 
-      {% comment %}
-      {% if is_vendee %}
-      <li><a><i class="fa fa-bookmark"></i> Inbox <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-            <li><a href="{% url 'console:partner:pages:neworders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>New Orders</a></li>
-          <li><a href="{% url 'console:partner:pages:closedorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Closed Orders</a></li>
-          <li><a href="{% url 'console:partner:pages:heldorders-list' vendor_id=vendor_id %}" data-pjax='.right_col'>Hold Orders</a></li>
+            <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
+            </li>
+          {% endif %}
         </ul>
-      </li>
-      {% endif %}
-      {% endcomment %}
-      <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="{% url 'console:category-list' %}">Category</a></li>
-          <li><a href="{% url 'console:category-relation-list' %}">Category Relationship</a></li>
+        <h3>Product Moderation</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+          
+            <li><a><i class="fa fa-book"></i> Product Moderation <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:screenproduct-list' %}">Product Screens</a></li>
+                <li><a href="{% url 'console:screenproduct-moderationlist' %}">Moderation List</a></li>
+                
+                
+              </ul>
+            </li>
+            <li><a><i class="fa fa-book"></i> FAQ Moderation <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                
+                <li><a href="{% url 'console:screenfaq-list' %}">FAQ Screens</a></li>
+                <li><a href="{% url 'console:screenfaq-moderationlist' %}">Moderation List</a></li>
+              
+              </ul>
+            </li>
+            
+          {% endif %}
         </ul>
-      </li>
-      <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="{% url 'console:product-list' %}">Product</a></li>
-          <li><a href="{% url 'console:attributeoption-list' %}">Attribute Option</a></li>
-          <li><a href="{% url 'console:attribute-list' %}">Attribute</a>
-          </li>
+    {% elif request.user|has_group:"Operation" %} 
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:product-list' %}">Product</a></li>
+              </ul>
+            </li>
+            
+          {% endif %}
         </ul>
-      </li>
-      <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="{% url 'console:faquestion-list' %}">Faq</a></li>
-          <li><a href="{% url 'console:chapter-list' %}">Chapter</a></li>
-          <li><a href="{% url 'console:keyword-list' %}">Keyword</a></li>
+    {% elif request.user|has_group:"Vendor" %} 
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:screenproduct-list' %}">Product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+              {% if perms.faq.console_change_faq %}
+                <li><a href="{% url 'console:screenfaq-list' %}">FAQs</a></li>
+              {% endif %}
+              </ul>
+            </li>
+            
+          {% endif %}
         </ul>
-      </li>
-
-      {% comment %}
-        {% if is_admin %}
-          <li><a><i class="fa fa-bookmark"></i> Orders <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="{% url 'console:order:pages:neworders-list' %}" data-pjax='.right_col'>New Orders</a></li>
-              <li><a href="{% url 'console:order:pages:closedorders-list' %}" data-pjax='.right_col'>Closed Orders</a></li>
-              <li><a href="{% url 'console:order:pages:heldorders-list' %}" data-pjax='.right_col'>Hold Orders</a></li>
-            </ul>
-          </li>
-        {% endif %}
-      {% endcomment %}
+    {% endif %}
+    {% if  request.user|has_group:"Product" or request.user|has_group:"Operation" or request.user|has_group:"Writer" %}
+      <ul class="nav side-menu">
+        
 
       <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
@@ -78,11 +129,6 @@
 
       {% endif %}
 
-      <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-            <li><a href="{% url "console:geo-country" %}">Country</a></li>
-        </ul>
-      </li>
       <li>
       <a>
         <i class="fa fa-edit"></i>Linkedin Queue<span class="fa fa-chevron-down"></span>
@@ -106,7 +152,6 @@
             </li>
       </ul>
       </li>
-
       <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
 
@@ -182,8 +227,13 @@
             
         </ul>
       </li>
+    {% endif %}
+        
+      
+      
+      
                         
-    </ul>
+   
   </div>
 
 </div>
