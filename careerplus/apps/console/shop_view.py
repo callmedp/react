@@ -1593,11 +1593,10 @@ class ActionCategoryView(View, CategoryValidation):
                                     "Category is removed as skill!") 
                             data = {'success': 'True',
                                 'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
-                except:
+                except Exception as e:
+                    messages.error(request, (
+                        ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                     data = {'error': 'True'}
-                    messages.error(
-                        self.request,
-                        "Object Do not Exists!")    
             else:
                 data = {'error': 'True'}
                 messages.error(
@@ -1670,11 +1669,10 @@ class ActionProductView(View, ProductValidation):
                                     "Product is removed from indexing!") 
                             data = {'success': 'True',
                                 'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
-                except:
+                except Exception as e:
+                    messages.error(request, (
+                        ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                     data = {'error': 'True'}
-                    messages.error(
-                        self.request,
-                        "Object Do not Exists!")    
             else:
                 data = {'error': 'True'}
                 messages.error(
