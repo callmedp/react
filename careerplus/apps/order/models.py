@@ -388,4 +388,4 @@ class InternationalProfileCredential(models.Model):
     profile_status = models.BooleanField(default=False)
 
     def __str__(self):
-        pass
+        return self.username

@@ -58,11 +58,14 @@ $(function(){
 
 });
 
-
-
-
 function jobProfileUpdate(oi_id, ){
-    if (oi_id){
+    
+    if($('#'+oi_id+'_username').val()=="" || $('#'+oi_id+'_password').val()=="")
+        {
+            alert('Please fill the required details.');
+        }
+
+    else{
         var formData = $('#pro_update' + oi_id).serialize();
         var formAction = $('#pro_update' + oi_id).attr('action');
         $.ajax({
@@ -72,13 +75,8 @@ function jobProfileUpdate(oi_id, ){
             dataType: 'json',
             success: function(data){
                 if (data.status){
-                    
+                 alert('Value Updated');   
                 }
-                else{
-                    var msg = data.display_message;
-                    alert(msg);
-                }
-                // window.location.reload();
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong. Try again later");

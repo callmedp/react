@@ -1,6 +1,7 @@
 {% extends "console/base_console.html" %}
 {% load static %}
 {% load humanize %}
+{% load console_tags %}
 {% load thumbnail %}
 
 {% block title %}
@@ -130,38 +131,37 @@
                         <table>
                           <tbody>
                             <tr>
-                            {% for i in profile_url %}
+                            {% for profile_url in profile_urls %}
                               <th class="column-title">Website</th>
                             {% endfor %}
                             </tr>
                             <tr>  
-                            {% for i in profile_url %} 
+                            {% for profile_url in profile_urls %} 
                               <td>
-                                <a target="_blank" href="http://{{i}}/">
-                                  {{i}}
+                                <a target="_blank" href="http://{{profile_url}}/">
+                                  {{profile_url}}
                                 </a>
                               </td>
                             {% endfor %}  
                             </tr>
                             <tr>
-                            {% for i in profile_url %}
+                            {% for profile_url in profile_urls %}
                               <td>
-                                <form method="POST" 
-                                id="pro_update{{ forloop.counter }}"
+                                <form method="POST" id="pro_update{{ forloop.counter }}"
                                 action="{% url "console:international_profile_update" order.pk %}">
-                                  <input type="hidden" name="site" 
-                                  value="{{i}}">
-                                  <input type="hidden" name="count" 
-                                  value="{{forloop.counter}}">
+                                  <input type="hidden" name="site{{forloop.counter}}" 
+                                  value="{{profile_url}}">
+                                  <input type="hidden" name="count" value="{{forloop.counter}}">
                                   <input type="hidden" name="update" 
                                   value="1">
                                   <label>Username</label>
-                                    <input type="text" name="username{{ forloop.counter }}" value="">
+                                  <input type="text" name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}" id="{{forloop.counter}}_username">
                                   <label>Password</label>
-                                    <input type="text" name="password{{ forloop.counter }}" value="">
+                                    <input type="text" 
+                                    name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}" id="{{forloop.counter}}_password">
                                   <label>
-                                    <input type="checkbox" name="flag{{ forloop.counter }}">Profile Updation Flag
-                                  </label><br>
+                                  <input type="checkbox" name="flag{{forloop.counter}}" class="flag" {% if profile_url|profile_status:profile_url_dict%} checked{% endif %} id=""> :Profile Updation Flag</label>
+                                  <br>
                                   <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                       <center>

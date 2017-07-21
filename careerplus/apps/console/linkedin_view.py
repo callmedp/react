@@ -132,7 +132,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status=[4,23])
         user = self.request.user
         if user.has_perm('order.can_show_unassigned_inbox'):
             queryset = queryset.filter(assigned_to=None)
@@ -848,15 +848,20 @@ class ProfileUpdationView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProfileUpdationView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
+        profile_url_dict = {}
         order = self.get_object()
-        profile_url = order.product.profile_website.split(',')
+        profile_urls = order.product.profile_country.profile_url.split(',')
+        profile_info = InternationalProfileCredential.objects.filter(oi=order.pk)
+        
+        for profile in profile_info:
+            profile_url_dict[profile.site_url] = profile
+        
         context.update({
             "messages": alert,
             "order": order,
-            "profile_url": profile_url,
+            "profile_urls": profile_urls,
             "action_form": OIActionForm(queue_name="internationalprofileupdate"),
-
-
+            "profile_url_dict": profile_url_dict,
         }) 
         return context
 
@@ -867,11 +872,23 @@ class ProfileUpdationView(DetailView):
             action = 0
 
         selected = request.POST.get('selected_id', '')
-        selected_id = json.loads(selected)
         queue_name = request.POST.get('queue_name', '')
         update_sub = request.POST.get('update', '')
+        count = request.POST.get('count', None)
+        username=request.POST.get('username'+str(count)+'', None)
+        password=request.POST.get('password'+str(count)+'', None)
+        site=request.POST.get('site'+str(count)+'', None)
+        flag=request.POST.get('flag'+str(count)+'', None)
+
+        if not username and not password:
+            msg = 'Please update all the profiles first'
+            messages.add_message(request, messages.SUCCESS, msg)
+            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
+
         
         if action == -9 and queue_name == "internationalprofileupdate":
+
+            selected_id = json.loads(selected)
             try:
                 orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=int(selected_id[0]))
                 approval = 0
@@ -892,13 +909,26 @@ class ProfileUpdationView(DetailView):
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':int(selected_id[0])}))
 
-        # elif update_sub == "1":
-        #     orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=int(selected_id[0]))
-        #     count = request.POST.get('count')
-        #     username=request.POST.get('username'+count+'', None)
-        #     password=request.POST.get('password'+count+'', None)
-        #     site=request.POST.get('site'+count+'', None)
-        #     flag=request.POST.get('flag'+count+'', None)
+        elif update_sub == "1":
+            try:
+                orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=kwargs.get('pk'))
+                if username and password and flag:
+                    profile_obj = InternationalProfileCredential()
+                    profile_obj.oi = orderitem
+                    profile_obj.country = orderitem.product.profile_country
+                    profile_obj.username = username
+                    profile_obj.password = password
+                    profile_obj.candidateid = orderitem.order.candidate_id
+                    profile_obj.candidate_email = orderitem.order.email
+                    profile_obj.site_url = site
+                    profile_obj.profile_status = True
+                    profile_obj.save()
+                    return HttpResponse(json.dumps({'success':True}), content_type="application/json")
+                return HttpResponse(json.dumps({'success':False}), content_type="application/json")
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
+
 
 
     @method_decorator(csrf_exempt)
