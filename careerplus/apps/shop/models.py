@@ -880,6 +880,7 @@ class Product(AbstractProduct, ModelMeta):
         blank=True)
     
     active = models.BooleanField(default=False)
+    profile_country = models.ForeignKey(Country, null=True)
     is_indexable = models.BooleanField(default=False)
     _metadata_default = ModelMeta._metadata_default.copy()
     _metadata_default['locale'] = 'dummy_locale'

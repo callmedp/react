@@ -256,4 +256,19 @@ urlpatterns += [
     url(r'^linkedin/linkedin-approval/$',
         linkedin_view.LinkedinApprovalVeiw.as_view(),
         name='linkedin-approval'),
+
+    url(r'^queue/internationalprofileupdate/$',
+        linkedin_view.InterNationalUpdateQueueView.as_view(),
+        name='queue-internationalprofileupdate'),
+
+    url(r'^queue/internationalapproval/$',
+        linkedin_view.InterNationalApprovalQueue.as_view(),
+        name='queue-internationalapproval'),
+
+    url(r'^queue/orderitem/internationalassignment/$',
+        linkedin_view.InterNationalAssignmentOrderItemView.as_view(),
+        name='international-assignment-orderitem-view'),
+
+    url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
+        linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),   
 ]
