@@ -245,16 +245,16 @@ class ChangeProductForm(forms.ModelForm):
         self.fields['name'].widget.attrs['placeholder'] = 'Add product name'
         self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[3, 60]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 3-60 characters.'
 
         self.fields['upc'].widget.attrs['class'] = form_class
         
         self.fields['upc'].widget.attrs['maxlength'] = 80
         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
         self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['upc'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['upc'].widget.attrs['data-parsley-length'] = "[3, 60]"
+        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 3-60 characters.'
         
         self.fields['banner'].widget.attrs['class'] = form_class + ' clearimg'
         self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 300
@@ -281,9 +281,9 @@ class ChangeProductForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
-            if len(name) < 4 or len(name) > 60:
+            if len(name) < 3 or len(name) > 60:
                 raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
+                    "Name should be between 3-60 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -303,9 +303,9 @@ class ChangeProductForm(forms.ModelForm):
     def clean_upc(self):
         upc = self.cleaned_data.get('upc', '')
         if upc:
-            if len(upc) < 4 or len(upc) > 60:
+            if len(upc) < 3 or len(upc) > 60:
                 raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
+                    "Name should be between 3-60 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -371,8 +371,8 @@ class ChangeProductSEOForm(forms.ModelForm):
         self.fields['image_alt'].widget.attrs['placeholder'] = 'Add Alt'
         self.fields['image_alt'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['image_alt'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['image_alt'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['image_alt'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['image_alt'].widget.attrs['data-parsley-length'] = "[3, 60]"
+        self.fields['image_alt'].widget.attrs['data-parsley-length-message'] = 'Length should be between 3-60 characters.'
 
         self.fields['title'].widget.attrs['class'] = form_class
         self.fields['title'].widget.attrs['maxlength'] = 80
@@ -381,8 +381,8 @@ class ChangeProductSEOForm(forms.ModelForm):
         self.fields['title'].widget.attrs['required'] = "required"
         
         self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['title'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['title'].widget.attrs['data-parsley-length'] = "[3, 60]"
+        self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 3-60 characters.'
 
         self.fields['heading'].widget.attrs['class'] = form_class
         self.fields['heading'].widget.attrs['maxlength'] = 80
@@ -390,8 +390,8 @@ class ChangeProductSEOForm(forms.ModelForm):
         self.fields['heading'].widget.attrs['placeholder'] = 'Add H1'
         self.fields['heading'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['heading'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['heading'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['heading'].widget.attrs['data-parsley-length'] = "[3, 60]"
+        self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 3-60 characters.'
 
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
@@ -404,7 +404,7 @@ class ChangeProductSEOForm(forms.ModelForm):
     def clean_title(self):
         title = self.cleaned_data.get('title', '')
         if title:
-            if len(title) < 4 or len(title) > 60:
+            if len(title) < 3 or len(title) > 60:
                 raise forms.ValidationError(
                     "Name should be between 4-60 characters.")
         else:
@@ -415,7 +415,7 @@ class ChangeProductSEOForm(forms.ModelForm):
     def clean_heading(self):
         heading = self.cleaned_data.get('heading', '')
         if heading:
-            if len(heading) < 4 or len(heading) > 60:
+            if len(heading) < 3 or len(heading) > 60:
                 raise forms.ValidationError(
                     "Name should be between 4-60 characters.")
         else:
@@ -493,16 +493,16 @@ class ProductPriceForm(forms.ModelForm):
         aed_price = self.cleaned_data.get('aed_price', '')
         gbp_price = self.cleaned_data.get('gbp_price', '')
 
-        if 0 in self.currency and inr_price <= 0:
+        if 0 in self.currency and inr_price < 0:
             raise forms.ValidationError(
                 "INR Price is required as product is visible in respective country.")
-        if 1 in self.currency and usd_price <= 0:
+        if 1 in self.currency and usd_price < 0:
             raise forms.ValidationError(
                 "USD Price is required as product is visible in respective country.")
-        if 2 in self.currency and aed_price <= 0:
+        if 2 in self.currency and aed_price < 0:
             raise forms.ValidationError(
                 "AED Price is required as product is visible in respective country.")
-        if 3 in self.currency and gbp_price <= 0:
+        if 3 in self.currency and gbp_price < 0:
             raise forms.ValidationError(
                 "GBP Price is required as product is visible in respective country.")
 
@@ -514,9 +514,6 @@ class ProductPriceForm(forms.ModelForm):
             if inr_price < Decimal(0):
                 raise forms.ValidationError(
                     "This value cannot be negative.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
         return inr_price
 
     def clean_usd_price(self):
@@ -1056,15 +1053,15 @@ class ChangeProductVariantForm(forms.ModelForm):
         self.fields['name'].widget.attrs['placeholder'] = 'Add Product Name'
         self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[3, 60]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 3-60 characters.'
         self.fields['upc'].widget.attrs['class'] = form_class
         self.fields['upc'].widget.attrs['maxlength'] = 80
         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
         self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['upc'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['upc'].widget.attrs['data-parsley-length'] = "[3, 60]"
+        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 3-60 characters.'
         self.fields['inr_price'].widget.attrs['class'] = form_class
         self.fields['inr_price'].required = True
         self.fields['usd_price'].widget.attrs['class'] = form_class
@@ -1085,16 +1082,16 @@ class ChangeProductVariantForm(forms.ModelForm):
         aed_price = self.cleaned_data.get('aed_price', '')
         gbp_price = self.cleaned_data.get('gbp_price', '')
 
-        if 0 in self.currency and inr_price <= 0:
+        if 0 in self.currency and inr_price < 0:
             raise forms.ValidationError(
                 "INR Price is required as product is visible in respective country.")
-        if 1 in self.currency and usd_price <= 0:
+        if 1 in self.currency and usd_price < 0:
             raise forms.ValidationError(
                 "USD Price is required as product is visible in respective country.")
-        if 2 in self.currency and aed_price <= 0:
+        if 2 in self.currency and aed_price < 0:
             raise forms.ValidationError(
                 "AED Price is required as product is visible in respective country.")
-        if 3 in self.currency and gbp_price <= 0:
+        if 3 in self.currency and gbp_price < 0:
             raise forms.ValidationError(
                 "GBP Price is required as product is visible in respective country.")
 
@@ -1105,9 +1102,6 @@ class ChangeProductVariantForm(forms.ModelForm):
             if inr_price < Decimal(0):
                 raise forms.ValidationError(
                     "This value cannot be negative.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
         return inr_price
 
     def clean_usd_price(self):

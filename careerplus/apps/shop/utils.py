@@ -282,7 +282,7 @@ class ProductModeration(object):
             if request and request.user:
                 if productscreen:
                     vendor = request.user.get_vendor()
-                    if not vendor:
+                    if not productscreen.vendor:
                         messages.error(request, "Vendor is not associated")
                         return test_pass
                     if not productscreen.product:
