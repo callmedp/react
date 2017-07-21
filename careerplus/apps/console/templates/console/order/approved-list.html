@@ -170,10 +170,6 @@
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Approved On</th>
                     <th class="column-title">How Old</th>
-                    {% if obj.oi_draft %}
-                        <th class="column-title">Draft Level</th>
-                        <th class="column-title">Draft</th>
-                    {% endif %}
                     <th class="column-title">Review Order</th>
                   </tr>
                 </thead>
@@ -192,12 +188,6 @@
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.approved_on}}</td>
                       <td>{{obj.updated_on|naturaltime}}</td>
-                      {% if obj.oi_draft %}
-                          <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
-                          <td>
-                            <a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a>
-                          </td>
-                      {% endif %}
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
                       
                       

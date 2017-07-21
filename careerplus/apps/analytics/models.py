@@ -86,7 +86,7 @@ class UserProductView(models.Model):
 
     def __str__(self):
         return _("%(user)s viewed '%(product)s'") % {
-            'user': self.user, 'product': self.product}
+            'user': self.user_id, 'product': self.product}
 
 
 class UserSearch(models.Model):
@@ -108,5 +108,5 @@ class UserSearch(models.Model):
 
     def __str__(self):
         return _("%(user)s searched for '%(query)s'") % {
-            'user': self.user,
+            'user': self.user_id,
             'query': self.query}

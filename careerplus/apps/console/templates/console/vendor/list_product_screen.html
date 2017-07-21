@@ -1,10 +1,12 @@
 {% extends "console/base_console.html" %}
 {% load static %}
 {% load humanize %}
+{% load console_tags %}
+
 {% load thumbnail %}
 
 {% block title %}
-  <title>Chapter Listing</title>
+  <title>Product</title>
 {% endblock title %}
 
 {% block pagecontent %}
@@ -13,10 +15,10 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Chapters</h3>
+        <h3>Products</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:chapter-list" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:screenproduct-list" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -29,14 +31,16 @@
           </div>
       </form>
     </div>
-
+    {% if perms.shop.console_add_product %}
+      
     <div class="row top_tiles">
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:chapter-add" %}">
-          <i class="fa fa-edit"></i> Add New Chapter</a>
+        <a class="btn btn-app" href="{% url "console:screenproduct-add" %}">
+          <i class="fa fa-edit"></i> Add New Product</a>
       </div>
     </div>
-
+    {% endif %}
+    
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -78,9 +82,10 @@
                 <thead>
                   <tr class="headings">
                     <th class="column-title"># </th>
-                    <th class="column-title">Heading</th>
+                    <th class="column-title">Name</th>
                     <th class="column-title">Status</th>
                     <th class="column-title">Vendor</th>
+                    <th class="column-title">Type</th>
                     <th class="column-title">#Edit</th>
                     </tr>
                 </thead>
@@ -91,7 +96,7 @@
                 <tr class="even pointer">
                   <td>{{obj.pk}}</td>
                   <td>
-                    <a >{{obj.heading}}</a>
+                    <a >{{obj.name}}</a>
                     <br />
                     <small>Modified {{obj.modified|naturaltime}}</small>
                   </td>
@@ -99,11 +104,15 @@
                     <button type="button" class="btn btn-success btn-xs">{{obj.get_status}}</button>
                   </td>
                   <td>
-                    {{obj.vendor}}
+                    <button type="button" class="btn btn-success btn-xs">{{obj.get_vendor}}</button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs">{{obj.get_type}}</button>
                   </td>
                   
                   <td>
-                    <a href="{% url "console:category-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                        <a href="{% url "console:screenproduct-change" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>  
+                    
                   </td>
                 </tr>
                 {% endfor %}

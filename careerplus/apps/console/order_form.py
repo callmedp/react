@@ -48,7 +48,7 @@ class InboxActionForm(forms.Form):
         super(InboxActionForm, self).__init__(*args, **kwargs)
         from django.contrib.auth.models import Permission
         from django.db.models import Q
-        perm = Permission.objects.get(codename='can_assigned_to_writer')
+        perm = Permission.objects.get(codename='writer_inbox_assignee')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
         self.fields['action'].required = True
         self.fields['action'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
@@ -231,7 +231,7 @@ class OIFilterForm(forms.Form):
         from django.contrib.auth.models import Permission
         from django.db.models import Q
 
-        perm = Permission.objects.get(codename='can_assigned_to_writer')
+        perm = Permission.objects.get(codename='writer_inbox_assignee')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
         self.fields['writer'].widget.attrs['class'] = 'form-control'
         self.fields['writer'].queryset = users

@@ -29,14 +29,15 @@
           </div>
       </form>
     </div>
-
-    <div class="row top_tiles">
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <a class="btn btn-app" href="{% url "console:category-add" %}">
-          <i class="fa fa-edit"></i> Add New Category</a>
+    {% if perms.shop.console_add_category %}
+      <div class="row top_tiles">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <a class="btn btn-app" href="{% url "console:category-add" %}">
+            <i class="fa fa-edit"></i> Add New Category</a>
+        </div>
       </div>
-    </div>
-
+    {% endif %}
+    
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -79,7 +80,8 @@
                   <tr class="headings">
                     <th class="column-title"># </th>
                     <th class="column-title">Name</th>
-                    <th class="column-title">Icon</th>
+                    <th class="column-title">Active</th>
+                    <th class="column-title">Is SkillPage?</th>
                     <th class="column-title">Level</th>
                     <th class="column-title">#Edit</th>
                     </tr>
@@ -96,17 +98,10 @@
                     <small>Modified {{obj.modified|naturaltime}}</small>
                   </td>
                   <td>
-                    <ul class="list-inline">
-                      <li>
-                        {% if obj.icon %}
-                          <img src="{{obj.icon.url}}" class="avatar" alt="{{obj.image_alt}}">
-                        {% elif obj.image %}
-                          {% thumbnail obj.image "100x100" crop="center" as im %}
-                            <img src="{{ im.url }}" class="avatar" >
-                          {% endthumbnail %}  
-                        {% endif %}
-                      </li>
-                    </ul>
+                      <button type="button" class="btn btn-success btn-xs">{{obj.get_active}}</button>  
+                  </td>
+                  <td>
+                      <button type="button" class="btn btn-success btn-xs">{{obj.get_skillpage}}</button>  
                   </td>
                   <td>
                     <button type="button" class="btn btn-success btn-xs">{{obj.get_level}}</button>

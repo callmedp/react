@@ -10,4 +10,6 @@ urlpatterns = [
         name='partnerinbox'),
     url(r'^hold/$', views.PartnerHoldQueueView.as_view(),
         name='partnerholdqueue'),
+    url(r'^varification-reports/$', views.PartnerVarificationQueueView.as_view(),
+        name='varificationreports'),
 ]

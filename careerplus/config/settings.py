@@ -170,7 +170,33 @@ SERVER_EMAIL = 'recruiter@shine.com'
 DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
 EMAIL_SERVER = 'http://localhost:8000'
 
+# encode decode settings
+EMAIL_SMS_TOKEN_EXPIRY = 7
+ENCODE_SALT = 'xfxa'
+
+
+# Do Not Change #
+COURSE_SLUG = ['course',]
+WRITING_SLUG = ['writing',]
+SERVICE_SLUG = ['service',]
+
+
+VENDOR_GROUP_LIST = ['VENDOR']
+PRODUCT_GROUP_LIST = ['PRODUCT']
+OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
+SEO_GROUP_LIST = ['SEO']
+WRITING_GROUP_LIST = ['WRITERS']
+
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']
 
 CP_VENDOR_ID = '12345'
+
+############ SOLR SETTINGS #######################
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'INCLUDE_SPELLING': False,
+    },
+}

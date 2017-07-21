@@ -1,7 +1,6 @@
 import json
 import logging
 import datetime
-import requests
 
 from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
@@ -15,11 +14,12 @@ from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
-from order.models import OrderItem
+from order.models import Order, OrderItem
 from console.order_form import FileUploadForm, VendorFileUploadForm
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
+from core.tasks import upload_resume_to_shine
 
 
 class ArticleCommentView(View):
@@ -47,7 +47,7 @@ class ArticleCommentView(View):
             data = {"status": status}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
-            return HttpResponseForbidden
+            return HttpResponseForbidden()
 
 
 class ArticleShareView(View):
@@ -64,7 +64,7 @@ class ArticleShareView(View):
             data = {"status": "success"}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
-            return HttpResponseForbidden
+            return HttpResponseForbidden()
 
 
 class AjaxCommentLoadMoreView(View, LoadMoreMixin):
@@ -173,8 +173,8 @@ class AjaxStateView(View):
     def get(self, request, *args, **kwargs):
         data = {"states": []}
         try:
-            country_code = request.GET.get('country_code', '91')
-            country_obj = Country.objects.get(phone=country_code)
+            country = request.GET.get('country', 'India')
+            country_obj = Country.objects.get(name=country)
             states = country_obj.state_set.all().values_list('name', flat=True)
             data['states'] = list(states)
         except:
@@ -211,7 +211,7 @@ class AjaxOrderItemCommentView(View):
 class ApproveByAdminDraft(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax() and request.user.is_authenticated:
+        if request.is_ajax() and request.user.is_authenticated():
             oi_pk = request.POST.get('oi_pk', None)
             try:
                 obj = OrderItem.objects.get(pk=oi_pk)
@@ -300,6 +300,9 @@ class ApproveByAdminDraft(View):
                             last_oi_status=24,
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
+
+                        # sync resume on shine
+                        upload_resume_to_shine(oi_pk=obj.pk)
                     else:
                         obj.orderitemoperation_set.create(
                             oi_status=obj.oi_status,
@@ -315,7 +318,7 @@ class ApproveByAdminDraft(View):
 class RejectByAdminDraft(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax() and request.user.is_authenticated:
+        if request.is_ajax() and request.user.is_authenticated():
             oi_pk = request.POST.get('oi_pk', None)
             try:
                 obj = OrderItem.objects.get(pk=oi_pk)
@@ -336,10 +339,14 @@ class RejectByAdminDraft(View):
 
 class UploadDraftView(View):
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_authenticated:
+        if request.is_ajax() and request.user.is_authenticated():
             data = {'display_message': "", }
-            queue_name = request.POST.get('queue_name', '').strip()
-            if queue_name == "partnerinbox":
+            try:
+                flow = int(request.POST.get('flow', 0))
+            except Exception as e:
+                flow = 0
+
+            if flow in [2, 6, 10]:
                 form = VendorFileUploadForm(request.POST, request.FILES)
             else:
                 form = FileUploadForm(request.POST, request.FILES)
@@ -392,6 +399,51 @@ class UploadDraftView(View):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
+                    elif obj.product.type_flow == 6:
+                        if obj.oi_status == 81:
+                            last_oi_status = obj.last_oi_status
+                            obj.oi_status = 4  # Closed oi
+                            obj.oi_draft = request.FILES.get('file', '')
+                            obj.last_oi_status = 22
+                            obj.closed_on = timezone.now()
+                            obj.save()
+                            data['display_message'] = 'Reporting document uploded and orderitem closed successfully.'
+
+                            obj.orderitemoperation_set.create(
+                                oi_draft=obj.oi_draft,
+                                draft_counter=2,
+                                oi_status=22,
+                                last_oi_status=last_oi_status,
+                                assigned_to=obj.assigned_to,
+                                added_by=request.user)
+
+                            obj.orderitemoperation_set.create(
+                                oi_status=obj.oi_status,
+                                last_oi_status=22,
+                                assigned_to=obj.assigned_to,
+                                added_by=request.user)
+                        else:
+                            last_oi_status = obj.last_oi_status
+                            obj.oi_status = 81  # Varification reports
+                            obj.oi_draft = request.FILES.get('file', '')
+                            obj.last_oi_status = 22
+                            obj.save()
+                            data['display_message'] = 'Document uploded successfully.'
+
+                            obj.orderitemoperation_set.create(
+                                oi_draft=obj.oi_draft,
+                                draft_counter=1,
+                                oi_status=22,
+                                last_oi_status=last_oi_status,
+                                assigned_to=obj.assigned_to,
+                                added_by=request.user)
+
+                            obj.orderitemoperation_set.create(
+                                oi_status=obj.oi_status,
+                                last_oi_status=22,
+                                assigned_to=obj.assigned_to,
+                                added_by=request.user)
+
                     else:
                         last_status = obj.oi_status
                         obj.oi_draft = request.FILES.get('file', '')
@@ -428,7 +480,7 @@ class UploadDraftView(View):
 
 class SaveWaitingInput(View):
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_authenticated:
+        if request.is_ajax() and request.user.is_authenticated():
             data = {"message": "Waiting input Not Updated"}
             oi_pk = request.POST.get('oi_pk', None)
             waiting_input = request.POST.get('waiting_input', None)
@@ -546,7 +598,7 @@ class RejectDraftByLinkedinAdmin(View):
 class GenerateAutoLoginToken(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0, "display_message": ''}
-        if request.is_ajax() and request.user.is_authenticated:
+        if request.is_ajax() and request.user.is_authenticated():
             try:
                 email = request.POST.get('email', '')
                 enc_type = int(request.POST.get('type', 1))
@@ -559,4 +611,27 @@ class GenerateAutoLoginToken(View):
             except Exception as e:
                 data['display_message'] = str(e)
             return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
+class MarkedPaidOrderView(View):
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0, "display_message": ''}
+        if request.is_ajax() and request.user.is_authenticated() and request.user.has_perm('order.can_mark_order_as_paid'):
+            order_pk = request.POST.get('order_pk', None)
+            try:
+                obj = Order.objects.get(pk=order_pk)
+                data['status'] = 1
+                obj.status = 1
+                obj.paid_by = request.user
+                obj.payment_date = timezone.now()
+                obj.save()
+                data['display_message'] = "order %s marked paid successfully" % (order_pk)
+            except Exception as e:
+                data['display_message'] = '%s order id - %s' % (str(e), order_pk)
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        elif request.is_ajax() and request.user.is_authenticated():
+            data['display_message'] = "Permission denied"
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
         return HttpResponseForbidden()

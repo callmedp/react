@@ -1,5 +1,9 @@
 import json
 import logging
+import csv
+import datetime
+import logging
+
 from collections import OrderedDict
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -121,7 +125,6 @@ class LinkedinQueueView(ListView, PaginationMixin):
                                 assigned_to=obj.assigned_to,
                                 added_by=request.user
                             )
-                            SendMail().send([email_to], mail_type, data)
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
                         data['display_message'] = str(e)
@@ -133,6 +136,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
         queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status=[4,23])
+
         user = self.request.user
         if user.has_perm('order.can_show_unassigned_inbox'):
             queryset = queryset.filter(assigned_to=None)
@@ -417,8 +421,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByAdminView, self).get_queryset()
-        queryset = queryset.filter(order__status=2, oi_status=47, product__type_flow__in=[8])
-
+        queryset = queryset.filter(order__status=1, oi_status=47, product__type_flow__in=[8])
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |
@@ -611,7 +614,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinApprovalVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=2, oi_status=45, product__type_flow__in=[8]).exclude(oi_status=9)
+        queryset = queryset.filter(order__status=1, oi_status=45, product__type_flow__in=[8]).exclude(oi_status=9)
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |

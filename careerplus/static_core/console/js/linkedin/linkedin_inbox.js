@@ -10,8 +10,8 @@ $(function(){
         }
         else{
         	var selected = new Array();
-            $('#inbox-table input:checked').each(function() {
-                selected.push($(this).prop('name'));
+            $('#body-table-inbox input[name="table_records"]:checked').each(function() {
+                selected.push($(this).prop('value'));
             });
 
             if (selected.length > 0){
@@ -72,4 +72,5 @@ $(function(){
             } 
         }   
     });
+    
 });

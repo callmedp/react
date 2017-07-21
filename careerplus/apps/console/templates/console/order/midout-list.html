@@ -184,7 +184,6 @@
                     <th class="column-title">Midout sent on</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Order Deatil</th>
-                    <th class="column-title">Candidate Resume</th>
                     <th class="column-title">Upload</th>
                   </tr>
                 </thead>
@@ -210,7 +209,6 @@
                           <b>Updated On: {{obj.updated_on}}</b>
                       </td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
-                      <td>{% if not obj.oi_resume %}Not Uploded{% else %}<a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a>{% endif %}</td>
                       <td>
                         <form data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">{% csrf_token %}
                           {{form.oi_resume}}
