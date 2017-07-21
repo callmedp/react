@@ -1179,6 +1179,7 @@ class ProductScreen(AbstractProduct):
                     product_class=self.product_class,
                     type_product=self.type_product,
                     upc=self.upc,
+                    vendor=self.vendor,
                     inr_price=self.inr_price)
                 self.product = product
                 self.save()
