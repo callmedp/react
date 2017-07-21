@@ -55,7 +55,7 @@
       {% endif %}
       {% if object.status == 2 %}
     
-        {% if request.user|has_group:"Product" %}
+        {% if request.user|has_group:PRODUCT_GROUP_LIST %}
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
               <a class="btn btn-app click-modal" data-msg="live">
                 <i class="fa fa-copy"></i> Copy to Live</a>

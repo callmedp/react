@@ -2,7 +2,7 @@
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
   <div class="menu_section">
-    {% if request.user|has_group:"Product" %}
+    {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_category %}
@@ -64,7 +64,7 @@
             
           {% endif %}
         </ul>
-    {% elif request.user|has_group:"Operation" %} 
+    {% elif request.user|has_group:OPERATION_GROUP_LIST %} 
         <h3>Product</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
@@ -76,7 +76,7 @@
             
           {% endif %}
         </ul>
-    {% elif request.user|has_group:"Vendor" %} 
+    {% elif request.user|has_group:VENDOR_GROUP_LIST %} 
         <h3>Product</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
@@ -96,7 +96,7 @@
           {% endif %}
         </ul>
     {% endif %}
-    {% if  request.user|has_group:"Product" or request.user|has_group:"Operation" or request.user|has_group:"Writer" %}
+    {% if  request.user|has_group:PRODUCT_GROUP_LIST or request.user|has_group:OPERATION_GROUP_LIST or request.user|has_group:WRITING_GROUP_LIST %}
       <ul class="nav side-menu">
         
 

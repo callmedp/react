@@ -1,7 +1,7 @@
 from django import template                                                                      
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse_lazy, reverse
-
+from console.decorators import flatlist
 
 register = template.Library()
 
@@ -39,12 +39,18 @@ def get_edit_purl(form_set):
 
 
 @register.filter(name='has_group')
-def has_group(user, group_name):
+def has_group(user, grp_list):
     try:
         if user.is_superuser:
             return True
-        group = Group.objects.get(name=group_name)
-        return True if group in user.groups.all() else False
+        groups = user.groups.all().values_list('name', flat=True)
+        groups = set(groups)
+        
+        flat_list = [ll for ll in flatlist(grp_list)]
+        flat_list = set(flat_list)
+        intersection = flat_list.intersection(groups)
+
+        return True if intersection else False
     except:
         return False
     return False
