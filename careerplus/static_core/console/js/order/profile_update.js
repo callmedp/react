@@ -74,7 +74,7 @@ function jobProfileUpdate(oi_id, ){
             data : formData,
             dataType: 'json',
             success: function(data){
-                if (data.status){
+                if (data['success']==true){
                  alert('Value Updated');   
                 }
             },

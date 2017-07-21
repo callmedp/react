@@ -917,7 +917,7 @@ class ProfileUpdationView(DetailView):
                     profile_obj.oi = orderitem
                     profile_obj.country = orderitem.product.profile_country
                     profile_obj.username = username
-                    profile_obj.password = password
+                    profile_obj.Password = password
                     profile_obj.candidateid = orderitem.order.candidate_id
                     profile_obj.candidate_email = orderitem.order.email
                     profile_obj.site_url = site
