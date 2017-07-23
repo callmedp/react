@@ -11,7 +11,7 @@ $().ready(function() {
                 {
                     emailresponse = res.exists;
                 }
-             });
+            });
              return emailresponse;
 
         },
@@ -23,12 +23,10 @@ $().ready(function() {
             if($(this).val() != '')
             {
               $('button[type="submit"]').prop('disabled', false);  
-              // $('button[type="submit"]').attr('disabled' , false); 
             }
             else
             {
                 $('button[type="submit"]').prop('disabled', true);
-              // $('button[type="submit"]').attr('disabled' , true);
             }   
         },
         rules: {
@@ -49,6 +47,31 @@ $().ready(function() {
             password:{
                 required: "Please provide a password"
             }
+        }
+    });   
+});
+
+$().ready(function() {
+    $("#forgot_form").validate({
+        submitHandler: function(form) {
+            $.ajax({
+                url: "",
+                type: "POST",             
+                data: new FormData($(form)),
+                cache: false,             
+                processData: false,      
+                success: function(data){
+                }
+            });
+        },
+        rules: {
+            email:{
+                required:true,
+                email:true,
+            }
+        },
+        messages:{
+            email: { required:"Please enter a valid email address"},
         }
     });
 });

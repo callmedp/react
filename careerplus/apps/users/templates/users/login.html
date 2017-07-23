@@ -60,7 +60,9 @@
                 </label>
             </div>
             <button type="submit" class="btn btn-primary submit">Login</button>
-            <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
+            <small class="form-text text-muted text-center">
+                <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Forgot Password?</a>
+            </small>
             <div class="social-login">
                 <span>or login with</span>
                 <a class="facebook" href="#"></a>
@@ -74,6 +76,45 @@
 
 </div>
 <!-- main section end -->
+
+<!-- forgot password box -->
+  <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+      </div>
+        <form method="post" id="forgot_form" accept="">
+          <div class="form-group">
+            <input type="Name" class="form-control" name="email" id="exampleInputName" aria-describedby="nameHelp" placeholder="Enter the Email Id which you are registered on Shine.com">
+          </div>
+          <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>  
+
+<!-- forgot password sent message -->
+  <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+      </div>
+        <form>
+          <div class="form-group">
+            A link to reset your Shine Password has been sent to your Email Id
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock container %}
 
 {% block js_section %}

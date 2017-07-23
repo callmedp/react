@@ -184,3 +184,19 @@ class DownloadBoosterResume(View):
             messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
             response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
             return response
+
+
+class ForgotPasswordView(View):
+    template_name = ""
+
+    def get(self, request, *args, **kwargs):
+        return super(ForgotPasswordView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ForgotPasswordView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert,
+        })
+        return context
+
