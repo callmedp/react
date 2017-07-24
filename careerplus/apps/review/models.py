@@ -73,71 +73,6 @@ class Review(AbstractAutoDate):
             return self.user_email
         return ugettext('Anonymous')
 
-    def get_averages(self, max_value=None):
-
-        """
-        Call this if you have multiple rating in a review.
-        """
-        max_rating_value = 0
-        category_maximums = {}
-        category_averages = {}
-        categories = RatingCategory.objects.filter(counts_for_average=True,
-                                                   rating__review=self)
-        # find the highest rating possible across all categories
-        for category in categories:
-            category_max = category.get_rating_max_from_choices()
-            category_maximums.update({category: category_max})
-            if max_value is not None:
-                max_rating_value = max_value
-            else:
-                if category_max > max_rating_value:
-                    max_rating_value = category_max
-        # calculate the average of every distinct category, normalized to the
-        # recently found max
-        for category in categories:
-            category_average = None
-            ratings = Rating.objects.filter(
-                review=self,
-                category=category, value__isnull=False).exclude(value='')
-            category_max = category_maximums[category]
-            for rating in ratings:
-                if category_average is None:
-                    category_average = float(rating.value)
-                else:
-                    category_average += float(rating.value)
-
-            if category_average is not None:
-                category_average *= float(max_rating_value) / float(
-                    category_max)
-                category_averages[category] = (
-                    category_average / ratings.count())
-
-        # calculate the total average of all categories
-        total_average = 0
-        for category, category_average in category_averages.items():
-            total_average += category_average
-        if not len(category_averages):
-            return (False, False)
-        total_average /= len(category_averages)
-
-        return total_average, category_averages
-
-    def get_average_rating(self, max_value=None):
-        """
-        Returns the average rating for all categories of this review.
-        """
-        total_average, category_averages = self.get_averages(
-            max_value=max_value)
-        return total_average
-
-    def get_category_averages(self, max_value=None):
-        """
-        Returns the average ratings for every category of this review.
-        """
-        total_average, category_averages = self.get_averages(
-            max_value=max_value)
-        return category_averages
-
     def get_ratings(self):
         pure_rating = int(self.average_rating)
         decimal_part = self.average_rating - pure_rating
@@ -155,7 +90,7 @@ class Review(AbstractAutoDate):
         return final_score
 
     def get_remarks(self):
-        remarks= ''
+        remarks = ''
         if self.average_rating >= 4.0:
             remarks = "Excellent!"
         elif self.average_rating >= 3.0:
@@ -168,107 +103,3 @@ class Review(AbstractAutoDate):
         return remarks
 
 
-class RatingCategory(AbstractAutoDate):
-    identifier = models.SlugField(
-        max_length=32,
-        verbose_name=_('Identifier'),
-        blank=True,
-        unique=True
-    )
-
-    counts_for_average = models.BooleanField(
-        verbose_name=_('Count it for average rating'),
-        default=True,
-    )
-
-    name = models.CharField(
-        max_length=100,
-        verbose_name=_("Name"),)
-    question = models.CharField(
-        max_length=100,
-        verbose_name=_("Question"),)
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def required(self):
-        """Returns False, if the choices include a None value."""
-        if not hasattr(self, '_required'):
-            # get_choices sets _required
-            self.get_choices()
-        return self._required
-
-    def get_choices(self):
-        """Returns the tuple of choices for this category."""
-        choices = ()
-        self._required = True
-        for choice in self.choices.all():
-            if choice.value is None or choice.value == '':
-                self._required = False
-            choices += (choice.value, choice.label),
-        if not choices:
-            return DEFAULT_CHOICES
-        return choices
-
-    def get_rating_max_from_choices(self):
-        """Returns the maximun value a rating can have in this catgory."""
-        return int(list(self.get_choices())[0][0])
-
-
-class RatingCategoryChoice(AbstractAutoDate):
-    ratingcategory = models.ForeignKey(
-        RatingCategory,
-        verbose_name=_('Rating category'),
-        related_name='choices',
-    )
-
-    value = models.CharField(
-        verbose_name=_('Value'),
-        max_length=20,
-        blank=True, null=True,
-    )
-
-    label = models.CharField(
-        verbose_name=_('Label'),
-        max_length=128,)
-    
-    def __str__(self):
-        return self.label
-
-    class Meta:
-        ordering = ('-value', )
-
-
-class Rating(models.Model):
-    """
-    Represents a rating for one rating category.
-    :rating: Rating value.
-    :review: The review the rating belongs to.
-    :category: The rating category the rating belongs to.
-    """
-    rating_choices = DEFAULT_CHOICES
-
-    value = models.CharField(
-        max_length=20,
-        verbose_name=_('Value'),
-        choices=rating_choices,
-        blank=True, null=True,
-    )
-
-    review = models.ForeignKey(
-        'review.Review',
-        verbose_name=_('Review'),
-        related_name='ratings',
-    )
-
-    category = models.ForeignKey(
-        'review.RatingCategory',
-        verbose_name=_('Category'),
-    )
-
-    class Meta:
-        ordering = ['category', 'review']
-
-    def __str__(self):
-        return '{0}/{1} - {2}'.format(self.category, self.review, self.value)

@@ -1,0 +1,185 @@
+{% load static %}
+<div class="sidebar" id="main-sidebar">
+    <div class="main-sidebar-wrapper" id="main-sidebar-wrapper">
+        <div class="login_wrap non_login w100fl" style="display:block;">
+            <div class="login_content">
+                <div class="user_details">
+                    <div class="media">
+                        <div class="media-left">
+                            <span><img src="{% static 'shinelearn/images/mobile/common/user.jpg' %}"></span>
+                        </div>
+                        <div class="media-body rel">
+                            <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>
+                            <div class="mt-10">
+                                {% if request.session.candidate_id %}
+                                <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+                                <a href="{% url 'register' %}" class="btn btn-outline">Register</a>
+                                {% else %}
+                                <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- User after login Ends here -->
+            </div><img src="{% static 'shinelearn/images/mobile/common/nonlogin.jpg' %}">
+
+        </div><!-- Login widgets Ends here -->
+
+        <nav>
+            <ul class="sb-menu">
+
+                <li><a href="index.html"><span class="icon-home"></span>Home</a></li>
+                <li> <a href="search-listing.html"><span class="icon-home-search"></span>Search</a></li>
+                <li><a href="recommend-listing.html"><span class="icon-rec-course"></span>Recommended courses</a></li>
+                <li>
+                    <a href="#" class="level-control"><span class="icon-all-courses"></span>All Courses</a>
+                    <div class="level-one">
+                        <a href="#" class="backthis" data-index="0"><i class="icon-back pull-left"></i>  All Courses</a>
+
+                        <ul>
+                            <li>
+                                <a href="#" class="level-control" >Operations</a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> Operations</a>
+                                    <ul>
+                                        <li><a href="combo-course.html">GetCertGo Certification (16)</a></li>
+                                        <li><a href="course-detail.html">ACCA IFRS Certifications (4)</a></li>
+                                        <li><a href="resume-detail.html">Aon Hewitt HR Certifications (5)</a></li>
+                                        <li><a href="#">Government of India - Vskills Certification (283)</a></li>
+                                        <li><a href="#">ICFL Training Programs (5)</a></li>
+                                        <li><a href="#">Analytics and Big Data (3)</a></li>
+                                        <li><a href="#">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Finance</a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> Finance</a>
+                                    <ul>
+                                        <li><a href="#">Financial Softwares (16)</a></li>
+                                        <li><a href="#">Investment-Banking (4)</a></li>
+                                        <li><a href="#">Accounting (5)</a></li>
+                                        <li><a href="#">IFRS (283)</a></li>
+                                        <li><a href="#">Corporate Finance (5)</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Human Resources</a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> Finance</a>
+                                    <ul>
+                                        <li><a href="#">Financial Softwares (16)</a></li>
+                                        <li><a href="#">Investment-Banking (4)</a></li>
+                                        <li><a href="#">Accounting (5)</a></li>
+                                        <li><a href="#">IFRS (283)</a></li>
+                                        <li><a href="#">Corporate Finance (5)</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Personal Development </a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> Personal Development</a>
+                                    <ul>
+                                        <li><a href="#">Financial Softwares (16)</a></li>
+                                        <li><a href="#">Investment-Banking (4)</a></li>
+                                        <li><a href="#">Accounting (5)</a></li>
+                                        <li><a href="#">IFRS (283)</a></li>
+                                        <li><a href="#">Corporate Finance (5)</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Sales And Marketing </a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> Sales And Marketing</a>
+                                    <ul>
+                                        <li><a href="#">Financial Softwares (16)</a></li>
+                                        <li><a href="#">Investment-Banking (4)</a></li>
+                                        <li><a href="#">Accounting (5)</a></li>
+                                        <li><a href="#">IFRS (283)</a></li>
+                                        <li><a href="#">Corporate Finance (5)</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >IT Software & Certifications </a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> IT Software & Certifications</a>
+                                    <ul>
+                                        <li><a href="#">Financial Softwares (16)</a></li>
+                                        <li><a href="#">Investment-Banking (4)</a></li>
+                                        <li><a href="#">Accounting (5)</a></li>
+                                        <li><a href="#">IFRS (283)</a></li>
+                                        <li><a href="#">Corporate Finance (5)</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Development </a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> Development</a>
+                                    <ul>
+                                        <li><a href="#">Financial Softwares (16)</a></li>
+                                        <li><a href="#">Investment-Banking (4)</a></li>
+                                        <li><a href="#">Accounting (5)</a></li>
+                                        <li><a href="#">IFRS (283)</a></li>
+                                        <li><a href="#">Corporate Finance (5)</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Other Online Courses </a>
+                                <div class="level-two">
+                                    <a href="#" class="backthis"><i class="icon-back pull-left"></i> Other Online Courses</a>
+                                    <ul>
+                                        <li><a href="#">Financial Softwares (16)</a></li>
+                                        <li><a href="#">Investment-Banking (4)</a></li>
+                                        <li><a href="#">Accounting (5)</a></li>
+                                        <li><a href="#">IFRS (283)</a></li>
+                                        <li><a href="#">Corporate Finance (5)</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="level-control"><span class="icon-job"></span>Job Assistance Services</a>
+                    <div class="level-one">
+                        <a href="#" class="backthis" data-index="0"><i class="icon-back pull-left"></i> Job Assistance Services</a>
+                        <ul>
+                            <li><a href="#">Interview Preparation</a></li>
+                            <li><a href="#">Job Search Guidance</a></li>
+                            <li><a href="#">Competitive Exams</a></li>
+                            <li><a href="#">Government Jobs</a></li>
+                            <li><a href="#">Government News</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#"><span class="icon-career"></span>Career Guidance</a></li>
+                <li><a href="streams_detail.html"><span class="icon-sample"></span>Free samples</a></li>
+                <li><a href="#"><span class="icon-dashboard"></span>Dashboard</a></li>
+            </ul>
+        </nav><!-- Main Menu list Ends here -->
+        <nav class="borderBottom-0">
+            <ul class="sb-menu">
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Contact us</a></li>
+                <li><a href="blog-landing.html">Blog</a></li>
+            </ul>
+        </nav><!-- secondary Menu list Ends here -->
+    </div>
+</div><!-- #main-sidebar .main-sidebar .main-sidebar-left -->
+    

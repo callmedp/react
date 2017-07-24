@@ -40,21 +40,21 @@ class LoginToCommentView(View):
                     "password": self.request.POST.get('password')
                 })
 
-                user_exist = RegistrationLoginApi().check_email_exist(login_dict['email'])
+                user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
-                if user_exist['exists']:
-                    login_resp = RegistrationLoginApi().user_login(login_dict)
+                if user_exist.get('exists'):
+                    login_resp = RegistrationLoginApi.user_login(login_dict)
 
-                    if login_resp['response'] == 'login_user':
+                    if login_resp.get('response') == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
                         self.request.session.update(resp_status)
                         if remember_me:
                             self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
 
-                    elif login_resp['response'] == 'error_pass':
+                    elif login_resp.get('response') == 'error_pass':
                         login_resp['error_message'] = login_resp.get("non_field_errors")[0]
 
-                elif not user_exist['exists']:
+                elif not user_exist.get('exists'):
                     login_resp['response'] = 'error_pass'
                     login_resp['error_message'] = "This email is not registered. Please register."
             else:
@@ -79,14 +79,14 @@ class RegisterToCommentView(View):
                     "country_code": request.POST.get('country_code'),
                     "vendor_id": request.POST.get('vendor_id'),
                 })
-                user_resp = RegistrationLoginApi().user_registration(post_data)
+                user_resp = RegistrationLoginApi.user_registration(post_data)
 
                 if user_resp['response'] == 'new_user':
                     login_dict.update({
                         "email": request.POST.get('email'),
                         "password": request.POST.get('password') if request.POST.get('password') else request.POST.get('raw_password'),
                     })
-                    resp = RegistrationLoginApi().user_login(login_dict)
+                    resp = RegistrationLoginApi.user_login(login_dict)
 
                     if resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=resp['candidate_id'])
@@ -422,7 +422,7 @@ class BlogLandingPageView(TemplateView, BlogMixin):
 
     def get_meta_details(self):
         meta = Meta(
-            title="Career Guidance & Advice – Articles @ Learning.Shine",
+            title="Career Guidance & Advice - Articles @ Learning.Shine",
             description='Planning to change career - Get advice and tips for better growth. Read latest articles for interview preparation, competitive exams, government jobs, resume writing tips & other career guidance at learning.shine',
         )
         return {"meta": meta}

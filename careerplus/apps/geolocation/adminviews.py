@@ -13,7 +13,7 @@ from .forms import CountryUpdateForm
 class CountryUpdateView(UpdateView):
 	model = Country
 	template_name = 'geoadmin/country-update.html'
-	success_url = "/myadmin/geolocation/country-list/"
+	success_url = "/console/geolocation/country/"
 	http_method_names = [u'get', u'post']
 	form_class = CountryUpdateForm
 

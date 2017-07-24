@@ -1,14 +1,16 @@
 import datetime
 import json
 
-from django.views.generic import View, TemplateView
+from django.views.generic import View, DetailView
 from django.template.loader import render_to_string
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse,\
+    HttpResponseForbidden, HttpResponsePermanentRedirect
 from django.urls import reverse
 from django.http import Http404
 from django.utils import timezone
 from django.conf import settings
+from django.utils.http import urlquote
+
 from django.db.models import Q
 from django.middleware.csrf import get_token
 
@@ -19,42 +21,69 @@ from .models import Page, Comment
 from .mixins import UploadInFile, LoadMoreMixin
 
 
-class CMSPageView(TemplateView, LoadMoreMixin):
+class CMSPageView(DetailView, LoadMoreMixin):
     model = Page
     template_name = "cms/cms_page.html"
+    page_obj = None
+    page = 1
 
-    def __init__(self):
-        self.page_obj = None
-        self.page = 1
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        slug = self.kwargs.get('slug')
+
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if pk is not None:
+            queryset = queryset.filter(pk=pk, is_active=True)
+        elif slug is not None:
+            queryset = queryset.filter(slug=slug, is_active=True)
+        try:
+            obj = queryset.get()
+        except:
+            raise Http404
+        return obj
+
+    def redirect_if_necessary(self, current_path, article):
+        expected_path = article.get_absolute_url()
+        if expected_path != urlquote(current_path):
+            return HttpResponsePermanentRedirect(expected_path)
+        return None
 
     def get(self, request, *args, **kwargs):
-        slug = kwargs.get('slug', None)
+        self.slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
-        try:
-            self.page_obj = Page.objects.get(slug=slug, is_active=True)
-        except Exception:
-            raise Http404
-        self.page_obj.total_view += 1
-        self.page_obj.save()
+        self.object = self.get_object()
+        redirect = self.redirect_if_necessary(request.path, self.object)
+        if redirect:
+            return redirect
+        self.object.total_view += 1
+        self.object.save()
         today = timezone.now()
         today_date = datetime.date(day=1, month=today.month, year=today.year)
-        pg_counter, created = self.page_obj.pagecounter_set.get_or_create(count_period=today_date)
+        pg_counter, created = self.object.pagecounter_set.get_or_create(count_period=today_date)
         pg_counter.no_views += 1
         pg_counter.save()
-        context = super(CMSPageView, self).get(request, *args, **kwargs)
-        return context
+        response = super(CMSPageView, self).get(request, *args, **kwargs)
+        return response
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
             data_dict = {"status": 0, }
             message = request.POST.get('message', '').strip()
-            slug = kwargs.get('slug', None)
+            # slug = kwargs.get('slug', None)
+            pk = kwargs.get('pk')
             try:
-                self.page_obj = Page.objects.get(slug=slug, is_active=True)
+                self.page_obj = Page.objects.get(pk=pk, is_active=True)
             except Exception:
                 raise Http404
             if request.session.get('candidate_id') and message and self.page_obj:
-                Comment.objects.create(candidate_id=request.session.get('candidate_id'), message=message, page=self.page_obj)
+                name = ''
+                if request.session.get('first_name'):
+                    name = request.session.get('first_name')
+                if request.session.get('last_name'):
+                    name += ' ' + request.session.get('last_name')
+                Comment.objects.create(candidate_id=request.session.get('candidate_id'), message=message, name=name, page=self.page_obj)
                 self.page_obj.comment_count += 1
                 self.page_obj.save()
                 today = timezone.now()
@@ -69,20 +98,17 @@ class CMSPageView(TemplateView, LoadMoreMixin):
 
     def get_context_data(self, **kwargs):
         context = super(CMSPageView, self).get_context_data(**kwargs)
-        page_obj = self.page_obj
+        page_obj = self.get_object()
         left_widgets = page_obj.pagewidget_set.filter(section='left').select_related('widget')
         right_widgets = page_obj.pagewidget_set.filter(section='right').select_related('widget')
         context['left_widgets'] = ''
         context['right_widgets'] = ''
         context['page_obj'] = page_obj
         context['page_heading'] = page_obj.name
-        country_choices = [(m.id, m.phone + '-' + '(' + m.code3 + ')') for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+
+        country_choices = [(m.id, m.phone + '-' + '(' + m.code3 + ')') for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(name='India', phone='91')[0].pk
-        
-        if self.request.session.get('candidate_id'):
-            download_pop_up = "no"
-        else:
-            download_pop_up = "yes"
 
         download_docs = page_obj.document_set.filter(is_active=True)
         csrf_token_value = get_token(self.request)
@@ -94,27 +120,29 @@ class CMSPageView(TemplateView, LoadMoreMixin):
             })
 
         for left in left_widgets:
+            if self.request.flavour == 'mobile' and left.widget.widget_type in [6, 7]:
+                continue
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
                 'widget': left.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
-                'download_pop_up': download_pop_up,
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })
             widget_context.update(left.widget.get_widget_data())
-            context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context)
+            context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context, request=self.request)
 
         for right in right_widgets:
+            if self.request.flavour == 'mobile' and right.widget.widget_type in [6, 7]:
+                continue
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
                 'widget': right.widget,
                 'download_doc': download_doc,
                 'csrf_token_value': csrf_token_value,
-                'download_pop_up': download_pop_up,
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })
@@ -122,7 +150,8 @@ class CMSPageView(TemplateView, LoadMoreMixin):
             context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
 
         comments = page_obj.comment_set.filter(is_published=True, is_removed=False)
-        context['comment_listing'] = self.pagination_method(page=self.page, comment_list=comments, page_obj=self.page_obj)
+        context['comment_listing'] = self.pagination_method(
+            page=self.page, comment_list=comments, page_obj=page_obj)
         context['total_comment'] = comments.count()
         context.update({
             "hostname": settings.SITE_DOMAIN,
@@ -176,7 +205,7 @@ class DownloadPdfView(View, UploadInFile):
     http_method_names = [u'post', ]
     
     def post(self, request, *args, **kwargs):
-        slug = kwargs.get('slug', None)
+        pk = kwargs.get('pk', None)
         page_obj = None
         action_type = int(request.POST.get('action_type', '0'))
         name = request.POST.get('name', '').strip()
@@ -222,9 +251,8 @@ class DownloadPdfView(View, UploadInFile):
                 self.write_in_file(data_dict=data_dict)
 
         try:
-            page_obj = Page.objects.get(slug=slug, is_active=True)
+            page_obj = Page.objects.get(pk=pk, is_active=True)
         except Exception:
             raise Http404
+        return HttpResponseRedirect(page_obj.get_absolute_url())
 
-        return HttpResponseRedirect(
-            reverse('cms:page', kwargs={'slug': page_obj.slug}))

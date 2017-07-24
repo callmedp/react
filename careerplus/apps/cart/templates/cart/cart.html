@@ -18,7 +18,7 @@
   <!-- navigation bar -->
   <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
+        <!-- Brand and toggle get grouped for better common display -->
         <div class="navbar-header">
           <a class="navbar-brand" href="#"></a>
         </div>
@@ -39,9 +39,8 @@
 
 
 {% block container %}
+    {% if cart_items %}
     <section class="container mt-53">
-
-        {% if cart_items %}
         <!-- page content body start -->
         <div class="row">
         <!-- left content start -->
@@ -56,52 +55,125 @@
 
             {% for item in cart_items %}
                 <!-- item 1 -->
-                <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
-                    <li class="col-sm-5 col-md-6">
-                        <span class="cart-sub-heading">{{item.li.product.name}}</span>
-                        <span class="provided-by">Provided by <a href="#">{{item.li.product.vendor}}</a></span>
-                    </li>
-                    <li class="col-sm-3">
-                        <span class="custom-select">
-                            <select class="form-control">
-                                <option>Normal</option>
-                            </select>
-                        </span>
-                    </li>
-                    <li class="col-sm-2">
-                        <strong>Rs. {{item.li.price_excl_tax}}/-</strong>
-                    </li>
+                {% with li=item.li addons=item.addons variations=item.variations %}
+                    {% if li.product.type_service == 3 and variations %}
+
+                        <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
+                            <li class="col-sm-5 col-md-6">
+                                <span class="cart-sub-heading">{{li.product.name}}</span>
+                                <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
+                            </li>
+                            <li class="col-sm-3">
+                                <span class="custom-select">
+                                    <select class="form-control">
+                                        <option>Normal</option>
+                                    </select>
+                                </span>
+                            </li>
+                            <li class="col-sm-2">
+                                <strong>Rs. {{variations.first.product.get_price}}/-</strong>
+                            </li>
 
 
-                    <form role="form" id="cart_remove_form{{item.prod.id}}">{% csrf_token %}
-                        <input type="hidden" name="reference_id" value="{{item.prod.reference}}">
-                        <li class="col-sm-2 col-md-1">
-                            <a role="button" onclick="removeFromCart('{{item.prod.id}}')">Remove</a>
-                        </li>
-                    </form>
-                </ul>
-                {% if item.addons %}
-                    <span class="addons-heading"></span>
-                    {% for addon in item.addons %}
-                    <ul class="ml-15 addons">
-                      <li class="col-sm-8 col-md-9">
-                        {{addon.product.name}}
-                      </li>
-                      <li class="col-sm-2">
-                        <strong>Rs. {{addon.price_excl_tax}}/-</strong>
-                      </li>
-                      <!--li class="col-sm-2 col-md-1">
-                        <a href="#">Remove</a>
-                      </li-->
-                      <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
-                        <input type="hidden" name="reference_id" value="{{addon.reference}}">
-                        <li class="col-sm-2 col-md-1">
-                            <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
-                        </li>
-                    </form>
-                    </ul>
-                    {% endfor %}
-                {% endif %}
+                            <form role="form" id="cart_remove_form{{li.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{variations.first.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{li.id}}')">Remove</a>
+                                </li>
+                            </form>
+                        </ul>
+                        {% if addons %}
+                            <span class="addons-heading"></span>
+                            {% for addon in addons %}
+                            <ul class="ml-15 addons">
+                              <li class="col-sm-8 col-md-9">
+                                {{addon.product.name}}
+                              </li>
+                              <li class="col-sm-2">
+                                <strong>Rs. {{addon.product.get_price}}/-</strong>
+                              </li>
+                              <!--li class="col-sm-2 col-md-1">
+                                <a href="#">Remove</a>
+                              </li-->
+                              <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                </li>
+                            </form>
+                            </ul>
+                            {% endfor %}
+                        {% endif %}
+
+                    {% else %}
+
+                        <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
+                            <li class="col-sm-5 col-md-6">
+                                <span class="cart-sub-heading">{{li.product.name}}</span>
+                                <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
+                            </li>
+                            <li class="col-sm-3">
+                                <span class="custom-select">
+                                    <select class="form-control">
+                                        <option>Normal</option>
+                                    </select>
+                                </span>
+                            </li>
+                            <li class="col-sm-2">
+                                <strong>Rs. {{li.product.get_price}}/-</strong>
+                            </li>
+
+
+                            <form role="form" id="cart_remove_form{{li.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{li.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{li.id}}')">Remove</a>
+                                </li>
+                            </form>
+                        </ul>
+                        {% if addons or variations %}
+                            <span class="addons-heading"></span>
+                            {% for var in variations %}
+                                <ul class="ml-15 addons">
+                                  <li class="col-sm-8 col-md-9">
+                                    {{var.product.name}}
+                                  </li>
+                                  <li class="col-sm-2">
+                                    <strong>Rs. {{var.product.get_price}}/-</strong>
+                                  </li>
+                                  
+                                  <form role="form" id="cart_remove_form{{var.id}}">{% csrf_token %}
+                                    <input type="hidden" name="reference_id" value="{{var.reference}}">
+                                    <li class="col-sm-2 col-md-1">
+                                        <a role="button" onclick="removeFromCart('{{var.id}}')">Remove</a>
+                                    </li>
+                                </form>
+                                </ul>
+                            {% endfor %}
+
+                            {% for addon in addons %}
+                                <ul class="ml-15 addons">
+                                  <li class="col-sm-8 col-md-9">
+                                    {{addon.product.name}}
+                                  </li>
+                                  <li class="col-sm-2">
+                                    <strong>Rs. {{addon.product.get_price}}/-</strong>
+                                  </li>
+                                  <!--li class="col-sm-2 col-md-1">
+                                    <a href="#">Remove</a>
+                                  </li-->
+                                  <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                                    <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                                    <li class="col-sm-2 col-md-1">
+                                        <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                    </li>
+                                </form>
+                                </ul>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+
             {% endfor %}
 
 
@@ -132,10 +204,75 @@
 
         </div>
         <!-- page content body end -->
-        {% endif %}
 
     </section>
     <!-- main section end -->
+    {% else %}
+        <!-- Blank Cart -->
+        <section class="container">
+
+            <!-- page content body start -->
+            <div class="row">
+                <!-- content start -->
+                <div class="col-sm-12 mt-53">
+                  <div class="empty-cart bdr">
+                    <figure class="empty-cart-pic"></figure>
+                    <article>You have no product in your cart. <br>Add your first product and earn <strong>Shine loyalty points</strong></article>
+                    <a href="{% url "homepage" %}" class="search-button">Search now</a>
+                  </div>
+                </div>
+                <!-- content end -->
+
+                {% if recommended_products %}
+                <!-- Recommended products start -->
+                <div class="col-sm-12 mt-40">
+                  <h2 class="detail-heading">Recommended products</h2>
+
+                  <div class="row">
+
+                    <ul class="listing">
+                      {% for prd in recommended_products %}
+                      <li class="col-sm-6 col-md-4">
+                        <a title="prd.name" class="box-panel" href="{{prd.get_absolute_url}}">
+                          <div class="media">
+                            <div class="media-left">
+                                <figure style="background-color:{{prd.get_bg}};">
+                                    <img class="media-object" src="{{prd.image.url}}" alt="{{prd.image_alt}}" height="134" width="131">
+                                </figure>
+                            </div>
+                            <div class="media-body">
+
+                              <h3 class="listing-heading">{{prd.name}}</h3>
+                              <div class="rating-review-box">
+                                    {% for star in prd.get_ratings %}
+                                          {% if star == '*' %}
+                                            <figure class="full-star"></figure>
+                                          {% elif star == '+' %}
+                                            <figure class="half-star"></figure>
+                                          {% else %}
+                                            <figure class="blank-star"></figure>
+                                          {% endif %}
+                                    {% endfor %}
+                                        
+                                    <strong>{{prd.get_avg_ratings}}<small>/5</small></strong>
+                                    <span class="jobs-available"><strong>{{prd.num_jobs}}</strong> jobs available</span>
+                                </div>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      {% endfor %}
+
+                    </ul>
+
+                  </div>
+
+                </div>
+                <!-- Recommended products end -->
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
 {% endblock container %}
   
 

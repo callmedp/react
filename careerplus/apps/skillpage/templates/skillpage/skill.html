@@ -50,19 +50,19 @@
 					       Provider
 					   {% for top_4_vendor in top_4_vendors %}    
 						{% if forloop.counter == 1 %}
-							<img src="{{top_4_vendor.icon.url}}" 
+							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
 						{% if forloop.counter == 2 %}
-							<img src="{{top_4_vendor.icon.url}}" 
+							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
 						{% if forloop.counter == 3 %}
-							<img src="{{top_4_vendor.icon.url}}" 
+							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
 						{% if forloop.counter == 4 %}
-							<img src="{{top_4_vendor.icon.url}}" 
+							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
 						{% endfor %}

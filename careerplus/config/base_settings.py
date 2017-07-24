@@ -12,12 +12,14 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import sys
-import redis
+# import redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
+
+GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -25,17 +27,12 @@ sys.path.append(os.path.join(BASE_DIR, 'apps'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g58#1(xdr&s%t@$erwjosc@nuiuy4j)9#g+*jhr#m1o6c)zws7'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 TEMPLATE_DEBUG = False  # django sorl required
 
-ALLOWED_HOSTS = []
 
 # Application definition
 DJANGO_APPS = [
-    'grappelli',
-    'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,21 +44,27 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'cities_light',
     'ckeditor',
     'ckeditor_uploader',
+    'django_mobile',
     'meta',
-    'cities_light',
+    'requests',
+    'sekizai',
     'sorl.thumbnail',
-    'requests'
+    'rest_framework',
+    'haystack',
 ]
 
 # Apps specific for this project go here.
 LOCAL_APPS = [
+    'core',
     'users',
+    'seo',
+    'blog',
     'cms',
     'design',
     'faq',
-    'seo',
     'ajax',
     'skillpage',
     'review',
@@ -73,9 +76,14 @@ LOCAL_APPS = [
     'shop',
     'cart',
     'order',
-    'blog',
+    'homepage',
     'microsite',
     'dashboard',
+    'wallet',
+    'search',
+    'linkedin',
+    'emailers',
+    'quizs',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -91,6 +99,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.UpgradedMobileDetectionMiddleware',
+    'core.middleware.UpgradedSetFlavourMiddleware',
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -99,17 +109,31 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'careerplus.config.context_processors.common_context_processor',
+                # 'django_mobile.context_processors.flavour'
+                # 'django_mobile.context_processors.flavour',
+                'careerplus.config.context_processors.common_context_processor',
+                'sekizai.context_processors.sekizai',
+                'core.context_processors.js_settings'
             ],
+            'loaders': ([
+                # ('django_mobile.loader.CachedLoader', [
+                    # 'django_mobile.loader.Loader',
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader'
+                ]),
         },
     },
 ]
+
+# For django-mobile compatiility
+TEMPLATE_LOADERS = TEMPLATES[0]['OPTIONS']['loaders']
 
 WSGI_APPLICATION = 'careerplus.wsgi.application'
 
@@ -149,27 +173,242 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser'
+    ],
+    'PAGE_SIZE': 10
+}
 
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
 CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-        'height': 400,
-        'width': 700,
+        'height': 'auto',
+        'width': 'auto',
         # 'removePlugins': 'stylesheetparser',
         # 'extraPlugins': 'codesnippet',
     },
 }
 
 
-BROKER_URL = 'redis://localhost:6379/0'
+# BROKER_URL = 'redis://localhost:6379/0'
 
-try:
-    REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
-except:
-    REDIS_CON = None
+# try:
+#     REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
+# except:
+#     REDIS_CON = None
+
+DRAFT_MAX_LIMIT = 3
+
+# HTMSL for SMS
+HTMSL_USER = 'sumo'
+HTMSL_PASS = 'w1XN75L'
+HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
+ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
+
+
+########## DOMAIN SETTINGS ######################
+MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
+MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
 CART_MAX_LIMIT = 5
 
 SHINE_API_URL = 'https://sumosc.shine.com'
+
+############ SOLR SETTINGS #######################
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr',
+        'INCLUDE_SPELLING': False,
+    },
+}
+
+HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 50
+HAYSTACK_BATCH_SIZE = 100
+HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
+
+# encode decode constants
+TOKEN_DT_FORMAT = '%Y%m%d%H%M%S'
+LOGIN_TOKEN_EXPIRY = 30
+EMAIL_SMS_TOKEN_EXPIRY = 7
+ENCODE_SALT = 'xfxa'
+
+# resume writing India product List
+RESUME_WRITING_INDIA = [2]
+
+######## LOGGING CONFIG ############################
+LOGS_ROOT = os.path.join(BASE_DIR, "log")
+
+for d in ['debug', 'error', 'info', 'email', 'sms', 'profile', 'payment']:
+    if not os.path.exists(os.path.join(LOGS_ROOT, d)):
+        os.makedirs(os.path.join(LOGS_ROOT, d))
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'debug_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'debug', 'debug.log')
+        },
+        'info_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'info', 'info.log')
+        },
+        'error_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'error.log')
+        },
+        'email_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'email', 'email.log')
+        },
+        'sms_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'sms', 'sms.log')
+        },
+        'profile_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'profile', 'profile.log')
+        },
+        'unsubs_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'info', 'unsubs.log')
+        },
+        'feedback_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'email', 'feedback.log')
+        },
+        'payment_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'payment', 'error.log')
+        },
+        'cron_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'cron.log')
+        },
+        'command_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'command.log')
+        },
+        'cashback_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'cashback.log')
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins', 'error_handler'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'debug_log': {
+            'handlers': ['debug_handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'info_log': {
+            'handlers': ['info_handler'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'error_log': {
+            'handlers': ['error_handler'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'email_log': {
+            'handlers': ['email_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'sms_log': {
+            'handlers': ['sms_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'profile_import_log': {
+            'handlers': ['profile_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'unsubs_log': {
+            'handlers': ['unsubs_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'feedback_log': {
+            'handlers': ['feedback_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'payment_log': {
+            'handlers': ['payment_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'cron_log': {
+            'handlers': ['cron_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'command_log': {
+            'handlers': ['command_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'cashback_log': {
+            'handlers': ['cashback_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}

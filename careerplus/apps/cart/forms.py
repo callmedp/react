@@ -1,12 +1,32 @@
 from django import forms
+from django.db.models import Q
 
-from .models import ShippingDetail
+from geolocation.models import Country
+
+from .models import Cart
 
 
 class ShippingDetailUpdateForm(forms.ModelForm):
+    country_code = forms.ChoiceField(
+        required=True, widget=forms.Select())
+    country = forms.ChoiceField(
+        required=True, widget=forms.Select())
+
+    class Meta:
+        model = Cart
+
+        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
 
     def __init__(self, *args, **kwargs):
         super(ShippingDetailUpdateForm, self).__init__(*args, **kwargs)
+        try:
+            country_choices, CHOICE_COUNTRY = [], []
+            for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
+                country_choices.append((m.phone, m.phone))
+                CHOICE_COUNTRY.append((m.name, m.name))
+
+        except:
+            country_choices, CHOICE_COUNTRY = [('91', '91')], [('India', 'India')]
 
         form_class = 'form-control'
         self.fields['first_name'].required = True
@@ -17,12 +37,15 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Last name'
         self.fields['last_name'].widget.attrs['class'] = form_class
 
-        self.fields['email'].required = True
-        self.fields['email'].widget.attrs['placeholder'] = 'Email Id'
-        self.fields['email'].widget.attrs['class'] = form_class
+        # self.fields['email'].required = True
+        # self.fields['email'].widget.attrs['readonly'] = True
+        # self.fields['email'].widget.attrs['placeholder'] = 'Email Id'
+        # self.fields['email'].widget.attrs['class'] = form_class
 
         self.fields['country_code'].required = True
         self.fields['country_code'].widget.attrs['class'] = form_class
+        self.fields['country_code'].choices = country_choices
+        self.fields['country_code'].initial = '91'
 
         self.fields['mobile'].required = True
         self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile'
@@ -42,11 +65,8 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 
         self.fields['country'].required = True
         self.fields['country'].widget.attrs['class'] = form_class
-
-    class Meta:
-        model = ShippingDetail
-
-        fields = ['first_name', 'last_name', 'email', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
+        self.fields['country'].choices = CHOICE_COUNTRY
+        self.fields['country'].initial = 'India'
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '').strip()
@@ -55,7 +75,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
                 "This field is required.")
         elif not first_name.isalpha():
             raise forms.ValidationError(
-                "This field should be only alphabets.")
+                "This field should be only letters.")
         return first_name
 
     def clean_last_name(self):
@@ -65,7 +85,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
                 "This field is required.")
         elif not last_name.isalpha():
             raise forms.ValidationError(
-                "This field should be only alphabets.")
+                "This field should be only letters.")
         return last_name
 
     def clean_mobile(self):

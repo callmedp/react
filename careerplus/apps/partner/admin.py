@@ -1,4 +1,22 @@
 from django.contrib import admin
 from . import models
 
-admin.site.register(models.Vendor)
+
+class VendorHierarchyInline(admin.TabularInline):
+    model = models.VendorHierarchy
+    extra = 1
+
+
+class VendorAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'slug', 'email', 'mobile', 'pan', 'website')
+
+    inlines = [VendorHierarchyInline]
+    model = models.VendorHierarchy
+    fk_name = 'vendee'
+    readonly_fields = ('modified',)
+    
+    extra = 0
+
+
+
+admin.site.register(models.Vendor, VendorAdmin)

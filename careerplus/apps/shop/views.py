@@ -1,4 +1,3 @@
-
 from collections import OrderedDict
 from django.core.paginator import Paginator
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseForbidden
@@ -7,6 +6,9 @@ from django.utils.http import urlquote
 from django.views.generic import DetailView, ListView
 from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
+
+from cart.mixins import CartMixin
+
 from .models import Product, Category, Attribute
 from review.models import Review
 
@@ -41,14 +43,6 @@ class ProductInformationMixin(object):
             'breadcrumbs': breadcrumbs
         }
 
-    def get_sibling_package(self, product):
-        other_siblings = OrderedDict()
-        siblings = {
-            'product_type': 'course',
-            'otherprovide': other_siblings
-        }
-        return siblings
-
     def get_info(self, product):
         info = {}
         info['prd_img'] = product.image.url
@@ -67,7 +61,14 @@ class ProductInformationMixin(object):
         info['prd_vendor_img_alt'] = product.vendor.image_alt
         info['prd_rating_star'] = product.get_ratings()
         info['prd_video'] = product.video_url
-        info['prd_service'] = product.type_service
+        if product.is_course:
+            info['prd_service'] = 'course'
+        elif product.is_writing:
+            info['prd_service'] = 'resume'
+        elif product.is_service:
+            info['prd_service'] = 'service'
+        else:
+            info['prd_service'] = 'other'
         info['prd_product'] = product.type_product
         info['prd_exp'] = product.get_exp
         return info
@@ -76,13 +77,13 @@ class ProductInformationMixin(object):
         structure = {
             'prd_program_struct': False
         }
-        chapter_list = product.chapters.filter(
-            productstructure__active=True).order_by('productstructure__sort_order')
-        if chapter_list:
-            structure.update({
-                'prd_program_struct': True,
-                'chap_list': chapter_list
-            })
+        # chapter_list = product.chapters.filter(
+        #     productstructure__active=True).order_by('productstructure__sort_order')
+        # if chapter_list:
+        #     structure.update({
+        #         'prd_program_struct': True,
+        #         'chap_list': chapter_list
+        #     })
         return structure
 
     def get_faq(self, product):
@@ -90,7 +91,7 @@ class ProductInformationMixin(object):
             'prd_faq': False
         }
         faqs = product.faqs.filter(
-            productfaqs__active=True).order_by('productfaqs__question_order')
+            productfaqs__active=True, status=2).order_by('productfaqs__question_order')
         if faqs:
             structure.update({
                 'prd_faq': True,
@@ -104,6 +105,7 @@ class ProductInformationMixin(object):
         }
         recommended_list = product.related.filter(
             secondaryproduct__active=True,
+            active=True,
             secondaryproduct__type_relation=2)
         if recommended_list:
             recommendation.update({
@@ -117,7 +119,7 @@ class ProductInformationMixin(object):
             'other_package': False,
         }
         categoryproducts = category.categoryproducts.filter(
-            active=True, type_service__in=[1, 2, 4]).exclude(pk=product.pk).distinct()
+            active=True,).exclude(pk=product.pk).distinct()
         if categoryproducts:
             package.update({
                 'other_package': True,
@@ -129,7 +131,7 @@ class ProductInformationMixin(object):
             'other_provider': False,
         }
         providers = category.categoryproducts.filter(
-            active=True, type_service=3).exclude(pk=product.pk).distinct()
+            active=True).exclude(pk=product.pk).distinct()
         if providers:
             provider.update({
                 'other_provider': True,
@@ -141,23 +143,33 @@ class ProductInformationMixin(object):
         return {'combos': combos}
 
     def get_variation(self, product):
-        if product.type_service == 3:
+        if product.is_course:
             course_dict = []
+            selected_var = None
             course_list = product.variation.filter(
                 siblingproduct__active=True).order_by('-siblingproduct__sort_order')
             if course_list:
                 from shop.choices import MODE_CHOICES, COURSE_TYPE_CHOICES
                 for course in course_list:
+                    fake_price = course.get_fakeprice()
+                    if fake_price:
+                        fake_price = fake_price[0]
+                    else:
+                        fake_price = 0
+
+                    if not selected_var:
+                        selected_var = course
                     course_dict.append(
                         OrderedDict({
                             'id': course.id,
                             'label': course.name,
-                            'mode': dict(MODE_CHOICES).get(course.study_mode),
-                            'duration': course.duration_months,
-                            'type': dict(COURSE_TYPE_CHOICES).get(course.course_type),
-                            'certify': course.certification,
-                            'price': course.get_price()}))
-            return {'course_variation_list': course_dict}
+                            'mode': getattr(course.attr, 'study_mode', None),
+                            'duration': getattr(course.attr, 'duration', None),
+                            'type': getattr(course.attr, 'study_type', None),
+                            'certify': getattr(course.attr, 'certification', None),
+                            'price': course.get_price(),
+                            'fake_price': fake_price}))
+            return {'course_variation_list': course_dict, 'selected_var': selected_var}
         else:
             service_list = []
             service_list = product.variation.filter(
@@ -204,7 +216,7 @@ class ProductInformationMixin(object):
             }
 
 
-class ProductDetailView(DetailView, ProductInformationMixin):
+class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
     http_method_names = ['get', 'post']
 
@@ -248,6 +260,8 @@ class ProductDetailView(DetailView, ProductInformationMixin):
         if product.is_combo:
             ctx.update(self.get_combos(product))
         ctx.update(self.get_frequentlybought(product, category))
+        ctx.update(self.getSelectedProduct(product))
+        ctx.update(self.getSelectedProductPrice(product))
         return ctx
 
     # def send_signal(self, request, response, product):
@@ -263,6 +277,8 @@ class ProductDetailView(DetailView, ProductInformationMixin):
     
     def return_http404(self, product):
         if not product:
+            return True
+        if not product.active:
             return True
         if not self.category:
             return True

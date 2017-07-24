@@ -1,4 +1,4 @@
-{% if prd_service == 3 %}
+{% if prd_service == 'course' %}
 
 
   {% if course_variation_list %}
@@ -20,8 +20,8 @@
           <tbody>
           {% for vars in course_variation_list %}
             
-            <tr {% if forloop.first %}class="selected"{% endif %}>
-              <td><label><input type="radio" name="radio" data-price="{{vars.price}}" data-id="{{vars.id}}"></label></td>
+            <tr>
+              <td><label><input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" data-price="{{vars.price}}" data-id="{{vars.id}}" actual-price="{% if vars.fake_price %} {{vars.fake_price}}{% else %}{{vars.price}}{% endif %}"></label></td>
               <td>{{vars.mode}}</td>
               <td>{{vars.duration}} months</td>
               <td>{% if vars.certify %}
@@ -48,8 +48,8 @@
         <h2 class="detail-heading">Select products</h2>
           <ul>
             {% for service in service_variation_list  %}
-              <li {% if forloop.first %}class="selected"{% endif %}>
-                <label><input class="input" type="checkbox" data-price="{{country.get_price}}">{{service.pv_name}}</label> 
+              <li>
+                <label><input class="input" name="required_option" data-id="{{service.id}}" {% if service.id in selected_products %}checked{% endif %} type="checkbox" data-price="{{service.get_price}}" actual-price="{% if service.get_fakeprice %} {{service.get_fakeprice.0}}{% else %}{{service.get_price}}{% endif %}">{{service.pv_name}}</label> 
                 <strong>Rs. {{service.get_price}}/-</strong>
               </li>
             {% endfor %}
@@ -64,10 +64,11 @@
     <div class="row">
       <div class="select-country col-sm-12 col-md-8 mb-40">
         <h2 class="detail-heading">Select countries</h2>
+           <div class="cart-message"><span class="cart-error" id="error_required"></span></div>
           <ul>
             {% for country in country_variation_list %}
-              <li {% if forloop.first %}class="selected"{% endif %}>
-                <label><input class="input" value='{{country.id}}' type="checkbox" data-price="{{country.get_price}}"> {{country.name}}</label> 
+              <li>
+                <label><input {% if country.id in selected_products %}checked{% endif %} class="input" value='{{country.id}}' name="required_option" type="checkbox" data-id="{{country.id}}" data-price="{{country.get_price}}" actual-price="{% if country.get_fakeprice %} {{country.get_fakeprice.0}}{% else %}{{country.get_price}}{% endif %}"> {{country.pv_name}}</label> 
               </li>
             {% endfor %}
           </ul>

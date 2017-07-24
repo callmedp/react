@@ -4,79 +4,73 @@
         Login
 {% endblock title %}
 {% block css_section %}
-        {{block.super}}
-        <style type="text/css">
-          .error {
-                color: red;
-          } 
-        </style>
+    {{block.super}}
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
 {% endblock css_section %}
 {% block container %}
 
 <!-- main section start -->
 <div class="container pr">
-  <header class="login-page-bg">
-    <div class="login-bg-txt">
-      <figure class="login-icon1"></figure>
-        <strong>1 Lacs+</strong>
-          Satisfied users
-    </div>
-    <div class="login-bg-txt">
-      <figure class="login-icon2"></figure>
-        <strong>300+</strong>
-          Courses
-    </div>
-    <div class="login-bg-txt">
-      <figure class="login-icon3"></figure>
-        <strong>500+</strong>
-          Professional resumes delivered
-    </div>
-  </header>
+    <header class="login-page-bg">
+        <div class="login-bg-txt">
+            <figure class="login-icon1"></figure>
+            <strong>1 Lacs+</strong>
+            Satisfied users
+        </div>
+        <div class="login-bg-txt">
+            <figure class="login-icon2"></figure>
+            <strong>300+</strong>
+            Courses
+        </div>
+        <div class="login-bg-txt">
+            <figure class="login-icon3"></figure>
+            <strong>500+</strong>
+            Professional resumes delivered
+        </div>
+    </header>
 
-  <!-- login form start -->
-  <div class="register login-signup-box">
-  <div>
-    <h1 class="modal-title">Login</h1>
-    {% if messages %}
-        {% for message in messages %}
-        <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-  </div>
-    <form method="post" id="login_form" role="form">
-    {% csrf_token %}
-      <fieldset>
-          {% for field in form %}
-              {% if field.errors %}
-                  <div class="form-group error">
-                      {{field}}  
-                      {% for error in  field.errors %}{{ error }}{% endfor %}
-                  </div>
-              {% else %}
-                  <div class="form-group">
-                      {{ field }}
-                  </div>
-              {% endif %}
-          {% endfor %}
-      </fieldset>
-      <div class="form-check">
-        <label class="form-check-label">
-          <input type="checkbox" name="remember_me" class="form-check-input">
-          Remember me
-        </label>
-      </div>
-      <button type="submit" class="btn btn-primary submit">Login</button>
-      <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
-      <div class="social-login">
-        <span>or login with</span>
-        <a class="facebook" href="#"></a>
-        <a class="linkedin" href="#"></a>
-        <a class="gplus" href="#"></a>
-      </div>
-      <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
-    </form>
-  </div>
-  <!-- login form end -->
+    <!-- login form start -->
+    <div class="register login-signup-box">
+        <div>
+            <h1 class="modal-title">Login</h1>
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="post" id="login_form" role="form">
+        {% csrf_token %}
+            <fieldset>
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %}error{% endif %}">
+                        {{field}}
+                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" name="remember_me" class="form-check-input">
+                    Remember me
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary submit">Login</button>
+            <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
+            <div class="social-login">
+                <span>or login with</span>
+                <a class="facebook" href="#"></a>
+                <a class="linkedin" href="#"></a>
+                <a class="gplus" href="#"></a>
+            </div>
+            <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
+        </form>
+    </div>
+    <!-- login form end -->
 
 </div>
 <!-- main section end -->

@@ -1,4 +1,13 @@
 $().ready(function() {
+
+    $.validator.addMethod("indiaMobile", function(value, element) {
+        var country_code = $('#id_country_code').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
+
     var emailresponse;
     $.validator.addMethod("uniqueUserName",
         function(value, element) {
@@ -9,13 +18,13 @@ $().ready(function() {
                 data:{email:$("#id_email").val()},
                 success: function(res)
                 {
-                    emailresponse = ( res.exists == false ) ? true : false;
+                    emailresponse = !res.exists;
                 }
-             });
-             return emailresponse;
+            });
+            return emailresponse;
 
         },
-        "This email id already taken."
+        "This email id is already taken."
     );
 
     $("#register_form").validate({
@@ -34,39 +43,44 @@ $().ready(function() {
                 email:{
                     required:true,
                     email:true,
-                    uniqueUserName:true,
+                    uniqueUserName:true
                 },
                 raw_password:{
                     required:true,
                     minlength:6,
-                    maxlength: 15,
+                    maxlength: 15
                 },
                 cell_phone:{
                     required:true,
                     number: true,
-                    minlength: 10,
-                    maxlength: 15,
+                    indiaMobile: true,
+                    minlength: 6,
+                    maxlength: 15
+                },
+                hello: {
+                    required: true
                 },
                 term_conditions:{
-                   required:true,
-                },                
+                    required:true
+                }
         },
         messages:{
             email: { 
-                required:"Please enter a valid email address",                
+                required:"Please enter a valid email address"
             },
             raw_password:{
-                required: "Please provide a password",
+                required: "Please provide a password"
             },
             cell_phone:{
-                required:"Mobile Number is Mandatory",
-                number:"Enter only number",
-                maxlength: "Please enter below 15 digits",
-                minlength: "Please enter atleast 10 digits",
+                required:"Mobile No. is mandatory",
+                number:"Enter only numbers",
+                indiaMobile: "Length must be 10 digits.",
+                maxlength: "Please enter up to 15 digits",
+                minlength: "Please enter at least 6 digits"
             },
             term_conditions:{
-              required:"Please check term conditions",
-            },
-        },
+                required:"Please check terms & conditions"
+            }
+        }
     });
 });

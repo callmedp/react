@@ -1,0 +1,339 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Shine Learning{% endblock title %}
+
+{% block css_section %}
+  {{block.super}}
+  <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
+
+{% endblock css_section %}
+    
+
+{% block main_container %}
+    {% block page_heading %}
+        {% if request.session.candidate_id %}
+        <!-- header -->
+        <header class="home-header-loggedin">
+          <div class="container">
+            <div class="home-caption">
+              <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
+              <strong>We would like to recommend these courses for you based on your profile</strong>
+            </div>
+            
+            <!-- recommend courses -->
+            <div>
+              <ul class="listing">
+                {% for course in recommended_courses %}
+                <li class="col-sm-6 col-md-4">
+                  <a title="{{course.heading}}" class="box-panel" href="{{course.get_absolute_url}}">
+                    <div class="media">
+                      <div class="media-left">
+                          <figure class="color1" style="background-color:{{course.get_bg}};">
+                            <img class="media-object" src="{{course.image.url}}" alt="{{course.image_alt}}" height="125" width="125">
+                          </figure>
+                      </div>
+                      <div class="media-body">
+
+                        <h3 class="listing-heading">{{course.heading}}</h3>
+
+                        <div class="rating-review-box">
+                            {% for star in course.get_ratings %}
+                                  {% if star == '*' %}
+                                    <figure class="full-star"></figure>
+                                  {% elif star == '+' %}
+                                    <figure class="half-star"></figure>
+                                  {% else %}
+                                    <figure class="blank-star"></figure>
+                                  {% endif %}
+                                {% endfor %}
+                                
+                                <strong>{{course.get_avg_ratings}}<small>/5</small></strong>
+                                <span class="jobs-available"><strong>{{course.num_jobs}}</strong> jobs available</span>
+                        </div> 
+
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                {% endfor %}
+                
+              </ul>
+            </div>
+            <a class="modification" data-toggle="collapse" href="#search" aria-expanded="false" aria-controls="search">Modify recommendation</a>
+          </div>
+        </header>
+
+        {% else %}
+        <!-- header -->
+        <header class="home-header">
+          <div class="container">
+            <div class="home-caption">
+              <h1>Get the right skills to <br>move ahead in your career</h1>
+              <strong>1 lakh happy learners | Over 400 courses</strong>
+            </div>
+
+            <div class="home-search-box search-mg">
+              <strong>Let’s find the right course for you</strong>
+              <form class="form-inline">
+                <div class="form-group">
+                  <input class="form-control input1" name="query1" id="query1" placeholder="Functional area" type="text">
+                  <input class="form-control input2" name="query2" id="query2" placeholder="Key skills" type="text">
+                  <input class="form-control input3" name="query3" id="query3" placeholder="Experience" type="text">              
+                </div>
+                <button type="submit" class="find-jobs-btn btn">Find</button>
+              </form>
+            </div>
+
+          </div>
+        </header>
+        {% endif %}
+
+        <div class="collapse search-bg" id="search">
+            <div class="home-search-box">
+                <strong>Let’s find the right course for you</strong>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <input class="form-control input1" name="query1" id="query1" placeholder="Functional area" type="text">
+                    <input class="form-control input2" name="query2" id="query2" placeholder="Key skills" type="text">
+                    <input class="form-control input3" name="query3" id="query3" placeholder="Experience" type="text">              
+                  </div>
+                  <button type="submit" class="find-jobs-btn btn">Find</button>
+                </form>
+            </div>
+        </div>
+
+    {% endblock page_heading %}
+
+    {% block section1 %}
+        <!-- how it works -->
+        <section class="container">
+           <div class="row">
+              <ul class="how-it-works">
+                <li class="col-sm-3">
+                  <figure class="discover-home-icon"></figure>
+                  <strong>Discover</strong>
+                  <article>Help us know you better and we will suggest the right courses or career enhancement services for you.</article>
+                </li>
+                <li class="col-sm-3">
+                  <figure class="evaluate-home-icon"></figure>
+                  <strong>Evaluate</strong>
+                  <article>Chat with us or browse through the details to compare and choose the option that suits you best.</article>
+                </li>
+                <li class="col-sm-3">
+                  <figure class="buy-home-icon"></figure>
+                  <strong>Buy</strong>
+                  <article>Once you have made your choice, check out and buy the relevant course or service.</article>
+                </li>
+                <li class="col-sm-3">
+                  <figure class="getfuture-home-icon"></figure>
+                  <strong>Get future-ready</strong>
+                  <article>Take the course or service to gear up for the next stage of your career.</article>
+                </li>
+              </ul>
+          </div>
+        </section>
+    {% endblock section1 %}
+
+    {% block section2 %}
+        {% if tcourses %}
+
+        <!-- our courses -->
+        <section class="container-fluid our-courses">
+          <div class="row">
+            <div class="container">
+              <h2>Our Courses</h2>
+              <article>Choose from a pool of 600+ courses basis my domain or area of interest</article>
+              <!-- Nav tabs -->
+              <ul class="nav tab-link" role="tablist">
+                  
+                {% for course in tcourses %}
+                      <li role="presentation" {% if forloop.first %}class="active"{% endif %}><a href="#{{course.tab}}" aria-controls="{{course.tab}}" role="tab" data-toggle="tab">{{course.name}}</a></li>
+                {% endfor %}
+                  
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <!-- Certifications tab content -->
+                {% for course in tcourses %}
+                <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{course.tab}}">
+                  <ul class="listing">
+                    {% for tprd in course.tprds %}
+                    <li class="col-sm-6 col-md-4">
+                      <a title="{{tprd.product.heading}}" class="box-panel" href="{{tprd.product.get_absolute_url}}">
+                        <div class="media">
+                          <div class="media-left">
+                              <figure style="background-color:{{tprd.product.get_bg}};">
+                                <img class="media-object" src="{{tprd.product.image.url}}" alt="{{tprd.product.image_alt}}" height="134" width="131">
+                              </figure>
+                          </div>
+                          <div class="media-body">
+
+                            <h3 class="listing-heading">{{tprd.product.heading}}</h3>
+
+                            <div class="rating-review-box">
+                                {% for star in tprd.product.get_ratings %}
+                                  {% if star == '*' %}
+                                    <figure class="full-star"></figure>
+                                  {% elif star == '+' %}
+                                    <figure class="half-star"></figure>
+                                  {% else %}
+                                    <figure class="blank-star"></figure>
+                                  {% endif %}
+                                {% endfor %}
+                                
+                                <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
+                                <span class="jobs-available"><strong>{{tprd.product.num_jobs}}</strong> jobs available</span> 
+                            </div> 
+
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    {% endfor %}
+
+                  </ul>
+                  <a title="View all" href="{{course.view_all}}" class="view-all">View all</a>
+                </div>
+                {% endfor %}
+                
+              </div>
+
+            </div>
+          </div>
+        </section>
+        {% endif %}
+    {% endblock section2 %}
+
+    {% block section3 %}
+        <!-- Job assistance services -->
+        {% if job_asst_services %}
+        <section class="container-fluid job-assistance">
+          <div class="row">
+            <div class="container">
+              <h2>Job assistance services</h2>
+              <article>Struggling to find my next job? Get interview ready through our array of job assistance services</article>
+                <ul class="listing">
+                  {% for tprd in job_asst_services %}
+                  <li>
+                    <a title="Resume writing" class="box-panel" href="{{tprd.product.get_absolute_url}}">
+                      <figure style="background-color:{{tprd.product.get_bg}};">
+                        {% thumbnail tprd.product.image "200x125" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{tprd.product.image_alt}}">
+                        {% endthumbnail %}
+                        <!--img class="media-object" src="{{prd.image.url}}" alt="{{prd.image_alt}}"-->
+                      </figure>
+                      <div class="caption">
+                        <h3 class="listing-heading">{{tprd.product.heading}}</h3>
+                        <div class="rating-review-box">
+                            {% for star in tprd.product.get_ratings %}
+                              {% if star == '*' %}
+                                <figure class="full-star"></figure>
+                              {% elif star == '+' %}
+                                <figure class="half-star"></figure>
+                              {% else %}
+                                <figure class="blank-star"></figure>
+                              {% endif %}
+                            {% endfor %}
+                          <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
+                          <span class="jobs-available"><strong>{{tprd.product.buy_count}}</strong> people bought</span> 
+                        </div> 
+
+                      </div>
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                <a title="View all" href="{{job_asst_view_all}}" class="view-all">View all</a>
+            </div>
+          </div>
+        </section>
+        {% endif %}
+    {% endblock section3 %}
+
+    {% block section4 %}
+        <!-- Testimonials start -->
+        {% if testimonials %}
+        <section class="container mb-100">
+          <div class="testimonials">
+            <h2 class="text-center text-uppercase ro-heading">Testimonials</h2>
+
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner" role="listbox">
+                {% for test in testimonials %}
+                <div class="item {% if forloop.first %}active{% endif %}">
+                  {% if test.image %}
+                      <img src="{{test.image.url}}" alt="profile-pic" width="100" height="100">
+                  {% else %}
+                    <img src="{% static "shinelearn/images/user-loggedin.jpg" %}" alt="profile-pic" width="100" height="100">
+                  {% endif %}
+                  <div class="carousel-caption">           
+                    {{test.review|striptags|safe}}
+                    <strong>
+                      {{test.user_name}}
+                      <small>{{test.designation}} {% if test.company %}at {{test.company}}{% endif %}</small>
+                    </strong>
+
+                  </div>
+                </div>
+                {% endfor %}
+
+              </div>
+
+              <!-- Controls -->
+              <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+              </a>
+              <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+              </a>
+            </div>
+          </div>
+        </section>
+        {% endif %}
+
+    {% endblock section4 %}
+
+{% endblock main_container %}
+
+
+{% block js_section %}
+  {{block.super}} 
+  <script type="text/javascript">
+      $(document).ready(function() {
+          // Header Scroll
+          $(window).on('scroll', function() {
+              var scroll = $(window).scrollTop();
+
+              if (scroll >= 50) {
+                  $('.navbar').addClass('navbar-color');
+              } else {
+                  $('.navbar').removeClass('navbar-color');
+              }
+          });
+
+      });
+    </script>
+
+    <script type="text/javascript">
+      $('#query1').typeahead({        
+        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+      });
+
+      $('.tt-query').css('background-color','#fff'); 
+
+      $('#query2').typeahead({        
+        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+      });
+
+      $('.tt-query').css('background-color','#fff'); 
+
+      $('#query3').typeahead({        
+        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+      });
+
+      $('.tt-query').css('background-color','#fff'); 
+    </script>   
+{% endblock js_section %}

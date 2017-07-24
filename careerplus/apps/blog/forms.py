@@ -14,10 +14,6 @@ User = get_user_model()
 
 class BlogAddForm(forms.ModelForm):
 
-    display_name = forms.CharField(label=("Display Name:"), required=False,
-        max_length=85, widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
-
     name = forms.CharField(label=("Name*:"), required=True, max_length=85,
         help_text='enter name for slug generation.',
         widget=forms.TextInput(
@@ -72,7 +68,7 @@ class BlogAddForm(forms.ModelForm):
 
     class Meta:
         model = Blog
-        fields = ['display_name', 'name', 'slug', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'sites', 'user', 'allow_comment',
+        fields = ['name', 'slug', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'sites', 'user', 'allow_comment',
             'status', 'url', 'title', 'meta_desc', 'meta_keywords']
         widgets = {
             'url': forms.URLInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),

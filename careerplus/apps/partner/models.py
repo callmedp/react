@@ -57,6 +57,10 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     website = models.CharField(
         _('Website.'), blank=True,
         max_length=20, help_text=_('Website'))
+    prd_add_class = models.ManyToManyField(
+        'shop.ProductClass',
+        verbose_name=_('Product Add-Types'),
+        blank=True)
     employees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through='VendorHierarchy',
@@ -69,7 +73,7 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         verbose_name_plural = _('Vendors')
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
-
+        
     def __str__(self):
         return self.name
 
@@ -89,7 +93,12 @@ class VendorHierarchy(AbstractAutoDate):
     designation = models.PositiveSmallIntegerField(
         default=1)
 
+    # class Meta:
+    #     # pass
+    #     # Comment this while initial migration
+    #     auto_created = True
+
     def __str__(self):
         return _("%(vendor)s to '%(employee)s'") % {
-            'vendor': self.vendor,
+            'vendor': self.vendee,
             'employee': self.employee}

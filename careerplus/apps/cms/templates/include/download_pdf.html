@@ -1,7 +1,7 @@
 {% load static %}
 <div class="download-pdf mb-40">
    {% if download_doc %}
-	  <a id="id_download_button" href="{{download_doc.get_url}}" pop-up="{{download_pop_up}}">
+	  <a id="id_download_button" href="{{download_doc.get_url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
 	    <img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}">
 	    <span class="download-box">
 	      <figure class="download-icon"></figure>
@@ -20,7 +20,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h1 class="modal-title" id="myModalLabel">Download as PDF</h1>
       </div>
-        <form role="form" method="post" id="downloadpdf_form" action="{% url "cms:download-pdf" page_obj.slug %}">
+        <form role="form" method="post" id="downloadpdf_form" action="{% url "cms:download-pdf" page_obj.pk %}">
           <div style='display:none'>
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
           </div>

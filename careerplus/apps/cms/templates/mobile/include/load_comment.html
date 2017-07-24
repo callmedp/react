@@ -1,0 +1,20 @@
+{% load static humanize %}
+{% static 'shinelearn/images/mobile/common/default-user.jpg' as default_user_pic %}
+{% for comment in comments %}
+    <li>
+        <sup><img src="{{ default_user_pic }}"></sup>
+        <p class="pb-0">{{comment.message}}</p>
+        <span class="editor fs-12 c9">{{ comment.created_by|title }}, {{ comment.created_on|naturaltime }}</span>
+    </li>
+{% endfor %}
+
+{% if comments.has_next %}
+    <div id="load_more">
+        <form role="form" id="loadform">
+            {% csrf_token %}
+            <input type="hidden" name="page" value="{{comments.next_page_number}}">
+            <input type="hidden" name="slug" value="{{page_obj.slug}}">
+        </form>
+        <a id="comment_load_more" role="button" class="comments-links mb-40"> <span class="comments-icon mr-10"></span>Load more Comments</a>
+    </div>
+{% endif %}

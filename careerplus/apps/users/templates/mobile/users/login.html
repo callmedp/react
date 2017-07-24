@@ -1,0 +1,70 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% block title %}Login Shine learning{% endblock %}
+{% block css_section %}
+{{ block.super }}
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
+{% endblock css_section %}
+
+
+{% block container %}
+    <div class="body-wrapper">
+        <div class="tab-container">
+            <ul class="tabs box-panel p-0">
+                <li><a href="{% url 'login' %}" class="current">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+            </ul>
+
+            <!-- Tab content Satrts here -->
+            <div class="content-box mt-20">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                <form method="post" id="login_form" data-role="form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group {% if field.errors %}error{% endif %}">
+                            {{field}}
+                            {% for error in  field.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        <p class="c9 pb-0">
+                            <input type="checkbox" id="test10">
+                            <label for="test10">Remember me</label>
+                        </p>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Login</button>
+                        <a href="#">Forgot Password?</a>
+                    </div>
+
+                    <div class="line_wrap w100fl">
+                        <span>or sign in with</span>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="social-login w100fl text-center">
+                        <a href="#" class="fb"><sup class="icon-fb-2"></sup></a>
+                        <a href="#" class="tw"><sup class="icon-tw-2"></sup></a>
+                        <a href="#" class="gp"><sup class="icon-gp-2"></sup></a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <a href="#" class="any-query block mt-20 text-center row">Any Query ? We are here to help you..</a>
+                </form>
+            </div><!-- Tab content ends here -->
+        </div><!-- container -->
+    </div>
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+{% endblock js_section %}
+

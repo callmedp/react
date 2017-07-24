@@ -1,0 +1,87 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% block title %}Register Shine learning{% endblock %}
+{% block css_section %}
+{{ block.super }}
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
+    <style>
+        .error.form-control {
+            border-color: #f34a38;
+            color: #f34a38;
+        }
+        .form-group label.error {
+            font-size: 85%;
+            padding-top: 3px;
+            color: #f34a38;
+            display: block;
+            padding-bottom: 0;
+        }
+    </style>
+{% endblock css_section %}
+
+{% block container %}
+    <div class="body-wrapper">
+        <div class="tab-container">
+            <ul class="tabs box-panel p-0">
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}" class="current">Register</a></li>
+            </ul>
+
+            <div class="content-box mt-20">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                <form method="post" id="register_form" role="form">
+                    {% csrf_token %}
+
+                    <div class="form-group {% if form.email.errors %}error{% endif %}">
+                        {{ form.email }}
+                        {% if form.email.errors %}<p class="mgs">{{ form.email.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div class="form-group {% if form.raw_password.errors %}error{% endif %}">
+                        {{ form.raw_password }}
+                        {% if form.raw_password.errors %}<p class="mgs">{{ form.raw_password.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
+                    <div class="pull-left code">
+                         {{form.country_code}}
+                    </div>
+                        {{form.cell_phone}}
+                        {% if form.cell_phone.errors %}<p class="mgs">{{ form.cell_phone.errors.0 }}</p>{% endif %}
+                     <div class="clearfix"></div>
+                    </div>
+                    {{form.vendor_id}}
+
+                    <div class="form-group mt-30">
+                        <p class="c9">
+                          <input type="checkbox" id="id_term_conditions" name="term_conditions"/>
+                          <label for="id_term_conditions"> I agree to <a href="#">Terms &amp; Conditions</a></label>
+                        </p>
+
+                        <p class="c9">
+                          {{ form.is_job_seeker }}
+                          <label for="id_is_job_seeker">Receive jobs notifications</label>
+                        </p>
+                    </div>
+
+                    <div class="form-group text-center tabs">
+                        <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Register</button>
+                        <div class="clearfix"></div>
+                        <p>Already have an account? <a href="{% url 'login' %}" data-toggle="tab">Login now</a></p>
+                    </div>
+                </form>
+            </div>
+        </div><!-- container -->
+    </div>
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static 'shinelearn/js/users/registration.js' %}"></script>
+{% endblock js_section %}

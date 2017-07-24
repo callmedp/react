@@ -1,8 +1,9 @@
+{% load static %}
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" href="#"></a>
+      <a class="navbar-brand" href="{% url "homepage" %}"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -143,14 +144,17 @@
           </ul>
         </li>
         <li class="dropdown cart-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="cart-icon"></span></a>
+          <a href="{% url "cart:cart-product-list" %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="cart-icon">{% if cart_count %}<span class="cart-counter">{{cart_count}}</span>{% endif %}</span></a>
           <ul class="dropdown-menu">
             <li><a href="{% url "cart:cart-product-list" %}">My Cart</a></li>
+
           </ul>
         </li>
         {% if request.session.candidate_id %}
         <li class="dropdown login-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="loggedin-user"><img src="{% static "shinelearn/images/user-loggedin.jpg" %}" align="user name"></span></a>
+
+          <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">
             <li><a href="#">My inbox</a></li>
             <li><a href="#">My orders</a></li>
@@ -164,6 +168,7 @@
             <a href="{% url 'login' %}" ><span class="login-btn">Login</span></a>
         </li>
         {% endif %}
+
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
