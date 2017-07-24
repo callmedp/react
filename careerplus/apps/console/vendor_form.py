@@ -153,7 +153,7 @@ class AddScreenProductForm(forms.ModelForm):
             self.fields['product_class'].queryset = vendor.prd_add_class.all()
                        
         self.fields['inr_price'].widget.attrs['class'] = form_class
-        self.fields['inr_price'].required = True
+        self.fields['inr_price'].required = False
         
         self.fields['name'].widget.attrs['class'] = form_class
         self.fields['name'].widget.attrs['maxlength'] = 80
@@ -215,7 +215,7 @@ class AddScreenProductForm(forms.ModelForm):
             if inr_price < Decimal(0):
                 raise forms.ValidationError(
                     "This value cannot be negative.")
-            return inr_price
+        return inr_price
     
     def save(self, commit=True, *args, **kwargs):
         productscreen = super(AddScreenProductForm, self).save(

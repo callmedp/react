@@ -11,7 +11,6 @@ def common_context_processor(request):
     	"OPERATION_GROUP_LIST": settings.OPERATION_GROUP_LIST,
     	"SEO_GROUP_LIST": settings.SEO_GROUP_LIST,
     	"WRITING_GROUP_LIST": settings.WRITING_GROUP_LIST
-
     })
     return context
 
