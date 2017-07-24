@@ -4,7 +4,6 @@ import csv
 import datetime
 import logging
 
-from collections import OrderedDict
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import (
@@ -135,12 +134,12 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status=[4,23])
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48])
 
         user = self.request.user
-        if user.has_perm('order.can_show_unassigned_inbox'):
+        if user.has_perm('order.writer_inbox_assigner'):
             queryset = queryset.filter(assigned_to=None)
-        elif user.has_perm('order.can_show_assigned_inbox'):
+        elif user.has_perm('order.writer_inbox_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
             queryset = queryset.none()
@@ -221,7 +220,6 @@ class DraftListing(ListView, PaginationMixin):
         return context
 
 
-@method_decorator(login_required(login_url='/console/login/'), name='dispatch')
 class LinkedinOrderDetailVeiw(DetailView):
     model = Order
     template_name = "console/linkedin/linkedin-order.html"
@@ -490,9 +488,6 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         self.delivery_type = request.GET.get('delivery_type', -1)
         return super(LinkedinRejectedByCandidateView, self).get(request, args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        pass
-
     def get_context_data(self, **kwargs):
         context = super(LinkedinRejectedByCandidateView, self).get_context_data(**kwargs)
         paginator = Paginator(context['rejectedbylinkedincandidate_list'], self.paginated_by)
@@ -517,7 +512,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByCandidateView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=48, product__type_flow__in=[1])
+        queryset = queryset.filter(order__status=1, oi_status=48, product__type_flow__in=[8])
 
         try:
             if self.query:
