@@ -3,7 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
-    PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
+    PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS,\
+    OI_USER_STATUS
 
 from linkedin.models import Draft
 
@@ -297,6 +298,11 @@ class OrderItem(models.Model):
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
+    @property
+    def get_user_oi_status(self):
+        dict_status = dict(OI_USER_STATUS)
+        return dict_status.get(self.oi_status)
+
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
         return list(communications)
@@ -365,6 +371,11 @@ class OrderItemOperation(AbstractAutoDate):
     @property
     def get_oi_status(self):
         dict_status = dict(OI_OPS_STATUS)
+        return dict_status.get(self.oi_status)
+
+    @property
+    def get_user_oi_status(self):
+        dict_status = dict(OI_USER_STATUS)
         return dict_status.get(self.oi_status)
 
 

@@ -35,6 +35,7 @@ from .order_form import (
     OIFilterForm,
     OIActionForm,
     AssignmentActionForm,)
+from .mixins import ActionUserMixin
 
 
 @method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/'), name='dispatch')
@@ -247,19 +248,15 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             try:
                 oi = OrderItem.objects.get(pk=obj_pk)
                 order = oi.order
-                orderitems = order.orderitems.all()  # filter(product__type_flow__in=[1])
+                orderitems = order.orderitems.filter(oi_status=2)  # filter(product__type_flow__in=[1])
                 for oi in orderitems:
                     if not oi.oi_resume:
-                        oi.oi_resume = request.FILES.get('oi_resume', '')
-                        last_status = oi.oi_status
-                        oi.oi_status = 3
-                        oi.last_oi_status = last_status
-                        oi.save()
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=last_status,
-                            assigned_to=oi.assigned_to,
-                            added_by=request.user)
+                        data = {
+                            "candidate_resume": request.FILES.get('oi_resume', ''),
+                        }
+
+                        ActionUserMixin().upload_candidate_resume(
+                            oi=oi, data=data, user=request.user)
                 messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
@@ -291,10 +288,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_queryset(self):
         queryset = OrderItem.objects.all().select_related('order', 'product')
         queryset = queryset.filter(
-            order__status=1, no_process=False, product__type_flow__in=[1, 3, 5]).exclude(oi_status=4)
-
-        queryset = queryset.filter(Q(oi_resume__exact='') |
-            Q(oi_resume__isnull=True))
+            order__status=1, no_process=False, oi_status=2)
 
         try:
             if self.query:
@@ -418,7 +412,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3], oi_draft='').exclude(oi_resume='').exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status=5)
+
         user = self.request.user
         if user.is_superuser:
             pass
@@ -610,7 +605,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovalQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=23, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=23, product__type_flow__in=[1, 3, 12, 13])
         user = self.request.user
        
         if user.has_perm('order.can_view_all_approval_list'):
@@ -1392,8 +1387,30 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(BoosterQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=7, no_process=False).exclude(oi_status__in=[4, 62])
-        queryset = queryset.filter(parent__oi_status=4)
+        queryset = queryset.filter(order__status=1, product__type_flow=7, no_process=False, oi_status__in=[5, 61])
+        queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        q1 = queryset.filter(oi_status=61)
+        exclude_list = []
+        for obj in q1:
+            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1)
+            if closed_ois.exists():
+                last_oi_status = obj.oi_status
+                obj.oi_status = 5
+                obj.oi_draft = closed_ois[0].oi_draft
+                obj.draft_counter += 1
+                obj.last_oi_status = last_oi_status
+                obj.save()
+
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=obj.last_oi_status,
+                    assigned_to=obj.assigned_to,
+                )
+            else:
+                exclude_list.append(obj.pk)
+
+        queryset = queryset.exclude(id__in=exclude_list)
+        queryset = queryset.exclude(Q(oi_draft__isnull=True) | Q(oi_draft__exact=''))
 
         try:
             if self.query:
@@ -1419,7 +1436,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        return queryset
 
 
 class ActionOrderItemView(View):
@@ -1607,8 +1624,7 @@ class ActionOrderItemView(View):
 
         elif action == -3 and queue_name == 'booster':
             try:
-                booster_ois = OrderItem.objects.filter(id__in=selected_id, product__type_flow=7).select_related('order')
-                booster_ois = booster_ois.exclude(oi_status__in=[4, 62])
+                booster_ois = OrderItem.objects.filter(id__in=selected_id, product__type_flow=7, oi_status=5).select_related('order')
                 days = 7
                 candidate_data = {}
                 recruiter_data = {}
@@ -1622,7 +1638,7 @@ class ActionOrderItemView(View):
                         "user_name": oi.order.first_name + ' ' + oi.order.last_name
                     })
 
-                    if oi.parent and oi.parent.oi_draft and (oi.parent.oi_status == 4 or oi.parent.no_process):
+                    if oi.oi_draft:
                         resumevar = "http://%s/user/resume/download/?token=%s" % (
                             settings.SITE_DOMAIN, token)
                         resumevar = textwrap.fill(resumevar, width=80)
@@ -1762,15 +1778,14 @@ class ActionOrderItemView(View):
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 unhold = 0
                 for obj in orderitems:
-                    prev_status = obj.last_oi_status
                     last_oi_status = obj.oi_status
-                    obj.oi_status = prev_status  # UnHold
+                    obj.oi_status = 12  # UnHold
                     obj.last_oi_status = last_oi_status
                     obj.save()
                     unhold += 1
                     obj.orderitemoperation_set.create(
                         oi_status=obj.oi_status,
-                        last_oi_status=last_oi_status,
+                        last_oi_status=obj.last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
                 msg = str(unhold) + ' orderitems are unhold.'

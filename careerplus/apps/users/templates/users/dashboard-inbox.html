@@ -1,0 +1,238 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+{% spaceless %}
+
+    
+    {% block title %}User Inbox|Shinelearning{% endblock title %} 
+    
+    {% block css_section %}
+        {{block.super}}
+        <link type="text/css" href="{% static "/shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
+        <style type="text/css">
+            .error{
+                color: red;
+            }
+        </style>
+    {% endblock css_section %}
+    
+    <!-- main section start -->
+    {% block main_container %}
+
+      {% block page_heading %}
+
+       {% block breadcrumb %}
+           <!-- breadcrums -->
+            <section class="container">
+              <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">Dashboard</li>
+              </ol>  
+            </section>
+       {% endblock breadcrumb %}
+      
+      {% endblock page_heading %}
+
+      {% block main_section %}
+          <section class="container mt-10">
+
+            <!-- page content body start -->
+            <div class="row">
+            
+            {% block upload_box %}
+
+            {% if pending_resume_items %}
+            <!-- resume upload box -->
+            <div class="notification-resume">
+              To initiate your <a href="#">Resume writing</a> services. Use <a href="#">Shine resume</a> or <a href="#">upload resume</a>
+              
+              <form role="form" method="post" action="." id="resume-upload-form" enctype='multipart/form-data'>{% csrf_token %}
+                  <small id="non-field-errors" class="error">{{validation_error}}</small>
+                  <div class="resume-writing">
+                    <div class="input-file">
+                    <a class='' href='javascript:;'>
+                        <span class="choose-file">Choose file</span>
+                        <input maxlength="200" name="file" id="file-id" type="file" style='position:absolute;z-index:2;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="30"  onchange='$("#upload-file-info").html($(this).val());'>
+                    </a>
+                    <span class="upload-file" id="upload-file-info"></span>
+                    <span class="error-txt"></span>
+                    </div>
+                    <strong>Use this resume for following products</strong>
+                    {% for oi in pending_resume_items %}
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" name="resume_pending" value="{{oi.pk}}">
+                            {{oi.product.name}} - {{oi.product.get_exp}}
+                          </label>
+                        </div>
+                    {% endfor %}
+                    <input type="hidden" id="resume_type_id" name="resume_type" value="0" />
+                    <a role="button" id="upload-resume-button" class="blue-button">Upload now</a>
+                  </div>
+              </form>
+            </div>
+            {% endif %}
+            {% endblock upload_box %}
+
+            {% block left_content %}
+            <!-- left content start -->
+              <div class="col-sm-3 dashboard-tab">
+                <a class="active" href="dashboard-inbox.html"><span class="inbox-icon"></span> Inbox</a>
+                <a href="dashboard-orders.html"><span class="orders-icon"></span> My orders</a>
+                <a href="dashboard-wallet.html"><span class="wallet-icon"></span> My wallet</a>
+                <!-- <a href="dashboard-recommended.html"><span class="recommended-icon"></span> Recommended courses</a> -->
+                <a href="dashboard-roundone.html"><span class="referal-icon"></span> Referral</a>
+                <div class="please-call">
+                  Please call us at <strong>0120-4959420/32</strong> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.
+                </div>
+              </div>  
+            <!-- left content end -->
+            {% endblock left_content %}
+
+            {% block right_content %}
+            <!-- right content start -->
+            <div class="col-sm-9 bdr dashboard-tab-content" id="right-content-id">
+              <div class="filter-by">
+              Filter by
+                <div class="form-group custom-select">
+                <select class="form-control">
+                  <option>Last six months</option>
+                  <option>Last three months</option>
+                </select>
+                </div>
+                <div class="form-group custom-select">
+                <select class="form-control">
+                  <option>Active orders</option>
+                  <option>Inactive orders</option>
+                </select>
+                </div>
+              </div>
+              <ul class="products-inbox" id="product-inbox-id">
+                   {{inbox_list|safe}}
+              </ul>
+
+            </div>
+            <!-- right content end -->
+            {% endblock right_content %}
+
+            </div>
+            <!-- page content body end -->
+
+        </section>
+        <!-- main section end -->
+      {% endblock main_section %}
+
+      {% block recommended_products %}
+          <!-- Recommended products container -->
+        <section class="container-fluid recommended-products">
+          <div class="container">
+            <div class="row">
+              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                  <div class="panel-heading" role="tab" id="headingOne">
+                    <h3 class="panel-title">
+                      <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          Recommended Products
+                        </a>
+                      </h3>
+                    </div>
+                  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                      <div class="row">
+                        <ul class="listing">
+                          <li class="col-sm-6 col-md-4">
+                            <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
+                              <div class="media">
+                                <div class="media-left">
+                                    <figure class="color1">
+                                      <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
+                                    </figure>
+                                </div>
+                                <div class="media-body">
+
+                                  <h3 class="listing-heading">Prince2 Foundation Training</h3>
+
+                                  <div class="rating-review-box">
+                                      <figure class="full-star"></figure>
+                                      <figure class="full-star"></figure>
+                                      <figure class="half-star"></figure>
+                                      <figure class="blank-star"></figure>
+                                      <figure class="blank-star"></figure>
+                                      <strong>3.9<small>/5</small></strong>
+                                      <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                                  </div> 
+
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="col-sm-6 col-md-4">
+                            <a title="Background Verification" class="box-panel" href="#">
+                              <div class="media">
+                                <div class="media-left">
+                                    <figure class="color2">
+                                      <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
+                                    </figure>
+                                </div>
+                                <div class="media-body">
+
+                                  <h3 class="listing-heading">Vskills Certified Project</h3>
+
+                                  <div class="rating-review-box">
+                                      <figure class="full-star"></figure>
+                                      <figure class="full-star"></figure>
+                                      <figure class="half-star"></figure>
+                                      <figure class="blank-star"></figure>
+                                      <figure class="blank-star"></figure>
+                                      <strong>3.9<small>/5</small></strong> 
+                                      <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                                  </div> 
+
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li class="col-sm-6 col-md-4 hidden-sm">
+                            <a title="The Complete Career Package" class="box-panel" href="#">
+                              <div class="media">
+                                <div class="media-left">
+                                    <figure class="color3">
+                                      <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
+                                    </figure>
+                                </div>
+                                <div class="media-body">
+
+                                  <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
+
+                                  <div class="rating-review-box">
+                                      <figure class="full-star"></figure>
+                                      <figure class="full-star"></figure>
+                                      <figure class="half-star"></figure>
+                                      <figure class="blank-star"></figure>
+                                      <figure class="blank-star"></figure>
+                                      <strong>3.9<small>/5</small></strong> 
+                                      <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                                  </div> 
+
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>     
+        </section> 
+      {% endblock recommended_products %}
+
+    {% endblock main_container %}
+
+    {% block js_section %}
+        {{block.super}}
+        <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    {% endblock js_section %}
+  
+{% endspaceless %}

@@ -17,7 +17,7 @@ class Command(BaseCommand):
 def booster():
     ''' Resume Boosters mail sending'''
 
-    booster_ois = OrderItem.objects.filter(order__status__in=[1, 3], product__type_flow=7).exclude(oi_status__in=[4, 62])
+    booster_ois = OrderItem.objects.filter(order__status__in=[1, 3], product__type_flow=7, oi_status=5)
     booster_ois = booster_ois.select_related('order')
     days = 7
     candidate_data = {}
@@ -31,7 +31,7 @@ def booster():
             "user_name": oi.order.first_name + ' ' + oi.order.last_name
         })
 
-        if oi.parent and oi.parent.oi_draft and (oi.parent.oi_status == 4 or oi.parent.no_process):
+        if oi.oi_draft:
             resumevar = "http://%s/user/resume/download/?token=%s" % (
                 settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)
