@@ -421,7 +421,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         if user.is_superuser:
             pass
         elif user.has_perm('order.writer_inbox_assigner'):
-            queryset = queryset.filter(Q(assigned_to__isnull=True) | Q(assigned_to__exact=''))
+            queryset = queryset.filter(assigned_to__isnull=True)
         elif user.has_perm('order.writer_inbox_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
@@ -1026,7 +1026,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
         queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3]).exclude(oi_status=4)
-        queryset = queryset.exclude(assigned_to__isnull=True).exclude(assigned_to__exact='')
+        queryset = queryset.exclude(assigned_to__isnull=True)
         user = self.request.user
 
         if user.has_perm('order.can_view_all_allocated_list'):
