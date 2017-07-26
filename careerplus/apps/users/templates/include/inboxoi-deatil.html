@@ -57,6 +57,48 @@
               
             </ul>
         </li>
+    {% elif oi.product.type_flow == 3 %}
+        <li class="col-sm-12">
+          <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
+          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <ul class="view-comments-links col-sm-7 col-md-8">
+            <li>View details</li>
+            <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
+          </ul>
+          <div class="hr"></div>
+          <ul class="table-data">
+              <li class="data-heading">
+                <datalist class="col-sm-3">
+                  Date
+                </datalist>
+                <datalist class="col-sm-6">
+                  Status
+                </datalist>
+                <datalist class="col-sm-3">
+                </datalist>
+              </li>
+
+              {% for op in ops %}
+                  <li>
+                    <datalist class="col-sm-3">
+                      {{op.created.date}}
+                    </datalist>
+                    <datalist class="col-sm-6">
+                        {{op.get_user_oi_status}}
+                    </datalist>
+                    <datalist class="col-sm-3 text-right">
+
+                      {% if op.oi_draft %}
+                          <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                      {% elif op.oi_status and not oi.oi_resume %}
+                          <a href="#" >Upload Resume</a>
+                      {% endif %}
+                    </datalist>
+                  </li>
+              {% endfor %}
+              
+            </ul>
+        </li>
     {% elif oi.product.type_flow == 2 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
