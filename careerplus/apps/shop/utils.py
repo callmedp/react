@@ -289,11 +289,15 @@ class ProductModeration(object):
                         messages.error(request, "Product is not associated")
                         return test_pass
                             
-                    test_pass = self.validate_fields(
-                        request=request, product=productscreen)
+                    if not self.validate_fields(
+                        request=request, product=productscreen):
+                        return test_pass
                     if productscreen.type_product == 1:
-                        test_pass = self.validate_variation(
-                            request=request, product=productscreen)
+                        if not self.validate_variation(
+                            request=request, product=productscreen):
+                            return test_pass
+                    
+                    test_pass = True    
                     return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
@@ -546,14 +550,18 @@ class CategoryValidation(object):
         try:
             if request:
                 if category:
-                    test_pass = self.validate_fields(
-                        request=request, category=category)
+                    if not self.validate_fields(
+                        request=request, category=category):
+                        return test_pass
                     if category.type_level in [2, 3, 4]:
-                        test_pass = self.validate_parent(
-                            request=request, category=category)
+                        if not self.validate_parent(
+                            request=request, category=category):
+                            return test_pass
                     if category.is_skill:
-                        test_pass = self.validate_skillpage(
-                            request=request, category=category)
+                        if not self.validate_skillpage(
+                            request=request, category=category):
+                            return test_pass
+                    test_pass = True
                     return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
@@ -573,8 +581,9 @@ class CategoryValidation(object):
             if request:
                 if category:
                     if category.type_level in [1, 2, 3]:
-                        test_pass = self.validate_childs(
-                            request=request, category=category)
+                        if not self.validate_childs(
+                            request=request, category=category):
+                            return test_pass
                     if category.get_products():
                         messages.error(request, "Products is associated please reassign")
                         return test_pass
@@ -596,13 +605,17 @@ class CategoryValidation(object):
         try:
             if request:
                 if category:
-                    test_pass = self.validate_fields(
-                        request=request, category=category)
+                    if not self.validate_fields(
+                        request=request, category=category):
+                        return test_pass
                     if category.type_level in [2, 3, 4]:
-                        test_pass = self.validate_parent(
-                            request=request, category=category)
-                    test_pass = self.validate_skillpage(
-                        request=request, category=category)
+                        if not self.validate_parent(
+                            request=request, category=category):
+                            return test_pass
+                    if not self.validate_skillpage(
+                        request=request, category=category):
+                        return test_pass
+                    test_pass = True
                     return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
@@ -957,9 +970,7 @@ class ProductValidation(object):
                         if not sibling.inr_price > Decimal(0):
                             messages.error(request, "Variation" + str(sibling) +" INR Price is negetive")
                             return test_pass
-                        test_pass = self.validate_attributes(request=request, product=sibling)
-                        if not test_pass:
-                            test_pass = False
+                        if not self.validate_attributes(request=request, product=sibling):
                             return test_pass
                            
                     test_pass = True
