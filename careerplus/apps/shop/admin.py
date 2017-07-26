@@ -22,7 +22,7 @@ class CategoryAdmin(admin.ModelAdmin):
     inlines = [CategoryRelationshipInline, CategoryProductInline]
     readonly_fields = ('modified',)
     list_display = [
-        'name', 'modified', 'type_level', 'type_service', ]
+        'name', 'modified', 'type_level',]
     search_fields = ('name',)
     
 

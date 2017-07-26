@@ -64,8 +64,6 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
-    type_service = models.PositiveSmallIntegerField(
-        _('Service'), choices=SERVICE_CHOICES, default=0)
     type_level = models.PositiveSmallIntegerField(
         _('Level'), choices=CATEGORY_CHOICES, default=0)
     video_link = models.CharField(
@@ -381,8 +379,6 @@ class Attribute(AbstractAutoDate):
         on_delete=models.PROTECT,
         verbose_name=_('Product Class'), related_name="attributes",
         help_text=_("Choose what type of product this is"))
-    type_service = models.PositiveSmallIntegerField(
-        _('Service'), choices=SERVICE_CHOICES, default=0)
     name = models.CharField(
         _('Name'), max_length=100,
         unique=True,
@@ -668,8 +664,6 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
-    type_service = models.PositiveSmallIntegerField(
-        _('Service'), choices=SERVICE_CHOICES, default=0)
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
@@ -696,9 +690,6 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Image Alt'), blank=True, max_length=100)
     video_url = models.CharField(
         _('Video Url'), blank=True, max_length=200)
-    flow_image = models.ImageField(
-        _('Delivery Flow Image'), upload_to=get_upload_path_product_image,
-        blank=True, null=True)
     
     email_cc = RichTextField(
         verbose_name=_('Email CC'), blank=True, default='')
@@ -773,19 +764,6 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     @property
     def is_virtual(self, *args, **kwargs):
         return self.type_product == 4
-
-    def get_meta_desc(self, description=''):
-        try:
-            from bs4 import BeautifulSoup
-            soup = BeautifulSoup(self.description, 'html.parser')
-            cleantext = soup.get_text()
-            cleantext = cleantext.strip()
-        except:
-            cleantext = ''
-        return cleantext
-
-    def get_keywords(self):
-        return self.meta_keywords.strip().split(",")
 
     def get_active(self):
         if self.active:
@@ -887,12 +865,12 @@ class Product(AbstractProduct, ModelMeta):
 
     _metadata = {
         'title': 'title',
-        'description': 'get_description',
-        'og_description': 'get_description',
-        'keywords': 'get_keywords',
+        'description': 'meta_desc',
+        'og_description': 'meta_desc',
+        'keywords': 'meta_keywords',
         'published_time': 'created',
         'modified_time': 'modified',
-        'url': 'get_full_url',
+        'url': 'get_url',
     }
 
     class Meta:
@@ -917,45 +895,153 @@ class Product(AbstractProduct, ModelMeta):
 
     def save(self, *args, **kwargs):
         if self.name:
-            if not self.title:
-                self.title = self.name
             if not self.heading:
-                self.heading = self.name
+                self.heading = self.get_heading()
+            if not self.title:
+                self.title = self.get_title()
             if not self.image_alt:
                 self.image_alt = self.name
-        if self.description:
             if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description)
+                self.meta_desc = self.get_meta_desc()
         super(Product, self).save(*args, **kwargs)
         self.attr.save()
 
     @property
+    def category_main(self):
+        main_prod_cat = self.categories.filter(
+            productcategories__is_main=True,
+            productcategories__active=True,
+            active=True)
+        if main_prod_cat:
+            return main_prod_cat[0]
+        else:
+            prod_cat = self.categories.filter(
+                productcategories__is_main=False,
+                productcategories__active=True,
+                active=True)
+            if prod_cat:
+                return prod_cat[0]
+        return None
+
+    def get_exp(self, *args, **kwargs):
+        return getattr(self.attr, 'experience', None)
+    
+    @property
     def is_course(self):
-        if self.product_class.slug in settings.COURSE_SLUG:
+        if self.product_class and self.product_class.slug in settings.COURSE_SLUG:
             return True
         else:
             return False
     @property
     def is_writing(self):
-        if self.product_class.slug in settings.WRITING_SLUG:
+        if self.product_class and self.product_class.slug in settings.WRITING_SLUG:
             return True
         else:
             return False
 
     @property
     def is_service(self):
-        if self.product_class.slug in settings.SERVICE_SLUG:
+        if self.product_class and self.product_class.slug in settings.SERVICE_SLUG:
             return True
         else:
             return False
 
+    def get_heading(self):
+        if self.is_course:
+            return '%s - Certification Course' % (
+                self.name,
+            )
+        elif self.is_service or self.is_writing:
+            if self.category_main:
+                return '%s -  for %s' % (
+                    self.category_main.name,
+                    self.get_exp(),
+                )
+
+        return ''
+
+    def get_title(self):
+        if self.is_course:
+            return '%s Certification Course INR %s - Learning.Shine' % (
+                self.name,
+                str(round(self.inr_price, 0)),
+            )
+        elif self.is_service or self.is_writing:
+            if self.category_main:
+                return '%s -  for %s -  Online Services - Learning.Shine' % (
+                    self.category_main.name,
+                    self.get_exp(),
+                )            
+        return ''
+
+    def get_meta_desc(self):
+        if self.is_course:
+            return '%s - Get Online Access, Supports from Experts, Study Materials, course module, fee structure and other details at Learning.Shine' % (
+                self.name,
+            )
+        elif self.is_service or self.is_writing:
+            return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
+                    self.category_main.name,
+                    self.get_exp(),
+                    self.category_main.name,
+                )            
+        
+        return ''
+
+    def get_icon_url(self):
+        if self.icon:
+            return self.get_full_url(url=self.icon.url)
+        return ''
+
+    def get_image_url(self):
+        if self.image:
+            return self.get_full_url(url=self.image.url)
+        return ''
+    
+    def get_url(self):
+        return self.get_full_url(self.get_absolute_url())
+
+    def get_absolute_url(self, prd_slug=None, cat_slug=None):
+        if not cat_slug:
+            cat_slug = self.category_main
+        cat_slug = cat_slug.slug if cat_slug else None
+        if self.is_course:
+            return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        elif self.is_writing:
+            return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        elif self.is_service:
+            return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        else:
+            return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+
+    def get_ratings(self):
+        pure_rating = int(self.avg_rating)
+        decimal_part = self.avg_rating - pure_rating
+        final_score = ['*' for i in range(pure_rating)]
+        rest_part = int(Decimal(5.0) - self.avg_rating)
+        res_decimal_part = Decimal(5.0) - self.avg_rating - Decimal(rest_part)
+        if decimal_part >= 0.75:
+            final_score.append("*")
+        elif decimal_part >= 0.25:
+            final_score.append("+")
+        if res_decimal_part >= 0.75:
+            final_score.append('-')
+        for i in range(rest_part):
+            final_score.append('-')
+        return final_score
+
+    def get_avg_ratings(self):
+        return round(self.avg_rating, 1)
+
+    def get_screen(self):
+        if self.screenproduct.all().exists():
+            return self.screenproduct.all()[0]
+        else:
+            return None
+
     @property
     def get_bg(self, *args, **kwargs):
         return dict(BG_CHOICES).get(self.image_bg)
-
-    def get_exp(self, *args, **kwargs):
-        return getattr(self.attr, 'experience', None)
-                        
 
     def pv_name(self, *args, **kwargs):
         if self.is_course:
@@ -982,23 +1068,7 @@ class Product(AbstractProduct, ModelMeta):
                 return (round(fake_inr_price, 0), percent_diff)
         return None
 
-    @property
-    def category_slug(self):
-        main_prod_cat = self.categories.filter(
-            productcategories__is_main=True,
-            productcategories__active=True,
-            active=True)
-        if main_prod_cat:
-            return main_prod_cat[0]
-        else:
-            prod_cat = self.categories.filter(
-                productcategories__is_main=False,
-                productcategories__active=True,
-                active=True)
-            if prod_cat:
-                return prod_cat[0]
-        return None
-
+    
     def verify_category(self, cat_slug=None):
         try:
             prod_cat = self.categories.filter(
@@ -1007,29 +1077,12 @@ class Product(AbstractProduct, ModelMeta):
             if prod_cat:
                 return prod_cat[0]
             else:
-                return self.category_slug
+                return self.category_main
         except:
             pass
         return None
 
-    def get_full_url(self):
-        return self.build_absolute_uri(self.get_absolute_url())
-
-    def get_absolute_url(self, prd_slug=None, cat_slug=None):
-        if cat_slug:
-            pass
-        else:
-            cat_slug = self.category_slug
-        cat_slug = cat_slug.slug if cat_slug else None
-        if self.is_course:
-            return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
-        elif self.is_writing:
-            return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
-        elif self.is_service:
-            return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
-        else:
-            return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
-
+    
     def create_icon(self):
         if not self.image:
             return
@@ -1066,34 +1119,7 @@ class Product(AbstractProduct, ModelMeta):
         )
         return
 
-    def get_description(self):
-        return self.meta_desc
     
-    def get_ratings(self):
-        pure_rating = int(self.avg_rating)
-        decimal_part = self.avg_rating - pure_rating
-        final_score = ['*' for i in range(pure_rating)]
-        rest_part = int(Decimal(5.0) - self.avg_rating)
-        res_decimal_part = Decimal(5.0) - self.avg_rating - Decimal(rest_part)
-        if decimal_part >= 0.75:
-            final_score.append("*")
-        elif decimal_part >= 0.25:
-            final_score.append("+")
-        if res_decimal_part >= 0.75:
-            final_score.append('-')
-        for i in range(rest_part):
-            final_score.append('-')
-        return final_score
-
-    def get_avg_ratings(self):
-        return round(self.avg_rating, 1)
-
-    def get_screen(self):
-        if self.screenproduct.all().exists():
-            return self.screenproduct.all()[0]
-        else:
-            return None
-
 
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(
