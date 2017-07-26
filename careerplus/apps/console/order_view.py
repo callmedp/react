@@ -421,7 +421,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         if user.is_superuser:
             pass
         elif user.has_perm('order.writer_inbox_assigner'):
-            queryset = queryset.filter(assigned_to__isnull=True) | queryset.filter(assigned_to__exact='')
+            queryset = queryset.filter(Q(assigned_to__isnull=True) | Q(assigned_to__exact=''))
         elif user.has_perm('order.writer_inbox_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
