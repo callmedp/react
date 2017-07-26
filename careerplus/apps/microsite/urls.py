@@ -1,5 +1,6 @@
 from django.conf.urls import url
-from .views import PartnerHomeView, PartnerListView, PartnerDetailView
+from .views import PartnerHomeView, PartnerListView, PartnerDetailView, \
+    GetReferenceView, SaveJobView
 
 urlpatterns = [
 
@@ -11,4 +12,10 @@ urlpatterns = [
 
     url(r'^(?P<partner>[-\w]+)/(?P<job_title>[-\w]+)/(?P<job_params>[-\w]+)/?$',
         PartnerDetailView.as_view(), name='partner-detail'),
+
+    url(r'^roundone/get-reference/$', GetReferenceView.as_view(),
+        name='roundone-get-reference'),
+
+    url(r'^roundone/save-job/$', SaveJobView.as_view(),
+        name='roundone-save-job'),
 ]
