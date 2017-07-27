@@ -121,12 +121,21 @@ class DashboardDetailView(TemplateView):
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])
-            elif self.oi.product.type_flow == 3:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 121])
             elif self.oi.product.type_flow == 2:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6])
+
+            elif self.oi.product.type_flow == 3:
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 121])
+            elif self.oi.product.type_flow == 4:
+                pass
+            elif self.oi.product.type_flow == 5:
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 27])
             elif self.oi.product.type_flow == 6:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82])
+            elif self.oi.product.type_flow == 7:
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 61, 62])
+            elif self.oi.product.type_flow == 8:
+                pass
             elif self.oi.product.type_flow == 10:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101])
             context.update({

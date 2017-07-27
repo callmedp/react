@@ -71,6 +71,11 @@ OI_OPS_STATUS = (
     # flow 3 121 - 141
     (121, 'Service has been processed and Final document is ready'),
 
+    # flow9 141 - 160
+    (141, 'Your profile to be shared with interviewer is pending'),
+    (142, 'Round one is not expired'),
+    (143, 'Round one is expired'),
+
 )
 
 OI_USER_STATUS = (
@@ -116,8 +121,13 @@ OI_USER_STATUS = (
     # flow10 101 - 120
     (101, 'To start learning , it is mandatory to take this test'),
 
-    # flow3 121 - 141
+    # flow3 121 - 140
     (121, 'Service has been processed and Final document is ready'),
+
+    # flow9 141 - 160
+    (141, 'Your profile to be shared with interviewer is pending'),
+    (142, 'Service is under progress'),
+    (143, 'Service has been expired'),
 
 )
 

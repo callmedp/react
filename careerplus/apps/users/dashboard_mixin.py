@@ -26,18 +26,18 @@ class DashboardInfo(object):
             }
             return render_to_string('include/user-inboxlist.html', data)
 
-    def get_inbox_oi_detail(self, candidate_id=None, oi=None):
-        if oi and oi.order.candidate_id == candidate_id:
-            if oi.product.type_flow in [1, 12, 13]:
-                ops = oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])
+    # def get_inbox_oi_detail(self, candidate_id=None, oi=None):
+    #     if oi and oi.order.candidate_id == candidate_id:
+    #         if oi.product.type_flow in [1, 12, 13]:
+    #             ops = oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])
 
-            if ops.exists():
-                data = {
-                    "oi": oi,
-                    "ops": ops,
-                    "max_draft_limit": settings.DRAFT_MAX_LIMIT,
-                }
-                return render_to_string('include/inboxoi-deatil.html', data)
+    #         if ops.exists():
+    #             data = {
+    #                 "oi": oi,
+    #                 "ops": ops,
+    #                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,
+    #             }
+    #             return render_to_string('include/inboxoi-deatil.html', data)
 
     def get_pending_resume_items(self, candidate_id=None, email=None):
         if candidate_id:

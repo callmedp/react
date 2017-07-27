@@ -252,8 +252,6 @@
 
                 <tbody id="body-table-list">
                   {% for obj in page %}
-                    {% with obj.check_featured_profile_dependency as dependency_obj %}
-                    {% if dependency_obj %}
                     <tr class="even pointer">
                       {% if perms.order.domestic_profile_update_assigner or perms.order.oi_action_permission %}
                             <td class="a-center ">
@@ -319,8 +317,6 @@
                       </td>
                       <td>{{obj.assigned_to}}</td>
                     </tr>
-                    {% endif %}
-                    {% endwith %}
                   {% endfor %}
                 </tbody>
               </table>

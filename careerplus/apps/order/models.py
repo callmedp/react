@@ -325,17 +325,13 @@ class OrderItem(models.Model):
             return 'Draft %s' % (self.draft_counter)
         return ''
 
-    def check_featured_profile_dependency(self):
-        order = self.order
-        ois = order.orderitems.filter(product__id__in=settings.RESUME_WRITING_INDIA)
-        if ois.exists():
-            closed_ois = ois.filter(oi_status=4)
-            if closed_ois.exists():
-                return closed_ois[0]
-            else:
-                return None
-        else:
-            return self
+    def get_roundone_status(self):
+        if self.oi_status == 142:
+            pass
+        elif self.oi_status not in [141, 142, 143]:
+            pass
+        dict_status = dict(OI_USER_STATUS)
+        return dict_status.get(self.oi_status)
 
     def get_test_obj(self):
         return self

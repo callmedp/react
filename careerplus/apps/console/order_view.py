@@ -1207,10 +1207,32 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(DomesticProfileUpdateQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=5, no_process=False).exclude(oi_status__in=[4, 23, 24])
-        queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
-
+        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=5, no_process=False, oi_status__in=[5, 25, 27])
+        # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
         user = self.request.user
+
+        q1 = queryset.filter(oi_status=27)
+        exclude_list = []
+        for oi in q1:
+            closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
+            if closed_ois.exists():
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.last_oi_status = last_oi_status
+                oi.oi_draft = closed_ois[0].oi_draft
+                oi.draft_counter += 1
+                oi.draft_added_on = timezone.now()
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    oi_draft=oi.oi_draft,
+                    draft_counter=oi.draft_counter,
+                    assigned_to=oi.assigned_to)
+            else:
+                exclude_list.append(oi.pk)
+
+        queryset = queryset.exclude(id__in=exclude_list)
 
         if user.is_superuser or user.has_perm('order.domestic_profile_update_assigner'):
             pass
@@ -1392,16 +1414,19 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for obj in q1:
-            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1)
+            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, no_process=False)
             if closed_ois.exists():
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5
                 obj.oi_draft = closed_ois[0].oi_draft
                 obj.draft_counter += 1
                 obj.last_oi_status = last_oi_status
+                obj.draft_added_on = timezone.now()
                 obj.save()
 
                 obj.orderitemoperation_set.create(
+                    oi_draft=obj.oi_draft,
+                    draft_counter=obj.draft_counter,
                     oi_status=obj.oi_status,
                     last_oi_status=obj.last_oi_status,
                     assigned_to=obj.assigned_to,
