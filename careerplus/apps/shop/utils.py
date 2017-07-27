@@ -767,9 +767,6 @@ class ProductValidation(object):
         try:
             if request:
                 if product:
-                    if product.type_product in [2, 4]:
-                        messages.error(request, "Can't active child-variation and virtual product active!")
-                        return False
                     
                     if not self.validate_fields(
                         request=request, product=product):
@@ -808,8 +805,8 @@ class ProductValidation(object):
         try:
             if request:
                 if product:
-                    if product.type_product in [2, 4]:
-                        messages.error(request, "Can't index child-variation and virtual product!")
+                    if not product.active:
+                        messages.error(request, "First Make Product Active")
                         return False
                     
                     if not self.validate_fields(

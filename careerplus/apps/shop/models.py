@@ -17,6 +17,12 @@ from faq.models import (
     FAQuestion, Chapter,
     ScreenFAQ, ScreenChapter)
 from geolocation.models import Country, Currency
+from .managers import (
+    ProductManager,
+    IndexableProductManager,
+    BrowsableProductManager,
+    SaleableProductManager)
+
 from .utils import ProductAttributesContainer
 from .functions import (
     get_upload_path_category,
@@ -105,6 +111,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     active = models.BooleanField(default=False)
     display_order = models.IntegerField(default=1)
 
+    
     _metadata_default = ModelMeta._metadata_default.copy()
     _metadata_default['locale'] = 'dummy_locale'
 
@@ -860,6 +867,12 @@ class Product(AbstractProduct, ModelMeta):
     active = models.BooleanField(default=False)
     profile_country = models.ForeignKey(Country, null=True)
     is_indexable = models.BooleanField(default=False)
+
+    objects = ProductManager()
+    indexable = IndexableProductManager()
+    saleable = SaleableProductManager()
+    browsable = BrowsableProductManager()
+
     _metadata_default = ModelMeta._metadata_default.copy()
     _metadata_default['locale'] = 'dummy_locale'
 

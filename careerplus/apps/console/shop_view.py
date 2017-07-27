@@ -968,7 +968,7 @@ class ChangeProductView(DetailView):
             ProductChildFormSet = inlineformset_factory(
                 Product, Product.childs.through, fk_name='father',
                 form=ProductChildForm,
-                can_delete=True,
+                can_delete=False,
                 formset=ChildInlineFormSet, extra=1,
                 max_num=20, validate_max=True)
             if self.object:
@@ -980,7 +980,7 @@ class ChangeProductView(DetailView):
             ProductRelatedFormSet = inlineformset_factory(
                 Product, Product.related.through, fk_name='primary',
                 form=ProductRelatedForm,
-                can_delete=True,
+                can_delete=False,
                 formset=RelatedInlineFormSet, extra=1,
                 max_num=20, validate_max=True)
             if self.object:
@@ -1201,8 +1201,6 @@ class ChangeProductView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-                                obj.status = 1
-                                obj.save()        
                                 
                             messages.success(
                                 self.request,
@@ -1240,9 +1238,15 @@ class ChangeProductView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-                                obj.status = 1
-                                obj.save()        
-                                
+                                if obj.type_product == 1:
+                                    obj.is_indexable = False
+                                    obj.save()
+                                    childs = obj.mainproduct.all()
+                                    for child in childs:
+                                        sibling = child.sibling
+                                        sibling.is_indexable = False
+                                        sibling.save()
+                            
                             messages.success(
                                 self.request,
                                 "Product Variation changed Successfully")
@@ -1262,7 +1266,7 @@ class ChangeProductView(DetailView):
                         ProductChildFormSet = inlineformset_factory(
                             Product, Product.childs.through, fk_name='father',
                             form=ProductChildForm,
-                            can_delete=True,
+                            can_delete=False,
                             formset=ChildInlineFormSet, extra=1,
                             max_num=20, validate_max=True)
                         formset = ProductChildFormSet(
@@ -1299,7 +1303,7 @@ class ChangeProductView(DetailView):
                         ProductRelatedFormSet = inlineformset_factory(
                             Product, Product.related.through, fk_name='primary',
                             form=ProductRelatedForm,
-                            can_delete=True,
+                            can_delete=False,
                             formset=RelatedInlineFormSet, extra=1,
                             max_num=20, validate_max=True)
                         formset = ProductRelatedFormSet(
@@ -1332,9 +1336,6 @@ class ChangeProductView(DetailView):
                                 request, [
                                     "console/shop/change_product.html"
                                 ], context)
-
-                    
-                    
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
@@ -1634,6 +1635,12 @@ class ActionProductView(View, ProductValidation):
                             request=self.request,product=product):    
                             product.active = True
                             product.save()
+                            if product.type_product == 1:
+                                childs = product.mainproduct.filter(active=True)
+                                for child in childs:
+                                    sibling = child.sibling
+                                    sibling.active = True
+                                    sibling.save()
                             messages.success(
                                 self.request,
                                     "Product is made active!") 
@@ -1643,7 +1650,15 @@ class ActionProductView(View, ProductValidation):
                             data = {'error': 'True'}
                     elif action == "inactive":
                             product.active = False
-                            product.save()    
+                            product.is_indexable = False
+                            product.save() 
+                            if product.type_product == 1:
+                                childs = product.mainproduct.all()
+                                for child in childs:
+                                    sibling = child.sibling
+                                    sibling.is_indexable = False
+                                    sibling.active = False
+                                    sibling.save()
                             messages.success(
                                 self.request,
                                     "Product is made inactive!") 
@@ -1654,6 +1669,12 @@ class ActionProductView(View, ProductValidation):
                             request=self.request,product=product):
                             product.is_indexable = True
                             product.save()    
+                            if product.type_product == 1:
+                                childs = product.mainproduct.filter(active=True)
+                                for child in childs:
+                                    sibling = child.sibling
+                                    sibling.is_indexable = True
+                                    sibling.save()
                             messages.success(
                                 self.request,
                                     "Product will be indexing!") 
@@ -1663,7 +1684,13 @@ class ActionProductView(View, ProductValidation):
                             data = {'error': 'True'}
                     elif action == "unindex":
                             product.is_indexable = False
-                            product.save()    
+                            product.save()
+                            if product.type_product == 1:
+                                childs = product.mainproduct.all()
+                                for child in childs:
+                                    sibling = child.sibling
+                                    sibling.is_indexable = False
+                                    sibling.save()
                             messages.success(
                                 self.request,
                                     "Product is removed from indexing!") 

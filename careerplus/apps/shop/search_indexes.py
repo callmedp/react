@@ -12,7 +12,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pTt = indexes.CharField(model_attr='title', null=True, indexed=False)
     pMtD = indexes.CharField(model_attr='meta_desc', null=True, indexed=False)
     pMK = indexes.CharField(model_attr='meta_keywords', null=True, indexed=False)
-    pHd = indexes.EdgeNGramField(model_attr='heading', null=True)
+    pHd = indexes.EdgeNgramField(model_attr='heading', null=True)
     pHdx = indexes.CharField(model_attr='heading', null=True, indexed=False)
     
     # Control Field #
@@ -27,30 +27,43 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pIBg = indexes.IntegerField(model_attr='image_bg', default=0, indexed=False)
     pImg = indexes.CharField(model_attr='image', indexed=False)
     pImA = indexes.CharField(model_attr='image_alt', null=True, indexed=False)
-    pVd = indexes.CharField(model_attr='video_url', indexed=False)
+    pvurl = indexes.CharField(model_attr='video_url', indexed=False)
     pAb = indexes.CharField(model_attr='about', default='')
     pDsc = indexes.CharField(model_attr='description', default='')
     pBS = indexes.CharField(model_attr='buy_shine', default='')
     
-    #Facets Fields#
+    #Facets & Attributes Fields#
     pPc = indexes.CharField(null=True, faceted=True)
-    pPv = indexes.CharField(null=True, faceted=True)
+    pPV = indexes.CharField(null=True, faceted=True)
     pAR = indexes.DecimalField(model_attr='avg_rating', faceted=True)
+    pCtg = indexes.MultiValueField(null=True, faceted=True)
+    pCts = indexes.MultiValueField(null=True)
+    pFA = indexes.MultiValueField(null=True, faceted=True)
+    pDM = indexes.IntegerField(default=0, faceted=True)
+    pDD = indexes.IntegerField(default=0, faceted=True)
+    pRD = indexes.BooleanField(default=True)
+    pCert = indexes.BooleanField(default=False, faceted=True)
+    pEX = indexes.CharField(null=True, faceted=True)
+    pStM = indexes.CharField(null=True, faceted=True)
+    pCT = indexes.CharField(null=True, faceted=True)
     
-    # pDM = indexes.IntegerField(model_attr='duration_months', default=0, faceted=True)
-    # pDD = indexes.IntegerField(model_attr='duration_days', default=0)
-    # pEx = indexes.IntegerField(model_attr='experience', default=0)
-    # pRD = indexes.BooleanField(model_attr='requires_delivery', default=True)
-    # pCert = indexes.BooleanField(model_attr='certification', default=True, faceted=True)
-    # pSM = indexes.IntegerField(model_attr='study_mode', default=0, faceted=True)
-    # pCT = indexes.IntegerField(model_attr='course_type', default=0, faceted=True)
+    pStar = indexes.CharField(null=True, indexed=False)
+    pRC = indexes.IntegerField(default=0, model_attr='no_review', indexed=False)
+    pBC = indexes.IntegerField(default=0, model_attr='buy_count', indexed=False)
+    pNJ = indexes.IntegerField(default=0, model_attr='num_jobs', indexed=False)
+    pVi = indexes.CharField(null=True, indexed=False)
     
-    pRC = indexes.IntegerField(default=0, model_attr='no_review')
-    pBC = indexes.IntegerField(default=0, model_attr='buy_count')
-    pNJ = indexes.IntegerField(default=0, model_attr='num_jobs')
-    pSK = indexes.CharField(default='') 
+    #Price Fields#
+    pPinr = indexes.DecimalField(model_attr='inr_price', faceted=True)
+    pPfinr = indexes.DecimalField(model_attr='fake_inr_price', faceted=True)
+    pPusd = indexes.DecimalField(model_attr='usd_price', faceted=True)
+    pPfusd = indexes.DecimalField(model_attr='fake_usd_price', faceted=True)
+    pPaed = indexes.DecimalField(model_attr='aed_price', faceted=True)
+    pPfaed = indexes.DecimalField(model_attr='fake_aed_price', faceted=True)
+    pPgbp = indexes.DecimalField(model_attr='gbp_price', faceted=True)
+    pPfgbp = indexes.DecimalField(model_attr='fake_gbp_price', faceted=True)
     
-    # pCts = indexes.MultiValueField(model_attr='countries__name')
+    
     # pVtn = indexes.MultiValueField(model_attr='variation__name')
     # pRtd = indexes.MultiValueField(model_attr='related__name')
     # pCds = indexes.MultiValueField(model_attr='childs__name')
@@ -65,6 +78,49 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Product
+
+    def index_queryset(self, using=None):
+        return self.get_model().indexable.all()
+
+    def read_queryset(self, using=None):
+        return self.get_model().indexable.base_queryset()
+
+
+    def prepare_pVi(self, obj):
+        if obj.vendor:
+            return obj.vendor.image.url if obj.vendor.image else ''
+        return ''
+    
+    def prepare_pStar(self, obj):
+        return obj.get_ratings()
+    
+    def prepare_pDM(self, obj):
+        if obj.is_course:
+            return getattr(obj.attr, 'duration_months', 0)
+
+    def prepare_pDD(self, obj):
+        if obj.is_course:
+            return getattr(obj.attr, 'duration_days', 0)
+
+    def prepare_pRD(self, obj):
+        if obj.is_course:
+            return getattr(obj.attr, 'requires_delivery', False)
+
+    def prepare_pCert(self, obj):
+        if obj.is_course:
+            return getattr(obj.attr, 'certification', False)
+
+    def prepare_pEX(self, obj):
+        if obj.is_service or obj.is_writing:
+            return str(getattr(obj.attr, 'experience', None)) if getattr(obj.attr, 'experience', None) else None
+
+    def prepare_pSM(self, obj):
+        if obj.is_course:
+            return str(getattr(obj.attr, 'study_mode', None)) if getattr(obj.attr, 'study_mode', None) else None
+
+    def prepare_pCL(self, obj):
+        if obj.is_course:
+            return str(getattr(obj.attr, 'course_level', None)) if getattr(obj.attr, 'course_level', None) else None
 
     def prepare_pURL(self, obj):
         return obj.get_url()
@@ -85,4 +141,24 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_pImg(self, obj):
         return obj.get_image_url()
 
-       
+    def prepare_pCts(self, obj):
+        countries = obj.countries.all()
+        if len(countries) > 0:
+            return [con.code2 for con in countries]
+    
+    def prepare_pCtg(self, obj):
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        if len(categories) > 0:
+            return [cat.name for cat in categories]
+
+    def prepare_pFA(self, obj):
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        if len(categories) > 0:
+            p_category = [pcat for cat in categories for pcat in cat.get_parent()]
+            pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
+            parents = [p_category, pp_category]
+            return [item.name for sublist in parents for item in sublist if sublist]

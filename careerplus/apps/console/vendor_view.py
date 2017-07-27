@@ -1157,6 +1157,12 @@ class ActionScreenProductView(View, ProductModeration):
                                 productscreen.save()
                                 product.is_indexable = False
                                 product.save()
+                                if product.type_product == 1:
+                                    childs = product.mainproduct.all()
+                                    for child in childs:
+                                        sibling = child.sibling
+                                        sibling.is_indexable = False
+                                        sibling.save()
                                 messages.success(
                                     self.request,
                                         "Product Screen is copied to live! Please validate fields in live product") 
