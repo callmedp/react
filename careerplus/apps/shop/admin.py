@@ -5,6 +5,7 @@ from . import models
 class CategoryRelationshipInline(admin.StackedInline):
     model = models.CategoryRelationship
     fk_name = 'related_from'
+    readonly_fields = ('modified',)
     raw_id_fields = ['related_from', 'related_to']
     extra = 1
 
@@ -12,12 +13,17 @@ class CategoryRelationshipInline(admin.StackedInline):
 class CategoryProductInline(admin.TabularInline):
     model = models.ProductCategory
     fk_name = 'category'
+    readonly_fields = ('modified',)
     raw_id_fields = ['category', 'product']
     extra = 1
 
 
 class CategoryAdmin(admin.ModelAdmin):
     inlines = [CategoryRelationshipInline, CategoryProductInline]
+    readonly_fields = ('modified',)
+    list_display = [
+        'name', 'modified', 'type_level']
+    search_fields = ('name',)
 
 
 class AttributeInline(admin.TabularInline):
@@ -102,6 +108,7 @@ class ProductExtraInfoAdmin(admin.ModelAdmin):
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute)
 admin.site.register(models.Keyword)
+admin.site.register(models.ProductClass)
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)

@@ -9,6 +9,8 @@ urlpatterns = [
 
 from django.conf.urls import url
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
+from . import shop_view, vendor_view, blog_view, order_view
+from geolocation import adminviews
 
 urlpatterns += [
     url(r'^$', ConsoleDashboardView.as_view(), name='dashboard'),
@@ -16,79 +18,116 @@ urlpatterns += [
     url(r'^logout/$', ConsoleLogoutView.as_view(), name='logout'),
 ]
 
-from . import shop_view
+
+urlpatterns += [
+    url(r'^screenproduct/list/$',
+        vendor_view.ListScreenProductView.as_view(),
+        name='screenproduct-list'),
+    url(r'^screenproduct/add/$',
+        vendor_view.AddScreenProductView.as_view(),
+        name='screenproduct-add'),
+    url(r'^screenproduct/change/(?P<pk>[\d]+)/$',
+        vendor_view.ChangeScreenProductView.as_view(),
+        name='screenproduct-change'),
+    url(r'^screenproduct/variantadd/(?P<pk>[\d]+)/$',
+        vendor_view.AddScreenProductVariantView.as_view(),
+        name='screenproductvariant-add'),
+    url(r'^screenproduct/variantchange/(?P<pk>[\d]+)/(?P<parent>[\d]+)/$',
+        vendor_view.ChangeScreenProductVariantView.as_view(),
+        name='screenproductvariant-change'),
+    url(r'^screenproduct/moderation-list/$',
+        vendor_view.ListModerationScreenProductView.as_view(),
+        name='screenproduct-moderationlist'),
+    url(r'^screenproduct/action/(?P<action>[\w-]+)/$',
+        vendor_view.ActionScreenProductView.as_view(),
+        name='screenproduct-action'),
+    
+    
+    url(r'^screenfaq/list/$',
+        vendor_view.ListScreenFaqView.as_view(),
+        name='screenfaq-list'),
+    url(r'^screenfaq/add/$',
+        vendor_view.AddScreenFaqView.as_view(),
+        name='screenfaq-add'),
+    url(r'^screenfaq/change/(?P<pk>[\d]+)/$',
+        vendor_view.ChangeScreenFaqView.as_view(),
+        name='screenfaq-change'),
+    url(r'^screenfaq/moderation-list/$',
+        vendor_view.ListModerationScreenFaqView.as_view(),
+        name='screenfaq-moderationlist'),
+    url(r'^screenfaq/action/(?P<action>[\w-]+)/$',
+        vendor_view.ActionScreenFaqView.as_view(),
+        name='screenfaq-action'),
+    
+]
 
 urlpatterns += [
     url(r'^category/add/$',
-        shop_view.AddCategoryView.as_view(), name='category-add'),
+        shop_view.AddCategoryView.as_view(),
+        name='category-add'),
     url(r'^category/list/$',
-        shop_view.ListCategoryView.as_view(), name='category-list'),
+        shop_view.ListCategoryView.as_view(),
+        name='category-list'),
     url(r'^categoryrelationship/list/$',
         shop_view.ListCategoryRelationView.as_view(),
         name='category-relation-list'),
     url(r'^category/change/(?P<pk>[\d]+)/$',
-        shop_view.ChangeCategoryView.as_view(), name='category-change'),
-    url(r'^product/add/$',
-        shop_view.AddProductView.as_view(), name='product-add'),
+        shop_view.ChangeCategoryView.as_view(),
+        name='category-change'),
+    url(r'^category/action/(?P<action>[\w-]+)/$',
+        shop_view.ActionCategoryView.as_view(),
+        name='category-action'),
+    
+
     url(r'^product/list/$',
         shop_view.ListProductView.as_view(), name='product-list'),
     url(r'^product/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeProductView.as_view(), name='product-change'),
-    url(r'^product/structurechange/(?P<pk>[\d]+)/$',
-        shop_view.ChangeProductStructureView.as_view(),
-        name='productstructure-change'),
-    url(r'^product/pricechange/(?P<pk>[\d]+)/$',
-        shop_view.ChangeProductPriceView.as_view(),
-        name='productprice-change'),
-    url(r'^product/childchange/(?P<pk>[\d]+)/$',
-        shop_view.ChangeProductChildView.as_view(),
-        name='productchild-change'),
-    url(r'^product/varschange/(?P<pk>[\d]+)/$',
-        shop_view.ChangeProductVariationView.as_view(),
-        name='productvariation-change'),
-
-
-    url(r'^faq/add/$',
-        shop_view.AddFaqView.as_view(), name='faquestion-add'),
+    url(r'^product/change-ops/(?P<pk>[\d]+)/$',
+        shop_view.OPChangeProductView.as_view(), name='product-opschange'),
+    url(r'^product/variantchange/(?P<pk>[\d]+)/(?P<parent>[\d]+)/$',
+        shop_view.ChangeProductVariantView.as_view(),
+        name='productvariant-change'),
+    url(r'^product/action/(?P<action>[\w-]+)/$',
+        shop_view.ActionProductView.as_view(),
+        name='product-action'),
+        
     url(r'^faq/list/$',
-        shop_view.ListFaqView.as_view(), name='faquestion-list'),
+        shop_view.ListFaqView.as_view(),
+        name='faq-list'),
     url(r'^faq/change/(?P<pk>[\d]+)/$',
-        shop_view.ChangeFaqView.as_view(), name='faquestion-change'),
-    
-
-    url(r'^chapter/add/$',
-        shop_view.AddChapterView.as_view(), name='chapter-add'),
-    url(r'^chapter/list/$',
-        shop_view.ListChapterView.as_view(), name='chapter-list'),
-    
-
+        shop_view.ChangeFaqView.as_view(),
+        name='faquestion-change'),
+        
     url(r'^keyword/add/$',
-        shop_view.AddKeywordView.as_view(), name='keyword-add'),
+        shop_view.AddKeywordView.as_view(),
+        name='keyword-add'),
     url(r'^keyword/list/$',
-        shop_view.ListKeywordView.as_view(), name='keyword-list'),
+        shop_view.ListKeywordView.as_view(),
+        name='keyword-list'),
     url(r'^keyword/change/(?P<pk>[\d]+)/$',
-        shop_view.ChangeKeywordView.as_view(), name='keyword-change'),
+        shop_view.ChangeKeywordView.as_view(),
+        name='keyword-change'),
     
 
     url(r'^attribute/add/$',
-        shop_view.AddAttributeView.as_view(), name='attribute-add'),
+        shop_view.AddAttributeView.as_view(),
+        name='attribute-add'),
     url(r'^attribute/list/$',
         shop_view.ListAttributeView.as_view(),
         name='attribute-list'),
     url(r'^attribute/change/(?P<pk>[\d]+)/$',
-        shop_view.ChangeAttributeView.as_view(), name='attribute-change'),
-    
+        shop_view.ChangeAttributeView.as_view(),
+        name='attribute-change'),
 
-    url(r'^attributeoption/add/$',
-        shop_view.AddAttributeOptionView.as_view(),
-        name='attributeoption-add'),
-    url(r'^attributeoption/list/$',
-        shop_view.ListAttributeOptionGroupView.as_view(),
-        name='attributeoption-list'),
+    # url(r'^attributeoption/add/$',
+    #     shop_view.AddAttributeOptionView.as_view(),
+    #     name='attributeoption-add'),
+    # url(r'^attributeoption/list/$',
+    #     shop_view.ListAttributeOptionGroupView.as_view(),
+    #     name='attributeoption-list'),
 ]
 
-
-from . import blog_view
 
 urlpatterns += [
     url(r'^blog/tag/$',
@@ -121,7 +160,6 @@ urlpatterns += [
 ]
 
 
-from geolocation import adminviews
 
 urlpatterns += [
     url(r'^geolocation/country/$',
@@ -131,8 +169,6 @@ urlpatterns += [
         adminviews.CountryUpdateView.as_view(), name='geo-country-update'),
 ]
 
-
-from . import order_view
 
 urlpatterns += [
     url(r'^queue/orders/$',
@@ -220,4 +256,19 @@ urlpatterns += [
     url(r'^linkedin/linkedin-approval/$',
         linkedin_view.LinkedinApprovalVeiw.as_view(),
         name='linkedin-approval'),
+
+    url(r'^queue/internationalprofileupdate/$',
+        linkedin_view.InterNationalUpdateQueueView.as_view(),
+        name='queue-internationalprofileupdate'),
+
+    url(r'^queue/internationalapproval/$',
+        linkedin_view.InterNationalApprovalQueue.as_view(),
+        name='queue-internationalapproval'),
+
+    url(r'^queue/orderitem/internationalassignment/$',
+        linkedin_view.InterNationalAssignmentOrderItemView.as_view(),
+        name='international-assignment-orderitem-view'),
+
+    url(r'^queqe/internationalprofile/(?P<pk>\d+)/update/$',
+        linkedin_view.ProfileUpdationView.as_view(), name='international_profile_update'),   
 ]

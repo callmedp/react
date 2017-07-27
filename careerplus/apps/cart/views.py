@@ -1,6 +1,8 @@
 import json
 import logging
-
+from decimal import Decimal
+from django.utils import timezone
+from django.shortcuts import render, render_to_response
 from django.views.generic import TemplateView, View, UpdateView
 from django.forms.forms import NON_FIELD_ERRORS
 from django.http import HttpResponseForbidden, HttpResponse,\
@@ -10,14 +12,16 @@ from django.core.validators import validate_email
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.template.response import TemplateResponse
+from django.conf import settings
 
 from shine.core import ShineCandidateDetail
-from shop.models import Product
+from shop.models import Product, ProductClass
 from users.mixins import RegistrationLoginApi, UserMixin
 
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
+from wallet.models import Wallet
 
 
 class CartView(TemplateView, CartMixin, UserMixin):
@@ -25,8 +29,9 @@ class CartView(TemplateView, CartMixin, UserMixin):
 
     def get_recommended_products(self):
         recommended_products = []
+        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         # recommended_products = Product.objects.filter(
-        #     type_service=3, type_product__in=[0, 1, 3], active=True)
+        #     product_class__in=course_classes, active=True)
         return {'recommended_products': list(recommended_products)}
 
     def get(self, request, *args, **kwargs):
@@ -38,7 +43,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
         context.update({
             "cart_items": self.get_cart_items(cart_obj=cart_obj),
             "total_amount": self.getTotalAmount(cart_obj=cart_obj),
-            "country_obj": self.get_client_country(self.request),
+            # "country_obj": self.get_client_country(self.request),
         })
         if not context['cart_items']:
             context.update(self.get_recommended_products())
@@ -52,6 +57,7 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+
         if request.is_ajax():
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
@@ -146,7 +152,7 @@ class PaymentLoginView(TemplateView):
                 user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
                 if user_exist.get('exists') and password:
-                    login_resp = RegistrationLoginApi().user_login(login_dict)
+                    login_resp = RegistrationLoginApi.user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
@@ -320,6 +326,74 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
+            context.update({
+                "cart_items": self.get_cart_items(),
+                "total_amount": self.getTotalAmount(),
+            })
+        else:
+            self.getCartObject()
+            context.update({
+                "cart_items": self.get_cart_items(),
+                "total_amount": self.getTotalAmount(),
+            })
+        cart_obj, wal_obj = None, None
+        cart_coupon, cart_wallet  = None, None
+        wal_txn, wal_total, wal_point = None, None, None
+        
+        cart_pk = self.request.session.get('cart_pk')
+        try:
+            cart_obj = Cart.objects.get(pk=cart_pk)
+        except Cart.DoesNotExist:
+            cart_obj = None
+        if cart_obj:
+            wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
+            cart_coupon = cart_obj.coupon
+            if cart_coupon:
+                wal_obj = None
+            elif wal_txn:
+                wal_obj = None
+                wal_txn = wal_txn[0]
+                points = wal_txn.point_txn.all()
+                points_active = points.filter(expiry__gte=timezone.now())
+                points_used = wal_txn.usedpoint.all()
+                
+                if len(points_active) == len(points):
+                    cart_wallet = wal_txn
+                    wal_point = wal_txn.point_value
+                else:
+                    points_used = wal_txn.usedpoint.all().order_by('point__pk')
+                    for pts in points_used:
+                        point = pts.point
+                        point.current += pts.point_value
+                        point.last_used = timezone.now()
+                        pts.txn_type = 5
+                        if point.expiry <= timezone.now():
+                            point.status = 3
+                        else:
+                            if point.current > Decimal(0):
+                                point.status = 1
+                            else:
+                                point.status = 2
+                        point.save()
+                        pts.save()
+                    wal_txn.txn_type = 5
+                    wal_txn.notes = 'Auto Reverted From Cart'
+                    wal_txn.status = 1
+                    wal_txn.save()
+                    wal_obj = wal_txn.wallet
+                    wal_total = wal_obj.get_current_amount()
+                    if wal_total <= Decimal(0):
+                        wal_obj = None
+            elif cart_obj.owner_id:
+                wal_obj, created = Wallet.objects.get_or_create(owner=cart_obj.owner_id)
+                wal_total = wal_obj.get_current_amount()
+                if wal_total <= Decimal(0):
+                    wal_obj = None
+
+        context.update({
+            'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
+            'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
         context.update({
             "cart_items": self.get_cart_items(cart_obj=self.cart_obj),
             "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),

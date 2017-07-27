@@ -1136,12 +1136,19 @@
   width: 48%;
   margin-right: 2%;
 }
+.profile-data li .pro-select22 {
+  max-width: 140px;
+  width: auto;
+  margin-right: 5px;
+  display: inline-block;
+  padding-right: 10px;
+}
 .profile-data li .pro-select, .profile-data li .pro-select2 {
   background: url(../../images/dropdown.png);
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: right;
-  padding: 6px;
+  padding: 6px 15px 6px 6px;
   width: 100%;
   text-align: left;
   -webkit-appearance: none;
@@ -1196,6 +1203,11 @@
 }
 .profile-data label {
   font-weight: 600;
+}
+.profile-data .edit-bdr {
+  margin-top: 10px;
+  border-top: 1px solid #e1e1e1;
+  display: table;
 }
 
 /*--------------profile page css end-------------*/

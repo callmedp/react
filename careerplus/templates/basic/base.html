@@ -14,7 +14,7 @@
     
     {% endblock meta_html %}
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>{% block title %}CMS - Shine Learning{%endblock title%}</title>
+    <title>{% block title %}Shine Learning{%endblock title%}</title>
 
     {% block canonical_url %}
       
@@ -68,8 +68,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
-    
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}">
+    </script>
+    <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}">
+    </script>
     <script>
         $('.nav-tabs > li > a').hover(function() {
             $(this).tab('show');

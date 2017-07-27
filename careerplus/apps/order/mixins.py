@@ -84,6 +84,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
     def createOrderitems(self, order, cart_obj):
         try:
             if order and cart_obj:
+                self.request.session.update({
+                    "order_pk": order.pk,
+                })
                 cart_items = self.get_cart_items()
                 for item in cart_items:
                     parent_li = item.get('li')
@@ -168,8 +171,5 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
                             oi.save()
 
-                self.request.session.update({
-                    "order_pk": order.pk,
-                })
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

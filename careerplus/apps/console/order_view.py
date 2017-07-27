@@ -418,7 +418,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         if user.is_superuser:
             pass
         elif user.has_perm('order.writer_inbox_assigner'):
-            queryset = queryset.filter(assigned_to__isnull=True) | queryset.filter(assigned_to__exact='')
+            queryset = queryset.filter(assigned_to__isnull=True)
         elif user.has_perm('order.writer_inbox_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
@@ -1023,7 +1023,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
         queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3]).exclude(oi_status=4)
-        queryset = queryset.exclude(assigned_to__isnull=True).exclude(assigned_to__exact='')
+        queryset = queryset.exclude(assigned_to__isnull=True)
         user = self.request.user
 
         if user.has_perm('order.can_view_all_allocated_list'):
@@ -1757,6 +1757,71 @@ class ActionOrderItemView(View):
             return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
         elif action == -6 and queue_name == "domesticprofileapproval":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 25  # rejected By Admin
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems rejected.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        elif action == -10 and queue_name == "internationalapproval":
+            try:
+                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                approval = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 4  # closed
+                    obj.last_oi_status = last_oi_status
+                    obj.approved_on = timezone.now()
+                    obj.save()
+                    approval += 1
+
+                    # mail to user about writer information
+                    to_emails = [obj.order.email]
+                    data = {}
+                    data.update({
+                        "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        "mobile": obj.order.mobile,
+                        "subject": "Your International Profile updated",
+
+                    })
+                    mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATE_MAIL'
+
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems approved.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+        elif action == -11 and queue_name == "internationalapproval":
             try:
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 approval = 0

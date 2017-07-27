@@ -78,6 +78,8 @@ LOCAL_APPS = [
     'order',
     'homepage',
     'microsite',
+    'dashboard',
+    'wallet',
     'search',
     'linkedin',
     'emailers',
@@ -113,18 +115,19 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django_mobile.context_processors.flavour',
+                'careerplus.config.context_processors.common_context_processor',
+                # 'django_mobile.context_processors.flavour'
+                # 'django_mobile.context_processors.flavour',
                 'careerplus.config.context_processors.common_context_processor',
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings'
             ],
-            'loaders': [
+            'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
-                    'django_mobile.loader.Loader',
+                    # 'django_mobile.loader.Loader',
                     'django.template.loaders.filesystem.Loader',
                     'django.template.loaders.app_directories.Loader'
-                # ]),
-            ],
+                ]),
         },
     },
 ]
@@ -184,8 +187,8 @@ CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googl
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-        'height': 400,
-        'width': 700,
+        'height': 'auto',
+        'width': 'auto',
         # 'removePlugins': 'stylesheetparser',
         # 'extraPlugins': 'codesnippet',
     },
@@ -211,6 +214,10 @@ ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+
+CART_MAX_LIMIT = 5
+
+SHINE_API_URL = 'https://sumosc.shine.com'
 
 ############ SOLR SETTINGS #######################
 HAYSTACK_CONNECTIONS = {
