@@ -300,40 +300,41 @@
 
 
 {% block js_section %}
-  {{block.super}} 
-  <script type="text/javascript">
-      $(document).ready(function() {
-          // Header Scroll
-          $(window).on('scroll', function() {
-              var scroll = $(window).scrollTop();
+    {{block.super}}
+    <script src="{% static 'shinelearn/js/search/typeahead.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Header Scroll
+            $(window).on('scroll', function() {
+                var scroll = $(window).scrollTop();
 
-              if (scroll >= 50) {
-                  $('.navbar').addClass('navbar-color');
-              } else {
-                  $('.navbar').removeClass('navbar-color');
-              }
-          });
+                if (scroll >= 50) {
+                    $('.navbar').addClass('navbar-color');
+                } else {
+                    $('.navbar').removeClass('navbar-color');
+                }
+            });
 
-      });
+        });
     </script>
 
     <script type="text/javascript">
-      $('#query1').typeahead({        
-        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
-      });
+        $('#query1').typeahead({
+            local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+        });
 
-      $('.tt-query').css('background-color','#fff'); 
+        $('.tt-query').css('background-color','#fff');
 
-      $('#query2').typeahead({        
-        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
-      });
+        $('#query2').typeahead({
+            local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+        });
 
-      $('.tt-query').css('background-color','#fff'); 
+        $('.tt-query').css('background-color','#fff');
 
-      $('#query3').typeahead({        
-        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
-      });
+        $('#query3').typeahead({
+            local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+        });
 
-      $('.tt-query').css('background-color','#fff'); 
+        $('.tt-query').css('background-color','#fff');
     </script>   
 {% endblock js_section %}

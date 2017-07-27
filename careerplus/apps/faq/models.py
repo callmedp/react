@@ -65,6 +65,7 @@ class FAQuestion(AbstractAutoDate):
     def get_status(self):
         return dict(self.STATUS_CHOICES).get(self.status)
 
+
 class Chapter(AbstractAutoDate):
     STATUS_CHOICES = (
         (2, _('Active')),

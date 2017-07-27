@@ -14,7 +14,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pSg = indexes.CharField(model_attr='slug')
     pTS = indexes.IntegerField(model_attr='type_service', default=0)
     pTP = indexes.IntegerField(model_attr='type_product', default=0)
-    pTF = indexes.IntegerField(model_attr='type_flow', default=0)
+    pTF = indexes.IntegerField(model_attr='type_flow', default=0)   # Not indexed
     pUPC = indexes.CharField(model_attr='upc')
     pBnr = indexes.CharField(model_attr='banner')
     pIc = indexes.CharField(model_attr='icon')

@@ -43,19 +43,20 @@ PRODUCT_CHOICES = (
 
 FLOW_CHOICES = (
     (0, 'Default'),
-    (1, 'Flow 1'),
-    (2, 'Flow 2'),
-    (3, 'Flow 3'),
-    (4, 'Flow 4'),
-    (5, 'Flow 5'),
-    (6, 'Flow 6'),
-    (7, 'Flow 7'),
-    (8, 'Flow 8'),
-    (9, 'Flow 9'),
-    (10, 'Flow 10'),
-    (11, 'Flow 11'),
-    (12, 'Flow 12'),
-    (13, 'Flow 13'),)
+    (1, 'Resume Writing India'),
+    (2, 'Courses'),
+    (3, 'Resume Critique'),
+    (4, 'International Profile Update'),
+    (5, 'Featured Profile'),
+    (6, 'IDfy Assessment'),
+    (7, 'Resume Booster'),
+    (8, 'Linkedin'),
+    (9, 'Round One'),
+    (10, 'StudyMate'),
+    (11, 'TSSC'),
+    (12, 'Country Specific Resume'),
+    (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),)
+
 
 EXP_CHOICES = (
     (0, 'Default'),
