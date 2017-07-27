@@ -127,7 +127,6 @@ class ThankYouView(TemplateView):
                 context.update({
                     'orderitems': order_items,
                     'order': order})
-
         return context
 
 
