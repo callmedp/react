@@ -935,15 +935,14 @@ class ChangeScreenProductVariantView(DetailView):
             ChangeScreenProductVariantView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         pk_parent = kwargs.get('parent',None)
-        parent = self.get_object().variationproduct.filter(
-            mainproduct__sibling=self.get_object())
+        parent = self.get_object().get_parent()
         
-        main_change_form = AddScreenProductVariantForm(parent=parent[0],
+        main_change_form = AddScreenProductVariantForm(parent=parent,
             user=self.request.user, instance=self.get_object())
         context.update({
             'messages': alert,
             'form': main_change_form,
-            'parent': parent[0].pk
+            'parent': parent.pk if parent else None
             })
         return context
 
@@ -980,11 +979,10 @@ class ChangeScreenProductVariantView(DetailView):
                             return HttpResponseRedirect(
                                 reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
                     if slug == 'variant':
-                        parent = self.get_object().variationproduct.filter(
-                            mainproduct__sibling=self.get_object())
+                        parent = self.get_object().get_parent()
                         form = AddScreenProductVariantForm(
                             request.POST, request.FILES,
-                            parent=parent[0],
+                            parent=parent,
                             user=self.request.user,
                             instance=obj)
 
@@ -992,16 +990,16 @@ class ChangeScreenProductVariantView(DetailView):
                             productscreen = form.save()
                             productscreen.status = 1
                             productscreen.save()        
-                            if not parent[0].status == 2:    
-                                parent[0].status = 1
-                                parent[0].save()
+                            if not parent.status == 2:    
+                                parent.status = 1
+                                parent.save()
 
                             messages.success(
                                 self.request,
                                 "Product Changed Successfully")
                             return HttpResponseRedirect(
                                 reverse('console:screenproductvariant-change',
-                                    kwargs={'pk': obj.pk, 'parent': parent[0].pk}))
+                                    kwargs={'pk': obj.pk, 'parent': parent.pk}))
                         else:
                             context = self.get_context_data()
                             if form:

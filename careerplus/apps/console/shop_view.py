@@ -1462,15 +1462,14 @@ class ChangeProductVariantView(DetailView):
             ChangeProductVariantView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         pk_parent = kwargs.get('parent',None)
-        parent = self.get_object().variationproduct.filter(
-            mainproduct__sibling=self.get_object())
+        parent = self.get_object().get_parent()
         
-        main_change_form = ChangeProductVariantForm(parent=parent[0],
+        main_change_form = ChangeProductVariantForm(parent=parent,
             user=self.request.user, instance=self.get_object())
         context.update({
             'messages': alert,
             'form': main_change_form,
-            'parent': parent[0].pk
+            'parent': parent.pk if parent else None
             })
         return context
 
@@ -1491,11 +1490,10 @@ class ChangeProductVariantView(DetailView):
                         return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
                     
                     if slug == 'variant':
-                        parent = self.get_object().variationproduct.filter(
-                            mainproduct__sibling=self.get_object())
+                        parent = self.get_object().get_parent()
                         form = ChangeProductVariantForm(
                             request.POST, request.FILES,
-                            parent=parent[0],
+                            parent=parent,
                             user=self.request.user,
                             instance=obj)
 
@@ -1506,7 +1504,7 @@ class ChangeProductVariantView(DetailView):
                                 "Product Changed Successfully")
                             return HttpResponseRedirect(
                                 reverse('console:productvariant-change',
-                                    kwargs={'pk': obj.pk, 'parent': parent[0].pk}))
+                                    kwargs={'pk': obj.pk, 'parent': parent.pk}))
                         else:
                             context = self.get_context_data()
                             if form:

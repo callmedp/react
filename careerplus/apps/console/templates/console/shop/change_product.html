@@ -1321,11 +1321,11 @@
           let msg = $(this).data("msg");
           $("#alertModalOk").data("action", msg);
           if (msg == "active"){
-            let message = 'Please make sure you have saved your changes. Do you wish to make this category active?';
+            let message = 'Please make sure you have saved your changes. Do you wish to make this product active?';
             $("#alertModal").modal('show').find('#alertModalBody').html(message);
           }
           else if(msg == "inactive"){
-            let message = 'Do you want to make this category inactive?';
+            let message = 'Do you want to make this product inactive?';
             $("#alertModal").modal('show').find('#alertModalBody').html(message);
           }
           else if(msg == "index"){

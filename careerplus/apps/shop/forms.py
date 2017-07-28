@@ -937,7 +937,7 @@ class ProductRelatedForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
         super(ProductRelatedForm, self).__init__(*args, **kwargs)
-        queryset = Product.objects.filter(active=True).exclude(pk=obj.pk)
+        queryset = Product.objects.filter(active=True, type_product__in=[0,4,5]).exclude(pk=obj.pk)
         if self.instance.pk:
             self.fields['secondary'].queryset = queryset
         else:

@@ -1132,7 +1132,26 @@ class Product(AbstractProduct, ModelMeta):
         )
         return
 
-    
+    def get_parent(self):
+        if self.type_product == 2:
+            return self.variationproduct.all()[0] if self.variationproduct.exists() else None
+        else:
+            return None
+
+    def get_variations(self):
+        if self.type_product == 1:
+            return self.variation.filter(
+                siblingproduct__active=True, active=True).order_by('-siblingproduct__sort_order')
+        else:
+            return None
+
+    def get_combos(self):
+        if self.type_product == 3:
+            return self.childs.filter(
+                active=True, childrenproduct__active=True).order_by('-childrenproduct__sort_order')
+        else:
+            return None
+
 
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(
@@ -1238,7 +1257,12 @@ class ProductScreen(AbstractProduct):
     def get_status(self):
         return dict(self.STATUS_CHOICES).get(self.status)
 
-    
+    def get_parent(self):
+        if self.type_product == 2:
+            return self.variationproduct.all()[0] if self.variationproduct.exists() else None
+        else:
+            return None
+
 
 # class ProductArchive(AbstractProduct):
 #     product = models.ForeignKey(

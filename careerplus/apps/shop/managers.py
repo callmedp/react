@@ -13,8 +13,8 @@ class ProductQuerySet(models.query.QuerySet):
 				'faqs',
 				'productfaqs'
 				'childs',
-				'childrenproduct',
 				'variation',
+                'variationproduct',
 				'siblingproduct')
 
     def indexable(self):
