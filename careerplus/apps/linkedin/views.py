@@ -56,6 +56,7 @@ class CounsellingSubmit(TemplateView):
             'ques_dict': ques_dict,
             'quiz_resp': quiz_resp if quiz_resp else None,
             'flag': quiz_resp.submitted if quiz_resp else False,
+            "orderitem":orderitem,
         } 
         return context
 
@@ -83,7 +84,7 @@ class CounsellingSubmit(TemplateView):
                 orderitem.tat_date = datetime.now()
                 orderitem.counselling_form_status = 42
                 orderitem.save()
-            return HttpResponseRedirect(reverse('dashboard'))
+            return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
 
 class DraftView(TemplateView):

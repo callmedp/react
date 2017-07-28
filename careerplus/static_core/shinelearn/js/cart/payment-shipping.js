@@ -108,11 +108,10 @@ $().ready(function() {
         $.ajax({
             url: '/ajax/get-states/',
             type: 'GET',
-            data: {"country_code": $( this ).val(), },
+            data: {"country": $( this ).val(), },
             dataType: 'json',
             success: function(json) {
                 states = json.states;
-                console.log(states);
                 // initialize autocomplete with custom appendTo
                 $('#id_state').autocomplete({
                     lookup: states
@@ -135,10 +134,11 @@ $().ready(function() {
         $.ajax({
             url: '/ajax/get-states/',
             type: 'GET',
-            data: {"country_code": $('#id_country').val(), },
+            data: {"country": $('#id_country').val(), },
             dataType: 'json',
             success: function(json) {
                 states = json.states;
+
                 // initialize autocomplete with custom appendTo
                 $('#id_state').autocomplete({
                     lookup: states

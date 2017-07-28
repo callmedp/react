@@ -33,7 +33,6 @@ TEMPLATE_DEBUG = False  # django sorl required
 
 # Application definition
 DJANGO_APPS = [
-    'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,6 +78,8 @@ LOCAL_APPS = [
     'order',
     'homepage',
     'microsite',
+    'dashboard',
+    'wallet',
     'search',
     'linkedin',
     'emailers',
@@ -114,18 +115,19 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django_mobile.context_processors.flavour',
+                'careerplus.config.context_processors.common_context_processor',
+                # 'django_mobile.context_processors.flavour'
+                # 'django_mobile.context_processors.flavour',
                 'careerplus.config.context_processors.common_context_processor',
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings'
             ],
-            'loaders': [
+            'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
-                    'django_mobile.loader.Loader',
+                    # 'django_mobile.loader.Loader',
                     'django.template.loaders.filesystem.Loader',
                     'django.template.loaders.app_directories.Loader'
-                # ]),
-            ],
+                ]),
         },
     },
 ]
@@ -198,8 +200,8 @@ CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googl
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-        'height': 400,
-        'width': 700,
+        'height': 'auto',
+        'width': 'auto',
         # 'removePlugins': 'stylesheetparser',
         # 'extraPlugins': 'codesnippet',
     },
@@ -221,11 +223,14 @@ HTMSL_PASS = 'w1XN75L'
 HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
 ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
 
-CART_MAX_LIMIT = 5
 
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+
+CART_MAX_LIMIT = 5
+
+SHINE_API_URL = 'https://sumosc.shine.com'
 
 ############ SOLR SETTINGS #######################
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
@@ -242,3 +247,182 @@ EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
+# encode decode constants
+TOKEN_DT_FORMAT = '%Y%m%d%H%M%S'
+LOGIN_TOKEN_EXPIRY = 30
+EMAIL_SMS_TOKEN_EXPIRY = 7
+ENCODE_SALT = 'xfxa'
+
+# resume writing India product List
+RESUME_WRITING_INDIA = [2]
+
+######## LOGGING CONFIG ############################
+LOGS_ROOT = os.path.join(BASE_DIR, "log")
+
+for d in ['debug', 'error', 'info', 'email', 'sms', 'profile', 'payment']:
+    if not os.path.exists(os.path.join(LOGS_ROOT, d)):
+        os.makedirs(os.path.join(LOGS_ROOT, d))
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'debug_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'debug', 'debug.log')
+        },
+        'info_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'info', 'info.log')
+        },
+        'error_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'error.log')
+        },
+        'email_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'email', 'email.log')
+        },
+        'sms_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'sms', 'sms.log')
+        },
+        'profile_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'profile', 'profile.log')
+        },
+        'unsubs_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'info', 'unsubs.log')
+        },
+        'feedback_handler': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'email', 'feedback.log')
+        },
+        'payment_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'payment', 'error.log')
+        },
+        'cron_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'cron.log')
+        },
+        'command_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'command.log')
+        },
+        'cashback_handler': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGS_ROOT, 'error', 'cashback.log')
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins', 'error_handler'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'debug_log': {
+            'handlers': ['debug_handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'info_log': {
+            'handlers': ['info_handler'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'error_log': {
+            'handlers': ['error_handler'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'email_log': {
+            'handlers': ['email_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'sms_log': {
+            'handlers': ['sms_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'profile_import_log': {
+            'handlers': ['profile_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'unsubs_log': {
+            'handlers': ['unsubs_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'feedback_log': {
+            'handlers': ['feedback_handler', ],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'payment_log': {
+            'handlers': ['payment_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'cron_log': {
+            'handlers': ['cron_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'command_log': {
+            'handlers': ['command_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'cashback_log': {
+            'handlers': ['cashback_handler', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}

@@ -16,12 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
-from filebrowser.sites import site
 from django.conf.urls.static import static
 
 from users.views import (DashboardView,
     RegistrationApiView, LoginApiView, LogoutApiView)
-
 from homepage.views import HomePageView
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
@@ -40,8 +38,9 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api-auth/',
+        include('rest_framework.urls', namespace='rest_framework')),
     url(r'^$', HomePageView.as_view(), name='homepage'),
     url(r'^console/', include('console.urls', namespace='console')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
@@ -66,7 +65,9 @@ urlpatterns += [
     url(r'^login/$', LoginApiView.as_view(), name='login'),
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
+    url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
+
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(

@@ -25,8 +25,11 @@ class Cart(AbstractAutoDate):
     last_status = models.PositiveIntegerField(
         _("Last Status"), default=None, null=True,
         blank=True, choices=STATUS_CHOICES)
-    # vouchers = models.ManyToManyField(
-    #     'coupon.Voucher', verbose_name=_("Vouchers"), blank=True)
+    coupon = models.ForeignKey(
+        'coupon.Coupon',
+        on_delete=models.SET_NULL,
+        verbose_name=_("Coupon"), null=True,)
+    
     is_submitted = models.BooleanField(default=False)
     date_merged = models.DateTimeField(
         _("Date merged"), null=True, blank=True)

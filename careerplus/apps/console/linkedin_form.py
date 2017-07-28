@@ -347,6 +347,14 @@ class LinkedinOIFilterForm(forms.Form):
             'placeholder': "from date - to date",
             "readonly": True, }))
 
+    payment_date = forms.CharField(
+        label=("Payment Date:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
     delivery_type = forms.ChoiceField(
         label=("Delivery Type:"), choices=[],
         required=False,
@@ -425,3 +433,21 @@ class EducationInlineFormSet(forms.BaseInlineFormSet):
         if any(self.errors):
             return
         return
+
+
+class AssignmentInterNationalForm(forms.Form):
+    assign_to = forms.ModelChoiceField(
+        queryset=User.objects.none(),
+        empty_label="Select User",
+        to_field_name='pk',
+        required=True, widget=forms.Select())
+
+    def __init__(self, *args, **kwargs):
+        super(AssignmentInterNationalForm, self).__init__(*args, **kwargs)
+        from django.contrib.auth.models import Permission
+        from django.db.models import Q
+        perm = Permission.objects.get(codename='international_profile_update_assignee')
+        users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        self.fields['assign_to'].required = True
+        self.fields['assign_to'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['assign_to'].queryset = users

@@ -1,15 +1,16 @@
 from __future__ import absolute_import
 import json
+import re
 import logging
 import hmac
 import hashlib
 import requests
+from datetime import datetime, timedelta
 from collections import OrderedDict
 from itertools import islice
-
+from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
 from cart.models import Subscription
-
 
 
 class RoundOneAPI(object):
@@ -21,12 +22,12 @@ class RoundOneAPI(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
-    def get_access_token(self, email, request=None):
+    def get_roundone_access_token(self, email, request):
         try:
             if request:
                 access_token = request.session.get('roundone_access_token', '')
                 token_expiry = request.session.get('roundone_token_expiry')
-                if access_token and token_expiry and datetime.now() < token_expiry:
+                if access_token and token_expiry and datetime.now() < datetime.strptime(json.loads(token_expiry), "%Y-%m-%dT%H:%M:%S.%f"):
                     return access_token
             try:
                 password = Subscription.objects.get(
@@ -36,7 +37,7 @@ class RoundOneAPI(object):
                 password = settings.ROUNDONE_DEFAULT_PASSWORD
 
             post_url = settings.ROUNDONE_API_DICT.get("oauth_url")
-
+            
             post_data = {
                 "client_id": settings.ROUNDONE_API_DICT.get("client_id", ''),
                 "client_secret": settings.ROUNDONE_API_DICT.get(
@@ -44,7 +45,7 @@ class RoundOneAPI(object):
                 "affiliateName": settings.ROUNDONE_API_DICT.get(
                     "affiliateName", 'CP'),
                 "username": email,
-                "password": password.candidate_id,
+                "password": '592be7a753c034509597de71', #password.candidateid,
             }
 
             headers = {'content-type': 'application/json'}
@@ -57,12 +58,11 @@ class RoundOneAPI(object):
                 response_json = response.json()
                 access_token = response_json.get('access_token', '')
                 expires_in = response_json.get('expires_in', 172800)
-
                 if request and access_token:
                     request.session.update({
                         'roundone_access_token': access_token,
-                        'roundone_token_expiry': datetime.now() +
-                        timedelta(seconds=expires_in)})
+                        'roundone_token_expiry': json.dumps(datetime.now() +
+                        timedelta(seconds=expires_in), cls=DjangoJSONEncoder)})
                 return access_token
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -205,7 +205,7 @@ class RoundOneAPI(object):
                 "refId": job_params[2],
                 "userEmail": userEmail,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             headers = {'content-type': 'application/json'}
             response = requests.post(
@@ -225,7 +225,7 @@ class RoundOneAPI(object):
         try:
             userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("get_profile_url")
-            access_token = self.get_access_token(userEmail, request)
+            access_token = self.get_roundone_access_token(userEmail, request)
             params = {
                 "userEmail": userEmail,
                 "access_token": access_token
@@ -248,11 +248,11 @@ class RoundOneAPI(object):
         try:
             if roundone_profile.get("user"):
                 applicantProfile = {"user": roundone_profile.get("user")}
-                userEmail = request.user.email
+                userEmail = request.session.get('email', '')
                 url = settings.ROUNDONE_API_DICT.get("post_profile_url")
                 data = {
                     "userEmail": userEmail,
-                    "access_token": self.get_access_token(userEmail, request),
+                    "access_token": self.get_roundone_access_token(userEmail, request),
                     "applicantProfile": applicantProfile
                 }
                 headers = {'content-type': 'application/json'}
@@ -270,12 +270,12 @@ class RoundOneAPI(object):
     def get_referral_status(self, request=None):
         response_json = {"response": False}
         try:
-            userEmail = request.user.email
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("referral_status_url")
             params = {
                 "userEmail": userEmail,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
             if response and response.status_code == 200 and response.json():
@@ -288,14 +288,14 @@ class RoundOneAPI(object):
     def get_referral_confirm(self, request):
         response_json = {"response": False}
         try:
-            userEmail = request.user.email
+            userEmail = request.session.get('email', '')
             requestId = request.GET.get('requestId')
             url = settings.ROUNDONE_API_DICT.get("referral_confirm_url")
             put_data = {
                 "userEmail": userEmail,
                 "requestId": requestId,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             headers = {'content-type': 'application/json'}
             response = requests.put(
@@ -312,12 +312,12 @@ class RoundOneAPI(object):
     def get_upcoming_status(self, request=None):
         response_json = {"response": False}
         try:
-            userEmail = request.user.email
+            userEmail = request.session.get('email', '')
             url = settings.ROUNDONE_API_DICT.get("upcoming_interaction_url")
             params = {
                 "userEmail": userEmail,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
             if response and response.status_code == 200 and response.json():
@@ -335,7 +335,7 @@ class RoundOneAPI(object):
             params = {
                 "userEmail": userEmail,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
             if response and response.status_code == 200 and response.json():
@@ -353,7 +353,7 @@ class RoundOneAPI(object):
             params = {
                 "userEmail": userEmail,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
             if response and response.status_code == 200 and response.json():
@@ -374,14 +374,14 @@ class RoundOneAPI(object):
                 "refId": job_params[2],
                 "userEmail": userEmail,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             headers = {'content-type': 'application/json'}
             response = requests.put(
                 url, data=json.dumps(data_dict),
                 headers=headers,
                 timeout=settings.ROUNDONE_API_TIMEOUT)
-            if response and response.status_code == 200 and response.json():
+            if response.status_code == 200 and response.json():
                 response_json = response.json()
                 response_json.update({'response': True})
         except Exception as e:
@@ -397,7 +397,7 @@ class RoundOneAPI(object):
             else:
                 return False
 
-            access_token = self.get_access_token(userEmail, request)
+            access_token = self.get_roundone_access_token(userEmail, request)
 
             if len(access_token) > 0:
                 params = {
@@ -431,7 +431,7 @@ class RoundOneAPI(object):
                 "jobType": job_params[1],
                 "refId": job_params[2],
                 "userEmail": userEmail,
-                "access_token": self.get_access_token(userEmail, request)
+                "access_token": self.get_roundone_access_token(userEmail, request)
             }
             headers = {'content-type': 'application/json'}
             response = requests.post(
@@ -465,7 +465,7 @@ class RoundOneAPI(object):
                 'orderId': orderId,
                 'feedbackData': feedbackData,
                 "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP'),
-                'access_token': self.get_access_token(userEmail, request)
+                'access_token': self.get_roundone_access_token(userEmail, request)
             }
             headers = {'content-type': 'application/json'}
             response = requests.put(
@@ -488,7 +488,7 @@ class RoundOneAPI(object):
             params = {
                 'userEmail': userEmail,
                 'orderId': orderId,
-                'access_token': self.get_access_token(userEmail, request)
+                'access_token': self.get_roundone_access_token(userEmail, request)
             }
             response = requests.get(url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
             if response and response.status_code == 200 and response.json():
@@ -509,6 +509,14 @@ class RoundOneAPI(object):
         except:
             pass
         return user_ip
+
+    def remove_html_tags(self, json_dict):
+        for json_rsp in json_dict.get('data'):
+            jd = json_rsp.get('jobDescription')
+            clean = re.compile('<.*?>')
+            text = re.sub(clean, '', jd)
+            json_rsp.update({'jobDescription': text.replace("\n\n\n", "")})
+        return json_dict
 
 
 class RoundOneSEO(object):

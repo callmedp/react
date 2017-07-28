@@ -1,0 +1,21 @@
+{% load console_tags %}
+{% if field|widget_type == 'ClearableFileInput'%}
+<div class="item form-group {% if field.errors %}bad{% endif %}">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.id_for_label }}">{{field.label}} <span class="required">*</span>
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12 clearimg">
+    {{field}}
+  </div>
+  <div class="alert">{{field.errors}}</div>
+</div>
+
+{% else %}	
+<div class="item form-group {% if field.errors %}bad{% endif %}">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.id_for_label }}">{{field.label}} <span class="required">*</span>
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    {{field}}
+  </div>
+  <div class="alert">{{field.errors}}</div>
+</div>
+{% endif %}

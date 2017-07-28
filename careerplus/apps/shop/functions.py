@@ -1,7 +1,8 @@
 import os
 import time
-
+from django.core.exceptions import ValidationError
 from random import random
+from django.utils.translation import ugettext_lazy as _
 
 
 def get_file_name(f_obj):
@@ -41,3 +42,7 @@ def get_upload_path_product_file(instance, filename):
 def get_upload_path_vendor(instance, filename):
     return "vendor/{ven_id}/{filename}".format(
         ven_id=instance.id, filename=get_file_name(filename))
+
+
+
+    

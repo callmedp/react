@@ -36,13 +36,14 @@ OI_OPS_STATUS = (
     (10, 'On Hold by Vendor'),
     (11, 'Archived'),
 
-    # flow1 and flow3 21 - 40
+    # flow1, flow3, and flow 5 status 21 - 40
     (21, 'Upload Draft'),
     (22, 'Draft Uploaded'),
     (23, 'Pending Approval'),
     (24, 'Approved'),
     (25, 'Rejected By Admin'),
     (26, 'Rejected By Candidate'),
+    (27, 'Profile Update'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),
@@ -55,6 +56,10 @@ OI_OPS_STATUS = (
     # flow7 61 - 80
     (61, "Will start once resume is made"),
     (62, "Resume Boosted"),
+
+    # flow6 81 - 100
+    (81, "Pending Varification Reports"),
+
 )
 
 COUNSELLING_FORM_STATUS = (

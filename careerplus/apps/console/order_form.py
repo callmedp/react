@@ -48,7 +48,7 @@ class InboxActionForm(forms.Form):
         super(InboxActionForm, self).__init__(*args, **kwargs)
         from django.contrib.auth.models import Permission
         from django.db.models import Q
-        perm = Permission.objects.get(codename='can_assigned_to_writer')
+        perm = Permission.objects.get(codename='writer_inbox_assignee')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
         self.fields['action'].required = True
         self.fields['action'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
@@ -72,6 +72,29 @@ class FileUploadForm(forms.Form):
             if extn not in ['pdf', 'doc', 'docx']:
                 raise forms.ValidationError(
                     "only pdf, doc and docx formats are allowed.")
+            elif file.size > 500 * 1024:
+                raise forms.ValidationError(
+                    "file is too large ( > 500kb ).")
+        return file
+
+
+class VendorFileUploadForm(forms.Form):
+    file = forms.FileField(max_length=255, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(VendorFileUploadForm, self).__init__(*args, **kwargs)
+
+    def clean_file(self):
+        file = self.files.get('file', '')
+        if not file:
+            raise forms.ValidationError(
+                "file is required.")
+        elif file:
+            name = file.name
+            extn = name.split('.')[-1]
+            if extn not in ['pdf', 'doc', 'docx', 'png', 'jpg']:
+                raise forms.ValidationError(
+                    "only pdf, doc, docx, png and jpg formats are allowed.")
             elif file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "file is too large ( > 500kb ).")
@@ -166,6 +189,14 @@ class OIFilterForm(forms.Form):
             'placeholder': "from date - to date",
             "readonly": True, }))
 
+    date_placed = forms.CharField(
+        label=("Placed Date:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
     delivery_type = forms.ChoiceField(
         label=("Delivery Type:"), choices=[],
         required=False,
@@ -200,7 +231,7 @@ class OIFilterForm(forms.Form):
         from django.contrib.auth.models import Permission
         from django.db.models import Q
 
-        perm = Permission.objects.get(codename='can_assigned_to_writer')
+        perm = Permission.objects.get(codename='writer_inbox_assignee')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
         self.fields['writer'].widget.attrs['class'] = 'form-control'
         self.fields['writer'].queryset = users
@@ -242,6 +273,37 @@ class OIActionForm(forms.Form):
                 (-1, "Export As Csv"),
                 (-3, "Send Booster Mail"),
             )
+        elif queue_name == 'domesticprofileupdate':
+            ACTION_CHOICES += (
+                (-4, "Send for approval to ops"),  # send domestic Profile Update for approval
+            )
+        elif queue_name == 'domesticprofileapproval':
+            ACTION_CHOICES += (
+                (-5, "Approve Domestic Profile Update"),  # domestic Profile Update approved
+                (-6, "Reject Domestic Profile Update"),
+            )
+
+        elif queue_name == 'partnerinbox':
+            ACTION_CHOICES += (
+                (-7, "Keep On Hold"),  # item on hold by vendor
+            )
+
+        elif queue_name == 'partnerholdqueue':
+            ACTION_CHOICES += (
+                (-8, "Unhold"),  # unhold orderitem
+            )
+
+        elif queue_name == 'internationalprofileupdate':
+            ACTION_CHOICES += (
+                (-9, "Send for approval to ops"),  # send international Profile Update for approval
+            )
+
+        elif queue_name == 'internationalapproval':
+            ACTION_CHOICES += (
+                (-10, "Approve International Profile Update"),  # domestic Profile Update approved
+                (-11, "Reject International Profile Update"),
+            )
+
         else:
             ACTION_CHOICES += ((-1, "Export As Csv"),)
 
@@ -254,3 +316,21 @@ class OIActionForm(forms.Form):
 
     class Meta:
         fields = ['action', ]
+
+
+class AssignmentActionForm(forms.Form):
+    assign_to = forms.ModelChoiceField(
+        queryset=User.objects.none(),
+        empty_label="Select User",
+        to_field_name='pk',
+        required=True, widget=forms.Select())
+
+    def __init__(self, *args, **kwargs):
+        super(AssignmentActionForm, self).__init__(*args, **kwargs)
+        from django.contrib.auth.models import Permission
+        from django.db.models import Q
+        perm = Permission.objects.get(codename='domestic_profile_update_assignee')
+        users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        self.fields['assign_to'].required = True
+        self.fields['assign_to'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['assign_to'].queryset = users

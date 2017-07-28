@@ -74,6 +74,10 @@ class RegistrationApiView(FormView):
                 request.session.update(resp_status)
                 return HttpResponseRedirect(self.success_url)
 
+            elif resp['response'] == False:
+                return render(self.request, self.template_name, {'form': form})    
+
+
         elif user_resp['response'] == 'exist_user':
             messages.add_message(self.request, messages.ERROR, "This user already exists", 'danger')
             return HttpResponseRedirect(reverse('login'))

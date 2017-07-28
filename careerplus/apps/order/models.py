@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from seo.models import AbstractAutoDate
+from geolocation.models import Country
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
 
@@ -18,7 +19,7 @@ class Order(AbstractAutoDate):
         'cart.Cart', verbose_name=_("Cart"),
         null=True, blank=True, on_delete=models.SET_NULL)
 
-    # custome information
+    # customer information
     candidate_id = models.CharField(
         null=True,
         blank=True,
@@ -76,6 +77,12 @@ class Order(AbstractAutoDate):
     welcome_call_done = models.BooleanField(default=False)
     midout_sent_on = models.DateTimeField(null=True, blank=True)
 
+    # cash or Faild trasnsaction manual paid by..
+    paid_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='order_paid_by',
+        null=True, blank=True)
+
     class Meta:
         app_label = 'order'
         ordering = ['-date_placed']
@@ -92,7 +99,10 @@ class Order(AbstractAutoDate):
 
             # order deatil permissions
             ("can_view_order_detail", "Can View Order Deatil"),
-            
+
+            # order Action permissions
+            ("can_mark_order_as_paid", "Can Mark Order As Paid"),
+
         )
 
     def __str__(self):
@@ -191,7 +201,6 @@ class OrderItem(models.Model):
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
-
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -204,16 +213,14 @@ class OrderItem(models.Model):
             ("can_upload_candidate_resume", "Can Upload Candidate resume"),
 
             # inbox permission
-            ("can_show_inbox_queue", "Can Show Inbox Queue"),
-            ("can_view_extra_field_inbox", "Can View Extra Fields Of Inbox"),
-            ("can_show_assigned_inbox", "Can Show Only Assigned Inbox"),
-            ("can_show_unassigned_inbox", "Can Show Only Unassigned Inbox"),
-            ("writer_assignment_action", "Writer Assignment Action permission"),
-            ("can_assigned_to_writer", "Can Assigned To This Writer"),
+            ("can_show_inbox_queue", "Can Show Writer Inbox Queue"),
+            ("can_view_extra_field_inbox", "Can View Extra Fields Of Writer Inbox"),
+            ("writer_inbox_assigner", "Writer Inbox Assigner"),
+            ("writer_inbox_assignee", "Writer Inbox Assignee"),
 
             # oirder item detail permission
             ("can_view_order_item_detail", "Can View Order Item Detail"),
-            
+
             # for linkedin flow
             ("writer_assignment_linkedin_action", "Can Assign to Other linkedin writer"),
             ("can_assigned_to_linkedin_writer", "Can Assigned To This linkedin Writer"),
@@ -250,10 +257,36 @@ class OrderItem(models.Model):
             # Booster Queue
             ("can_show_booster_queue", "Can Show Booster Queue"),
 
+            # Domestic Profile Update Queue Permissions
+            ("can_show_domestic_profile_update_queue", "Can Show Domestic Profile Update Queue"),
+            ("domestic_profile_update_assigner", "Domestic Profile Update Assigner"),
+            ("domestic_profile_update_assignee", "Domestic Profile Update Assignee"),
+
+            # Domestic Profile Approval Queue Permissions
+            ("can_show_domestic_profile_approval_queue", "Can Show Domestic Profile Approval Queue"),
+
+            # International Profile Update Queue Permissions
+            ("can_show_international_profile_update_queue", "Can Show International Profile Update Queue"),
+            ("international_profile_update_assigner", "International Profile Update Assigner"),
+            ("international_profile_update_assignee", "International Profile Update Assignee"),
+
+            # International Profile Approval Queue Permissions
+            ("can_show_international_profile_approval_queue", "Can Show International Profile Approval Queue"),
+
             # Closed Permission
             ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),
             ("can_view_all_closed_oi_list", "Can View All Closed Orderitem List"),
             ("can_view_only_assigned_closed_oi_list", "Can View Only Assigned Closed Orderitem List"),
+
+            # partner inbox permission
+            ("can_show_partner_inbox_queue", "Can Show Partner Inbox Queue"),
+            ("show_test_status_fields", "Show Test Status Field For Studymate"),
+
+            # Hold queue permissions
+            ("can_show_hold_orderitem_queue", "Can Show Hold Orderitem Queue"),
+
+            # Varification report queue
+            ("can_show_varification_report_queue", "Can Show Varification Report Queue"),
 
             # Action Permission
             ("oi_action_permission", "OrderItem Action Permission"),
@@ -292,8 +325,23 @@ class OrderItem(models.Model):
         if self.draft_counter == settings.DRAFT_MAX_LIMIT:
             return 'Final Draft'
         elif self.draft_counter:
-            return 'Draft %s' %(self.draft_counter)
+            return 'Draft %s' % (self.draft_counter)
         return ''
+
+    def check_featured_profile_dependency(self):
+        order = self.order
+        ois = order.orderitems.filter(product__id__in=settings.RESUME_WRITING_INDIA)
+        if ois.exists():
+            closed_ois = ois.filter(oi_status=4)
+            if closed_ois.exists():
+                return closed_ois[0]
+            else:
+                return None
+        else:
+            return self
+
+    def get_test_obj(self):
+        return self
 
 
 class OrderItemOperation(AbstractAutoDate):
@@ -348,3 +396,16 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['added_on']
+
+class InternationalProfileCredential(models.Model):
+    oi = models.ForeignKey(OrderItem)
+    country =  models.ForeignKey(Country)
+    username = models.CharField(_('Username'), max_length=100)
+    Password = models.CharField(_('Password'), max_length=100)
+    candidateid = models.CharField(_('CandidateId'), max_length=100)
+    candidate_email = models.CharField(_('Candidate Email'), max_length=100)
+    site_url = models.CharField(_('Site Url'), max_length=100, blank=True)
+    profile_status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.username
