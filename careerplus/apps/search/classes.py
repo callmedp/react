@@ -13,7 +13,7 @@ from haystack.query import EmptySearchQuerySet
 
 #local imports
 from search import inputs
-from search.helpers import search_clean_fields, pop_stop_words
+from .helpers import search_clean_fields, pop_stop_words
 
 #inter app imports
 from core.library.search.query import SQS
@@ -42,9 +42,9 @@ class BaseSearch(object):
         'qt': 'dismax',
         'facet': 'on',
         'facet.mincount': '1',
-        'qf': 'text pHd^0.5 pCtg^0.3 pMtD^0.1 pMK^0.1 pChts^0.1 pAb^0.05',
-        'pf': 'pHd^0.5 pCtg^0.3 pMtD^0.1 pMK^0.1 pChts^0.1 pAb^0.05',
-        'pf2': 'pCtg^0.3 pChts^0.1',
+        'qf': 'text pHd^0.5 pFA^0.3 pCtg^0.2 pMtD^0.1 pMK^0.1 pChts^0.1 pAb^0.05',
+        'pf': 'pHd^0.5 pFA^0.2 pCtg^0.2 pMtD^0.1 pMK^0.1 pChts^0.1 pAb^0.05',
+        'pf2': 'pFA^03 pCtg^0.2 pChts^0.1',
         'ps2': 1,
         'tie': 1,
         'hl': False,
@@ -55,15 +55,16 @@ class BaseSearch(object):
     facet_list = ['{!ex=loc}jFLoc',
                   '{!ex=exft}jFEx',
                   '{!ex=slft}jFSal',
-                  '{!ex=jfunT}jFArea',
+                  '{!ex=jfunT}pFA',
                   '{!ex=indT}jIndID',
                   'jNSTs']
 
+    # These are the filters shown on search page
     filter_mapping = {
         '{!tag=loc}jFLoc': 'location',
         '{!tag=exft}jFEx': 'fexp',
         '{!tag=slft}jFSal': 'fsalary',
-        '{!tag=jfunT}jFArea': 'farea',
+        '{!tag=jfunT}jFA': 'farea',
         '{!tag=indT}jIndID': 'findustry',
         'jCIDF':'fcid',
         'jNSTs': 'fshift',

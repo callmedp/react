@@ -13,7 +13,7 @@
 
 {% block main_container %}
 <h2>Search</h2>
-
+    {% comment %}
     <form method="get" action=".">
         <table>
             {{ form.as_table }}
@@ -47,7 +47,7 @@
             {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}
     </form>
-
+    {% endcomment %}
     {% block page_heading %}
         <!-- header -->
         <header class="search-header">
@@ -60,10 +60,13 @@
                 {% block product_header %}
                     <div class="search-caption">
                         <div class="search-box">
-                            <form class="form-inline">
+                            <form class="form-inline" id="search_form" data-role="form">
+                                {% csrf_token %}
+                                {% for field in form %}
                                 <div class="form-group">
-                                    <input class="form-control" name="query" id="query" placeholder="Job title, keyword or company name" type="text">
+                                    {{field}}
                                 </div>
+                                {% endfor %}
                                 <button type="submit" class="find-jobs-btn btn">Find</button>
                             </form>
                         </div>

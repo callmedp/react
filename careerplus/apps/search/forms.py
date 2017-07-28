@@ -8,22 +8,29 @@ class SearchForm(forms.Form):
     """
     Product Search Form
     """
+    # These are the search text boxes on search page
     q = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class': 'cls_input_validate cls_local_autocomplete search3 ',
-                'data-rulesid':"01",'data-selecttype':'multiple','maxlength':'150','placeholder':'Type Job Title, Skills etc.','holder':'Type Job Title, Skills etc.'}),initial='')
+                'class': 'form-control',
+                'data-rulesid': "01",
+                'data-selecttype': 'multiple',
+                'maxlength': '150',
+                'placeholder': 'Search for courses, services etc..',
+                'holder': 'Type Job Title, Skills etc.'}
+        ),
+        initial='')
 
 
 class SearchRecommendedForm(forms.Form):
     """
     Product Recommendation Form
     """
-    farea = forms.CharField(
+    farea = forms.ChoiceField(
         required=True,
         widget=forms.TextInput(
             attrs={
-                'class': 'form-control',
+                'class': 'form-control js_farea',
                 'data-rulesid': "01",
                 'data-selecttype': 'multiple',
                 'maxlength': '150',
@@ -31,14 +38,14 @@ class SearchRecommendedForm(forms.Form):
                 'holder': 'Functional Area'}),
         initial='',
         choices=AREA_WITH_LABEL)
-    skill = forms.CharField(
+    skill = forms.MultipleChoiceField(
         required=False,
-        widget=forms.TextInput(
+        widget=forms.CheckboxSelectMultiple(
             attrs={
-                'class': 'form-control',
+                'class': 'form-control js_skill',
                 'maxlength':'150',
-                'placeholder':'Skill',
-                'holder':'skill'
+                'placeholder':'Key Skills',
+                'holder': 'skill'
             }
         ),
         initial='',

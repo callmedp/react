@@ -1,8 +1,5 @@
 import re
 import shlex
-import hashlib
-import bencode
-import urllib2
 
 STOP_WORDS = ('and', 'or', 'not')
 BOOLEAN_OPERATORS = ('and', 'or', 'not')
@@ -125,20 +122,6 @@ class Phraser(object):
         else:
             return query
 
-
-class Hasher(object):
-    """
-    class to create a hash of job search query parameters
-    """
-    def prepare(self, data, func_transform):
-        data_keys = sorted(data.keys())
-        concatenated_data = ''
-        for key in data_keys:
-            concatenated_data += key +':'+ func_transform(key, data[key]) +'|'
-        encoded_string = bencode.bencode(concatenated_data)
-        hashed_string = hashlib.md5(encoded_string).hexdigest()
-        return hashed_string
-
 CSEARCH_KEYWORD_REPLACE = {
     "-plus": "+",
     "-dot-": ".",
@@ -154,11 +137,6 @@ CSEARCH_KEYWORD_REPLACE = {
 def specialcharin(kwrd):
     kwrd=kwrd.lower()
     return "c++" in kwrd or "j++" in kwrd or "c#" in kwrd or ".net" in kwrd or "j#" in kwrd
-
-
-def path_special_char_replace(path):
-    path=urllib2.unquote(path)
-    return path.lower().replace("c++","c-plus-plus").replace("j++","j-plus-plus").replace(".net","dot-net").replace("c#","c-sharp").replace("j#","j-sharp")
 
 
 def replaced_character_in(kw):

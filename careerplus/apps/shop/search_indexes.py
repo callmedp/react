@@ -82,7 +82,6 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     # pAts = indexes.MultiValueField(model_attr='attributes__display_name')
     # pPrs = indexes.MultiValueField(model_attr='prices__value', faceted=True)
     # pIA = indexes.BooleanField(default=False, model_attr='active')
->>>>>>> haystack
 
     def get_model(self):
         return Product
