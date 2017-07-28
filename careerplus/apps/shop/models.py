@@ -14,8 +14,7 @@ from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from partner.models import Vendor
 from faq.models import (
-    FAQuestion, Chapter,
-    ScreenFAQ, ScreenChapter)
+    FAQuestion, ScreenFAQ)
 from geolocation.models import Country, Currency
 from .managers import (
     ProductManager,
@@ -1242,6 +1241,7 @@ class ProductScreen(AbstractProduct):
                     inr_price=self.inr_price)
                 self.product = product
                 self.save()
+        return self.product
 
     def add_variant(self, variant):
         if self.type_product == 1:
@@ -1689,3 +1689,115 @@ class ProductExtraInfo(models.Model):
     def __str__(self):
         return '{0} - {1}'.format(self.product, self.type)
 
+
+class Chapter(AbstractAutoDate):
+    STATUS_CHOICES = (
+        (2, _('Active')),
+        (1, _('Inactive')),
+        (0, _('Moderation')),)
+
+    heading = models.CharField(_('chapter'), max_length=255)
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
+    
+    ordering = models.PositiveSmallIntegerField(
+        _('ordering'), default=1,
+        help_text=_(u'An integer used to order the chapter \
+            amongst others related to the same chapter. If not given this \
+            chapter will be last in the list.'))
+    status = models.BooleanField(
+        _('status'),
+        default=False,
+        help_text=_("Only questions with 'Active' will be "
+                    "displayed."))
+    product = models.ForeignKey(
+        Product,
+        related_name='chapter_product',
+        null=True, blank=True)
+    
+    class Meta:
+        ordering = ['ordering']
+        verbose_name = _('Chapter')
+        verbose_name_plural = _('Chapters')
+        permissions = (
+            ("console_add_chapter", "Can Add Product Chapter From Console"),
+            ("console_change_chapter", "Can Change Product Chapter From Console"),
+            ("console_moderate_chapter", "Can Moderate Product Chapter From Console"),
+            )
+    
+    def __str__(self):
+        return (self.heading[:75] + '...') if len(self.heading) > 75 else self.heading
+    
+    def get_screen(self):
+        if self.orig_ch.exists():
+            return self.orig_ch.all()[0]
+        else:
+            return None
+
+    def create_screen(self):
+        if not self.get_screen():
+            if self.heading and self.product:
+                schapter = ScreenChapter.objects.create(
+                    heading=self.heading,
+                    answer=self.answer,
+                    status=self.status,
+                    product=self.product.get_screen(),
+                    ordering=self.ordering,
+                    chapter=self)
+                return schapter
+        return self.get_screen()
+    
+
+class ScreenChapter(AbstractAutoDate):
+    STATUS_CHOICES = (
+        (2, _('Active')),
+        (1, _('Inactive')),
+        (0, _('Moderation')),)
+
+    heading = models.CharField(_('chapter'), max_length=255)
+    answer = RichTextField(
+        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
+    
+    ordering = models.PositiveSmallIntegerField(
+        _('ordering'), default=1,
+        help_text=_(u'An integer used to order the chapter \
+            amongst others related to the same chapter. If not given this \
+            chapter will be last in the list.'))
+    status = models.BooleanField(
+        _('status'),
+        default=False,
+        help_text=_("Only questions with 'Active' will be "
+                    "displayed."))
+    
+    product = models.ForeignKey(
+        ProductScreen,
+        related_name='chapter_product',
+        null=True, blank=True)
+    chapter = models.ForeignKey(
+        Chapter,
+        related_name='orig_ch',
+        null=True, blank=True)
+        
+
+    class Meta:
+        ordering = ['ordering']
+        verbose_name = _('Screen Chapter')
+        verbose_name_plural = _('Screen Chapters')
+    
+    def __str__(self):
+        return (self.heading[:75] + '...') if len(self.heading) > 75 else self.heading
+    
+    def create_chapter(self):
+        if not self.chapter:
+            if self.heading and self.product:
+                chapter = Chapter.objects.create(
+                    heading=self.heading,
+                    answer=self.answer,
+                    status=self.status,
+                    product=self.product.product,
+                    ordering=self.ordering)
+                self.chapter = chapter
+                self.save()
+                return chapter
+        return self.chapter
+    

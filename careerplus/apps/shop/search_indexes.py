@@ -67,6 +67,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPfgbp = indexes.DecimalField(model_attr='fake_gbp_price', faceted=True)
     
     pFAQs = indexes.CharField(indexed=False)
+    pPChs = indexes.CharField(indexed=False)
+    
     pCmbs = indexes.CharField(indexed=False)
     pVrs = indexes.CharField(indexed=False)
     # pVtn = indexes.MultiValueField(model_attr='variation__name')
@@ -403,3 +405,29 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'var_list': var_list
                 })
         return json.dumps(var_dict)
+
+    def prepare_pPChs(self, obj):
+        structure = {
+            'chapter': False
+        }
+        if obj.type_product == 2:    
+            chapters = obj.get_parent().chapter_product.filter(status=True)\
+                    .order_by('ordering') if obj.get_parent() else []
+        else:
+            chapters = obj.chapter_product.filter(status=True)\
+                    .order_by('ordering')
+        chapter_list = []
+        if chapters:
+            structure.update({
+                'chapter': True
+            })
+            for pch in chapters:
+                chapter_list.append({
+                    'heading': pch.heading,
+                    'content': pch.answer,
+                    'ordering': pch.ordering
+                })
+            structure.update({
+                'chapter_list': chapter_list
+            })
+        return json.dumps(structure)

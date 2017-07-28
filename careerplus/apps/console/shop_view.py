@@ -22,7 +22,7 @@ from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
-    Product)
+    Product,Chapter)
 
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
@@ -51,7 +51,9 @@ from shop.forms import (
     ChildInlineFormSet,
     ProductRelatedForm,
     RelatedInlineFormSet,
-    ChangeProductVariantForm)
+    ChangeProductVariantForm,
+    ChapterInlineFormSet,
+    ProductChapterForm,)
 
 from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
@@ -952,6 +954,19 @@ class ChangeProductView(DetailView):
                 form_kwargs={'object': self.get_object(),
                     'vendor':vendor },)
             context.update({'prdfaq_formset': prdfaq_formset})
+
+        ProductChapterFormSet = inlineformset_factory(
+            Product, Chapter, fk_name='product',
+            form=ProductChapterForm,
+            can_delete=False,
+            formset=ChapterInlineFormSet, extra=1,
+            max_num=20, validate_max=True)
+        if self.object:
+            prdchapter_formset = ProductChapterFormSet(
+                instance=self.get_object(),
+                form_kwargs={'object': self.get_object()},)
+            context.update({'prdchapter_formset': prdchapter_formset})
+        
         if self.object.type_product == 1:
             ProductVariationFormSet = inlineformset_factory(
                 Product, Product.variation.through, fk_name='main',
@@ -1336,6 +1351,44 @@ class ChangeProductView(DetailView):
                                 request, [
                                     "console/shop/change_product.html"
                                 ], context)
+                    elif slug == 'chapter':
+                        ProductChapterFormSet = inlineformset_factory(
+                            Product, Chapter, fk_name='product',
+                            form=ProductChapterForm,
+                            can_delete=False,
+                            formset=ChapterInlineFormSet, extra=1,
+                            max_num=20, validate_max=True)
+                        formset = ProductChapterFormSet(
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj},)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                                formset.save_m2m()
+                                
+                            messages.success(
+                                self.request,
+                                "Product Chapter changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prdchapter_formset': formset})
+                            messages.error(
+                                self.request,
+                                "Product Chapter Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
