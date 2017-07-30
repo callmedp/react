@@ -89,6 +89,24 @@ class RegistrationLoginApi(object):
                                                  "%s " % str(e))
         return response_json
 
+    @staticmethod
+    def reset_update(data_dict):
+        response_json = {"response": False}
+        post_url = "{}/api/v2/login/forgot-password/?format=json".format(settings.SHINE_SITE)
+        headers = {'Content-Type': 'application/json'}
+        try:
+            response = requests.post(post_url, data=json.dumps(post_data), headers=headers)
+            if response.status_code == 201:
+                response_json = response.json()
+
+            if response.status_code:
+                logging.getLogger('error_log').error(
+                    "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
+        except Exception as e:
+            logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
+                                                 "%s " % str(e))
+        return response_json
+
 
 class UserMixin(object):
     def get_client_ip(self, request):

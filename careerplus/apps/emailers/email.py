@@ -153,3 +153,12 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
 
             self.process(to, send_dict, data)
+
+        elif mail_type == "FORGOT_PASSWORD":
+            send_dict['subject'] = "Forgot Password"
+            send_dict['template'] = 'emailers/payment_confirm.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            # send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            data['button_text'] = "Click Here To Reset Password"
+            self.process(to, send_dict, data)

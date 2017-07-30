@@ -14,7 +14,11 @@ from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry
 from order.models import OrderItem
 
-from .forms import RegistrationForm, LoginApiForm
+from .forms import (
+    RegistrationForm,
+    LoginApiForm,
+    SetConfirmPasswordForm,
+    PasswordResetRequestForm)
 from .mixins import RegistrationLoginApi
 
 
@@ -90,8 +94,19 @@ class RegistrationApiView(FormView):
 
 class LoginApiView(FormView):
     form_class = LoginApiForm
-    template_name = "users/login.html"
+    template_name = "mobile/users/login.html"
     success_url = "/"
+
+    def get_context_data(self, **kwargs):
+        context = super(LoginApiView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        form = self.get_form()
+        context.update({
+            'messages': alert,
+            'form': form,
+            "reset_form": PasswordResetRequestForm()
+        })
+        return context
 
     def form_valid(self, form):
         login_dict = {}
@@ -122,15 +137,21 @@ class LoginApiView(FormView):
                     messages.add_message(self.request, messages.ERROR, login_resp["non_field_errors"][0], 'danger')
                 elif not login_resp['response']:
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
-                return render(self.request, self.template_name, {'form': form})
+                return render(
+                    self.request, self.template_name,
+                    {'form': form, 'reset_form': reset_form})
 
             elif not user_exist.get('response', ''):
                 messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
-                return render(self.request, self.template_name, {'form': form})
+                return render(
+                    self.request, self.template_name,
+                    {'form': form, 'reset_form': reset_form})
 
             elif not user_exist.get('exists', ''):
                 messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
-                return render(self.request, self.template_name, {'form': form})
+                return render(
+                    self.request, self.template_name,
+                    {'form': form, "reset_form": reset_form})
 
         except Exception as e:
             logging.getLogger('error_log').error("Exception while logging in a user with email: %s. "
@@ -186,17 +207,26 @@ class DownloadBoosterResume(View):
             return response
 
 
-class ForgotPasswordView(View):
-    template_name = ""
+class ForgotPasswordResetView(FormView):
+    template_name = "users/reset_password.html"
+    form_class = SetConfirmPasswordForm
 
     def get(self, request, *args, **kwargs):
-        return super(ForgotPasswordView, self).get(request, *args, **kwargs)
+        return super(ForgotPasswordResetView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(ForgotPasswordView, self).get_context_data(**kwargs)
+        context = super(ForgotPasswordResetView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         context.update({
             'messages': alert,
         })
         return context
 
+    def post(self, request, *arg, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            messages.success(request, 'Password has been reset.')
+            return self.form_valid(form)
+        else:
+            messages.error(request, 'Password reset has not been unsuccessful.')
+            return self.form_invalid(form)
