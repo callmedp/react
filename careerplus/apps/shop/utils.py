@@ -203,9 +203,10 @@ class ProductModeration(object):
                     if not product.inr_price > Decimal(0):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
-                    if not product.chapter_product.filter(status=True):
-                        messages.error(request, "Product has no active chapter")
-                        return test_pass
+                    if product.type_product in [0,1,3,5]:
+                        if not product.chapter_product.filter(status=True):
+                            messages.error(request, "Product has no active chapter")
+                            return test_pass
                     
                     if request.user.groups.filter(name='Product').exists() or request.user.is_superuser:
                         diction = [0,1, 3, 4, 5]
@@ -919,9 +920,10 @@ class ProductValidation(object):
                         messages.error(request, "Product Display Heading is required")
                         return test_pass
                     
-                    if not product.chapter_product.filter(status=True):
-                        messages.error(request, "Product has no active chapter")
-                        return test_pass
+                    if product.type_product in [0,1,3,5]:
+                        if not product.chapter_product.filter(status=True):
+                            messages.error(request, "Product has no active chapter")
+                            return test_pass
                     
 
                     if product.type_product in [0, 1, 3, 4]:
@@ -1042,6 +1044,7 @@ class ProductValidation(object):
                                 messages.error(request, (
                                     ("%(attr)s attribute cannot be blank") %
                                     {'attr': attribute.name}))
+                                return test_pass
                         else:
                             try:
                                 attribute.validate_value(value)
@@ -1049,6 +1052,7 @@ class ProductValidation(object):
                                 messages.error(request, (
                                     ("%(attr)s attribute %(err)s") %
                                     {'attr': attribute.name, 'err': e}))
+                                return test_pass
                     test_pass = True
                     return test_pass
                 else:

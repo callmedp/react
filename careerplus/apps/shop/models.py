@@ -148,16 +148,16 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def save(self, *args, **kwargs):
         if self.pk:
             self.url = self.get_full_url()
-        if self.name:
-            if not self.title:
-                self.title = self.name
-            if not self.heading:
-                self.heading = self.name
-            if not self.image_alt:
-                self.image_alt = self.name
-        if self.description:
-            if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description.strip())
+            if self.name:
+                if not self.title:
+                    self.title = self.name
+                if not self.heading:
+                    self.heading = self.name
+                if not self.image_alt:
+                    self.image_alt = self.name
+            if self.description:
+                if not self.meta_desc:
+                    self.meta_desc = self.get_meta_desc(self.description.strip())
                 
         super(Category, self).save(*args, **kwargs)
 
@@ -906,7 +906,7 @@ class Product(AbstractProduct, ModelMeta):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.name:
+        if self.name and self.pk:
             if not self.heading:
                 self.heading = self.get_heading()
             if not self.title:
