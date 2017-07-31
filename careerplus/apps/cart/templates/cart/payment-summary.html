@@ -81,7 +81,7 @@
                 </li>
               {% endif %}
 
-              {% if li.product.type_service == 3 and variations %}
+              {% if li.product.is_course and variations %}
                   <li>
                     <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
                     </span>
