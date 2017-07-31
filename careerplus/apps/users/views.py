@@ -18,17 +18,6 @@ from .forms import RegistrationForm, LoginApiForm
 from .mixins import RegistrationLoginApi
 
 
-class DashboardView(TemplateView):
-    template_name = "users/loginsuccess.html"
-
-    def get_context(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        return context
-
-    def get(self, request, *args, **kwargs):
-        return super(DashboardView, self).get(request, args, **kwargs)
-
-
 class RegistrationApiView(FormView):
     template_name = 'users/register.html'
     http_method_names = [u'get', u'post']
@@ -105,14 +94,12 @@ class LoginApiView(FormView):
             "email": user_email,
             "password": self.request.POST.get('password')
         })
-        
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
             if user_exist.get('exists', ''):
                 login_resp = RegistrationLoginApi.user_login(login_dict) # TODO: Do we need this check here
                                                                         # TODO: if we have that check on frontend?
                 if login_resp['response'] == 'login_user':
-
                     resp_status = ShineCandidateDetail().get_status_detail(email=None,
                         shine_id=login_resp.get('candidate_id', ''))
                     if resp_status:
@@ -166,8 +153,8 @@ class DownloadBoosterResume(View):
             if valid:
                 oi = OrderItem.objects.get(pk=oi_pk)
 
-                if oi.parent and oi.parent.oi_draft and (oi.parent.oi_status == 4 or oi.parent.no_process):
-                    resume = oi.parent.oi_draft
+                if oi.oi_draft:
+                    resume = oi.oi_draft
                     file_path = resume.path
                     filename = resume.name
                     extn = filename.split('.')[-1]

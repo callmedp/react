@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from users.views import (DashboardView,
+from users.views import (
     RegistrationApiView, LoginApiView, LogoutApiView)
 from homepage.views import HomePageView
 from linkedin.views import AutoLoginView
@@ -64,7 +64,6 @@ urlpatterns += [
     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
-    url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
     url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
 

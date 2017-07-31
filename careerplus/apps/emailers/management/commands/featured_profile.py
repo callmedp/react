@@ -36,7 +36,7 @@ def featured_updated():
             try:
                 data = {}
                 data.update({
-                    "ShineCareerPlus": {"xfr": 0},
+                    "ShineCareerPlus": {"xfr": 1},
                     "is_email_verified": 1,
                     "is_cell_phone_verified": 1
                 })
@@ -62,8 +62,12 @@ def featured_updated():
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4
                     obj.closed_on = timezone.now()
-                    obj.last_oi_status = last_oi_status
+                    obj.last_oi_status = 6
                     obj.save()
+                    obj.orderitemoperation_set.create(
+                        oi_status=6,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to)
                     obj.orderitemoperation_set.create(
                         oi_status=obj.oi_status,
                         last_oi_status=obj.last_oi_status,

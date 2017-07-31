@@ -12,23 +12,28 @@ from django.core.validators import validate_email
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.template.response import TemplateResponse
+from django.conf import settings
 
 from shine.core import ShineCandidateDetail
-from shop.models import Product
+from shop.models import Product, ProductClass
 from users.mixins import RegistrationLoginApi, UserMixin
+from console.decorators import Decorate, stop_browser_cache
 
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 from wallet.models import Wallet
 
+
+@Decorate(stop_browser_cache())
 class CartView(TemplateView, CartMixin, UserMixin):
     template_name = "cart/cart.html"
 
     def get_recommended_products(self):
         recommended_products = []
+        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         # recommended_products = Product.objects.filter(
-        #     type_service=3, type_product__in=[0, 1, 3], active=True)
+        #     product_class__in=course_classes, active=True)
         return {'recommended_products': list(recommended_products)}
 
     def get(self, request, *args, **kwargs):
@@ -40,7 +45,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
         context.update({
             "cart_items": self.get_cart_items(cart_obj=cart_obj),
             "total_amount": self.getTotalAmount(cart_obj=cart_obj),
-            "country_obj": self.get_client_country(self.request),
+            # "country_obj": self.get_client_country(self.request),
         })
         if not context['cart_items']:
             context.update(self.get_recommended_products())
@@ -54,7 +59,6 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-
         if request.is_ajax():
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
@@ -116,6 +120,7 @@ class RemoveFromCartView(View, CartMixin):
         return HttpResponseForbidden()
 
 
+@Decorate(stop_browser_cache())
 class PaymentLoginView(TemplateView):
     template_name = "cart/payment-login.html"
 
@@ -201,6 +206,7 @@ class PaymentLoginView(TemplateView):
         return context
 
 
+@Decorate(stop_browser_cache())
 class PaymentShippingView(UpdateView, CartMixin):
     model = Cart
     template_name = "cart/payment-shipping.html"
@@ -292,6 +298,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
 class PaymentSummaryView(TemplateView, CartMixin):
     template_name = "cart/payment-summary.html"
 

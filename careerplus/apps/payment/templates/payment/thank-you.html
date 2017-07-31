@@ -57,7 +57,7 @@
         <h2>You have subscribed to the following services</h2>
         {% for item in orderitems %}
             {% with oi=item.oi addons=item.addons variations=item.variations %}
-                {% if oi.product.type_service == 3 and variations %}
+                {% if oi.product.is_course and variations %}
                     <div class="subcribe-services">
                          <strong>{{oi.product.name}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
                         <ul>

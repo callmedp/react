@@ -1,3 +1,370 @@
+function viewDetailOrderitem(oi_pk, ) {
+    if (oi_pk){
+        $.ajax({
+            url: '/dashboard/inbox-detail/',
+            type: "GET",
+            data : {'oi_pk': oi_pk, },
+            dataType: 'html',
+            success: function(html) {
+                $('#right-content-id').html(html);
+               // $("#load_more" + article_id).remove();
+               // $("#page_comment" + article_id).append(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong");
+            }
+        });
+    }
+};
+
+function viewCommentOrderitem(oi_pk, ) {
+    if (oi_pk){
+        $.ajax({
+            url: '/dashboard/inbox-comment/',
+            type: "GET",
+            data : {'oi_pk': oi_pk, },
+            dataType: 'html',
+            success: function(html) {
+                $('#right-content-id').html(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong");
+            }
+        });
+    }
+};
+
+function giveFeedbackOrderitem(oi_pk) {
+    if (oi_pk){
+        $.ajax({
+            url: '/dashboard/inbox-feedback/',
+            type: "GET",
+            data : {'oi_pk': oi_pk, },
+            dataType: 'html',
+            success: function(html) {
+                $('#right-content-id').html(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong, try after sometimes.");
+            }
+        });
+    }
+};
+
+function rejectService(oi_pk) {
+    $("#reject-modal" + oi_pk).modal("show");
+
+    $(document).on('click', '#reject-submit-button' + oi_pk, function () {
+        $("#reject-form-id" + oi_pk).validate({
+            rules: {
+                comment:{
+                    required: function(){
+                        if($('#reject-file-id').val() == "")
+                            return true;
+                        else
+                            return false;
+                    },
+                } ,
+
+                reject_file: {
+                    extn: true,
+                }
+            },
+            messages: {
+                comment: 'This field is required',
+                reject_file: 'only pdf, doc and docx formats are allowed',
+            },
+            submitHandler: function(form) {                
+                return false;
+            },
+
+        });
+
+        var flag = $('#reject-form-id' + oi_pk).valid();
+        if (flag){
+            var formData = new FormData($('#reject-form-id' + oi_pk)[0]);
+            $.ajax({
+                url: '/dashboard/inbox-rejectservice/',
+                type: "POST",
+                cache: false,
+                processData: false,
+                contentType: false,
+                async: false,
+                data : formData,
+                enctype: "multipart/form-data",
+                success: function(json) {
+                    $("#reject-modal" + oi_pk).modal("hide");
+                    $('#reject_success_modal').modal("show");
+                    $('#reject-form-id' + oi_pk)[0].reset();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong. Try again later");
+                    window.location.reload();
+                }
+            });
+
+        }
+        
+    });
+   
+};
+
+function acceptService(oi_pk, ) {
+    if (oi_pk){
+        $("#accept-modal" + oi_pk).modal("show");
+
+        $(document).on('click', '#accept-submit-button' + oi_pk, function () {
+            var formData = $('#accept-form-id' + oi_pk).serialize();
+            $.ajax({
+                url: '/dashboard/inbox-acceptservice/',
+                type: "POST",
+                data : formData,
+                dataType: 'json',
+                success: function(data) {
+                    window.location.reload();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong, try after sometimes");
+                }
+            });
+        });
+
+        
+    }
+};
+
+
+
+$(document).ready(function(){
+
+    $(document).on('click', '#load-more-orderitem', function(event) {
+        var formData = $("#load-orderitem-form").serialize();
+        $.ajax({
+            url : "/dashboard/loadmore/orderitem/",
+            type: "POST",
+            data : formData,
+            success: function(data, textStatus, jqXHR)
+            {
+                // data = JSON.parse(data);
+                $("#load_more_item").remove();
+                $("#orderitem-inbox-box").append(data.orderitem_list);
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert("Can't load more comments.");
+            }
+        });   
+    });
+
+    $(document).on('change', '#lastmonth-id', function(event) {
+        console.log("hello");
+
+        // var formData = $("#load-orderitem-form").serialize();
+        // $.ajax({
+        //     url : "/dashboard/loadmore/orderitem/",
+        //     type: "POST",
+        //     data : formData,
+        //     success: function(data, textStatus, jqXHR)
+        //     {
+        //         // data = JSON.parse(data);
+        //         $("#load_more_item").remove();
+        //         $("#orderitem-inbox-box").append(data.orderitem_list);
+        //     },
+        //     error: function (jqXHR, textStatus, errorThrown)
+        //     {
+        //         alert("Can't load more comments.");
+        //     }
+        // });   
+    });
+
+    $("#reject_success_modal").on('hidden.bs.modal', function () {
+        window.location.reload();
+    });
+
+    $.validator.addMethod("extnAccept", function(value, element) {
+        var fileInput = document.getElementById('file-id');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+        if(!allowedExtensions.exec(filePath)){
+            return false;
+        }
+        else{
+            return true;
+        }
+            
+    });
+
+    $.validator.addMethod("extn", function(value, element) {
+        var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+        if(value && !allowedExtensions.exec(value)){
+            return false;
+        }
+        else{
+            return true;
+        }
+            
+    });
+
+
+
+    $("#resume-upload-form").validate({
+        rules: {
+            file:{
+                required: true,
+                maxlength: 200,
+                extnAccept: true,
+            },        
+        },
+        messages:{
+            file:{
+                required: 'this value is required.',
+                maxlength: 'length should be less than 200 characters',
+                extnAccept: 'only pdf, doc and docx formats are allowed',
+            },
+        },
+        // highlight: function(element) {
+        //     $(element).closest('.col-sm-6').addClass('error');
+        // },
+        // unhighlight: function(element) {
+        //     $(element).closest('.col-sm-6').removeClass('error');
+        // },
+        // errorPlacement: function(error, element){
+        //     $(element).siblings('.error-txt').html(error.text());
+        // }
+    });
+
+    $('#upload-resume-button').click(function(){
+        var flag = $("#resume-upload-form").valid();
+        if (flag){
+            $('#resume-upload-form').submit();
+        }
+    });
+
+    $.validator.addMethod("custom_message",
+        function(value, element) {
+            if($('#id_comment').val().trim()){
+                return true;
+            }
+            return false;
+    });
+
+    $.validator.addMethod("custom_review",
+        function(value, element) {
+            if($('#id_review').val().trim()){
+                return true;
+            }
+            return false;
+    });
+
+    $(document).on('click', '[name="rating"]', function () {
+        var html = $(this).attr('value') + '<small>/5</small>';
+        $('#selected-rating').html(html);
+        $('#rating-error').text('');
+    });
+
+    $(document).on('click', '#rating-submit', function () {
+        $("#feedback-form").validate({
+            rules: {
+                rating:{
+                    required: true,
+                },
+                review: {
+                    required: true,
+                    maxlength: 100,
+                    custom_review: true,
+                },
+            },
+            messages: {
+                rating:{
+                    required: "rating is required."
+                },
+                review: {
+                    required: "review is Mandatory.",
+                    maxlength: "length should be less than 100 characters.",
+                    custom_review: "review is Mandatory.",
+                },
+            },
+            errorPlacement: function(error, element){
+                $(element).siblings('.error').html(error.text());
+            },
+            submitHandler: function(form) {                
+                return false;
+            },
+
+        });
+        var flag = $('#feedback-form').valid();
+        var rating_flag = false;
+        $('input[name="rating"]').each(function () {
+            if ($(this).is(':checked')){
+                rating_flag = true;
+            }
+        });
+        if (!rating_flag){
+            $('#rating-error').text('rating is mandatory');
+        }
+        if (flag && rating_flag){
+            var formData = $('#feedback-form').serialize();
+            $.ajax({
+                url: '/dashboard/inbox-feedback/',
+                type: 'POST',
+                data : formData,
+                dataType: 'json',
+                success: function(json) {
+                    alert(json.display_message);
+                    window.location.reload();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong, try again later");
+                }
+            });
+        }
+        
+        
+    });
+
+    $(document).on('click', '#comment_submit_button', function () {
+        $("#user-comment-form").validate({
+            rules: {
+                comment: {
+                    required: true,
+                    maxlength: 200,
+                    custom_message: true,
+                },
+            },
+            messages: {
+                comment: {
+                    required: "Message is Mandatory.",
+                    maxlength: "Length should be less than 200 characters.",
+                    custom_message: "Message is Mandatory.",
+                },
+            },
+            errorPlacement: function(error, element){
+                $(element).siblings('.error').html(error.text());
+            },
+
+        });
+        var flag = $('#user-comment-form').valid();
+
+        if (flag){
+            var formData = $('#user-comment-form').serialize();
+            $.ajax({
+                url: '/dashboard/inbox-comment/',
+                type: 'POST',
+                data : formData,
+                dataType: 'html',
+                success: function(html) {
+                    $('#right-content-id').html(html);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong");
+                }
+            });
+        }
+    });
+
+});
+
+
 function updateTabContent(ajaxurl, element1, element2){
     $.ajax({
         url: ajaxurl,

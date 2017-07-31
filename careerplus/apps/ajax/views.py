@@ -6,6 +6,7 @@ from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.conf import settings
 
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
@@ -20,6 +21,8 @@ from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
+from order.functions import update_initiat_orderitem_sataus
+from console.mixins import ActionUserMixin
 
 
 class ArticleCommentView(View):
@@ -216,11 +219,13 @@ class ApproveByAdminDraft(View):
             try:
                 obj = OrderItem.objects.get(pk=oi_pk)
                 data['status'] = 1
-                last_status = obj.oi_status
                 product_flow = obj.product.type_flow
 
                 if product_flow == 3:
+                    last_oi_status = obj.last_oi_status
                     obj.oi_status = 4
+                    obj.last_oi_status = 121
+                    obj.draft_counter += 1
                     obj.closed_on = timezone.now()
                     obj.save()
 
@@ -241,19 +246,57 @@ class ApproveByAdminDraft(View):
                         logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
 
                     obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
-                        last_oi_status=last_status,
+                        oi_draft=obj.oi_draft,
+                        draft_counter=obj.draft_counter,
+                        oi_status=121,
+                        last_oi_status=last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
 
-                elif product_flow == 1:
-                    if obj.draft_counter == 3:
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=obj.last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                elif product_flow in [1, 12, 13]:
+                    last_oi_status = obj.last_oi_status
+                    if (obj.draft_counter + 1) == settings.DRAFT_MAX_LIMIT:
                         obj.oi_status = 4
+                        obj.last_oi_status = 24
                         obj.closed_on = timezone.now()
                     else:
                         obj.oi_status = 24
+                        obj.last_oi_status = last_oi_status
+                    obj.draft_counter += 1
                     obj.approved_on = timezone.now()
                     obj.save()
+
+                    if obj.oi_status == 4:
+                        obj.orderitemoperation_set.create(
+                            oi_status=24,
+                            draft_counter=obj.draft_counter,
+                            oi_draft=obj.oi_draft,
+                            last_oi_status=last_oi_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=24,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
+
+                        # sync resume on shine
+                        upload_resume_to_shine(oi_pk=obj.pk)
+                    else:
+                        obj.orderitemoperation_set.create(
+                            oi_draft=obj.oi_draft,
+                            draft_counter=obj.draft_counter,
+                            oi_status=obj.oi_status,
+                            last_oi_status=obj.last_oi_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user)
 
                     # mail to candidate
                     to_emails = [obj.order.email]
@@ -264,7 +307,7 @@ class ApproveByAdminDraft(View):
                         "name": obj.order.first_name + ' ' + obj.order.last_name,
                         "mobile": obj.order.mobile,
                     })
-                    if obj.draft_counter < 3:
+                    if obj.draft_counter < settings.DRAFT_MAX_LIMIT:
                         mail_type = 'REMINDER'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
@@ -288,27 +331,6 @@ class ApproveByAdminDraft(View):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    if obj.oi_status == 4:
-                        obj.orderitemoperation_set.create(
-                            oi_status=24,
-                            last_oi_status=last_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=24,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-
-                        # sync resume on shine
-                        upload_resume_to_shine(oi_pk=obj.pk)
-                    else:
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=last_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
             except:
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -354,120 +376,9 @@ class UploadDraftView(View):
                 try:
                     oi_pk = request.POST.get('oi_pk', None)
                     obj = OrderItem.objects.get(pk=oi_pk)
-                    if obj.product.type_flow in [2, 10]:
-                        last_oi_status = obj.last_oi_status
-                        obj.oi_status = 4  # closed orderitem
-                        obj.oi_draft = request.FILES.get('file', '')
-                        obj.last_oi_status = 22
-                        obj.closed_on = timezone.now()
-                        obj.save()
-                        data['display_message'] = 'Document uploded and orderitem closed Successfully.'
-
-                        obj.orderitemoperation_set.create(
-                            oi_draft=obj.oi_draft,
-                            draft_counter=1,
-                            oi_status=22,
-                            last_oi_status=last_oi_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=22,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-
-                        # mail and sms to candidate
-                        to_emails = [obj.order.email]
-                        email_dict = {}
-                        email_dict.update({
-
-                            "info": 'Your service has been processed',
-                            "subject": 'Your service has been processed',
-                            "name": obj.order.first_name + ' ' + obj.order.last_name,
-                            "mobile": obj.order.mobile,
-                        })
-
-                        mail_type = 'COURSE_CLOSER_MAIL'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    elif obj.product.type_flow == 6:
-                        if obj.oi_status == 81:
-                            last_oi_status = obj.last_oi_status
-                            obj.oi_status = 4  # Closed oi
-                            obj.oi_draft = request.FILES.get('file', '')
-                            obj.last_oi_status = 22
-                            obj.closed_on = timezone.now()
-                            obj.save()
-                            data['display_message'] = 'Reporting document uploded and orderitem closed successfully.'
-
-                            obj.orderitemoperation_set.create(
-                                oi_draft=obj.oi_draft,
-                                draft_counter=2,
-                                oi_status=22,
-                                last_oi_status=last_oi_status,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user)
-
-                            obj.orderitemoperation_set.create(
-                                oi_status=obj.oi_status,
-                                last_oi_status=22,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user)
-                        else:
-                            last_oi_status = obj.last_oi_status
-                            obj.oi_status = 81  # Varification reports
-                            obj.oi_draft = request.FILES.get('file', '')
-                            obj.last_oi_status = 22
-                            obj.save()
-                            data['display_message'] = 'Document uploded successfully.'
-
-                            obj.orderitemoperation_set.create(
-                                oi_draft=obj.oi_draft,
-                                draft_counter=1,
-                                oi_status=22,
-                                last_oi_status=last_oi_status,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user)
-
-                            obj.orderitemoperation_set.create(
-                                oi_status=obj.oi_status,
-                                last_oi_status=22,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user)
-
-                    else:
-                        last_status = obj.oi_status
-                        obj.oi_draft = request.FILES.get('file', '')
-                        if obj.oi_status == 26:
-                            obj.draft_counter += 1
-                        elif not obj.draft_counter:
-                            obj.draft_counter += 1
-                        obj.oi_status = 23  # pending Approval
-                        obj.last_oi_status = last_status
-                        obj.draft_added_on = timezone.now()
-                        obj.save()
-                        data['display_message'] = 'Draft uploded Successfully.'
-                        obj.orderitemoperation_set.create(
-                            oi_draft=obj.oi_draft,
-                            draft_counter=obj.draft_counter,
-                            oi_status=22,
-                            last_oi_status=last_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=22,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
+                    mixin_data = {
+                        "oi_draft": request.FILES.get('file', ''), }
+                    data = ActionUserMixin().upload_draft_orderitem(oi=obj, data=mixin_data, user=request.user)
                 except Exception as e:
                     data['display_message'] = str(e)
             else:
@@ -627,6 +538,8 @@ class MarkedPaidOrderView(View):
                 obj.payment_date = timezone.now()
                 obj.save()
                 data['display_message'] = "order %s marked paid successfully" % (order_pk)
+                # update initial operation status
+                update_initiat_orderitem_sataus(order=obj)
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), order_pk)
             return HttpResponse(json.dumps(data), content_type="application/json")

@@ -1057,9 +1057,9 @@ class Product(AbstractProduct, ModelMeta):
 
     def pv_name(self, *args, **kwargs):
         if self.is_course:
-            return self.name + ' ( ' + self.get_exp + ' ) '
+            return self.name + ' ( ' + str(self.get_exp()) + ' ) '
         elif self.is_writing:
-            return self.name + ' ( ' + self.get_exp + ' ) '
+            return self.name + ' ( ' + str(self.get_exp()) + ' ) '
         elif self.is_course:
             return self.name + ' by ' + self.vendor.name
         return self.name

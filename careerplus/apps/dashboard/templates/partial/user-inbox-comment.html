@@ -1,0 +1,38 @@
+
+<div class="back-inbox">
+  <a href="{% url "dashboard:dashboard" %}">Back to inbox</a>
+</div>
+
+<ul class="products-inbox">
+  <li class="col-sm-12">
+    <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
+    <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+    <ul class="view-comments-links col-sm-7 col-md-8">
+      <li><a role="button" onclick="viewDetailOrderitem('{{oi.pk}}',)">View details</a></li>
+      <li>Comment to writer</li>
+    </ul>
+    <div class="hr"></div>
+    <form class="comment-form" role="form" id="user-comment-form"> {% csrf_token %}
+      <label>Comments</label>
+      <textarea class="form-control" id="id_comment" required name="comment" rows="4"></textarea>
+      <span class="error"></span>
+      <input type="hidden" name="oi_pk" value="{{oi.pk}}" />
+      <button type="button" class="blue-button pull-right" id="comment_submit_button">Submit</button>
+    </form>
+    
+
+    {% for msg in comments %}
+       {% if msg.added_by %}
+        <div class="writer-comment">
+            <p class="writer-bg">{{msg.message|safe}}</p>
+            <span class="author"><strong>{{msg.added_by}}</strong> - {{msg.added_on.date}}</span>
+        </div>
+        {% elif msg.candidate_id %}
+            <div class="user-comment">
+                <p class="user-bg">{{msg.message|safe}}</p>
+                <span class="author"><strong>Me</strong> - {{msg.added_on.date}}</span>
+            </div>
+        {% endif %}
+    {% endfor %}
+  </li>
+</ul>

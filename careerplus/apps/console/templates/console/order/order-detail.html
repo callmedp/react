@@ -97,6 +97,7 @@
                         <th>Order Item Id</th>
                         <th>Item Name</th>
                         <th>Status</th>
+                        {% comment %}
                         <th>
                             <h2><small>Candidate resumes/drafts:</small></h2>
                             <table class="table table-bordered table-responsive">
@@ -104,12 +105,14 @@
                                <th>Draft</th>
                             </table>
                         </th>
+                        {% endcomment %}
                         <th>
                             <h2><small>Order items operations/actions:</small></h2>
                             <table class="table table-bordered table-responsive">
                                <th>How Old</th>
                                <th>Action</th>
                                <th>Added By / Assigned</th>
+                               <th>Download Document</th>
                             </table>
                         </th>
 
@@ -128,6 +131,7 @@
                           <td>{{obj.id}}</td>
                           <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
                           <td>{{obj.get_oi_status}}</td>
+                          {% comment %}
                           <td>
                               <table class="table table-bordered table-responsive">
                                    <tbody>
@@ -147,6 +151,7 @@
                                    </tbody>
                               </table>
                           </td>
+                          {% endcomment %}
                           <td>
                               <table class="table table-bordered table-responsive">
                                   {% for op in obj.get_oi_operations %}
@@ -154,6 +159,14 @@
                                       <td>{{op.created|naturaltime}}</td>
                                       <td>{{op.get_oi_status}}</td>
                                       <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
+                                      <td>{% if op.oi_resume %}
+                                              <strong>Candidate Reume:</strong></br>
+                                              <a href="{{op.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                          {% elif op.oi_draft %}
+                                              <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
+                                              <a href="{{op.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                          {% endif %}
+                                      </td>
                                     </tr>
                                   {% endfor %}
                               </table>

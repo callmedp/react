@@ -5,7 +5,7 @@ from django.conf import settings
 
 from decimal import Decimal
 
-from shop.models import Product
+from shop.models import Product, ProductClass
 
 from .models import Cart, LineItem
 
@@ -78,7 +78,7 @@ class CartMixin(object):
 			if cart_obj:
 				cart_obj.lineitems.filter(product=product).delete()
 
-				if product.type_service == 3 and cv_id:
+				if product.is_course and cv_id:
 					# courses
 					try:
 						cv_prod = Product.objects.get(id=cv_id, active=True)
@@ -235,7 +235,7 @@ class CartMixin(object):
 					total += li.product.get_price()
 				lis = cart_obj.lineitems.filter(no_process=True).select_related('product')
 				for li in lis:
-					if li.product.type_service == 3 and li.no_process == True:
+					if li.product.is_course and li.no_process == True:
 						pass
 					else:
 						total += li.product.get_price()
@@ -271,7 +271,7 @@ class CartMixin(object):
 			cart_obj = Cart.objects.get(pk=cart_pk)
 			try:
 				parent_li = cart_obj.lineitems.get(product=product)
-				if parent_li.product.type_service == 3 and parent_li.no_process == True:
+				if parent_li.product.is_course and parent_li.no_process == True:
 					pass
 				else:
 					total += parent_li.product.get_price()
@@ -309,10 +309,11 @@ class CartMixin(object):
 			cart_pk = request.session.get('cart_pk')
 
 			if cart_pk:
+				course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
 				cart_obj = Cart.objects.get(pk=cart_pk)
 				total_count += cart_obj.lineitems.all().count()
 				total_count -= cart_obj.lineitems.filter(
-					parent=None, product__type_service=3,
+					parent=None, product_class__in=course_classes,
 					no_process=True).count()
 				
 		except Exception as e:

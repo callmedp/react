@@ -22,10 +22,8 @@ class CategoryAdmin(admin.ModelAdmin):
     inlines = [CategoryRelationshipInline, CategoryProductInline]
     readonly_fields = ('modified',)
     list_display = [
-        'name', 'modified', 'type_level',]
+        'name', 'modified', 'type_level']
     search_fields = ('name',)
-    
-
 
 
 class AttributeInline(admin.TabularInline):
