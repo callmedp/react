@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,11 +10,11 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
     <!-- Bootstrap -->
-    <link type="text/css" href="css/bootstrap.css" rel="stylesheet">
-    <link type="text/css" href="css/header-footer.css" rel="stylesheet">
-    <link href="css/jquery.mCustomScrollbar.css" rel="stylesheet">
-    <link type="text/css" href="css/listing.css" rel="stylesheet">
-
+    <link type="text/css" href="{% static '/shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/listing.css' %}" rel="stylesheet">
+    
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE]>
@@ -460,22 +461,22 @@
       </div>
 
       <ul class="listing">
-
+            
             <li class="box-panel">
-              <a title="Resume / Visual Resume / LinkedIn" href="#">
+              <a title="Six Sigma Black Belt" href="/course/category21-2/six-sigma-black-belt-2/pd-11">
                 <div class="media">
                   <div class="media-left">
-                      <figure class="color1">
-                        <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
+                      <figure style='background-color:#a3e77d;'>
+                        <img class="media-object" src="/media/product_image/11/1501497926_7670.png" alt="Six Sigma Black Belt">
                       </figure>
                   </div>
                   <div class="media-body">
                     <div class="certification-jobs-box">
                       <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
+                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">0</span> jobs available</span>
                     </div>
 
-                    <h3 class="listing-heading">Resume / Visual Resume / LinkedIn</h3>
+                    <h3 class="listing-heading">Six Sigma Black Belt</h3>
 
                     <div class="rating-review-box">
                         <figure class="full-star"></figure>
@@ -483,16 +484,16 @@
                         <figure class="half-star"></figure>
                         <figure class="blank-star"></figure>
                         <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
+                        <strong>2.5/5</strong> | 21 ratings <b>18 reviews</b>
                     </div> 
 
                     <div class="providers">
                        Providers
-                       <span>Career Plus</span>
+                       <span>V Skill</span>
                     </div>
 
                     <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
+                       Starting at <strong>Rs. 4500/-</strong> <strike>Rs. 5000/-</strike> <span class="discount">5% OFF</span>
                     </div>
 
                   </div>
@@ -504,7 +505,7 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color2">
-                        <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
+                        <img class="media-object" src="{% static "shinelearn/images/course-logo2.png" %}" alt="Resume / Visual Resume / LinkedIn">
                       </figure>
                   </div>
                   <div class="media-body">
@@ -545,7 +546,7 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color3">
-                        <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
+                        <img class="media-object" src="{% static "shinelearn/images/course-logo3.png" %}" alt="Resume / Visual Resume / LinkedIn">
                       </figure>
                   </div>
                   <div class="media-body">
@@ -584,7 +585,7 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color4">
-                        <img class="media-object" src="images/course-logo4.png" alt="Resume / Visual Resume / LinkedIn">
+                        <img class="media-object" src="{% static "shinelearn/images/course-logo4.png" %}" alt="Resume / Visual Resume / LinkedIn">
                       </figure>
                   </div>
                   <div class="media-body">
@@ -618,7 +619,7 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color1">
-                        <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
+                        <img class="media-object" src="{% static "shinelearn/images/course-logo1.png" %}" alt="Resume / Visual Resume / LinkedIn">
                       </figure>
                   </div>
                   <div class="media-body">
@@ -656,7 +657,7 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color2">
-                        <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
+                        <img class="media-object" src="{% static "shinelearn/images/course-logo2.png" %}" alt="Resume / Visual Resume / LinkedIn">
                       </figure>
                   </div>
                   <div class="media-body">
@@ -697,7 +698,7 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color3">
-                        <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
+                        <img class="media-object" src="{% static "shinelearn/images/course-logo3.png" %}" alt="Resume / Visual Resume / LinkedIn">
                       </figure>
                   </div>
                   <div class="media-body">
@@ -736,7 +737,7 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color4">
-                        <img class="media-object" src="images/course-logo4.png" alt="Resume / Visual Resume / LinkedIn">
+                        <img class="media-object" src="{% static "shinelearn/images/course-logo4.png" %}" alt="Resume / Visual Resume / LinkedIn">
                       </figure>
                   </div>
                   <div class="media-body">
@@ -810,10 +811,11 @@ Careerplus is the Trade Mark of HT Media and the services associated with it are
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="js/bootstrap-slider.min.js"></script>
-    <script src="js/typeahead.min.js"></script>
+    <script src="{% static 'shinelearn/js/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/js/bootstrap-slider.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/js/typeahead.min.js' %}"></script>
+
 
     <script type="text/javascript">
     $('.nav-tabs > li > a').hover(function() {
