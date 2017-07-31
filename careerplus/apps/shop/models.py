@@ -250,9 +250,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return []
 
     def get_products(self):
-        products = self.productcategories.filter(
+        products = self.categoryproducts.filter(
             active=True,
-            product__active=True)
+            productcategories__active=True)
         return products
 
     def split_career_outcomes(self):
@@ -1144,10 +1144,33 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return None
 
+    def get_fbts(self):
+        if self.type_product in [0, 1, 3, 5]:
+            return self.related.filter(
+                secondaryproduct__active=True, active=True).order_by('-secondaryproduct__sort_order')
+        else:
+            return None
+
     def get_combos(self):
         if self.type_product == 3:
             return self.childs.filter(
                 active=True, childrenproduct__active=True).order_by('-childrenproduct__sort_order')
+        else:
+            return None
+
+    def get_pops(self):
+        if self.type_product in [0, 1, 3, 5]:
+            category = self.category_main
+            if category:    
+                if self.is_course:
+                    pop_list = category.get_products().filter(
+                        type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
+                    return pop_list
+                elif self.is_writing or self.is_service:
+                    pop_list = category.get_products().filter(
+                        type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
+                    return pop_list
+            return None        
         else:
             return None
 

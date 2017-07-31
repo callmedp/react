@@ -71,6 +71,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     
     pCmbs = indexes.CharField(indexed=False)
     pVrs = indexes.CharField(indexed=False)
+    pFBT = indexes.CharField(indexed=False)
+    pPOP = indexes.CharField(indexed=False)
     # pVtn = indexes.MultiValueField(model_attr='variation__name')
     # pRtd = indexes.MultiValueField(model_attr='related__name')
     # pCds = indexes.MultiValueField(model_attr='childs__name')
@@ -431,3 +433,120 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 'chapter_list': chapter_list
             })
         return json.dumps(structure)
+
+    def prepare_pFBT(self, obj):
+        fbt_dict = {
+            'fbt': False,
+            'fbt_list': []
+        }
+        fbt_list = []
+        if obj.type_product == 2:
+            parent = obj.get_parent()    
+            fbt = parent.get_fbts()
+        else:
+            fbt = obj.get_fbts() 
+        if fbt:
+            if obj.is_course:
+                fbt_dict.update({
+                    'fbt': True
+                })
+                for pv in fbt:
+                    fbt_list.append({
+                        'id': pv.id,
+                        'label': pv.name,
+                        'mode': str(getattr(pv.attr, 'study_mode', '')),
+                        'duration': str(getattr(pv.attr, 'duration_months', '')),
+                        'type': str(getattr(pv.attr, 'course_type', '')),
+                        'certify': str(getattr(pv.attr, 'certification', '')),
+                        'inr_price': float(pv.inr_price),
+                        'fake_inr_price': float(pv.fake_inr_price),
+                        'usd_price': float(pv.usd_price),
+                        'fake_usd_price': float(pv.fake_usd_price),
+                        'aed_price': float(pv.aed_price),
+                        'fake_aed_price': float(pv.fake_aed_price),
+                        'gbp_price': float(pv.gbp_price),
+                        'fake_gbp_price': float(pv.fake_gbp_price)})
+                fbt_dict.update({
+                    'fbt_list': fbt_list
+                })
+            elif obj.is_writing or obj.is_service:
+                fbt_dict.update({
+                    'fbt': True
+                })
+                for pv in fbt:
+                    for pv in fbt:
+                        fbt_list.append({
+                            'id': pv.id,
+                            'label': pv.name,
+                            'country': str(getattr(pv.attr, 'profile_country', '')),
+                            'experience': str(getattr(pv.attr, 'experience', None)),
+                            'inr_price': float(pv.inr_price),
+                            'fake_inr_price': float(pv.fake_inr_price),
+                            'usd_price': float(pv.usd_price),
+                            'fake_usd_price': float(pv.fake_usd_price),
+                            'aed_price': float(pv.aed_price),
+                            'fake_aed_price': float(pv.fake_aed_price),
+                            'gbp_price': float(pv.gbp_price),
+                            'fake_gbp_price': float(pv.fake_gbp_price)})
+                fbt_dict.update({
+                    'fbt_list': fbt_list
+                })
+        return json.dumps(fbt_dict)
+
+    def prepare_pPOP(self, obj):
+        pop_dict = {
+            'pop': False,
+            'pop_list': []
+        }
+        pop_list = []
+        if obj.type_product == 2:
+            parent = obj.get_parent()    
+            pop = parent.get_pops()
+        else:
+            pop = obj.get_pops() 
+        if pop:
+            if obj.is_course:
+                pop_dict.update({
+                    'pop': True
+                })
+                for pv in pop:
+                    pop_list.append({
+                        'id': pv.id,
+                        'label': pv.name,
+                        'vendor': pv.vendor.name,
+                        'url': pv.get_url(),
+                        'inr_price': float(pv.inr_price),
+                        'fake_inr_price': float(pv.fake_inr_price),
+                        'usd_price': float(pv.usd_price),
+                        'fake_usd_price': float(pv.fake_usd_price),
+                        'aed_price': float(pv.aed_price),
+                        'fake_aed_price': float(pv.fake_aed_price),
+                        'gbp_price': float(pv.gbp_price),
+                        'fake_gbp_price': float(pv.fake_gbp_price)})
+                pop_dict.update({
+                    'pop_list': pop_list
+                })
+            elif obj.is_writing or obj.is_service:
+                pop_dict.update({
+                    'pop': True
+                })
+                for pv in pop:
+                    for pv in pop:
+                        pop_list.append({
+                            'id': pv.id,
+                            'label': pv.name,
+                            'experience': str(getattr(pv.attr, 'experience', None)),
+                            'url': pv.get_url(),
+                            'inr_price': float(pv.inr_price),
+                            'fake_inr_price': float(pv.fake_inr_price),
+                            'usd_price': float(pv.usd_price),
+                            'fake_usd_price': float(pv.fake_usd_price),
+                            'aed_price': float(pv.aed_price),
+                            'fake_aed_price': float(pv.fake_aed_price),
+                            'gbp_price': float(pv.gbp_price),
+                            'fake_gbp_price': float(pv.fake_gbp_price)})
+                pop_dict.update({
+                    'pop_list': pop_list
+                })
+        return json.dumps(pop_dict)
+        
