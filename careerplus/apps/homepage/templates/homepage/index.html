@@ -220,9 +220,7 @@
                   <li>
                     <a title="Resume writing" class="box-panel" href="{{tprd.product.get_absolute_url}}">
                       <figure style="background-color:{{tprd.product.get_bg}};">
-                        {% thumbnail tprd.product.image "200x125" crop="center" as im %}
                             <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{tprd.product.image_alt}}">
-                        {% endthumbnail %}
                         <!--img class="media-object" src="{{prd.image.url}}" alt="{{prd.image_alt}}"-->
                       </figure>
                       <div class="caption">
