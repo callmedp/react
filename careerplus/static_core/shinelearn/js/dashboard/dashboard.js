@@ -1,7 +1,7 @@
 function viewDetailOrderitem(oi_pk, ) {
     if (oi_pk){
         $.ajax({
-            url: '/user/dashboard/detail/',
+            url: '/dashboard/inbox-detail/',
             type: "GET",
             data : {'oi_pk': oi_pk, },
             dataType: 'html',
@@ -20,7 +20,7 @@ function viewDetailOrderitem(oi_pk, ) {
 function viewCommentOrderitem(oi_pk, ) {
     if (oi_pk){
         $.ajax({
-            url: '/user/dashboard/comment/',
+            url: '/dashboard/inbox-comment/',
             type: "GET",
             data : {'oi_pk': oi_pk, },
             dataType: 'html',
@@ -34,37 +34,102 @@ function viewCommentOrderitem(oi_pk, ) {
     }
 };
 
-function rejectService(oi_pk, ) {
+function giveFeedbackOrderitem(oi_pk) {
     if (oi_pk){
         $.ajax({
-            url: '/user/dashboard/rejectservice/',
+            url: '/dashboard/inbox-feedback/',
             type: "GET",
             data : {'oi_pk': oi_pk, },
-            dataType: 'json',
-            success: function(data) {
-                window.location.reload();
+            dataType: 'html',
+            success: function(html) {
+                $('#right-content-id').html(html);
             },
             error: function(xhr, ajaxOptions, thrownError) {
-                alert("Something went wrong, try after sometimes");
+                alert("Something went wrong, try after sometimes.");
             }
         });
     }
 };
 
+function rejectService(oi_pk) {
+    $("#reject-modal" + oi_pk).modal("show");
+
+    $(document).on('click', '#reject-submit-button' + oi_pk, function () {
+        $("#reject-form-id" + oi_pk).validate({
+            rules: {
+                comment:{
+                    required: function(){
+                        if($('#reject-file-id').val() == "")
+                            return true;
+                        else
+                            return false;
+                    },
+                } ,
+
+                reject_file: {
+                    extn: true,
+                }
+            },
+            messages: {
+                comment: 'This field is required',
+                reject_file: 'only pdf, doc and docx formats are allowed',
+            },
+            submitHandler: function(form) {                
+                return false;
+            },
+
+        });
+
+        var flag = $('#reject-form-id' + oi_pk).valid();
+        if (flag){
+            var formData = new FormData($('#reject-form-id' + oi_pk)[0]);
+            $.ajax({
+                url: '/dashboard/inbox-rejectservice/',
+                type: "POST",
+                cache: false,
+                processData: false,
+                contentType: false,
+                async: false,
+                data : formData,
+                enctype: "multipart/form-data",
+                success: function(json) {
+                    $("#reject-modal" + oi_pk).modal("hide");
+                    $('#reject_success_modal').modal("show");
+                    $('#reject-form-id' + oi_pk)[0].reset();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong. Try again later");
+                    window.location.reload();
+                }
+            });
+
+        }
+        
+    });
+   
+};
+
 function acceptService(oi_pk, ) {
     if (oi_pk){
-        $.ajax({
-            url: '/user/dashboard/acceptservice/',
-            type: "GET",
-            data : {'oi_pk': oi_pk, },
-            dataType: 'json',
-            success: function(data) {
-                window.location.reload();
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                alert("Something went wrong, try after sometimes");
-            }
+        $("#accept-modal" + oi_pk).modal("show");
+
+        $(document).on('click', '#accept-submit-button' + oi_pk, function () {
+            var formData = $('#accept-form-id' + oi_pk).serialize();
+            $.ajax({
+                url: '/dashboard/inbox-acceptservice/',
+                type: "POST",
+                data : formData,
+                dataType: 'json',
+                success: function(data) {
+                    window.location.reload();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong, try after sometimes");
+                }
+            });
         });
+
+        
     }
 };
 
@@ -72,10 +137,53 @@ function acceptService(oi_pk, ) {
 
 $(document).ready(function(){
 
+    $(document).on('click', '#load-more-orderitem', function(event) {
+        var formData = $("#load-orderitem-form").serialize();
+        $.ajax({
+            url : "/dashboard/loadmore/orderitem/",
+            type: "POST",
+            data : formData,
+            success: function(data, textStatus, jqXHR)
+            {
+                // data = JSON.parse(data);
+                $("#load_more_item").remove();
+                $("#orderitem-inbox-box").append(data.orderitem_list);
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert("Can't load more comments.");
+            }
+        });   
+    });
+
+    $(document).on('change', '#lastmonth-id', function(event) {
+        console.log("hello");
+
+        // var formData = $("#load-orderitem-form").serialize();
+        // $.ajax({
+        //     url : "/dashboard/loadmore/orderitem/",
+        //     type: "POST",
+        //     data : formData,
+        //     success: function(data, textStatus, jqXHR)
+        //     {
+        //         // data = JSON.parse(data);
+        //         $("#load_more_item").remove();
+        //         $("#orderitem-inbox-box").append(data.orderitem_list);
+        //     },
+        //     error: function (jqXHR, textStatus, errorThrown)
+        //     {
+        //         alert("Can't load more comments.");
+        //     }
+        // });   
+    });
+
+    $("#reject_success_modal").on('hidden.bs.modal', function () {
+        window.location.reload();
+    });
+
     $.validator.addMethod("extnAccept", function(value, element) {
         var fileInput = document.getElementById('file-id');
         var filePath = fileInput.value;
-        console.log(filePath);
         var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
         if(!allowedExtensions.exec(filePath)){
             return false;
@@ -85,6 +193,19 @@ $(document).ready(function(){
         }
             
     });
+
+    $.validator.addMethod("extn", function(value, element) {
+        var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+        if(value && !allowedExtensions.exec(value)){
+            return false;
+        }
+        else{
+            return true;
+        }
+            
+    });
+
+
 
     $("#resume-upload-form").validate({
         rules: {
@@ -102,13 +223,13 @@ $(document).ready(function(){
             },
         },
         // highlight: function(element) {
-        //     $(element).closest('.input-file').addClass('error');
+        //     $(element).closest('.col-sm-6').addClass('error');
         // },
         // unhighlight: function(element) {
-        //     $(element).closest('.input-file').removeClass('error');
+        //     $(element).closest('.col-sm-6').removeClass('error');
         // },
         // errorPlacement: function(error, element){
-        //     $(element).closest('.error-txt').html(error.text());
+        //     $(element).siblings('.error-txt').html(error.text());
         // }
     });
 
@@ -125,6 +246,80 @@ $(document).ready(function(){
                 return true;
             }
             return false;
+    });
+
+    $.validator.addMethod("custom_review",
+        function(value, element) {
+            if($('#id_review').val().trim()){
+                return true;
+            }
+            return false;
+    });
+
+    $(document).on('click', '[name="rating"]', function () {
+        var html = $(this).attr('value') + '<small>/5</small>';
+        $('#selected-rating').html(html);
+        $('#rating-error').text('');
+    });
+
+    $(document).on('click', '#rating-submit', function () {
+        $("#feedback-form").validate({
+            rules: {
+                rating:{
+                    required: true,
+                },
+                review: {
+                    required: true,
+                    maxlength: 100,
+                    custom_review: true,
+                },
+            },
+            messages: {
+                rating:{
+                    required: "rating is required."
+                },
+                review: {
+                    required: "review is Mandatory.",
+                    maxlength: "length should be less than 100 characters.",
+                    custom_review: "review is Mandatory.",
+                },
+            },
+            errorPlacement: function(error, element){
+                $(element).siblings('.error').html(error.text());
+            },
+            submitHandler: function(form) {                
+                return false;
+            },
+
+        });
+        var flag = $('#feedback-form').valid();
+        var rating_flag = false;
+        $('input[name="rating"]').each(function () {
+            if ($(this).is(':checked')){
+                rating_flag = true;
+            }
+        });
+        if (!rating_flag){
+            $('#rating-error').text('rating is mandatory');
+        }
+        if (flag && rating_flag){
+            var formData = $('#feedback-form').serialize();
+            $.ajax({
+                url: '/dashboard/inbox-feedback/',
+                type: 'POST',
+                data : formData,
+                dataType: 'json',
+                success: function(json) {
+                    alert(json.display_message);
+                    window.location.reload();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong, try again later");
+                }
+            });
+        }
+        
+        
     });
 
     $(document).on('click', '#comment_submit_button', function () {
@@ -149,11 +344,11 @@ $(document).ready(function(){
 
         });
         var flag = $('#user-comment-form').valid();
-        console.log(flag);
+
         if (flag){
             var formData = $('#user-comment-form').serialize();
             $.ajax({
-                url: '/user/dashboard/comment/',
+                url: '/dashboard/inbox-comment/',
                 type: 'POST',
                 data : formData,
                 dataType: 'html',

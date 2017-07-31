@@ -3,28 +3,70 @@ import datetime
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.conf import settings
+from django.middleware.csrf import get_token
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from order.models import OrderItem
+
+from order.models import Order, OrderItem
 
 
 class DashboardInfo(object):
-    def get_inbox_list(self, candidate_id=None, last_month_from=3, active=1):
+    def get_inbox_list(self, candidate_id=None, request=None, last_month_from=3, select_type=0, page=1):
         if candidate_id:
-            days = 3 * 30
+            days = last_month_from * 30
             last_payment_date = timezone.now() - datetime.timedelta(days=days)
-            orderitems = OrderItem.objects.filter(order__candidate_id=candidate_id, order__payment_date__gte=last_payment_date, no_process=False)
+            orderitems = OrderItem.objects.filter(
+                order__status__in=[1, 3],
+                order__candidate_id=candidate_id,
+                order__payment_date__gte=last_payment_date, no_process=False)
             # if active:
             #     orderitems = orderitems.exclude(oi_status=4)
             # else:
             #     orderitems = orderitems.filter(oi_status=4)
 
-            orderitems = orderitems.select_related('order', 'product', 'partner')
+            orderitems = orderitems.select_related(
+                'order', 'product', 'partner')
+            paginator = Paginator(orderitems, 2)
+            try:
+                orderitems = paginator.page(page)
+            except PageNotAnInteger:
+                orderitems = paginator.page(1)
+            except EmptyPage:
+                orderitems = paginator.page(paginator.num_pages)
             data = {
                 "orderitems": orderitems,
-                "backend_status": [23, 25],
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,
+                "csrf_token_value": get_token(request),
+                "last_month_from": last_month_from,
+                "select_type": select_type,
             }
-            return render_to_string('include/user-inboxlist.html', data)
+            return render_to_string('partial/user-inboxlist.html', data)
+
+    def get_myorder_list(self, candidate_id=None):
+        if candidate_id:
+            days = 3 * 30
+            last_dateplaced_date = timezone.now() - datetime.timedelta(days=days)
+            orders = Order.objects.filter(
+                status__in=[1, 2, 3],
+                candidate_id=candidate_id,
+                date_placed__gte=last_dateplaced_date)
+
+            order_list = []
+            for obj in orders:
+                orderitems = obj.orderitems.filter(no_process=False)
+                orderitems.select_related('product')
+                item_count = orderitems.count()
+                data = {
+                    "order": obj,
+                    "item_count": item_count,
+                    "orderitems": orderitems,
+                }
+                order_list.append(data)
+
+            context = {
+                "order_list": order_list,
+            }
+            return render_to_string('partial/myorder-list.html', context)
 
     # def get_inbox_oi_detail(self, candidate_id=None, oi=None):
     #     if oi and oi.order.candidate_id == candidate_id:

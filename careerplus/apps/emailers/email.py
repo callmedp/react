@@ -82,7 +82,11 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Auto Closer Your Order item")
             template_name = data.get('template_name', 'auto_closer.html')
             send_dict['template'] = 'emailers/' + template_name
-            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+
             self.process(to, send_dict, data)
 
         elif mail_type == "MIDOUT":

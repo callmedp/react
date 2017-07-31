@@ -6,12 +6,14 @@ from django.shortcuts import render
 from cart.models import Cart
 from order.mixins import OrderMixin
 from order.models import Order
+from console.decorators import Decorate, stop_browser_cache
 
 from .forms import StateForm, PayByCheckForm
 from .mixin import PaymentMixin
 from microsite.roundoneapi import RoundOneAPI
 
 
+@Decorate(stop_browser_cache())
 class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
     template_name = "payment/payment-option.html"
 
@@ -102,6 +104,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return context
 
 
+@Decorate(stop_browser_cache())
 class ThankYouView(TemplateView):
     template_name = "payment/thank-you.html"
 
@@ -130,16 +133,17 @@ class ThankYouView(TemplateView):
         return context
 
 
+@Decorate(stop_browser_cache())
 class PaymentOopsView(TemplateView):
     template_name = 'payment/payment-oops.html'
 
     def get(self, request, *args, **kwargs):
-        return super(self.__class__, self).get(request, *args, **kwargs)
+        return super(PaymentOopsView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         error_type = self.request.GET.get('error', '')
         txn_id = self.request.GET.get('txn_id', '')
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(PaymentOopsView, self).get_context_data(**kwargs)
         context.update({'error_type': error_type, 'txn_id': txn_id})
         context.update({'is_payment': True, })
         return context

@@ -1,13 +1,15 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+
 from seo.models import AbstractAutoDate
 from geolocation.models import Country
+from linkedin.models import Draft
+
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS,\
     OI_USER_STATUS
-
-from linkedin.models import Draft
+from .functions import get_upload_path_order_invoice
 
 
 class Order(AbstractAutoDate):
@@ -83,6 +85,11 @@ class Order(AbstractAutoDate):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='order_paid_by',
         null=True, blank=True)
+
+    # invoce order
+    invoice = models.FileField(
+        upload_to=get_upload_path_order_invoice, max_length=255,
+        blank=True, null=True)
 
     class Meta:
         app_label = 'order'
@@ -201,6 +208,7 @@ class OrderItem(models.Model):
 
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+    user_feedback = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'order'

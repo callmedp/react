@@ -2,8 +2,16 @@ import datetime
 import base64
 
 from django.conf import settings
+from django.template import Context
+from django.template.loader import get_template
+from django.utils import timezone
+from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 from Crypto.Cipher import XOR
+from weasyprint import HTML
+
+
 # from filebrowser.base import FileObject
 
 
@@ -69,10 +77,39 @@ class TokenGeneration(object):
         email = inp_list[1]
         type = int(inp_list[2])
         dt = datetime.datetime.strptime(inp_list[3], settings.TOKEN_DT_FORMAT)
-        # try:
-        #     orders = Order.objects.filter(email=email, status=1)
-        #     if orders.exists():
-                
-        # except:
-        #     return None, None, None
         return email, type, (dt >= datetime.datetime.now())
+
+
+class InvoiceGenerate(object):
+
+    def get_invoice_data(self):
+        pass
+
+    def generate_pdf(self, context_dict={}, template_src=None):
+        if template_src:
+            html_template = get_template(template_src)
+            context = Context(context_dict)
+
+            rendered_html = html_template.render(context).encode(
+                encoding="UTF-8")
+
+            pdf_file = HTML(string=rendered_html).write_pdf()
+            return pdf_file
+
+        # http_response = HttpResponse(pdf_file, content_type='application/pdf')
+        # http_response['Content-Disposition'] = 'filename="report.pdf"'
+        # return http_response
+
+    def save_order_invoice_pdf(self, order=None):
+        if order:
+            context_dict = {}
+            pdf_file = self.generate_pdf(
+                context_dict=context_dict,
+                template_src='invoice/invoice.html')
+            file_name = 'invoice-' + str(order.number) + '-'\
+                + timezone.now().strftime('%d%m%Y') + '.pdf'
+            order.invoice = SimpleUploadedFile(
+                file_name, pdf_file,
+                content_type='application/pdf')
+            order.save()
+            return order

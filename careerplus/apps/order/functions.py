@@ -140,3 +140,8 @@ def update_initiat_orderitem_sataus(order=None):
                         oi_status=oi.oi_status,
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
+
+
+def get_upload_path_order_invoice(instance, filename):
+    return "invoice/order/{order_id}/{filename}".format(
+        order_id=instance.id, filename=filename)

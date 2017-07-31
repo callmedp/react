@@ -17,6 +17,7 @@ from django.conf import settings
 from shine.core import ShineCandidateDetail
 from shop.models import Product, ProductClass
 from users.mixins import RegistrationLoginApi, UserMixin
+from console.decorators import Decorate, stop_browser_cache
 
 from .models import Cart
 from .mixins import CartMixin
@@ -24,6 +25,7 @@ from .forms import ShippingDetailUpdateForm
 from wallet.models import Wallet
 
 
+@Decorate(stop_browser_cache())
 class CartView(TemplateView, CartMixin, UserMixin):
     template_name = "cart/cart.html"
 
@@ -57,7 +59,6 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-
         if request.is_ajax():
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
@@ -119,6 +120,7 @@ class RemoveFromCartView(View, CartMixin):
         return HttpResponseForbidden()
 
 
+@Decorate(stop_browser_cache())
 class PaymentLoginView(TemplateView):
     template_name = "cart/payment-login.html"
 
@@ -204,6 +206,7 @@ class PaymentLoginView(TemplateView):
         return context
 
 
+@Decorate(stop_browser_cache())
 class PaymentShippingView(UpdateView, CartMixin):
     model = Cart
     template_name = "cart/payment-shipping.html"
@@ -295,6 +298,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
 class PaymentSummaryView(TemplateView, CartMixin):
     template_name = "cart/payment-summary.html"
 

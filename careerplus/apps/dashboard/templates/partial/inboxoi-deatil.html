@@ -1,20 +1,20 @@
 <div class="back-inbox">
-<a href="{% url "dashboard" %}">Back to inbox</a>
+<a href="{% url "dashboard:dashboard" %}">Back to inbox</a>
 </div>
 
 <ul class="products-inbox">
     {% if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
           </ul>
-          {% if obj.oi_status == 24 %}
-          <div class="accept-reject col-sm-5 col-md-4">
-            <a class="accept" href="#">Accept</a> <a class="reject" href="#">Reject</a>
-          </div>
+          {% if oi.oi_status == 24 %}
+            <div class="accept-reject col-sm-5 col-md-4">
+                <a class="accept" href="#" data-toggle="modal" data-target=".bs-example-modal-sm3">Accept</a> <a class="reject" href="#" data-toggle="modal" data-target=".bs-example-modal-sm4">Reject</a>
+            </div>
           {% endif %}
           <div class="hr"></div>
           <ul class="table-data">
@@ -46,9 +46,67 @@
                         {% endif %}
                     </datalist>
                     <datalist class="col-sm-3 text-right">
-                      {% if op.oi_status == 2 %}
-                      <a href="{{homepage}}">Upload Resume</a>
+                      {% if op.oi_status == 2 and not oi.oi_resume %}
+                      <a href="#">Upload Resume</a>
                       {% elif op.oi_status == 24 %}
+                          <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                      {% elif op.oi_status == 27 %}
+                          <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                      {% endif %}
+                    </datalist>
+                  </li>
+              {% endfor %}
+              
+            </ul>
+        </li>
+    {% elif oi.product.type_flow == 8 %}
+        <li class="col-sm-12">
+          <h2>{{oi.product.name}}</h2>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
+          <ul class="view-comments-links col-sm-7 col-md-8">
+            <li>View details</li>
+            <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
+          </ul>
+          {% if oi.oi_status == 46 %}
+            <div class="accept-reject col-sm-5 col-md-4">
+                <a class="accept" href="#" data-toggle="modal" data-target=".bs-example-modal-sm3">Accept</a> <a class="reject" href="#" data-toggle="modal" data-target=".bs-example-modal-sm4">Reject</a>
+            </div>
+          {% endif %}
+          <div class="hr"></div>
+          <ul class="table-data">
+              <li class="data-heading">
+                <datalist class="col-sm-3">
+                  Date
+                </datalist>
+                <datalist class="col-sm-6">
+                  Status
+                </datalist>
+                <datalist class="col-sm-3">
+                </datalist>
+              </li>
+
+              {% for op in ops %}
+                  <li>
+                    <datalist class="col-sm-3">
+                      {{op.created.date}}
+                    </datalist>
+                    <datalist class="col-sm-6">
+                        {% if op.oi_status == 46 and op.draft_counter == 1 %}
+                            {{op.get_user_oi_status}}
+                        {% elif op.oi_status == 46 and op.draft_counter < max_draft_limit %}
+                            Revised Document is ready
+                        {% elif op_oi_status == 4 %}
+                            Document is finalized
+                        {% else %}
+                           {{op.get_user_oi_status}}
+                        {% endif %}
+                    </datalist>
+                    <datalist class="col-sm-3 text-right">
+                      {% if op.oi_status == 49 and oi.counselling_form_status == 41 %}
+                      <a href="#">Complete form</a>
+                      {% elif op.oi_status == 46 %}
+                          <a href="#" target="_blank">Download</a>
+                      {% elif op.oi_status == 27 %}
                           <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
                       {% endif %}
                     </datalist>
@@ -60,7 +118,7 @@
     {% elif oi.product.type_flow == 3 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
@@ -102,7 +160,7 @@
     {% elif oi.product.type_flow == 2 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
@@ -138,10 +196,51 @@
               
             </ul>
         </li>
+    {% elif oi.product.type_flow == 4 %}
+        <li class="col-sm-12">
+          <h2>{{oi.product.name}} </h2>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
+          <ul class="view-comments-links col-sm-7 col-md-8">
+            <li>View details</li>
+            <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
+          </ul>
+          <div class="hr"></div>
+          <ul class="table-data">
+              <li class="data-heading">
+                <datalist class="col-sm-3">
+                  Date
+                </datalist>
+                <datalist class="col-sm-6">
+                  Status
+                </datalist>
+                <datalist class="col-sm-3">
+                </datalist>
+              </li>
+
+              {% for op in ops %}
+                  <li>
+                    <datalist class="col-sm-3">
+                      {{op.created.date}}
+                    </datalist>
+                    <datalist class="col-sm-6">
+                        {{op.get_user_oi_status}}
+                    </datalist>
+                    <datalist class="col-sm-3 text-right">
+                      {% if op.oi_status == 2 and not oi.oi_resume %}
+                          <a href="#">Upload Resume</a>
+                      {% elif op.oi_status == 6 %}
+                          <a href="#">Download Credential</a>
+                      {% endif %}
+                    </datalist>
+                  </li>
+              {% endfor %}
+              
+            </ul>
+        </li>
     {% elif oi.product.type_flow == 5 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
@@ -180,7 +279,7 @@
     {% elif oi.product.type_flow == 6 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
@@ -219,7 +318,7 @@
     {% elif oi.product.type_flow == 7 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
@@ -255,7 +354,7 @@
     {% elif oi.product.type_flow == 9 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
@@ -296,7 +395,7 @@
     {% elif oi.product.type_flow == 10 %}
         <li class="col-sm-12">
           <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
-          <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
+          <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
             <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>

@@ -46,7 +46,7 @@ OI_OPS_STATUS = (
     (24, 'Approved'),
     (25, 'Rejected By Admin'),
     (26, 'Rejected By Candidate'),
-    (27, 'Service has been processed and Document is finalized'),
+    (27, 'Service has been processed and Document is finalized'),  # user Accept the draft flow 8 too
     (28, 'Profile Update'),
 
     # for linkedin flow8 41 - 60
@@ -59,7 +59,7 @@ OI_OPS_STATUS = (
     (49, 'Couselling form is pending'),
 
     # flow7 61 - 80
-    (61, 'Service will be initiated once resume is finalized'),
+    (61, 'Service will be initiated once resume is finalized'),  # flow 4 and flow 5
     (62, 'Resume Boosted'),
 
     # flow6 81 - 100
@@ -109,7 +109,7 @@ OI_USER_STATUS = (
     (45, 'Linkedin Pending Approval'),
     (46, 'Linkedin Approved'),
     (47, 'Linkedin Rejected By Admin'),
-    (48, 'Linkedi Rejected By Candidate'),
+    (48, 'Modifications requested'),
     (49, 'Couselling form is pending'),
 
     # flow7 61 - 80
