@@ -906,15 +906,16 @@ class Product(AbstractProduct, ModelMeta):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.name and self.pk:
-            if not self.heading:
-                self.heading = self.get_heading()
-            if not self.title:
-                self.title = self.get_title()
-            if not self.image_alt:
-                self.image_alt = self.name
-            if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc()
+        if self.pk:
+            if self.name:    
+                if not self.heading:
+                    self.heading = self.get_heading()
+                if not self.title:
+                    self.title = self.get_title()
+                if not self.image_alt:
+                    self.image_alt = self.name
+                if not self.meta_desc:
+                    self.meta_desc = self.get_meta_desc()
         super(Product, self).save(*args, **kwargs)
         self.attr.save()
 
@@ -992,11 +993,12 @@ class Product(AbstractProduct, ModelMeta):
                 self.name,
             )
         elif self.is_service or self.is_writing:
-            return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
-                    self.category_main.name,
-                    self.get_exp(),
-                    self.category_main.name,
-                )            
+            if self.category_main:
+                return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
+                        self.category_main.name,
+                        self.get_exp(),
+                        self.category_main.name,
+                    )            
         
         return ''
 
