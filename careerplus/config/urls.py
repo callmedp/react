@@ -65,7 +65,9 @@ urlpatterns += [
     url(r'^login/$', LoginApiView.as_view(), name='login'),
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
+    url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
+
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(

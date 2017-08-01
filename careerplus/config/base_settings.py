@@ -78,6 +78,7 @@ LOCAL_APPS = [
     'order',
     'homepage',
     'microsite',
+    'dashboard',
     'wallet',
     'search',
     'linkedin',
@@ -213,6 +214,10 @@ ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+
+CART_MAX_LIMIT = 5
+
+SHINE_API_URL = 'https://sumosc.shine.com'
 
 ############ SOLR SETTINGS #######################
 HAYSTACK_CONNECTIONS = {

@@ -56,7 +56,7 @@
             {% for item in cart_items %}
                 <!-- item 1 -->
                 {% with li=item.li addons=item.addons variations=item.variations %}
-                    {% if li.product.type_service == 3 and variations %}
+                    {% if li.product.is_course and variations %}
 
                         <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
                             <li class="col-sm-5 col-md-6">

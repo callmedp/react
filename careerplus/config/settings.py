@@ -7,6 +7,7 @@ IS_LIVE = False
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
 SITE_DOMAIN = '127.0.0.1:8000'
+SITE_PROTOCOL = 'https'
 
 # Database
 DATABASES = {
@@ -56,7 +57,7 @@ META_SITE_PROTOCOL = 'https'
 META_SITE_DOMAIN = 'learning.shine.com'
 META_SITE_TYPE = 'Website'
 META_SITE_NAME = 'ShineLearning'
-META_USE_SITES = False
+META_USE_SITES = True
 META_DEFAULT_KEYWORDS = ['E-Learning', 'Skills', 'Resume', 'India']
 META_USE_OG_PROPERTIES = True
 META_USE_TWITTER_PROPERTIES = True
@@ -177,9 +178,8 @@ ENCODE_SALT = 'xfxa'
 
 # Do Not Change #
 COURSE_SLUG = ['course',]
-WRITING_SLUG = ['writing',]
+WRITING_SLUG = ['writing','resume']
 SERVICE_SLUG = ['service',]
-
 
 VENDOR_GROUP_LIST = ['VENDOR']
 PRODUCT_GROUP_LIST = ['PRODUCT']

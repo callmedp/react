@@ -3,7 +3,7 @@ import re
 
 # django imports
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.http import Http404
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -183,3 +183,6 @@ class SearchListView(ListView):
     def form_invalid(self, form):
         raise Http404
 
+
+class TestListingView(TemplateView):
+    template_name = 'search/listing.html'

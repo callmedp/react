@@ -21,7 +21,7 @@ from django.db.models import Q
 from shop.choices import PRODUCT_VENDOR_CHOICES
 from blog.mixins import PaginationMixin
 from shop.models import (
-    Product, ProductScreen)
+    Product, ProductScreen, ScreenChapter)
 from faq.models import ScreenFAQ, FAQuestion
 from shop.utils import ProductModeration
 from .vendor_form import (
@@ -35,6 +35,8 @@ from .vendor_form import (
     ScreenProductAttributeForm,
     ScreenProductFAQForm,
     ScreenFAQInlineFormSet,
+    ScreenProductChapterForm,
+    ScreenChapterInlineFormSet,
     ScreenProductVariationForm,
     ScreenVariationInlineFormSet,)
 
@@ -423,7 +425,6 @@ class AddScreenProductView(FormView):
 
     def form_valid(self, form):
         user = self.request.user
-
         if user.has_perm('shop.console_add_product'):
             vendor = user.get_vendor()
             if not vendor:
@@ -526,6 +527,19 @@ class ChangeScreenProductView(DetailView):
                 form_kwargs={'object': self.get_object(),
                     'vendor':vendor },)
             context.update({'prdfaq_formset': prdfaq_formset})
+        
+        ScreenProductChapterFormSet = inlineformset_factory(
+            ProductScreen, ScreenChapter, fk_name='product',
+            form=ScreenProductChapterForm,
+            can_delete=False,
+            formset=ScreenChapterInlineFormSet, extra=1,
+            max_num=20, validate_max=True)
+        if self.object:
+            prdchapter_formset = ScreenProductChapterFormSet(
+                instance=self.get_object(),
+                form_kwargs={'object': self.get_object()},)
+            context.update({'prdchapter_formset': prdchapter_formset})
+        
         if self.object.type_product == 1:
             ScreenProductVariationFormSet = inlineformset_factory(
                 ProductScreen, ProductScreen.variation.through, fk_name='main',
@@ -757,6 +771,46 @@ class ChangeScreenProductView(DetailView):
                                 request, [
                                     "console/vendor/change_screenproduct.html"
                                 ], context)
+                    elif slug == 'chapter':
+                        ScreenProductChapterFormSet = inlineformset_factory(
+                            ProductScreen, ScreenChapter, fk_name='product',
+                            form=ScreenProductChapterForm,
+                            can_delete=False,
+                            formset=ScreenChapterInlineFormSet, extra=1,
+                            max_num=20, validate_max=True)
+                        formset = ScreenProductChapterFormSet(
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj},)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                                formset.save_m2m()
+                                if not obj.status == 2:    
+                                    obj.status = 1
+                                    obj.save()        
+                                
+                            messages.success(
+                                self.request,
+                                "Product Chapter changed Successfully")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prdchapter_formset': formset})
+                            messages.error(
+                                self.request,
+                                "Product Chapter Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_screenproduct.html"
+                                ], context)
                     
                 messages.error(
                     self.request,
@@ -935,15 +989,14 @@ class ChangeScreenProductVariantView(DetailView):
             ChangeScreenProductVariantView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         pk_parent = kwargs.get('parent',None)
-        parent = self.get_object().variationproduct.filter(
-            mainproduct__sibling=self.get_object())
+        parent = self.get_object().get_parent()
         
-        main_change_form = AddScreenProductVariantForm(parent=parent[0],
+        main_change_form = AddScreenProductVariantForm(parent=parent,
             user=self.request.user, instance=self.get_object())
         context.update({
             'messages': alert,
             'form': main_change_form,
-            'parent': parent[0].pk
+            'parent': parent.pk if parent else None
             })
         return context
 
@@ -980,11 +1033,10 @@ class ChangeScreenProductVariantView(DetailView):
                             return HttpResponseRedirect(
                                 reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
                     if slug == 'variant':
-                        parent = self.get_object().variationproduct.filter(
-                            mainproduct__sibling=self.get_object())
+                        parent = self.get_object().get_parent()
                         form = AddScreenProductVariantForm(
                             request.POST, request.FILES,
-                            parent=parent[0],
+                            parent=parent,
                             user=self.request.user,
                             instance=obj)
 
@@ -992,16 +1044,16 @@ class ChangeScreenProductVariantView(DetailView):
                             productscreen = form.save()
                             productscreen.status = 1
                             productscreen.save()        
-                            if not parent[0].status == 2:    
-                                parent[0].status = 1
-                                parent[0].save()
+                            if not parent.status == 2:    
+                                parent.status = 1
+                                parent.save()
 
                             messages.success(
                                 self.request,
                                 "Product Changed Successfully")
                             return HttpResponseRedirect(
                                 reverse('console:screenproductvariant-change',
-                                    kwargs={'pk': obj.pk, 'parent': parent[0].pk}))
+                                    kwargs={'pk': obj.pk, 'parent': parent.pk}))
                         else:
                             context = self.get_context_data()
                             if form:
@@ -1033,7 +1085,6 @@ class ActionScreenFaqView(View):
     def post(self, request, *args, **kwargs):
         try:
             form_data = self.request.POST
-            
             action = form_data.get('action', None)
             pk_obj = form_data.get('screenfaq', None)
             allowed_action = []
@@ -1151,12 +1202,20 @@ class ActionScreenProductView(View, ProductModeration):
                         if self.validate_screenproduct(
                             request=self.request,productscreen=productscreen): 
                             product, productscreen, copied = self.copy_to_product(
-                                product=product, screen=productscreen)
+                                request=self.request,
+                                product=product,
+                                screen=productscreen)
                             if copied:
                                 productscreen.status = 3
                                 productscreen.save()
                                 product.is_indexable = False
                                 product.save()
+                                if product.type_product == 1:
+                                    childs = product.mainproduct.all()
+                                    for child in childs:
+                                        sibling = child.sibling
+                                        sibling.is_indexable = False
+                                        sibling.save()
                                 messages.success(
                                     self.request,
                                         "Product Screen is copied to live! Please validate fields in live product") 
@@ -1174,7 +1233,9 @@ class ActionScreenProductView(View, ProductModeration):
                             data = {'error': 'True'}
                     elif action == "revert":
                         product, productscreen, copied = self.copy_to_screen(
-                            product=product, screen=productscreen)
+                            request=self.request,
+                            product=product,
+                            screen=productscreen)
                         if copied:
                             productscreen.status = 6
                             productscreen.save()

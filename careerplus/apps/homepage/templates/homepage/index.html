@@ -82,7 +82,7 @@
                   <input class="form-control input2" name="query2" id="query2" placeholder="Key skills" type="text">
                   <input class="form-control input3" name="query3" id="query3" placeholder="Experience" type="text">              
                 </div>
-                <button type="submit" class="find-jobs-btn btn">Find</button>
+                <button type="button" onclick="location.href='/search/listing/'" class="find-jobs-btn btn">Find</button>
               </form>
             </div>
 
@@ -220,9 +220,7 @@
                   <li>
                     <a title="Resume writing" class="box-panel" href="{{tprd.product.get_absolute_url}}">
                       <figure style="background-color:{{tprd.product.get_bg}};">
-                        {% thumbnail tprd.product.image "200x125" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{tprd.product.image_alt}}">
-                        {% endthumbnail %}
+                            <img class="media-object" src="{{ tprd.product.image.url }}" width="200" height="125" alt="{{tprd.product.image_alt}}">
                         <!--img class="media-object" src="{{prd.image.url}}" alt="{{prd.image_alt}}"-->
                       </figure>
                       <div class="caption">

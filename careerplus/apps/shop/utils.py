@@ -203,7 +203,11 @@ class ProductModeration(object):
                     if not product.inr_price > Decimal(0):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
-
+                    if product.type_product in [0,1,3,5]:
+                        if not product.chapter_product.filter(status=True):
+                            messages.error(request, "Product has no active chapter")
+                            return test_pass
+                    
                     if request.user.groups.filter(name='Product').exists() or request.user.is_superuser:
                         diction = [0,1, 3, 4, 5]
                     else:
@@ -282,18 +286,22 @@ class ProductModeration(object):
             if request and request.user:
                 if productscreen:
                     vendor = request.user.get_vendor()
-                    if not vendor:
+                    if not productscreen.vendor:
                         messages.error(request, "Vendor is not associated")
                         return test_pass
                     if not productscreen.product:
                         messages.error(request, "Product is not associated")
                         return test_pass
                             
-                    test_pass = self.validate_fields(
-                        request=request, product=productscreen)
+                    if not self.validate_fields(
+                        request=request, product=productscreen):
+                        return test_pass
                     if productscreen.type_product == 1:
-                        test_pass = self.validate_variation(
-                            request=request, product=productscreen)
+                        if not self.validate_variation(
+                            request=request, product=productscreen):
+                            return test_pass
+                        
+                    test_pass = True    
                     return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
@@ -307,7 +315,7 @@ class ProductModeration(object):
         return test_pass
 
     @transaction.atomic
-    def copy_to_product(self, product, screen):
+    def copy_to_product(self, request, product, screen):
         copy = False
         try:
             with transaction.atomic():
@@ -340,7 +348,9 @@ class ProductModeration(object):
                         setattr(product.attr, attribute.name, value)
                 
                 product.save()
-                from shop.models import FAQProduct, VariationProduct
+                from shop.models import (
+                    FAQProduct, VariationProduct,)
+
                 productfaq = product.productfaqs.all()
                 screenfaq = screen.screenfaqs.all()
                 scfq = screen.faqs.all()
@@ -359,6 +369,23 @@ class ProductModeration(object):
                         question=faq)
                     fqprd.active = False
                     fqprd.save()
+                
+                screenchap = screen.chapter_product.all()
+                prdchap = product.chapter_product.all()
+                for chap in screenchap:
+                    pchap = chap.create_chapter()
+                    pchap.heading = chap.heading
+                    pchap.answer = chap.heading
+                    pchap.status = chap.status
+                    pchap.ordering = chap.ordering
+                    pchap.product = product
+                    pchap.save()
+                screenchap = [ch.chapter for ch in screenchap]
+                inactive_chap = [ch for ch in prdchap if ch not in screenchap]
+                
+                for chap in inactive_chap:
+                    chap.status = False
+                    chap.save()
                 
                 if screen.type_product == 1:
                     screenvar = screen.variation.all()
@@ -426,7 +453,7 @@ class ProductModeration(object):
         return (product, screen, copy)
 
     @transaction.atomic
-    def copy_to_screen(self, product, screen):
+    def copy_to_screen(self, request,product, screen):
         copy = False
         try:
             with transaction.atomic():
@@ -479,6 +506,26 @@ class ProductModeration(object):
                         question=faq)
                     fqprd.active = False
                     fqprd.save()
+
+                screenchap = screen.chapter_product.all()
+                prdchap = product.chapter_product.all()
+                for chap in prdchap:
+                    schap = chap.create_screen()
+                    schap.heading = chap.heading
+                    schap.answer = chap.heading
+                    schap.status = chap.status
+                    schap.ordering = chap.ordering
+                    schap.product = screen
+                    schap.save()
+                
+                prdchap = [ch.get_screen() for ch in prdchap]
+                inactive_chap = [ch for ch in prdchap if ch not in screenchap]
+                
+                for chap in inactive_chap:
+                    chap.status = False
+                    chap.save()
+                
+
                 if screen.type_product == 1:
                     screenvar = screen.variation.all()
                     screenvariation = screen.mainproduct.all()
@@ -546,14 +593,18 @@ class CategoryValidation(object):
         try:
             if request:
                 if category:
-                    test_pass = self.validate_fields(
-                        request=request, category=category)
+                    if not self.validate_fields(
+                        request=request, category=category):
+                        return test_pass
                     if category.type_level in [2, 3, 4]:
-                        test_pass = self.validate_parent(
-                            request=request, category=category)
+                        if not self.validate_parent(
+                            request=request, category=category):
+                            return test_pass
                     if category.is_skill:
-                        test_pass = self.validate_skillpage(
-                            request=request, category=category)
+                        if not self.validate_skillpage(
+                            request=request, category=category):
+                            return test_pass
+                    test_pass = True
                     return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
@@ -573,8 +624,9 @@ class CategoryValidation(object):
             if request:
                 if category:
                     if category.type_level in [1, 2, 3]:
-                        test_pass = self.validate_childs(
-                            request=request, category=category)
+                        if not self.validate_childs(
+                            request=request, category=category):
+                            return test_pass
                     if category.get_products():
                         messages.error(request, "Products is associated please reassign")
                         return test_pass
@@ -596,13 +648,17 @@ class CategoryValidation(object):
         try:
             if request:
                 if category:
-                    test_pass = self.validate_fields(
-                        request=request, category=category)
+                    if not self.validate_fields(
+                        request=request, category=category):
+                        return test_pass
                     if category.type_level in [2, 3, 4]:
-                        test_pass = self.validate_parent(
-                            request=request, category=category)
-                    test_pass = self.validate_skillpage(
-                        request=request, category=category)
+                        if not self.validate_parent(
+                            request=request, category=category):
+                            return test_pass
+                    if not self.validate_skillpage(
+                        request=request, category=category):
+                        return test_pass
+                    test_pass = True
                     return test_pass
                 else:
                     messages.error(request, "Object Do not Exists")
@@ -754,9 +810,6 @@ class ProductValidation(object):
         try:
             if request:
                 if product:
-                    if product.type_product in [2, 4]:
-                        messages.error(request, "Can't active child-variation and virtual product active!")
-                        return False
                     
                     if not self.validate_fields(
                         request=request, product=product):
@@ -795,8 +848,8 @@ class ProductValidation(object):
         try:
             if request:
                 if product:
-                    if product.type_product in [2, 4]:
-                        messages.error(request, "Can't index child-variation and virtual product!")
+                    if not product.active:
+                        messages.error(request, "First Make Product Active")
                         return False
                     
                     if not self.validate_fields(
@@ -866,6 +919,11 @@ class ProductValidation(object):
                     if not product.heading:
                         messages.error(request, "Product Display Heading is required")
                         return test_pass
+                    
+                    if product.type_product in [0,1,3,5]:
+                        if not product.chapter_product.filter(status=True):
+                            messages.error(request, "Product has no active chapter")
+                            return test_pass
                     
 
                     if product.type_product in [0, 1, 3, 4]:
@@ -957,9 +1015,7 @@ class ProductValidation(object):
                         if not sibling.inr_price > Decimal(0):
                             messages.error(request, "Variation" + str(sibling) +" INR Price is negetive")
                             return test_pass
-                        test_pass = self.validate_attributes(request=request, product=sibling)
-                        if not test_pass:
-                            test_pass = False
+                        if not self.validate_attributes(request=request, product=sibling):
                             return test_pass
                            
                     test_pass = True
@@ -988,6 +1044,7 @@ class ProductValidation(object):
                                 messages.error(request, (
                                     ("%(attr)s attribute cannot be blank") %
                                     {'attr': attribute.name}))
+                                return test_pass
                         else:
                             try:
                                 attribute.validate_value(value)
@@ -995,6 +1052,7 @@ class ProductValidation(object):
                                 messages.error(request, (
                                     ("%(attr)s attribute %(err)s") %
                                     {'attr': attribute.name, 'err': e}))
+                                return test_pass
                     test_pass = True
                     return test_pass
                 else:

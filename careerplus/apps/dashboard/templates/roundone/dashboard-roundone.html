@@ -1,0 +1,308 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+    {% block css_section %}
+        {{block.super}}
+        <link type="text/css" href="{% static 'shinelearn/css/dashboard/dashboard.css' %}" rel="stylesheet">
+    {% endblock css_section %}
+{% block container %}
+  <section class="container">
+    <div class="overlay"></div>
+      <div id="id_overlay" style="background-color: rgba(255, 255, 255,1); height: 100%; left: 0; position: fixed; top: 0px; width: 100%; z-index: 100; min-height: 100%; display:none;">
+      </div>
+      <div id="id_load" style='position: fixed; width: 100%; background: url("{% static "/shinelearn/images/loader.gif" %}") no-repeat; height: 100%; top: 50%; left: 50%; z-index: 101; display:none;'>
+      </div>
+    <div class="queries">
+      Queries? <a href="mailto:support@roundone.in">support@roundone.in</a>
+    </div>
+    <ol class="breadcrumb">
+      <li><a href="#">Home</a></li>
+      <li class="active">Dashboard</li>
+    </ol>  
+  </section>
+
+  <section class="container mt-10">
+
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+      <div class="col-sm-3 dashboard-tab">
+        <a href="dashboard-inbox.html"><span class="inbox-icon"></span> Inbox</a>
+        <a href="dashboard-orders.html"><span class="orders-icon"></span> My orders</a>
+        <a href="dashboard-wallet.html"><span class="wallet-icon"></span> My wallet</a>
+        <a class="active" href="dashboard-roundone.html"><span class="referal-icon"></span> Referral</a>
+        <div class="please-call">
+          Please call us at <strong>0120-4959420/32</strong> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.
+        </div>
+      </div>  
+    <!-- left content end -->
+
+    <!-- right content start -->
+    <div class="col-sm-9 bdr dashboard-tab-content">
+        <ul role="tablist" class="roundone-tab" id="id_roundone_tab">
+          <li role="presentation" class="active">
+            <a href="#referral" aria-controls="referral" role="tab" 
+            data-toggle="tab">Referral Request</a>
+          </li>
+          <li role="presentation" class="" id="tab_upcoming">
+            <a href="#upcoming" aria-controls="upcoming" role="tab" 
+            data-toggle="tab">Upcoming Interactions</a>
+          </li>
+          <li role="presentation" class="" id="tab_past_interaction">
+            <a href="#past" aria-controls="past" role="tab" 
+            data-toggle="tab">Past Interactions</a>
+          </li>
+          <li role="presentation" class="" id="tab_saved">
+            <a href="#Saved" aria-controls="Saved" role="tab" 
+            data-toggle="tab">Saved</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Referral Request tab -->
+          <div role="tabpanel" class="tab-pane active" id="referral">
+            {% if accepted %}
+              <div class="col-sm-12 notification">
+                Congratulations, Your Job Application has been accepted
+              </div>
+              <ul class="table-data">
+              {% for accepted_data in accepted %}
+                <li>
+                  <datalist class="col-sm-3">
+                    <a href="#">{{accepted_data.jobTitle}}</a>
+                      <p>{{accepted_data.company}}</p>
+                  </datalist>
+                  <datalist class="col-sm-4">
+                    Referrer : {{accepted_data.referrerDetails.position}}, {{accepted_data.referrerDetails.department}}
+                  </datalist>
+                  <datalist class="col-sm-3">
+                    <p>Date Applied: {{accepted_data.requestedDate}}</p> <p>Date Accepted: {{accepted_data.acceptedDate}}</p> <p>Expires on: {{accepted_data.expiryDate}}}</p>
+                    </datalist>
+                  <datalist class="col-sm-2"><a class="bdr-button" 
+                  href="{{accepted_data.requestId}}">Confirm now</a></datalist>
+                </li>
+              {% endfor %}
+              </ul>
+              {% endif %}
+
+              {% if pending %}
+              <ul class="table-data">
+                <li class="data-heading">
+                  <datalist class="col-sm-3">
+                    Job Applied
+                  </datalist>
+                  <datalist class="col-sm-4">
+                    Referrer
+                  </datalist>
+                  <datalist class="col-sm-3">
+                    Status
+                  </datalist>
+                  <datalist class="col-sm-2">
+                    Date Requested
+                  </datalist>
+                </li>
+                {% for pending_data in pending %}
+                <li>
+                  <datalist class="col-sm-3">
+                    <a href="#">{{pending_data.jobTitle}}</a>
+                      <p>{{pending_data.company}}</p>
+                  </datalist>
+                  <datalist class="col-sm-4">
+                    {{pending_data.referrerDetails.position}}, {{pending_data.referrerDetails.department}}
+                  </datalist>
+                  <datalist class="col-sm-3">
+                    {{pending_data.status}}
+                  </datalist>
+                  <datalist class="col-sm-2">
+                    {{pending_data.requestedDate}}
+                  </datalist>
+                </li>
+                {% endfor %}
+              </ul>
+            {% endif %}           
+          </div>
+
+          <!-- Upcoming Interactions tab -->
+          <div role="tabpanel" class="tab-pane" id="upcoming">
+          </div>
+
+          <!-- Past Interactions tab -->
+          <div role="tabpanel" class="tab-pane" id="past">
+              
+          </div>
+
+          <!-- Saved tab -->
+          <div role="tabpanel" class="tab-pane" id="Saved">
+          </div>
+        </div>
+
+    
+    </div>
+    <!-- right content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+
+<!-- Recommended products container -->
+<section class="container-fluid recommended-products">
+  <div class="container">
+    <div class="row">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h3 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  Recommended Products
+                </a>
+              </h3>
+            </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+              <div class="row">
+                <ul class="listing">
+                  <li class="col-sm-6 col-md-4">
+                    <a title="Resume / Visual Resume / LinkedIn" class="box-panel" href="#">
+                      <div class="media">
+                        <div class="media-left">
+                            <figure class="color1">
+                              <img class="media-object" src="images/course-logo1.png" alt="Resume / Visual Resume / LinkedIn">
+                            </figure>
+                        </div>
+                        <div class="media-body">
+
+                          <h3 class="listing-heading">Prince2 Foundation Training</h3>
+
+                          <div class="rating-review-box">
+                              <figure class="full-star"></figure>
+                              <figure class="full-star"></figure>
+                              <figure class="half-star"></figure>
+                              <figure class="blank-star"></figure>
+                              <figure class="blank-star"></figure>
+                              <strong>3.9<small>/5</small></strong>
+                              <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                          </div> 
+
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="col-sm-6 col-md-4">
+                    <a title="Background Verification" class="box-panel" href="#">
+                      <div class="media">
+                        <div class="media-left">
+                            <figure class="color2">
+                              <img class="media-object" src="images/course-logo2.png" alt="Resume / Visual Resume / LinkedIn">
+                            </figure>
+                        </div>
+                        <div class="media-body">
+
+                          <h3 class="listing-heading">Vskills Certified Project</h3>
+
+                          <div class="rating-review-box">
+                              <figure class="full-star"></figure>
+                              <figure class="full-star"></figure>
+                              <figure class="half-star"></figure>
+                              <figure class="blank-star"></figure>
+                              <figure class="blank-star"></figure>
+                              <strong>3.9<small>/5</small></strong> 
+                              <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                          </div> 
+
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="col-sm-6 col-md-4 hidden-sm">
+                    <a title="The Complete Career Package" class="box-panel" href="#">
+                      <div class="media">
+                        <div class="media-left">
+                            <figure class="color3">
+                              <img class="media-object" src="images/course-logo3.png" alt="Resume / Visual Resume / LinkedIn">
+                            </figure>
+                        </div>
+                        <div class="media-body">
+
+                          <h3 class="listing-heading">PMI Agile Certified Practitioner</h3>
+
+                          <div class="rating-review-box">
+                              <figure class="full-star"></figure>
+                              <figure class="full-star"></figure>
+                              <figure class="half-star"></figure>
+                              <figure class="blank-star"></figure>
+                              <figure class="blank-star"></figure>
+                              <strong>3.9<small>/5</small></strong> 
+                              <span class="jobs-available"><strong>212</strong> jobs available</span> 
+                          </div> 
+
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>     
+</section>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+       <div id="id_close_success_modal">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h1 class="modal-title">Login</h1>
+        </div>
+        <div class="modal-body">
+          <p id="id_success_message">{{message}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="id_success_accept">{{accept_btn}}</button>
+          <button type="button" id="id_success_reject">{{reject_btn}}</button>
+          <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+        </div>
+        </div>
+    </div>
+  </div>  
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp_error">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+       <div id="id_close_error_modal">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h1 class="modal-title">Login</h1>
+        </div>
+        <div class="modal-body">
+          <p id="id_error_message">{{message}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="id_error_accept">{{accept_btn}}</button>
+          <button type="button" id="id_error_reject">{{reject_btn}}</button>
+          <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+        </div>
+        </div>
+    </div>
+  </div>  
+</div>
+{% endblock container %}
+{% block js_section %}
+   {{ block.super }}
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}"></script>
+    <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
+    <script type="text/javascript">
+    $('.nav-tabs > li > a').hover(function() {
+        $(this).tab('show');
+      });
+    $('.dropdown').hover(function(){ 
+        $('.dropdown-toggle', this).trigger('click'); 
+      });
+    </script>
+{% endblock js_section %}

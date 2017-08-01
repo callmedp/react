@@ -251,7 +251,7 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
         ctx.update(self.get_faq(product))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
-        if product.type_service == 3:
+        if product.is_course:
             ctx.update(self.get_other_provider(product, category))
         else:
             ctx.update(self.get_other_package(product, category))

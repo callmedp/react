@@ -72,19 +72,19 @@ function send_xhr (ajaxurl, idx) {
             result = JSON.parse(response);
 
             if(result.status){
-                if(result.show_cart){
-                    $('#cart_btn').trigger('click');
-
-                }else if(result.redirect && result.redirect_url.length > 0) {
+                if(result.redirect && result.redirect_url.length > 0) 
+                {
                     window.location.href = result.redirect_url;
                 }
-                else if(result.response){
+                else if(result.response)
+                {
+                    hideLoader();
+                    // $("#api_rsp").modal('show');
                     showSuccessModal(result.message, "Ok");
                 }
-            }else if(!result.status && result.show_login){
-                // defined in common_v2.js
-                login_frame();
-            }else{
+            }
+            else
+            {
                 showErrorModal(result.message, "Ok", "Cancel");
             }
         },
