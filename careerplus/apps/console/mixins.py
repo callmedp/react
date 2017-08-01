@@ -41,7 +41,7 @@ class ActionUserMixin(object):
                 oi.last_oi_status = 6
                 oi.closed_on = timezone.now()
                 oi.save()
-                message_dict['display_message'] = 'Document uploded and orderitem closed Successfully.'
+                message_dict['display_message'] = 'Document uploaded and orderitem closed Successfully.'
 
                 oi.orderitemoperation_set.create(
                     oi_draft=oi.oi_draft,
@@ -88,7 +88,7 @@ class ActionUserMixin(object):
                     oi.last_oi_status = 6
                     oi.closed_on = timezone.now()
                     oi.save()
-                    message_dict['display_message'] = 'Reporting document uploded and orderitem closed successfully.'
+                    message_dict['display_message'] = 'Reporting document uploaded and orderitem closed successfully.'
 
                     oi.orderitemoperation_set.create(
                         oi_draft=oi.oi_draft,
@@ -110,7 +110,7 @@ class ActionUserMixin(object):
                     oi.draft_counter += 1
                     oi.last_oi_status = 22
                     oi.save()
-                    message_dict['display_message'] = 'Document uploded successfully.'
+                    message_dict['display_message'] = 'Document uploaded successfully.'
 
                     oi.orderitemoperation_set.create(
                         oi_draft=oi.oi_draft,
@@ -127,7 +127,7 @@ class ActionUserMixin(object):
                 oi.last_oi_status = last_status
                 oi.draft_added_on = timezone.now()
                 oi.save()
-                message_dict['display_message'] = 'Draft uploded Successfully.'
+                message_dict['display_message'] = 'Draft uploaded Successfully.'
                 oi.orderitemoperation_set.create(
                     oi_draft=oi.oi_draft,
                     draft_counter=oi.draft_counter + 1,

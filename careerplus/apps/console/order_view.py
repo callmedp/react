@@ -485,7 +485,7 @@ class OrderItemDetailVeiw(DetailView):
                 obj.last_oi_status = last_status
                 obj.draft_added_on = timezone.now()
                 obj.save()
-                messages.add_message(request, messages.SUCCESS, 'draft uploded Successfully')
+                messages.add_message(request, messages.SUCCESS, 'draft uploaded Successfully')
                 obj.orderitemoperation_set.create(
                     oi_draft=obj.oi_draft,
                     draft_counter=obj.draft_counter,
@@ -683,9 +683,6 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
         return super(ApprovedQueueVeiw, self).get(request, args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        pass
 
     def get_context_data(self, **kwargs):
         context = super(ApprovedQueueVeiw, self).get_context_data(**kwargs)
@@ -892,9 +889,6 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
         return super(RejectedByCandidateQueue, self).get(request, args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        pass
 
     def get_context_data(self, **kwargs):
         context = super(RejectedByCandidateQueue, self).get_context_data(**kwargs)
