@@ -54,15 +54,7 @@ $().ready(function() {
 $().ready(function() {
     $("#forgot_form").validate({
         submitHandler: function(form) {
-            $.ajax({
-                url: "",
-                type: "POST",             
-                data: new FormData($(form)),
-                cache: false,             
-                processData: false,      
-                success: function(data){
-                }
-            });
+            form.submit();
         },
         rules: {
             email:{

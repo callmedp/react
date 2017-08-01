@@ -118,13 +118,13 @@ class SetConfirmPasswordForm(forms.Form):
     password
     """
     min_password_length = 6
-    max_password_length = 10
+    max_password_length = 15
     error_messages = {
         'password_mismatch': ("The two password fields didn't match."),
         }
-    new_password1 = forms.CharField(max_length=10,
+    new_password1 = forms.CharField(max_length=15,
         widget=forms.PasswordInput(attrs={'placeholder': 'New password', 'class': 'form-control',}))
-    new_password2 = forms.CharField(max_length=10,
+    new_password2 = forms.CharField(max_length=15,
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password', 'class': 'form-control'}))
 
     def clean_new_password2(self):

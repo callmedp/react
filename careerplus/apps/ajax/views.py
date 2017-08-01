@@ -635,18 +635,4 @@ class MarkedPaidOrderView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
-
-
-class ForgotPasswordEmailView(View):
-
-    def post(self, request, *args, **kwargs):
-        mail_type = 'FORGOT_PASSWORD'
-        email = request.POST.get('email')
-        to_emails = [email]
-        email_dict = {}
-        try:
-            SendMail().send(to_emails, mail_type, email_dict)
-        except Exception as e:
-            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-        return HttpResponse(json.dumps({'status':True}), content_type="application/json")
         

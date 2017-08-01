@@ -11,7 +11,7 @@ from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 
 from shine.core import ShineCandidateDetail
-from core.mixins import TokenExpiry
+from core.mixins import TokenExpiry, TokenGeneration
 from order.models import OrderItem
 
 from .forms import (
@@ -94,7 +94,7 @@ class RegistrationApiView(FormView):
 
 class LoginApiView(FormView):
     form_class = LoginApiForm
-    template_name = "mobile/users/login.html"
+    template_name = "users/login.html"
     success_url = "/"
 
     def get_context_data(self, **kwargs):
@@ -207,9 +207,10 @@ class DownloadBoosterResume(View):
             return response
 
 
-class ForgotPasswordResetView(FormView):
+class ForgotPasswordResetView(ShineCandidateDetail, FormView):
     template_name = "users/reset_password.html"
     form_class = SetConfirmPasswordForm
+    success_url = '/login/'
 
     def get(self, request, *args, **kwargs):
         return super(ForgotPasswordResetView, self).get(request, *args, **kwargs)
@@ -217,16 +218,65 @@ class ForgotPasswordResetView(FormView):
     def get_context_data(self, **kwargs):
         context = super(ForgotPasswordResetView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
+        token = self.request.GET.get('token')
+        email, type, valid = TokenGeneration().decode(token)
         context.update({
             'messages': alert,
+            'email': email,
+            'token': token,
         })
         return context
 
     def post(self, request, *arg, **kwargs):
+        email, type, valid = TokenGeneration().decode(request.POST.get("token"))
         form = self.form_class(request.POST)
-        if form.is_valid():
-            messages.success(request, 'Password has been reset.')
-            return self.form_valid(form)
+        if valid:
+            if form.is_valid():
+                data = request.POST
+                email_exist = RegistrationLoginApi.check_email_exist(data.get('email'))
+                if email_exist['exists']:
+                    pass_resp = RegistrationLoginApi.reset_update(data)
+                    if pass_resp['response']:
+                        messages.success(request, 'Password has been reset.')
+                        return self.form_valid(form)
+                    elif pass_resp['status_code'] == 400:
+                        messages.success(request, 'Client Authentication Failed')
+                        return self.form_valid(form)
+                elif not email_exist['exists']:
+                    messages.success(request, 'email does not exist')
+                    return self.form_valid(form)
+            else:
+                messages.error(request, 'Password reset has not been unsuccessful.')
+                return self.form_invalid(form)
         else:
-            messages.error(request, 'Password reset has not been unsuccessful.')
+            messages.error(request, 'The reset password link is no longer valid.')
             return self.form_invalid(form)
+
+
+class ForgotHtmlView(TemplateView):
+    template_name = "mobile/users/forgot_password.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ForgotHtmlView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert,
+            "reset_form": PasswordResetRequestForm()
+        })
+        return context
+
+
+class ForgotPasswordEmailView(View):
+    success_url = '/user/forgot/html/'
+
+    def post(self, request, *args, **kwargs):
+        mail_type = 'FORGOT_PASSWORD'
+        email = request.POST.get('email')
+        to_emails = [email]
+        email_dict = {"email": email}
+        try:
+            SendMail().send(to_emails, mail_type, email_dict)
+        except Exception as e:
+            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+        messages.add_message(self.request, messages.ERROR, 'A link to reset your Shine Password has been sent to your Email Id', 'success')
+        return HttpResponseRedirect(self.success_url)
