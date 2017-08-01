@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Admin - Shine Learning</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+    <!-- Bootstrap -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+<!-- main section start -->
+<section style="max-width: 1170px; margin: 10px auto;">
+
+  <!-- page content body start -->
+  <div style="margin-left: -15px; margin-right: -15px;">
+
+    <!-- mid content start here -->
+    {%if draft %}
+	    <table border="0" width="100%" cellpadding="4" style="color: #666; font-size: 14px; line-height: 20px; font-family: arial; vertical-align: top; margin-left: 15px; margin-right: 15px; border-collapse: collapse;">
+	        <tr>
+	        	<td colspan="2">
+	            	<h2 style="font-weight: 300; color: #333; margin:0 0 5px 0; font-size: 30px;">{{name}}</h2>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td colspan="2">
+	            	<p style="font-size: 16px; color: #666; margin: 0;">
+	            	{{draft.headline}}</p>
+	            </td>
+	        </tr>
+	        {% if current_org %}
+	            <tr valign="top" style="font-size: 13px;">
+	                <td style="color: #999">Current</td>
+	                <td>{{current_org.org_name}}</td>
+	            </tr>
+            {%endif%}
+
+	        {% if organization_list%}
+               {% for org in organization_list  %}
+                    {% if forloop.counter == 1 %}
+                    <tr valign="top" style="font-size: 13px;">
+                        <td style="color: #999">Previous</td>
+                        <td>{{org.org_name}}</td>
+                    </tr>
+                    {%endif%}
+                {%endfor%}
+            {%endif%}
+
+	        {% if education_list %}
+                {% for edu  in education_list  %}
+                    {%if forloop.counter == 1%}
+                        <tr valign="top" style="font-size: 13px;">
+                            <td style="color: #999">Education</td>
+                            <td style="padding-bottom: 30px;">{{edu.school_name}}</td>
+                        </tr>
+                    {%endif%}
+                {%endfor%}
+            {%endif%}
+
+            {% if draft.summary  %}
+            <tr  style="border-top: 1px solid #ccc;">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h3 style="margin: 0; color: #333; font-size: 20px; font-weight: 400;">Summary</h3></td>
+            </tr>
+            <tr>
+            <td colspan="2" style=" padding-bottom: 30px;">
+                {{draft.summary|safe}} 
+            </td>                    
+            </tr>
+            {% endif %}
+            
+            {% if organization_list or current_org%}
+                <tr style="border-top: 1px solid #ccc; vertical-align: top;">
+                    <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h3 style="margin: 0; color: #333; font-size: 20px; font-weight: 400; margin: 0;">Experience</h3></td>
+                </tr>
+                {% if current_org %}
+                    <tr valign="top">
+                        <td>Company</td>
+                        <td>{{current_org.org_name}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Job Title</td>
+                        <td>{{current_org.title}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Description</td>
+                        <td>{{current_org.org_desc|safe}} </td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Duration</td>
+                        <td style=" padding-bottom: 30px;">{{current_org.work_from|date:'N o'}} - {%if current_org.org_current%}Present {% else %}{{current_org.work_to|date:'N o'}}{%endif%}</td>
+                    </tr>              
+                    <tr valign="top">
+                        <td></td>
+                        <td style=" padding-bottom: 30px;"></td>
+                    </tr>
+                {%endif%}
+                {% for org in organization_list  %}
+                    <tr valign="top">
+                        <td>Company</td>
+                        <td>{{org.org_name}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Job Title</td>
+                        <td>{{org.title}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Description</td>
+                        <td>{{org.org_desc}} </td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Duration</td>
+                        <td style=" padding-bottom: 30px;">{{org.work_from|date:'N o'}} - {%if org.org_current%}Present {% else %}{{org.work_to|date:'N o'}}{%endif%}</td>
+                    </tr>              
+                    {%if not forloop.last%}
+                    <tr valign="top">
+                        <td></td>
+                        <td style=" padding-bottom: 30px;"></td>
+                    </tr>
+                    {%endif%}
+                {% endfor %}
+            {%endif%}
+
+            {% if education_list or current_edu %}
+                <tr style="border-top: 1px solid #ccc;">
+                	<td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h3 style="margin: 0; color: #333; font-size: 20px; font-weight: 400; margin: 0;">Education Details</h3></td>
+                </tr>
+
+                {%if current_edu%}
+                   <tr valign="top">
+                        {% if  current_edu.level == 0 %}
+                            <td>School</td>    
+                        {% else %}
+                            <td>College</td>
+                        {% endif %}
+                        
+                        
+                        <td>{{current_edu.school_name}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Duration</td>
+                        <td>{{current_edu.study_from|date:'N o'}} - {%if current_edu.edu_current%}Present{%else%}{{current_edu.study_to|date:'N o'}}{%endif%}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Degree</td>
+                        <td>{{current_edu.degree}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Description</td>
+                        <td style=" padding-bottom: 30px;">{{current_edu.edu_desc|safe}}</td>
+                    </tr>              
+                    <tr valign="top">
+                        <td></td>
+                        <td style=" padding-bottom: 30px;"></td>
+                    </tr>
+                {%endif%}
+                        
+                {% for edu  in education_list  %}
+                    <tr valign="top">
+                        {% if  edu.level == 0 %}
+                            <td>School</td>    
+                        {% else %}
+                            <td>College</td>
+                        {% endif %}
+                        
+                        
+                        <td>{{edu.school_name}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Duration</td>
+                        <td>{{edu.study_from|date:'N o'}} - {%if edu.edu_current%}Present{%else%}{{edu.study_to|date:'N o'}}{%endif%}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Degree</td>
+                        <td>{{edu.degree}}</td>
+                    </tr>
+                    <tr valign="top">
+                        <td>Description</td>
+                        <td style=" padding-bottom: 30px;">{{edu.edu_desc}}</td>
+                    </tr>
+                    {%if not forloop.last%}
+                    <tr valign="top">
+                        <td></td>
+                        <td style=" padding-bottom: 30px;"></td>
+                    </tr>
+                    {%endif%}
+                        
+                {% endfor %}
+                
+            {% endif %}
+
+            {%if skill_list %}
+                <tr style="border-top: 1px solid #ccc;">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h3 style="margin: 0; color: #333; font-size: 20px; font-weight: 400; margin: 0;">Skills</h3></td>
+                </tr>
+                <tr>
+            
+                    <td colspan="2" style="padding-bottom: 30px;">
+                    {% for skill in skill_list %}
+                     <div style="padding: 5px 10px; display: inline-block; background-color: #e6e6e6; text-align: center; float: left; margin-right:10px;">{{skill.key_skills}}</div> 
+                    {% endfor %}
+                    </td>
+                    
+                </tr>
+            {%endif%}
+        {% if flag2 %}
+	        <tr style="border-top: 1px solid #ccc;">
+		        <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h4 style="margin: 0 0 20px 0; color: #333; font-size: 20px; font-weight: 400;">Important Tips</h4>
+		        </td>
+	        </tr>
+	        {% if draft.profile_photo  %}
+                <tr style="border-top: 1px solid #ccc;">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h4 style="margin: 0; color: #333; font-size: 15px; font-weight: 400; margin: 0;">Profile Picture</h4></td>
+                </tr>
+                <tr>
+                <td colspan="2" >
+                {{draft.profile_photo}}</td>
+                </tr>        
+            {% endif %}
+
+	        {% if draft.recommendation  %}
+                <tr style="border-top: 1px solid #ccc;">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h4 style="margin: 0; color: #333; font-size: 15px; font-weight: 400; margin: 0;">Recommendations</h4></td>
+                </tr>
+                <tr>
+                <td colspan="2" >
+                {{draft.recommendation}}</td>
+                </tr>        
+            {% endif %}
+
+	        {% if draft.follow_company  %}
+                <tr style="border-top: 1px solid #ccc;">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h4 style="margin: 0; color: #333; font-size: 15px; font-weight: 400; margin: 0;">Follow Companies</h4></td>
+                </tr>
+                <tr>
+                <td colspan="2">
+                {{draft.follow_company}}</td>
+                </tr>        
+            {% endif %}
+	        {% if draft.join_group  %}
+                <tr style="border-top: 1px solid #ccc;">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h4 style="margin: 0; color: #333; font-size: 15px; font-weight: 400; margin: 0;">Join Groups</h4></td>
+                </tr>
+                <tr>
+                <td colspan="2" >
+                {{draft.join_group}}</td>
+                </tr>        
+            {% endif %}
+
+            {% if draft.public_url  %}
+                <tr style="border-top: 1px solid #ccc;">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px;"><h4 style="margin: 0; color: #333; font-size: 15px; font-weight: 400; margin: 0;">Public Urls</h4></td>
+                </tr>
+                <tr>
+                <td colspan="2" >
+                {{draft.public_url}}</td>
+                </tr>        
+            {% endif %}
+	    {% endif %}   
+	    </table>
+	{% else %}
+		 <h2>Sorry No draft has been prepared for the order</h2>
+	{% endif %}
+    <!-- mid content ends here --> 
+
+  </div>
+  <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+
+
+</body>
+</html>
