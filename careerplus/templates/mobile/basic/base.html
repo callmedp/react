@@ -88,12 +88,12 @@
 
             {% block footer %}
             <!-- footer -->
-            {% include 'basic/footer.html' %}
+            {% include 'mobile/basic/footer.html' %}
             {% endblock footer %}
 
             {% block navigation %}
             <!-- left side menu -->
-            {% include 'basic/navigation.html' %}
+            {% include 'mobile/basic/navigation.html' %}
             {% endblock navigation %}
         </div>
     {% block js_section %}
@@ -104,8 +104,10 @@
         <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
         <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
         <script src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}">
+        </script>
+        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}">
+        </script>
     {% endblock js_section %}
 {% endspaceless %}
     {% render_block "custom_js" %}

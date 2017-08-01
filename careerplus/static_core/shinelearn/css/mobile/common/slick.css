@@ -95,11 +95,11 @@
 
 .slick-prev {
   left: -10px;
-  background: url("../images/sprites.svg") no-repeat -125px -111px; }
+  background: url("../../../images/mobile/common/sprites.svg") no-repeat -125px -111px; }
 
 .slick-next {
   right: -10px;
-  background: url("../images/sprites.svg") no-repeat -153px -111px; }
+  background: url("../../../images/mobile/common/sprites.svg") no-repeat -153px -111px; }
 
 /* Dots */
 .slick-dots {

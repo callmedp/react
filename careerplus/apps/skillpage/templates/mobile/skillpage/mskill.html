@@ -1,0 +1,271 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block css_section %}
+{{ block.super }}
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" 
+    rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/skill/skill.css' %}" 
+    rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" 
+    rel="stylesheet">
+{% endblock css_section %}
+{% block header_title %}
+    <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Programs</h1>
+    <ul class="header-taging mt-10 w100fl">
+        {% if top_3_prod.0 %}
+        <li><a href="#">{{top_3_prod.0.name}}</a></li>
+        {% endif %}
+        {% if top_3_prod.1 %}
+        <li><a href="#">{{top_3_prod.1.name}}</a></li>
+        {% endif %}
+        {% if top_3_prod.2 %}
+        <li><a href="#">{{top_3_prod.2.name}}</a></li>
+        {% endif %}
+    </ul>
+{% endblock header_title %}
+
+{% block container %}
+    <div class="body-wrapper ">
+        <section class="content-box">
+            <div class="skill-box">
+                <div class="container pt-0 pb-5">
+                {% if top_4_vendors %}
+                    <h2 class="mb-0">Providers</h2>
+                    <ul class="skill-provider home-slider">
+                    {% for top_4_vendor in top_4_vendors %}
+                        {% if forloop.counter == 1 %}
+                        <li>
+                            <a href="#" class="box">
+                                <img src="{{top_4_vendor.image.url}}">
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if forloop.counter == 2 %}
+                        <li>
+                            <a href="#" class="box">
+                                <img src="{{top_4_vendor.image.url}}">
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if forloop.counter == 3 %}
+                        <li>
+                            <a href="#" class="box">
+                                <img src="{{top_4_vendor.image.url}}">
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if forloop.counter == 4 %}
+                        <li>
+                            <a href="#" class="box">
+                                <img src="{{top_4_vendor.image.url}}">
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                </div><!-- end of provider slider -->
+                <div class="container">
+                    <h2>About Six Sigma</h2>
+                    <p class="pb-0">
+                        {{category_obj.description | safe}}
+                    </p>
+                </div><!-- end of Six Sigma -->
+
+                <div class="container">
+                    <h2>Recommended  for</h2>
+                    <div class="box row">
+                        <ul class="recommd-list">
+                        {% for career_outcome in career_outcomes %}
+                            <li>
+                                <sup class="icon-tick"></sup>{{career_outcome}}
+                            </li>
+                        {% endfor %} 
+                        </ul>
+                        <div class="clearfix"></div>  
+                    </div>
+                </div><!-- end of Recommended  for -->
+
+                <div class="container">
+                    <h2>Demand in Market</h2>
+                    <div class="box row">
+                    {% if category_obj.graph_image %}
+                        <div><img src="{{category_obj.graph_image.url}}"></div>
+                    {% endif %}
+                        <div class="market-demand mt-30 mb-30">
+                            <div class="media">
+                                <div class="media-left">
+                                  <span class="icon-file mt-10"></span>
+                                </div>
+                                <div class="media-body">
+                                  <span class="fs-22 blue-link">
+                                  {{api_data.job_count}}</span>
+                                  <p class="pb-0 c6">
+                                    jobs in the market demanding this skill
+                                  </p>
+                                </div>
+                            </div><!-- end of media -->
+                            <div class="media">
+                                <div class="media-left">
+                                  <span class="icon-graph mt-10"></span>
+                                </div>
+                                <div class="media-body">
+                                    <span class="fs-22 blue-link">Only 10%</span>
+                                    <p class="pb-0 c6">
+                                        candidates are six sigma certified
+                                    </p>
+                                </div>
+                            </div><!-- end of media -->  
+                        </div>
+
+                        <p>Jobs require this skill in different functional area</p>
+                        <ul class="links mb-10">
+                            <li>
+                                <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.0.0}}">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.1.0}}">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.2.0}}">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- end of Recommended for -->
+
+                <div class="container" id="product_list">
+                    <h2>{{category_obj.name}} Programs</h2>
+                {% for product in products %}
+                    <div class="box row mb-15">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#" class="sigma-pro color1">
+                                    <img src="images/course-logo1.png">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <p class="pb-0"><a href="#">
+                                    <strong>{{product.name}}</strong></a>
+                                </p>
+                        
+                                <div class="mb-10 c6">
+                                    <div class="rating inline-block ml-0 fs-12">
+                                        {% for rating in product.get_ratings %}
+                                            {% if rating == "*" %}
+                                                <sup class="fill-star"></sup>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {{product.avg_rating |floatformat:1}}/5
+                                    </div><!-- end of star rating -->
+
+                                    <div class="inline-block fs-12">
+                                        <figure class="icon-comments"></figure>
+                                        <a href="#">{{product.no_review}}</a>
+                                        <figure class="icon-jobs ml-10"></figure>
+                                        <strong>{{product.num_jobs}}</strong> Jobs
+                                        <figure class="icon-certificate ml-10">
+                                        </figure>Certification
+                                    </div>
+                                </div><!-- end of icons wrapper -->
+
+                                <p class="pb-5 fs-12 c6">
+                                    Providers
+                                    <a href="#" class="tag-bg fs-11 ml-5">
+                                    {{product.vendor.name}}
+                                    </a>
+                                </p>
+                                <p class="pb-0 fs-12">
+                                    Starting at <strong>{{product.inr_price}}</strong> 
+                                    <span class="strike-through c9 fs-11"></span>
+                                    <span class="off"></span>
+                                </p>
+                            </div><!-- end of media body -->
+                        </div><!-- end of media -->
+                    </div><!-- end of box -->
+                    {% if products.has_next %}
+                    <p class="text-right pb-0">
+                        <a href="javascript:void(0);" id="product_load_more"
+                        class="load-more loadmore">
+                        <strong>LoadMore</strong></a>
+                    </p>
+                    {% endif %}
+                {% endfor %}
+                <div id="prod_load_more">
+                    {% if products.has_next %}  
+                        <input type="hidden" name="page" 
+                        value="{{products.next_page_number}}" id="page_id">
+                        <input type="hidden" name="slug" value="{{slug}}" 
+                        id="slug_id">
+                    {% endif %}     
+                </div>
+                </div><!-- end of container -->
+
+                <!-- Revew Slide widget -->
+                <div class="container">
+                {% if page_reviews %}
+                    <div class="w100fl">
+                        <h2 class="pull-left">Reviews</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="box row pb-30">
+                        <div class="review-container rel">
+                            <ul class="review-slide" id="review_list">
+                            {% for page_review in page_reviews %}
+                                <li>
+                                    <div class="wrap">
+                                        {% for rating in page_review.get_ratings %}
+                                        <div class="rating inline-block ml-0 fs-12">
+                                            {% if rating == "*" %}
+                                            <sup class="fill-star"></sup>
+                                            {% else %}
+                                            <sup class="unfill-star"></sup>
+                                            {% endif %}
+                                        </div><!-- end of star rating -->
+                                        {% endfor %}
+                                        <p>{{page_review.content | safe}}</p>
+                                        <p class="fs-12 c9 pb-0">
+                                            {{page_review.user_name}} 
+                                            {{page_review.created|timesince}} ago
+                                        </p>
+                                    </div>
+                                </li>
+                                {% if page_reviews.has_next %}
+                                    <a href="javascript:void(0);" 
+                                    id="review_load_more" class="load-more loadreview"> Load more</a>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
+                            <div id="review_load_more">
+                                {% if page_reviews.has_next %}  
+                                <input type="hidden" name="page" 
+                                value="{{page_reviews.next_page_number}}" id="page_id1">
+                                <input type="hidden" name="slug" value="{{slug}}" 
+                                id="slug_id1">
+                                {% endif %}     
+                            </div>
+                        </div><!-- end of review wrap -->
+                    </div><!-- end of box -->
+                {% endif %}
+                </div><!-- end of container -->
+            
+            </div><!-- end of skill box -->
+        </section><!-- end of section here -->
+    </div>
+    
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}">
+    </script>
+    <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"
+        charset="utf-8">
+    </script>
+    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+{% endblock js_section %}
+

@@ -1,0 +1,30 @@
+{% load static %}
+{% if page_reviews %}
+{% for page_review in page_reviews %}
+<li>
+  <div class="wrap">
+      {% for rating in page_review.get_ratings %}
+      <div class="rating inline-block ml-0 fs-12">
+          {% if rating == "*" %}
+          <sup class="fill-star"></sup>
+          {% else %}
+          <sup class="unfill-star"></sup>
+          {% endif %}
+      </div><!-- end of star rating -->
+      {% endfor %}
+      <p>{{page_review.content | safe}}</p>
+      <p class="fs-12 c9 pb-0">
+          {{page_review.user_name}} 
+          {{page_review.created|timesince}} ago
+      </p>
+  </div>
+</li>
+{% endfor %}
+{% endif %}
+{% if page_reviews.has_next %}
+<input type="hidden" name="page" 
+value="{{page_reviews.next_page_number}}" id="page_id1">
+<input type="hidden" name="slug" value="{{slug}}" 
+id="slug_id1">
+<a href="javascript:void();" id="review_load_more" class="load-more loadreview"> Load more</a>
+{% endif %}

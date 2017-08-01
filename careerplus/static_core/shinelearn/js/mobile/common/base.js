@@ -322,17 +322,17 @@ $(document).ready(function() {
 
 
 // New Ticker Satrts here 	
-$(window).load(function(e) {
-	try {
-		$("#bn4").breakingNews({
-			effect		:"slide-v",
-			autoplay	:true,
-			timer		:3000,
-		});
-	} catch(e) {
-		console.log(e);
-	}
-});// New Ticker Ends here 	
+// $(window).load(function(e) {
+// 	try {
+// 		$("#bn4").breakingNews({
+// 			effect		:"slide-v",
+// 			autoplay	:true,
+// 			timer		:3000,
+// 		});
+// 	} catch(e) {
+// 		console.log(e);
+// 	}
+// });// New Ticker Ends here 	
 
 // Notification open and close Starts here  
 $('#theNotif').click(function() { return false; });
