@@ -233,12 +233,12 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def __init__(self):
         self.page = 1
         self.paginated_by = 50
-        self.query, self.updated_on = '', ''
+        self.query, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(MidOutQueueView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -273,7 +273,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
         }
         filter_form = OIFilterForm(initial)
         context.update({
@@ -302,8 +302,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
 
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -311,7 +311,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -329,13 +329,13 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.writer, self.added_on = '', ''
+        self.writer, self.created = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.writer = request.GET.get('writer', '')
-        self.added_on = request.GET.get('added_on', '')
+        self.created = request.GET.get('created', '')
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -398,7 +398,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        initial = {"added_on": self.added_on, "writer": self.writer}
+        initial = {"created": self.created, "writer": self.writer}
         filter_form = OIFilterForm(initial)
         context.update({
             "action_form": InboxActionForm(),
@@ -434,8 +434,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if self.added_on:
-                date_range = self.added_on.split('-')
+            if self.created:
+                date_range = self.created.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -443,7 +443,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    added_on__range=[start_date, end_date])
+                    created__range=[start_date, end_date])
         except:
             pass
 
@@ -568,13 +568,13 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.updated_on, self.draft_level = '', -1
+        self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
@@ -588,7 +588,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         max_limit_draft = settings.DRAFT_MAX_LIMIT
 
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
             "writer": self.writer,
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
@@ -625,8 +625,8 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -634,7 +634,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -672,13 +672,13 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.updated_on, self.draft_level = '', -1
+        self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
@@ -694,7 +694,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
             "writer": self.writer,
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
@@ -729,8 +729,8 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         except:
             pass
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -738,7 +738,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -776,13 +776,13 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.updated_on, self.draft_level = '', -1
+        self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
@@ -795,7 +795,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
             "writer": self.writer,
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
@@ -835,8 +835,8 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -844,7 +844,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -881,13 +881,13 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.updated_on, self.draft_level = '', -1
+        self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
@@ -903,7 +903,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
             "writer": self.writer,
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
@@ -943,8 +943,8 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -952,7 +952,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -990,14 +990,14 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.writer, self.added_on = '', ''
+        self.writer, self.created = '', ''
         self.oi_status = -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.writer = request.GET.get('writer', '')
-        self.added_on = request.GET.get('added_on', '')
+        self.created = request.GET.get('created', '')
         self.oi_status = request.GET.get('oi_status', '')
         return super(AllocatedQueueVeiw, self).get(request, args, **kwargs)
 
@@ -1007,7 +1007,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         initial = {
-            "added_on": self.added_on,
+            "created": self.created,
             "writer": self.writer,
             "oi_status": self.oi_status, }
         filter_form = OIFilterForm(initial)
@@ -1044,8 +1044,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if self.added_on:
-                date_range = self.added_on.split('-')
+            if self.created:
+                date_range = self.created.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -1053,7 +1053,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    added_on__range=[start_date, end_date])
+                    created__range=[start_date, end_date])
         except:
             pass
 
@@ -1083,13 +1083,13 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.payment_date, self.added_on = '', ''
+        self.payment_date, self.created = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.added_on = request.GET.get('added_on', '')
+        self.created = request.GET.get('created', '')
         return super(ClosedOrderItemQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1098,7 +1098,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         initial = {
-            "added_on": self.added_on,
+            "created": self.created,
             "payment_date": self.payment_date, }
         filter_form = OIFilterForm(initial)
         context.update({
@@ -1135,8 +1135,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if self.added_on:
-                date_range = self.added_on.split('-')
+            if self.created:
+                date_range = self.created.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -1144,7 +1144,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    added_on__range=[start_date, end_date])
+                    created__range=[start_date, end_date])
         except:
             pass
 
@@ -1176,13 +1176,13 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 20
         self.query = ''
-        self.payment_date, self.updated_on = '', ''
+        self.payment_date, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(DomesticProfileUpdateQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1192,7 +1192,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
-            "updated_on": self.updated_on, }
+            "modified": self.modified, }
         filter_form = OIFilterForm(initial)
         context.update({
             "assignment_form": AssignmentActionForm(),
@@ -1269,8 +1269,8 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -1278,7 +1278,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -1296,13 +1296,13 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.payment_date, self.updated_on = '', ''
+        self.payment_date, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(DomesticProfileApprovalQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1312,7 +1312,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
-            "updated_on": self.updated_on, }
+            "modified": self.modified, }
         filter_form = OIFilterForm(initial)
         context.update({
             "messages": alert,
@@ -1354,8 +1354,8 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
 
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -1363,7 +1363,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -1484,7 +1484,7 @@ class ActionOrderItemView(View):
                 csv_writer.writerow([
                     'Orderitem Id', 'OrderId', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
-                    'Expert Name', 'Updated_On', 'Draft Level',
+                    'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
             
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
@@ -1505,7 +1505,7 @@ class ActionOrderItemView(View):
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
                                 str(writer),
-                                str(oi.updated_on),
+                                str(oi.modified),
                                 str(oi.get_draft_level()),
                                 str(oi.draft_added_on),
                                 str(oi.order.payment_date)])
@@ -1529,7 +1529,7 @@ class ActionOrderItemView(View):
                 csv_writer.writerow([
                     'Orderitem Id', 'OrderId', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
-                    'Expert Name', 'Updated_On', 'Draft Level',
+                    'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
             
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
@@ -1550,7 +1550,7 @@ class ActionOrderItemView(View):
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
                                 str(writer),
-                                str(oi.updated_on),
+                                str(oi.modified),
                                 str(oi.get_draft_level()),
                                 str(oi.draft_added_on),
                                 str(oi.order.payment_date)])
@@ -1574,7 +1574,7 @@ class ActionOrderItemView(View):
                 csv_writer.writerow([
                     'Orderitem Id', 'OrderId', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
-                    'Expert Name', 'Updated_On', 'Draft Level',
+                    'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
             
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
@@ -1595,7 +1595,7 @@ class ActionOrderItemView(View):
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
                                 str(writer),
-                                str(oi.updated_on),
+                                str(oi.modified),
                                 str(oi.get_draft_level()),
                                 str(oi.draft_added_on),
                                 str(oi.order.payment_date)])
@@ -1619,7 +1619,7 @@ class ActionOrderItemView(View):
                 csv_writer.writerow([
                     'Orderitem Id', 'OrderId', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
-                    'Updated_On', 'Payment Date'])
+                    'modified', 'Payment Date'])
 
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 if orderitems:
@@ -1634,7 +1634,7 @@ class ActionOrderItemView(View):
                                 str(oi.product.name + ' ' + oi.product.get_exp),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
-                                str(oi.updated_on),
+                                str(oi.modified),
                                 str(oi.order.payment_date)])
                         except:
                             continue

@@ -127,7 +127,7 @@ class Order(AbstractAutoDate):
         return payD.get(self.payment_mode)
 
 
-class OrderItem(models.Model):
+class OrderItem(AbstractAutoDate):
     order = models.ForeignKey(
         'order.Order', related_name='orderitems', verbose_name=_("Order"))
 
@@ -206,8 +206,6 @@ class OrderItem(models.Model):
     draft_added_on = models.DateTimeField(null=True, blank=True)
     approved_on = models.DateTimeField(null=True, blank=True)  # draft approved on
 
-    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
     user_feedback = models.BooleanField(default=False)
 
     class Meta:
@@ -392,7 +390,7 @@ class OrderItemOperation(AbstractAutoDate):
         return dict_status.get(self.oi_status)
 
 
-class Message(models.Model):
+class Message(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
 
     added_by = models.ForeignKey(
@@ -406,17 +404,15 @@ class Message(models.Model):
 
     is_internal = models.BooleanField(default=False)
 
-    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
-
     class Meta:
-        ordering = ['added_on']
+        ordering = ['created']
 
-class InternationalProfileCredential(models.Model):
+
+class InternationalProfileCredential(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
     country =  models.ForeignKey(Country)
     username = models.CharField(_('Username'), max_length=100)
-    Password = models.CharField(_('Password'), max_length=100)
+    password = models.CharField(_('Password'), max_length=100)
     candidateid = models.CharField(_('CandidateId'), max_length=100)
     candidate_email = models.CharField(_('Candidate Email'), max_length=100)
     site_url = models.CharField(_('Site Url'), max_length=100, blank=True)
@@ -424,3 +420,4 @@ class InternationalProfileCredential(models.Model):
 
     def __str__(self):
         return self.username
+

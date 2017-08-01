@@ -33,7 +33,7 @@
                 <div style="display:none">
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.updated_on }}
+                            {{ filter_form.modified }}
                         </div>
                         <br/>
                     </div>
@@ -79,9 +79,9 @@
                             <br/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.updated_on.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.modified.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.updated_on }}
+                                {{ filter_form.modified }}
                             </div>
                             <br/>
                         </div>
@@ -234,8 +234,8 @@
                         <td>{{obj.order.payment_date.date}}</td>
 
                         <td>
-                            {{obj.updated_on|naturaltime}}
-                            <b>Updated On: {{obj.updated_on.date}}</b>
+                            {{obj.modified|naturaltime}}
+                            <b>Updated On: {{obj.modified.date}}</b>
                         </td>
                     </tr>
                   {% endwith %}

@@ -180,7 +180,7 @@
                                             <span>
                                               <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}} {{order.last_name}}{% endif %}</span>
 
-                                              <span class="time">{{msg.added_on|naturaltime}}</span>
+                                              <span class="time">{{msg.created|naturaltime}}</span>
                                             </span>
                                             <span class="message">
                                               {{msg.message}}

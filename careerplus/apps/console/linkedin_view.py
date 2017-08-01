@@ -54,13 +54,13 @@ class LinkedinQueueView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.writer, self.added_on = '', ''
+        self.writer, self.created = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.writer = request.GET.get('writer', '')
-        self.added_on = request.GET.get('added_on', '')
+        self.created = request.GET.get('created', '')
         return super(LinkedinQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -68,7 +68,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
         paginator = Paginator(context['orderitem_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        initial = {"added_on": self.added_on, "writer": self.writer}
+        initial = {"created": self.created, "writer": self.writer}
         filter_form = LinkedinOIFilterForm(initial)
         context.update({
             "action_form": LinkedinInboxActionForm(),
@@ -155,8 +155,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.added_on:
-                date_range = self.added_on.split('-')
+            if self.created:
+                date_range = self.created.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -164,7 +164,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    added_on__range=[start_date, end_date])
+                    created__range=[start_date, end_date])
         except:
             pass
 
@@ -385,13 +385,13 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.updated_on, self.draft_level = '', -1
+        self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
@@ -404,7 +404,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
             "writer": self.writer,
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
@@ -433,8 +433,8 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -442,7 +442,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -478,13 +478,13 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.updated_on, self.draft_level = '', -1
+        self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
@@ -500,7 +500,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
             "writer": self.writer,
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
@@ -530,8 +530,8 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -539,7 +539,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -576,13 +576,13 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.updated_on, self.draft_level = '', -1
+        self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
@@ -596,7 +596,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         max_limit_draft = settings.DRAFT_MAX_LIMIT
 
         initial = {
-            "updated_on": self.updated_on,
+            "modified": self.modified,
             "writer": self.writer,
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level,
@@ -626,8 +626,8 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -635,7 +635,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -672,13 +672,13 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 20
         self.query = ''
-        self.payment_date, self.updated_on = '', ''
+        self.payment_date, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(InterNationalUpdateQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -688,7 +688,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
-            "updated_on": self.updated_on, }
+            "modified": self.modified, }
         filter_form = LinkedinOIFilterForm(initial)
         context.update({
             "assignment_form": AssignmentInterNationalForm(),
@@ -739,8 +739,8 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -748,7 +748,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -765,13 +765,13 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.payment_date, self.updated_on = '', ''
+        self.payment_date, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(InterNationalApprovalQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -781,7 +781,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
-            "updated_on": self.updated_on, }
+            "modified": self.modified, }
         filter_form = LinkedinOIFilterForm(initial)
         context.update({
             "messages": alert,
@@ -823,8 +823,8 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
 
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -832,7 +832,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -920,7 +920,7 @@ class ProfileUpdationView(DetailView):
                     profile_obj.oi = orderitem
                     profile_obj.country = orderitem.product.profile_country
                     profile_obj.username = username
-                    profile_obj.Password = password
+                    profile_obj.password = password
                     profile_obj.candidateid = orderitem.order.candidate_id
                     profile_obj.candidate_email = orderitem.order.email
                     profile_obj.site_url = site

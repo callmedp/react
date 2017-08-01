@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.added_on }}
+                            {{ filter_form.created }}
                         </div>
                         <br/>
                     </div>
@@ -81,9 +81,9 @@
                             <br/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.added_on.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.added_on }}
+                                {{ filter_form.created }}
                             </div>
                             <br/>
                         </div>
@@ -233,7 +233,7 @@
                       </td>
                       <td>
                         {{obj.tat_date|naturaltime}}
-                        <b>Updated On: {{obj.updated_on}}</b>
+                        <b>Updated On: {{obj.modified}}</b>
                       </td>
 
                       {% if obj.counselling_form_status == 42 %}

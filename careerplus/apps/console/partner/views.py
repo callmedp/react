@@ -27,13 +27,13 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 20
         self.query = ''
-        self.payment_date, self.updated_on = '', ''
+        self.payment_date, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(PartnerInboxQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -41,7 +41,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        initial = {"updated_on": self.updated_on, "payment_date": self.payment_date}
+        initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
         context.update({
             "messages": alert,
@@ -74,8 +74,8 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -83,7 +83,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -115,13 +115,13 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 20
         self.query = ''
-        self.payment_date, self.updated_on = '', ''
+        self.payment_date, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(PartnerHoldQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -129,7 +129,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         paginator = Paginator(context['hold_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        initial = {"updated_on": self.updated_on, "payment_date": self.payment_date}
+        initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
         context.update({
             "messages": alert,
@@ -162,8 +162,8 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -171,7 +171,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
@@ -203,13 +203,13 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 20
         self.query = ''
-        self.payment_date, self.updated_on = '', ''
+        self.payment_date, self.modified = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.updated_on = request.GET.get('updated_on', '')
+        self.modified = request.GET.get('modified', '')
         return super(PartnerVarificationQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -217,7 +217,7 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        initial = {"updated_on": self.updated_on, "payment_date": self.payment_date}
+        initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
         context.update({
             "messages": alert,
@@ -250,8 +250,8 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.updated_on:
-                date_range = self.updated_on.split('-')
+            if self.modified:
+                date_range = self.modified.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -259,7 +259,7 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    updated_on__range=[start_date, end_date])
+                    modified__range=[start_date, end_date])
         except:
             pass
 
