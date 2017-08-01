@@ -548,7 +548,6 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
         comment_list = render_to_string('include/article-load-comment.html',
             comment_load_context)
 
-        # import ipdb; ipdb.set_trace()
 
         if self.request.session.get('candidate_id'):
             login_status = 1
