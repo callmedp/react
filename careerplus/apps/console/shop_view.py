@@ -1017,6 +1017,7 @@ class ChangeProductView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+        
         if self.request.POST or self.request.FILES:
             try:
                 obj = int(self.kwargs.get('pk', None))

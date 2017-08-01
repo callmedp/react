@@ -178,7 +178,7 @@ ENCODE_SALT = 'xfxa'
 
 # Do Not Change #
 COURSE_SLUG = ['course',]
-WRITING_SLUG = ['writing',]
+WRITING_SLUG = ['writing','resume']
 SERVICE_SLUG = ['service',]
 
 VENDOR_GROUP_LIST = ['VENDOR']
