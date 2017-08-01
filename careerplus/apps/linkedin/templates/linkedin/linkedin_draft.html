@@ -18,168 +18,174 @@
 
   <!-- page content body start -->
   <div class="row">
-
+  {% if draft %}  
     <!-- mid content start here -->
     <div class="col-sm-12 linkedin_resume">
       <img src="images/resume_linkedin.jpg" class="pull-left mr-20 mt-20" alt="Linkedin">
-      <div class="downloadpdf"><a href="#">Download PDF</a></div>
-    <div class="card card-block nobdr pull-left">
-      <h2 class="card-title">Amit Gupta</h2>
-      <p class="card-text"></p>
-      <p class="card-text1">{{draft.headline}}</p>
-      <span class="wd10">Current</span>   
-      <span class="wd80">{{current_org.org_name}}</span>  
-      <span class="wd10">Previous</span>
-      {% if organization_list %}
-        {% for org in organization_list  %}
-          {% if forloop.counter == 1 %}             
-            <span class="wd80">{{org.org_name}}</span>
-            <span class="wd80">hell</span>
+      <div class="downloadpdf"><a href="{% url "linkedin-draf-download" orderitem.pk op_id.linkedin %}">Download PDF</a></div>
+        <div class="card card-block nobdr pull-left">
+          <h2 class="card-title">{{name}}</h2>
+          <p class="card-text"></p>
+          <p class="card-text1">{{draft.headline}}</p>
+          {% if current_org %}
+              <span class="wd10">Current</span>   
+              <span class="wd80">{{current_org.org_name}}</span>  
+          {% endif %} 
+          {% if organization_list%}
+              {% for org in organization_list  %}
+                  {% if forloop.counter == 1 %}
+                      <span class="wd10">Previous</span>   
+                      <span class="wd80">&nbsp;{{org.org_name}}</span>  
+                  {%endif%}
+              {%endfor%}
           {%endif%}
-        {%endfor%}
-      {% else %}
-        <span class="wd80">assada</span>
-      {%endif%}
-      <span class="wd10">Education</span>   
-      <span class="wd80">Delhi Public School</span>  
-    </div> 
+          {% if education_list %}
+              {% for edu  in education_list  %}
+                  {%if forloop.counter == 1%}
+                      <span class="wd10">Education</span>   
+                      <span class="wd80">&nbsp;&nbsp;{{edu.school_name}}</span>
+                  {%endif%}
+              {%endfor%}
+          {%endif%}  
+        </div> 
 
-    <ul>
-      <li class="bdrtp"><h3>Summary</h3>
-      {{draft.summary|safe}}
-      </li>
-    {% if organization_list or current_org %}
-      <li class="bdrtp"><h3>Experience</h3>
-      {%if current_org %}
         <ul>
-          <li class="wd1">Company </li>
-          <li class="wd2">{{current_org.org_name}}</li>
-          <li class="wd1">Job Title</li>
-          <li class="wd2">{{current_org.title}}</li>
-          <li class="wd1">Description</li>
-          <li class="wd2">{{current_org.org_desc|safe}}</li>
-          <li class="wd1">Duration</li>
-          <li class="wd2">
-            {{current_org.work_from|date:'N o'}} - {% if current_org.org_current %}Present {% else %}{{current_org.work_to|date:'N o'}}{%endif%}
+          <li class="bdrtp"><h3>Summary</h3>
+          {{draft.summary|safe}}
           </li>
-        </ul>
-      {% endif %}
-      {% for org in organization_list%}
-        <ul>
-          <li class="wd1">Company </li>
-          <li class="wd2">{{org.org_name}}</li>
-          <li class="wd1">Job Title</li>
-          <li class="wd2">{{org.title}}</li>
-          <li class="wd1">Description</li>
-          <li class="wd2">{{org.org_desc|safe}}</li>
-          <li class="wd1">Duration</li>
-          <li class="wd2">
-            {{org.work_from|date:'N o'}} - {% if org.org_current %}Present {% else %}
-            {{org.work_to|date:'N o'}}{%endif%}
-          </li>
-        </ul>
-      {% endfor %}
-      </li>
-    {% endif %}
-    {% if education_list or current_edu %}
-      <li class="bdrtp"><h3>Education Details</h3>
-      {%if current_edu %}
-        <ul>
-          <li class="wd1">School</li>
-          {% if  current_edu.level == 0 %}
-              <li class="wd2">School</li>    
-          {% else %}
-              <li class="wd2">College</li>
+          {% if organization_list or current_org %}
+            <li class="bdrtp"><h3>Experience</h3>
+            {%if current_org %}
+              <ul>
+                <li class="wd1">Company </li>
+                <li class="wd2">{{current_org.org_name}}</li>
+                <li class="wd1">Job Title</li>
+                <li class="wd2">{{current_org.title}}</li>
+                <li class="wd1">Description</li>
+                <li class="wd2">{{current_org.org_desc|safe}}</li>
+                <li class="wd1">Duration</li>
+                <li class="wd2">
+                  {{current_org.work_from|date:'N o'}} - {% if current_org.org_current %}Present {% else %}{{current_org.work_to|date:'N o'}}{%endif%}
+                </li>
+              </ul>
+            {% endif %}
+            {% for org in organization_list%}
+              <ul>
+                <li class="wd1">Company </li>
+                <li class="wd2">{{org.org_name}}</li>
+                <li class="wd1">Job Title</li>
+                <li class="wd2">{{org.title}}</li>
+                <li class="wd1">Description</li>
+                <li class="wd2">{{org.org_desc|safe}}</li>
+                <li class="wd1">Duration</li>
+                <li class="wd2">
+                  {{org.work_from|date:'N o'}} - {% if org.org_current %}Present {% else %}
+                  {{org.work_to|date:'N o'}}{%endif%}
+                </li>
+              </ul>
+            {% endfor %}
+            </li>
           {% endif %}
-          <li class="wd1">Degree</li>
-          <li class="wd2">{{current_edu.degree}}</li>
-          <li class="wd1">Description</li>
-          <li class="wd2">{{current_edu.edu_desc|safe}}</li>
-          <li class="wd1">Duration</li>
-          <li class="wd2">
-            {{current_edu.study_from|date:'N o'}} - {%if current_edu.edu_current%}Present{%else%}{{current_edu.study_to|date:'N o'}}{%endif%}
-          </li>
-        </ul>
-      {% endif %}
-      {% for edu in education_list %}
-        <ul>
-          <li class="wd1">School</li>
-          {% if  current_edu.level == 0 %}
-              <li class="wd2">School</li>    
-          {% else %}
-              <li class="wd2">College</li>
+          {% if education_list or current_edu %}
+            <li class="bdrtp"><h3>Education Details</h3>
+            {%if current_edu %}
+              <ul>
+                <li class="wd1">School</li>
+                {% if  current_edu.level == 0 %}
+                    <li class="wd2">School</li>    
+                {% else %}
+                    <li class="wd2">College</li>
+                {% endif %}
+                <li class="wd1">Degree</li>
+                <li class="wd2">{{current_edu.degree}}</li>
+                <li class="wd1">Description</li>
+                <li class="wd2">{{current_edu.edu_desc|safe}}</li>
+                <li class="wd1">Duration</li>
+                <li class="wd2">
+                  {{current_edu.study_from|date:'N o'}} - {%if current_edu.edu_current%}Present{%else%}{{current_edu.study_to|date:'N o'}}{%endif%}
+                </li>
+              </ul>
+            {% endif %}
+            {% for edu in education_list %}
+              <ul>
+                <li class="wd1">School</li>
+                {% if  current_edu.level == 0 %}
+                    <li class="wd2">School</li>    
+                {% else %}
+                    <li class="wd2">College</li>
+                {% endif %}
+                <li class="wd1">Degree</li>
+                <li class="wd2">{{current_edu.degree}}</li>
+                <li class="wd1">Description</li>
+                <li class="wd2">{{current_edu.edu_desc|safe}}</li>
+                <li class="wd1">Duration</li>
+                <li class="wd2">
+                  {{edu.study_from|date:'N o'}} - {% if edu.edu_current %}Present{%else%}
+                  {{edu.study_to|date:'N o'}}{%endif%}
+                </li>
+              </ul>
+            {% endfor %}
+            </li>
           {% endif %}
-          <li class="wd1">Degree</li>
-          <li class="wd2">{{current_edu.degree}}</li>
-          <li class="wd1">Description</li>
-          <li class="wd2">{{current_edu.edu_desc|safe}}</li>
-          <li class="wd1">Duration</li>
-          <li class="wd2">
-            {{edu.study_from|date:'N o'}} - {% if edu.edu_current %}Present{%else%}
-            {{edu.study_to|date:'N o'}}{%endif%}
-          </li>
-        </ul>
-      {% endfor %}
-      </li>
-    {% endif %}
-    {%if skill_list %}
-      <li class="bdrtp mb20"><h3>Skills</h3>
-      {% for skill in skill_list %}
-        <div class="block-inline">
-        <div data-type="yrs" data-editable="" data-role="inputSelect" class="skill-box">
-        <div class="skill-name">{{skill}}</div>
-        </div>
-        </div>
-      {% endfor %}
-      </li>
-    {% endif %}
-  {% if flag2 %}
-    <li class="bdrtp"><h3 class="mb20">Important Tips</h3>
-    {% if draft.profile_photo  %}
-      <h4>Profile Picture</h4>
-      <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
-        {{draft.profile_photo}}
-      </textarea>
-      </li>
-    {% endif %}
-    {% if draft.recommendation  %}
-      <li><h4>Recommendations</h4>
-      <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
-        {{draft.recommendation}}
-      </textarea>
-      </li>
-    {% endif %}
-    {% if draft.follow_company %}
-    <li><h4>Follow Companies</h4>
-    <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
-      {{draft.follow_company}}
-    </textarea>
-    </li>
-    {% endif %}
-    {% if draft.join_group  %}
-      <li><h4>Join Groups</h4>
-      <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
-        {{draft.join_group}}
-      </textarea>
-      </li>
-      {% endif %}
-    {% if draft.public_url  %}
-      <li><h4>Public URL</h4>
-      <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
-        {{draft.public_url}}
-      </textarea>
-      </li>
-    {% endif %}
-  {% endif %}
-    </ul>   
-
-
+          {%if skill_list %}
+            <li class="bdrtp mb20"><h3>Skills</h3>
+            {% for skill in skill_list %}
+              <div class="block-inline">
+              <div data-type="yrs" data-editable="" data-role="inputSelect" class="skill-box">
+              <div class="skill-name">{{skill}}</div>
+              </div>
+              </div>
+            {% endfor %}
+            </li>
+          {% endif %}
+          {% if flag2 %}
+            <li class="bdrtp"><h3 class="mb20">Important Tips</h3>
+            {% if draft.profile_photo  %}
+              <h4>Profile Picture</h4>
+              <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
+                {{draft.profile_photo}}
+              </textarea>
+              </li>
+            {% endif %}
+            {% if draft.recommendation  %}
+              <li><h4>Recommendations</h4>
+              <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
+                {{draft.recommendation}}
+              </textarea>
+              </li>
+            {% endif %}
+            {% if draft.follow_company %}
+            <li><h4>Follow Companies</h4>
+            <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
+              {{draft.follow_company}}
+            </textarea>
+            </li>
+            {% endif %}
+            {% if draft.join_group  %}
+              <li><h4>Join Groups</h4>
+              <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
+                {{draft.join_group}}
+              </textarea>
+              </li>
+              {% endif %}
+            {% if draft.public_url  %}
+              <li><h4>Public URL</h4>
+              <textarea class="form-control" id="exampleTextarea" placeholder="" rows="2">
+                {{draft.public_url}}
+              </textarea>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>   
     </div>
-    <!-- mid content ends here --> 
-
+    <!-- mid content ends here -->
+  {% else %}
+      <div class="col-sm-12 linkedin_resume"> 
+      <h2>Sorry No draft has been prepared for the order</h2>
+      </div>
+  {%endif%} 
   </div>
   <!-- page content body end -->
-
 </section>
 <!-- main section end -->
 {% endblock container %}
