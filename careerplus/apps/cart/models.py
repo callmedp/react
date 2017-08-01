@@ -137,10 +137,9 @@ class LineItem(AbstractAutoDate):
                                  'line_id': self.pk}
 
 
-class Subscription(models.Model):
+class Subscription(AbstractAutoDate):
     candidateid = models.CharField(max_length=255, null=True, blank=True)
     order = models.ForeignKey(Order)
-    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     expire_on = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

@@ -1,12 +1,13 @@
 from django.db import models
 from django.db import IntegrityError
+from django.core.exceptions import ImproperlyConfigured
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-
+from django.conf import settings
 
 class AbstractAutoDate(models.Model):
-    created = models.DateTimeField(editable=False, auto_now_add=True)
+    created = models.DateTimeField(editable=False, auto_now_add=True,)
     modified = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
@@ -37,6 +38,38 @@ class AbstractSEO(models.Model):
     
     class Meta:
         abstract = True
+
+    def get_domain(self):
+        if not settings.SITE_DOMAIN:
+            raise ImproperlyConfigured('SITE_DOMAIN is not set')
+        return settings.SITE_DOMAIN
+
+    def get_protocol(self):
+        if not settings.SITE_PROTOCOL:
+            raise ImproperlyConfigured('SITE_PROTOCOL is not set')
+        return settings.SITE_PROTOCOL
+
+    def get_full_url(self, url):
+        if not url:
+            return None
+        if url.startswith('http'):
+            return url
+        if url.startswith('//'):
+            return '%s:%s' % (
+                self.get_protocol(),
+                url
+            )
+        if url.startswith('/'):
+            return '%s://%s%s' % (
+                self.get_protocol(),
+                self.get_domain(),
+                url
+            )
+        return '%s://%s/%s' % (
+            self.get_protocol(),
+            self.get_domain(),
+            url
+        )
 
     def save(self, *args, **kwargs):
         pk_field_name = self._meta.pk.name

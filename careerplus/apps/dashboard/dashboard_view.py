@@ -222,7 +222,7 @@ class DashboardCommentView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardCommentView, self).get_context_data(**kwargs)
         if self.oi and self.oi.order.candidate_id == self.candidate_id:
-            comments = self.oi.message_set.filter(is_internal=False).order_by('added_on')
+            comments = self.oi.message_set.filter(is_internal=False).order_by('created')
             context.update({
                 "oi": self.oi,
                 "comments": comments

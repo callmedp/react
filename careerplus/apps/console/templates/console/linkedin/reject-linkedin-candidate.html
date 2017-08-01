@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.updated_on }}
+                            {{ filter_form.modified }}
                         </div>
                         <br/>
                     </div>
@@ -91,9 +91,9 @@
                             <br/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.updated_on.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.modified.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.updated_on }}
+                                {{ filter_form.modified }}
                             </div>
                             <br/>
                         </div>
@@ -249,8 +249,8 @@
                       <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
-                      <td>{{obj.updated_on|naturaltime}}
-                          <b>Updated On: {{obj.updated_on}}</b>
+                      <td>{{obj.modified|naturaltime}}
+                          <b>Updated On: {{obj.modified}}</b>
                       </td>
 
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>

@@ -25,12 +25,12 @@
        {% if msg.added_by %}
         <div class="writer-comment">
             <p class="writer-bg">{{msg.message|safe}}</p>
-            <span class="author"><strong>{{msg.added_by}}</strong> - {{msg.added_on.date}}</span>
+            <span class="author"><strong>{{msg.added_by}}</strong> - {{msg.created.date}}</span>
         </div>
         {% elif msg.candidate_id %}
             <div class="user-comment">
                 <p class="user-bg">{{msg.message|safe}}</p>
-                <span class="author"><strong>Me</strong> - {{msg.added_on.date}}</span>
+                <span class="author"><strong>Me</strong> - {{msg.created.date}}</span>
             </div>
         {% endif %}
     {% endfor %}

@@ -71,52 +71,6 @@ class FAQuestion(AbstractAutoDate):
         return dict(self.STATUS_CHOICES).get(self.status)
 
 
-class Chapter(AbstractAutoDate):
-    STATUS_CHOICES = (
-        (2, _('Active')),
-        (1, _('Inactive')),
-        (0, _('Moderation')),)
-
-    heading = models.CharField(_('chapter'), max_length=255)
-    parent = models.ForeignKey(
-        'self', verbose_name=_('parentchapter'),
-        related_name='parentheading', null=True, blank=True)
-    answer = RichTextField(
-        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
-    
-    ordering = models.PositiveSmallIntegerField(
-        _('ordering'), default=1,
-        help_text=_(u'An integer used to order the chapter \
-            amongst others related to the same chapter. If not given this \
-            chapter will be last in the list.'))
-    status = models.IntegerField(
-        _('status'),
-        choices=STATUS_CHOICES,
-        default=0,
-        help_text=_("Only questions with their status set to 'Active' will be "
-                    "displayed."))
-    vendor = models.ForeignKey(
-        Vendor,
-        related_name='chapter_vendor',
-        null=True, blank=True)
-    
-    class Meta:
-        ordering = ('heading',)
-        verbose_name = _('Chapter')
-        verbose_name_plural = _('Chapters')
-        permissions = (
-            ("console_add_chapter", "Can Add Product Chapter From Console"),
-            ("console_change_chapter", "Can Change Product Chapter From Console"),
-            ("console_moderate_chapter", "Can Moderate Product Chapter From Console"),
-            )
-    def __str__(self):
-        return self.heading
-
-    @property
-    def get_status(self):
-        return dict(self.STATUS_CHOICES).get(self.status)
-
-
 class ScreenFAQ(AbstractAutoDate):
 
     faq = models.ForeignKey(
@@ -170,53 +124,13 @@ class ScreenFAQ(AbstractAutoDate):
         return dict(self.STATUS_CHOICES).get(self.status)
 
     def create_faq(self):
-        if self.text and self.answer and self.vendor:
-            faq = FAQuestion.objects.create(
-                text=self.text,
-                answer=self.answer,
-                vendor=self.vendor)
-            self.faq = faq
-            self.save()
-            return faq
-        return None
-
-
-class ScreenChapter(AbstractAutoDate):
-    STATUS_CHOICES = (
-        (2, _('Active')),
-        (1, _('Inactive')),
-        (0, _('Moderation')),)
-
-    heading = models.CharField(_('chapter'), max_length=255)
-    parent = models.ForeignKey(
-        'self', verbose_name=_('parentchapter'),
-        related_name='parentheading', null=True, blank=True)
-    answer = RichTextField(
-        verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
-    
-    ordering = models.PositiveSmallIntegerField(
-        _('ordering'), default=1,
-        help_text=_(u'An integer used to order the chapter \
-            amongst others related to the same chapter. If not given this \
-            chapter will be last in the list.'))
-    status = models.IntegerField(
-        _('status'),
-        choices=STATUS_CHOICES,
-        default=0,
-        help_text=_("Only questions with their status set to 'Active' will be "
-                    "displayed."))
-    vendor = models.ForeignKey(
-        Vendor,
-        null=True, blank=True)
-    
-    class Meta:
-        ordering = ('heading',)
-        verbose_name = _('Chapter')
-        verbose_name_plural = _('Screen Chapters')
-    def __str__(self):
-        return self.heading
-
-    @property
-    def get_status(self):
-        return dict(self.STATUS_CHOICES).get(self.status)
-
+        if not self.faq:
+            if self.text and self.vendor:
+                faq = FAQuestion.objects.create(
+                    text=self.text,
+                    answer=self.answer,
+                    vendor=self.vendor)
+                self.faq = faq
+                self.save()
+                return faq
+        return self.faq
