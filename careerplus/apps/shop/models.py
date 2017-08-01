@@ -970,7 +970,7 @@ class Product(AbstractProduct, ModelMeta):
         
         if self.inr_price:
             return round(self.inr_price, 0)
-        return 'Set Price'
+        return Decimal(0)
 
     def get_fakeprice(self, *args, **kwargs):
         if self.inr_price:

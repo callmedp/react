@@ -10,13 +10,17 @@ from django.views.generic import TemplateView, View
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.conf import settings
+from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
+from django.core.files.base import ContentFile
 
 # from console.decorators import Decorate, stop_browser_cache
-from order.models import OrderItem
+from order.models import Order, OrderItem
 from review.models import Review
 from emailers.email import SendMail
 from emailers.sms import SendSMS
+from core.api_mixin import ShineCandidateDetail
+from core.mixins import InvoiceGenerate
 
 from .dashboard_mixin import DashboardInfo
 
@@ -34,15 +38,6 @@ class DashboardView(TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id', None)
         email = self.request.session.get('email')
-        # if candidate_id:
-        #     if not self.request.session.get('resume_id', None):
-        #         res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
-        #         resumes = res['resumes']
-        #         default_resumes = [resume for resume in resumes if resume['is_default']]
-        #         if default_resumes:
-        #             self.request.session.update({
-        #                 "resume_id": default_resumes[0].get('id', '')
-        #             })
         inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
         pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
         context.update({
@@ -54,12 +49,45 @@ class DashboardView(TemplateView):
     def post(self, request, *args, **kwargs):
         if request.session.get('candidate_id', None):
             candidate_id = request.session.get('candidate_id')
-            resume_type = request.POST.get('resume_type', '0').strip()
             file = request.FILES.get('file', '')
             list_ids = request.POST.getlist('resume_pending', [])
+            shine_resume = request.POST.get('shine_resume', None)
+            resume_extn = request.session.get('resume_extn', '')
             validation_error = ''
+            if shine_resume and resume_extn:
+                response = ShineCandidateDetail().get_shine_candidate_resume(
+                    candidate_id=candidate_id,
+                    resume_id=request.session.get('resume_id'))
+                if response.status_code == 200:
+                    default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
+                    file_name = request.session.get('shine_resume_name', default_name)
+                    file_name = file_name + '.' + resume_extn
 
-            if resume_type == '0' and file:
+                    order_items = OrderItem.objects.filter(
+                        id__in=list_ids, order__candidate_id=candidate_id,
+                        no_process=False, oi_status=2)
+                    for obj in order_items:
+                        obj.oi_resume.save(file_name, ContentFile(response.content))
+                        last_oi_status = obj.oi_status
+                        obj.oi_status = 5
+                        obj.last_oi_status = 13
+                        obj.save()
+                        obj.orderitemoperation_set.create(
+                            oi_status=13,
+                            oi_resume=obj.oi_resume,
+                            last_oi_status=last_oi_status,
+                            assigned_to=obj.assigned_to)
+
+                        obj.orderitemoperation_set.create(
+                            oi_status=obj.oi_status,
+                            last_oi_status=obj.last_oi_status,
+                            assigned_to=obj.assigned_to)
+
+                    # with open(file_name, 'wb') as fd:
+                    #     for chunk in response.iter_content(chunk_size=128):
+                    #         fd.write(chunk)
+
+            elif file:
                 extn = file.name.split('.')[-1]
                 if extn in ['doc', 'docx', 'pdf'] and list_ids:
                     data = {
@@ -74,7 +102,7 @@ class DashboardView(TemplateView):
                         "validation_error": validation_error,
                     })
                     return TemplateResponse(
-                        request, ["users/dashboard-inbox.html"], context)
+                        request, ["dashboard/dashboard-inbox.html"], context)
                 else:
                     validation_error = 'Only doc, docx and pdf formats are allowed'
                     context = self.get_context_data()
@@ -83,8 +111,7 @@ class DashboardView(TemplateView):
                     })
                     return TemplateResponse(
                         request, ["dashboard/dashboard-inbox.html"], context)
-            elif resume_type == 1:
-                pass
+            
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
@@ -100,7 +127,7 @@ class DashboardMyorderView(TemplateView):
         context = super(DashboardMyorderView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id', None)
         if candidate_id:
-            order_list = DashboardInfo().get_myorder_list(candidate_id=candidate_id)
+            order_list = DashboardInfo().get_myorder_list(candidate_id=candidate_id, request=self.request)
         else:
             order_list = ''
 
@@ -423,4 +450,105 @@ class DashboardInboxLoadmoreView(View):
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
 
+        return HttpResponseForbidden()
+
+
+class DashboardInboxFilterView(View):
+    def post(self, request, *args, **kwargs):
+        candidate_id = request.session.get('candidate_id', None)
+        if request.is_ajax() and candidate_id:
+            try:
+                last_month_from = int(request.POST.get('last_month_form', 3))
+                select_type = int(request.POST.get('select_type', 0))
+                orderitem_list = DashboardInfo().get_inbox_list(
+                    candidate_id=candidate_id, request=request,
+                    last_month_from=last_month_from,
+                    select_type=select_type)
+                data = {"orderitem_list": orderitem_list, }
+                return HttpResponse(
+                    json.dumps(data), content_type="application/json")
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
+
+        return HttpResponseForbidden()
+
+
+class DashboardNotificationBoxView(TemplateView):
+    template_name = 'partial/notification-box.html'
+
+    def __init__(self):
+        self.candidate_id = None
+
+    def get(self, request, *args, **kwargs):
+        self.candidate_id = request.session.get('candidate_id', None)
+        if request.is_ajax() and self.candidate_id:
+            return super(DashboardNotificationBoxView, self).get(request, args, **kwargs)
+        else:
+            return HttpResponseForbidden()
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardNotificationBoxView, self).get_context_data(**kwargs)
+        email = self.request.session.get('email', None)
+        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id, email=email)
+        context.update({
+            "pending_resume_items": pending_resume_items,
+        })
+        candidate_id = self.candidate_id
+        if candidate_id:
+            if not self.request.session.get('resume_id', None):
+                res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
+                resumes = res['resumes']
+                default_resumes = [resume for resume in resumes if resume['is_default']]
+                if default_resumes:
+                    self.request.session.update({
+                        "resume_id": default_resumes[0].get('id', ''),
+                        "shine_resume_name": default_resumes[0].get('resume_name', ''),
+                        "resume_extn": default_resumes[0].get('extension', ''),
+                    })
+                    context.update({
+                        "resume_id": self.request.session.get('resume_id', ''),
+                        "shine_resume_name": self.request.session.get('shine_resume_name', ''),
+                        "resume_extn": self.request.session.get('extension', ''),
+                    })
+            else:
+                context.update({
+                    "resume_id": self.request.session.get('resume_id', ''),
+                    "shine_resume_name": self.request.session.get('shine_resume_name', ''),
+                    "resume_extn": self.request.session.get('extension', ''),
+                })
+
+        return context
+
+
+class DashboardInvoiceDownload(View):
+    # template_name = 'invoice/invoice.html'
+
+    # def get(self, request, *args, **kwargs):
+    #     return super(DashboardInvoiceDownload, self).get(request, args, **kwargs)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(DashboardInvoiceDownload, self).get_context_data(**kwargs)
+
+    #     order = Order.objects.get(id=31)
+    #     context.update(InvoiceGenerate().get_invoice_data(order=order))
+    #     return context
+
+    def post(self, request, *args, **kwargs):
+        candidate_id = request.session.get('candidate_id', None)
+        email = request.session.get('email', None)
+        try:
+            order_pk = request.POST.get('order_pk', None)
+            order = Order.objects.get(pk=order_pk)
+            if candidate_id and (order.email == email or order.candidate_id == candidate_id):
+                if order.invoice:
+                    invoice = order.invoice
+                else:
+                    order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                    invoice = order.invoice
+                filename = invoice.name.split('/')[-1]
+                response = HttpResponse(invoice, content_type='application/pdf')
+                response['Content-Disposition'] = 'attachment; filename=%s' % filename
+                return response
+        except:
+            pass
         return HttpResponseForbidden()

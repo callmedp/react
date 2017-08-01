@@ -133,9 +133,22 @@ function acceptService(oi_pk, ) {
     }
 };
 
+function downloadOrderInvoice(order_pk, ) {
+    if (order_pk){
+        console.log("hello submit");
+        $('#download-invoice-form' + order_pk).submit();
+    }
+};
+
+
+
 
 
 $(document).ready(function(){
+
+    // $(document).on('click', '#download-order-invoice', function () {
+    //     $('#').submit();
+    // });
 
     $(document).on('click', '#load-more-orderitem', function(event) {
         var formData = $("#load-orderitem-form").serialize();
@@ -157,35 +170,48 @@ $(document).ready(function(){
     });
 
     $(document).on('change', '#lastmonth-id', function(event) {
-        console.log("hello");
 
-        // var formData = $("#load-orderitem-form").serialize();
-        // $.ajax({
-        //     url : "/dashboard/loadmore/orderitem/",
-        //     type: "POST",
-        //     data : formData,
-        //     success: function(data, textStatus, jqXHR)
-        //     {
-        //         // data = JSON.parse(data);
-        //         $("#load_more_item").remove();
-        //         $("#orderitem-inbox-box").append(data.orderitem_list);
-        //     },
-        //     error: function (jqXHR, textStatus, errorThrown)
-        //     {
-        //         alert("Can't load more comments.");
-        //     }
-        // });   
+        var formData = $("#order-filter-form").serialize();
+        $.ajax({
+            url : "/dashboard/inbox-filter/",
+            type: "POST",
+            data : formData,
+            success: function(data, textStatus, jqXHR)
+            {
+                $("#orderitem-inbox-box").html(data.orderitem_list);
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert("something went wrong, try again later");
+            }
+        });   
     });
+
+    $(document).on('change', '#select-type-id', function(event) {
+        var formData = $("#order-filter-form").serialize();
+        $.ajax({
+            url : "/dashboard/inbox-filter/",
+            type: "POST",
+            data : formData,
+            success: function(data, textStatus, jqXHR)
+            {
+                $("#orderitem-inbox-box").html(data.orderitem_list);
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert("something went wrong, try again later");
+            }
+        }); 
+    });
+
 
     $("#reject_success_modal").on('hidden.bs.modal', function () {
         window.location.reload();
     });
 
     $.validator.addMethod("extnAccept", function(value, element) {
-        var fileInput = document.getElementById('file-id');
-        var filePath = fileInput.value;
         var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
-        if(!allowedExtensions.exec(filePath)){
+        if(value && !allowedExtensions.exec(value)){
             return false;
         }
         else{
@@ -205,39 +231,67 @@ $(document).ready(function(){
             
     });
 
-
-
-    $("#resume-upload-form").validate({
-        rules: {
-            file:{
-                required: true,
-                maxlength: 200,
-                extnAccept: true,
-            },        
-        },
-        messages:{
-            file:{
-                required: 'this value is required.',
-                maxlength: 'length should be less than 200 characters',
-                extnAccept: 'only pdf, doc and docx formats are allowed',
+    $(document).on('click', '#upload-resume-button', function () {
+        $("#resume-upload-form").validate({
+            rules:{
+                file:{
+                    required: function(element) {
+                        if ($("#shine-resume-id").is(":checked"))
+                            return false;
+                        else
+                            return true;
+                    },
+                    maxlength: 200,
+                    extnAccept: true,
+                },
             },
-        },
-        // highlight: function(element) {
-        //     $(element).closest('.col-sm-6').addClass('error');
-        // },
-        // unhighlight: function(element) {
-        //     $(element).closest('.col-sm-6').removeClass('error');
-        // },
-        // errorPlacement: function(error, element){
-        //     $(element).siblings('.error-txt').html(error.text());
-        // }
-    });
+            messages:{
+                file:{
+                    required: 'this value is required.',
+                    maxlength: 'length should be less than 200 characters',
+                    extnAccept: 'only pdf, doc and docx formats are allowed',
+                },
+                shine_resume:{
+                    required: 'this value is required.',
+                }
+            },
 
-    $('#upload-resume-button').click(function(){
+        });
+
         var flag = $("#resume-upload-form").valid();
-        if (flag){
+        var required_flag = false
+
+        $('input[name="resume_pending"]').each(function () {
+            if ($(this).is(':checked')){
+                required_flag = true;
+            }
+        });
+
+        if (!required_flag){
+            $('#required_product_error').text('select atleast one of services');
+        }
+
+        if (flag && required_flag){
             $('#resume-upload-form').submit();
         }
+    });
+
+    $(document).on('click', '[name="resume_pending"]', function () {
+        $('#required_product_error').text('');
+    });
+
+    $(document).on('click', '#upload_resume', function () {
+        $.ajax({
+            url: '/dashboard/inbox-notificationbox/',
+            type: 'GET',
+            dataType: 'html',
+            success: function(html) {
+                $('#notification-box-id').html(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong");
+            }
+        }); 
     });
 
     $.validator.addMethod("custom_message",

@@ -19,14 +19,14 @@ class DashboardInfo(object):
                 order__status__in=[1, 3],
                 order__candidate_id=candidate_id,
                 order__payment_date__gte=last_payment_date, no_process=False)
-            # if active:
-            #     orderitems = orderitems.exclude(oi_status=4)
-            # else:
-            #     orderitems = orderitems.filter(oi_status=4)
+            if select_type == 1:
+                orderitems = orderitems.exclude(oi_status=4)
+            elif select_type == 2:
+                orderitems = orderitems.filter(oi_status=4)
 
             orderitems = orderitems.select_related(
                 'order', 'product', 'partner')
-            paginator = Paginator(orderitems, 2)
+            paginator = Paginator(orderitems, 10)
             try:
                 orderitems = paginator.page(page)
             except PageNotAnInteger:
@@ -42,7 +42,7 @@ class DashboardInfo(object):
             }
             return render_to_string('partial/user-inboxlist.html', data)
 
-    def get_myorder_list(self, candidate_id=None):
+    def get_myorder_list(self, candidate_id=None, request=None):
         if candidate_id:
             days = 3 * 30
             last_dateplaced_date = timezone.now() - datetime.timedelta(days=days)
@@ -63,8 +63,14 @@ class DashboardInfo(object):
                 }
                 order_list.append(data)
 
+            if request:
+                csrf_token = get_token(request)
+            else:
+                csrf_token = get_token(self.request)
+
             context = {
                 "order_list": order_list,
+                "csrf_token": csrf_token,
             }
             return render_to_string('partial/myorder-list.html', context)
 

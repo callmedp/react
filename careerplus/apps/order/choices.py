@@ -38,6 +38,7 @@ OI_OPS_STATUS = (
     (10, 'On Hold by Vendor'),
     (11, 'Archived'),
     (12, 'Unhold by Vendor'),
+    (13, 'Shine Resume'),
 
     # flow1, flow3, flow12, flow13, and flow 5 status 21 - 40
     (21, 'Upload Draft'),
@@ -91,6 +92,7 @@ OI_USER_STATUS = (
     (10, 'Service is initiate'),
     (11, 'Archived'),
     (12, 'Service is initiated'),
+    (13, 'Shine Resume'),
 
 
     # flow1, flow12, flow13, flow3, and flow 5 status 21 - 40
