@@ -84,6 +84,7 @@ LOCAL_APPS = [
     'linkedin',
     'emailers',
     'quizs',
+    'database'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

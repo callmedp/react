@@ -19,6 +19,14 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+    'oldDB': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shinecp',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
 }
 
 # Apps specific for this project go here.

@@ -151,137 +151,153 @@
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
 
 
-    <field name="pPaed" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="pBC" type="long" indexed="false" stored="true" multiValued="false" />
 
-    <field name="pDD_exact" type="long" indexed="true" stored="true" multiValued="false" />
+    <field name="pMK" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="pPfaed_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPusd" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pCT_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pCtg" type="text_en" indexed="true" stored="true" multiValued="true" />
+    <field name="pDM_exact" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="pPaed_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
-    <field name="pCts" type="text_en" indexed="true" stored="true" multiValued="true" />
+    <field name="pSg" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="pBS" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="pFBT" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="pPV_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="pPChs" type="string" indexed="false" stored="true" multiValued="false" />
 
-    <field name="pUPC" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="pCmbs" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pFAQs" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pNm" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pIBg" type="long" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pPaed" type="text_en" indexed="true" stored="true" multiValued="false" />
 
     <field name="id" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="pIc" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="pNJ" type="long" indexed="false" stored="true" multiValued="false" />
 
-    <field name="pEX_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="pRC" type="long" indexed="false" stored="true" multiValued="false" />
 
-    <field name="pMK" type="string" indexed="false" stored="true" multiValued="false" />
+    <field name="pDsc" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pCert" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPfgbp" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPc" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pStM_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPOP" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pCtg_exact" type="string" indexed="true" stored="true" multiValued="true" />
+
+    <field name="pVi" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pStM" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pCts" type="text_en" indexed="true" stored="true" multiValued="true" />
+
+    <field name="pPgbp" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pCtg" type="text_en" indexed="true" stored="true" multiValued="true" />
+
+    <field name="pPusd" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pVrs" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pEX" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pHdx" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pCert_exact" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pHd" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pRD" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pDM" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPfaed_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPfgbp_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pCT" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pMtD" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pPusd_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pTP" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pAR_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPfusd" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pStar" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pvurl" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pPV_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPfinr_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pTt" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pURL" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pFA" type="text_en" indexed="true" stored="true" multiValued="true" />
 
     <field name="pPfusd_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="pAb" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="pPinr" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pIBg" type="long" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pDsc" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pTt" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pTP" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPgbp_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pRD" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pVi" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pPgbp" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pDM" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pURL" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pPfinr_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pCT" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pSg" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPfusd" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pTF" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pCert" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pRC" type="long" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pAR" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pNm" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pMtD" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pFA_exact" type="string" indexed="true" stored="true" multiValued="true" />
-
-    <field name="pImg" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pCtg_exact" type="string" indexed="true" stored="true" multiValued="true" />
-
-    <field name="pHd" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pStM" type="text_en" indexed="true" stored="true" multiValued="false" />
-
     <field name="pPV" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPc" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pEX" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pBC" type="long" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pPusd_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pCert_exact" type="boolean" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPinr_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pDM_exact" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pStM_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pHdx" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pPc_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPfgbp" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPfaed" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pAR_exact" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pNJ" type="long" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pFA" type="text_en" indexed="true" stored="true" multiValued="true" />
-
-    <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pvurl" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pStar" type="string" indexed="false" stored="true" multiValued="false" />
-
-    <field name="pDD" type="long" indexed="true" stored="true" multiValued="false" />
-
-    <field name="pPfgbp_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="pImA" type="string" indexed="false" stored="true" multiValued="false" />
 
+    <field name="pAR" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pCL_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pImg" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pTF" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pEX_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pCL" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPgbp_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pDD" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPc_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPinr_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pDD_exact" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pIc" type="string" indexed="false" stored="true" multiValued="false" />
+
     <field name="pPfinr" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pFA_exact" type="string" indexed="true" stored="true" multiValued="true" />
+
+    <field name="pUPC" type="string" indexed="false" stored="true" multiValued="false" />
+
+    <field name="pPinr" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pPfaed" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pBS" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="pCT_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
   </fields>
 

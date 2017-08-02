@@ -182,6 +182,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 parents = [p_category, pp_category]
                 return [item.name for sublist in parents for item in sublist if sublist]
         return []
+    
     def prepare_pFAQs(self, obj):
         structure = {
             'faq': False
