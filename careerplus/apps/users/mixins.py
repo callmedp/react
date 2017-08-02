@@ -105,7 +105,6 @@ class RegistrationLoginApi(object):
         request_header = ShineCandidateDetail().get_api_headers()
         request_header.update({'Content-Type':'application/json'})
         try:
-            import ipdb; ipdb.set_trace()
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()

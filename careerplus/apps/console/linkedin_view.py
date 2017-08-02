@@ -703,6 +703,8 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         user = self.request.user
         if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
             pass
+        elif user.has_perm('order.international_profile_update_assigner'):
+            queryset = queryset.filter(assigned_to__isnull=True)
         elif user.has_perm('order.international_profile_update_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
@@ -868,7 +870,6 @@ class ProfileUpdationView(DetailView):
             action = int(request.POST.get('action', '0'))
         except:
             action = 0
-
         selected = request.POST.get('selected_id', '')
         queue_name = request.POST.get('queue_name', '')
         update_sub = request.POST.get('update', '')
@@ -878,10 +879,10 @@ class ProfileUpdationView(DetailView):
         site=request.POST.get('site'+str(count)+'', None)
         flag=request.POST.get('flag'+str(count)+'', None)
 
-        if not username and not password:
-            msg = 'Please update all the profiles first'
-            messages.add_message(request, messages.SUCCESS, msg)
-            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
+        # if not username and not password:
+        #     msg = 'Please update all the profiles first'
+        #     messages.add_message(request, messages.SUCCESS, msg)
+        #     return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
 
         
         if action == -9 and queue_name == "internationalprofileupdate":
