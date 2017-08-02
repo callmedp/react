@@ -233,20 +233,8 @@
                                         </p>
                                     </div>
                                 </li>
-                                {% if page_reviews.has_next %}
-                                    <a href="javascript:void(0);" 
-                                    id="review_load_more" class="load-more loadreview"> Load more</a>
-                                {% endif %}
                             {% endfor %}
                             </ul>
-                            <div id="review_load_more">
-                                {% if page_reviews.has_next %}  
-                                <input type="hidden" name="page" 
-                                value="{{page_reviews.next_page_number}}" id="page_id1">
-                                <input type="hidden" name="slug" value="{{slug}}" 
-                                id="slug_id1">
-                                {% endif %}     
-                            </div>
                         </div><!-- end of review wrap -->
                     </div><!-- end of box -->
                 {% endif %}
@@ -265,7 +253,6 @@
     <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"
         charset="utf-8">
     </script>
-    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
 {% endblock js_section %}
 

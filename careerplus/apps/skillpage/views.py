@@ -16,7 +16,7 @@ from .mixins import SkillPageMixin
 
 class SkillPageView(DetailView, SkillPageMixin):
     model = Category
-    template_name = "mobile/skillpage/mskill.html"
+    template_name = "skillpage/skill.html"
     page = 1
 
     def get_object(self, queryset=None):
@@ -101,7 +101,6 @@ class SkillPageView(DetailView, SkillPageMixin):
             page_reviews = prod_review.page(1)
         except EmptyPage:
             page_reviews = prod_review.page(prod_review.num_pages)
-
         context['meta'] = self.object.as_meta(self.request)
         context.update({
             "api_data": api_data,
@@ -113,7 +112,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
             "products": products,
-            "page_reviews":page_reviews,
+            "page_reviews":prod_reviews[0:4] if self.request.flavour else page_reviews,
             'url': 'https://' + self.object.video_link
         })
         context.update(self.get_breadcrumb_data())
