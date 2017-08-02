@@ -699,6 +699,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(InterNationalUpdateQueueView, self).get_queryset()
         queryset = queryset.filter(order__status=1, product__type_flow=4, no_process=False).exclude(oi_status__in=[4, 23, 24])
+        queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
 
         user = self.request.user
         if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
@@ -925,10 +926,7 @@ class ProfileUpdationView(DetailView):
                     return HttpResponse(json.dumps({'success':True}), content_type="application/json")
                 return HttpResponse(json.dumps({'success':False}), content_type="application/json")
             except Exception as e:
-                messages.add_message(request, messages.ERROR, str(e))
-            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
-
-
+                logging.getLogger('error_log').error("%s - %s" % (str(update_sub), str(e)))
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
