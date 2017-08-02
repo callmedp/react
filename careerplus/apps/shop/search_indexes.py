@@ -10,33 +10,33 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     
     # Meta and SEO #
     pURL = indexes.CharField(null=True, indexed=False)
-    pTt = indexes.CharField(null=True, indexed=False) # model_attr='title'
-    pMtD = indexes.CharField(null=True, indexed=False) # model_attr='meta_desc'
-    pMK = indexes.CharField(null=True, indexed=False) # model_attr='meta_keywords'
-    pHd = indexes.EdgeNgramField(null=True) # model_attr='heading'
-    pHdx = indexes.CharField(null=True, indexed=False) # model_attr='heading'
+    pTt = indexes.CharField(model_attr='title', null=True, indexed=False)
+    pMtD = indexes.CharField(model_attr='meta_desc', null=True, indexed=False) 
+    pMK = indexes.CharField(model_attr='meta_keywords', null=True, indexed=False) 
+    pHd = indexes.EdgeNgramField(model_attr='heading', null=True,)
+    pHdx = indexes.CharField(model_attr='heading', null=True, indexed=False) 
     
     # Control Field #
-    pNm = indexes.CharField(null=True) # model_attr='name'
-    pSg = indexes.CharField(null=True) # model_attr='slug'
-    pTP = indexes.IntegerField(default=0) # model_attr='type_product'
-    pTF = indexes.IntegerField(default=0) # model_attr='type_flow'
-    pUPC = indexes.CharField(null=True, indexed=False) # model_attr='upc'
+    pNm = indexes.CharField(model_attr='name', null=True)
+    pSg = indexes.CharField(model_attr='slug', null=True)
+    pTP = indexes.IntegerField(model_attr='type_product', default=0)
+    pTF = indexes.IntegerField(model_attr='type_flow', default=0)
+    pUPC = indexes.CharField(model_attr='upc', null=True, indexed=False)
     
     # Content Field#
     pIc = indexes.CharField(indexed=False)
-    pIBg = indexes.IntegerField(default=0, indexed=False) # model_attr='image_bg'
+    pIBg = indexes.IntegerField(default=0, indexed=False)
     pImg = indexes.CharField(indexed=False)
-    pImA = indexes.CharField(null=True, indexed=False) # model_attr='image_alt'
+    pImA = indexes.CharField(model_attr='image_alt', null=True, indexed=False) 
     pvurl = indexes.CharField(indexed=False) # model_attr='video_url'
-    pAb = indexes.CharField(default='') # model_attr='about'
-    pDsc = indexes.CharField(default='') # model_attr='description'
-    pBS = indexes.CharField(default='') # model_attr='buy_shine'
+    pAb = indexes.CharField(model_attr='about', default='') 
+    pDsc = indexes.CharField(model_attr='description', default='') 
+    pBS = indexes.CharField(model_attr='buy_shine', default='') 
     
     #Facets & Attributes Fields#
     pPc = indexes.CharField(null=True, faceted=True)
     pPV = indexes.CharField(null=True, faceted=True)
-    pAR = indexes.DecimalField(faceted=True) # model_attr='avg_rating'
+    pAR = indexes.DecimalField(model_attr='avg_rating', faceted=True) 
     pCtg = indexes.MultiValueField(null=True, faceted=True)
     pCts = indexes.MultiValueField(null=True)
     pFA = indexes.MultiValueField(null=True, faceted=True)
@@ -51,9 +51,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pCL = indexes.CharField(null=True, faceted=True)
     
     pStar = indexes.CharField(null=True, indexed=False)
-    pRC = indexes.IntegerField(default=0, indexed=False) # model_attr='no_review'
-    pBC = indexes.IntegerField(default=0, indexed=False) # model_attr='buy_count'
-    pNJ = indexes.IntegerField(default=0, indexed=False) # model_attr='num_jobs'
+    pRC = indexes.IntegerField(model_attr='no_review', default=0, indexed=False) 
+    pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=False) 
+    pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
     pVi = indexes.CharField(null=True, indexed=False)
     
     #Price Fields#
@@ -95,129 +95,29 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().indexable.base_queryset()
 
     def prepare_pURL(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().get_url() if obj.get_parent() else ''
-        return obj.get_url()
-
-    def prepare_pTt(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().title if obj.get_parent() else ''
-        return obj.title
-
-    def prepare_pMtD(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().meta_desc if obj.get_parent() else ''
-        return obj.meta_desc
-
-    def prepare_pMK(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().meta_keywords if obj.get_parent() else ''
-        return obj.meta_keywords
-
-    def prepare_pHd(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().heading if obj.get_parent() else ''
-        return obj.heading
-    prepare_pHdx = prepare_pHd
-
-    def prepare_pNm(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().name if obj.get_parent() else ''
-        return obj.name
-
-    def prepare_pTP(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().type_product if obj.get_parent() else ''
-        return obj.type_product
-    
-    def prepare_pSL(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().slug if obj.get_parent() else ''
-        return obj.slug
-    
-    def prepare_pTF(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().type_flow if obj.get_parent() else ''
-        return obj.type_flow
-    
-    def prepare_pUPC(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().upc if obj.get_parent() else ''
-        return obj.upc
-    
+        return obj.get_url() if obj.get_url() else ''
+        
     def prepare_pIc(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().get_icon_url() if obj.get_parent() else ''
         return obj.get_icon_url()
         
     def prepare_pImg(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().get_image_url() if obj.get_parent() else ''
         return obj.get_image_url()
 
     def prepare_pIBg(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().image_bg if obj.get_parent() else ''
         return obj.image_bg
     
     def prepare_pImA(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().image_alt if obj.get_parent() else ''
         return obj.image_alt
         
     def prepare_pvurl(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().video_url if obj.get_parent() else ''
         return obj.video_url
     
-    def prepare_pAb(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().about if obj.get_parent() else ''
-        return obj.about
-
-    def prepare_pDsc(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().description if obj.get_parent() else ''
-        return obj.description
-    
-    def prepare_pBS(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().buy_shine if obj.get_parent() else ''
-        return obj.buy_shine
-    
-    def prepare_pAR(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().avg_rating if obj.get_parent() else []
-        return obj.avg_rating
-    
     def prepare_pStar(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().get_ratings() if obj.get_parent() else []
         return obj.get_ratings()
     
-    def prepare_pRC(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().no_review if obj.get_parent() else []
-        return obj.no_review
-    
-    def prepare_pBC(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().buy_count if obj.get_parent() else []
-        return obj.buy_count
-    
-    def prepare_pNJ(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().num_jobs if obj.get_parent() else []
-        return obj.num_jobs
-    
     def prepare_pVi(self, obj):
-        if obj.type_product == 2:    
-            parent = obj.get_parent()
-            if parent.vendor:
-                return parent.vendor.image.url if parent.vendor.image else ''
-        else:    
-            if obj.vendor:
-                return obj.vendor.image.url if obj.vendor.image else ''
+        if obj.vendor:
+            return obj.vendor.image.url if obj.vendor.image else ''
         return ''
     
     def prepare_pDM(self, obj):
@@ -253,62 +153,42 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return getattr(obj.attr, 'course_type', None) if getattr(obj.attr, 'course_type', None) else None
 
     def prepare_pPc(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().product_class.slug if obj.get_parent() else ''
         return obj.product_class.slug if obj.product_class else ''
 
     def prepare_pPv(self, obj):
-        if obj.type_product == 2:    
-            return obj.get_parent().vendor.name if obj.get_parent() else ''
         return obj.vendor.name if obj.vendor else ''
 
     def prepare_pCts(self, obj):
-        if obj.type_product == 2:    
-            countries = obj.get_parent().countries.all() if obj.get_parent() else ''
-        else:
-            countries = obj.countries.all()
+        countries = obj.countries.all()
         if len(countries) > 0:
             return [con.code2 for con in countries]
     
     def prepare_pCtg(self, obj):
-        if obj.type_product == 2:    
-            categories = obj.get_parent().categories.filter(
-                productcategories__active=True,
-                active=True) if obj.get_parent() else ''
-        else:
+        if obj.is_course:
             categories = obj.categories.filter(
                 productcategories__active=True,
                 active=True)
-        if len(categories) > 0:
-            return [cat.name for cat in categories]
-
+            if len(categories) > 0:
+                return [cat.name for cat in categories]
+        return []
     def prepare_pFA(self, obj):
-        if obj.type_product == 2:    
-            categories = obj.get_parent().categories.filter(
-                productcategories__active=True,
-                active=True) if obj.get_parent() else ''
-        else:
+        if obj.is_course:    
             categories = obj.categories.filter(
                 productcategories__active=True,
                 active=True)
-        if len(categories) > 0:
-            p_category = [pcat for cat in categories for pcat in cat.get_parent()]
-            pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
-            parents = [p_category, pp_category]
-            return [item.name for sublist in parents for item in sublist if sublist]
-
+            if len(categories) > 0:
+                p_category = [pcat for cat in categories for pcat in cat.get_parent()]
+                pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
+                parents = [p_category, pp_category]
+                return [item.name for sublist in parents for item in sublist if sublist]
+        return []
     def prepare_pFAQs(self, obj):
         structure = {
             'faq': False
         }
-        if obj.type_product == 2:    
-            faqs = obj.get_parent().faqs.filter(
-                productfaqs__active=True, status=2)\
-                    .order_by('productfaqs__question_order') if obj.get_parent() else []
-        else:
-            faqs = obj.faqs.filter(
-                productfaqs__active=True, status=2)\
-                    .order_by('productfaqs__question_order') 
+        faqs = obj.faqs.filter(
+            productfaqs__active=True, status=2)\
+                .order_by('productfaqs__question_order') 
         faq_list = []
         if faqs:
             structure.update({
@@ -355,9 +235,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             'var_list': []
         }
         var_list = []
-        if obj.type_product == 2:
-            parent = obj.get_parent()    
-            var = parent.get_variations()
+        if obj.type_product == 1:
+            var = obj.get_variations()
         else:
             return json.dumps(var_dict) 
         if var:
@@ -412,12 +291,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         structure = {
             'chapter': False
         }
-        if obj.type_product == 2:    
-            chapters = obj.get_parent().chapter_product.filter(status=True)\
-                    .order_by('ordering') if obj.get_parent() else []
-        else:
-            chapters = obj.chapter_product.filter(status=True)\
-                    .order_by('ordering')
+        chapters = obj.chapter_product.filter(status=True)\
+                .order_by('ordering')
         chapter_list = []
         if chapters:
             structure.update({
@@ -440,11 +315,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             'fbt_list': []
         }
         fbt_list = []
-        if obj.type_product == 2:
-            parent = obj.get_parent()    
-            fbt = parent.get_fbts()
-        else:
-            fbt = obj.get_fbts() 
+        fbt = obj.get_fbts() 
         if fbt:
             if obj.is_course:
                 fbt_dict.update({
@@ -499,11 +370,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             'pop_list': []
         }
         pop_list = []
-        if obj.type_product == 2:
-            parent = obj.get_parent()    
-            pop = parent.get_pops()
-        else:
-            pop = obj.get_pops() 
+        pop = obj.get_pops() 
         if pop:
             if obj.is_course:
                 pop_dict.update({
