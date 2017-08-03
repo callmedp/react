@@ -29,10 +29,12 @@
               {% if perms.shop.console_change_keyword %}
                 <li><a href="{% url 'console:keyword-list' %}">Keywords</a></li>
               {% endif %}
-              {% if perms.shop.console_change_attribute %}
-                <li><a href="{% url 'console:attribute-list' %}">Attributes</a>
-                </li>
-              {% endif %}
+              {% comment %}
+                {% if perms.shop.console_change_attribute %}
+                  <li><a href="{% url 'console:attribute-list' %}">Attributes</a>
+                  </li>
+                {% endif %}
+              {% endcomment %}
               
               </ul>
             </li>
