@@ -4,7 +4,6 @@ import csv
 import datetime
 import logging
 
-from collections import OrderedDict
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import (
@@ -135,12 +134,12 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status=[4,23])
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48])
 
         user = self.request.user
-        if user.has_perm('order.can_show_unassigned_inbox'):
+        if user.has_perm('order.writer_inbox_assigner'):
             queryset = queryset.filter(assigned_to=None)
-        elif user.has_perm('order.can_show_assigned_inbox'):
+        elif user.has_perm('order.writer_inbox_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
             queryset = queryset.none()
@@ -221,7 +220,6 @@ class DraftListing(ListView, PaginationMixin):
         return context
 
 
-@method_decorator(login_required(login_url='/console/login/'), name='dispatch')
 class LinkedinOrderDetailVeiw(DetailView):
     model = Order
     template_name = "console/linkedin/linkedin-order.html"
@@ -490,9 +488,6 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         self.delivery_type = request.GET.get('delivery_type', -1)
         return super(LinkedinRejectedByCandidateView, self).get(request, args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        pass
-
     def get_context_data(self, **kwargs):
         context = super(LinkedinRejectedByCandidateView, self).get_context_data(**kwargs)
         paginator = Paginator(context['rejectedbylinkedincandidate_list'], self.paginated_by)
@@ -517,7 +512,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByCandidateView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=48, product__type_flow__in=[1])
+        queryset = queryset.filter(order__status=1, oi_status=48, product__type_flow__in=[8])
 
         try:
             if self.query:
@@ -704,10 +699,13 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(InterNationalUpdateQueueView, self).get_queryset()
         queryset = queryset.filter(order__status=1, product__type_flow=4, no_process=False).exclude(oi_status__in=[4, 23, 24])
+        queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
 
         user = self.request.user
         if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
             pass
+        elif user.has_perm('order.international_profile_update_assigner'):
+            queryset = queryset.filter(assigned_to__isnull=True)
         elif user.has_perm('order.international_profile_update_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
@@ -873,7 +871,6 @@ class ProfileUpdationView(DetailView):
             action = int(request.POST.get('action', '0'))
         except:
             action = 0
-
         selected = request.POST.get('selected_id', '')
         queue_name = request.POST.get('queue_name', '')
         update_sub = request.POST.get('update', '')
@@ -883,10 +880,10 @@ class ProfileUpdationView(DetailView):
         site=request.POST.get('site'+str(count)+'', None)
         flag=request.POST.get('flag'+str(count)+'', None)
 
-        if not username and not password:
-            msg = 'Please update all the profiles first'
-            messages.add_message(request, messages.SUCCESS, msg)
-            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
+        # if not username and not password:
+        #     msg = 'Please update all the profiles first'
+        #     messages.add_message(request, messages.SUCCESS, msg)
+        #     return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
 
         
         if action == -9 and queue_name == "internationalprofileupdate":
@@ -929,10 +926,7 @@ class ProfileUpdationView(DetailView):
                     return HttpResponse(json.dumps({'success':True}), content_type="application/json")
                 return HttpResponse(json.dumps({'success':False}), content_type="application/json")
             except Exception as e:
-                messages.add_message(request, messages.ERROR, str(e))
-            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
-
-
+                logging.getLogger('error_log').error("%s - %s" % (str(update_sub), str(e)))
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):

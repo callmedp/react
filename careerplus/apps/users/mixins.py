@@ -4,6 +4,7 @@ import logging
 
 from django.contrib.gis.geoip import GeoIP
 from django.conf import settings
+from shine.core import ShineCandidateDetail
 
 from geolocation.models import Country
 
@@ -82,6 +83,36 @@ class RegistrationLoginApi(object):
                 response_json = response.json()
 
             if response.status_code:
+                logging.getLogger('error_log').error(
+                    "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
+        except Exception as e:
+            logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
+                                                 "%s " % str(e))
+        return response_json
+
+    @staticmethod
+    def reset_update(data_dict):
+        response_json = {"response": False}
+        post_data = {}
+
+        post_url = "{}/api/v2/career-plus/login/change-password/?format=json".format(settings.SHINE_SITE)
+
+        post_data.update({
+            'email': data_dict.get('email'),
+            'password':data_dict.get('new_password1'),
+            'confirm_password':data_dict.get('new_password2')
+        })
+        request_header = ShineCandidateDetail().get_api_headers()
+        request_header.update({'Content-Type':'application/json'})
+        try:
+            response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
+            if response.status_code == 201:
+                response_json = response.json()
+                response_json.update({'response':True})
+
+            if response.status_code == 400:
+                response_json = response.json()
+                response_json.update({'status_code':response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
         except Exception as e:

@@ -203,7 +203,11 @@ class ProductModeration(object):
                     if not product.inr_price > Decimal(0):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
-
+                    if product.type_product in [0,1,3,5]:
+                        if not product.chapter_product.filter(status=True):
+                            messages.error(request, "Product has no active chapter")
+                            return test_pass
+                    
                     if request.user.groups.filter(name='Product').exists() or request.user.is_superuser:
                         diction = [0,1, 3, 4, 5]
                     else:
@@ -296,7 +300,7 @@ class ProductModeration(object):
                         if not self.validate_variation(
                             request=request, product=productscreen):
                             return test_pass
-                    
+                        
                     test_pass = True    
                     return test_pass
                 else:
@@ -311,7 +315,7 @@ class ProductModeration(object):
         return test_pass
 
     @transaction.atomic
-    def copy_to_product(self, product, screen):
+    def copy_to_product(self, request, product, screen):
         copy = False
         try:
             with transaction.atomic():
@@ -344,7 +348,9 @@ class ProductModeration(object):
                         setattr(product.attr, attribute.name, value)
                 
                 product.save()
-                from shop.models import FAQProduct, VariationProduct
+                from shop.models import (
+                    FAQProduct, VariationProduct,)
+
                 productfaq = product.productfaqs.all()
                 screenfaq = screen.screenfaqs.all()
                 scfq = screen.faqs.all()
@@ -363,6 +369,23 @@ class ProductModeration(object):
                         question=faq)
                     fqprd.active = False
                     fqprd.save()
+                
+                screenchap = screen.chapter_product.all()
+                prdchap = product.chapter_product.all()
+                for chap in screenchap:
+                    pchap = chap.create_chapter()
+                    pchap.heading = chap.heading
+                    pchap.answer = chap.heading
+                    pchap.status = chap.status
+                    pchap.ordering = chap.ordering
+                    pchap.product = product
+                    pchap.save()
+                screenchap = [ch.chapter for ch in screenchap]
+                inactive_chap = [ch for ch in prdchap if ch not in screenchap]
+                
+                for chap in inactive_chap:
+                    chap.status = False
+                    chap.save()
                 
                 if screen.type_product == 1:
                     screenvar = screen.variation.all()
@@ -430,7 +453,7 @@ class ProductModeration(object):
         return (product, screen, copy)
 
     @transaction.atomic
-    def copy_to_screen(self, product, screen):
+    def copy_to_screen(self, request,product, screen):
         copy = False
         try:
             with transaction.atomic():
@@ -483,6 +506,26 @@ class ProductModeration(object):
                         question=faq)
                     fqprd.active = False
                     fqprd.save()
+
+                screenchap = screen.chapter_product.all()
+                prdchap = product.chapter_product.all()
+                for chap in prdchap:
+                    schap = chap.create_screen()
+                    schap.heading = chap.heading
+                    schap.answer = chap.heading
+                    schap.status = chap.status
+                    schap.ordering = chap.ordering
+                    schap.product = screen
+                    schap.save()
+                
+                prdchap = [ch.get_screen() for ch in prdchap]
+                inactive_chap = [ch for ch in prdchap if ch not in screenchap]
+                
+                for chap in inactive_chap:
+                    chap.status = False
+                    chap.save()
+                
+
                 if screen.type_product == 1:
                     screenvar = screen.variation.all()
                     screenvariation = screen.mainproduct.all()
@@ -767,9 +810,6 @@ class ProductValidation(object):
         try:
             if request:
                 if product:
-                    if product.type_product in [2, 4]:
-                        messages.error(request, "Can't active child-variation and virtual product active!")
-                        return False
                     
                     if not self.validate_fields(
                         request=request, product=product):
@@ -808,8 +848,8 @@ class ProductValidation(object):
         try:
             if request:
                 if product:
-                    if product.type_product in [2, 4]:
-                        messages.error(request, "Can't index child-variation and virtual product!")
+                    if not product.active:
+                        messages.error(request, "First Make Product Active")
                         return False
                     
                     if not self.validate_fields(
@@ -879,6 +919,11 @@ class ProductValidation(object):
                     if not product.heading:
                         messages.error(request, "Product Display Heading is required")
                         return test_pass
+                    
+                    if product.type_product in [0,1,3,5]:
+                        if not product.chapter_product.filter(status=True):
+                            messages.error(request, "Product has no active chapter")
+                            return test_pass
                     
 
                     if product.type_product in [0, 1, 3, 4]:
@@ -999,6 +1044,7 @@ class ProductValidation(object):
                                 messages.error(request, (
                                     ("%(attr)s attribute cannot be blank") %
                                     {'attr': attribute.name}))
+                                return test_pass
                         else:
                             try:
                                 attribute.validate_value(value)
@@ -1006,6 +1052,7 @@ class ProductValidation(object):
                                 messages.error(request, (
                                     ("%(attr)s attribute %(err)s") %
                                     {'attr': attribute.name, 'err': e}))
+                                return test_pass
                     test_pass = True
                     return test_pass
                 else:

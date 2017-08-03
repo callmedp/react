@@ -9,7 +9,9 @@ from .decorators import has_group
 from shop.models import (
     ProductClass,
     ProductScreen, 
-    FAQProductScreen, VariationProductScreen)
+    FAQProductScreen,
+    VariationProductScreen,
+    ScreenChapter)
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
@@ -868,3 +870,50 @@ class ScreenVariationInlineFormSet(forms.BaseInlineFormSet):
         if any(self.errors):
             return
         return
+
+
+class ScreenProductChapterForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ScreenProductChapterForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['heading'].widget.attrs['class'] = form_class
+        self.fields['heading'].widget.attrs['maxlength'] = 200
+        self.fields['heading'].widget.attrs['placeholder'] = 'Add heading'
+        self.fields['heading'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['heading'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['heading'].widget.attrs['data-parsley-length'] = "[4, 200]"
+        
+        self.fields['answer'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-200 characters.'
+        self.fields['answer'].widget.attrs['required'] = 'required'
+        self.fields['answer'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        
+        self.fields['ordering'].widget.attrs['class'] = form_class
+        self.fields['status'].widget.attrs['class'] = 'js-switch'
+        self.fields['status'].widget.attrs['data-switchery'] = 'true'
+        
+    class Meta:
+        model = ScreenChapter
+        fields = (
+            'heading', 'answer', 'ordering', 'status')
+
+    def clean(self):
+        super(ScreenProductChapterForm, self).clean()
+
+
+    def clean_heading(self):
+        heading = self.cleaned_data.get('heading', None)
+        if heading:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return heading
+
+class ScreenChapterInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(ScreenChapterInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        
