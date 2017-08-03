@@ -1693,7 +1693,13 @@ class ProductExtraInfo(models.Model):
     """
     Model to add any extra information to a Product.
     """
+    CHOICES = (
+        ('default', 'Default'),
+        ('profile_update', 'Profile Update Country')
+    )
+
     info_type = models.CharField(
+        choices=CHOICES,
         max_length=256,
         verbose_name=_('Type'),
     )
@@ -1712,7 +1718,7 @@ class ProductExtraInfo(models.Model):
         ordering = ['info_type']
 
     def __str__(self):
-        return '{0} - {1}'.format(self.product, self.type)
+        return '{0} - {1}'.format(self.product, self.info_type)
 
 
 class Chapter(AbstractAutoDate):

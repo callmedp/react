@@ -78,11 +78,15 @@ class CategoryInline(admin.TabularInline):
     fk_name = 'product'
     extra = 1
 
+class ProductExtraInfoInline(admin.TabularInline):
+    model = models.ProductExtraInfo
+    fk_name = 'product'
+    extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
-        FAQuestionInline, AttributeInline, ]
+        FAQuestionInline, AttributeInline, ProductExtraInfoInline]
     prepopulated_fields = {"slug": ("name",)}
 
 # class ProductAdmin(admin.ModelAdmin):
