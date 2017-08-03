@@ -1201,11 +1201,11 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(DomesticProfileUpdateQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=5, no_process=False, oi_status__in=[5, 25, 27])
+        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=5, no_process=False, oi_status__in=[5, 25, 61])
         # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
         user = self.request.user
 
-        q1 = queryset.filter(oi_status=27)
+        q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for oi in q1:
             closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
