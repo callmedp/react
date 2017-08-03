@@ -698,9 +698,31 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InterNationalUpdateQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=4, no_process=False).exclude(oi_status__in=[4, 23, 24])
-        queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
+        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=4, no_process=False, oi_status__in=[5, 25, 61])
+        # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
+        user = self.request.user
+        q1 = queryset.filter(oi_status=61)
+        exclude_list = []
+        for oi in q1:
+            closed_ois = oi.order.orderitems.filter(product__type_flow=12, oi_status=4, no_process=False)
+            if closed_ois.exists():
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.last_oi_status = last_oi_status
+                oi.oi_draft = closed_ois[0].oi_draft
+                oi.draft_counter += 1
+                oi.draft_added_on = timezone.now()
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    oi_draft=oi.oi_draft,
+                    draft_counter=oi.draft_counter,
+                    assigned_to=oi.assigned_to)
+            else:
+                exclude_list.append(oi.pk)
 
+        queryset = queryset.exclude(id__in=exclude_list)
         user = self.request.user
         if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
             pass
@@ -850,12 +872,16 @@ class ProfileUpdationView(DetailView):
         context = super(ProfileUpdationView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         profile_url_dict = {}
+        profile_urls = None
         order = self.get_object()
-        profile_urls = order.product.profile_country.profile_url.split(',')
-        profile_info = InternationalProfileCredential.objects.filter(oi=order.pk)
-        
-        for profile in profile_info:
-            profile_url_dict[profile.site_url] = profile
+        try:
+            profile_urls = order.product.profile_country.profile_url.split(',')
+            profile_info = InternationalProfileCredential.objects.filter(oi=order.pk)
+            
+            for profile in profile_info:
+                profile_url_dict[profile.site_url] = profile
+        except Exception as e:
+            logging.getLogger('error_log').error("%s - %s" % (str(profile_url_dict), str(e)))
         
         context.update({
             "messages": alert,
@@ -879,14 +905,16 @@ class ProfileUpdationView(DetailView):
         password=request.POST.get('password'+str(count)+'', None)
         site=request.POST.get('site'+str(count)+'', None)
         flag=request.POST.get('flag'+str(count)+'', None)
-
-        # if not username and not password:
-        #     msg = 'Please update all the profiles first'
-        #     messages.add_message(request, messages.SUCCESS, msg)
-        #     return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
-
         
         if action == -9 and queue_name == "internationalprofileupdate":
+            counts = request.POST.getlist('count', None)
+            for count in counts:
+                username=request.POST.get('username'+str(count)+'', None)
+                password=request.POST.get('password'+str(count)+'', None)
+                if not username and not password:
+                    msg = 'Please update all the profiles first'
+                    messages.add_message(request, messages.SUCCESS, msg)
+                    return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
 
             selected_id = json.loads(selected)
             try:
