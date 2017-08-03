@@ -22,12 +22,12 @@ class Command(BaseCommand):
         cursor = db.cursor()
 
         sql = """SELECT auth_user.email, auth_user.username, cart_userprofile.shine_id
-            FROM auth_user
-            LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
-            WHERE auth_user.id IN (
-                SELECT DISTINCT U0.candidate_id
-                FROM cart_order U0
-                WHERE U0.candidate_id IS NOT NULL)
+                FROM auth_user
+                LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
+                WHERE auth_user.id IN (
+                    SELECT DISTINCT U0.candidate_id
+                    FROM cart_order U0
+                    WHERE U0.candidate_id IS NOT NULL)
             """
         cursor.execute(sql,{})
         result = cursor.fetchall()
