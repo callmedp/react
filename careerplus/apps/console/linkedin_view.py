@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.utils.decorators import method_decorator
 
 from linkedin.models import Draft, Organization, Education
+from geolocation.models import Country
 from quizs.models import QuizResponse
 
 from .linkedin_form import (
@@ -134,6 +135,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
+        # import ipdb; ipdb.set_trace()
         queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48])
 
         user = self.request.user
@@ -875,7 +877,9 @@ class ProfileUpdationView(DetailView):
         profile_urls = None
         order = self.get_object()
         try:
-            profile_urls = order.product.profile_country.profile_url.split(',')
+            profile_obj = order.product.productextrainfo_set.get(info_type='profile_update')
+            country_obj = Country.objects.get(pk=profile_obj.object_id)
+            profile_urls = country_obj.profile_url.split(',')
             profile_info = InternationalProfileCredential.objects.filter(oi=order.pk)
             
             for profile in profile_info:
@@ -887,6 +891,7 @@ class ProfileUpdationView(DetailView):
             "messages": alert,
             "order": order,
             "profile_urls": profile_urls,
+            'country_obj': country_obj,
             "action_form": OIActionForm(queue_name="internationalprofileupdate"),
             "profile_url_dict": profile_url_dict,
         }) 
