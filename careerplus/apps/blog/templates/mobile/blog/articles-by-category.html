@@ -1,0 +1,161 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block django_meta %}
+   {% include 'meta/meta.html' %}
+{% endblock django_meta %}
+
+{% block title %}{{category.name}} Career Articles | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    
+{% endblock css_section %}
+
+{% block header %}
+
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+    
+    
+        <img src="{% static "shinelearn/images/mobile/common/header-back-img.png" %}">
+        
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="pull-left" id="sidebar-main-trigger" href="#"></a> 
+
+                
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <a class="icon-search pull-left" href="search-listing.html">search</a>
+
+                
+                <a class="icon-cart pull-left" href="#">cart</a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+
+        
+        
+        
+        <h1 class="heading-back w100fl pb-0">{{category.name}}</h1>
+        
+
+    </header><!-- header ends here -->
+
+{% endblock header %}
+
+{% block container %}
+
+<div class="tab-container">
+
+  <ul class="tabs box-panel p-0">
+    <li><a role="button" class="current" data-tab="tab-1">Recent</a></li>
+    <li><a role="button" data-tab="tab-2">Popularity</a></li>
+  </ul>
+
+  <!-- Tab content Satrts here -->
+  <div id="tab-1" class="tab-content current">
+
+  {% for obj in recent_page %}
+  <div class="box-panel row ">
+    <div class="media">
+      <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
+        {% if obj.image %}
+            <figure class="media-left">
+                {% thumbnail obj.image "96x73" crop="center" as im %}
+                   <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="...">
+                {% endthumbnail %}
+            </figure>
+        {% endif %}
+        <div class="media-body rel">
+          <h3 class="media-heading">{{obj.display_name}}</h3>
+
+          <div class="blog-author fs-11">
+            <span class="editor">{{obj.created_by.name}}, {{obj.publish_date.date}}</span>
+            <span class="view-forward">
+              <figure class="icon-forward"></figure> {{obj.comment_moderated}} 
+              <figure class="icon-view icon-grey-view ml-10"></figure> {{obj.no_views}}
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+
+  {% if recent_page.has_next %}
+        <div id="load_more_recent">
+            <form role="form" id="loadmore-recent-form">
+                <input type="hidden" name="page" value="{{recent_page.next_page_number}}">
+                <input type="hidden" name="tab" value="0">
+                <input type="hidden" name="cat_slug" value="{{category.slug}}">
+            </form>
+            <a role="button" class="btn-slg btn-grey block" id="recent-loadmore">Load more</a>
+        </div>
+    {% endif %}
+      
+  </div><!-- Tab content ends here -->
+
+  <div id="tab-2" class="tab-content">
+    {% for obj in pop_page %}
+        <div class="box-panel row ">
+          <div class="media">
+            <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
+
+            {% if obj.image %}
+                <figure class="media-left">
+                    {% thumbnail obj.image "96x73" crop="center" as im %}
+                       <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="...">
+                    {% endthumbnail %}
+                </figure>
+            {% endif %}
+
+              <div class="media-body rel">
+                <h3 class="media-heading">{{obj.display_name}}</h3>
+
+                <div class="blog-author fs-11">
+                  <span class="editor">{{obj.created_by.name}}, {{obj.publish_date.date}}</span>
+                  <span class="view-forward">
+                    <figure class="icon-forward"></figure> {{obj.comment_moderated}}
+                    <figure class="icon-view icon-grey-view ml-10"></figure> {{obj.no_views}}
+                  </span>
+                  
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+    {% endfor %}
+
+    {% if pop_page.has_next %}
+        <div id="load_more_pop">
+            <form role="form" id="loadmore-pop-form">
+                <input type="hidden" name="page" value="{{pop_page.next_page_number}}">
+                <input type="hidden" name="tab" value="1">
+                <input type="hidden" name="cat_slug" value="{{category.slug}}">
+            </form>
+            <a role="button" class="btn-slg btn-grey block" id="popular-loadmore">Load more</a>
+        </div>
+    {% endif %}
+    
+  </div>
+</div><!-- Tab container -->
+
+<div class="bottom-btn-wrap w100 text-center">
+  <a href="{% url "blog:article-mobile-categories" %}" class="btn-slg btn-blue block">More categories</a>
+</div>
+
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static "shinelearn/js/mobile/blog/blog.js" %}"></script>
+{% endblock js_section %}

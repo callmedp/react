@@ -236,11 +236,11 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
             self.cat_obj = Category.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
-        context = super(self.__class__, self).get(request, args, **kwargs)
+        context = super(BlogCategoryListView, self).get(request, args, **kwargs)
         return context
         
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(BlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
         categories = Category.objects.filter(is_active=True)
         article_list = Blog.objects.filter(status=1)
@@ -402,7 +402,13 @@ class BlogLandingPageView(TemplateView, BlogMixin):
                 p: top_articles.select_related('p_cat', 'user'),
             })
 
-        article_list = render_to_string('include/top_article.html',
+        if self.request.flavour == 'mobile':
+            article_list = render_to_string('include/top_article.html',
+            {'page_obj': page_obj,
+            'article_list': article_list,
+            'heading': True, })
+        else:
+            article_list = render_to_string('include/top_article.html',
             {'page_obj': page_obj, 'article_list': article_list})
         context.update({
             'categories': categories,

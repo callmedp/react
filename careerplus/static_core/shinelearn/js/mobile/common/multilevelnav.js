@@ -106,7 +106,7 @@
                     .removeClass(defaults.navClass)
                     .parent()
                     .removeClass(defaults.opacityClass);
-            }				
+            }               
         });
 
         $(defaults.defaultButton).on('click', function(){
