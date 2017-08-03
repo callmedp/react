@@ -402,13 +402,13 @@ class ProductModeration(object):
                         vproduct.product_class = vscreen.product_class
                         vproduct.type_product = vscreen.type_product
                         
-                        vproduct.inr_price = screen.inr_price
-                        vproduct.fake_inr_price = screen.fake_inr_price
-                        vproduct.usd_price = screen.usd_price
-                        vproduct.fake_usd_price = screen.fake_usd_price
-                        vproduct.aed_price = screen.aed_price
-                        vproduct.fake_aed_price = screen.fake_aed_price
-                        vproduct.gbp_price = screen.gbp_price
+                        vproduct.inr_price = vscreen.inr_price
+                        vproduct.fake_inr_price = vscreen.fake_inr_price
+                        vproduct.usd_price = vscreen.usd_price
+                        vproduct.fake_usd_price = vscreen.fake_usd_price
+                        vproduct.aed_price = vscreen.aed_price
+                        vproduct.fake_aed_price = vscreen.fake_aed_price
+                        vproduct.gbp_price = vscreen.gbp_price
                         vproduct.fake_gbp_price = vscreen.fake_gbp_price
                         vproduct.vendor = vscreen.vendor
                         vproduct.save()
