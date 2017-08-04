@@ -32,7 +32,7 @@ class ArticleCommentView(View):
             try:
                 message = request.POST.get('message').strip()
                 pk = request.POST.get('pk', None)
-                blog = Blog.objects.get(pk=pk, is_active=True)
+                blog = Blog.objects.get(pk=pk, status=1)
 
                 if request.session.get('candidate_id') and message:
                     name = ''

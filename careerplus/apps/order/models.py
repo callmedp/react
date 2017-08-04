@@ -171,6 +171,7 @@ class OrderItem(AbstractAutoDate):
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
+    is_addon = models.BooleanField(default=False)
 
     #counselling form status
     counselling_form_status = models.PositiveSmallIntegerField(

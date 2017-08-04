@@ -135,38 +135,46 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            {% if perms.order.writer_assignment_permission %}
-            <div class="col-sm-4">
-            <div class="input-group">
-                {{action_form.action}}
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
-                </span>
-            </div>
-            </div>
+            {% if perms.order.writer_inbox_assigner %}
+
+                <form method="POST" role="form" id="assignment_form" action="{% url "console:assignment-orderitem-view" %}">{% csrf_token %}
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        {{assignment_form.assign_to}}
+                        <input type="hidden" id="selected-id-assign" name="selected_id" />
+                        <input type="hidden" name="queue_name" value="allocated" />
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-primary" id="assignment_button_go">Assign To!</button>
+                        </span>
+                    </div>
+                </div>
+                </form>
+
             {% endif %}
             <!--h2>Select Comment to Change</h2-->
             <!-- large modal -->
 
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="assignmentModal">
                 <div class="modal-dialog modal-lg">
                   <div class="modal-content">
 
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                       </button>
-                      <h4 class="modal-title" id="myModalLabel">Action On Allocated List</h4>
+                      <h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
                     </div>
-                    <div class="modal-body" id="myModalbody">
+                    <div class="modal-body" id="assignmentModalbody">
                       Are You Sure???
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="action_inbox">Yes</button>
+                      <button type="button" class="btn btn-primary" id="assignment_action_yes">Yes</button>
                     </div>
+
                   </div>
                 </div>
             </div>
+            
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -182,7 +190,7 @@
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
-                    {% if perms.order.writer_assignment_permission %}
+                    {% if perms.order.writer_inbox_assigner %}
                         <th>
                           <input type="checkbox" id="check-all" class="flat">
                         </th>
@@ -208,7 +216,7 @@
                   </tr>
                 </thead>
 
-                <tbody id="body-table-inbox">
+                <tbody id="body-table-list">
                   {% for obj in page %}
                     <tr class="even pointer">
                       {% if perms.order.writer_assignment_permission %}
@@ -221,7 +229,10 @@
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
-                      <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>{% if obj.parent and obj.is_variation %}
+                              {{obj.parent.product.name}}:</br>
+                          {% endif %}
+                          {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                       <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>User Category</td>
@@ -313,10 +324,10 @@
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/inbox-list.js" %}"></script>
 
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
 <script type="text/javascript">
 
     $(document).ready(function() {

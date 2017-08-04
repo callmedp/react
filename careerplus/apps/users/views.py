@@ -94,6 +94,8 @@ class LoginApiView(FormView):
             "email": user_email,
             "password": self.request.POST.get('password')
         })
+        if 'next' in self.request.GET:
+            self.success_url = self.request.GET.get('next')
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
             if user_exist.get('exists', ''):

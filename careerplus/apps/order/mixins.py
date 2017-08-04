@@ -166,7 +166,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                 order=order,
                                 product=addon.product,
                                 title=addon.product.name,
-                                partner=addon.product.vendor
+                                partner=addon.product.vendor,
+                                is_addon=True,
                             )
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             oi.parent = p_oi

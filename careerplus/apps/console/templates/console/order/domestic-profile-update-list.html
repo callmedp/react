@@ -263,7 +263,10 @@
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
-                      <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>{% if obj.parent and obj.is_variation %}
+                              {{obj.parent.product.name}}:</br>
+                          {% endif %}
+                          {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                       <td>{{obj.get_oi_status}}</td>
                       <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a></td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>

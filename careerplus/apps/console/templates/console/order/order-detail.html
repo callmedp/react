@@ -129,7 +129,10 @@
                       {% for obj in orderitems %}
                       <tr>
                           <td>{{obj.id}}</td>
-                          <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                          <td>{% if obj.parent and obj.is_variation %}
+                              {{obj.parent.product.name}}:</br>
+                          {% endif %}
+                          {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                           <td>{{obj.get_oi_status}}</td>
                           {% comment %}
                           <td>

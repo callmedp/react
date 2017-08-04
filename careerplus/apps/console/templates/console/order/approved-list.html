@@ -182,7 +182,10 @@
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
-                      <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>{% if obj.parent and obj.is_variation %}
+                              {{obj.parent.product.name}}:</br>
+                          {% endif %}
+                          {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                       <td>Delivery Type</td>
                       <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>

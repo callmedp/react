@@ -176,19 +176,29 @@ class BlogDetailView(DetailView, BlogMixin):
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
         main_obj = Blog.objects.filter(slug=blog.slug, status=1)
+
         detail_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
                 object_list=main_obj)
-
-        context.update({
-            "detail_article": render_to_string('include/detail-article-list.html',
+        if self.request.flavour == 'mobile':
+            detail_article = render_to_string('include/detail-article-list.html',
+                {"page_obj": detail_obj,
+                "slug": blog.slug,
+                "SITEDOMAIN": settings.SITE_DOMAIN,
+                "main_article": main_obj[0]})
+        else:
+            detail_article = render_to_string('include/detail-article-list.html',
                 {"page_obj": detail_obj,
                 "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+
+        context.update({
+            "detail_article": detail_article,
+            "main_article": main_obj[0],
         })
 
         article_list = Blog.objects.filter(p_cat=p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
-        article_list = article_list.distinct().select_related('user').prefetch_related('tags')
+        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
@@ -493,7 +503,7 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
             self.page = self.request.GET.get('page', 1)
             self.slug = self.request.GET.get('slug')
             try:
-                self.blog = Blog.objects.get(slug=self.slug)
+                self.blog = Blog.objects.get(slug=self.slug, status=1)
             except:
                 return ''
             return super(self.__class__, self).get(request, args, **kwargs)
@@ -505,7 +515,7 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
 
         article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=self.blog.slug)
-        article_list = article_list.distinct().select_related('user').prefetch_related('tags')
+        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,

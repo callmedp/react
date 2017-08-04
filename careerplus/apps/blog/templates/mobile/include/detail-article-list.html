@@ -1,0 +1,108 @@
+{% load static %}
+
+
+{% if main_article %}
+    <div class="clearfix border-bottom pb-10 mb-10 fs-13">
+        <span class="view-forward">
+          <figure class="icon-chat-sm"></figure> <a role="button"> {{main_article.comment_moderated}} Comments</a> 
+          <figure class="icon-view icon-grey-view ml-10"></figure> {{main_article.no_views}}
+        </span>
+        <span class="editor">{{main_article.created_by.name}}, {{main_article.publish_date.date}}</span>
+    </div>
+{% endif %}
+{% for article in page_obj %}
+    <article>
+        {% if not main_article %}
+            <h1>{{article.display_name}}</h1>
+            <div class="clearfix border-bottom pb-10 mb-10 fs-13">
+                <span class="view-forward">
+                  <figure class="icon-chat-sm"></figure> <a href="#"> {{article.comment_moderated}} Comments</a> 
+                  <figure class="icon-view icon-grey-view ml-10"></figure> 21
+                </span>
+                <span class="editor">{{article.created_by.name}}, {{article.publish_date.date}}</span>
+            </div>
+        {% endif %}
+        {{article.content|safe}}
+
+        {% with article.tags.all as tags %}
+            {% if tags %}
+                <div class="tagging mt-30 mb-30">
+                  <p>Tagged in</p>
+                  {% for tag in tags %}
+                      <a role="button">{{tag.name}}</a>
+                  {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% if article.allow_comment %}
+            <div class="w100 text-center">
+                <a class="btn-slg btn-grey block" role="button" onclick="openCommentBox('{{article.id}}')" id="total_comment{{article.id}}"><span class="icon-chat"></span>{{article.comment_moderated}} comments</a>
+            </div><!-- end of comments button -->
+
+            <div class="comment-wrap mt-20" id="comment-box{{article.id}}" >
+            </div> <!-- end comment wrap -->
+
+        {% endif %}
+    </article><!-- end of article -->
+{% endfor %}
+
+{% comment %}
+<!-- Related articles Starts here -->
+<div class="related-article row mb-30 mt-30">
+  <h2 class="mb-10">Related articles</h2>
+
+  <ul class="home-slider">
+  
+    <li>
+      <div class="media">
+      <a title="Government Jobs" href="#">
+        <figure class="media-left">
+          <img class="media-object w-auto" src="images/article-list-1.jpg" alt="...">
+        </figure>
+        <div class="media-body rel">
+          <p class="mb-0">8 Reasons to consider a career change</p>
+        </div>
+      </a>
+      </div>
+    </li>
+  
+    <li>
+      <div class="media">
+      <a title="Government Jobs" href="#">
+        <figure class="media-left">
+          <img class="media-object w-auto" src="images/article-list-2.jpg" alt="...">
+        </figure>
+        <div class="media-body rel">
+          <p class="mb-0">Career management: Defining the process and purpose</p>
+        </div>
+      </a>
+      </div>
+    </li>
+  
+    <li>
+      <div class="media">
+      <a title="Government Jobs" href="#">
+        <figure class="media-left">
+          <img class="media-object w-auto" src="images/article-list-3.jpg" alt="...">
+        </figure>
+        <div class="media-body rel">
+          <p class="mb-0">8 Reasons to consider a career change</p>
+        </div>
+      </a>
+      </div>
+    </li>
+  
+  </ul>
+</div><!-- Related articles Ends here -->
+{% endcomment %}
+
+
+{% if page_obj.has_next %}
+  <div id="load_more" style='display:none'>
+      <div>
+        <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
+        <input type="hidden" id="pg_slug" name="slug" value="{{slug}}">
+      </div>
+  </div>
+{% endif %}
