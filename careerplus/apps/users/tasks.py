@@ -39,7 +39,6 @@ def user_register(data={}, order=None):
         if candidate_id:
             order.candidate_id = candidate_id
             order.save()
-        
     except Exception as e:
         logging.getLogger('task_log').error(
             "%s error in user_registration task" % str(e))

@@ -6,6 +6,7 @@ from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
+from user.tasks import user_register
 
 from .models import Order, OrderItem
 from .functions import update_initiat_orderitem_sataus
@@ -57,6 +58,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 self.createOrderitems(order, cart_obj)
                 # update initial operation status
                 update_initiat_orderitem_sataus(order=order)
+
+                if not order.candidate_id:
+                    user_register(data={}, order=order.pk)
 
                 # for linkedin
                 order_items = order.orderitems.filter(product__type_flow__in=[8])
