@@ -41,9 +41,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pDM = indexes.MultiValueField(default=0, faceted=True)
     pCert = indexes.MultiValueField(default=False, faceted=True)
     pCL = indexes.MultiValueField(null=True, faceted=True)
-    
-
-    
+    pAttr = indexes.MultiValueField(null=True)
     
     # Content Field#
     pIc = indexes.CharField(indexed=False)
@@ -167,12 +165,16 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_pDM(self, obj):
         if obj.is_course:
             DM = []
-            DM.append(getattr(obj.attr, 'duartion_days') if getattr(obj.attr, 'duration_days', None) else 0)
-            if obj.type_product == 2:
+            duration_month = getattr(obj.attr, 'duartion_days') if getattr(obj.attr, 'duration_days', None) else 0
+            duration_month = (duration_month//30)
+            DM.append(duration_month)
+            if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    DM.append(getattr(pv.attr, 'duration_days') if getattr(pv.attr, 'duration_days', None) else 0)
-                DM = set(DM)
+                    duration_month = getattr(pv.attr, 'duartion_days') if getattr(pv.attr, 'duration_days', None) else 0
+                    duration_month = (duration_month//30)
+                    DM.append(duration_month)
+                DM = list(set(DM))
             return DM
         return []
 
@@ -180,11 +182,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.is_course:
             CERT = []
             CERT.append(getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0)
-            if obj.type_product == 2:
+            if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    SM.append(getattr(pv.attr, 'certification') if getattr(pv.attr, 'certification', None) else 0)
-                CERT = set(CERT)
+                    CERT.append(getattr(pv.attr, 'certification') if getattr(pv.attr, 'certification', None) else 0)
+                CERT = list(set(CERT))
             return CERT
         return []
 
@@ -192,11 +194,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.is_course:
             SM = []
             SM.append(getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '')
-            if obj.type_product == 2:
+            if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
                     SM.append(getattr(pv.attr, 'study_mode').code if getattr(pv.attr, 'study_mode', None) else '')
-                SM = set(SM)
+                SM = list(set(SM))
             return SM
         return []
     
@@ -204,13 +206,38 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.is_course:
             CL = []
             CL.append(getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else '')
-            if obj.type_product == 2:
+            if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
                     CL.append(getattr(pv.attr, 'course_level').code if getattr(pv.attr, 'course_level', None) else '')
-                CL = set(CL)
+                CL = list(set(CL))
             return CL
         return []
+
+    def prepare_pAttr(self, obj):
+        ATTR = []
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                SM = getattr(pv.attr, 'study_mode').code if getattr(pv.attr, 'study_mode', None) else ''
+                CL = getattr(pv.attr, 'course_level').code if getattr(pv.attr, 'course_level', None) else ''
+                CERT = getattr(pv.attr, 'certification') if getattr(pv.attr, 'certification', None) else 0
+                CERT = 'CERT' if CERT else ''
+                DM = getattr(pv.attr, 'duartion_days') if getattr(pv.attr, 'duration_days', None) else 0
+                DM = (DM//30)
+                AR = str(round(obj.avg_rating, 1)*100)
+                ATTR.append(str(SM) + ' ' + str(CL)+ ' ' + str(CERT)+ ' ' + str(DM)+ ' ' + str(AR))
+        else:
+            SM = getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else ''
+            CL = getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else ''
+            CERT = getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0
+            CERT = 'CERT' if CERT else ''
+            DM = getattr(obj.attr, 'duartion_days') if getattr(obj.attr, 'duration_days', None) else 0
+            DM = (DM//30)
+            AR = str(round(obj.avg_rating, 1)*100)
+            ATTR.append(str(SM) + ' ' + str(CL)+ ' ' + str(CERT)+ ' ' + str(DM)+ ' ' + str(AR))
+        return ATTR
+
     
     def prepare_pCT(self, obj):
         if obj.is_course:
@@ -500,4 +527,5 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'pop_list': pop_list
                 })
         return json.dumps(pop_dict)
-        
+    
+
