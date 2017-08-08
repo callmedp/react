@@ -72,3 +72,8 @@ class SendSMS(object):
             template_name = data.get('template_name', 'course-closer.html')
             send_dict['template'] = 'sms/' + template_name
             self.process(send_dict, data)
+
+        elif sms_type == "AUTO_REGISTER":
+            template_name = data.get('template_name', 'auto-register.html')
+            send_dict['template'] = 'sms/' + template_name
+            self.process(send_dict, data)

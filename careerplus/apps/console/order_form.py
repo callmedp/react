@@ -173,7 +173,7 @@ class OIFilterForm(forms.Form):
         to_field_name='pk',
         widget=forms.Select())
 
-    added_on = forms.CharField(
+    created = forms.CharField(
         label=("Added On:"), required=False,
         initial='',
         widget=forms.TextInput(attrs={
@@ -204,7 +204,7 @@ class OIFilterForm(forms.Form):
         widget=forms.Select(
             attrs={'class': 'form-control'}))
 
-    updated_on = forms.CharField(
+    modified = forms.CharField(
         label=("Modified On:"), required=False,
         initial='',
         widget=forms.TextInput(attrs={
@@ -253,7 +253,7 @@ class OIFilterForm(forms.Form):
         self.fields['draft_level'].choices = draft_choices
 
     class Meta:
-        fields = ['writer', 'payment_date', 'added_on', 'delivery_type', 'updated_on', 'draft_level']
+        fields = ['writer', 'payment_date', 'created', 'delivery_type', 'modified', 'draft_level']
 
 
 class OIActionForm(forms.Form):
@@ -326,11 +326,16 @@ class AssignmentActionForm(forms.Form):
         required=True, widget=forms.Select())
 
     def __init__(self, *args, **kwargs):
+        queue_name = kwargs.pop('queue_name', None)
         super(AssignmentActionForm, self).__init__(*args, **kwargs)
         from django.contrib.auth.models import Permission
         from django.db.models import Q
-        perm = Permission.objects.get(codename='domestic_profile_update_assignee')
-        users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        if queue_name == 'allocatedqueue':
+            perm = Permission.objects.get(codename='writer_inbox_assignee')
+            users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        else:
+            perm = Permission.objects.get(codename='domestic_profile_update_assignee')
+            users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
         self.fields['assign_to'].required = True
         self.fields['assign_to'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['assign_to'].queryset = users

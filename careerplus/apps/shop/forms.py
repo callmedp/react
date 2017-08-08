@@ -358,6 +358,13 @@ class ChangeProductForm(forms.ModelForm):
         if product.image:
             if not product.icon:
                 product.create_icon()
+        if product.type_product == 1:
+            variation = product.variation.all()
+            for pv in variation:
+                if pv.type_flow != product.type_flow:
+                    pv.type_flow = product.type_flow
+                    pv.save()
+        
         return product
 
 

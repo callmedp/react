@@ -4,12 +4,12 @@ from django.utils import timezone
 
 from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
-from emailers.email import SendMail
-from emailers.sms import SendSMS
-
-from .models import Order, OrderItem
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
+from users.tasks import user_register
+
+from .models import Order, OrderItem
+from .functions import update_initiat_orderitem_sataus
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -37,10 +37,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             if cart_obj:
                 order = Order.objects.create(cart=cart_obj, date_placed=timezone.now())
                 order.number = 'CP' + str(order.pk)
-                
                 if candidate_id:
                     order.candidate_id = candidate_id
-                
+
                 order.email = cart_obj.email
                 order.first_name = cart_obj.first_name
                 order.last_name = cart_obj.last_name
@@ -51,33 +50,21 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.state = cart_obj.state
                 order.country = cart_obj.country
 
+                # set currency
+                order.currency = 'Rs.'
+
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
                 self.createOrderitems(order, cart_obj)
+                # update initial operation status
+                update_initiat_orderitem_sataus(order=order)
+
+                if not order.candidate_id:
+                    user_register(data={}, order=order.pk)
+
+                # for linkedin
                 order_items = order.orderitems.filter(product__type_flow__in=[8])
-                # mai and sms
-                if order.orderitems.filter(product__type_flow__in=[1, 3, 4, 5]) and order.status == 1:
-                    to_emails = [order.email]
-                    mail_type = "MIDOUT"
-                    data = {}
-                    data.update({
-                        "info": 'Upload Your resume',
-                        "subject": 'Upload Your Resume',
-                        "name": order.first_name + ' ' + order.last_name,
-                        "mobile": order.mobile,
-                    })
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                        order.midout_sent_on = timezone.now()
-                    except Exception as e:
-                        logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                    try:
-                        SendSMS().send(sms_type=mail_type, data=data)
-                    except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                elif order_items:
+                if order_items:
                     # associate draft object with order
                     order_item = order_items.first()
                     draft_obj = Draft.objects.create()
@@ -103,6 +90,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
     def createOrderitems(self, order, cart_obj):
         try:
             if order and cart_obj:
+                self.request.session.update({
+                    "order_pk": order.pk,
+                })
                 cart_items = self.get_cart_items()
                 for item in cart_items:
                     parent_li = item.get('li')
@@ -117,7 +107,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             no_process=True,
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-                        p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
+                        p_oi.oi_price_before_discounts_excl_tax = parent_li.product.get_price()
                         p_oi.save()
 
                         combos = self.get_combos(parent_li.product).get('combos')
@@ -126,7 +116,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi = OrderItem.objects.create(
                                 order=order,
                                 product=product,
-                                title=product.pv_name,
+                                title=product.pv_name(),
                                 partner=product.vendor
                             )
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
@@ -180,15 +170,13 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                 order=order,
                                 product=addon.product,
                                 title=addon.product.name,
-                                partner=addon.product.vendor
+                                partner=addon.product.vendor,
+                                is_addon=True,
                             )
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             oi.parent = p_oi
                             oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
                             oi.save()
 
-                self.request.session.update({
-                    "order_pk": order.pk,
-                })
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

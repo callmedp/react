@@ -24,7 +24,7 @@ class Command(BaseCommand):
 def draft_reminder_mail():
     try:
         orderitems = OrderItem.objects.filter(
-            oi_status=6, product__type_flow__in=[1]).select_related('order', 'product')
+            oi_status=24, product__type_flow__in=[1, 12, 13]).select_related('order', 'product')
         for oi in orderitems:
             if not oi.approved_on:
                 oi.approved_on = timezone.now()
@@ -117,6 +117,16 @@ def draft_reminder_mail():
                 except Exception as e:
                     logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
+                last_oi_status = oi.oi_status
+                oi.oi_status = 4
+                oi.last_oi_status = last_oi_status
+                oi.closed_on = timezone.now()
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    assigned_to=oi.assigned_to)
+
             elif draft_level == 2 and today_date == approved_date + datetime.timedelta(days=4):
                 to_emails = [oi.order.email]
                 mail_type = 'REMINDER'
@@ -179,6 +189,16 @@ def draft_reminder_mail():
                     SendSMS().send(sms_type=mail_type, data=data)
                 except Exception as e:
                     logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                last_oi_status = oi.oi_status
+                oi.oi_status = 4
+                oi.last_oi_status = last_oi_status
+                oi.closed_on = timezone.now()
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    assigned_to=oi.assigned_to)
     except Exception as e:
         logging.getLogger('email_log').error("%s - %s" % (
             "Reminder mail cron", str(e)))

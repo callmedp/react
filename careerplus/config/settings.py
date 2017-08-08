@@ -9,6 +9,9 @@ SITE_ID = 1
 SITE_DOMAIN = '127.0.0.1:8000'
 SITE_PROTOCOL = 'https'
 
+MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
+MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+
 # Database
 DATABASES = {
     'default': {
@@ -187,7 +190,7 @@ BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
 
 # Do Not Change #
 COURSE_SLUG = ['course',]
-WRITING_SLUG = ['writing',]
+WRITING_SLUG = ['writing','resume']
 SERVICE_SLUG = ['service',]
 
 VENDOR_GROUP_LIST = ['VENDOR']

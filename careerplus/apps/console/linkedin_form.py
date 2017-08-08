@@ -23,7 +23,7 @@ class DraftForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    summary = forms.CharField(required=True, widget=CKEditorWidget())
+    summary = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'ckeditor'}))
 
     profile_photo = forms.CharField(label=("Profile Photo"), max_length=85,
         widget=forms.TextInput(
@@ -138,8 +138,7 @@ class OrganizationForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control'}))
 
-    org_desc = forms.CharField(
-        required=True, widget=CKEditorWidget())
+    org_desc = forms.CharField(widget=forms.Textarea(attrs={'class':'ckeditor'}))
     
     work_from = forms.DateField(
           widget=forms.DateInput(attrs={'class': 'form-control work_from'}))
@@ -227,7 +226,7 @@ class EducationForm(forms.ModelForm):
     level = forms.ChoiceField(choices = LEVEL, 
         widget=forms.Select(attrs={'class': 'form-control'}))
 
-    edu_desc = forms.CharField(required=True, widget=CKEditorWidget())
+    edu_desc = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'ckeditor'}))
     
     study_from = forms.DateField(
           widget=forms.DateInput(attrs={'class': 'form-control study_from'}))
@@ -339,7 +338,7 @@ class LinkedinOIFilterForm(forms.Form):
         to_field_name='pk',
         widget=forms.Select())
 
-    added_on = forms.CharField(
+    created = forms.CharField(
         label=("Added On:"), required=False,
         initial='',
         widget=forms.TextInput(attrs={
@@ -362,7 +361,7 @@ class LinkedinOIFilterForm(forms.Form):
         widget=forms.Select(
             attrs={'class': 'form-control'}))
 
-    updated_on = forms.CharField(
+    modified = forms.CharField(
         label=("Modified On:"), required=False,
         initial='',
         widget=forms.TextInput(attrs={
@@ -411,7 +410,7 @@ class LinkedinOIFilterForm(forms.Form):
         self.fields['draft_level'].choices = draft_choices
 
     class Meta:
-        fields = ['writer', 'added_on', 'delivery_type', 'updated_on', 'draft_level']
+        fields = ['writer', 'created', 'delivery_type', 'modified', 'draft_level']
 
 
 class OrganizationInlineFormSet(forms.BaseInlineFormSet):

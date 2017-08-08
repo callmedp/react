@@ -36,7 +36,7 @@ class WalletRedeemView(APIView, CartMixin):
         if cart_obj.coupon:
             return Response(
                 {'success': 0,
-                 'error': 'Coupon already applied, You cannot reddem point now.'
+                 'error': 'Coupon already applied, You cannot redeem point now.'
                  }, status=400, content_type='application/json')
         wal_txn = cart_obj.wallettxn.filter(
             txn_type=2).order_by('-created').select_related('wallet')

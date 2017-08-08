@@ -1,0 +1,35 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+
+{% block title %}Article Categories | Shinelearning{% endblock %}
+{% block css_section %}
+    {{ block.super }}
+{% endblock css_section %}
+
+<body>
+    {% block main_container %}
+        <div class="wrapper">
+            {% block header %}
+                <header class="filter-menu">
+                    <div class="">
+                        <a class="icon-back pull-left" role="button" onclick="goBack()"></a>
+                        Choose Category
+                    </div><!-- / Left side Icon ends here -->
+                </header><!-- header ends here -->
+            {% endblock header %}
+
+            <section class="content-box">
+                <ul class="filter-item">
+                    {% for cat in object_list %}
+                        {% if cat.article_exists %}
+                            <li><a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </section>
+        </div><!-- /page -->
+    {% endblock main_container %}
+
+{% block js_section %}
+    {{ block.super }}
+{% endblock js_section %}

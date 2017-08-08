@@ -425,7 +425,6 @@ class AddScreenProductView(FormView):
 
     def form_valid(self, form):
         user = self.request.user
-
         if user.has_perm('shop.console_add_product'):
             vendor = user.get_vendor()
             if not vendor:

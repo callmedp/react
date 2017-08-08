@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import SearchListView, SearchQueryView
+from .views import SearchListView, SearchQueryView, TestListingView
 
 urlpatterns = [
     url(r'^recommended/(?P<f_area>[-./\w]+)/(?P<skill>[-./\w]+)$', SearchListView.as_view(), name='recommended_listing'),

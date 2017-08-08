@@ -1,6 +1,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import View, TemplateView, DetailView
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.http import urlquote
 
@@ -8,6 +9,7 @@ from shop.models import Category
 from cms.mixins import UploadInFile
 from review.models import Review
 from partner.models import Vendor
+from shop.models import Product
 from .mixins import SkillPageMixin
 
 # Create your views here.
@@ -65,14 +67,17 @@ class SkillPageView(DetailView, SkillPageMixin):
         career_outcomes = self.object.split_career_outcomes()
         prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
+
         try:    
             top_3_prod = self.object.categoryproducts.all().order_by('-productcategories__prd_order')[0:3]
             top_4_vendors = Vendor.objects.all()[0:4]
         except:
             pass
-
+        
+        prd_obj = ContentType.objects.get_for_model(Product)
         prod_id_list = self.object.categoryproducts.values_list('id', flat=True)
-        prod_reviews = Review.objects.filter(id__in=prod_id_list)
+        prod_reviews = Review.objects.filter(
+            object_id__in=prod_id_list, content_type=prd_obj)
 
         try:
             prod_lists[0]
@@ -96,7 +101,6 @@ class SkillPageView(DetailView, SkillPageMixin):
             page_reviews = prod_review.page(1)
         except EmptyPage:
             page_reviews = prod_review.page(prod_review.num_pages)
-
         context['meta'] = self.object.as_meta(self.request)
         context.update({
             "api_data": api_data,
@@ -108,7 +112,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
             "products": products,
-            "page_reviews":page_reviews,
+            "page_reviews":prod_reviews[0:4] if self.request.flavour else page_reviews,
             'url': 'https://' + self.object.video_link
         })
         context.update(self.get_breadcrumb_data())

@@ -117,7 +117,7 @@ class LineItem(AbstractAutoDate):
         _('Price incl. Tax'), decimal_places=2, max_digits=12, null=True)
 
     no_process = models.BooleanField(default=False)
-    parent_deleted = models.BooleanField(default=False)
+    parent_deleted = models.BooleanField(default=False)  #  True for variation and False for Addon
 
     def __init__(self, *args, **kwargs):
         super(LineItem, self).__init__(*args, **kwargs)
@@ -137,10 +137,9 @@ class LineItem(AbstractAutoDate):
                                  'line_id': self.pk}
 
 
-class Subscription(models.Model):
+class Subscription(AbstractAutoDate):
     candidateid = models.CharField(max_length=255, null=True, blank=True)
     order = models.ForeignKey(Order)
-    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     expire_on = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

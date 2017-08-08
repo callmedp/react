@@ -148,16 +148,16 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def save(self, *args, **kwargs):
         if self.pk:
             self.url = self.get_full_url()
-        if self.name:
-            if not self.title:
-                self.title = self.name
-            if not self.heading:
-                self.heading = self.name
-            if not self.image_alt:
-                self.image_alt = self.name
-        if self.description:
-            if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc(self.description.strip())
+            if self.name:
+                if not self.title:
+                    self.title = self.name
+                if not self.heading:
+                    self.heading = self.name
+                if not self.image_alt:
+                    self.image_alt = self.name
+            if self.description:
+                if not self.meta_desc:
+                    self.meta_desc = self.get_meta_desc(self.description.strip())
                 
         super(Category, self).save(*args, **kwargs)
 
@@ -250,9 +250,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return []
 
     def get_products(self):
-        products = self.productcategories.filter(
+        products = self.categoryproducts.filter(
             active=True,
-            product__active=True)
+            productcategories__active=True)
         return products
 
     def split_career_outcomes(self):
@@ -366,6 +366,7 @@ class AttributeOption(models.Model):
         'shop.AttributeOptionGroup', related_name='options',
         verbose_name=_("Group"))
     option = models.CharField(_('Option'), max_length=255)
+    code = models.CharField(_('Option Code'), max_length=4)
 
     def __str__(self):
         return self.option
@@ -906,15 +907,16 @@ class Product(AbstractProduct, ModelMeta):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.name:
-            if not self.heading:
-                self.heading = self.get_heading()
-            if not self.title:
-                self.title = self.get_title()
-            if not self.image_alt:
-                self.image_alt = self.name
-            if not self.meta_desc:
-                self.meta_desc = self.get_meta_desc()
+        if self.pk:
+            if self.name:    
+                if not self.heading:
+                    self.heading = self.get_heading()
+                if not self.title:
+                    self.title = self.get_title()
+                if not self.image_alt:
+                    self.image_alt = self.name
+                if not self.meta_desc:
+                    self.meta_desc = self.get_meta_desc()
         super(Product, self).save(*args, **kwargs)
         self.attr.save()
 
@@ -992,11 +994,12 @@ class Product(AbstractProduct, ModelMeta):
                 self.name,
             )
         elif self.is_service or self.is_writing:
-            return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
-                    self.category_main.name,
-                    self.get_exp(),
-                    self.category_main.name,
-                )            
+            if self.category_main:
+                return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
+                        self.category_main.name,
+                        self.get_exp(),
+                        self.category_main.name,
+                    )            
         
         return ''
 
@@ -1057,9 +1060,9 @@ class Product(AbstractProduct, ModelMeta):
 
     def pv_name(self, *args, **kwargs):
         if self.is_course:
-            return self.name + ' ( ' + self.get_exp + ' ) '
+            return self.name + ' ( ' + str(self.get_exp()) + ' ) '
         elif self.is_writing:
-            return self.name + ' ( ' + self.get_exp + ' ) '
+            return self.name + ' ( ' + str(self.get_exp()) + ' ) '
         elif self.is_course:
             return self.name + ' by ' + self.vendor.name
         return self.name
@@ -1068,7 +1071,7 @@ class Product(AbstractProduct, ModelMeta):
         
         if self.inr_price:
             return round(self.inr_price, 0)
-        return 'Set Price'
+        return Decimal(0)
 
     def get_fakeprice(self, *args, **kwargs):
         if self.inr_price:
@@ -1144,10 +1147,33 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return None
 
+    def get_fbts(self):
+        if self.type_product in [0, 1, 3, 5]:
+            return self.related.filter(
+                secondaryproduct__active=True, active=True).order_by('-secondaryproduct__sort_order')
+        else:
+            return None
+
     def get_combos(self):
         if self.type_product == 3:
             return self.childs.filter(
                 active=True, childrenproduct__active=True).order_by('-childrenproduct__sort_order')
+        else:
+            return None
+
+    def get_pops(self):
+        if self.type_product in [0, 1, 3, 5]:
+            category = self.category_main
+            if category:    
+                if self.is_course:
+                    pop_list = category.get_products().filter(
+                        type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
+                    return pop_list
+                elif self.is_writing or self.is_service:
+                    pop_list = category.get_products().filter(
+                        type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
+                    return pop_list
+            return None        
         else:
             return None
 
@@ -1668,7 +1694,13 @@ class ProductExtraInfo(models.Model):
     """
     Model to add any extra information to a Product.
     """
+    CHOICES = (
+        ('default', 'Default'),
+        ('profile_update', 'Profile Update Country')
+    )
+
     info_type = models.CharField(
+        choices=CHOICES,
         max_length=256,
         verbose_name=_('Type'),
     )
@@ -1687,7 +1719,7 @@ class ProductExtraInfo(models.Model):
         ordering = ['info_type']
 
     def __str__(self):
-        return '{0} - {1}'.format(self.product, self.type)
+        return '{0} - {1}'.format(self.product, self.info_type)
 
 
 class Chapter(AbstractAutoDate):

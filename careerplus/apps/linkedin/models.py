@@ -1,10 +1,10 @@
 from django.db import models
 from ckeditor.fields import RichTextField
-
+from seo.models import AbstractAutoDate
 LEVEL = (('NA', '---------'),(0, 'School'),(1,'College'),)
 
 
-class Draft(models.Model):
+class Draft(AbstractAutoDate):
     """Draft for the linkedin course"""
     candidate_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='Name')
     headline = models.CharField(max_length=120, verbose_name='Headline', null=True, blank=True)
@@ -30,7 +30,7 @@ class Draft(models.Model):
         return str(self.pk)
  
 
-class Organization(models.Model):
+class Organization(AbstractAutoDate):
     draft = models.ForeignKey(
         Draft, related_name='from_organization')
     org_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='Company Name')
@@ -44,7 +44,7 @@ class Organization(models.Model):
         return str(self.pk)
 
 
-class Education(models.Model):
+class Education(AbstractAutoDate):
     draft = models.ForeignKey(
         Draft, related_name='from_education')
     school_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='School Name')

@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
+from django.conf import settings
 
-from shop.models import Product
+from shop.models import Product, ProductClass
 
 from .models import TopTrending, Testimonial
 
@@ -15,7 +16,8 @@ class HomePageView(TemplateView):
             tjob = TopTrending.objects.filter(
                 is_active=True, is_jobassistance=True)[0]
             job_services = tjob.get_trending_products()
-            job_services = job_services.filter(product__type_service=2)
+            services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
+            job_services = job_services.filter(product__product_class__in=services_class, product__type_product__in=[0, 1, 3])
             job_services = job_services[: 5]
             job_asst_view_all = tjob.view_all
         except:
@@ -32,7 +34,8 @@ class HomePageView(TemplateView):
             tabs = ['home', 'profile', 'message', 'settings']
             for course in courses:
                 tprds = course.get_trending_products()
-                tprds = tprds.filter(product__type_service=3)[: 9]
+                course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
+                tprds = tprds.filter(product__product_class__in=course_classes)[: 9]
                 data = {
                     'name': course.name,
                     'tprds': list(tprds),
@@ -46,8 +49,9 @@ class HomePageView(TemplateView):
         return {'tcourses': tcourses}
 
     def get_recommend_courses(self):
+        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         recommended_courses = Product.objects.filter(
-            type_service=3, type_product__in=[0, 1, 3],
+            product_class__in=course_classes, type_product__in=[0, 1, 3],
             active=True)[: 6]
         return {"recommended_courses": recommended_courses, }
 
@@ -55,9 +59,6 @@ class HomePageView(TemplateView):
         testimonials = Testimonial.objects.filter(page=1, is_active=True)
         testimonials = testimonials[: 5]
         return {"testimonials": testimonials}
-
-    def get(self, request, *args, **kwargs):
-        return super(self.__class__, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)

@@ -7,6 +7,7 @@ from django.views.generic import ListView, TemplateView
 from django.http import QueryDict, Http404
 from django.core.paginator import Paginator, InvalidPage
 from django.core.exceptions import ImproperlyConfigured
+
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.conf import settings
@@ -422,3 +423,5 @@ class SearchListView(SearchBaseView):
     search_class = SimpleSearch
     params_class = SimpleParams
     pass
+
+

@@ -1017,6 +1017,7 @@ class ChangeProductView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+        
         if self.request.POST or self.request.FILES:
             try:
                 obj = int(self.kwargs.get('pk', None))
@@ -1690,6 +1691,7 @@ class ActionProductView(View, ProductValidation):
                                 childs = product.mainproduct.filter(active=True)
                                 for child in childs:
                                     sibling = child.sibling
+                                    sibling.type_flow = product.type_flow
                                     sibling.active = True
                                     sibling.save()
                             messages.success(
@@ -1724,6 +1726,7 @@ class ActionProductView(View, ProductValidation):
                                 childs = product.mainproduct.filter(active=True)
                                 for child in childs:
                                     sibling = child.sibling
+                                    sibling.type_flow = product.type_flow
                                     sibling.is_indexable = True
                                     sibling.save()
                             messages.success(

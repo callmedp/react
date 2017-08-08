@@ -322,7 +322,7 @@
   font-size: 40px;
   color: #707070;
   font-weight: 400;
-  background: url(../images/sprite.png) no-repeat -445px -92px;
+  background: url(../../images/sprite.png) no-repeat -445px -92px;
   width: 16px;
   height: 3px;
 }
@@ -334,7 +334,7 @@
   font-size: 40px;
   color: #707070;
   font-weight: 400;
-  background: url(../images/sprite.png) no-repeat -427px -91px;
+  background: url(../../images/sprite.png) no-repeat -427px -91px;
   width: 16px;
   height: 17px;
 }
@@ -416,7 +416,7 @@
 .notification-resume .resume-writing {
   text-align: left;
   margin: 20px auto 0 auto;
-  width: 300px;
+  width: 400px;
   display: block;
   font-size: 12px;
   color: #666;
@@ -427,6 +427,8 @@
   font-weight: 400;
   margin-top: 20px;
   width: 100%;
+  clear: both;
+  overflow: hidden;
 }
 .notification-resume .resume-writing .input-file {
   border-bottom: 1px solid #e1e1e1;
@@ -435,6 +437,7 @@
   height: 30px;
   line-height: 16px;
   cursor: pointer;
+  margin-bottom: 15px;
 }
 .notification-resume .resume-writing .choose-file {
   color: #3f5f94;
@@ -443,6 +446,7 @@
   text-align: right;
   position: relative;
   z-index: -1;
+  margin-top: 5px;
 }
 .notification-resume .resume-writing .upload-file {
   top: -17px;
@@ -453,6 +457,13 @@
 .notification-resume .resume-writing .blue-button {
   margin-top: 5px;
   color: #fff;
+}
+.notification-resume .resume-writing .use-shine label {
+  font-weight: 400;
+  font-size: 14px;
+}
+.notification-resume .resume-writing .use-shine label input {
+  margin-right: 5px;
 }
 
 .filter-by {
@@ -514,7 +525,7 @@
 }
 .back-inbox a:before {
   content: '';
-  background: url(../images/sprite.png) no-repeat -246px -247px;
+  background: url(../../images/sprite.png) no-repeat -246px -247px;
   width: 8px;
   height: 14px;
   display: inline-block;
@@ -597,7 +608,7 @@
 }
 .products-inbox li .accept-reject .accept:before {
   content: '';
-  background: url(../images/sprite.png) no-repeat -216px -251px;
+  background: url(../../images/sprite.png) no-repeat -216px -251px;
   width: 12px;
   height: 9px;
   display: inline-block;
@@ -622,7 +633,7 @@
 }
 .products-inbox li .accept-reject .reject:before {
   content: '';
-  background: url(../images/sprite.png) no-repeat -232px -251px;
+  background: url(../../images/sprite.png) no-repeat -232px -251px;
   width: 10px;
   height: 10px;
   display: inline-block;
@@ -814,10 +825,31 @@
   color: #333;
 }
 
+.load-more-list {
+  padding: 10px 0;
+  display: block;
+  color: #333;
+  background-color: #f1f1f1;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 30px 0 0 15px;
+  clear: both;
+  float: left;
+  width: 96.5%;
+}
+.load-more-list:hover {
+  color: #333;
+}
+.load-more-list:focus {
+  color: #333;
+  overflow: hidden;
+}
+
 /*----------------feddback & interview page css----------------*/
 .feedback-header {
   clear: both;
-  background: url(../images/detail-header-bg.jpg) no-repeat center top;
+  background: url(../../images/detail-header-bg.jpg) no-repeat center top;
   background-size: cover;
   display: block;
 }
@@ -914,7 +946,7 @@
 .feedback-referrer .referrer-feedback-icon {
   width: 50px;
   height: 72px;
-  background: url(../images/sprite.png) no-repeat 0 -242px;
+  background: url(../../images/sprite.png) no-repeat 0 -242px;
   display: inline-block;
   margin-right: 10px;
 }
@@ -1144,7 +1176,7 @@
   padding-right: 10px;
 }
 .profile-data li .pro-select, .profile-data li .pro-select2 {
-  background: url(../images/dropdown.png);
+  background: url(../../images/dropdown.png);
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: right;
@@ -1224,7 +1256,7 @@
   height: 83px;
   display: block;
   margin: 0 auto;
-  background: url(../images/sprite.png) no-repeat -52px -242px;
+  background: url(../../images/sprite.png) no-repeat -52px -242px;
 }
 .empty-wallet article {
   display: block;
@@ -1357,6 +1389,151 @@
 .linkedin_resume .skill-box .skill-time, .linkedin_resume .skill-box .skill-name {
   padding: 5px 10px;
   display: inline-block;
+}
+
+.accept-msg {
+  font-size: 14px;
+}
+.accept-msg strong {
+  font-weight: 600;
+  display: block;
+}
+.accept-msg small {
+  color: #999;
+  margin-top: 10px;
+}
+
+.reject-msg label {
+  font-weight: 400;
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 18px;
+}
+.reject-msg label:hover {
+  color: #333;
+}
+.reject-msg .input-file {
+  border-bottom: 1px solid #e1e1e1;
+  position: relative;
+  overflow: hidden;
+  height: 30px;
+  line-height: 16px;
+  cursor: pointer;
+}
+.reject-msg .input-file .choose-file {
+  color: #3f5f94;
+  font-size: 12px;
+  display: block;
+  position: relative;
+  margin-top: 8px;
+  text-align: right;
+}
+.reject-msg .input-file .upload-file {
+  top: 0;
+  position: relative;
+  width: 230px;
+  float: left;
+}
+.reject-msg .custom-select {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 0;
+}
+@media (max-width: 1190px) {
+  .reject-msg .custom-select {
+    width: auto;
+  }
+}
+.reject-msg .custom-select select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: -2px;
+  text-overflow: '';
+  border-radius: 0;
+  height: 28px;
+  padding: 2px 15px 2px 0;
+  margin-left: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+}
+.reject-msg .custom-select select::-ms-expand {
+  display: none;
+}
+.reject-msg .custom-select:after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #c1c1c1;
+  position: absolute;
+  right: 5px;
+  top: 12px;
+  text-indent: 1px;
+  text-overflow: '';
+}
+.reject-msg textarea {
+  padding-left: 0;
+}
+
+/* Ratings widget */
+.rate {
+  display: inline-block;
+  border: 0;
+}
+
+/* Hide radio */
+.rate > input {
+  display: none;
+}
+
+/* Order correctly by floating highest to the right */
+.rate > label {
+  color: #e1e1e1;
+  float: right;
+  height: 16px;
+}
+
+/* The star of the show */
+.rate > label:before {
+  display: inline-block;
+  font-size: 20px;
+  padding: 0 1px;
+  margin: 0;
+  cursor: pointer;
+  content: "\2605 ";
+  /* full star */
+}
+
+/* Zero stars rating */
+.rate > label:last-child:before {
+  content: "\2605 ";
+  /* empty star outline */
+}
+
+/* Half star trick */
+.rate .half:before {
+  content: "\2605 ";
+  /* half star no outline */
+  position: absolute;
+  padding-right: 0;
+}
+
+/* Click + hover color */
+input:checked ~ label,
+label:hover, label:hover ~ label {
+  color: #3f5f94;
+}
+
+/* color previous stars on hover */
+/* Hover highlights */
+input:checked + label:hover, input:checked ~ label:hover,
+input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label {
+  color: #3f5f94;
 }
 
 /*# sourceMappingURL=dashboard.css.map */

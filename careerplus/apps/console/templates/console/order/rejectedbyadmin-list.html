@@ -38,7 +38,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.updated_on }}
+                            {{ filter_form.modified }}
                         </div>
                         <br/>
                     </div>
@@ -89,9 +89,9 @@
                             <br/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.updated_on.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.modified.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.updated_on }}
+                                {{ filter_form.modified }}
                             </div>
                             <br/>
                         </div>
@@ -240,17 +240,20 @@
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
-                      <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>{% if obj.parent and obj.is_variation %}
+                              {{obj.parent.product.name}}:</br>
+                          {% endif %}
+                          {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                       
                       <td>Delivery Type</td>
                       <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
-                      <td>{{obj.updated_on|naturaltime}}
-                          <b>Updated On: {{obj.updated_on}}</b>
+                      <td>{{obj.modified|naturaltime}}
+                          <b>Updated On: {{obj.modified}}</b>
                       </td>
 
-                      <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
+                      <td>Draft Level {% if obj.draft_counter|add:"1" == max_limit_draft %}Final{% else %}{{obj.draft_counter|add:"1"}} {% endif %}</td>
 
                       <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
 
@@ -293,7 +296,7 @@
 
                                 {% for field in message_form %}
                                     <div class="form-group"> 
-                                        <div class="col-md-4">
+                                        <div class="col-md-8">
                                             {{ field }}
                                             {% if field.help_text %}
                                                 <p class="text-muted"><small>{{ field.help_text }}</small></p>

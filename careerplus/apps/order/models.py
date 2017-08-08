@@ -1,12 +1,15 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+
 from seo.models import AbstractAutoDate
 from geolocation.models import Country
-from .choices import STATUS_CHOICES, SITE_CHOICES,\
-    PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS
-
 from linkedin.models import Draft
+
+from .choices import STATUS_CHOICES, SITE_CHOICES,\
+    PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS,\
+    OI_USER_STATUS
+from .functions import get_upload_path_order_invoice
 
 
 class Order(AbstractAutoDate):
@@ -83,6 +86,11 @@ class Order(AbstractAutoDate):
         related_name='order_paid_by',
         null=True, blank=True)
 
+    # invoce order
+    invoice = models.FileField(
+        upload_to=get_upload_path_order_invoice, max_length=255,
+        blank=True, null=True)
+
     class Meta:
         app_label = 'order'
         ordering = ['-date_placed']
@@ -119,7 +127,7 @@ class Order(AbstractAutoDate):
         return payD.get(self.payment_mode)
 
 
-class OrderItem(models.Model):
+class OrderItem(AbstractAutoDate):
     order = models.ForeignKey(
         'order.Order', related_name='orderitems', verbose_name=_("Order"))
 
@@ -163,6 +171,7 @@ class OrderItem(models.Model):
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
+    is_addon = models.BooleanField(default=False)
 
     #counselling form status
     counselling_form_status = models.PositiveSmallIntegerField(
@@ -198,8 +207,7 @@ class OrderItem(models.Model):
     draft_added_on = models.DateTimeField(null=True, blank=True)
     approved_on = models.DateTimeField(null=True, blank=True)  # draft approved on
 
-    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+    user_feedback = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'order'
@@ -227,6 +235,8 @@ class OrderItem(models.Model):
             ("can_show_linkedinrejectedbyadmin_queue", "Can View Linkedin Rejected By Admin Queue"),
             ("can_show_linkedinrejectedbycandidate_queue", "Can View LinkedinRejected By Candidate Queue"),
             ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
+            ("can_show_linkedin_inbox_queue", "Can View Linkedin Inbox Queue"),
+            ("can_show_linkedin_writer_draft", "Can View Linkedin Writer Draft"),
 
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),
@@ -306,6 +316,11 @@ class OrderItem(models.Model):
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
+    @property
+    def get_user_oi_status(self):
+        dict_status = dict(OI_USER_STATUS)
+        return dict_status.get(self.oi_status)
+
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
         return list(communications)
@@ -328,17 +343,13 @@ class OrderItem(models.Model):
             return 'Draft %s' % (self.draft_counter)
         return ''
 
-    def check_featured_profile_dependency(self):
-        order = self.order
-        ois = order.orderitems.filter(product__id__in=settings.RESUME_WRITING_INDIA)
-        if ois.exists():
-            closed_ois = ois.filter(oi_status=4)
-            if closed_ois.exists():
-                return closed_ois[0]
-            else:
-                return None
-        else:
-            return self
+    def get_roundone_status(self):
+        if self.oi_status == 142:
+            pass
+        elif self.oi_status not in [141, 142, 143]:
+            pass
+        dict_status = dict(OI_USER_STATUS)
+        return dict_status.get(self.oi_status)
 
     def get_test_obj(self):
         return self
@@ -376,8 +387,13 @@ class OrderItemOperation(AbstractAutoDate):
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
+    @property
+    def get_user_oi_status(self):
+        dict_status = dict(OI_USER_STATUS)
+        return dict_status.get(self.oi_status)
 
-class Message(models.Model):
+
+class Message(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
 
     added_by = models.ForeignKey(
@@ -391,17 +407,15 @@ class Message(models.Model):
 
     is_internal = models.BooleanField(default=False)
 
-    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
-
     class Meta:
-        ordering = ['added_on']
+        ordering = ['created']
 
-class InternationalProfileCredential(models.Model):
+
+class InternationalProfileCredential(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
     country =  models.ForeignKey(Country)
     username = models.CharField(_('Username'), max_length=100)
-    Password = models.CharField(_('Password'), max_length=100)
+    password = models.CharField(_('Password'), max_length=100)
     candidateid = models.CharField(_('CandidateId'), max_length=100)
     candidate_email = models.CharField(_('Candidate Email'), max_length=100)
     site_url = models.CharField(_('Site Url'), max_length=100, blank=True)
@@ -409,3 +423,4 @@ class InternationalProfileCredential(models.Model):
 
     def __str__(self):
         return self.username
+

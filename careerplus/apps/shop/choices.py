@@ -32,6 +32,7 @@ PRODUCT_CHOICES = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
 
 FLOW_CHOICES = (
     (0, 'Default'),
+<<<<<<< HEAD
     (1, 'Resume Writing India'),
     (2, 'Courses'),
     (3, 'Resume Critique'),
@@ -46,6 +47,22 @@ FLOW_CHOICES = (
     (12, 'Country Specific Resume'),
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),)
 
+=======
+    (1, 'Resume Writing India'),  # flow1
+    (2, 'Courses'),  # flow2
+    (3, 'Resume Critique'),  # flow3
+    (4, 'International Profile Update'),  # flow4
+    (5, 'Featured Profile'),  # flow5
+    (6, 'IDfy Assessment'),  # flow6
+    (7, 'Resume Booster'),  # flow7
+    (8, 'Linkedin'),  # flow8
+    (9, 'Round One'),  # flow9
+    (10, 'StudyMate'),  # flow 10
+    (11, 'TSSC'),  # flow 11
+    (12, 'Country Specific Resume'),  # flow 12
+    (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
+)
+>>>>>>> dev
 
 EXP_CHOICES = (
     (0, 'Default'),
