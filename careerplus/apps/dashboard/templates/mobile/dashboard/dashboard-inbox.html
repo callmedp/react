@@ -1,0 +1,97 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block title %}My Inbox | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    
+{% endblock css_section %}
+
+{% block header %}
+    <header class="w100fl he-auto">
+        
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="icon-bar pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a class=" pull-left"  role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <a class="icon-search pull-left" href="search-listing.html">search</a>
+
+                
+                <a class="icon-cart pull-left" href="#">cart</a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">Inbox</h1>
+        
+
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <!-- content box Starts here -->
+    <div class="content-box">
+        <div class="container" id="orderitem-inbox-box">
+            {{inbox_list|safe}}
+
+        </div><!-- /container -->
+    </div><!-- content box ends here -->
+    
+    {% block pending_items %}
+        <!-- Other packages start here -->
+        <div class="sidebar" id="sidebar-secondary">
+          <div class="upload-resume p-15">
+            <p class="fs-16 c6 mt-20">To initiate your <a href="#">Resume writing</a> services. Use <a href="#">Shine resume</a> or <a href="#">upload resume</a> </p>
+            
+            <div class="rel mt-10">
+                <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+                <div class="fileUpload">
+                    <span>Upload</span>
+                    <input id="uploadBtn" type="file" class="upload" />
+                </div>
+            </div><!-- Choose file ends here -->
+
+            <div class="mt-30">
+                <p class="c6 fs-13"><strong>Use this resume for following products</strong></p>
+                <ul class="resume-type mt-10">
+                    <li>
+                        <input type="checkbox" id="test1">
+                        <label for="test1">Resume writing - Exp 0 to 1 yrs</label>
+                    </li>
+
+                    <li>
+                        <input type="checkbox" id="test2">
+                        <label for="test2">Resume writing - Exp 4 to 8 yrs</label>
+                    </li>
+
+                    <li>
+                        <input type="checkbox" id="test3">
+                        <label for="test3">Resume writing - Exp 10 to 15 yrs</label>
+                    </li>
+                </ul>
+
+                <div class="bottom-btn">
+                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center">Upload now</a>
+                </div>
+            </div>
+
+          </div>
+        </div><!-- Other packages ends here -->
+    {% endblock pending_items %}
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+{% endblock js_section %}

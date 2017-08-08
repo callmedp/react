@@ -5,7 +5,7 @@
 <ul class="products-inbox">
     {% if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13 %}
         <li class="col-sm-12">
-          <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
+          <h2>{{oi.product.heading}}{% if oi.product.get_exp %} - Exp: {{oi.product.get_exp}}{% endif %}</h2>
           <span class="transaction">Order ID : {{oi.order.number}}</span>
           <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
@@ -307,7 +307,7 @@
                     </datalist>
                     <datalist class="col-sm-3 text-right">
                       {% if op.oi_draft %}
-                          <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                          <a href="{{op.oi_draft.url}}" target="_blank">Download</a>
                       {% endif %}
                     </datalist>
                   </li>
@@ -424,6 +424,8 @@
                     <datalist class="col-sm-3 text-right">
                       {% if op.oi_status == 101 %}
                           <a href="#" target="_blank">Take Test</a>
+                      {% elif op.oi_draft %}
+                          <a href="{{op.oi_draft.url}}" target="_blank">Download</a>
                       {% endif %}
                     </datalist>
                   </li>

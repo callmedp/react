@@ -1,0 +1,282 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block title %}Order item detail | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    
+{% endblock css_section %}
+
+{% block header %}
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="icon-back pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                
+                <a class=" pull-left" role="button" onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <a class="icon-search pull-left" href="search-listing.html">search</a>
+
+                <a class="icon-cart pull-left" href="#">cart</a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">Details</h1>
+        
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <div class="content-box pt-0">
+        <div class="box row">
+            <h2 class="mb-5">{{oi.product.heading}}{% if oi.product.get_exp %} - {{obj.product.get_exp}}{% endif %}</h2>
+            <p class="pb-0 c6">Order ID : {{oi.order.number}}</p>
+            {% if oi.oi_status == 24 or oi.oi_status == 46 %}
+                <div class="button-wrap mt-15">
+                    <span class="accept"><a href="#"><sup class="icon-tick-green"></sup>Accept</a></span>
+                    <span class="reject"><a href="#"><sup class="icon-tick-cross"></sup>Reject</a></span>
+                    <div class="clearfix"></div>        
+                </div><!-- /.button-wrap -->
+            {% endif %}
+        </div><!-- /.box and row -->
+
+        <h2 class="mt-15 c9">Status</h2>
+
+        <ul class="status-list">
+            {% if oi.oi_status == 1 or oi.oi_status == 12 or oi.oi_status == 13 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {% if op.oi_status == 24 and op.draft_counter == 1 %}
+                                {{op.get_user_oi_status}}
+                            {% elif op.oi_status == 24 and op.draft_counter < max_draft_limit %}
+                                Revised Document is ready
+                            {% elif op_oi_status == 4 %}
+                                Document is finalized
+                            {% else %}
+                               {{op.get_user_oi_status}}
+                            {% endif %}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_status == 2 and not oi.oi_resume %}
+                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                        {% elif op.oi_status == 24 %}
+                            <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}">Download</a>
+                        {% elif op.oi_status == 27 %}
+                            <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}">Download</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+            {% elif oi.product.type_flow == 8 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {% if op.oi_status == 46 and op.draft_counter == 1 %}
+                                {{op.get_user_oi_status}}
+                            {% elif op.oi_status == 46 and op.draft_counter < max_draft_limit %}
+                                Revised Document is ready
+                            {% elif op_oi_status == 4 %}
+                                Document is finalized
+                            {% else %}
+                               {{op.get_user_oi_status}}
+                            {% endif %}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_status == 49 and oi.counselling_form_status == 41 %}
+                            <a href="#" class="btn btn-outline w100 mt-20">Complete form</a>
+                        {% elif op.oi_status == 46 %}
+                            <a href="#" class="btn btn-outline w100 mt-20">Download</a>
+                        {% elif op.oi_status == 27 %}
+                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 3 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_draft %}
+                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                        {% elif op.oi_status and not oi.oi_resume %}
+                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 2 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_status == 6 %}
+                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 4 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_status == 2 and not oi.oi_resume %}
+                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                        {% elif op.oi_status == 6 %}
+                            <a href="#" lass="btn btn-outline w100 mt-20">Download Credential</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 5 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_status == 2 and not oi.oi_resume %}
+                          <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 6 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_draft %}
+                            <a href="{{op.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 7 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 9 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_status == 141 %}
+                            <a href="#" class="btn btn-outline w100 mt-20">Complete Profile</a>
+                        {% elif op.oi_status == 142 %}
+                            <a href="#" class="btn btn-outline w100 mt-20">Edit your profile</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 10 %}
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                        {% if op.oi_status == 101 %}
+                            <a href="#" class="btn btn-outline w100 mt-20">Take Test</a>
+                        {% elif op.oi_draft == 101 %}
+                            <a href="{{op.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                        {% endif %}
+                    </li><!-- /.li -->
+                {% endfor %}
+
+
+            {% endif %}
+
+            {% comment %}
+            <li class="box row">
+                <div class="rel status-item">
+                    Final document Uploaded
+                    <span>Jul 12, 2016</span>
+                </div>
+                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
+            </li><!-- /.li --><li class="box row">
+                <div class="rel status-item">
+                    Document is finalized
+                    <span>Jul 12, 2016</span>
+                </div>
+
+            </li><!-- /.li -->
+
+            <li class="box row">
+                <div class="rel status-item">
+                    Final document Uploaded
+                    <span>Jul 12, 2016</span>
+                </div>
+                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
+            </li><!-- /.li --><li class="box row">
+                <div class="rel status-item">
+                    Document is finalized
+                    <span>Jul 12, 2016</span>
+                </div>
+
+            </li><!-- /.li -->
+
+            <li class="box row">
+                <div class="rel status-item">
+                    Final document Uploaded
+                    <span>Jul 12, 2016</span>
+                </div>
+                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
+            </li><!-- /.li --><li class="box row">
+                <div class="rel status-item">
+                    Document is finalized
+                    <span>Jul 12, 2016</span>
+                </div>
+
+            </li><!-- /.li -->
+
+            <li class="box row">
+                <div class="rel status-item">
+                    Final document Uploaded
+                    <span>Jul 12, 2016</span>
+                </div>
+                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
+            </li><!-- /.li -->
+            {% endcomment %}
+        </ul><!-- /.ul -->
+
+        <a href="#" class="btn btn-blue btn-round w100"><span class="icon-comment-white"></span>Comment to writer</a>
+
+
+
+    </div>
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+{% endblock js_section %}

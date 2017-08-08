@@ -4,7 +4,7 @@ from .views import RoundoneDashboardView, DashboardSavedDeleteView, \
     DashboardUpcomingView, DashboardPastView, DashboardSavedView, \
     DashboardResultView, DashboardMyProfileView, \
     UpdateShineProfileView
-from . import dashboard_view
+from . import dashboard_view, mobile_view
 
 
 urlpatterns = [
@@ -77,4 +77,13 @@ urlpatterns += [
     url(r'^order-invoicedownload/$',
         dashboard_view.DashboardInvoiceDownload.as_view(),
         name='dashboard-invoicedownload'),
+]
+
+
+# for mobile pages
+
+urlpatterns += [
+    url(r'^item-detail/$',
+        mobile_view.DashboardItemDetailView.as_view(),
+        name='dashboard-itemdetail'),
 ]

@@ -6,12 +6,11 @@ from django.conf import settings
 from django.middleware.csrf import get_token
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
 from order.models import Order, OrderItem
 
 
 class DashboardInfo(object):
-    def get_inbox_list(self, candidate_id=None, request=None, last_month_from=3, select_type=0, page=1):
+    def get_inbox_list(self, candidate_id=None, request=None, last_month_from=6, select_type=0, page=1):
         if candidate_id:
             days = last_month_from * 30
             last_payment_date = timezone.now() - datetime.timedelta(days=days)
@@ -25,7 +24,7 @@ class DashboardInfo(object):
                 orderitems = orderitems.filter(oi_status=4)
 
             orderitems = orderitems.select_related(
-                'order', 'product', 'partner')
+                'order', 'product', 'partner').order_by('-order__payment_date')
             paginator = Paginator(orderitems, 10)
             try:
                 orderitems = paginator.page(page)
