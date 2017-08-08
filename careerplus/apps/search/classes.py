@@ -13,10 +13,12 @@ from haystack.query import EmptySearchQuerySet
 
 #local imports
 from search import inputs
-from .helpers import search_clean_fields, pop_stop_words
+from .helpers import search_clean_fields, pop_stop_words, clean_all_fields, clean_id_fields, clean_list_fields, \
+    handle_special_chars, get_filters, remove_quote_in_q
+from .lookups import FILLERS
 
 #inter app imports
-from core.library.search.query import SQS
+from core.library.haystack.query import SQS
 
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
@@ -31,9 +33,9 @@ class BaseSearch(object):
     search_params = {}
     allow_empty_query = True
 
-    fields = ["text", "pURL", "pTt", "pHd", "pNm", "pSg", "pTS", "pTP", "pUPC", "pBnr", "pIc", "pIBg", "pImg",
-              "pImA", "pVd", "pDM", "pDD", "id", "pCert", "pSM", "pCT", "pAR", "pRC", "pNJ", "pSK", "pCds",
-              "pVnd", "pPrs"]
+    fields = ["text", "pURL", "pTt", "pHd", "pNm", "pSg", "pPC", "pTP", "pUPC", "pBnr", "pIc", "pIBg", "pImg",
+              "pImA", "pvurl", "pDM", "pDD", "id", "pCert", "pSM", "pCT", "pAR", "pRC", "pNJ",
+              "pPV", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pPChs"]
 
     similar_fields = []
 
@@ -43,55 +45,58 @@ class BaseSearch(object):
         'facet': 'on',
         'facet.mincount': '1',
         'qf': 'text pHd^0.5 pFA^0.3 pCtg^0.2 pMtD^0.1 pMK^0.1 pChts^0.1 pAb^0.05',
-        'pf': 'pHd^0.5 pFA^0.2 pCtg^0.2 pMtD^0.1 pMK^0.1 pChts^0.1 pAb^0.05',
-        'pf2': 'pFA^03 pCtg^0.2 pChts^0.1',
+        'pf': 'pHd^0.5 pFA^0.2 pCtg^0.2 pMtD^0.1 pMK^0.1 pPChs^0.1 pAb^0.05',
+        'pf2': 'pFA^03 pCtg^0.2 pPChs^0.1',
         'ps2': 1,
         'tie': 1,
         'hl': False,
         # 'boost': 'product(recip(ms(NOW/HOUR,jPDate),3.16e-11,0.08,0.05),jDup)',
+        'spellcheck': 'true',
+        'spellcheck.dictionary': 'default',
+        'spellcheck.onlyMorePopular': 'true',
+        'spellcheck.maxResultsForSuggest': 10000,
+        'spellcheck.maxCollations': 4,
+        'spellcheck.maxCollationTries': 100,
+        'spellcheck.collateExtendedResults': 'true',
         'bq': 'date:[NOW/DAY-1YEAR TO NOW/DAY]'
     }
 
-    facet_list = ['{!ex=loc}jFLoc',
-                  '{!ex=exft}jFEx',
-                  '{!ex=slft}jFSal',
-                  '{!ex=jfunT}pFA',
-                  '{!ex=indT}jIndID',
-                  'jNSTs']
+    facet_list = ['pPinr',
+                  '{!ex=level}pCL',
+                  '{!ex=ratng}pAR',
+                  '{!ex=funa}pFA',
+                  '{!ex=durm}pDM',
+                  '{!ex=cert}pCert',
+                  '{!ex=mode}pSM'
+                  ]
 
     # These are the filters shown on search page
     filter_mapping = {
-        '{!tag=loc}jFLoc': 'location',
-        '{!tag=exft}jFEx': 'fexp',
-        '{!tag=slft}jFSal': 'fsalary',
-        '{!tag=jfunT}jFA': 'farea',
-        '{!tag=indT}jIndID': 'findustry',
-        'jCIDF':'fcid',
-        'jNSTs': 'fshift',
-        'jCType': 'rectype',
-        'jCID': 'rect',
-        'jCUID': 'rect_uid',
-        'jJobType':'job_type'
+        'pPinr': 'fprice',
+        '{!tag=level}pCL': 'fclevel',
+        '{!tag=cert}pCert': 'fcert',
+        '{!tag=funa}pFA': 'farea',
+        '{!tag=ratng}pAR': 'frating',
+        '{!tag=durm}pDM':'fduration',
+        '{!tag=mode}pSM': 'fmode'
     }
 
     boost_mapping = {
-        'jIndID': (('IndustryCurr', 2), ('IndustryPrev', 1)),
-        'jAreaID': (('SubFunctionalAreaCurr', 2), ('SubFunctionalAreaPrev', 1)),
-        'jExID': (('Experience', 2),),
-        'jLocID': (('Location', 2),),
+        # 'jIndID': (('IndustryCurr', 2), ('IndustryPrev', 1)),
+        # 'jAreaID': (('SubFunctionalAreaCurr', 2), ('SubFunctionalAreaPrev', 1)),
+        # 'jExID': (('Experience', 2),),
+        # 'jLocID': (('Location', 2),),
     }
 
     needed_params_options = {}
 
-    sort_mapping = {'sort': {'1': '-jPDate'}}
+    sort_mapping = {'sort': {'1': '-pCDate', '2': 'pPinr', '3': '-pPinr', '4': 'pAR'}}
 
     query_param_name = 'q'
 
     user = AnonymousUser()
 
-
-
-    def set_query(self,query):
+    def set_query(self, query):
         """
         Set the actual query string upon which the Raw search needs to be performed.
         Use this method to set the query for search.
@@ -105,26 +110,24 @@ class BaseSearch(object):
         Raises an exception if the query is not set by the calling instance.
         """
         if not hasattr(self,'query'):
-            raise ImproperlyConfigured("'%s' must define query" %self.__class__.__name__)
+            raise ImproperlyConfigured("'%s' must define query" % self.__class__.__name__)
         return self.query
 
-    def set_params(self,params):
+    def set_params(self, params):
         """
         All the search classes take the processed search params.
         Set them using this method.
         No cleaning/processing of the params to be performed in search classes.
         """
-
         self.params = params
 
     def set_results(self):
         """
-        Spellcheck query not needed in every case.
-        Pop spellcheck parameters wherever possible.
+        Spell check query not needed in every case.
+        Pop spell check parameters wherever possible.
         """
-        if self.params.has_key('no_spelling') and self.params.get('no_spelling') == True:
+        if 'no_spelling' in self.params and self.params.get('no_spelling') == True:
             self.results = SQS().using('no_spellcheck')
-
 
     def get_params(self):
         """
@@ -133,7 +136,7 @@ class BaseSearch(object):
         """
 
         if not hasattr(self,'params'):
-            raise ImproperlyConfigured("'%s' must define params" %self.__class__.__name__)
+            raise ImproperlyConfigured("'%s' must define params" % self.__class__.__name__)
 
         self.set_results()
         return self.params
@@ -151,12 +154,10 @@ class BaseSearch(object):
             return 0
         return results_per_page
 
-
     def set_user(self,user):
         """
         Set the user_id for authenticated users.
         Set it using the class instance and additional filters will be applied.
-        Filters like applied jobs etc. can be applied using user_id.
         """
         self.user = user
 
@@ -172,14 +173,12 @@ class BaseSearch(object):
         Returns the facet lists to be shown on results page. List is maintained
         in 'facet_list' list and is supposed to be defined at class level.
 
-        Incase you want to override and have a completely new list, just define
+        In case you want to override and have a completely new list, just define
         the list in your extended class.
 
-        Incase you want to append more facets to existing list then you are
+        In case you want to append more facets to existing list then you are
         suppose to override this method and return updated list
         """
-        if getattr(self,'featured_company_call',None):
-            return self.fc_facet_list
         return self.facet_list
 
     def get_filter_mapping(self):
@@ -235,10 +234,10 @@ class BaseSearch(object):
 
         extra_params = self.extra_params.copy()
 
-        if self.user.is_authenticated():
-            extra_params.update({"cid":str(self.user.pk)})
+        # if self.user.is_authenticated():
+        #     extra_params.update({"cid": str(self.user.pk)})
 
-        if self.params.has_key('no_spelling') and self.params.get('no_spelling') == True:
+        if 'no_spelling' in self.params and self.params.get('no_spelling') == True:
 
             params_to_pop = ['spellcheck','spellcheck.dictionary','spellcheck.maxCollations',
                             'spellcheck.onlyMorePopular','spellcheck.maxResultsForSuggest',
@@ -248,10 +247,9 @@ class BaseSearch(object):
 
         return extra_params
 
-
     def add_basic_filters(self,results):
         """
-        Filter search results on the basis of form params sent by candidate.
+        Filter search results on the basis of form params sent by user.
         Search filter mapping used for filtering.
         """
         for field, param in self.get_filter_mapping().items():
@@ -331,14 +329,7 @@ class BaseSearch(object):
         results = self.results
         results = self.add_basic_filters(results)
 
-        # Job Freshness Filter
-        if self.params.get('active') and search_clean_fields(self.params.get('active')):
-            results = results.narrow('jPDate:[NOW/DAY-%sDAYS TO *]' % self.params.get('active'))
-
         results = self.add_sws_filters(results)
-        if self.params.get("rect") and search_clean_fields(self.params.get("rect")):
-            results = results.narrow('jAC:(%s)' % 'False')
-
         return results
 
     def add_custom_boost(self):
@@ -349,30 +340,12 @@ class BaseSearch(object):
         """
         results = self.results
 
-        if str(self.params.get('Salary')).isdigit() and search_clean_fields(self.params.get('Salary')):
-            sal1 = int(self.params.get('Salary')) + 1
-            sal2 = int(self.params.get('Salary')) + 2
-            results = results.boost('jSalMinID:(%s)' % sal1, 1)
-            results = results.boost('jSalMinID:[%s TO *]' % sal2, 2)
-
-        # Company Jobs Boosting vs Consultant Jobs
-        results = results.boost('jCType:0', settings.SEARCH_COMPANY_BOOST)
-
-        # boost paid jobs
-        results = results.boost('jPaid:1', settings.SEARCH_PAID_BOOST)
-
-        # boost jobs where the company is not anonymous
-        results = results.boost('jAC:0', 2)
-
-        #boost enterprise jobs
-        results = results.boost('jEnt:2', settings.SEARCH_ENT_BOOST)
-
         return results
 
     def add_boost(self):
         """
         All boosting related logic should go here. Override as one key can have range of boosts.
-        So technicanlly implemented by enabling one tuple to have multiple tuples or lists and
+        So technically implemented by enabling one tuple to have multiple tuples or lists and
         iterating over these tuples.
         """
         results = self.results
@@ -405,7 +378,6 @@ class BaseSearch(object):
         end_offset = start_offset + self.results_per_page
         return (start_offset,end_offset)
 
-
     def get_results(self):
         """
         The core function which gets called by the views/APIs.
@@ -415,31 +387,39 @@ class BaseSearch(object):
             return EmptySearchQuerySet()
 
         self.results_per_page = self.get_rps()
+        import pdb;
+        pdb.set_trace()
         self.results = self.add_filters()
-        if self.params.get("sort")!="1":
+        if self.params.get("sort") != "1":
             self.results = self.add_boost()
+        pdb.set_trace()
         self.results = self.add_sort()
+        pdb.set_trace()
         self.results = self.results.extra(self.get_extra_params())
+        pdb.set_trace()
         self.results = self.results.filter(content=Raw(self.get_query()))
+        pdb.set_trace()
         self.results  = self.add_facets()
+        pdb.set_trace()
         self.results = self.results.highlight()
+        pdb.set_trace()
         if self.fields and not self.params.getlist('fl'):
             self.results = self.results.only(*self.fields)
         else:
             asked_fields = map(str,self.params.getlist('fl')[0].split(","))
             self.results = self.results.only(*asked_fields)
         (start_offset,end_offset) = self.get_load_range()
+        pdb.set_trace()
         self.results = self.results[start_offset:end_offset]
 
         return self.results
-
 
     def get_results_count_only(self):
         """
         Separate out the functionality when only count is required.
         Override in child classes when needed.
         """
-        fields = ['id','django_ct','django_id','score']
+        fields = ['id', 'django_ct', 'django_id', 'score']
         if self.needed_params_options and not self.needed_params_options.intersection(self.get_params().keys()):
             return 0
 
@@ -452,61 +432,11 @@ class BaseSearch(object):
 
 class SimpleSearch(BaseSearch):
 
-    fields = ["jPDate", "jRUrl", "jSpt", "jJT", "jCName", "jLoc", "jExp","jCL", "jKwd","id","jCTU","jCID","jFR","jQA","jRR","jGovt","jEXID","jJobType","jWSD","jExpDate","jWLC","jJDT"]
-    needed_params_options = {'q','loc','minsal','minexp','ind','area','location','fexp','fsalary','farea','findustry','rect','fshift','rect_uid','job_type'}
-    sort_mapping = {'sort': {'1': '-jPDate'}}
-    query_param_name = 'q'
-
-    facet_list = ['{!ex=loc}jFLoc',
-                  '{!ex=exft}jFEx',
-                  '{!ex=slft}jFSal',
-                  '{!ex=jfunT}jFArea',
-                  '{!ex=indT}jIndID',
-                  'jNSTs',
-                  'jCIDF',
-                  'jJobType']
-
-    search_filter_mapping = {
-            'jLocID': 'locid',
-            'jAreaID': 'area',
-            'jIndID': 'ind',
-            'jExID': 'minexp',
-            }
+    needed_params_options = {'q', 'fprice', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
 
     extra_params = {
-        'search_type': 'simple',
-        'mm': '1',
-        'qt': 'dismax',
-        'facet': 'on',
-        'facet.mincount': '1',
-        'f.jFEx.facet.sort': 'index',
-        'f.jFSal.facet.sort': 'index',
-        'qf': 'jLoc^6 jArea^2 jInd^2 text',
-        'pf': 'jLoc^6 jArea^2 jInd^2',
-        'ps2': 1,
-        'tie': 1,
-        'hl.simple.pre': "<span class='highlighted'>",
-        'hl.simple.post': "</span>",
-        'hl.fragsize':0,
-        'hl.fl': 'jSpt jKwd jJT jCName jJDT',
-        'spellcheck': 'true',
-        'spellcheck.dictionary': 'default',
-        'spellcheck.onlyMorePopular': 'true',
-        'spellcheck.maxResultsForSuggest': 10000,
-        'spellcheck.maxCollations': 4,
-        'spellcheck.maxCollationTries': 100,
-        'spellcheck.collateExtendedResults':'true',
-        'boost':'product(recip(ms(NOW/HOUR,jPDate),3.16e-11,0.08,0.05),jDup)',
+        'search_type': 'simple'
     }
-
-    def get_filter_mapping(self):
-        """
-        Overridden to update the filters for simple search.
-        Added extra filter mapping apart from the default.
-        """
-        mapping = super(SimpleSearch, self).get_filter_mapping()
-        mapping.update(self.search_filter_mapping)
-        return mapping
 
     def get_extra_params(self):
         """
@@ -514,130 +444,126 @@ class SimpleSearch(BaseSearch):
         Take into consideration semantic inferred_words.
         """
         extra_params = super(SimpleSearch,self).get_extra_params()
+        extra_params.update(self.extra_params)
+        # params_solr_mapping = {'job_title':'jJT',
+        #             'skill':'jKwd',
+        #             'company_name':'jCName'}
 
-        params_solr_mapping = {'job_title':'jJT',
-                    'skill':'jKwd',
-                    'company_name':'jCName'}
+        # default_boosts = {'pf': ['jLoc^6','jArea^2','jInd^2'],
+        #         'pf2': [],
+        #         'pf3':[]}
 
-        default_boosts = {'pf': ['jLoc^6','jArea^2','jInd^2'],
-                'pf2': [],
-                'pf3':[]}
-
-        field_related_pf_boost = {"jJT":{"pf2":"20","pf3":"20"},
-                                "jCName":{"pf2":"20","pf3":"20"},
-                                "jKwd":{"pf2":"20","pf3":"20",},}
-
-
-        for key,value in params_solr_mapping.items():
-            pf_covered = False
-            pf2_covered = False
-            pf3_covered = False
-
-            for param in self.params.get(key,[]):
-
-                if len(param.split(" ")) == 2 and not pf2_covered:
-                    pf2_covered = True
-                    default_boosts["pf2"].append(value+"^"+field_related_pf_boost[value]["pf2"])
-
-                if len(param.split(" ")) == 3 and not pf3_covered:
-                    pf3_covered = True
-                    default_boosts["pf3"].append(value+"^"+field_related_pf_boost[value]["pf3"])
-
-        if default_boosts['pf2']:
-            extra_params.update({'pf2':" ".join(default_boosts['pf2'])})
-
-        if default_boosts['pf3']:
-            extra_params['pf3'] = " ".join(default_boosts['pf3'])
-
-        if self.params.get('skill'):
-            extra_params['qf'] = extra_params['qf']+" "+"jKwd^40"
-        else:
-            extra_params['qf'] = extra_params['qf']+" "+"jKwd^6"
-
-        if self.params.get('company_name'):
-            extra_params['qf'] = extra_params['qf']+" "+"jCName^25"
-        else:
-            extra_params['qf'] = extra_params['qf']+" "+"jCName^5"
+        # field_related_pf_boost = {"jJT":{"pf2":"20","pf3":"20"},
+        #                         "jCName":{"pf2":"20","pf3":"20"},
+        #                         "jKwd":{"pf2":"20","pf3":"20",},}
 
 
-        if self.params.get('job_title'):
-            extra_params['qf'] = extra_params['qf']+" "+"jJT^35"
+        # for key,value in params_solr_mapping.items():
+        #     pf_covered = False
+        #     pf2_covered = False
+        #     pf3_covered = False
+        #
+        #     for param in self.params.get(key,[]):
+        #
+        #         if len(param.split(" ")) == 2 and not pf2_covered:
+        #             pf2_covered = True
+        #             default_boosts["pf2"].append(value+"^"+field_related_pf_boost[value]["pf2"])
+        #
+        #         if len(param.split(" ")) == 3 and not pf3_covered:
+        #             pf3_covered = True
+        #             default_boosts["pf3"].append(value+"^"+field_related_pf_boost[value]["pf3"])
 
-        else:
-            extra_params['qf'] = extra_params['qf']+" "+"jJT^15"
+        # if default_boosts['pf2']:
+        #     extra_params.update({'pf2':" ".join(default_boosts['pf2'])})
+        #
+        # if default_boosts['pf3']:
+        #     extra_params['pf3'] = " ".join(default_boosts['pf3'])
+
+        # if self.params.get('skill'):
+        #     extra_params['qf'] = extra_params['qf']+" "+"jKwd^40"
+        # else:
+        #     extra_params['qf'] = extra_params['qf']+" "+"jKwd^6"
+        #
+        # if self.params.get('company_name'):
+        #     extra_params['qf'] = extra_params['qf']+" "+"jCName^25"
+        # else:
+        #     extra_params['qf'] = extra_params['qf']+" "+"jCName^5"
+
+        #
+        # if self.params.get('job_title'):
+        #     extra_params['qf'] = extra_params['qf']+" "+"jJT^35"
+        #
+        # else:
+        #     extra_params['qf'] = extra_params['qf']+" "+"jJT^15"
 
         return extra_params
 
-    def add_filters(self):
-        results = super(SimpleSearch, self).add_filters()
-        loc = ''
-        jobs_near_candidate = False
-        # #Find jobs near the candidate. Only when requested.
-        if self.user.is_authenticated() and (self.params.get('best_matches')=='2' or self.params.get('best_matches_ajax')=='2'):
-            jobs_near_candidate = True
+    # def add_filters(self):
+    #     results = super(SimpleSearch, self).add_filters()
+    #     loc = ''
+    #
+    #     # Text Location Filter
+    #     if self.params.get('loc') and not self.params.get('locid') and search_clean_fields(self.params.get('loc')):
+    #         results = results.narrow('jLoc:(%s)' % inputs.Phraser().prepare(self.params.get('loc')))
+    #
+    #     if loc:
+    #         results = results.narrow('jLoc:(%s)' % inputs.Phraser().prepare(loc))
+    #
+    #     # Salary Filter
+    #     if self.params.get('minsal') and search_clean_fields(self.params.get('minsal')):
+    #         results = results.narrow('jSalMinID:[%(sal)s TO *] jSalMaxID:[%(sal)s TO *]' % {'sal': self.params.get('minsal')})
+    #
+    #     return results
 
-        # Text Location Filter
-        if self.params.get('loc') and not self.params.get('locid') and search_clean_fields(self.params.get('loc')):
-            results = results.narrow('jLoc:(%s)' % inputs.Phraser().prepare(self.params.get('loc')))
-
-        if loc:
-            results = results.narrow('jLoc:(%s)' % inputs.Phraser().prepare(loc))
-
-        # Salary Filter
-        if self.params.get('minsal') and search_clean_fields(self.params.get('minsal')):
-            results = results.narrow('jSalMinID:[%(sal)s TO *] jSalMaxID:[%(sal)s TO *]' % {'sal': self.params.get('minsal')})
-
-        return results
-
-    def add_user_preferences_boost(self,results):
-
-        job_title_value = pop_stop_words(self.user.latest_job_title)
-        if job_title_value:
-            job_title_value = job_title_value.encode('ascii', 'ignore')
-            job_title_value = filter(lambda x:x in string.printable,job_title_value)
-            job_title_value = pop_stop_words(inputs.Cleaned().prepare(job_title_value,clean=True))
-            job_title_value = job_title_value.split('"')
-
-            jts = []
-            for jt in job_title_value:
-                if jt == ' ' or jt == '':
-                    continue
-
-                jt = re.sub("\s\s+" , " ", jt).strip()
-                jts.append(jt)
-
-            results = results.boost('jJT:(%s)' % (' AND ').join(jts[0].split(' ')),8)
-
-        candidate_experience = self.user.experience_in_years
-        if candidate_experience:
-            results = results.boost('(jExMinId:[%s TO *] AND jExMaxId:[* TO %s])' %(candidate_experience-1,candidate_experience),8)
-
-        if self.user.get_functional_areas():
-            candidate_functional_area = self.user.get_functional_areas()
-            candidate_functional_area = ' '.join(map(str,set(candidate_functional_area)))
-            results = results.boost('jAreaID:(%s)' %str(candidate_functional_area),2)
-
-        candidate_profile_skills = CandidatePreferences.objects.get_all_skills(str(self.user.id))
-        if candidate_profile_skills:
-
-            for candidate_skills in candidate_profile_skills:
-                candidate_skills = candidate_skills.value_custom
-
-                if candidate_skills:
-                    candidate_skills = candidate_skills.encode('ascii', 'ignore')
-                    candidate_skills = filter(lambda x:x in string.printable,candidate_skills)
-                    candidate_skills = pop_stop_words(inputs.Cleaned().prepare(candidate_skills,clean=True))
-                    candidate_skills = candidate_skills.split('"')
-                    skills = []
-
-                    for skill in candidate_skills:
-                        if skill == ' ' or skill == '':
-                            continue
-                        skill = re.sub("\s\s+" , " ", skill).strip()
-                        skills.append(skill)
-                    for skill in skills:
-                        results = results.boost('jKwd:(%s)' %str(skill),8)
-        return results
+    # def add_user_preferences_boost(self,results):
+    #
+    #     job_title_value = pop_stop_words(self.user.latest_job_title)
+    #     if job_title_value:
+    #         job_title_value = job_title_value.encode('ascii', 'ignore')
+    #         job_title_value = filter(lambda x:x in string.printable,job_title_value)
+    #         job_title_value = pop_stop_words(inputs.Cleaned().prepare(job_title_value,clean=True))
+    #         job_title_value = job_title_value.split('"')
+    #
+    #         jts = []
+    #         for jt in job_title_value:
+    #             if jt == ' ' or jt == '':
+    #                 continue
+    #
+    #             jt = re.sub("\s\s+" , " ", jt).strip()
+    #             jts.append(jt)
+    #
+    #         results = results.boost('jJT:(%s)' % (' AND ').join(jts[0].split(' ')),8)
+    #
+    #     candidate_experience = self.user.experience_in_years
+    #     if candidate_experience:
+    #         results = results.boost('(jExMinId:[%s TO *] AND jExMaxId:[* TO %s])' %(candidate_experience-1,candidate_experience),8)
+    #
+    #     if self.user.get_functional_areas():
+    #         candidate_functional_area = self.user.get_functional_areas()
+    #         candidate_functional_area = ' '.join(map(str,set(candidate_functional_area)))
+    #         results = results.boost('jAreaID:(%s)' %str(candidate_functional_area),2)
+    #
+    #     candidate_profile_skills = CandidatePreferences.objects.get_all_skills(str(self.user.id))
+    #     if candidate_profile_skills:
+    #
+    #         for candidate_skills in candidate_profile_skills:
+    #             candidate_skills = candidate_skills.value_custom
+    #
+    #             if candidate_skills:
+    #                 candidate_skills = candidate_skills.encode('ascii', 'ignore')
+    #                 candidate_skills = filter(lambda x:x in string.printable,candidate_skills)
+    #                 candidate_skills = pop_stop_words(inputs.Cleaned().prepare(candidate_skills,clean=True))
+    #                 candidate_skills = candidate_skills.split('"')
+    #                 skills = []
+    #
+    #                 for skill in candidate_skills:
+    #                     if skill == ' ' or skill == '':
+    #                         continue
+    #                     skill = re.sub("\s\s+" , " ", skill).strip()
+    #                     skills.append(skill)
+    #                 for skill in skills:
+    #                     results = results.boost('jKwd:(%s)' %str(skill),8)
+    #     return results
 
     def add_boost(self):
         """
@@ -647,9 +573,204 @@ class SimpleSearch(BaseSearch):
         self.results = super(SimpleSearch,self).add_boost()
         results = self.add_custom_boost()
         boost_rect = self.params.get('boost_rect')
-        if boost_rect and str(boost_rect).isdigit():
-            results = results.boost('jCID:%s' %str(boost_rect), 100)
 
-        if self.params.has_key('rect') and self.user.is_authenticated():
-            results = self.add_user_preferences_boost(results)
+        # if self.params.has_key('rect') and self.user.is_authenticated():
+        #     results = self.add_user_preferences_boost(results)
         return results
+
+
+class BaseParams(object):
+
+    args = ''
+    keywords = ''
+    clean_query = True
+
+    def query_builder(self):
+        return self.search_params.get(self.query_param_name, "")
+
+    def get_request_params(self):
+        """
+        Return a copy of both GET/POST parameters.
+        GET params are set irrespective of Request Method.
+        This is done to handle user profile params
+        """
+        params = self.request.GET.copy()
+        if self.request.method == 'POST':
+            params.update(self.request.POST.copy())
+
+        for param in params:
+            values = params.getlist(param)
+            values = [value.strip() if isinstance(value, str) else value for value in values]
+            params.setlist(param, values)
+
+        return params
+
+    def clean_search_params(self):
+        """
+        Clean search params before processing.
+        Cleaning includes field, id and list cleaning.
+        """
+        self.search_params = clean_all_fields(self.search_params)
+        self.search_params = clean_id_fields(self.search_params)
+        self.search_params = clean_list_fields(self.search_params)
+
+    def set_args(self,args,kwargs):
+        self.args = args
+        self.keywords = self.args
+        self.kwargs = kwargs
+
+    def query_cleaner(self):
+        query = inputs.Cleaned().prepare(self.query)
+        return query
+
+    def get_search_query(self):
+
+        self.query = self.query_builder()
+        if self.clean_query:
+            self.query = self.query_cleaner()
+
+        return self.query
+
+    def get_search_params(self):
+
+        self.search_params = self.get_request_params()
+
+        self.clean_search_params()
+        return self.search_params
+
+
+class SimpleParams(BaseParams):
+
+    def set_params_from_lookups(self, params):
+
+        params['q'] = " ".join(self.keywords)
+        params['q'] = handle_special_chars(params['q'], False, True, False, False)
+        params = get_filters(params)
+        return params
+
+    def pop_null_parameters(self,params):
+        """
+        Null params sent from app.
+        Pop them to enable semantic to infer words.
+        """
+        for key in params.keys():
+            if not params.get(key) or params.get(key) == u'null':
+                params.pop(key)
+        return params
+
+    def get_request_params(self):
+        """
+        Collect and prepare all the request params.
+        All the processing of params is done here.
+        The view calls this method if the request is for web/mobile.
+        The API will call this method if the request is for app.
+        """
+
+        params_filtered = False
+        params = super(SimpleParams,self).get_request_params()
+
+        # resolve single quote and double quote issue
+        if params.get("q"):
+            params["q"] = remove_quote_in_q(params.get("q"))
+
+        if not params.get('page') and len(self.keywords) > 1 and self.keywords[-1].isdigit():
+            page = self.keywords[-1]
+            params['page'] = page
+            self.keywords = list(self.keywords)
+            self.keywords.remove(page)
+
+        if self.request.method != 'POST' and hasattr(self, 'keywords') and \
+                len(self.keywords):
+
+            params = self.set_params_from_lookups(params)
+            if 'q' not in params:
+                params['keywords'] = ""
+            else:
+                params['keywords'] = params.get('q')
+            params_filtered = True
+
+        # Incase of GET request if all arguments are found in lookup then it states that no keyword
+        # have been entered so set solr query as *:* in separate param so that it does not get displayed in form
+
+        params = self.pop_null_parameters(params)
+
+        if params_filtered == False:
+            if 'q' not in params:
+                params['keywords'] = ""
+            else:
+
+                params = get_filters(params)
+                params['keywords'] = params.get('q')
+
+        return params
+
+    def query_builder(self):
+        q = self.search_params.get('q',"")
+        if not q:
+            return q
+
+        #Exception for job and jobs in search terms.
+        if q == "courses" or q == "course" or q == "course courses" or q == "courses courses":
+            return " ".join(settings.PRODUCT_ALTERNATE_SEARCH_TERMS)
+
+        quoted_string = ""
+        for s in q.split("\"")[1::2]:
+            quoted_string = quoted_string+"\""+s+"\" " if s else quoted_string
+
+        quoted_string = quoted_string.strip()
+        unquoted_string = (" ".join(q.split("\"")[0::2])).lower()
+        classifiers_to_process = ["farea", "skills"]
+        words_to_and = []
+        for classifier in classifiers_to_process:
+            words_to_and = words_to_and + self.search_params.get(classifier, [])
+
+        for word in words_to_and:
+            unquoted_string = re.sub('(^{0}(?=\s))|((?<=\s){0}(?=\s))|((?<=\s){0}$)|(^{0}$)'.format(
+                re.escape(word.lower())),"", unquoted_string)
+
+        classified_words = quoted_string
+        for word in words_to_and:
+            classified_words = classified_words+" ("+" AND ".join(word.split(" "))+")"
+
+        split_query = unquoted_string.split(" ")
+        filler_words = ""
+        actual_words = ""
+
+        for word in split_query:
+            if word == "courses":
+                continue
+            if word in FILLERS:
+                filler_words = filler_words + " AND " + word if filler_words else filler_words + word
+            else:
+                actual_words = actual_words + " " + word if actual_words else actual_words + word
+
+        if filler_words:
+            filler_words = "("+filler_words+")"
+        if actual_words:
+            actual_words = "(" + handle_special_chars(actual_words, False, True) + ")"
+        if filler_words and actual_words:
+            query_to_return = classified_words + " " + actual_words + " AND " + filler_words
+        elif filler_words:
+            query_to_return = classified_words+" AND "+filler_words if classified_words else filler_words
+        else:
+            query_to_return = classified_words+" "+actual_words
+        query_to_return = re.sub("\(\s\s+\)", "", query_to_return).strip()
+
+        return query_to_return
+
+    def query_cleaner(self):
+        return inputs.Cleaned().prepare(self.query)
+
+    def handle_params_for_no_javascript(self,params):
+        """
+        Special checks for no javascript.
+        Handled for both mobile and desktop.
+        """
+        if 'farea' in params and params['farea'] == "Functional Area":
+            params['farea'] = ""
+        if 'q' in params and params['q'] == "Search for courses, services etc..":
+            params['q'] = ""
+        if 'skills' in params and params['skills'] == 'Key Skills':
+            params['skills'] = ""
+
+        return params

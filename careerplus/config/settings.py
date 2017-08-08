@@ -207,8 +207,45 @@ CP_VENDOR_ID = '12345'
 ############ SOLR SETTINGS #######################
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
         'URL': 'http://172.22.65.33:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
+    },
+}
+
+############# REDIS SETTINGS ###################
+# Cache related settings
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            "redis://172.22.67.80:6379/10",
+            "redis://172.22.67.80:6379/11",
+            ],
+        "TIMEOUT": 86400,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.ShardClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        }
+    },
+    'session': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            "redis://172.22.67.80:6379/12",
+            "redis://172.22.67.80:6379/13",
+            ],
+        "TIMEOUT": 86400,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.ShardClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        }
+    },
+    'search_lookup': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.80:6379/7",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+        }
     },
 }

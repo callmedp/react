@@ -2,13 +2,12 @@
 import re
 
 # django imports
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponsePermanentRedirect
 from django.views.generic import ListView, TemplateView
 from django.http import QueryDict, Http404
 from django.core.paginator import Paginator, InvalidPage
 from django.core.exceptions import ImproperlyConfigured
-
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, resolve, reverse
 from django.http import HttpResponseRedirect
 from django.conf import settings
 
@@ -17,189 +16,10 @@ from django.conf import settings
 from haystack.query import EmptySearchQuerySet
 
 # local imports
-# from shinecp.gosf.forms import GosfFilterForm
-# from shinecp.gosf.views import ProductVariationListView, CommonContext
-# from shinecp.theme.utils import is_mobile_browser
 from .forms import SearchForm
 from .classes import SimpleSearch, SimpleParams
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
-
-class SearchQueryView(ListView):
-
-    template_name = 'search/search.html'
-    initial = {'price_from': 0, 'price_to': 0}
-    search_type = ""
-
-    # def get_initial(self):
-    #     if hasattr(self, '_initial'):
-    #         return self._initial
-    #     initial = self.initial.copy()
-    #     variation = self.request.session.get('variation')
-    #     keyword = self.request.POST.get('keyword')
-    #
-    #     if not is_mobile_browser(self.request):
-    #         mobile_browser = False
-    #     else:
-    #         mobile_browser = True
-    #
-    #     initial.update(
-    #         {'search': 1, 'keyword': keyword,
-    #          'mobile_browser': mobile_browser})
-    #
-    #     if 'price_to' not in initial or initial['price_to'] == 0:
-    #         initial.update({
-    #             'price_to': CommonContext.get_price_slider_max_price()
-    #             })
-    #     self._initial = initial
-    #     return initial
-
-    def render_to_response(self, context, **response_kwargs):
-        response = super(SearchQueryView, self).render_to_response(
-            context, **response_kwargs)
-        return response
-
-    # def get_context_data(self, **kwargs):
-    #
-    #     context = super(self.__class__, self).get_context_data(**kwargs)
-    #     pv_list_response = ProductVariationListView.as_view()(
-    #         request=self.request, **context)
-    #     context.update({'search': 1})
-    #     context.update(pv_list_response.context_data)
-    #     context.update(self.get_common_context_data())
-    #     return context
-
-    # def get(self, request, *args, **kwargs):
-    #     request.method = 'POST'
-    #     request.POST = request.GET.copy()
-    #
-    #     q_search=request.GET.get('q', '').strip().replace('-', ' ')
-    #     if q_search:
-    #
-    #         q_search = re.sub(r'[^\d\w\s\?%-()*]', '',q_search[:50] )
-    #
-    #         request.POST.update(
-    #             {'keyword':q_search})
-    #
-    #         [request.POST.update(
-    #             {key: value}) for key, value in self.get_initial().iteritems() if
-    #             key not in request.POST]
-    #         mobile_browser = request.POST['mobile_browser']
-    #         if mobile_browser:
-    #             self.template_name = 'mobile/listing.html'
-    #         form = GosfFilterForm(request.GET or request.POST)
-    #         self.kwargs.update({'form': form})
-    #         self.form = form
-    #
-    #         if form.is_valid():
-    #             self.keyword = form.cleaned_data['keyword']
-    #             self.location = form.cleaned_data['location']
-    #
-    #         return super(self.__class__, self).post(self, request, *args, **kwargs)
-    #     else:
-    #         return HttpResponseRedirect(reverse_lazy('gosf:gosf_home'))
-
-    def post(self, request, form=None):
-        return self.get(self).get(request)
-
-    def form_valid(self, form):
-        self.form = form
-        return self.render_to_response(self.get_context_data(form=form))
-
-    def form_invalid(self, form):
-        raise Http404
-
-
-# class SearchListView():
-    # form_class = GosfFilterForm
-    # template_name = 'listing/search_v3.html'#'gosf/search.html'
-    # initial = {'price_from': 0, 'price_to': 0}
-
-    # def get_initial(self):
-    #     if hasattr(self, '_initial'):
-    #         return self._initial
-    #     initial = self.initial.copy()
-    #     variation = self.request.session.get('variation')
-    #     keyword = self.request.POST.get('keyword')
-    #     location = self.request.POST.get('location')
-    #
-    #     if not is_mobile_browser(self.request):
-    #         mobile_browser = False
-    #     else:
-    #         mobile_browser = True
-    #
-    #     initial.update(
-    #         {'search': 1, 'keyword': keyword,
-    #          'location': location,
-    #          'mobile_browser': mobile_browser})
-    #
-    #     if 'price_to' not in initial or initial['price_to'] == 0:
-    #         initial.update({
-    #             'price_to': CommonContext.get_price_slider_max_price()
-    #             })
-    #     self._initial = initial
-    #     return initial
-
-    # def render_to_response(self, context, **response_kwargs):
-    #     response = super(SearchListView, self).render_to_response(
-    #         context, **response_kwargs)
-    #     return response
-
-    # def get_context_data(self, **kwargs):
-    #
-    #     context = super(self.__class__, self).get_context_data(**kwargs)
-    #     pv_list_response = ProductVariationListView.as_view()(
-    #         request=self.request, **context)
-    #     context.update({'search': 1})
-    #     context.update(pv_list_response.context_data)
-    #     context.update(self.get_common_context_data())
-    #     return context
-
-    # def get(self, request, *args, **kwargs):
-    #     request.method = 'POST'
-    #     request.POST = request.GET.copy()
-    #
-    #     if 'keyword_in_url' in kwargs:
-    #         request.POST.update(
-    #             {'keyword': kwargs['keyword_in_url'].replace('-', ' ')})
-    #
-    #     if 'location' in kwargs:
-    #         request.POST.update(
-    #             {'location': kwargs['location'].replace('-', ' ')})
-    #
-    #     [request.POST.update(
-    #         {key: value}) for key, value in self.get_initial().iteritems() if key not in request.POST]
-    #     mobile_browser = request.POST['mobile_browser']
-    #     if mobile_browser:
-    #         self.template_name = 'mobile/listing.html'
-    #     form = GosfFilterForm(request.GET or request.POST)
-    #     self.kwargs.update({'form': form})
-    #     self.form = form
-    #
-    #     if form.is_valid():
-    #         self.keyword = form.cleaned_data['keyword']
-    #         self.location = form.cleaned_data['location']
-    #
-    #     return super(self.__class__, self).post(self, request, *args, **kwargs)
-
-    # def post(self, request, form=None):
-    #     return self.get(self).get(request)
-    #
-    # def form_valid(self, form):
-    #     self.form = form
-    #     return self.render_to_response(self.get_context_data(form=form))
-    #
-    # def form_invalid(self, form):
-    #     raise Http404
-    #
-    # def get_queryset(self):
-    #     return self.get_results()
-
-    # def list(self, request, *args, **kwargs):
-    #     sqs = self.get_results()
-    #     data = self.paginator.paginate_queryset(sqs, request)
-    #     serializer = self.get_serializer(data, many=True)
-    #     return self.paginator.get_paginated_response(serializer.data)
 
 
 class SearchBaseView(TemplateView):
@@ -218,6 +38,7 @@ class SearchBaseView(TemplateView):
     params_class = None
     session_key = "searchquery"
     search_type = ""
+    none_query = False
 
     def prepare_response(self):
         """
@@ -257,7 +78,10 @@ class SearchBaseView(TemplateView):
         return self.params_class
 
     def get_search_params(self):
-        self.params_class_obj = self.params_class(self.args, self.kwargs, self.request)
+        self.params_class_obj = self.params_class()
+        self.params_class_obj.set_args(self.args, self.kwargs)
+
+        setattr(self.params_class_obj, "request", self.request)
         self.search_params = self.params_class_obj.get_search_params()
 
     def get_search_query(self):
@@ -294,6 +118,7 @@ class SearchBaseView(TemplateView):
         search_class_obj.set_params(self.search_params)
         search_class_obj.user = self.request.user
         search_class_obj.query = self.query
+        import pdb; pdb.set_trace()
         self.results = search_class_obj.get_results()
 
     def post_processor(self):
@@ -318,7 +143,8 @@ class SearchBaseView(TemplateView):
         context['form'] = self.form(self.search_params)
         context['search_params'] = self.search_params
         context['QUERY_STRING'] = self.request.get_full_path()
-
+        print(self.results)
+        import pdb;pdb.set_trace()
         context['facets'] = self.results.facet_counts()
         context['search_params_string'] = self.search_params.urlencode()
         context = self.set_form_attributes_in_context(context)
@@ -398,8 +224,8 @@ class SearchBaseView(TemplateView):
         Used to fill the form after search is performed.
         """
         param_context_mapping = {
-            'fskill': 'skill',
-            'farea': 'area'
+            'skills': 'skills',
+            'farea': 'farea'
         }
 
         for param, value in param_context_mapping.items():
@@ -415,6 +241,9 @@ class SearchBaseView(TemplateView):
 
 
 class SearchListView(SearchBaseView):
+    """
+    Simple text search
+    """
     form = SearchForm
     __name__ = 'SimpleSearch'
     search_type = "keyword"
@@ -422,6 +251,20 @@ class SearchListView(SearchBaseView):
     track_query_dict = QueryDict('').copy()
     search_class = SimpleSearch
     params_class = SimpleParams
-    pass
+
+
+    def get_fields(self):
+        return ["id", "pURL", "pHdx", "pCDate", "pSg", "pIc", "pImA",
+                "pAb", "pAR", "pFA", "pCtg", "pPChs", "pCert", "pStM",
+                "pCL", "pStar", "pRC", "pNJ", "pCmbs", "pPv"]
+
+    def prepare_response(self):
+        self.keywords = self.args
+        current_url = resolve(self.request.path_info).url_name
+        if current_url == 'search_listing' and not self.request.GET:
+            return HttpResponsePermanentRedirect(reverse('search:recommended_listing',
+                                                         kwargs={'f_area':'it-software',
+                                                                 'skill':'development'}))
+        return super(SearchListView, self).prepare_response()
 
 

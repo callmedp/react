@@ -14,6 +14,7 @@ source ~/.bashrc
 # Env Setup
 
 mkvirtualenv careerplus
+pip install geoip
 pip3 install -r requirements/common.txt
 sudo apt-get install mysql-server
 mkdir /etc/uwsgi/

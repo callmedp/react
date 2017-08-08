@@ -17,7 +17,7 @@ class SearchForm(forms.Form):
                 'data-selecttype': 'multiple',
                 'maxlength': '150',
                 'placeholder': 'Search for courses, services etc..',
-                'holder': 'Type Job Title, Skills etc.'}
+                'holder': 'Search for courses, services etc..'}
         ),
         initial='')
 
@@ -38,14 +38,14 @@ class SearchRecommendedForm(forms.Form):
                 'holder': 'Functional Area'}),
         initial='',
         choices=AREA_WITH_LABEL)
-    skill = forms.MultipleChoiceField(
+    skills = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
             attrs={
                 'class': 'form-control js_skill',
                 'maxlength':'150',
                 'placeholder':'Key Skills',
-                'holder': 'skill'
+                'holder': 'Key Skills'
             }
         ),
         initial='',

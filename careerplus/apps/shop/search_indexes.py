@@ -3,13 +3,14 @@ from haystack import indexes
 from .models import Product
 from django.template.loader import render_to_string
 
+
 class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(
         document=True, use_template=True,
         template_name='search/indexes/shop/product_text.txt')
     id = indexes.IntegerField(model_attr='id')
     
-    #Search Fields#
+    # Search Fields #
     pHd = indexes.CharField(model_attr='heading', null=True)
     pFA = indexes.MultiValueField(null=True, faceted=True)
     pFAn = indexes.MultiValueField(null=True)
@@ -35,7 +36,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPvn = indexes.CharField(null=True)
     pCts = indexes.MultiValueField(null=True)
     
-    #Facets Fields#
+    # Facets Fields #
     pAR = indexes.DecimalField(default=0, faceted=True) 
     pStM = indexes.MultiValueField(null=True, faceted=True)
     pDM = indexes.MultiValueField(default=0, faceted=True)
@@ -43,7 +44,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pCL = indexes.MultiValueField(null=True, faceted=True)
     pAttr = indexes.MultiValueField(null=True)
     
-    # Content Field#
+    # Content Field #
     pIc = indexes.CharField(indexed=False)
     pIBg = indexes.IntegerField(default=0, indexed=False)
     pImg = indexes.CharField(indexed=False)
@@ -55,6 +56,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pRC = indexes.IntegerField(model_attr='no_review', default=0, indexed=False) 
     pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=False) 
     pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
+
     pVi = indexes.CharField(null=True, indexed=False)
     pCT = indexes.CharField(null=True, indexed=False)
     pDD = indexes.IntegerField(default=0, indexed=False)

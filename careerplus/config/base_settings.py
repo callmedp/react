@@ -425,3 +425,7 @@ LOGGING = {
         },
     }
 }
+
+
+############ SEARCH SPECIFIC SETTINGS ##############
+PRODUCT_ALTERNATE_SEARCH_TERMS = []     # TODO: Enter commonly search terms
