@@ -6,7 +6,7 @@ from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
-from user.tasks import user_register
+from users.tasks import user_register
 
 from .models import Order, OrderItem
 from .functions import update_initiat_orderitem_sataus
