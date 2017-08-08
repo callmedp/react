@@ -366,6 +366,7 @@ class AttributeOption(models.Model):
         'shop.AttributeOptionGroup', related_name='options',
         verbose_name=_("Group"))
     option = models.CharField(_('Option'), max_length=255)
+    code = models.CharField(_('Option Code'), max_length=4)
 
     def __str__(self):
         return self.option

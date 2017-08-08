@@ -19,7 +19,7 @@ class ProductQuerySet(models.query.QuerySet):
 
     def indexable(self):
         return self.filter(is_indexable=True,
-        	type_product__in=[0, 2, 3, 4, 5])
+        	type_product__in=[0, 1, 3, 4, 5])
 
     def saleable(self):
     	return self.filter(active=True)
