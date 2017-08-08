@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 		$(this).addClass('current');
 		$("#"+tab_id).addClass('current');
-	})// Tabbing function ends here
+	}); // Tabbing function ends here
 
 	function goBack() {
 	    window.history.back();

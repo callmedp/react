@@ -1,0 +1,62 @@
+{% load static %}
+{% if products %}
+{% for product in products %}
+    <div class="box row mb-15">
+        <div class="media">
+            <div class="media-left">
+                <a href="#" class="sigma-pro color1">
+                    <img src="images/course-logo1.png">
+                </a>
+            </div>
+            <div class="media-body">
+                <p class="pb-0"><a href="#">
+                    <strong>{{product.name}}</strong></a>
+                </p>
+        
+                <div class="mb-10 c6">
+                    <div class="rating inline-block ml-0 fs-12">
+                        {% for rating in product.get_ratings %}
+                            {% if rating == "*" %}
+                                <sup class="fill-star"></sup>
+                            {% endif %}
+                        {% endfor %}
+                        {{product.avg_rating |floatformat:1}}/5
+                    </div><!-- end of star rating -->
+
+                    <div class="inline-block fs-12">
+                        <figure class="icon-comments"></figure>
+                        <a href="#">{{product.no_review}}</a>
+                        <figure class="icon-jobs ml-10"></figure>
+                        <strong>{{product.num_jobs}}</strong> Jobs
+                        <figure class="icon-certificate ml-10">
+                        </figure>Certification
+                    </div>
+                </div><!-- end of icons wrapper -->
+
+                <p class="pb-5 fs-12 c6">
+                    Providers
+                    <a href="#" class="tag-bg fs-11 ml-5">
+                    {{product.vendor.name}}
+                    </a>
+                </p>
+                <p class="pb-0 fs-12">
+                    Starting at <strong>{{product.inr_price}}</strong> 
+                    <span class="strike-through c9 fs-11"></span>
+                    <span class="off"></span>
+                </p>
+            </div><!-- end of media body -->
+        </div><!-- end of media -->
+    </div><!-- end of box -->
+{% endfor %}
+
+{% endif %}
+{% if products.has_next %}
+  <input type="hidden" name="page" 
+  value="{{products.next_page_number}}" id="page_id">
+  <input type="hidden" name="slug" value="{{slug}}" id="slug_id">
+  <p class="text-right pb-0">
+      <a href="javascript:void(0);" id="product_load_more" 
+      class="load-more loadmore">
+      <strong>LoadMore</strong></a>
+  </p>
+{% endif %}
