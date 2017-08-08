@@ -51,7 +51,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pvurl = indexes.CharField(indexed=False) # model_attr='video_url'
     pDsc = indexes.CharField(model_attr='description', indexed=False) 
     pBS = indexes.CharField(model_attr='buy_shine', indexed=False) 
-    pStar = indexes.CharField(null=True, indexed=False)
+    pStar = indexes.MultiValueField(null=True, indexed=False)
     pRC = indexes.IntegerField(model_attr='no_review', default=0, indexed=False) 
     pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=False) 
     pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
@@ -251,10 +251,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return obj.product_class.slug if obj.product_class else ''
 
     def prepare_pPv(self, obj):
-        return obj.vendor.name if obj.vendor else ''
+        return obj.vendor.pk if obj.vendor else None
 
     def prepare_pPvn(self, obj):
-        return obj.vendor.pk if obj.vendor else ''
+        return obj.vendor.name if obj.vendor else ''
 
     def prepare_pCts(self, obj):
         countries = obj.countries.all()
