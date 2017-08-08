@@ -36,30 +36,24 @@
     <body>
         {% block main_container %}
         <div class="wrapper">
-
             {% block header %}
             <!-- header menu Icon Starts here -->
                 <header class="w100fl">
                     <!-- header menu Icon Starts here -->
+                   <div class="main-menu w100fl">
+                    <div class="pull-left">
+                        <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a> 
+                        {% block back_icon %}
+                           <a href="/" class="icon-logo pull-left"></a>
+                        {% endblock back_icon %}
+                        
+                    </div><!-- / Left side Icon ends here -->
 
-                    <div class="main-menu w100fl">
-                        <div class="pull-left">
-
-                            <a class=" pull-left" id="sidebar-main-trigger" href="#"></a>
-
-
-                            <a class="icon-back pull-left"  href="#"  onclick="goBack()"></a>
-                        </div><!-- / Left side Icon ends here -->
-
-                        <div class="pull-right">
-
-                            <a class="icon-search pull-left" href="search-listing.html">search</a>
-
-
-
-                            <a class="icon-cart pull-left" href="#">cart</a>
-                        </div><!-- / Right side Icon ends here -->
-                    </div><!-- header menu Icon ends here -->
+                    <div class="pull-right">
+                        <a class="icon-search pull-left " href="search-listing.html">search</a>
+                        <a class="icon-cart pull-left" href="#" >cart</a>
+                    </div><!-- / Right side Icon ends here -->
+                </div><!-- header menu Icon ends here -->
 
 
                     {% block header_title %}{% endblock header_title %}
@@ -82,9 +76,7 @@
 
                     <!-- Search listing tagging ends here -->
                 </header><!-- header ends here -->
-                {% endblock header %}
-
-                <!-- header menu Icon ends here -->
+            {% endblock header %}
 
 
             <div class="body-wrapper">
