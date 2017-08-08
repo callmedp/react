@@ -3,8 +3,15 @@
 {% block title %}Login Shine learning{% endblock %}
 {% block css_section %}
 {{ block.super }}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" 
+    rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/users/login.css' %}" 
+    rel="stylesheet">
 {% endblock css_section %}
 
 
@@ -41,7 +48,7 @@
 
                     <div class="form-group text-center">
                         <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Login</button>
-                        <a href="#">Forgot Password?</a>
+                        <a href="{% url "users:forgot-html" %}">Forgot Password?</a>
                     </div>
 
                     <div class="line_wrap w100fl">

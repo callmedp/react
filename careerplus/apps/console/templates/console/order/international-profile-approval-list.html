@@ -24,7 +24,7 @@
         <h3>International Profile Approval Orderitems</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-domesticprofileapproval" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:queue-internationalapproval" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -72,7 +72,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-domesticprofileapproval" %}" id="list-filter-form">
+                  <form class="form-group" method="GET" action="{% url "console:queue-internationalapproval" %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -195,6 +195,7 @@
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Assigned To</th>
+                    <th class="column-title">Update Profile</th>
                   </tr>
                 </thead>
 
@@ -247,6 +248,9 @@
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
                       <td>{{obj.assigned_to}}</td>
+                      <td>
+                        <a href="{% url "console:international_profile_update" obj.pk %}">Profile Update</a>
+                      </td>
                     </tr>
                   {% endfor %}
                 </tbody>

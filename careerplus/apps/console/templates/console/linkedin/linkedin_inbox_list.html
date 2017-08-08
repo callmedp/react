@@ -193,11 +193,13 @@
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">Assigned</th>
                     <th class="column-title">User Category</th>
-                    <th class="column-title">Uploaded Document</th>
+                    <!--<th class="column-title">Uploaded Document</th>-->
                     <th class="column-title">Complete Order Information</th>
                     <th class="column-title">How Old</th>
+                  {% if perms.order.can_show_linkedin_writer_draft %}
                     <th class="column-title">Counselling Form</th>
                     <th class="column-title">Draft Submit</th>
+                  {% endif %}
                     <th class="column-title">Submit Msg</th>
                     <th class="column-title">Waiting for input</th>
                   </tr>
@@ -222,10 +224,12 @@
                       <td>Regular</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>User Category</td>
+                      <!--
                       <td>
                         <a href="#" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye">
                         </i>Download Document</button></a>
                       </td>
+                      -->
                       <td>
                         <a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.id %}"><button type="button" class="btn btn-success btn-xs">
                         <i class="fa fa-eye"></i>
@@ -235,7 +239,7 @@
                         {{obj.tat_date|naturaltime}}
                         <b>Updated On: {{obj.modified}}</b>
                       </td>
-
+                    {% if perms.order.can_show_linkedin_writer_draft %}
                       {% if obj.counselling_form_status == 42 %}
                       <td><a href="{% url 'counselling-form' obj.pk %}" style="color:green">
                         Counselling Form Submitted</a>
@@ -256,6 +260,7 @@
                           Draft 
                         </button></a>
                       </td>
+                    {% endif %}
                       <td>
                         <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                             <fieldset>

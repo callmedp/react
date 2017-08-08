@@ -548,3 +548,4 @@ class MarkedPaidOrderView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
+        

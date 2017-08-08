@@ -235,6 +235,8 @@ class OrderItem(AbstractAutoDate):
             ("can_show_linkedinrejectedbyadmin_queue", "Can View Linkedin Rejected By Admin Queue"),
             ("can_show_linkedinrejectedbycandidate_queue", "Can View LinkedinRejected By Candidate Queue"),
             ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
+            ("can_show_linkedin_inbox_queue", "Can View Linkedin Inbox Queue"),
+            ("can_show_linkedin_writer_draft", "Can View Linkedin Writer Draft"),
 
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),
