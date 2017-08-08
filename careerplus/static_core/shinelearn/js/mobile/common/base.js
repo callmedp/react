@@ -17,6 +17,10 @@ $(document).ready(function() {
 		$("#"+tab_id).addClass('current');
 	})// Tabbing function ends here
 
+	function goBack() {
+	    window.history.back();
+	}// Go back function ends here
+
 	// Header Scroll
 	$(window).on('scroll', function() {
 		var scroll = $(window).scrollTop();
@@ -77,14 +81,7 @@ $(document).ready(function() {
 		infinite: false
 	});
 
-});// Document ready function ends here 
-
-
-function goBack() {
-    window.history.back();
-}// Go back function ends here
-
-
+});// Document ready function ends here
 
 document.ontouchmove = function ( event ) {
 
