@@ -1,7 +1,7 @@
 import string
 COUPON_TYPES = (
-    ('money', 'Money based coupon'),
-    ('percentage', 'Percentage discount'),
+    ('flat', 'Flat Discount'),
+    ('percent', 'Percentage discount'),
 )
 CODE_LENGTH = 8
 CODE_CHARS = string.ascii_letters + string.digits
