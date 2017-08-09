@@ -12,10 +12,9 @@ class SendMail():
         '''
             Base function to send email. If debug_mode is true the cc will be shinecp@hindustantimes.com
         '''
-
         if settings.DEBUG:
             subject = "Test Mail " + subject
-            to = ['priya.kharb@hindustantimes.com']
+            to = ['upenders379@gmail.com']
             cc = []
             bcc = []
 
@@ -50,6 +49,22 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
+        if mail_type == "REGISTRATION":
+            send_dict['template'] = 'emailers/candidate/register.html'
+            send_dict['subject'] = "Welcome to Shine"
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            self.process(to, send_dict, data)
+
+        if mail_type == "PAYMENT_PENDING":
+            send_dict['template'] = 'emailers/candidate/payment_pending.html'
+            send_dict['subject'] = "Your Shine Payment Confirmation Pending"
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            self.process(to, send_dict, data)
+            
         if str(mail_type) == "2":
             send_dict['subject'] = "Linkedin Profile"
             send_dict['template'] = 'emailers/payment_confirm.html'
@@ -67,15 +82,26 @@ class SendMail():
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
-        elif mail_type == "REMINDER":
-            send_dict['subject'] = data.get('subject', "Your developed document has been uploaded")
-            template_name = data.get('template_name', 'draft_reminder.html')
-            send_dict['template'] = 'emailers/' + template_name
-
+        elif mail_type == "Draft Upload":
+            # for first draft
+            if data.get('draft_level') == 1:
+                send_dict['template'] = 'emailers/candidate/initial_document.html'
+                send_dict['subject'] = "Your developed document has been uploaded"
             # for 2nd draft
-            if data.get('draft_level') == 2:
-                send_dict['subject'] = "Your modified document is awaiting for approval"
+            elif data.get('draft_level') == 2:
+                send_dict['template'] = 'emailers/candidate/revised_document.html'
+                send_dict['subject'] = "Your developed document is ready"
+            # for 3rd draf
+            elif data.get('draft_level') == 3:
+                send_dict['template'] = 'emailers/candidate/final_document.html'
+                send_dict['subject'] = "Your final document is ready"
 
+            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            self.process(to, send_dict, data)
+
+        elif mail_type == "Draft Reminder":
+            send_dict['template'] = 'emailers/candidate/draft_reminder.html'
+            send_dict['subject'] = "Reminder:Your developed document has been uploaded"
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
@@ -98,10 +124,10 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "RESUME_CRITIQUE":
-            send_dict['subject'] = data.get('subject', "Sharing of Evaluated Resume")
-            template_name = data.get('template_name', 'critique_mail.html')
-            send_dict['template'] = 'emailers/' + template_name
+            send_dict['subject'] = data.get('subject', "Your developed document is ready")
+            send_dict['template'] = 'candidate/resume_critique_closed.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            data['review_document'] = "Review Document"
             self.process(to, send_dict, data)
 
         elif mail_type == "BOOSTER_RECRUITER":

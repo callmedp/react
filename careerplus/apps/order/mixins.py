@@ -55,6 +55,22 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
+
+                if order.status == 'InProcess' and (order.payment_mode == 'Cash' or order.payment_mode == 'Cheque or Draft'):
+                    to_emails = [order.email]
+                    mail_type = "PAYMENT_PENDING"
+                    data = {}
+                    data.update({
+                        "subject": 'Your Shine Payment Confirmation Pending',
+                        "first_name": order.first_name,
+                        "transactionid": order.txn,
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, login_dict)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                        pass
+
                 self.createOrderitems(order, cart_obj)
                 # update initial operation status
                 update_initiat_orderitem_sataus(order=order)
@@ -64,6 +80,29 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
                 # for linkedin
                 order_items = order.orderitems.filter(product__type_flow__in=[8])
+
+                # mail and sms
+                if order.orderitems.filter(product__type_flow__in=[1, 3, 4, 5]) and order.status == 1:
+                    to_emails = [order.email]
+                    mail_type = "MIDOUT"
+                    data = {}
+                    data.update({
+                        "info": 'Upload Your resume',
+                        "subject": 'Upload Your Resume',
+                        "name": order.first_name + ' ' + order.last_name,
+                        "mobile": order.mobile,
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                        order.midout_sent_on = timezone.now()
+                    except Exception as e:
+                        logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
                 if order_items:
                     # associate draft object with order
                     order_item = order_items.first()

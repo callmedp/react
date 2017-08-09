@@ -15,7 +15,6 @@ class RegistrationLoginApi(object):
     def user_registration(post_data):
         response_json = {"response": "exist_user"}
         post_url = "{}/api/v2/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
-
         try:
             country_obj = Country.objects.get(phone=post_data['country_code'])
         except Country.DoesNotExist:

@@ -37,11 +37,10 @@ def draft_reminder_mail():
                 mail_type = 'REMINDER'
                 data = {}
                 data.update({
-                    "info": 'Your developed document is awaiting for approval',
-                    "subject": 'Your developed document is awaiting for approval',
+                    "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
-                    "name": oi.order.first_name + ' ' + oi.order.last_name,
-                    "mobile": oi.order.mobile,
+                    "first_name": oi.order.first_name,
+                    "candidateid": oi.order.candidate_id,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
@@ -59,11 +58,10 @@ def draft_reminder_mail():
                 mail_type = 'REMINDER'
                 data = {}
                 data.update({
-                    "info": 'Your developed document is awaiting for approval',
-                    "subject": 'Your developed document is awaiting for approval',
+                    "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
-                    "name": oi.order.first_name + ' ' + oi.order.last_name,
-                    "mobile": oi.order.mobile,
+                    "first_name": oi.order.first_name,
+                    "candidateid": oi.order.candidate_id,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
@@ -80,11 +78,10 @@ def draft_reminder_mail():
                 mail_type = 'REMINDER'
                 data = {}
                 data.update({
-                    "info": 'Your developed document is awaiting for approval',
-                    "subject": 'Your developed document is awaiting for approval',
+                    "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
-                    "name": oi.order.first_name + ' ' + oi.order.last_name,
-                    "mobile": oi.order.mobile,
+                    "first_name": oi.order.first_name,
+                    "candidateid": oi.order.candidate_id,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
@@ -132,11 +129,10 @@ def draft_reminder_mail():
                 mail_type = 'REMINDER'
                 data = {}
                 data.update({
-                    "info": 'Your developed document is awaiting for approval',
-                    "subject": 'Your developed document is awaiting for approval',
+                    "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
-                    "name": oi.order.first_name + ' ' + oi.order.last_name,
-                    "mobile": oi.order.mobile,
+                    "first_name": oi.order.first_name,
+                    "candidateid": oi.order.candidate_id,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
@@ -153,11 +149,10 @@ def draft_reminder_mail():
                 mail_type = 'REMINDER'
                 data = {}
                 data.update({
-                    "info": 'Your developed document is awaiting for approval',
-                    "subject": 'Your developed document is awaiting for approval',
+                    "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
-                    "name": oi.order.first_name + ' ' + oi.order.last_name,
-                    "mobile": oi.order.mobile,
+                    "first_name": oi.order.first_name,
+                    "candidateid": oi.order.candidate_id,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)
