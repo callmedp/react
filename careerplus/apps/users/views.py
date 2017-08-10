@@ -1,5 +1,6 @@
 import logging
 import mimetypes
+import json
 
 from django.shortcuts import render
 from wsgiref.util import FileWrapper
@@ -13,6 +14,7 @@ from django.core.urlresolvers import reverse
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from order.models import OrderItem
+from emailers.email import SendMail
 
 from .forms import (
     RegistrationForm,
@@ -271,16 +273,21 @@ class ForgotHtmlView(TemplateView):
 
 
 class ForgotPasswordEmailView(View):
-    success_url = '/user/forgot/html/'
 
     def post(self, request, *args, **kwargs):
-        mail_type = 'FORGOT_PASSWORD'
-        email = request.POST.get('email')
-        to_emails = [email]
-        email_dict = {"email": email}
-        try:
-            SendMail().send(to_emails, mail_type, email_dict)
-        except Exception as e:
-            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-        messages.add_message(self.request, messages.ERROR, 'A link to reset your Shine Password has been sent to your Email Id', 'success')
-        return HttpResponseRedirect(self.success_url)
+        if request.is_ajax():
+            email = request.POST.get('email')
+            user_exist = RegistrationLoginApi.check_email_exist(email)
+            mail_type = 'FORGOT_PASSWORD'
+            to_emails = [email]
+            email_dict = {"email": email}
+
+            if user_exist.get('exists', ''):
+                try:
+                    SendMail().send(to_emails, mail_type, email_dict)
+                except Exception as e:
+                    logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                return HttpResponse(json.dumps({'exist':True}), content_type="application/json")
+
+            elif not user_exist.get('exists', ''):
+                return HttpResponse(json.dumps({'notexist':True}), content_type="application/json")
