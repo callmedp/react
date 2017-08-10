@@ -19,16 +19,16 @@
         <div class="main-menu w100fl">
             <div class="pull-left">
                 
-                <a class="icon-back pull-left" id="sidebar-main-trigger" role="button"></a> 
+                <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
 
-                
-                <a class=" pull-left" role="button" onclick="goBack()"></a> 
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
                 
                 <a class="icon-search pull-left" href="search-listing.html">search</a>
 
+                
                 <a class="icon-cart pull-left" href="#">cart</a>
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
@@ -55,7 +55,7 @@
         <h2 class="mt-15 c9">Status</h2>
 
         <ul class="status-list">
-            {% if oi.oi_status == 1 or oi.oi_status == 12 or oi.oi_status == 13 %}
+            {% if oi.product.type_flow == 1 or oi.product.type_flow == 12 or oi.product.type_flow == 13 %}
                 {% for op in ops %}
                     <li class="box row">
                         <div class="rel status-item">
@@ -73,12 +73,13 @@
                         {% if op.oi_status == 2 and not oi.oi_resume %}
                             <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 24 %}
-                            <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}">Download</a>
+                            <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}" download>Download</a>
                         {% elif op.oi_status == 27 %}
-                            <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}">Download</a>
+                            <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}" download>Download</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
+
             {% elif oi.product.type_flow == 8 %}
                 {% for op in ops %}
                     <li class="box row">
@@ -99,7 +100,7 @@
                         {% elif op.oi_status == 46 %}
                             <a href="#" class="btn btn-outline w100 mt-20">Download</a>
                         {% elif op.oi_status == 27 %}
-                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -112,7 +113,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if op.oi_draft %}
-                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% elif op.oi_status and not oi.oi_resume %}
                             <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% endif %}
@@ -127,7 +128,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if op.oi_status == 6 %}
-                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -168,7 +169,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if op.oi_draft %}
-                            <a href="{{op.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                            <a href="{{op.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -208,7 +209,7 @@
                         {% if op.oi_status == 101 %}
                             <a href="#" class="btn btn-outline w100 mt-20">Take Test</a>
                         {% elif op.oi_draft == 101 %}
-                            <a href="{{op.oi_draft.url}}" class="btn btn-outline w100 mt-20">Download</a>
+                            <a href="{{op.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -216,64 +217,15 @@
 
             {% endif %}
 
-            {% comment %}
-            <li class="box row">
-                <div class="rel status-item">
-                    Final document Uploaded
-                    <span>Jul 12, 2016</span>
-                </div>
-                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
-            </li><!-- /.li --><li class="box row">
-                <div class="rel status-item">
-                    Document is finalized
-                    <span>Jul 12, 2016</span>
-                </div>
-
-            </li><!-- /.li -->
-
-            <li class="box row">
-                <div class="rel status-item">
-                    Final document Uploaded
-                    <span>Jul 12, 2016</span>
-                </div>
-                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
-            </li><!-- /.li --><li class="box row">
-                <div class="rel status-item">
-                    Document is finalized
-                    <span>Jul 12, 2016</span>
-                </div>
-
-            </li><!-- /.li -->
-
-            <li class="box row">
-                <div class="rel status-item">
-                    Final document Uploaded
-                    <span>Jul 12, 2016</span>
-                </div>
-                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
-            </li><!-- /.li --><li class="box row">
-                <div class="rel status-item">
-                    Document is finalized
-                    <span>Jul 12, 2016</span>
-                </div>
-
-            </li><!-- /.li -->
-
-            <li class="box row">
-                <div class="rel status-item">
-                    Final document Uploaded
-                    <span>Jul 12, 2016</span>
-                </div>
-                <a href="#" class="btn btn-outline w100 mt-20">Download Resume</a>
-            </li><!-- /.li -->
-            {% endcomment %}
         </ul><!-- /.ul -->
 
         <a href="#" class="btn btn-blue btn-round w100"><span class="icon-comment-white"></span>Comment to writer</a>
-
-
-
     </div>
+
+    {% block pending_items %}
+        {% include "partial/pending-items.html" %}
+    {% endblock pending_items %}
+
 {% endblock container %}
 
 {% block js_section %}

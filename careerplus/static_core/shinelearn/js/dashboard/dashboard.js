@@ -109,10 +109,9 @@ function rejectService(oi_pk) {
    
 };
 
-function acceptService(oi_pk, ) {
+function acceptService(oi_pk) {
     if (oi_pk){
         $("#accept-modal" + oi_pk).modal("show");
-
         $(document).on('click', '#accept-submit-button' + oi_pk, function () {
             var formData = $('#accept-form-id' + oi_pk).serialize();
             $.ajax({

@@ -2,6 +2,7 @@ from collections import Iterable
 
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.views.decorators.cache import patch_cache_control
+from django.http import Http404
 
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -25,10 +26,10 @@ def has_group(user, grp_list):
     flat_list = set(flat_list)
     return flat_list.intersection(groups)
 
+
 def Decorate(decorator):
     def _inner(view_cls):
         old_dispatch = view_cls.dispatch
-
         @method_decorator(decorator)
         def new_dispatch(self, request, *args, **kwargs):
             return old_dispatch(self, request, *args, **kwargs)
@@ -83,3 +84,17 @@ def stop_browser_cache():
             return response
         return wrapper
     return _stop_browser_cache
+
+
+def mobile_page_only(redirect_url=None):
+    def _mobile_page_only(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            if request.flavour == 'mobile':
+                return view_func(request, *args, **kwargs)
+            elif redirect_url:
+                return HttpResponseRedirect(redirect_url)
+            else:
+                raise Http404
+        return wrapper
+    return _mobile_page_only

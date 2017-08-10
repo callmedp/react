@@ -3,11 +3,12 @@
 {% load thumbnail %}
 
 
-{% block title %}My Inbox | Shinelearning{% endblock %}
+{% block title %}My Order | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/common/smk-accordion.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
     
 {% endblock css_section %}
@@ -33,27 +34,35 @@
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
         
-        <h1 class="heading-back w100fl pb-0">Inbox</h1>
+        <h1 class="heading-back w100fl pb-0">My Orders</h1>
         
 
     </header><!-- header ends here -->
 {% endblock header %}
 
 {% block container %}
-    <!-- content box Starts here -->
-    <div class="content-box">
-        <div class="container" id="orderitem-inbox-box">
-            {{inbox_list|safe}}
-
-        </div><!-- /container -->
-    </div><!-- content box ends here -->
+    <div class="my-order">
+        <!-- Accordion begin -->
+        <div class="accordion_example1 accordion-wrap">
+            {{order_list|safe}}
+        </div>
+        <!-- Accordion end -->
+    </div><!-- /.My order -->
     
-    {% block pending_items %}
-        {% include "partial/pending-items.html" %}
-    {% endblock pending_items %}
 {% endblock container %}
 
 {% block js_section %}
     {{block.super}}
+
     <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function($){ 
+            $(".accordion_example1").smk_Accordion({
+                showIcon: true, //boolean
+                animation: true, //boolean
+                closeAble: true, //boolean
+                slideSpeed: 200 //integer, miliseconds
+            });
+        });
+    </script>
 {% endblock js_section %}

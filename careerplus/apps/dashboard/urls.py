@@ -86,4 +86,7 @@ urlpatterns += [
     url(r'^item-detail/$',
         mobile_view.DashboardItemDetailView.as_view(),
         name='dashboard-itemdetail'),
+    url(r'^itemfeedback/$',
+        mobile_view.DashboardItemFeedbackView.as_view(),
+        name='dashboard-itemfeedback'),
 ]

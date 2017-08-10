@@ -3,13 +3,12 @@ from django.http import (
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.utils.decorators import method_decorator
 
+from console.decorators import Decorate, mobile_page_only
 from order.models import OrderItem
-from core.decorators import mobile_page_only
 
 
-@method_decorator(mobile_page_only, name='dispatch')
+@Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardItemDetailView(TemplateView):
     template_name = 'dashboard/dashboard-itemdetail.html'
 
@@ -58,5 +57,34 @@ class DashboardItemDetailView(TemplateView):
                 "oi": self.oi,
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,
                 "ops": list(ops),
+            })
+        return context
+
+
+class DashboardItemFeedbackView(TemplateView):
+    template_name = 'dashboard/dashboard-itemfeedback.html'
+
+    def __init__(self):
+        self.oi_pk = None
+        self.oi = None
+        self.candidate_id = None
+
+    def get(self, request, *args, **kwargs):
+        self.candidate_id = request.session.get('candidate_id', None)
+        if self.candidate_id:
+            self.oi_pk = request.GET.get('oi', None)
+            try:
+                self.oi = OrderItem.objects.get(pk=self.oi_pk)
+                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4:
+                    return super(DashboardItemFeedbackView, self).get(request, args, **kwargs)
+            except:
+                pass
+        return HttpResponseRedirect(reverse('dashboard:dashboard'))
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardItemFeedbackView, self).get_context_data(**kwargs)
+        if self.oi and self.oi.order.candidate_id == self.candidate_id:
+            context.update({
+                "oi": self.oi,
             })
         return context

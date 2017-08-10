@@ -1,33 +1,158 @@
 {% load static %}
 {% for obj in orderitems %}
-    {% if obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
         <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
+            <h2>{{obj.product.name}}{% if obj.product.get_exp %} - {{obj.product.get_exp}}{% endif %}</h2>
             <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 2 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
-            {% elif obj.oi_status == 23 and obj.draft_counter %}
-                <p><strong>Status:</strong> Modifications requested</p>
 
-            {% elif obj.oi_status == 25 and obj.draft_counter %}
-                <p><strong>Status:</strong> Modifications requested</p>
+            {% if obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
 
-            {% elif obj.oi_status == 26 and obj.draft_counter %}
-                <p><strong>Status:</strong> Modifications requested</p>
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+                {% elif obj.oi_status == 23 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
 
-            {% elif obj.oi_status == 24 and obj.draft_counter == 1 %}
-                <p><strong>Status:</strong> Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                {% elif obj.oi_status == 25 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
 
-            {% elif obj.oi_status == 24 and obj.draft_counter < max_draft_limit %}
-                <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                {% elif obj.oi_status == 26 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
 
-            {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
-                <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                {% elif obj.oi_status == 24 and obj.draft_counter == 1 %}
+                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
 
-            {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
-                <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
-            {% else %}
-                <p><strong>Status:</strong> Service is under progress</p>
+                {% elif obj.oi_status == 24 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+
+                {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
+                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+
+                {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% else %}
+                    <p><strong>Status:</strong> Service is under progress</p>
+                {% endif %}
+
+            {% elif obj.product.type_flow == 8 %}
+
+                {% if obj.oi_status == 49 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Complete form</a></p>
+                {% elif obj.oi_status == 45 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+
+                {% elif obj.oi_status == 47 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+
+                {% elif obj.oi_status == 48 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+
+                {% elif obj.oi_status == 46 and obj.draft_counter == 1 %}
+                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="#">Dwonload</a></p>
+
+                {% elif obj.oi_status == 46 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="#">Dwonload</a></p>
+
+                {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
+                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="#">Dwonload</a></p>
+
+                {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="#">Dwonload</a></p>
+
+                {% else %}
+                    <p><strong>Status:</strong> Service is under progress</p>
+
+                {% endif %}
+
+            {% elif obj.product.type_flow == 3 %}
+
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed and Final document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                {% else %}
+                    <p><strong>Status:</strong> Service is under progress</p>
+                
+                {% endif %}
+
+            {% elif obj.product.type_flow == 2 %}
+                {% if obj.oi_status == 5 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+                
+                {% elif obj.oi_status == 6 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% endif %}
+
+            {% elif obj.product.type_flow == 4 %}
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a href="#">Download Credential</a></p>
+
+                {% elif obj.oi_status == 61 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% else %}
+                   <p><strong>Status:</strong> Service is under progress</p>
+
+                {% endif %}
+
+            {% elif obj.product.type_flow == 5 %}
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed</p>
+
+                {% elif obj.oi_status == 61 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% else %}
+                   <p><strong>Status:</strong> Service is under progress</p>
+
+                {% endif %}
+
+            {% elif obj.product.type_flow == 6 %}
+                {% if obj.oi_status == 82 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} </p>
+                
+                {% elif obj.oi_status == 81 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+
+                {% endif %}
+
+            {% elif obj.product.type_flow == 7 %}
+                <p><strong>Status:</strong> {{obj.get_user_oi_status}}
+
+            {% elif obj.product.type_flow == 9 %}
+                {% with obj.get_roundone_status as op_status %}
+                    {% if op_status == 141 %}
+                        <p><strong>Status:</strong> Your profile to be shared with interviewer is pending - <a href="#">Complete Profile</a></p>
+                    
+                    {% elif op_status == 142 %}
+                        <p><strong>Status:</strong> Service is under progress - <a href="#">Edit your profile</a></p>
+
+                    {% elif op_status == 143 %}
+                        <p><strong>Status:</strong> Service has been expired</p>
+                    {% endif %}
+                {% endwith %}
+
+            {% elif obj.product.type_flow == 10 %}
+                {% if obj.oi_status == 5 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+                
+                {% elif obj.oi_status == 101 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="#">Take Test</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+
+                {% endif %}
+
             {% endif %}
 
             <ul class="view-comments-links col-sm-7 col-md-8">
@@ -36,7 +161,8 @@
                 </li>
                 <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
             </ul>
-            {% if obj.oi_status == 24 %}
+
+            {% if obj.oi_status == 24 or obj.oi_status == 46 %}
             <div class="accept-reject col-sm-5 col-md-4">
                 <a class="accept" role="button" onclick="acceptService('{{obj.pk}}')">Accept</a> <a  role="button" class="reject" onclick="rejectService('{{obj.pk}}')">Reject</a>
             </div>
@@ -137,540 +263,6 @@
             {% endif %}
             <div class="hr"></div>
         </li>
-    {% elif obj.product.type_flow == 8 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 49 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Complete form</a></p>
-            {% elif obj.oi_status == 45 and obj.draft_counter %}
-                <p><strong>Status:</strong> Modifications requested</p>
-
-            {% elif obj.oi_status == 47 and obj.draft_counter %}
-                <p><strong>Status:</strong> Modifications requested</p>
-
-            {% elif obj.oi_status == 48 and obj.draft_counter %}
-                <p><strong>Status:</strong> Modifications requested</p>
-
-            {% elif obj.oi_status == 46 and obj.draft_counter == 1 %}
-                <p><strong>Status:</strong> Document is ready - <a target="_blank" href="#">Dwonload</a></p>
-
-            {% elif obj.oi_status == 46 and obj.draft_counter < max_draft_limit %}
-                <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="#">Dwonload</a></p>
-
-            {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
-                <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="#">Dwonload</a></p>
-
-            {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
-                <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="#">Dwonload</a></p>
-
-            {% else %}
-                <p><strong>Status:</strong> Service is under progress</p>
-
-            {% endif %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 46 %}
-            <div class="accept-reject col-sm-5 col-md-4">
-                <a class="accept" role="button" onclick="acceptService('{{obj.pk}}')">Accept</a> <a  role="button" class="reject" onclick="rejectService('{{obj.pk}}')">Reject</a>
-            </div>
-
-            <!--Accept Modal-->
-            <div class="modal fade bs-example-modal-sm3" tabindex="-1" id="accept-modal{{obj.pk}}" role="dialog" aria-labelledby="mySmallModalLabel">
-              <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                 <div class="register">
-                 <div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h1 class="modal-title" id="myModalLabel">Accept Confirmation</h1>
-                  </div>
-                    <form role="form" id="accept-form-id{{obj.pk}}">
-                      <div style='display:none'>
-                           <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
-                           <input type='hidden' name='oi_pk' value='{{obj.pk}}'/>
-                      </div>
-                      <div class="form-group accept-msg">
-                        <strong>Are you sure you want to accept ?</strong>
-                        <small>Note: Once you accept, your service will be closed.</small>
-                      </div>
-                      <button type="button" id="accept-submit-button{{obj.pk}}" class="btn btn-primary submit">Accept</button>
-                      <small class="form-text text-muted text-center"><a href="#" data-toggle="modal" data-target="" data-dismiss="modal">Skip</a></small>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div> 
-
-
-            <!--Reject Modal-->
-            <div class="modal fade bs-example-modal-sm4" id="reject-modal{{obj.pk}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-              <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                 <div class="register">
-                 <div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h1 class="modal-title" id="myModalLabel">Reject confirmation</h1>
-                  </div>
-                    <form class="reject-msg" id="reject-form-id{{obj.pk}}" enctype='multipart/form-data'>
-                      <div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/></div>
-                      <div class="form-group">
-                        <label>If you have made changes to resume upload here</label>
-                        <div class="input-file">
-                          <a class='' href='javascript:;'>
-                              <input maxlength="200" type="file" id="reject-file-id" name="reject_file" style='position:absolute;z-index:1;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:#333;' size="30"  onchange='$("#upload-file-info1").html($(this).val());'>
-                               <span class="choose-file">Browse</span>
-                          </a>
-                          <span class="upload-file" id="upload-file-info"></span>
-                        </div>
-                      </div>
-                      <div class="form-group text-center">
-                        Or
-                      </div>
-                      <div class="form-group">
-                        <label>Leave your comments</label>
-                        <textarea class="form-control" id="reject-reason" name="comment" rows="1" placeholder="Comments"></textarea>
-                      </div>
-                      <div class="form-group">
-                        <input type="hidden" name="oi_pk" value="{{obj.pk}}" />
-                      </div>
-                      <button type="button" id="reject-submit-button{{obj.pk}}" class="btn btn-primary submit" data-toggle="modal">Submit</button>
-                      <small class="form-text text-muted text-center"><a href="#" data-toggle="modal" data-target="" data-dismiss="modal">Skip</a></small>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {% endif %}
-
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 3 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 2 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
-            {% elif obj.oi_status == 4 %}
-                <p><strong>Status:</strong> Service has been processed and Final document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
-            {% else %}
-                <p><strong>Status:</strong> Service is under progress</p>
-            
-            {% endif %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 2 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 5 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-            
-            {% elif obj.oi_status == 6 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
-            {% elif obj.oi_status == 4 %}
-                <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
-            {% endif %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 4 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 2 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
-
-            {% elif obj.oi_status == 4 %}
-                <p><strong>Status:</strong> Service has been processed - <a href="#">Download Credential</a></p>
-
-            {% elif obj.oi_status == 61 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-
-            {% else %}
-               <p><strong>Status:</strong> Service is under progress</p>
-
-            {% endif %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 5 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 2 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
-
-            {% elif obj.oi_status == 4 %}
-                <p><strong>Status:</strong> Service has been processed</p>
-
-            {% elif obj.oi_status == 61 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-
-            {% else %}
-               <p><strong>Status:</strong> Service is under progress</p>
-
-            {% endif %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 6 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 82 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} </p>
-            
-            {% elif obj.oi_status == 81 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
-
-            {% elif obj.oi_status == 4 %}
-                <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
-
-            {% endif %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 7 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            <p><strong>Status:</strong> {{obj.get_user_oi_status}}
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 9 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% with obj.get_roundone_status as op_status %}
-                {% if op_status == 141 %}
-                    <p><strong>Status:</strong> Your profile to be shared with interviewer is pending - <a href="#">Complete Profile</a></p>
-                
-                {% elif op_status == 142 %}
-                    <p><strong>Status:</strong> Service is under progress - <a href="#">Edit your profile</a></p>
-
-                {% elif op_status == 143 %}
-                    <p><strong>Status:</strong> Service has been expired</p>
-                {% endif %}
-            {% endwith %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% elif obj.product.type_flow == 10 %}
-        <li class="col-sm-12">
-            <h2>{{obj.product.name}} - {{obj.product.get_exp}}</h2>
-            <span class="transaction">Order ID : {{obj.order.number}}</span>
-            {% if obj.oi_status == 5 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-            
-            {% elif obj.oi_status == 101 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="#">Take Test</a></p>
-
-            {% elif obj.oi_status == 4 %}
-                <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
-
-            {% endif %}
-
-            <ul class="view-comments-links col-sm-7 col-md-8">
-                <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
-                </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Comment to writer</a></li>
-            </ul>
-            {% if obj.oi_status == 4 and not obj.user_feedback %}
-                <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
-                        <div class="rating-feedback">
-                          <span>Your feedback</span>
-                          <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
-                            <label for="rating5" title="5 stars"></label>
-
-                            <input type="radio" id="rating4" name="rating" value="4" />
-                            <label for="rating4" title="4 stars"></label>
-
-                            <input type="radio" id="rating3" name="rating" value="3" />
-                            <label for="rating3" title="3 stars"></label>
-
-                            <input type="radio" id="rating2" name="rating" value="2" />
-                            <label for="rating2" title="2 stars"></label>
-
-                            <input type="radio" id="rating1" name="rating" value="1" />
-                            <label for="rating1" title="1 star"></label>
-
-                          </fieldset>
-                          <small>Write feedback and earn loyalty points</small>
-                        </div>
-                    </a>
-              </div>
-            {% endif %}
-            <div class="hr"></div>
-        </li>
-    {% endif %}
 
 {% endfor %}
 

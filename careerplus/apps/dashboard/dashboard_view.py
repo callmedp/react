@@ -263,7 +263,7 @@ class DashboardFeedbackView(TemplateView):
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
-                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
+                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4:
                     pass
                 else:
                     return ''

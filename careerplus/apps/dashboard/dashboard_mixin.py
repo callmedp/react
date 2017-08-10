@@ -43,12 +43,20 @@ class DashboardInfo(object):
 
     def get_myorder_list(self, candidate_id=None, request=None):
         if candidate_id:
-            days = 3 * 30
+            days = 6 * 30
             last_dateplaced_date = timezone.now() - datetime.timedelta(days=days)
             orders = Order.objects.filter(
-                status__in=[1, 2, 3],
+                status__in=[1, 3],
                 candidate_id=candidate_id,
                 date_placed__gte=last_dateplaced_date)
+
+            orders = orders | Order.objects.filter(
+                status=0,
+                payment_mode__in=[1, 4],
+                candidate_id=candidate_id,
+                date_placed__gte=last_dateplaced_date)
+
+            orders = orders.order_by('-date_placed')
 
             order_list = []
             for obj in orders:
