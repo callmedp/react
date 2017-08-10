@@ -18,10 +18,8 @@ def update_initiat_orderitem_sataus(order=None):
             mail_type = "MIDOUT"
             data = {}
             data.update({
-                "info": 'Upload Your resume',
-                "subject": 'Upload Your Resume',
-                "name": order.first_name + ' ' + order.last_name,
-                "mobile": order.mobile,
+                "name": order.first_name,
+                "candidateid": order.candidate_id,
             })
             try:
                 SendMail().send(to_emails, mail_type, data)
