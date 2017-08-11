@@ -56,6 +56,7 @@ $().ready(function() {
         submitHandler: function(form) {
             var formData = $(form).serialize();
             var post_url = $(form).attr('action' );
+            $('#forgot_div').modal('hide');
             $.ajax({
                 url: post_url,
                 type: "POST",
@@ -63,11 +64,9 @@ $().ready(function() {
                 dataType: 'json',
                 success: function(json) {
                     if (json.exist == true){
-                        $('#forgot_div').modal('hide');
                         alert("Link has been sent your register email id");
                     }
                     else if (json.notexist == true){
-                        $('#forgot_div').modal('hide');
                         alert("your email does not exist on shine learning");
                     }
                 },
