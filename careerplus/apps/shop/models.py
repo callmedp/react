@@ -1046,8 +1046,21 @@ class Product(AbstractProduct, ModelMeta):
         return final_score
 
     def get_avg_ratings(self):
-        return round(self.avg_rating, 1)
-
+        AR = float(self.avg_rating)
+        if 0.0 <= AR <= 0.5:
+            return 0
+        elif 0.5 < AR <= 1.5:
+            return 1
+        elif 1.5 < AR <= 2.5:
+            return 2
+        elif 2.5 < AR <= 3.5:
+            return 3
+        elif 3.5 < AR <= 4.5:
+            return 4
+        elif 4.5 < AR <= 5.0:
+            return 5
+        else:
+            return 2.5
     def get_screen(self):
         if self.screenproduct.all().exists():
             return self.screenproduct.all()[0]

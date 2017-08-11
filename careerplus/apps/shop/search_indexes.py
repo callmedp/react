@@ -2,6 +2,7 @@ import json
 from haystack import indexes
 from .models import Product
 from django.template.loader import render_to_string
+from shop.choices import DURATION_DICT, convert_to_month
 
 class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(
@@ -36,7 +37,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pCts = indexes.MultiValueField(null=True)
     
     #Facets Fields#
-    pAR = indexes.DecimalField(default=0, faceted=True) 
+    pAR = indexes.IntegerField(default=0, faceted=True) 
     pStM = indexes.MultiValueField(null=True, faceted=True)
     pDM = indexes.MultiValueField(default=0, faceted=True)
     pCert = indexes.MultiValueField(default=False, faceted=True)
@@ -162,19 +163,19 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return ''
 
     def prepare_pAR(self, obj):
-        return round(obj.avg_rating, 1)
+        return obj.get_avg_ratings()
 
     def prepare_pDM(self, obj):
         if obj.is_course:
             DM = []
-            duration_month = getattr(obj.attr, 'duartion_days') if getattr(obj.attr, 'duration_days', None) else 0
-            duration_month = (duration_month//30)
+            duration_month = getattr(obj.attr, 'duration_days') if getattr(obj.attr, 'duration_days', None) else 0
+            duration_month = convert_to_month(duration_month)
             DM.append(duration_month)
             if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    duration_month = getattr(pv.attr, 'duartion_days') if getattr(pv.attr, 'duration_days', None) else 0
-                    duration_month = (duration_month//30)
+                    duration_month = getattr(pv.attr, 'duration_days') if getattr(pv.attr, 'duration_days', None) else 0
+                    duration_month = convert_to_month(duration_month)
                     DM.append(duration_month)
                 DM = list(set(DM))
             return DM
@@ -221,29 +222,33 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                SM = getattr(pv.attr, 'study_mode').code if getattr(pv.attr, 'study_mode', None) else ''
-                CL = getattr(pv.attr, 'course_level').code if getattr(pv.attr, 'course_level', None) else ''
+                SM = getattr(pv.attr, 'study_mode').code if getattr(pv.attr, 'study_mode', None) else '0'
+                CL = getattr(pv.attr, 'course_level').code if getattr(pv.attr, 'course_level', None) else '0'
                 CERT = getattr(pv.attr, 'certification') if getattr(pv.attr, 'certification', None) else 0
-                CERT = 'CERT' if CERT else ''
-                DM = getattr(pv.attr, 'duartion_days') if getattr(pv.attr, 'duration_days', None) else 0
-                DM = (DM//30)
-                AR = str(round(obj.avg_rating, 1)*100)
-                ATTR.append(str(SM) + ' ' + str(CL)+ ' ' + str(CERT)+ ' ' + str(DM)+ ' ' + str(AR))
+                CERT = 'CERT1' if CERT else 'CERT0'
+                DM = getattr(pv.attr, 'duration_days') if getattr(pv.attr, 'duration_days', None) else 0
+                DM = convert_to_month(DM)
+                AR = obj.get_avg_ratings()
+                ATTR.append(
+                    'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                    + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'AR' + str(AR))
         else:
-            SM = getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else ''
-            CL = getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else ''
+            SM = getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '0'
+            CL = getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else '0'
             CERT = getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0
-            CERT = 'CERT' if CERT else ''
-            DM = getattr(obj.attr, 'duartion_days') if getattr(obj.attr, 'duration_days', None) else 0
-            DM = (DM//30)
-            AR = str(round(obj.avg_rating, 1)*100)
-            ATTR.append(str(SM) + ' ' + str(CL)+ ' ' + str(CERT)+ ' ' + str(DM)+ ' ' + str(AR))
+            CERT = 'CERT1' if CERT else 'CERT0'
+            DM = getattr(obj.attr, 'duration_days') if getattr(obj.attr, 'duration_days', None) else 0
+            DM = convert_to_month(DM)
+            AR = obj.get_avg_ratings()
+            ATTR.append(
+                'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'AR' + str(AR))
         return ATTR
 
     
     def prepare_pCT(self, obj):
         if obj.is_course:
-            return getattr(obj.attr, 'course_type', None) if getattr(obj.attr, 'course_type', None) else None
+            return getattr(obj.attr, 'course_type', None).code if getattr(obj.attr, 'course_type', None) else None
 
 
     def prepare_pURL(self, obj):
@@ -253,10 +258,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return obj.product_class.slug if obj.product_class else ''
 
     def prepare_pPv(self, obj):
-        return obj.vendor.name if obj.vendor else ''
+        return obj.vendor.pk if obj.vendor else ''
 
     def prepare_pPvn(self, obj):
-        return obj.vendor.pk if obj.vendor else ''
+        return obj.vendor.name if obj.vendor else ''
 
     def prepare_pCts(self, obj):
         countries = obj.countries.all()
@@ -293,7 +298,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     
     def prepare_pEX(self, obj):
         if obj.is_service or obj.is_writing:
-            return getattr(obj.attr, 'experience', None) if getattr(obj.attr, 'experience', None) else None
+            return getattr(obj.attr, 'experience', None).code if getattr(obj.attr, 'experience', None) else None
 
     def prepare_pFAQs(self, obj):
         structure = {
