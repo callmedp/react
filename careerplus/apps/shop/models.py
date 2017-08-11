@@ -955,7 +955,7 @@ class Product(AbstractProduct, ModelMeta):
         return None
 
     def get_exp(self, *args, **kwargs):
-        return getattr(self.attr, 'experience', None)
+        return getattr(self.attr, 'experience', '')
     
     @property
     def is_course(self):

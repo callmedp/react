@@ -994,7 +994,6 @@ class RelatedInlineFormSet(forms.BaseInlineFormSet):
                 rel = form.cleaned_data['secondary']
                 product = form.cleaned_data['primary']
                 type_relation = form.cleaned_data['type_relation']
-                duplicates.append(rel)
                 if rel == product:
                     raise forms.ValidationError(
                         'Related must be different.',
@@ -1005,6 +1004,8 @@ class RelatedInlineFormSet(forms.BaseInlineFormSet):
                         'Related must be unique.',
                         code='duplicate_unique'
                     )
+                duplicates.append(rel)
+                
         return
 
 
