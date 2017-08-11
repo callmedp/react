@@ -77,6 +77,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pVrs = indexes.CharField(indexed=False)
     pFBT = indexes.CharField(indexed=False)
     pPOP = indexes.CharField(indexed=False)
+    pCD = indexes.DateTimeField(model_attr='created', indexed=False)
+    pMD = indexes.DateTimeField(model_attr='modified', indexed=False)
     
     def get_model(self):
         return Product
@@ -190,7 +192,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return CERT
         return []
 
-    def prepare_pSM(self, obj):
+    def prepare_pStM(self, obj):
         if obj.is_course:
             SM = []
             SM.append(getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '')
