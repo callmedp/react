@@ -1660,7 +1660,8 @@ class ActionOrderItemView(View):
                     candidate_data.update({
                         "email": oi.order.email,
                         "mobile": oi.order.mobile,
-                        "user_name": oi.order.first_name + ' ' + oi.order.last_name
+                        'subject': 'Your resume has been shared with relevant consultants',
+                        "user_name": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                     })
 
                     if oi.oi_draft:

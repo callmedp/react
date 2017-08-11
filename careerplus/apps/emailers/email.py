@@ -14,7 +14,7 @@ class SendMail():
         '''
         if settings.DEBUG:
             subject = "Test Mail " + subject
-            to = ['upenders379@gmail.com']
+            to = ['priya.kharb@hindustantimes.com']
             cc = []
             bcc = []
 
@@ -59,7 +59,7 @@ class SendMail():
 
         if mail_type == "PAYMENT_PENDING":
             send_dict['template'] = 'emailers/candidate/payment_pending.html'
-            send_dict['subject'] = "Your Shine Payment Confirmation Pending"
+            send_dict['subject'] = "Your shine payment confirmation"
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
@@ -142,9 +142,9 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "BOOSTER_CANDIDATE":
-            send_dict['subject'] = data.get('subject', "shine booster confirmation")
+            send_dict['subject'] = data.get('subject', "Your resume has been shared with relevant consultants")
             template_name = data.get('template_name', 'booster_candidate.html')
-            send_dict['template'] = 'emailers/' + template_name
+            send_dict['template'] = 'emailers/candidate' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]

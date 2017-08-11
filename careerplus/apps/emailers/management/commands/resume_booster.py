@@ -28,7 +28,8 @@ def booster():
         candidate_data.update({
             "email": oi.order.email,
             "mobile": oi.order.mobile,
-            "user_name": oi.order.first_name + ' ' + oi.order.last_name
+            'subject': 'Your resume has been shared with relevant consultants',
+            "user_name": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
         })
 
         if oi.oi_draft:
@@ -40,8 +41,7 @@ def booster():
             download_link = resumevar
             recruiter_data.update({
                 "link_title": link_title,
-                "download_link": download_link
-
+                "download_link": download_link,
             })
 
             try:

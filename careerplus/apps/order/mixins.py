@@ -56,13 +56,14 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
 
-                if order.status == 'InProcess' and (order.payment_mode == 'Cash' or order.payment_mode == 'Cheque or Draft'):
+
+                if order.status == 2 and (order.payment_mode == 1 or order.payment_mode == 4):
                     to_emails = [order.email]
                     mail_type = "PAYMENT_PENDING"
                     data = {}
                     data.update({
-                        "subject": 'Your Shine Payment Confirmation Pending',
-                        "first_name": order.first_name,
+                        "subject": 'Your shine payment confirmation',
+                        "first_name": order.first_name if order.first_name else order.candidate_id,
                         "transactionid": order.txn,
                     })
                     try:
