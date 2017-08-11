@@ -63,11 +63,15 @@ $().ready(function() {
                 data : formData,
                 dataType: 'json',
                 success: function(json) {
+                    $("#forgot_form")[0].reset();
                     if (json.exist == true){
                         alert("Link has been sent your register email id");
                     }
                     else if (json.notexist == true){
                         alert("your email does not exist on shine learning");
+                    }
+                    else if (json.noresponse == true){
+                        alert("Something went wrong. Try again later");
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {

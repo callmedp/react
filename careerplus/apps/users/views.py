@@ -134,23 +134,27 @@ class LoginApiView(FormView):
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form, 'reset_form': reset_form})
+                    {'form': form})
 
             elif not user_exist.get('response', ''):
                 messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form, 'reset_form': reset_form})
+                    {'form': form,})
 
             elif not user_exist.get('exists', ''):
                 messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form, "reset_form": reset_form})
+                    {'form': form,})
 
         except Exception as e:
             logging.getLogger('error_log').error("Exception while logging in a user with email: %s. "
                                                  "Exception: %s " % (user_email, str(e)))
+            messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+            return render(
+                self.request, self.template_name,
+                {'form': form})
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -280,3 +284,6 @@ class ForgotPasswordEmailView(View):
 
             elif not user_exist.get('exists', ''):
                 return HttpResponse(json.dumps({'notexist':True}), content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({'noresponse':True}), content_type="application/json")
+
