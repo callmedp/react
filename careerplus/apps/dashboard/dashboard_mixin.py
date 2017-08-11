@@ -6,6 +6,7 @@ from django.conf import settings
 from django.middleware.csrf import get_token
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from core.api_mixin import ShineCandidateDetail
 from order.models import Order, OrderItem
 
 
@@ -81,19 +82,6 @@ class DashboardInfo(object):
             }
             return render_to_string('partial/myorder-list.html', context)
 
-    # def get_inbox_oi_detail(self, candidate_id=None, oi=None):
-    #     if oi and oi.order.candidate_id == candidate_id:
-    #         if oi.product.type_flow in [1, 12, 13]:
-    #             ops = oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])
-
-    #         if ops.exists():
-    #             data = {
-    #                 "oi": oi,
-    #                 "ops": ops,
-    #                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,
-    #             }
-    #             return render_to_string('include/inboxoi-deatil.html', data)
-
     def get_pending_resume_items(self, candidate_id=None, email=None):
         if candidate_id:
             resume_pending_items = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3], no_process=False, oi_status=2)
@@ -125,3 +113,17 @@ class DashboardInfo(object):
                         oi_status=obj.oi_status,
                         last_oi_status=obj.last_oi_status,
                         assigned_to=obj.assigned_to)
+
+    def check_user_shine_resume(self, candidate_id=None, request=None):
+        if not request:
+            request = self.request
+        if candidate_id and request.session.get('resume_id', None):
+            res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
+            resumes = res['resumes']
+            default_resumes = [resume for resume in resumes if resume['is_default']]
+            if default_resumes:
+                request.session.update({
+                    "resume_id": default_resumes[0].get('id', ''),
+                    "shine_resume_name": default_resumes[0].get('resume_name', ''),
+                    "resume_extn": default_resumes[0].get('extension', ''),
+                })

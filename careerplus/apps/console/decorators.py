@@ -81,6 +81,7 @@ def stop_browser_cache():
             patch_cache_control(
                 response, no_cache=True, no_store=True, must_revalidate=True,
                 max_age=0)
+
             return response
         return wrapper
     return _stop_browser_cache

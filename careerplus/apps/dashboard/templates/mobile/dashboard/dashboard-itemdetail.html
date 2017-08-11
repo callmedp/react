@@ -9,7 +9,11 @@
     {{ block.super }}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
-    
+    <style type="text/css">
+        .error{
+            color: red;
+        }
+    </style>
 {% endblock css_section %}
 
 {% block header %}
@@ -33,7 +37,7 @@
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
         
-        <h1 class="heading-back w100fl pb-0">Details</h1>
+        <h1 class="heading-back w100fl pb-0">Comments</h1>
         
     </header><!-- header ends here -->
 {% endblock header %}
@@ -219,11 +223,11 @@
 
         </ul><!-- /.ul -->
 
-        <a href="#" class="btn btn-blue btn-round w100"><span class="icon-comment-white"></span>Comment to writer</a>
+        <a href="{% url "dashboard:dashboard-conversation" %}?oi={{oi.pk}}" class="btn btn-blue btn-round w100"><span class="icon-comment-white"></span>Leave us a message</a>
     </div>
 
     {% block pending_items %}
-        {% include "partial/pending-items.html" %}
+        {% include "partial/notification-box.html" %}
     {% endblock pending_items %}
 
 {% endblock container %}

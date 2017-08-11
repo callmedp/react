@@ -9,7 +9,7 @@
                 {% if obj.oi_status == 2 %}
                     <p><strong>Status</strong>: {{obj.get_user_oi_status}}
                     </p>
-                    <a href="#" class="sidebar-secondary-trigger">Upload Resume</a>
+                    <a role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
                 {% elif obj.oi_status == 23 and obj.draft_counter %}
                     <p><strong>Status</strong>: Modifications requested
                     </p>
@@ -153,20 +153,22 @@
             </div><!-- /.button-wrap -->
         {% endif %}
         {% if obj.oi_status == 4 and not obj.user_feedback %}
-            <div class="grey-box text-center mt-15">
-                <div class="row">
-                    <div class="rating inline-block ml-0 fs-14">
-                        <strong>Your feedback</strong>
-                        <sup class="fill-star"></sup>
-                        <sup class="fill-star"></sup>
-                        <sup class="fill-star"></sup>
-                        <sup class="unfill-star"></sup>
-                        <sup class="unfill-star"></sup>
-                        
-                    </div><!-- end of star rating -->
-                    <p class="pb-0 fs-13 c6">Write feedback and earn loyalty points</p>
-                </div>
-            </div><!-- /.grey-box -->
+            <a href="{% url "dashboard:dashboard-itemfeedback" %}?oi={{obj.pk}}">
+                <div class="grey-box text-center mt-15">
+                    <div class="row">
+                        <div class="rating inline-block ml-0 fs-14">
+                            <strong>Your feedback</strong>
+                            <sup class="fill-star"></sup>
+                            <sup class="fill-star"></sup>
+                            <sup class="fill-star"></sup>
+                            <sup class="unfill-star"></sup>
+                            <sup class="unfill-star"></sup>
+                            
+                        </div><!-- end of star rating -->
+                        <p class="pb-0 fs-13 c6">Write feedback and earn loyalty points</p>
+                    </div>
+                </div><!-- /.grey-box -->
+            </a>
         {% endif %}
     </div><!-- /.box and row -->
 {% endfor %}

@@ -89,4 +89,8 @@ urlpatterns += [
     url(r'^itemfeedback/$',
         mobile_view.DashboardItemFeedbackView.as_view(),
         name='dashboard-itemfeedback'),
+
+    url(r'^conversation/$',
+        mobile_view.DashboardMobileCommentView.as_view(),
+        name='dashboard-conversation'),
 ]

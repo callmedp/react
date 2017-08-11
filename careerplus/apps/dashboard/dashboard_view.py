@@ -44,6 +44,17 @@ class DashboardView(TemplateView):
             'inbox_list': inbox_list,
             'pending_resume_items': pending_resume_items,
         })
+        if self.request.flavour == 'mobile':
+            if not self.request.session.get('resume_id', None):
+                DashboardInfo().check_user_shine_resume(candidate_id=candidate_id, request=self.request)
+
+            if self.request.session.get('resume_id', None):
+                context.update({
+                    "resume_id": self.request.session.get('resume_id', ''),
+                    "shine_resume_name": self.request.session.get('shine_resume_name', ''),
+                    "resume_extn": self.request.session.get('extension', ''),
+                })
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -263,7 +274,7 @@ class DashboardFeedbackView(TemplateView):
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
-                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4:
+                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4 and not self.oi.user_feedback:
                     pass
                 else:
                     return ''

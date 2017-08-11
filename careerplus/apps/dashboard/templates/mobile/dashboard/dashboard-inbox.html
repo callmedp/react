@@ -9,7 +9,11 @@
     {{ block.super }}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
-    
+    <style type="text/css">
+        .error{
+            color: red;
+        }
+    </style>
 {% endblock css_section %}
 
 {% block header %}
@@ -49,7 +53,7 @@
     </div><!-- content box ends here -->
     
     {% block pending_items %}
-        {% include "partial/pending-items.html" %}
+        {% include "partial/notification-box.html" %}
     {% endblock pending_items %}
 {% endblock container %}
 

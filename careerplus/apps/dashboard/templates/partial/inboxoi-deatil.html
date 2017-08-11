@@ -9,7 +9,7 @@
         <span class="transaction">Order ID : {{oi.order.number}}</span>
         <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
-            <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Comment to writer</a></li>
+            <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Leave us a message</a></li>
         </ul>
         {% if oi.oi_status == 24 or oi.oi_status == 46 %}
             <!--div class="accept-reject col-sm-5 col-md-4">
