@@ -11,7 +11,7 @@ $().ready(function() {
                 {
                     emailresponse = res.exists;
                 }
-             });
+            });
              return emailresponse;
 
         },
@@ -23,12 +23,10 @@ $().ready(function() {
             if($(this).val() != '')
             {
               $('button[type="submit"]').prop('disabled', false);  
-              // $('button[type="submit"]').attr('disabled' , false); 
             }
             else
             {
-                $('button[type="submit"]').prop('disabled', true);
-              // $('button[type="submit"]').attr('disabled' , true);
+              $('button[type="submit"]').prop('disabled', true);
             }   
         },
         rules: {
@@ -49,6 +47,46 @@ $().ready(function() {
             password:{
                 required: "Please provide a password"
             }
+        }
+    });   
+});
+
+$().ready(function() {
+    $("#forgot_form").validate({
+        submitHandler: function(form) {
+            var formData = $(form).serialize();
+            var post_url = $(form).attr('action' );
+            $('#forgot_div').modal('hide');
+            $.ajax({
+                url: post_url,
+                type: "POST",
+                data : formData,
+                dataType: 'json',
+                success: function(json) {
+                    $("#forgot_form")[0].reset();
+                    if (json.exist == true){
+                        alert("Link has been sent your register email id");
+                    }
+                    else if (json.notexist == true){
+                        alert("your email does not exist on shine learning");
+                    }
+                    else if (json.noresponse == true){
+                        alert("Something went wrong. Try again later");
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong. Try again later");
+                }
+            });
+        },
+        rules: {
+            email:{
+                required:true,
+                email:true,
+            }
+        },
+        messages:{
+            email: { required:"Please enter a valid email address"},
         }
     });
 });

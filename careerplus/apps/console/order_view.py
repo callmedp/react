@@ -339,7 +339,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.is_ajax() and request.user.is_authenticated():
             try:
                 data = {"display_message": ''}
                 orderitem_list = request.POST.getlist('selected_id[]', [])
@@ -351,39 +351,45 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                     User = get_user_model()
                     try:
                         writer = User.objects.get(pk=writer_pk)
-                        for obj in orderitem_objs:
-                            obj.assigned_to = writer
-                            obj.assigned_by = request.user
-                            obj.save()
+                        ActionUserMixin().assign_orderitem(
+                            orderitem_list=orderitem_list,
+                            assigned_to=writer,
+                            user=request.user,
+                            data={})
 
-                            # mail to user about writer information
-                            to_emails = [obj.order.email]
-                            mail_type = 'ASSIGNMENT_ACTION'
-                            data = {}
-                            data.update({
-                                "name": obj.order.first_name + ' ' + obj.order.last_name,
-                                "writer_name": writer.name,
-                                "writer_email": writer.email,
-                                "writer_mobile": writer.contact_number,
-                                "mobile": obj.order.mobile
-                            })
+                        # for obj in orderitem_objs:
+                        #     obj.assigned_to = writer
+                        #     obj.assigned_by = request.user
+                        #     obj.save()
 
-                            try:
-                                SendMail().send(to_emails, mail_type, data)
-                            except Exception as e:
-                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                        #     # mail to user about writer information
+                        #     to_emails = [obj.order.email]
+                        #     mail_type = 'ASSIGNMENT_ACTION'
+                        #     data = {}
+                        #     data.update({
+                        #         "name": obj.order.first_name + ' ' + obj.order.last_name,
+                        #         "writer_name": writer.name,
+                        #         "writer_email": writer.email,
+                        #         "writer_mobile": writer.contact_number,
+                        #         "mobile": obj.order.mobile
+                        #     })
 
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=data)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                        #     try:
+                        #         SendMail().send(to_emails, mail_type, data)
+                        #     except Exception as e:
+                        #         logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
-                            obj.orderitemoperation_set.create(
-                                oi_status=1,
-                                last_oi_status=obj.oi_status,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user
-                            )
+                        #     try:
+                        #         SendSMS().send(sms_type=mail_type, data=data)
+                        #     except Exception as e:
+                        #         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                        #     obj.orderitemoperation_set.create(
+                        #         oi_status=1,
+                        #         last_oi_status=obj.oi_status,
+                        #         assigned_to=obj.assigned_to,
+                        #         added_by=request.user
+                        #     )
 
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
@@ -485,7 +491,7 @@ class OrderItemDetailVeiw(DetailView):
                 obj.last_oi_status = last_status
                 obj.draft_added_on = timezone.now()
                 obj.save()
-                messages.add_message(request, messages.SUCCESS, 'draft uploded Successfully')
+                messages.add_message(request, messages.SUCCESS, 'draft uploaded Successfully')
                 obj.orderitemoperation_set.create(
                     oi_draft=obj.oi_draft,
                     draft_counter=obj.draft_counter,
@@ -683,9 +689,6 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         self.draft_level = request.GET.get('draft_level', -1)
         self.delivery_type = request.GET.get('delivery_type', -1)
         return super(ApprovedQueueVeiw, self).get(request, args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        pass
 
     def get_context_data(self, **kwargs):
         context = super(ApprovedQueueVeiw, self).get_context_data(**kwargs)
@@ -893,9 +896,6 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         self.delivery_type = request.GET.get('delivery_type', -1)
         return super(RejectedByCandidateQueue, self).get(request, args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        pass
-
     def get_context_data(self, **kwargs):
         context = super(RejectedByCandidateQueue, self).get_context_data(**kwargs)
         paginator = Paginator(context['rejectedbycandidate_list'], self.paginated_by)
@@ -1012,7 +1012,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             "oi_status": self.oi_status, }
         filter_form = OIFilterForm(initial)
         context.update({
-            "action_form": InboxActionForm(),
+            "assignment_form": AssignmentActionForm(queue_name='allocatedqueue'),
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
@@ -1022,7 +1022,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3]).exclude(oi_status=4)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 12, 13, 8, 3]).exclude(oi_status=4)
         queryset = queryset.exclude(assigned_to__isnull=True)
         user = self.request.user
 
@@ -1207,11 +1207,11 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(DomesticProfileUpdateQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=5, no_process=False, oi_status__in=[5, 25, 27])
+        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=5, no_process=False, oi_status__in=[5, 25, 61])
         # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
         user = self.request.user
 
-        q1 = queryset.filter(oi_status=27)
+        q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for oi in q1:
             closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
@@ -1929,46 +1929,17 @@ class AssignmentOrderItemView(View):
         selected_id = json.loads(selected)
         queue_name = request.POST.get('queue_name', '')
 
-        if user_pk:
+        if user_pk and selected_id and request.user.is_authenticated():
             try:
                 User = get_user_model()
                 assign_to = User.objects.get(pk=user_pk)
+                ActionUserMixin().assign_orderitem_func(
+                    orderitem_list=selected_id,
+                    assigned_to=assign_to,
+                    user=request.user
+                )
+
                 orderitem_objs = OrderItem.objects.filter(id__in=selected_id)
-                for obj in orderitem_objs:
-                    obj.assigned_to = assign_to
-                    obj.assigned_by = request.user
-                    obj.save()
-
-                    # mail to user about writer information
-                    to_emails = [obj.order.email]
-                    data = {}
-                    data.update({
-                        "name": obj.order.first_name + ' ' + obj.order.last_name,
-                        "mobile": obj.order.mobile,
-                        "writer_name": assign_to.name,
-                        "writer_email": assign_to.email,
-                        "writer_mobile": assign_to.contact_number,
-                        "subject": "Information of your profile update service",
-
-                    })
-                    mail_type = 'ASSIGNMENT_ACTION'
-
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                    try:
-                        SendSMS().send(sms_type=mail_type, data=data)
-                    except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=1,
-                        last_oi_status=obj.oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user
-                    )
 
                 display_message = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                 messages.add_message(request, messages.SUCCESS, display_message)

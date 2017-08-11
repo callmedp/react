@@ -42,41 +42,8 @@
 
             {% if pending_resume_items %}
             <!-- resume upload box -->
-            <div class="notification-resume" id="notification-box">
-              To initiate your services.
-              
-              <form role="form" method="post" action="." id="resume-upload-form" enctype='multipart/form-data'>{% csrf_token %}
-                  <small id="non-field-errors" class="error">{{validation_error}}</small>
-
-                  <div class="resume-writing">
-                    <div class="input-file col-sm-6">
-                        <a class='' href='javascript:;'>
-                            <input maxlength="200" type="file" name="file" id="file-id" style='position:absolute;z-index:2;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="30"  onchange='$("#upload-file-info").html($(this).val());'>
-                            <span class="choose-file">Choose file</span>
-                            <span class="error-txt"></span>
-                        </a>
-                        <span class="upload-file" id="upload-file-info"></span>
-                    </div>
-                
-                    <div class="col-sm-1"> Or</div>
-                    <div class="col-sm-5 use-shine">
-                      <label>
-                        <input type="checkbox">Use Shine resume
-                      </label>
-                    </div>
-                    <strong>Use this resume for following products</strong>
-                    {% for oi in pending_resume_items %}
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox" name="resume_pending" value="{{oi.pk}}">
-                            {{oi.product.name}} - {{oi.product.get_exp}}
-                          </label>
-                        </div>
-                    {% endfor %}
-                    <input type="hidden" id="resume_type_id" name="resume_type" value="0" />
-                    <a role="button" id="upload-resume-button" class="blue-button">Upload now</a>
-                  </div>
-              </form>
+            <div class="notification-resume" id="notification-box-id">
+              To initiate your services. <a role="button" id="upload_resume">Upload resume</a>
             </div>
             {% endif %}
             {% endblock upload_box %}

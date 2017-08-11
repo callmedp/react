@@ -3,11 +3,12 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from linkedin.autologin import AutoLogin
+from core.mixins import TokenGeneration
 
 
 class SendMail():
 
-    def base_send_mail(self, subject, body, to=None, from_email=settings.DEFAULT_FROM_EMAIL, headers=None, cc=None, bcc=None, fail_silently=False, attachments=[], mimetype='application/pdf'):
+    def base_send_mail(self, subject, body, to=None, from_email=settings.CONSULTANTS_EMAIL, headers=None, cc=None, bcc=None, fail_silently=False, attachments=[], mimetype='application/pdf'):
         '''
             Base function to send email. If debug_mode is true the cc will be shinecp@hindustantimes.com
         '''
@@ -156,4 +157,24 @@ class SendMail():
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
 
+            self.process(to, send_dict, data)
+
+        elif mail_type == "AUTO_REGISTER":
+            send_dict['subject'] = data.get('subject', "Your login credential on shinelearning")
+            template_name = data.get('template_name', 'auto-register.html')
+            send_dict['template'] = 'emailers/' + template_name
+
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+
+        elif mail_type == "FORGOT_PASSWORD":
+
+            send_dict['subject'] = "Forgot Password"
+            send_dict['template'] = 'emailers/payment_confirm.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            token = TokenGeneration().encode(data.get("email", ''), '1', 1)
+            data['reset_url'] = "http://%s/user/update/password/?token=%s" % (settings.SITE_DOMAIN, token)
+            data['button_text'] = "Click Here To Reset Password"
             self.process(to, send_dict, data)

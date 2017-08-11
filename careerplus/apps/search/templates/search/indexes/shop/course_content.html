@@ -1,0 +1,14 @@
+{% for chapter in chap_list  %}
+  
+<li >
+  <div >
+    <h3 >
+      {{chapter.heading}}
+    </h3>
+  </div>
+  <div >
+      {{chapter.content|safe}}
+  </div>
+</li>
+
+{% endfor %}

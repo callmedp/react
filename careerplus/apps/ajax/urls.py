@@ -56,5 +56,4 @@ urlpatterns = [
 
     url(r'^order/markedpaid/$',
         views.MarkedPaidOrderView.as_view(), name='order-markedpaid'),
-
 ]

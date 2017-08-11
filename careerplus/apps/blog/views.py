@@ -176,19 +176,29 @@ class BlogDetailView(DetailView, BlogMixin):
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
         main_obj = Blog.objects.filter(slug=blog.slug, status=1)
+
         detail_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
                 object_list=main_obj)
-
-        context.update({
-            "detail_article": render_to_string('include/detail-article-list.html',
+        if self.request.flavour == 'mobile':
+            detail_article = render_to_string('include/detail-article-list.html',
+                {"page_obj": detail_obj,
+                "slug": blog.slug,
+                "SITEDOMAIN": settings.SITE_DOMAIN,
+                "main_article": main_obj[0]})
+        else:
+            detail_article = render_to_string('include/detail-article-list.html',
                 {"page_obj": detail_obj,
                 "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+
+        context.update({
+            "detail_article": detail_article,
+            "main_article": main_obj[0],
         })
 
         article_list = Blog.objects.filter(p_cat=p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
-        article_list = article_list.distinct().select_related('user').prefetch_related('tags')
+        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
@@ -236,11 +246,11 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
             self.cat_obj = Category.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
-        context = super(self.__class__, self).get(request, args, **kwargs)
+        context = super(BlogCategoryListView, self).get(request, args, **kwargs)
         return context
         
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(BlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
         categories = Category.objects.filter(is_active=True)
         article_list = Blog.objects.filter(status=1)
@@ -402,7 +412,13 @@ class BlogLandingPageView(TemplateView, BlogMixin):
                 p: top_articles.select_related('p_cat', 'user'),
             })
 
-        article_list = render_to_string('include/top_article.html',
+        if self.request.flavour == 'mobile':
+            article_list = render_to_string('include/top_article.html',
+            {'page_obj': page_obj,
+            'article_list': article_list,
+            'heading': True, })
+        else:
+            article_list = render_to_string('include/top_article.html',
             {'page_obj': page_obj, 'article_list': article_list})
         context.update({
             'categories': categories,
@@ -487,7 +503,7 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
             self.page = self.request.GET.get('page', 1)
             self.slug = self.request.GET.get('slug')
             try:
-                self.blog = Blog.objects.get(slug=self.slug)
+                self.blog = Blog.objects.get(slug=self.slug, status=1)
             except:
                 return ''
             return super(self.__class__, self).get(request, args, **kwargs)
@@ -499,7 +515,7 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
 
         article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
         article_list = article_list.exclude(slug=self.blog.slug)
-        article_list = article_list.distinct().select_related('user').prefetch_related('tags')
+        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,

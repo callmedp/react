@@ -366,6 +366,7 @@ class AttributeOption(models.Model):
         'shop.AttributeOptionGroup', related_name='options',
         verbose_name=_("Group"))
     option = models.CharField(_('Option'), max_length=255)
+    code = models.CharField(_('Option Code'), max_length=4)
 
     def __str__(self):
         return self.option
@@ -1062,8 +1063,21 @@ class Product(AbstractProduct, ModelMeta):
         return final_score
 
     def get_avg_ratings(self):
-        return round(self.avg_rating, 1)
-
+        AR = float(self.avg_rating)
+        if 0.0 <= AR <= 0.5:
+            return 0
+        elif 0.5 < AR <= 1.5:
+            return 1
+        elif 1.5 < AR <= 2.5:
+            return 2
+        elif 2.5 < AR <= 3.5:
+            return 3
+        elif 3.5 < AR <= 4.5:
+            return 4
+        elif 4.5 < AR <= 5.0:
+            return 5
+        else:
+            return 2.5
     def get_screen(self):
         if self.screenproduct.all().exists():
             return self.screenproduct.all()[0]
@@ -1087,7 +1101,7 @@ class Product(AbstractProduct, ModelMeta):
         
         if self.inr_price:
             return round(self.inr_price, 0)
-        return 'Set Price'
+        return Decimal(0)
 
     def get_fakeprice(self, *args, **kwargs):
         if self.inr_price:
@@ -1712,7 +1726,13 @@ class ProductExtraInfo(models.Model):
     """
     Model to add any extra information to a Product.
     """
+    CHOICES = (
+        ('default', 'Default'),
+        ('profile_update', 'Profile Update Country')
+    )
+
     info_type = models.CharField(
+        choices=CHOICES,
         max_length=256,
         verbose_name=_('Type'),
     )
@@ -1731,7 +1751,7 @@ class ProductExtraInfo(models.Model):
         ordering = ['info_type']
 
     def __str__(self):
-        return '{0} - {1}'.format(self.product, self.type)
+        return '{0} - {1}'.format(self.product, self.info_type)
 
 
 class Chapter(AbstractAutoDate):

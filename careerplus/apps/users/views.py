@@ -1,5 +1,6 @@
 import logging
 import mimetypes
+import json
 
 from django.shortcuts import render
 from wsgiref.util import FileWrapper
@@ -11,10 +12,15 @@ from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 
 from shine.core import ShineCandidateDetail
-from core.mixins import TokenExpiry
+from core.mixins import TokenExpiry, TokenGeneration
 from order.models import OrderItem
+from emailers.email import SendMail
 
-from .forms import RegistrationForm, LoginApiForm
+from .forms import (
+    RegistrationForm,
+    LoginApiForm,
+    SetConfirmPasswordForm,
+    PasswordResetRequestForm)
 from .mixins import RegistrationLoginApi
 
 
@@ -86,6 +92,17 @@ class LoginApiView(FormView):
     template_name = "users/login.html"
     success_url = "/"
 
+    def get_context_data(self, **kwargs):
+        context = super(LoginApiView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        form = self.get_form()
+        context.update({
+            'messages': alert,
+            'form': form,
+            "reset_form": PasswordResetRequestForm()
+        })
+        return context
+
     def form_valid(self, form):
         login_dict = {}
         remember_me = self.request.POST.get('remember_me', None)
@@ -94,6 +111,8 @@ class LoginApiView(FormView):
             "email": user_email,
             "password": self.request.POST.get('password')
         })
+        if 'next' in self.request.GET:
+            self.success_url = self.request.GET.get('next')
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
             if user_exist.get('exists', ''):
@@ -113,19 +132,29 @@ class LoginApiView(FormView):
                     messages.add_message(self.request, messages.ERROR, login_resp["non_field_errors"][0], 'danger')
                 elif not login_resp['response']:
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
-                return render(self.request, self.template_name, {'form': form})
+                return render(
+                    self.request, self.template_name,
+                    {'form': form})
 
             elif not user_exist.get('response', ''):
                 messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
-                return render(self.request, self.template_name, {'form': form})
+                return render(
+                    self.request, self.template_name,
+                    {'form': form,})
 
             elif not user_exist.get('exists', ''):
                 messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
-                return render(self.request, self.template_name, {'form': form})
+                return render(
+                    self.request, self.template_name,
+                    {'form': form,})
 
         except Exception as e:
             logging.getLogger('error_log').error("Exception while logging in a user with email: %s. "
                                                  "Exception: %s " % (user_email, str(e)))
+            messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+            return render(
+                self.request, self.template_name,
+                {'form': form})
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -175,3 +204,86 @@ class DownloadBoosterResume(View):
             messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
             response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
             return response
+
+
+class ForgotPasswordResetView(ShineCandidateDetail, FormView):
+    template_name = "users/reset_password.html"
+    form_class = SetConfirmPasswordForm
+    success_url = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        return super(ForgotPasswordResetView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ForgotPasswordResetView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        token = self.request.GET.get('token')
+        email, type, valid = TokenGeneration().decode(token)
+        context.update({
+            'messages': alert,
+            'email': email,
+            'token': token,
+        })
+        return context
+
+    def post(self, request, *arg, **kwargs):
+        email, type, valid = TokenGeneration().decode(request.POST.get("token"))
+        form = self.form_class(request.POST)
+        if valid:
+            if form.is_valid():
+                data = request.POST
+                email_exist = RegistrationLoginApi.check_email_exist(data.get('email'))
+                if email_exist['exists']:
+                    pass_resp = RegistrationLoginApi.reset_update(data)
+                    if pass_resp['response']:
+                        messages.success(request, 'Password has been reset.')
+                        return self.form_valid(form)
+                    elif pass_resp['status_code'] == 400:
+                        messages.success(request, 'Client Authentication Failed')
+                        return self.form_valid(form)
+                elif not email_exist['exists']:
+                    messages.success(request, 'email does not exist')
+                    return self.form_valid(form)
+            else:
+                messages.error(request, 'Password reset has not been unsuccessful.')
+                return self.form_invalid(form)
+        else:
+            messages.error(request, 'The reset password link is no longer valid.')
+            return self.form_invalid(form)
+
+
+class ForgotHtmlView(TemplateView):
+    template_name = "mobile/users/forgot_password.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ForgotHtmlView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert,
+            "reset_form": PasswordResetRequestForm()
+        })
+        return context
+
+
+class ForgotPasswordEmailView(View):
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            email = request.POST.get('email')
+            user_exist = RegistrationLoginApi.check_email_exist(email)
+            mail_type = 'FORGOT_PASSWORD'
+            to_emails = [email]
+            email_dict = {"email": email}
+
+            if user_exist.get('exists', ''):
+                try:
+                    SendMail().send(to_emails, mail_type, email_dict)
+                except Exception as e:
+                    logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                return HttpResponse(json.dumps({'exist':True}), content_type="application/json")
+
+            elif not user_exist.get('exists', ''):
+                return HttpResponse(json.dumps({'notexist':True}), content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({'noresponse':True}), content_type="application/json")
+

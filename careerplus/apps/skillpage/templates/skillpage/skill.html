@@ -49,19 +49,19 @@
 					<div class="provider">
 					       Provider
 					   {% for top_4_vendor in top_4_vendors %}    
-						{% if forloop.counter == 1 %}
+						{% if forloop.counter == 1 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 2 %}
+						{% if forloop.counter == 2 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 3 %}
+						{% if forloop.counter == 3 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 4 %}
+						{% if forloop.counter == 4 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
@@ -155,7 +155,7 @@
 
 		    <!-- certification programs listing -->
 		    <div id="programs" class="listing-box mb-40 scroll">
-		    	<h2>Six Sigma Certification Programs</h2>
+		    	<h2>{{category_obj.name}} Programs</h2>
 		    	<ul class="listing" id="product_list">
 		    		{% for product in products %}
 				        <li class="box-panel">
@@ -258,7 +258,7 @@
 		          		{% endif %}
 		          	{% endfor %}
 		        	</ul>
-		        	<div id="revi_load_more">
+		        	<div id="review_load_more">
 					    {% if page_reviews.has_next %} 	
 			      		<input type="hidden" name="page" 
 			      		value="{{page_reviews.next_page_number}}" id="page_id1">

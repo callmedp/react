@@ -34,7 +34,7 @@
                                     <table cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
                                             <td width="65px" valign="bottom" style=" color: #000000; padding-bottom:3px; font: 11px Arial; text-align:left; text-decoration: none;">Invoice No. </td>
-                                            <td width="60px" style="color: #000000; font: bold 12px Arial;text-decoration: none;">3897987</td>
+                                            <td width="60px" style="color: #000000; font: bold 12px Arial;text-decoration: none;">{{invoice_no}}</td>
                                         </tr>
                                         
                                         <!--tr>
@@ -52,17 +52,17 @@
                             <tr>
                                 <td width="23%" style=" color: #000000; font: 14px Arial; text-align: left; line-height: 18px; padding: 6px 0 0 10px; margin: 0px;">Email</td>
                                 <td width="4%"></td>
-                                <td width="73%" style=" color: #000000; font: 14px Arial; text-align: left; line-height: 18px; padding: 6px 0 0 0px; margin: 0px;">na@gmail.com</td>
+                                <td width="73%" style=" color: #000000; font: 14px Arial; text-align: left; line-height: 18px; padding: 6px 0 0 0px; margin: 0px;">{{email}}</td>
                             </tr>
                             <tr>
                                 <td style=" color: #000000; font: 14px Arial; text-align: left;line-height: 18px; padding: 6px 0 0 10px; margin: 0px;">CellPhone</td>
                                 <td></td>
-                                <td style=" color: #000000; font: 14px Arial; text-align: left;line-height: 18px; padding: 6px 0 0 0px; margin: 0px;">878787878</td>
+                                <td style=" color: #000000; font: 14px Arial; text-align: left;line-height: 18px; padding: 6px 0 0 0px; margin: 0px;">{{mobile}}</td>
                             </tr>
                             <tr>
                                 <td style=" color: #000000; font: 14px Arial; text-align: left;line-height: 18px; padding: 6px 0 0 10px; margin: 0px;">Invoice Date</td>
                                 <td></td>
-                                <td style=" color: #000000; font: 14px Arial; text-align: left;line-height: 18px;  padding: 6px 0 0 0px; margin: 0px;">28/07/2017</td>
+                                <td style=" color: #000000; font: 14px Arial; text-align: left;line-height: 18px;  padding: 6px 0 0 0px; margin: 0px;">{{invoice_date}}</td>
                             </tr>
                             <tr>
                                 <td style=" color: #000000; font: 14px Arial; text-align: left;line-height: 18px; padding: 6px 0 0 10px; margin: 0px;"></td>
@@ -77,44 +77,68 @@
                         <table width="590px" cellpadding="0" cellspacing="0" style="padding:0 10px;">
                             <tr>
                                 <td width="408" style="background:#383838; border: 1px solid #383838; padding: 0 0 0 6px; color: #FFFFFF; font: bold 15px Arial; height: 22px; padding: 6px 15px 0 15px; text-align: left;">Subscription</td>
-                                <td width="180" style="background:#383838; border: 1px solid #383838; padding: 0 0 0 6px; color: #FFFFFF; font: bold 15px Arial; height: 22px; padding: 6px 15px 0 15px; text-align:center;">Amount (in Rs.)</td>
+                                <td width="180" style="background:#383838; border: 1px solid #383838; padding: 0 0 0 6px; color: #FFFFFF; font: bold 15px Arial; height: 22px; padding: 6px 15px 0 15px; text-align:center;">Amount (in {{order.currency}})</td>
                             </tr>
-                            
-                                <tr>
-                                    <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Product 1</td>
-                                    <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">10</td>
-                                </tr>
-                                <tr>
-                                    <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Product 2</td>
-                                    <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">20</td>
-                                </tr>
+                                {% for data in order_items %}
+                                    {% with oi=data.oi addons=data.addons variations=data.variations combos=data.combos %}
+                                        {% if oi.no_process and oi.product.type_flow == 12 %}
+                                            <tr>
+                                                <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">{{oi.product.name}}{% if oi.product.get_exp %}-{{oi.product.get_exp}}{% endif %}</td>
+                                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{oi.oi_price_incl_tax|floatformat:2}}</td>
+                                            </tr>
+                                        {% elif not oi.no_process %}
+                                            <tr>
+                                                <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">{{oi.product.name}}{% if oi.product.get_exp %}-{{oi.product.get_exp}}{% endif %}</td>
+                                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{oi.oi_price_incl_tax|floatformat:2}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% for var in variations %}
+                                            <tr>
+                                                <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">{{var.product.name}}{% if var.product.get_exp %}-{{var.product.get_exp}}{% endif %}</td>
+                                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{var.oi_price_incl_tax|floatformat:2}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% for combo in combos %}
+                                            <tr>
+                                                <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">{{combo.product.name}}{% if combo.product.get_exp %}-{{combo.product.get_exp}}{% endif %}</td>
+                                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{combo.oi_price_incl_tax|floatformat:2}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% for addon in addons %}
+                                            <tr>
+                                                <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">{{addon.product.name}}{% if addon.product.get_exp %}-{{addon.product.get_exp}}{% endif %}</td>
+                                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{addon.oi_price_incl_tax|floatformat:2}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endwith %}
+                                {% endfor %}
 
                             <tr>
                                 <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Sub Total</td>
 
-                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">30</td>
+                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{total_price}}</td>
                             </tr>
 
                             <tr>
-                                <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Discount (if any) 50%</td>
+                                <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Discount (if any) 0%</td>
 
-                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">15</td>
+                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">0</td>
                             </tr>
                             <tr>
                                 <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Total</td>
 
-                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">15</td>
+                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{total_price}}</td>
                             </tr>
                            
-                            <tr>
+                            <!--tr>
                                 <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Goods and Service Tax @ 18%</td>
 
-                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">5</td>
-                            </tr>
+                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{tax_amount}}</td>
+                            </tr-->
                             <tr>
                                 <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 13px;">Grand Total</td>
 
-                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">20</td>
+                                <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 15px Arial; padding: 5px 0 5px 0px; text-align:center;">{{total_price}}</td>
                             </tr>
                         </table>
                     </td>
@@ -122,16 +146,13 @@
                 <tr>
                     <td>
                         <table width="590px" cellpadding="0" cellspacing="0" style="padding:6px 10px 0;">
-                            
-                                <!--tr>
+                            {% if order.country|upper == 'INDIA' %}
+                                <tr>
                                     <td colspan="3" style="color: #000000; font: 14px Arial; text-align: left; padding-bottom: 5px;">
-                                        {% if internet_handling_charges %}
-                                            asdfadsf
-                                        {% else %}
-                                            The above Goods and Service Tax amount includes CGST of {{order.get_currency}} {{ cess_amt_1|floatformat:2 }} and UTGST of {{order.get_currency}} {{ cess_amt_2|floatformat:2 }}
-                                        {% endif %}
+                                        The above Net Payable amount includes CGST of Rs.{{tax_level1}} and SGST of Rs.{{tax_level2}}
                                     </td>
-                                </tr-->
+                                </tr>
+                            {% endif %}
 
                             <tr>
                                 <td colspan="3" style="color: #000000; font: 14px Arial; text-align: left; padding-bottom: 5px;">Registered Details of HT Media Limited</td>

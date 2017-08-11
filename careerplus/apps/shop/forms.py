@@ -358,6 +358,13 @@ class ChangeProductForm(forms.ModelForm):
         if product.image:
             if not product.icon:
                 product.create_icon()
+        if product.type_product == 1:
+            variation = product.variation.all()
+            for pv in variation:
+                if pv.type_flow != product.type_flow:
+                    pv.type_flow = product.type_flow
+                    pv.save()
+        
         return product
 
 
@@ -981,16 +988,22 @@ class RelatedInlineFormSet(forms.BaseInlineFormSet):
         if any(self.errors):
             return
         relatives = []
-        duplicates = False
+        duplicates = []
         for form in self.forms:
             if form.cleaned_data:
                 rel = form.cleaned_data['secondary']
                 product = form.cleaned_data['primary']
                 type_relation = form.cleaned_data['type_relation']
+                duplicates.append(rel)
                 if rel == product:
                     raise forms.ValidationError(
                         'Related must be different.',
                         code='duplicate_parent'
+                    )
+                if rel in duplicates:
+                    raise forms.ValidationError(
+                        'Related must be unique.',
+                        code='duplicate_unique'
                     )
         return
 

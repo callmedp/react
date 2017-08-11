@@ -9,6 +9,9 @@ SITE_ID = 1
 SITE_DOMAIN = '127.0.0.1:8000'
 SITE_PROTOCOL = 'https'
 
+MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
+MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+
 # Database
 DATABASES = {
     'default': {

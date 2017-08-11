@@ -117,15 +117,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'careerplus.config.context_processors.common_context_processor',
-                # 'django_mobile.context_processors.flavour'
-                # 'django_mobile.context_processors.flavour',
+                'django_mobile.context_processors.flavour',
                 'careerplus.config.context_processors.common_context_processor',
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings'
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
-                    # 'django_mobile.loader.Loader',
+                    'django_mobile.loader.Loader',
                     'django.template.loaders.filesystem.Loader',
                     'django.template.loaders.app_directories.Loader'
                 ]),

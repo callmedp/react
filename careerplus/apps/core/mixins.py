@@ -7,9 +7,9 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-
 from Crypto.Cipher import XOR
 from weasyprint import HTML
+from decimal import Decimal
 
 
 # from filebrowser.base import FileObject
@@ -82,8 +82,91 @@ class TokenGeneration(object):
 
 class InvoiceGenerate(object):
 
-    def get_invoice_data(self):
-        pass
+    def get_invoice_data(self, order=None):
+        invoice_data = {}
+        if order:
+            invoice_no = order.id
+            email = order.email
+            mobile = order.mobile
+            invoice_date = timezone.now()
+
+            tax_amount = Decimal(0)
+            total_price = Decimal(0)
+            order_items = []
+            parent_ois = order.orderitems.filter(parent=None).select_related('product', 'partner')
+            for p_oi in parent_ois:
+                data = {}
+                data['oi'] = p_oi
+                data['addons'] = order.orderitems.filter(
+                    parent=p_oi, is_combo=False,
+                    is_variation=False,
+                    no_process=False).select_related('product', 'partner')
+                data['variations'] = order.orderitems.filter(
+                    parent=p_oi, no_process=False,
+                    is_variation=True).select_related('product', 'partner')
+                data['combos'] = order.orderitems.filter(
+                    parent=p_oi, no_process=False,
+                    is_combo=True).select_related('product', 'partner')
+                order_items.append(data)
+
+            for data in order_items:
+                parent_oi = data.get('oi')
+                addons = data.get('addons')
+                variations = data.get('variations')
+                combos = data.get('combos')
+                product_price = parent_oi.product.get_price()
+                product_tax = product_price * Decimal(18 / 100)
+                parent_oi.oi_price_incl_tax = product_price + product_tax
+                parent_oi.save()
+                if parent_oi.no_process == True and parent_oi.product.type_flow == 12:
+                    tax_amount += product_tax
+                    total_price += parent_oi.oi_price_incl_tax
+                elif parent_oi.no_process == False:
+                    tax_amount += product_tax
+                    total_price += parent_oi.oi_price_incl_tax
+
+                for oi in addons:
+                    product_price = oi.product.get_price()
+                    product_tax = product_price * Decimal(18 / 100)
+                    oi.oi_price_incl_tax = product_price + product_tax
+                    oi.save()
+                    tax_amount += product_tax
+                    total_price += oi.oi_price_incl_tax
+
+                for oi in variations:
+                    product_price = oi.product.get_price()
+                    product_tax = product_price * Decimal(18 / 100)
+                    oi.oi_price_incl_tax = product_price + product_tax
+                    oi.save()
+                    tax_amount += product_tax
+                    total_price += oi.oi_price_incl_tax
+
+                for oi in combos:
+                    product_price = oi.product.get_price()
+                    product_tax = product_price * Decimal(18 / 100)
+                    oi.oi_price_incl_tax = product_price + product_tax
+                    oi.save()
+                    tax_amount += product_tax
+                    total_price += oi.oi_price_incl_tax
+
+            tax_amount = round(tax_amount, 2)
+            tax_level1 = round(tax_amount / 2, 2)
+            tax_level2 = round(tax_amount / 2, 2)
+            total_price = round(total_price, 2)
+            invoice_data.update({
+                "invoice_no": invoice_no,
+                "email": email,
+                "mobile": mobile,
+                "invoice_date": invoice_date,
+                "order_items": order_items,
+                "tax_amount": tax_amount,
+                "tax_level1": tax_level1,
+                "tax_level2": tax_level2,
+                "total_price": total_price,
+                "order": order,
+            })
+
+        return invoice_data
 
     def generate_pdf(self, context_dict={}, template_src=None):
         if template_src:
@@ -102,7 +185,7 @@ class InvoiceGenerate(object):
 
     def save_order_invoice_pdf(self, order=None):
         if order:
-            context_dict = {}
+            context_dict = self.get_invoice_data(order=order)
             pdf_file = self.generate_pdf(
                 context_dict=context_dict,
                 template_src='invoice/invoice.html')

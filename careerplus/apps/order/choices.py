@@ -38,6 +38,7 @@ OI_OPS_STATUS = (
     (10, 'On Hold by Vendor'),
     (11, 'Archived'),
     (12, 'Unhold by Vendor'),
+    (13, 'Shine Resume'),
 
     # flow1, flow3, flow12, flow13, and flow 5 status 21 - 40
     (21, 'Upload Draft'),
@@ -47,7 +48,8 @@ OI_OPS_STATUS = (
     (25, 'Rejected By Admin'),
     (26, 'Rejected By Candidate'),
     (27, 'Service has been processed and Document is finalized'),  # user Accept the draft flow 8 too
-    (28, 'Profile Update'),
+    (28, 'Feature profile initiated'),
+    (29, 'Feature profile expired'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),
@@ -91,6 +93,7 @@ OI_USER_STATUS = (
     (10, 'Service is initiate'),
     (11, 'Archived'),
     (12, 'Service is initiated'),
+    (13, 'Shine Resume'),
 
 
     # flow1, flow12, flow13, flow3, and flow 5 status 21 - 40
@@ -101,7 +104,8 @@ OI_USER_STATUS = (
     (25, 'Rejected By Admin'),
     (26, 'Modifications requested'),
     (27, 'Service has been processed and Document is finalized'),
-    (28, 'Profile Update'),
+    (28, 'Feature profile initiated'),
+    (29, 'Feature profile expired'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),

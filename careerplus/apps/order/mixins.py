@@ -6,6 +6,7 @@ from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
+from users.tasks import user_register
 
 from .models import Order, OrderItem
 from .functions import update_initiat_orderitem_sataus
@@ -36,10 +37,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             if cart_obj:
                 order = Order.objects.create(cart=cart_obj, date_placed=timezone.now())
                 order.number = 'CP' + str(order.pk)
-                
                 if candidate_id:
                     order.candidate_id = candidate_id
-                
+
                 order.email = cart_obj.email
                 order.first_name = cart_obj.first_name
                 order.last_name = cart_obj.last_name
@@ -50,12 +50,18 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.state = cart_obj.state
                 order.country = cart_obj.country
 
+                # set currency
+                order.currency = 'Rs.'
+
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
                 self.createOrderitems(order, cart_obj)
                 # update initial operation status
                 update_initiat_orderitem_sataus(order=order)
-                
+
+                if not order.candidate_id:
+                    user_register(data={}, order=order.pk)
+
                 # for linkedin
                 order_items = order.orderitems.filter(product__type_flow__in=[8])
                 if order_items:
@@ -101,7 +107,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             no_process=True,
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-                        p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
+                        p_oi.oi_price_before_discounts_excl_tax = parent_li.product.get_price()
                         p_oi.save()
 
                         combos = self.get_combos(parent_li.product).get('combos')
@@ -164,7 +170,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                 order=order,
                                 product=addon.product,
                                 title=addon.product.name,
-                                partner=addon.product.vendor
+                                partner=addon.product.vendor,
+                                is_addon=True,
                             )
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             oi.parent = p_oi

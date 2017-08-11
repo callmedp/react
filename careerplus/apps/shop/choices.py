@@ -78,3 +78,36 @@ BG_COLOR = { 0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
     24: "#cdac98", 25: "#c5cbe9", 26: "#d5d5d5", 27: "#e39b71"
 }
 BG_CHOICES = tuple(BG_COLOR.items())
+
+
+DURATION_DICT = {
+    'D0': '0-1 month',
+    'D1': '1- 3 month',
+    'D2': '3-6 month',
+    'D3': '9 months',
+    'D4': '9-12 months',
+    'D5': '1 -2 years',
+    'D6': '2 -3 years',
+    'D7': '3+ years',
+}
+
+def convert_to_month(days=0):
+    if days:
+        months = int(days)//30
+        if 0 <= months <= 1:
+            return 'D0'
+        elif 1 < months <= 3:
+            return 'D1'
+        elif 3 < months <= 6:
+            return 'D2'
+        elif 6 < months <= 9:
+            return 'D3'
+        elif 9 < months <= 12:
+            return 'D4'
+        elif 12 < months <= 24:
+            return 'D5'
+        elif 24 < months <= 36:
+            return 'D6'
+        elif 36 < months:
+            return 'D7'
+    return 'D0'

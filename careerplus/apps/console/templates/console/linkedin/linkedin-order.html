@@ -132,7 +132,8 @@
                                      {% if obj.oio_linkedin %}
                                         <tr>
                                           <td>Candidate Draft</td>
-                                          <td><a href="#" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a></td>
+                                          <td>
+                                          <a href="{% url "linkedin-draf-download" obj.pk obj.oio_linkedin.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a></td>
                                         </tr>
                                       {% endif %}
 

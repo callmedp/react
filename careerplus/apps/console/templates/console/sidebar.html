@@ -29,15 +29,21 @@
               {% if perms.shop.console_change_keyword %}
                 <li><a href="{% url 'console:keyword-list' %}">Keywords</a></li>
               {% endif %}
-              {% if perms.shop.console_change_attribute %}
-                <li><a href="{% url 'console:attribute-list' %}">Attributes</a>
-                </li>
-              {% endif %}
+              {% comment %}
+                {% if perms.shop.console_change_attribute %}
+                  <li><a href="{% url 'console:attribute-list' %}">Attributes</a>
+                  </li>
+                {% endif %}
+              {% endcomment %}
               
               </ul>
             </li>
 
             <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url "console:geo-country" %}">Country</a></li>
+            </ul>
+
             </li>
           {% endif %}
         </ul>
@@ -96,7 +102,6 @@
           {% endif %}
         </ul>
     {% endif %}
-    {% if  request.user|has_group:PRODUCT_GROUP_LIST or request.user|has_group:OPERATION_GROUP_LIST or request.user|has_group:WRITING_GROUP_LIST %}
       <ul class="nav side-menu">
         
 
@@ -134,22 +139,30 @@
         <i class="fa fa-edit"></i>Linkedin Queue<span class="fa fa-chevron-down"></span>
       </a>
       <ul class="nav child_menu">
+        {% if perms.order.can_show_linkedin_inbox_queue %}
             <li>
               <a href="{% url 'console:linkedin-inbox' %}">
               Linkedin Inbox</a>
             </li>
+        {% endif %}
+        {% if perms.order.can_show_linkedin_approval_queue %}
             <li>
               <a href="{% url 'console:linkedin-approval' %}">
               Linkedin Aproval</a>
             </li>
+        {% endif %}
+        {% if perms.order.can_show_linkedinrejectedbycandidate_queue %}
             <li>
               <a href="{% url 'console:linkedin-rejectedbylinkedincandidate' %}">
               Linkedin Rejected By Candidate</a>
             </li>
+        {% endif %}
+        {% if perms.order.can_show_linkedinrejectedbyadmin_queue %}
             <li>
               <a href="{% url 'console:linkedin-rejectedbylinkedinadmin' %}">
               Linkedin Rejected By Admin</a>
             </li>
+        {% endif %}
       </ul>
       </li>
       <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
@@ -232,13 +245,7 @@
             
         </ul>
       </li>
-    {% endif %}
-        
-      
-      
-      
-                        
-   
+    
   </div>
 
 </div>

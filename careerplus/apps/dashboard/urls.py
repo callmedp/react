@@ -66,4 +66,15 @@ urlpatterns += [
         dashboard_view.DashboardInboxLoadmoreView.as_view(),
         name='dashboard-inbox-loadmore'),
 
+    url(r'^inbox-filter/$',
+        dashboard_view.DashboardInboxFilterView.as_view(),
+        name='dashboard-inboxfilter'),
+
+    url(r'^inbox-notificationbox/$',
+        dashboard_view.DashboardNotificationBoxView.as_view(),
+        name='dashboard-notificationbox'),
+
+    url(r'^order-invoicedownload/$',
+        dashboard_view.DashboardInvoiceDownload.as_view(),
+        name='dashboard-invoicedownload'),
 ]

@@ -1,0 +1,16 @@
+{% load static %}
+
+<form id="blog-comment-form{{article.id}}" role="form">{% csrf_token %}
+    <textarea placeholder="Write comments" class="form-control" id="id_comment{{article.id}}" name="message"></textarea>
+    <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
+    <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
+    {% if request.session.candidate_id %}
+        <button class="btn btn-blue btn-round mt-10" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Submit</button>
+    {% else %}
+        <button class="btn btn-blue btn-round mt-10 js_redirect" type="button">Submit</button>
+    {% endif %}
+</form>
+
+<ul class="mt-20" id="page_comment{{article.id}}">
+  {{ comment_list|safe|default:'' }}
+</ul>

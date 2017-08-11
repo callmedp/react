@@ -26,6 +26,13 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+class AttributeAdmin(admin.ModelAdmin):
+    readonly_fields = ('modified',)
+    list_display = [
+        'name', 'display_name',]
+    search_fields = ('name',)
+    raw_id_fields = ('product_class', 'option_group')
+
 class AttributeInline(admin.TabularInline):
     model = models.ProductAttribute
     raw_id_fields = ['attribute', 'product']
@@ -78,11 +85,15 @@ class CategoryInline(admin.TabularInline):
     fk_name = 'product'
     extra = 1
 
+class ProductExtraInfoInline(admin.TabularInline):
+    model = models.ProductExtraInfo
+    fk_name = 'product'
+    extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
-        FAQuestionInline, AttributeInline, ]
+        FAQuestionInline, AttributeInline, ProductExtraInfoInline]
     prepopulated_fields = {"slug": ("name",)}
 
 # class ProductAdmin(admin.ModelAdmin):
@@ -106,7 +117,7 @@ class ProductExtraInfoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Category, CategoryAdmin)
-admin.site.register(models.Attribute)
+admin.site.register(models.Attribute, AttributeAdmin)
 admin.site.register(models.Keyword)
 admin.site.register(models.ProductClass)
 admin.site.register(models.Product, ProductAdmin)

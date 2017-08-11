@@ -113,6 +113,27 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('api_log').error(str(e))
         return None
 
+    def get_shine_candidate_resume(self, candidate_id=None, resume_id=None, data={}, headers=None):
+        try:
+            if candidate_id and resume_id:
+                if not headers:
+                    headers = self.get_api_headers()
+                    headers.update({
+                        "Accept": 'application/json',
+                    })
+                    api_url = settings.SHINE_API_URL +\
+                        '/api/v2/candidate/' +\
+                        candidate_id + '/resumefiles/' +\
+                        resume_id + '/'
+                    response = requests.get(
+                        api_url,
+                        data=data, headers=headers)
+                    if response.status_code == 200:
+                        return response
+        except Exception as e:
+            logging.getLogger('api_log').error(str(e))
+        return None
+
 
 class FeatureProfileUpdate(ShineToken):
 
