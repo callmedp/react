@@ -21,11 +21,12 @@ from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
+from console.decorators import Decorate, stop_browser_cache
 
 from .dashboard_mixin import DashboardInfo
 
 
-# @Decorate(stop_browser_cache())
+@Decorate(stop_browser_cache())
 class DashboardView(TemplateView):
     template_name = "dashboard/dashboard-inbox.html"
 
@@ -122,7 +123,6 @@ class DashboardView(TemplateView):
                     })
                     return TemplateResponse(
                         request, ["dashboard/dashboard-inbox.html"], context)
-            
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
@@ -347,7 +347,7 @@ class DashboardRejectService(View):
             try:
                 oi = OrderItem.objects.get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
-                    if oi.product.type_flow in [1, 12, 13, 8] and oi.oi_status in [24, 46]:
+                    if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status
                         if oi.oi_status == 24:
                             oi.oi_status = 26
@@ -369,9 +369,7 @@ class DashboardRejectService(View):
                                 message=comment,
                                 candidate_id=candidate_id
                             )
-
                         data['display_message'] = "your draft is successfully rejected"
-
                     else:
                         data['display_message'] = "please do valid action only"
             except:
@@ -392,7 +390,7 @@ class DashboardAcceptService(View):
             try:
                 oi = OrderItem.objects.get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
-                    if oi.product.type_flow in [1, 12, 13, 8] and oi.oi_status in [24, 46]:
+                    if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status
                         oi.oi_status = 4
                         oi.last_oi_status = 27

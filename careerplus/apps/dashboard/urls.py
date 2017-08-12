@@ -93,4 +93,8 @@ urlpatterns += [
     url(r'^conversation/$',
         mobile_view.DashboardMobileCommentView.as_view(),
         name='dashboard-conversation'),
+
+    url(r'^rejectconfirmation/$',
+        mobile_view.DashboardMobileRejectView.as_view(),
+        name='dashboard-reject'),
 ]

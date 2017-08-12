@@ -60,4 +60,15 @@
 {% block js_section %}
     {{block.super}}
     <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    <script src="{% static "shinelearn/js/mobile/dashboard/dashboard.js" %}"></script>
+    <script>
+        function openPopup(el) {
+            $('.modal').hide();
+            $('#' + el).fadeIn(200);   
+        }
+
+        function closePopup() {
+            $('.modal').fadeOut(300);
+        }
+    </script>
 {% endblock js_section %}

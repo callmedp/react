@@ -12,7 +12,7 @@ from order.models import OrderItem
 from .dashboard_mixin import DashboardInfo
 
 
-@Decorate(stop_browser_cache())
+# @Decorate(stop_browser_cache())
 @Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardItemDetailView(TemplateView):
     template_name = 'dashboard/dashboard-itemdetail.html'
@@ -83,7 +83,7 @@ class DashboardItemDetailView(TemplateView):
         return context
 
 
-@Decorate(stop_browser_cache())
+# @Decorate(stop_browser_cache())
 @Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardItemFeedbackView(TemplateView):
     template_name = 'dashboard/dashboard-itemfeedback.html'
@@ -114,7 +114,7 @@ class DashboardItemFeedbackView(TemplateView):
         return context
 
 
-@Decorate(stop_browser_cache())
+# @Decorate(stop_browser_cache())
 @Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardMobileCommentView(TemplateView):
     template_name = 'dashboard/dashboard-comment.html'
@@ -164,3 +164,34 @@ class DashboardMobileCommentView(TemplateView):
             return HttpResponseRedirect(redirect_url)
         else:
             return HttpResponseRedirect(reverse('dashboard:dashboard'))
+
+
+# @Decorate(stop_browser_cache())
+@Decorate(mobile_page_only(redirect_url='/dashboard/'))
+class DashboardMobileRejectView(TemplateView):
+    template_name = 'dashboard/dashboard-reject.html'
+
+    def __init__(self):
+        self.oi_pk = None
+        self.oi = None
+        self.candidate_id = None
+
+    def get(self, request, *args, **kwargs):
+        self.candidate_id = request.session.get('candidate_id', None)
+        self.oi_pk = request.GET.get('oi', None)
+        if self.oi_pk and self.candidate_id:
+            try:
+                self.oi = OrderItem.objects.get(pk=self.oi_pk)
+                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status in [24, 46]:
+                    return super(DashboardMobileRejectView, self).get(request, args, **kwargs)
+            except:
+                pass
+        return HttpResponseRedirect(reverse('dashboard:dashboard'))
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardMobileRejectView, self).get_context_data(**kwargs)
+        if self.oi and self.oi.order.candidate_id == self.candidate_id:
+            context.update({
+                "obj": self.oi,
+            })
+        return context
