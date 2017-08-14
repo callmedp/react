@@ -1113,7 +1113,6 @@ class Product(AbstractProduct, ModelMeta):
                 return (round(fake_inr_price, 0), percent_diff)
         return None
 
-    
     def verify_category(self, cat_slug=None):
         try:
             prod_cat = self.categories.filter(

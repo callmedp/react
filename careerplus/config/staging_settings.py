@@ -4,6 +4,8 @@ from .settings import *
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning1.shine.com'
 SITE_DOMAIN = 'learning1.shine.com'
+SITE_PROTOCOL = 'http'
+
 
 ############ SOLR SETTINGS #######################
 HAYSTACK_CONNECTIONS = {

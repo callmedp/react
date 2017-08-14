@@ -1,223 +1,84 @@
+{% extends "basic/base1.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Search Result Page - Shine Learning</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
-    <!-- Bootstrap -->
-    <link type="text/css" href="{% static '/shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
-    <link type="text/css" href="{% static '/shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
-    <link type="text/css" href="{% static '/shinelearn/css/common/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
-    <link type="text/css" href="{% static '/shinelearn/css/common/listing.css' %}" rel="stylesheet">
-    
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-<nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#"></a>
-    </div>
+{% block css_section %}
+    {{block.super}}
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+    <link href="{% static '/shinelearn/css/common/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static '/shinelearn/css/product/detail.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/search/listing.css' %}" rel="stylesheet">
+{% endblock css_section %}
+{% block title %}Search Result Page - Shine Learning{% endblock title %}
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="dropdown courses-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hamburber-icon"></span>All Courses</a>
-          <div class="dropdown-menu courses-tabs">
-            <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="courses1" aria-controls="courses1" role="tab" data-toggle="tab">Operations</a></li>
-              <li role="presentation"><a href="#courses2" aria-controls="courses2" role="tab" data-toggle="tab">Finance</a></li>
-              <li role="presentation"><a href="#courses3" aria-controls="courses3" role="tab" data-toggle="tab">Human Resources</a></li>
-              <li role="presentation"><a href="#courses4" aria-controls="courses4" role="tab" data-toggle="tab">Personal Development</a></li>
-              <li role="presentation"><a href="#courses5" aria-controls="courses5" role="tab" data-toggle="tab">Sales And Marketing</a></li>
-              <li role="presentation"><a href="#courses6" aria-controls="courses6" role="tab" data-toggle="tab">IT Software & Certifications</a></li>
-              <li role="presentation"><a href="#courses7" aria-controls="courses7" role="tab" data-toggle="tab">Development</a></li>
-              <li role="presentation"><a href="#courses8" aria-controls="courses8" role="tab" data-toggle="tab">Other Online Courses</a></li>
-            </ul>
+{% block main_container %}
+    {% comment %}
+    <form method="get" action=".">
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <input type="submit" value="Search">
+                </td>
+            </tr>
+        </table>
 
-            <!-- Tab panes -->
-            <div class="tab-content">
-              <div role="tabpanel" class="tab-pane active" id="courses1">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
-              </ul>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="courses2">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
-              </ul>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="courses3">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
-              </ul>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="courses4">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
-              </ul>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="courses5">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
-              </ul>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="courses6">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
-              </ul>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="courses7">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">View all products</a></li>
-              </ul>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="courses8">
-                <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a tabindex="-1" href="#">View all products</a></li>
-              </ul>
-              </div>
+        {% if query %}
+            <h3>Results</h3>
+
+            {% for result in page.object_list %}
+                <p>
+                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+                </p>
+            {% empty %}
+                <p>No results found.</p>
+            {% endfor %}
+
+            {% if page.has_previous or page.has_next %}
+                <div>
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            {# Show some example queries to run, maybe query syntax, something else? #}
+        {% endif %}
+    </form>
+    {% endcomment %}
+    {% block page_heading %}
+        <!-- header -->
+        <header class="search-header">
+            <div class="container">
+                <!-- breadcrums -->
+                {% block breadcrumbs %}
+                  {% include "product/partials/breadcrumb.html" %}
+                {% endblock breadcrumbs %}
+
+                {% block product_header %}
+                    <div class="search-caption">
+                        <div class="search-box">
+                            <form class="form-inline" id="search_form" data-role="form">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                <div class="form-group">
+                                    {{field}}
+                                </div>
+                                {% endfor %}
+                                <button type="submit" class="find-jobs-btn btn">Find</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endblock product_header %}
             </div>
-          </div>
-        </li>
-        <li class="dropdown jobs-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Job Assistance Services</a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Interview Preparation</a></li>
-            <li><a href="#">Job Search Guidance</a></li>
-            <li><a href="#">Competitive Exams</a></li>
-            <li><a href="#">Government Jobs</a></li>
-            <li><a href="#">Government News</a></li>
-          </ul>
-        </li>
-      </ul>
-      
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="#">
-          <form action="" class="search">
-            <input type="text" class="form-control input-sm" maxlength="64" placeholder="Search" />
-            <button type="submit" class="search-icon"></button>
-          </form>
-          </a>
-        </li>
-        <li class="dropdown call-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="call-icon"></span></a>
-          <ul class="dropdown-menu">
-            <li><a class="text-center" href="#"><strong>Call us:</strong> 0124 - 3955001 / 02</a></li>
-          </ul>
-        </li>
-        <li class="dropdown cart-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="cart-icon"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">My Cart</a></li>
+        </header>
+    {% endblock page_heading %}
 
-          </ul>
-        </li>
-        <li class="dropdown login-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">Login</span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">My inbox</a></li>
-            <li><a href="#">My orders</a></li>
-            <li><a href="#">My Wallet</a></li>
-            <li><a href="#">Referrals</a></li>
-            <li><a href="#">Logout</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
 
-<!-- header -->
-<header class="search-header">
-  <div class="container">
-    <!-- breadcrums -->
-    <ol class="breadcrumb mt-30">
-      <li><a href="#">Home</a></li>
-      <li class="active">listing</li>
-    </ol>
-    <div class="search-caption">
-      <div class="search-box">
-        <!-- <form class="form-inline">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Job title, keyword or company name">
-          </div>
-          <button type="submit" class="find-jobs-btn btn">Find Jobs</button>
-        </form> -->
-        <form class="form-inline">
-          <div class="form-group">
-            <input class="form-control" name="query" id="query" placeholder="Job title, keyword or company name" type="text">              
-          </div>
-          <button type="submit" class="find-jobs-btn btn">Find Jobs</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</header>
 
-<!-- main section start -->
-<section class="container">
+    <!-- main section start -->
+    <section class="container">
 
     <!-- page content body start -->
     <div class="row">
@@ -283,21 +144,6 @@
           <div class="panel-heading">
             <h4 class="panel-title">
               <a>
-                Price  
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse" style="overflow: visible; max-height: auto">
-            <div class="panel-body">
-              <input id="ex2" type="text" class="span2" value="" data-slider-min="100" data-slider-max="25000" data-slider-step="5" data-slider-value="[250,450]"/>
-              <small class="slider-txt">Rs. 100 - 25000</small>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
                 Course Level  
               </a>
             </h4>
@@ -331,14 +177,6 @@
             <div class="panel-body">
                 <div class="rating-review-box">
                   <input type="checkbox">
-                  <figure class="half-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                </div>
-                <div class="rating-review-box">
-                  <input type="checkbox">
                   <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
                   <figure class="blank-star"></figure>
@@ -348,8 +186,16 @@
                 <div class="rating-review-box">
                   <input type="checkbox">
                   <figure class="full-star"></figure>
-                  <figure class="half-star"></figure>
+                  <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
+                  <figure class="blank-star"></figure>
+                  <figure class="blank-star"></figure>
+                </div>
+                <div class="rating-review-box">
+                  <input type="checkbox">
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
                   <figure class="blank-star"></figure>
                 </div> 
@@ -357,8 +203,8 @@
                   <input type="checkbox">
                   <figure class="full-star"></figure>
                   <figure class="full-star"></figure>
-                  <figure class="half-star"></figure>
-                  <figure class="blank-star"></figure>
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
                 </div>
                 <div class="rating-review-box">
@@ -366,8 +212,8 @@
                   <figure class="full-star"></figure>
                   <figure class="full-star"></figure>
                   <figure class="full-star"></figure>
-                  <figure class="half-star"></figure>
-                  <figure class="blank-star"></figure>
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
                 </div> 
 
             </div>
@@ -450,7 +296,7 @@
 
     <!-- mid content start -->
     <div class="col-sm-9 col-md-10 mt-40 ">
-      <div class="listing-heading-box">
+        <div class="listing-heading-box">
         <div class="form-group custom-select">
         <select class="form-control">
           <option>Relevance</option>
@@ -460,46 +306,45 @@
         <h2>11 products found</h2>
       </div>
 
-      <ul class="listing">
-            
+        <ul class="listing">
+            {% for result in page.object_list %}
             <li class="box-panel">
-              <a title="Six Sigma Black Belt" href="/course/category21-2/six-sigma-black-belt-2/pd-11">
+                <a title="{{ result.pTt|title }}" href="{{ result.pURL }}">
                 <div class="media">
                   <div class="media-left">
-                      <figure style='background-color:#a3e77d;'>
-                        <img class="media-object" src="/media/product_image/11/1501497926_7670.png" width="125" heigth="125" alt="Six Sigma Black Belt">
+                      <figure class="color1">
+                        <img class="media-object" src="{{ result.pIc }}" alt="{{ result.pTt|title }}">
                       </figure>
                   </div>
                   <div class="media-body">
                     <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">0</span> jobs available</span>
+                      {% if "true" in result.pCert %}<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>{% endif %}
+                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>
                     </div>
 
-                    <h3 class="listing-heading">Six Sigma Black Belt</h3>
+                    <h3 class="listing-heading">{{ result.pHd }}</h3>
 
                     <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>2.5/5</strong> | 21 ratings <b>18 reviews</b>
+                        {% for star in result.pStar %}
+                        <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
+                        {% endfor %}
+                        <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
                     </div> 
 
                     <div class="providers">
-                       Providers
-                       <span>V Skill</span>
+                       Provider
+                       <span>{{ result.pPvn|title }}</span>
                     </div>
-
                     <div class="pricing-box">
-                       Starting at <strong>Rs. 4500/-</strong> <strike>Rs. 5000/-</strike> <span class="discount">10% OFF</span>
+                       Starting at <strong>Rs. {{ result.pPinr |floatformat:'0' }}/-</strong>{% if result.pPfinr|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfinr|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
                     </div>
 
                   </div>
                 </div>
               </a>
             </li>
+            {% endfor %}
+            {% comment %}
             <li class="box-panel">
               <a title="Background Verification" href="#">
                 <div class="media">
@@ -766,7 +611,7 @@
                 </div>
               </a>
             </li>
-
+            {% endcomment %}
           </ul>
     </div>       
     <!-- mid content end -->
@@ -778,77 +623,45 @@
 
 </section>
 <!-- main section end -->
+{% endblock main_container %}
 
-
-  <!-- footer -->
-  <footer>
-    <div class="container">
-      <article>
-        <strong>Disclaimer</strong>
-Careerplus is the Trade Mark of HT Media and the services associated with it are only provided through the website Shine.com. You are advised to be cautious of calls/emails asking for payment from other web sites that claim to offer similar services under the name of careeerplus.shine.com. We have no associates or agents other than the partner sites that have been specifically named on the homepage of the website careerplus.shine.com Any specific advice or replies to queries in any part of the Site is/are the personal opinion of such experts/consultants/persons and are not subscribed to by this Site. HT Media neither endorses nor offers any judgement or warranty and accepts no responsibility or liability for the authenticity/availability of any of the goods/services/or for any damage, loss or harm, direct or consequential or any violation of local or international laws that may be incurred by your visit and/or transaction/s on these sites. We also recommend that you visit Security Guidelines and Terms and Conditions before availing the services.The information mentioned about salary increase is based on the internal research by the experts in the relevant domain in HT Media Limited. The said information is merely illustration of probability in increase and no guarantee is being provided by the company for the same. User agree and undertakes to comply with additional Terms and conditions, <a href="#">click here</a>
-      </article>
-      <div class="secure-payment">
-        <figure class="secure-icon"></figure>
-        <span class="secure-text"><strong>100% Secure Payment</strong>
-        All major credit & debit cards accepted</span>
-      </div>
-      <div class="payment-options">
-        <figure class="payment-option-txt">Payment options</figure>
-        <span class="payment-option-bg"></span>
-      </div>
-    </div>
-
-    <div class="footer-links">
-      <div class="container">
-        <a href="#">About Us</a> <a href="#">Partners</a> <a href="#">Privacy Policy</a> <a href="#">Terms & Condition</a> <a href="#">Contact us</a>
-        <span>Copyright © 2017 HT Media Limited.</span>
-      </div>
-    </div>
-    
-  </footer>
-
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+{% block js_section %}
+    {{block.super}}
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static 'shinelearn/js/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/js/bootstrap-slider.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/js/typeahead.min.js' %}"></script>
-
+    <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
 
     <script type="text/javascript">
-    $('.nav-tabs > li > a').hover(function() {
-        $(this).tab('show');
-      });
-    $('.dropdown').hover(function(){ 
-        $('.dropdown-toggle', this).trigger('click'); 
-      });
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+        });
+        $('.dropdown').hover(function(){
+            $('.dropdown-toggle', this).trigger('click');
+        });
     </script>
 
     <script>
-    (function($){
-      $(window).on("load",function(){
-        
-        $("#filters .scroll").mCustomScrollbar({
-          setHeight:140,
-          theme:"dark-3",
-        });
-        });
-      })(jQuery);
+        (function($){
+            $(window).on("load",function(){
+                $("#filters .scroll").mCustomScrollbar({
+                  setHeight:140,
+                  theme:"dark-3"
+                });
+            });
+        })(jQuery);
     </script>
 
     <script type="text/javascript">
-      $("#ex2").slider({});
+        $("#ex2").slider({});
     </script>
 
     <script type="text/javascript">
-      $('#query').typeahead({        
-        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
-      });
+        $('#query').typeahead({
+            local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+        });
 
-      $('.tt-query').css('background-color','#fff'); 
+        $('.tt-query').css('background-color','#fff');
     </script>
 
-  </body>
-</html>
+{% endblock js_section %}
