@@ -49,19 +49,19 @@
 					<div class="provider">
 					       Provider
 					   {% for top_4_vendor in top_4_vendors %}    
-						{% if forloop.counter == 1 %}
+						{% if forloop.counter == 1 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 2 %}
+						{% if forloop.counter == 2 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 3 %}
+						{% if forloop.counter == 3 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 4 %}
+						{% if forloop.counter == 4 and top_4_vendor.image.url %}
 							<img src="{{top_4_vendor.image.url}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}

@@ -91,6 +91,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         if vendor_list:
             return vendor_list[0]
         return None
+        
 # class UserEmail(models.Model):
 #     """
 #     This is to record of all emails sent to a user.

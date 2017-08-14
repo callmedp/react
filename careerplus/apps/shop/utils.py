@@ -160,8 +160,10 @@ class ProductAttributesContainer(object):
         return self.get_values().get(attribute=attribute)
 
     def get_all_attributes(self):
-        return self.product.product_class.attributes.filter(active=True)
-
+        if self.product:
+            if self.product.product_class:
+                return self.product.product_class.attributes.filter(active=True)  
+        return self.objects.none()
     def get_attribute_by_name(self, name):
         return self.get_all_attributes().get(name=name)
 
