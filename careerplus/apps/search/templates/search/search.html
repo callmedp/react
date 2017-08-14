@@ -12,7 +12,6 @@
 {% block title %}Search Result Page - Shine Learning{% endblock title %}
 
 {% block main_container %}
-<h2>Search</h2>
     {% comment %}
     <form method="get" action=".">
         <table>
@@ -145,21 +144,6 @@
           <div class="panel-heading">
             <h4 class="panel-title">
               <a>
-                Price  
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse" style="overflow: visible; max-height: auto">
-            <div class="panel-body">
-              <input id="ex2" type="text" class="span2" value="" data-slider-min="100" data-slider-max="25000" data-slider-step="5" data-slider-value="[250,450]"/>
-              <small class="slider-txt">Rs. 100 - 25000</small>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
                 Course Level  
               </a>
             </h4>
@@ -193,14 +177,6 @@
             <div class="panel-body">
                 <div class="rating-review-box">
                   <input type="checkbox">
-                  <figure class="half-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                </div>
-                <div class="rating-review-box">
-                  <input type="checkbox">
                   <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
                   <figure class="blank-star"></figure>
@@ -210,8 +186,16 @@
                 <div class="rating-review-box">
                   <input type="checkbox">
                   <figure class="full-star"></figure>
-                  <figure class="half-star"></figure>
+                  <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
+                  <figure class="blank-star"></figure>
+                  <figure class="blank-star"></figure>
+                </div>
+                <div class="rating-review-box">
+                  <input type="checkbox">
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
                   <figure class="blank-star"></figure>
                 </div> 
@@ -219,8 +203,8 @@
                   <input type="checkbox">
                   <figure class="full-star"></figure>
                   <figure class="full-star"></figure>
-                  <figure class="half-star"></figure>
-                  <figure class="blank-star"></figure>
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
                   <figure class="blank-star"></figure>
                 </div>
                 <div class="rating-review-box">
@@ -228,8 +212,8 @@
                   <figure class="full-star"></figure>
                   <figure class="full-star"></figure>
                   <figure class="full-star"></figure>
-                  <figure class="half-star"></figure>
-                  <figure class="blank-star"></figure>
+                  <figure class="full-star"></figure>
+                  <figure class="full-star"></figure>
                 </div> 
 
             </div>
@@ -325,37 +309,34 @@
         <ul class="listing">
             {% for result in page.object_list %}
             <li class="box-panel">
-                <a title="{{ result.object.pTt|title }}" href="{{ result.object.get_absolute_url }}">
+                <a title="{{ result.pTt|title }}" href="{{ result.pURL }}">
                 <div class="media">
                   <div class="media-left">
                       <figure class="color1">
-                        <img class="media-object" src="images/course-logo1.png" alt="{{ result.object.pTt|title }}">
+                        <img class="media-object" src="{{ result.pIc }}" alt="{{ result.pTt|title }}">
                       </figure>
                   </div>
                   <div class="media-body">
                     <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">0</span> jobs available</span>
+                      {% if "true" in result.pCert %}<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>{% endif %}
+                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>
                     </div>
 
-                    <h3 class="listing-heading">Six Sigma Black Belt</h3>
+                    <h3 class="listing-heading">{{ result.pHd }}</h3>
 
                     <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>2.5/5</strong> | 21 ratings <b>18 reviews</b>
+                        {% for star in result.pStar %}
+                        <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
+                        {% endfor %}
+                        <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
                     </div> 
 
                     <div class="providers">
-                       Providers
-                       <span>V Skill</span>
+                       Provider
+                       <span>{{ result.pPvn|title }}</span>
                     </div>
-
                     <div class="pricing-box">
-                       Starting at <strong>Rs. 4500/-</strong> <strike>Rs. 5000/-</strike> <span class="discount">10% OFF</span>
+                       Starting at <strong>Rs. {{ result.pPinr |floatformat:'0' }}/-</strong>{% if result.pPfinr|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfinr|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
                     </div>
 
                   </div>
@@ -647,9 +628,9 @@
 {% block js_section %}
     {{block.super}}
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static 'shinelearn/js/search/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/search/typeahead.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
 
     <script type="text/javascript">
         $('.nav-tabs > li > a').hover(function() {

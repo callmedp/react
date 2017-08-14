@@ -182,7 +182,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pCert(self, obj):
         if obj.is_course:
-            CERT = []
+            CERT = list()
             CERT.append(getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0)
             if obj.type_product == 1:
                 var = obj.get_variations()
@@ -194,7 +194,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pSM(self, obj):
         if obj.is_course:
-            SM = []
+            SM = list()
             SM.append(getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '')
             if obj.type_product == 1:
                 var = obj.get_variations()
@@ -203,7 +203,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 SM = list(set(SM))
             return SM
         return []
-    
+
     def prepare_pCL(self, obj):
         if obj.is_course:
             CL = []

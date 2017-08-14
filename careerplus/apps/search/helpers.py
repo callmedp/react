@@ -54,19 +54,19 @@ def clean_all_fields(param):
     escape . dot
     """
     for key in ["q", "farea", "skills"]:
-        val = str(param.get(key,"").encode('ascii', 'ignore'))
+        val = param.get(key, "")
         if val:
+            val = str(val)
             # allow only one (#,&,*,\) other than that should remove
             reg_x_kwr = [r'/', r'#', r'&', r'\*']
             for kwr in reg_x_kwr:
-                if len(re.findall(kwr,val)) > 1:
+                if len(re.findall(kwr, val)) > 1:
                     if r'&' == kwr:
                         val = re.sub(kwr, ' ', val)
                     else:
                         val = re.sub(kwr, '', val)
-
             # remove : ,?,back slashes,[,],{,}
-            val = re.sub(r'[\?\\\[\]\{\}]',"",val)
+            val = re.sub(r'[\?\\\[\]\{\}]', "", val)
             #val = val.replace(".","\.") # escape . dot
             param[key] = val
     return param
@@ -80,7 +80,7 @@ def clean_list_fields(param):
     """
 
     invalid_keyword = {None, "None", -1 , "-1", "-1'", "", " "}
-    for key in ["fprice", "fclevel", "fcert", "farea", "frating", "fduration", "fmode", "skills"]:
+    for key in ["fclevel", "fcert", "frating", "fduration", "fmode", "skills"]:
         val = param.getlist(key)
         if val:
             val = set(val)
@@ -89,10 +89,10 @@ def clean_list_fields(param):
                 if v.isdigit():
                     cln_list.append(v)
                 else:
-                    v = re.sub(r'[\?\\\[\]\{\}\'\"/]',"",v)
+                    v = re.sub(r'[\?\\\[\]\{\}\'\"/]', "", v)
                     if v.isdigit():
                         cln_list.append(v)
-            param.setlist(key,cln_list)
+            param.setlist(key, cln_list)
     return param
 
 
@@ -168,10 +168,11 @@ def get_ngrams(words_list,ngram):
     while counter+ngram <= end:
         word = slugify(" ".join(words_list[counter:counter+ngram]))
         if word:
-            semantic_entity = redis_server.get(word)
+            semantic_entity = None #redis_server.get(word)
             if semantic_entity:
                 words_to_pop.append(word)
-                value = ast.literal_eval(semantic_entity)
+                value = ast.literal_eval(semantic_entity.decode('utf-8') if isinstance(semantic_entity, bytes)
+                                         else semantic_entity)
                 value.append(word)
                 ngrams.append(value)
                 counter = counter+ngram
@@ -232,7 +233,7 @@ def clear_empty_keys(params):
     Remove empty valued keys.
     Prevent empty spaces from entering into the params.
     """
-    for key in params.keys():
+    for key in list(params):
         if not params.get(key):
             params.pop(key)
     return params
@@ -293,24 +294,24 @@ def get_filters(params):
         slugified_query = '-'.join(words_list)
 
     for i in range(5,0,-1):
-        words_to_pop, ngrams = get_ngrams(words_list,i)
+        words_to_pop, ngrams = get_ngrams(words_list, i)
         words_to_pop = dict((word, "") for word in words_to_pop)
 
-        inferred_words = classify_ngrams(inferred_words,ngrams)
-        slugified_query = pop_inferred_words_from_query(words_to_pop,slugified_query)
+        inferred_words = classify_ngrams(inferred_words, ngrams)
+        slugified_query = pop_inferred_words_from_query(words_to_pop, slugified_query)
         words_list = slugified_query.split("-")
         try:
             words_list.remove(u'')
         except ValueError:
             pass
 
-    inferred_words['q'] = filter(len,inferred_words.get('q', [])+words_list)
+    inferred_words['q'] = filter(len,inferred_words.get('q', []) + words_list)
     words_to_pop = inferred_words.get('skills', []) + inferred_words.get('farea', [])
     params['q'] = inputs.Cleaned().prepare(params['q'])
     params['q'] = params['q'].replace("/","-")
     params['q'] = handle_special_chars(params['q'], False, False, False, True)
     inferred_words_copy = inferred_words.copy()
-    inferred_words_copy.pop("q",None)
+    inferred_words_copy.pop("q", None)
     params['q'] = pop_stop_words(str(params['q']))
 
     params['q'] = ''.join([i.replace(",", " ") if '"' not in i else i for i in params['q']])

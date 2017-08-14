@@ -33,6 +33,7 @@ class Stopper(object):
         query = strQuery[:-1]
         return query
 
+
 class Tokenizer(object):
     """
     Tokenizes query basis comma and space. Used by other inputs and not to be used directly

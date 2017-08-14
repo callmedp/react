@@ -1,5 +1,6 @@
 # built-in imports
 import re
+import uuid
 
 # django imports
 from django.shortcuts import render, HttpResponsePermanentRedirect
@@ -18,17 +19,20 @@ from haystack.query import EmptySearchQuerySet
 # local imports
 from .forms import SearchForm
 from .classes import SimpleSearch, SimpleParams
+from .choices import AREA_WITH_LABEL, SKILL_WITH_LABEL
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 
 class SearchBaseView(TemplateView):
-    template = 'search/search.html'
+    template_name = 'search/search.html'
     ajax_template_name = 'search/ajax/search_listing.html'
-    allow_empty_query = True
+    allow_empty_query = False
     clean_query = True
     extra_context = {}
     query_param_name = "q"
+
+    # Conditional Form Validation required variables
     query = ''
     results = EmptySearchQuerySet()
     request = None
@@ -118,7 +122,6 @@ class SearchBaseView(TemplateView):
         search_class_obj.set_params(self.search_params)
         search_class_obj.user = self.request.user
         search_class_obj.query = self.query
-        import pdb; pdb.set_trace()
         self.results = search_class_obj.get_results()
 
     def post_processor(self):
@@ -143,8 +146,7 @@ class SearchBaseView(TemplateView):
         context['form'] = self.form(self.search_params)
         context['search_params'] = self.search_params
         context['QUERY_STRING'] = self.request.get_full_path()
-        print(self.results)
-        import pdb;pdb.set_trace()
+
         context['facets'] = self.results.facet_counts()
         context['search_params_string'] = self.search_params.urlencode()
         context = self.set_form_attributes_in_context(context)
@@ -179,7 +181,7 @@ class SearchBaseView(TemplateView):
             raise Http404("Pages should be 1 or greater.")
 
         start_offset = (page_no - 1) * self.results_per_page
-        self.results = self.results[start_offset:start_offset + self.results_per_page]
+        self.results[start_offset:start_offset + self.results_per_page]
 
         paginator = Paginator(self.results, self.results_per_page)
 
@@ -200,7 +202,6 @@ class SearchBaseView(TemplateView):
         3> Builds base template context and updates with any extra context passed
         4> Finally renders the mentioned search template
         """
-
         paginator, page = self.build_page()
 
         context = {
@@ -252,7 +253,6 @@ class SearchListView(SearchBaseView):
     search_class = SimpleSearch
     params_class = SimpleParams
 
-
     def get_fields(self):
         return ["id", "pURL", "pHdx", "pCDate", "pSg", "pIc", "pImA",
                 "pAb", "pAR", "pFA", "pCtg", "pPChs", "pCert", "pStM",
@@ -266,5 +266,42 @@ class SearchListView(SearchBaseView):
                                                          kwargs={'f_area':'it-software',
                                                                  'skill':'development'}))
         return super(SearchListView, self).prepare_response()
+
+    def pre_processor(self):
+        """
+        Called before any other processing
+        """
+
+        if self.search_params.get("none_query"):
+            self.none_query = True
+
+        # Analytics Relevance Tracking
+        if hasattr(self, 'request'):
+            if not self.request.is_ajax():
+                self.search_sid = uuid.uuid4().hex
+            else:
+                self.search_sid = self.search_params.get('sid')
+
+    def get_extra_context(self):
+
+        request_get = self.search_params.copy()
+        request_get.update(self.request.GET)
+        request_get.update(self.request.POST)
+        self.request_get = request_get
+        context = super(SearchListView, self).get_extra_context()
+
+        context['track_query_dict'] = self.track_query_dict.urlencode()
+        context.update({"search_type": "simple"})
+        return context
+
+    def prepare_track(self, page):
+        self.track_query_dict = QueryDict(self.search_params.urlencode()).copy()
+
+        self.track_query_dict['template'] = 'psrp_impressions'
+
+    def build_page(self):
+        (paginator, page) = super(SearchListView, self).build_page()
+        self.prepare_track(page)
+        return paginator, page
 
 

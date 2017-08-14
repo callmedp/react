@@ -249,3 +249,6 @@ CACHES = {
         }
     },
 }
+
+###### CLICK TRACKING #######################
+CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'

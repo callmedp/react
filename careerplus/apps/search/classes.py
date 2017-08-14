@@ -33,9 +33,9 @@ class BaseSearch(object):
     search_params = {}
     allow_empty_query = True
 
-    fields = ["text", "pURL", "pTt", "pHd", "pNm", "pSg", "pPC", "pTP", "pUPC", "pBnr", "pIc", "pIBg", "pImg",
-              "pImA", "pvurl", "pDM", "pDD", "id", "pCert", "pSM", "pCT", "pAR", "pRC", "pNJ",
-              "pPV", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pPChs"]
+    fields = ["text", "pURL", "pTt", "pHd", "pNm", "pSg", "pPc", "pTP", "pIc",
+              "pImA", "pvurl", "pDM", "pDD", "id", "pCert", "pAttr", "pCT", "pAR", "pARx", "pRC", "pNJ",
+              "pPvn", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pPChs"]
 
     similar_fields = []
 
@@ -61,18 +61,17 @@ class BaseSearch(object):
         'bq': 'date:[NOW/DAY-1YEAR TO NOW/DAY]'
     }
 
-    facet_list = ['pPinr',
-                  '{!ex=level}pCL',
-                  '{!ex=ratng}pAR',
-                  '{!ex=funa}pFA',
-                  '{!ex=durm}pDM',
-                  '{!ex=cert}pCert',
-                  '{!ex=mode}pSM'
-                  ]
+    facet_list = [
+        # '{!ex=level}pCL',
+        # '{!ex=ratng}pAR',
+        # '{!ex=funa}pFA',
+        # '{!ex=durm}pDM',
+        '{!ex=cert}pCert',
+        # '{!ex=mode}pSM'
+    ]
 
     # These are the filters shown on search page
     filter_mapping = {
-        'pPinr': 'fprice',
         '{!tag=level}pCL': 'fclevel',
         '{!tag=cert}pCert': 'fcert',
         '{!tag=funa}pFA': 'farea',
@@ -90,7 +89,7 @@ class BaseSearch(object):
 
     needed_params_options = {}
 
-    sort_mapping = {'sort': {'1': '-pCDate', '2': 'pPinr', '3': '-pPinr', '4': 'pAR'}}
+    sort_mapping = {'sort': {'1': '-pCDate', '2': 'pAR'}}
 
     query_param_name = 'q'
 
@@ -109,7 +108,7 @@ class BaseSearch(object):
         This is to be set by the calling instance.
         Raises an exception if the query is not set by the calling instance.
         """
-        if not hasattr(self,'query'):
+        if not hasattr(self, 'query'):
             raise ImproperlyConfigured("'%s' must define query" % self.__class__.__name__)
         return self.query
 
@@ -135,7 +134,7 @@ class BaseSearch(object):
         Raises an exception if the calling instance does not set the search params.
         """
 
-        if not hasattr(self,'params'):
+        if not hasattr(self, 'params'):
             raise ImproperlyConfigured("'%s' must define params" % self.__class__.__name__)
 
         self.set_results()
@@ -387,30 +386,21 @@ class BaseSearch(object):
             return EmptySearchQuerySet()
 
         self.results_per_page = self.get_rps()
-        import pdb;
-        pdb.set_trace()
         self.results = self.add_filters()
         if self.params.get("sort") != "1":
             self.results = self.add_boost()
-        pdb.set_trace()
         self.results = self.add_sort()
-        pdb.set_trace()
         self.results = self.results.extra(self.get_extra_params())
-        pdb.set_trace()
         self.results = self.results.filter(content=Raw(self.get_query()))
-        pdb.set_trace()
         self.results  = self.add_facets()
-        pdb.set_trace()
         self.results = self.results.highlight()
-        pdb.set_trace()
         if self.fields and not self.params.getlist('fl'):
             self.results = self.results.only(*self.fields)
         else:
             asked_fields = map(str,self.params.getlist('fl')[0].split(","))
             self.results = self.results.only(*asked_fields)
-        (start_offset,end_offset) = self.get_load_range()
-        pdb.set_trace()
-        self.results = self.results[start_offset:end_offset]
+        (start_offset, end_offset) = self.get_load_range()
+        self.results[start_offset:end_offset]
 
         return self.results
 
@@ -432,7 +422,7 @@ class BaseSearch(object):
 
 class SimpleSearch(BaseSearch):
 
-    needed_params_options = {'q', 'fprice', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
+    needed_params_options = {'q', 'fprice', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
 
     extra_params = {
         'search_type': 'simple'
@@ -515,56 +505,6 @@ class SimpleSearch(BaseSearch):
     #
     #     return results
 
-    # def add_user_preferences_boost(self,results):
-    #
-    #     job_title_value = pop_stop_words(self.user.latest_job_title)
-    #     if job_title_value:
-    #         job_title_value = job_title_value.encode('ascii', 'ignore')
-    #         job_title_value = filter(lambda x:x in string.printable,job_title_value)
-    #         job_title_value = pop_stop_words(inputs.Cleaned().prepare(job_title_value,clean=True))
-    #         job_title_value = job_title_value.split('"')
-    #
-    #         jts = []
-    #         for jt in job_title_value:
-    #             if jt == ' ' or jt == '':
-    #                 continue
-    #
-    #             jt = re.sub("\s\s+" , " ", jt).strip()
-    #             jts.append(jt)
-    #
-    #         results = results.boost('jJT:(%s)' % (' AND ').join(jts[0].split(' ')),8)
-    #
-    #     candidate_experience = self.user.experience_in_years
-    #     if candidate_experience:
-    #         results = results.boost('(jExMinId:[%s TO *] AND jExMaxId:[* TO %s])' %(candidate_experience-1,candidate_experience),8)
-    #
-    #     if self.user.get_functional_areas():
-    #         candidate_functional_area = self.user.get_functional_areas()
-    #         candidate_functional_area = ' '.join(map(str,set(candidate_functional_area)))
-    #         results = results.boost('jAreaID:(%s)' %str(candidate_functional_area),2)
-    #
-    #     candidate_profile_skills = CandidatePreferences.objects.get_all_skills(str(self.user.id))
-    #     if candidate_profile_skills:
-    #
-    #         for candidate_skills in candidate_profile_skills:
-    #             candidate_skills = candidate_skills.value_custom
-    #
-    #             if candidate_skills:
-    #                 candidate_skills = candidate_skills.encode('ascii', 'ignore')
-    #                 candidate_skills = filter(lambda x:x in string.printable,candidate_skills)
-    #                 candidate_skills = pop_stop_words(inputs.Cleaned().prepare(candidate_skills,clean=True))
-    #                 candidate_skills = candidate_skills.split('"')
-    #                 skills = []
-    #
-    #                 for skill in candidate_skills:
-    #                     if skill == ' ' or skill == '':
-    #                         continue
-    #                     skill = re.sub("\s\s+" , " ", skill).strip()
-    #                     skills.append(skill)
-    #                 for skill in skills:
-    #                     results = results.boost('jKwd:(%s)' %str(skill),8)
-    #     return results
-
     def add_boost(self):
         """
         Perform basic boosts by calling the Parent class.
@@ -602,7 +542,6 @@ class BaseParams(object):
             values = params.getlist(param)
             values = [value.strip() if isinstance(value, str) else value for value in values]
             params.setlist(param, values)
-
         return params
 
     def clean_search_params(self):
@@ -634,7 +573,6 @@ class BaseParams(object):
     def get_search_params(self):
 
         self.search_params = self.get_request_params()
-
         self.clean_search_params()
         return self.search_params
 
@@ -694,22 +632,20 @@ class SimpleParams(BaseParams):
 
         params = self.pop_null_parameters(params)
 
-        if params_filtered == False:
+        if not params_filtered:
             if 'q' not in params:
                 params['keywords'] = ""
             else:
-
                 params = get_filters(params)
                 params['keywords'] = params.get('q')
-
         return params
 
     def query_builder(self):
-        q = self.search_params.get('q',"")
+        q = self.search_params.get('q', "")
         if not q:
             return q
 
-        #Exception for job and jobs in search terms.
+        # Exception for course and courses in search terms.
         if q == "courses" or q == "course" or q == "course courses" or q == "courses courses":
             return " ".join(settings.PRODUCT_ALTERNATE_SEARCH_TERMS)
 
@@ -755,7 +691,6 @@ class SimpleParams(BaseParams):
         else:
             query_to_return = classified_words+" "+actual_words
         query_to_return = re.sub("\(\s\s+\)", "", query_to_return).strip()
-
         return query_to_return
 
     def query_cleaner(self):
