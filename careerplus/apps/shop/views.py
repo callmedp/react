@@ -77,13 +77,12 @@ class ProductInformationMixin(object):
         structure = {
             'prd_program_struct': False
         }
-        # chapter_list = product.chapters.filter(
-        #     productstructure__active=True).order_by('productstructure__sort_order')
-        # if chapter_list:
-        #     structure.update({
-        #         'prd_program_struct': True,
-        #         'chap_list': chapter_list
-        #     })
+        chapter_list = product.chapter_product.filter(status=True)
+        if chapter_list:
+            structure.update({
+                'prd_program_struct': True,
+                'chap_list': chapter_list
+            })
         return structure
 
     def get_faq(self, product):
@@ -123,7 +122,7 @@ class ProductInformationMixin(object):
         if categoryproducts:
             package.update({
                 'other_package': True,
-                'package_list': categoryproducts})
+                'package_list': categoryproducts[:4]})
         return package
 
     def get_other_provider(self, product, category):
@@ -135,7 +134,7 @@ class ProductInformationMixin(object):
         if providers:
             provider.update({
                 'other_provider': True,
-                'provider_list': providers})
+                'provider_list': providers[:4]})
         return provider
 
     def get_combos(self, product):

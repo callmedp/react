@@ -1169,7 +1169,7 @@ class ActionScreenProductView(View, ProductModeration):
             groups = self.request.user.groups.all().values_list('name', flat=True)
             if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['approval', 'live', 'revert', 'reject']
-            if has_group(user=self.request.user, grp_list=settings.VENDOR_GROUP_LIST):
+            elif has_group(user=self.request.user, grp_list=settings.VENDOR_GROUP_LIST):
                 allowed_action = ['approval']
 
             if action and action in allowed_action:

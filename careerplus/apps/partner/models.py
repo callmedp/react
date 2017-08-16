@@ -14,13 +14,19 @@ from geolocation.models import (
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
         _('Name'), max_length=100,
+        unique=True,
         help_text=_('Unique name going to decide the slug'))
+    cp_id = models.IntegerField(
+        _('CP Owner'),
+        blank=True,
+        null=True,
+        editable=False)
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
     email = models.EmailField(
-        _('Email'), unique=True,
-        max_length=100, help_text=_('Email Address'))
+        _('Email'), 
+        max_length=255, help_text=_('Email Address'))
     mobile = models.CharField(
         _('Mobile Number'), blank=True,
         max_length=20, help_text=_('Mobile Number'))
@@ -56,7 +62,7 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         max_length=20, help_text=_('PAN No.'))
     website = models.CharField(
         _('Website.'), blank=True,
-        max_length=20, help_text=_('Website'))
+        max_length=255, help_text=_('Website'))
     prd_add_class = models.ManyToManyField(
         'shop.ProductClass',
         verbose_name=_('Product Add-Types'),

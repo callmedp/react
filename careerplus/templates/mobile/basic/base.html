@@ -36,7 +36,6 @@
     <body>
         {% block main_container %}
         <div class="wrapper">
-
             {% block header %}
             <!-- header menu Icon Starts here -->
                 <header class="w100fl">
@@ -77,9 +76,7 @@
 
                     <!-- Search listing tagging ends here -->
                 </header><!-- header ends here -->
-                {% endblock header %}
-
-                <!-- header menu Icon ends here -->
+            {% endblock header %}
 
 
             <div class="body-wrapper">
@@ -111,7 +108,6 @@
         <script src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
         <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script>
         <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
-        
     {% endblock js_section %}
 {% endspaceless %}
     {% render_block "custom_js" %}

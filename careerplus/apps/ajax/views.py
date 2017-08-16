@@ -84,7 +84,7 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
                     comment_list=comments, page_obj=page_obj)
                 return HttpResponse(json.dumps({'comment_list': comment_list}))
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Error in loading more comments %s " % str(e))
         return HttpResponseForbidden()
 
 

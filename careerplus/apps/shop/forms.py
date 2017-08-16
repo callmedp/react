@@ -988,7 +988,7 @@ class RelatedInlineFormSet(forms.BaseInlineFormSet):
         if any(self.errors):
             return
         relatives = []
-        duplicates = False
+        duplicates = []
         for form in self.forms:
             if form.cleaned_data:
                 rel = form.cleaned_data['secondary']
@@ -999,6 +999,13 @@ class RelatedInlineFormSet(forms.BaseInlineFormSet):
                         'Related must be different.',
                         code='duplicate_parent'
                     )
+                if rel in duplicates:
+                    raise forms.ValidationError(
+                        'Related must be unique.',
+                        code='duplicate_unique'
+                    )
+                duplicates.append(rel)
+                
         return
 
 
