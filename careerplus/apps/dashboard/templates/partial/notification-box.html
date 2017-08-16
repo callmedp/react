@@ -7,9 +7,9 @@ To initiate your services.
     <div class="resume-writing">
       <div class="input-file col-sm-6">
           <a class='' href='javascript:;'>
+              <span class="error" id="file-error"></span>
               <input maxlength="200" type="file" name="file" id="file-id" style='position:absolute;z-index:2;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="30"  onchange='$("#upload-file-info").html($(this).val());'>
               <span class="choose-file">Choose file</span>
-              <span class="error-txt"></span>
           </a>
           <span class="upload-file" id="upload-file-info"></span>
       </div>
@@ -17,7 +17,7 @@ To initiate your services.
       <div class="col-sm-1"> Or</div>
       <div class="col-sm-5 use-shine">
         <label>
-          <input type="checkbox" name="shine_resume" id="shine-resume-id">Use Shine resume({{shine_resume_name}})
+            <input type="checkbox" name="shine_resume" id="shine-res">Use Shine resume{% if shine_resume_name %}({{shine_resume_name}}){% endif %}
         </label>
       </div>
       {% endif %}

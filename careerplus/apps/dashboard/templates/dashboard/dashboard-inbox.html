@@ -39,13 +39,12 @@
             <div class="row">
             
             {% block upload_box %}
-
-            {% if pending_resume_items %}
-            <!-- resume upload box -->
-            <div class="notification-resume" id="notification-box-id">
-              To initiate your services. <a role="button" id="upload_resume">Upload resume</a>
-            </div>
-            {% endif %}
+                {% if pending_resume_items %}
+                    <!-- resume upload box -->
+                    <div class="notification-resume" id="notification-box-id">
+                      To initiate your services. <a role="button" id="upload_resume">Upload resume</a>
+                    </div>
+                {% endif %}
             {% endblock upload_box %}
 
             {% block left_content %}

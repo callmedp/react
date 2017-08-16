@@ -9,7 +9,7 @@ from order.models import OrderItem
 
 class ActionUserMixin(object):
 
-    def assign_orderitem_func(self, orderitem_list=[], assigned_to=None, user=None, data={}):
+    def assign_single_orderitem(self, orderitem_list=[], assigned_to=None, user=None, data={}):
         orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list).select_related('order')
         for obj in orderitem_objs:
             obj.assigned_to = assigned_to
@@ -88,10 +88,10 @@ class ActionUserMixin(object):
                 variations = []
 
                 if not obj.parent and obj.product.type_flow in [1, 12, 13]:
-                    addons = obj.order.orderitems.filter(parent=obj, product__typ_flow__in=[1, 12, 13], is_addon=True)
+                    addons = obj.order.orderitems.filter(parent=obj, product__type_flow__in=[1, 12, 13], is_addon=True)
 
                 elif obj.is_addon and obj.parent.product.type_flow in [1, 12, 13]:
-                    addons = obj.order.orderitems.filter(parent=obj.parent, product__typ_flow__in=[1, 12, 13], is_addon=True)
+                    addons = obj.order.orderitems.filter(parent=obj.parent, product__type_flow__in=[1, 12, 13], is_addon=True)
                     if not obj.parent.no_process:
                         addons = addons | obj.order.orderitems.filter(pk=obj.pk)
 

@@ -21,11 +21,12 @@ from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
+from console.decorators import Decorate, stop_browser_cache
 
 from .dashboard_mixin import DashboardInfo
 
 
-# @Decorate(stop_browser_cache())
+@Decorate(stop_browser_cache())
 class DashboardView(TemplateView):
     template_name = "dashboard/dashboard-inbox.html"
 
@@ -38,11 +39,30 @@ class DashboardView(TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id', None)
         email = self.request.session.get('email')
-        inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
-        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
+
+        empty_inbox = DashboardInfo().check_empty_inbox(candidate_id=candidate_id)
+        if empty_inbox:
+            pass
+        else:
+            inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
+
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
+            context.update({
+                'inbox_list': inbox_list,
+                'pending_resume_items': pending_resume_items,
+            })
+        if self.request.flavour == 'mobile' and not empty_inbox:
+            if not self.request.session.get('resume_id', None):
+                DashboardInfo().check_user_shine_resume(candidate_id=candidate_id, request=self.request)
+
+            if self.request.session.get('resume_id', None):
+                context.update({
+                    "resume_id": self.request.session.get('resume_id', ''),
+                    "shine_resume_name": self.request.session.get('shine_resume_name', ''),
+                    "resume_extn": self.request.session.get('extension', ''),
+                })
         context.update({
-            'inbox_list': inbox_list,
-            'pending_resume_items': pending_resume_items,
+            "empty_inbox": empty_inbox,
         })
         return context
 
@@ -111,7 +131,6 @@ class DashboardView(TemplateView):
                     })
                     return TemplateResponse(
                         request, ["dashboard/dashboard-inbox.html"], context)
-            
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
@@ -263,7 +282,7 @@ class DashboardFeedbackView(TemplateView):
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
-                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
+                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4 and not self.oi.user_feedback:
                     pass
                 else:
                     return ''
@@ -336,7 +355,7 @@ class DashboardRejectService(View):
             try:
                 oi = OrderItem.objects.get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
-                    if oi.product.type_flow in [1, 12, 13, 8] and oi.oi_status in [24, 46]:
+                    if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status
                         if oi.oi_status == 24:
                             oi.oi_status = 26
@@ -358,9 +377,7 @@ class DashboardRejectService(View):
                                 message=comment,
                                 candidate_id=candidate_id
                             )
-
                         data['display_message'] = "your draft is successfully rejected"
-
                     else:
                         data['display_message'] = "please do valid action only"
             except:
@@ -381,7 +398,7 @@ class DashboardAcceptService(View):
             try:
                 oi = OrderItem.objects.get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
-                    if oi.product.type_flow in [1, 12, 13, 8] and oi.oi_status in [24, 46]:
+                    if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status
                         oi.oi_status = 4
                         oi.last_oi_status = 27

@@ -1,0 +1,223 @@
+{% load static %}
+
+{% for obj in orderitems %}
+    <div class="box row mb-30">
+        <p class="fs-16 pb-5"><a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.heading}}{% if obj.product.get_exp %} - {{obj.product.get_exp}}{% endif %}</a></p>
+        <p class="fs-12 c9">Order ID : {{obj.order.number}}</p>
+
+        <div class="light-blue">
+            {% if obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status</strong>: {{obj.get_user_oi_status}}
+                    </p>
+                    <a role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
+                {% elif obj.oi_status == 23 and obj.draft_counter %}
+                    <p><strong>Status</strong>: Modifications requested
+                    </p>
+                {% elif obj.oi_status == 25 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+                {% elif obj.oi_status == 26 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+                {% elif obj.oi_status == 24 and obj.draft_counter == 1 %}
+                    <p><strong>Status:</strong> Document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                {% elif obj.oi_status == 24 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Revised Document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
+                    <p><strong>Status:</strong> Final Document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
+                {% else %}
+                    <p><strong>Status:</strong> Service is under progress</p>
+                {% endif %}
+
+            <!-- flow 8 -->
+            {% elif obj.product.type_flow == 8 %}
+                {% if obj.oi_status == 49 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Complete form</a></p>
+                {% elif obj.oi_status == 45 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+
+                {% elif obj.oi_status == 47 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+
+                {% elif obj.oi_status == 48 and obj.draft_counter %}
+                    <p><strong>Status:</strong> Modifications requested</p>
+                {% elif obj.oi_status == 46 and obj.draft_counter == 1 %}
+                    <p><strong>Status:</strong> Document is ready - <a href="#" download>Dwonload</a></p>
+
+                {% elif obj.oi_status == 46 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Revised Document is ready - <a href="#" download>Dwonload</a></p>
+                {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
+                    <p><strong>Status:</strong> Final Document is ready - <a href="#" download>Dwonload</a></p>
+
+                {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
+                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a href="#" download>Dwonload</a></p>
+
+                {% else %}
+                    <p><strong>Status:</strong> Service is under progress</p>
+                {% endif %}
+
+            {% elif obj.product.type_flow == 3 %}
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#" class="sidebar-secondary-trigger">Upload Resume</a></p>
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed and Final document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                {% else %}
+                    <p><strong>Status:</strong> Service is under progress</p>
+                {% endif %}
+
+            {% elif obj.product.type_flow == 2 %}
+                {% if obj.oi_status == 5 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+                {% elif obj.oi_status == 6 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
+                {% endif %}
+
+            {% elif obj.product.type_flow == 4 %}
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#" class="sidebar-secondary-trigger">Upload Resume</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a href="#" download>Download Credential</a></p>
+
+                {% elif obj.oi_status == 61 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% else %}
+                   <p><strong>Status:</strong> Service is under progress</p>
+
+                {% endif %}
+            {% elif obj.product.type_flow == 5 %}
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="sidebar-secondary-trigger">Upload Resume</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed</p>
+
+                {% elif obj.oi_status == 61 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% else %}
+                   <p><strong>Status:</strong> Service is under progress</p>
+
+                {% endif %}
+
+            {% elif obj.product.type_flow == 6 %}
+                {% if obj.oi_status == 82 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} </p>
+                
+                {% elif obj.oi_status == 81 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
+
+                {% endif %}
+
+            {% elif obj.product.type_flow == 7 %}
+                <p><strong>Status:</strong> {{obj.get_user_oi_status}}
+
+            {% elif obj.product.type_flow == 9 %}
+                {% with obj.get_roundone_status as op_status %}
+                    {% if op_status == 141 %}
+                        <p><strong>Status:</strong> Your profile to be shared with interviewer is pending - <a href="#">Complete Profile</a></p>
+                    
+                    {% elif op_status == 142 %}
+                        <p><strong>Status:</strong> Service is under progress - <a href="#">Edit your profile</a></p>
+
+                    {% elif op_status == 143 %}
+                        <p><strong>Status:</strong> Service has been expired</p>
+                    {% endif %}
+                {% endwith %}
+
+            {% elif obj.product.type_flow == 10 %}
+                {% if obj.oi_status == 5 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+                
+                {% elif obj.oi_status == 101 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Take Test</a></p>
+
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> Service has been processed - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
+
+                {% endif %}
+
+            {% endif %}
+        </div><!-- /.blue box -->
+        {% if obj.oi_status == 24 or obj.oi_status == 46 %}
+            <div class="button-wrap mt-15">
+                <span class="accept"><a role="button" onClick="openPopup('accept-modal{{obj.pk}}');"><sup class="icon-tick-green"></sup>Accept</a></span>
+                <span class="reject"><a href="{% url "dashboard:dashboard-reject" %}?oi={{obj.pk}}"><sup class="icon-tick-cross"></sup>Reject</a></span>
+                <div class="clearfix"></div> 
+
+                <!-- The Accept Modal -->
+                <div id="accept-modal{{obj.pk}}" class="modal">
+                  <div class="modal-helper">
+                    <div class="modal-vertical-center">
+                       <!-- Modal content -->
+                        <div class="modal-content">
+                          <div class="header">
+                            <h2>Accept Confirmation</h2>
+                            <a role="button" class="icon-close" onclick="closePopup();"></a>
+                          </div><!-- end of header -->
+
+                          <div class="content-box pt-0 pb-0">
+                            <p><strong>Are you sure you want to accept?</strong></p>
+                            <p class="c9 fs-12">Note: Once you accept, your service will be closed.</p>
+                            <div class="text-center mt-10">
+                                <form role="form" id="mobileaccept-form{{obj.pk}}">
+                                    <div style='display:none'>
+                                       <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+                                       <input type='hidden' name='oi_pk' value='{{obj.pk}}'/>
+                                    </div>
+                                    <p><button class="btn w100 btn-round btn-blue" onClick="mobileAccept('{{obj.pk}}')">Accept</button></p>
+                                    <p class="fs-12"><a role="button" onclick="closePopup();">Skip</a></p>
+                                </form>
+                            </div>
+                          </div><!-- Tab content ends here -->
+                        </div><!-- end of modal content here -->
+                    </div><!-- end of modal-vertical-center -->
+                  </div><!-- end of modal-helper -->
+                </div><!-- end of Login modal here --> 
+            </div><!-- /.button-wrap -->
+        {% endif %}
+        {% if obj.oi_status == 4 and not obj.user_feedback %}
+            <a href="{% url "dashboard:dashboard-itemfeedback" %}?oi={{obj.pk}}">
+                <div class="grey-box text-center mt-15">
+                    <div class="row">
+                        <div class="rating inline-block ml-0 fs-14">
+                            <strong>Your feedback</strong>
+                            <sup class="fill-star"></sup>
+                            <sup class="fill-star"></sup>
+                            <sup class="fill-star"></sup>
+                            <sup class="unfill-star"></sup>
+                            <sup class="unfill-star"></sup>
+                            
+                        </div><!-- end of star rating -->
+                        <p class="pb-0 fs-13 c6">Write feedback and earn loyalty points</p>
+                    </div>
+                </div><!-- /.grey-box -->
+            </a>
+        {% endif %}
+    </div><!-- /.box and row -->
+{% endfor %}
+
+
+{% if orderitems.has_next %}
+    <div id="load_more_item">
+        <form role="form" id="load-orderitem-form">
+            <div style='display:none'>
+                <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+                <input type="hidden" name="page" value="{{orderitems.next_page_number}}">
+                <input type="hidden" name="last_month_from" value="{{last_month_from}}">
+                <input type="hidden" name="select_type" value="{{select_type}}">
+            </div>
+        </form>
+        <div class="w100 text-center">
+            <a class="btn-slg btn-grey block" role="button" id="load-more-orderitem"></span>Load more</a>
+        </div>
+        <!--a role="button" id="load-more-orderitem" class="load-more-list col-sm-12">Load more</a-->
+    </div>
+{% endif %}

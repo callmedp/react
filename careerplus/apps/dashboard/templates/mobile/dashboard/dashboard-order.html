@@ -1,0 +1,72 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block title %}My Order | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/common/smk-accordion.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    
+{% endblock css_section %}
+
+{% block header %}
+    <header class="w100fl he-auto">
+        
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="icon-bar pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a class=" pull-left"  role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <a class="icon-search pull-left" href="search-listing.html">search</a>
+
+                
+                <a class="icon-cart pull-left" href="#">cart</a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">My Orders</h1>
+        
+
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    {% if order_list %}
+        <div class="my-order">
+            <!-- Accordion begin -->
+            <div class="accordion_example1 accordion-wrap">
+                {{order_list|safe}}
+            </div>
+            <!-- Accordion end -->
+        </div><!-- /.My order -->
+    {% else %}
+        {% include "partial/empty_inbox.html" %}
+    {% endif %}
+    
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function($){ 
+            $(".accordion_example1").smk_Accordion({
+                showIcon: true, //boolean
+                animation: true, //boolean
+                closeAble: true, //boolean
+                slideSpeed: 200 //integer, miliseconds
+            });
+        });
+    </script>
+{% endblock js_section %}

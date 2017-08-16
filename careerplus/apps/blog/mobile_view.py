@@ -6,13 +6,13 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponseForbidden
 from django.core.paginator import Paginator
 
-from core.decorators import mobile_page_only
+from console.decorators import mobile_page_only
 
 from .models import Category, Blog
 from .mixins import PaginationMixin
 
 
-@method_decorator(mobile_page_only, name='dispatch')
+@method_decorator(mobile_page_only(), name='dispatch')
 class ArticleCategoryListMobile(ListView):
     model = Category
     template_name = 'blog/category-list.html'
