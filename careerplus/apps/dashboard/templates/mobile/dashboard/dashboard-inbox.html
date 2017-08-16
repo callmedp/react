@@ -45,12 +45,16 @@
 
 {% block container %}
     <!-- content box Starts here -->
-    <div class="content-box">
-        <div class="container" id="orderitem-inbox-box">
-            {{inbox_list|safe}}
+    {% if empty_inbox %}
+        {% include "partial/empty_inbox.html" %}
+    {% else %}
+        <div class="content-box">
+            <div class="container" id="orderitem-inbox-box">
+                {{inbox_list|safe}}
 
-        </div><!-- /container -->
-    </div><!-- content box ends here -->
+            </div><!-- /container -->
+        </div><!-- content box ends here -->
+    {% endif %}
     
     {% block pending_items %}
         {% include "partial/notification-box.html" %}

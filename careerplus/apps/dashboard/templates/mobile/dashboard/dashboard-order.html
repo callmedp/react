@@ -41,13 +41,17 @@
 {% endblock header %}
 
 {% block container %}
-    <div class="my-order">
-        <!-- Accordion begin -->
-        <div class="accordion_example1 accordion-wrap">
-            {{order_list|safe}}
-        </div>
-        <!-- Accordion end -->
-    </div><!-- /.My order -->
+    {% if order_list %}
+        <div class="my-order">
+            <!-- Accordion begin -->
+            <div class="accordion_example1 accordion-wrap">
+                {{order_list|safe}}
+            </div>
+            <!-- Accordion end -->
+        </div><!-- /.My order -->
+    {% else %}
+        {% include "partial/empty_inbox.html" %}
+    {% endif %}
     
 {% endblock container %}
 

@@ -39,13 +39,19 @@ class DashboardView(TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id', None)
         email = self.request.session.get('email')
-        inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
-        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
-        context.update({
-            'inbox_list': inbox_list,
-            'pending_resume_items': pending_resume_items,
-        })
-        if self.request.flavour == 'mobile':
+
+        empty_inbox = DashboardInfo().check_empty_inbox(candidate_id=candidate_id)
+        if empty_inbox:
+            pass
+        else:
+            inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
+
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
+            context.update({
+                'inbox_list': inbox_list,
+                'pending_resume_items': pending_resume_items,
+            })
+        if self.request.flavour == 'mobile' and not empty_inbox:
             if not self.request.session.get('resume_id', None):
                 DashboardInfo().check_user_shine_resume(candidate_id=candidate_id, request=self.request)
 
@@ -55,7 +61,9 @@ class DashboardView(TemplateView):
                     "shine_resume_name": self.request.session.get('shine_resume_name', ''),
                     "resume_extn": self.request.session.get('extension', ''),
                 })
-
+        context.update({
+            "empty_inbox": empty_inbox,
+        })
         return context
 
     def post(self, request, *args, **kwargs):

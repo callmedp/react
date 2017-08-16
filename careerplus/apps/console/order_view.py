@@ -816,7 +816,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByAdminQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=25, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=25, product__type_flow__in=[1, 3, 12, 13])
 
         user = self.request.user
 

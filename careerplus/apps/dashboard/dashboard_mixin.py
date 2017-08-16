@@ -11,6 +11,19 @@ from order.models import Order, OrderItem
 
 
 class DashboardInfo(object):
+
+    def check_empty_inbox(self, candidate_id=None):
+        if candidate_id:
+            days = 6 * 30
+            last_payment_date = timezone.now() - datetime.timedelta(days=days)
+            orderitems = OrderItem.objects.filter(
+                order__status__in=[1, 3],
+                order__candidate_id=candidate_id,
+                order__payment_date__gte=last_payment_date, no_process=False)
+            if orderitems.exists():
+                return False
+        return True
+
     def get_inbox_list(self, candidate_id=None, request=None, last_month_from=6, select_type=0, page=1):
         if candidate_id:
             days = last_month_from * 30
@@ -80,6 +93,8 @@ class DashboardInfo(object):
                 "order_list": order_list,
                 "csrf_token": csrf_token,
             }
+            if not order_list:
+                return ''
             return render_to_string('partial/myorder-list.html', context)
 
     def get_pending_resume_items(self, candidate_id=None, email=None):

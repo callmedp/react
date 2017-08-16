@@ -3,16 +3,17 @@ from django.http import (
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.core.urlresolvers import reverse
-# from django.contrib.contenttypes.models import ContentType
+# from django.views.decorators.cache import never_cache
+# from django.utils.decorators import method_decorator
 
-# from review.models import Review
 from console.decorators import Decorate, mobile_page_only, stop_browser_cache
 from order.models import OrderItem
 
 from .dashboard_mixin import DashboardInfo
 
 
-# @Decorate(stop_browser_cache())
+# @method_decorator(never_cache, name='dispatch')
+@Decorate(stop_browser_cache())
 @Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardItemDetailView(TemplateView):
     template_name = 'dashboard/dashboard-itemdetail.html'
@@ -83,7 +84,7 @@ class DashboardItemDetailView(TemplateView):
         return context
 
 
-# @Decorate(stop_browser_cache())
+@Decorate(stop_browser_cache())
 @Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardItemFeedbackView(TemplateView):
     template_name = 'dashboard/dashboard-itemfeedback.html'
@@ -114,7 +115,7 @@ class DashboardItemFeedbackView(TemplateView):
         return context
 
 
-# @Decorate(stop_browser_cache())
+@Decorate(stop_browser_cache())
 @Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardMobileCommentView(TemplateView):
     template_name = 'dashboard/dashboard-comment.html'
@@ -166,7 +167,7 @@ class DashboardMobileCommentView(TemplateView):
             return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
-# @Decorate(stop_browser_cache())
+@Decorate(stop_browser_cache())
 @Decorate(mobile_page_only(redirect_url='/dashboard/'))
 class DashboardMobileRejectView(TemplateView):
     template_name = 'dashboard/dashboard-reject.html'
