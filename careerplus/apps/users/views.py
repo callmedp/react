@@ -287,3 +287,29 @@ class ForgotPasswordEmailView(View):
         else:
             return HttpResponse(json.dumps({'noresponse':True}), content_type="application/json")
 
+
+class SocialLoginView(View):
+    success_url = '/'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            if request.GET.get('key') == 'fb':
+                fb_user = RegistrationLoginApi.social_login(request.GET)
+                candidateid = fb_user['user_details']['candidate_id']
+                if fb_user.get('response'):
+                    resp_status = ShineCandidateDetail().get_status_detail(
+                        email=None,
+                        shine_id=candidateid)
+                    request.session.update(resp_status)
+                    return HttpResponseRedirect(self.success_url)
+            elif request.GET.get('key') == 'gplus':
+                gplus_user = RegistrationLoginApi.social_login(request.GET)
+                if gplus_user.get('response'):
+                    # candidateid = gplus_user['user_details']['candidate_id']
+                    # resp_status = ShineCandidateDetail().get_status_detail(
+                    #         email=None,
+                    #         shine_id=fb_user['user_details']['candidate_id'])
+                    # request.session.update(resp_status)
+                    return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            raise e
