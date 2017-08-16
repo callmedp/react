@@ -147,6 +147,7 @@
 
         if(result['status']['signed_in'])
             {
+                console.log(result);
                 var access_token = result.access_token
                 var expiresIn = result.expires_in
                 $.get( "/user/social/login/", {"accessToken": access_token, 
@@ -161,7 +162,7 @@
             'cookiepolicy' : 'single_host_origin',
             'callback' : 'loginCallback', //callback function
             'approvalprompt':'force',
-            'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+            'scope' : 'profile email',
         };
         gapi.auth.signIn(myParams);
     }

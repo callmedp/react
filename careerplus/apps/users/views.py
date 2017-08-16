@@ -305,11 +305,11 @@ class SocialLoginView(View):
             elif request.GET.get('key') == 'gplus':
                 gplus_user = RegistrationLoginApi.social_login(request.GET)
                 if gplus_user.get('response'):
-                    # candidateid = gplus_user['user_details']['candidate_id']
-                    # resp_status = ShineCandidateDetail().get_status_detail(
-                    #         email=None,
-                    #         shine_id=fb_user['user_details']['candidate_id'])
-                    # request.session.update(resp_status)
+                    candidateid = gplus_user['user_details']['candidate_id']
+                    resp_status = ShineCandidateDetail().get_status_detail(
+                            email=None,
+                            shine_id=fb_user['user_details']['candidate_id'])
+                    request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
         except Exception as e:
             raise e
