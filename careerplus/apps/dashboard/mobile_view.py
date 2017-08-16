@@ -38,7 +38,7 @@ class DashboardItemDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardItemDetailView, self).get_context_data(**kwargs)
         email = self.request.session.get('email')
-        if self.oi and self.oi.order.candidate_id == self.candidate_id:
+        if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])

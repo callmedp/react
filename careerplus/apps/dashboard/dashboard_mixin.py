@@ -111,7 +111,7 @@ class DashboardInfo(object):
             file = data.get('candidate_resume', '')
             list_ids = data.get('list_ids', [])
             if file and list_ids:
-                pending_resumes = OrderItem.objects.filter(id__in=list_ids, order__candidate_id=candidate_id, no_process=False, oi_status=2)
+                pending_resumes = OrderItem.objects.filter(order__status=1, id__in=list_ids, order__candidate_id=candidate_id, no_process=False, oi_status=2)
                 for obj in pending_resumes:
                     obj.oi_resume = file
                     last_oi_status = obj.oi_status

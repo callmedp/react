@@ -35,9 +35,39 @@ def update_initiat_orderitem_sataus(order=None):
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-        if order.status == 1:
-            for oi in orderitems:
-                if oi.product.type_flow in [1, 3, 12, 13]:
+        # update initial status        
+        for oi in orderitems:
+            if oi.product.type_flow in [1, 3, 12, 13]:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 2
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
+
+            elif oi.product.type_flow == 2:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
+
+            elif oi.product.type_flow == 4:
+                if oi.order.orderitems.filter(product__type_flow=12, no_process=False).exists():
+                    last_oi_status = oi.oi_status
+                    oi.oi_status = 61
+                    oi.last_oi_status = last_oi_status
+                    oi.save()
+                    oi.orderitemoperation_set.create(
+                        oi_status=oi.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=oi.assigned_to)
+                else:
                     last_oi_status = oi.oi_status
                     oi.oi_status = 2
                     oi.last_oi_status = last_oi_status
@@ -47,9 +77,19 @@ def update_initiat_orderitem_sataus(order=None):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
 
-                elif oi.product.type_flow == 2:
+            elif oi.product.type_flow == 5:
+                if oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists():
                     last_oi_status = oi.oi_status
-                    oi.oi_status = 5
+                    oi.oi_status = 61
+                    oi.last_oi_status = last_oi_status
+                    oi.save()
+                    oi.orderitemoperation_set.create(
+                        oi_status=oi.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=oi.assigned_to)
+                else:
+                    last_oi_status = oi.oi_status
+                    oi.oi_status = 2
                     oi.last_oi_status = last_oi_status
                     oi.save()
                     oi.orderitemoperation_set.create(
@@ -57,49 +97,23 @@ def update_initiat_orderitem_sataus(order=None):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
 
-                elif oi.product.type_flow == 4:
-                    if oi.order.orderitems.filter(product__type_flow=12, no_process=False).exists():
-                        last_oi_status = oi.oi_status
-                        oi.oi_status = 61
-                        oi.last_oi_status = last_oi_status
-                        oi.save()
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=last_oi_status,
-                            assigned_to=oi.assigned_to)
-                    else:
-                        last_oi_status = oi.oi_status
-                        oi.oi_status = 2
-                        oi.last_oi_status = last_oi_status
-                        oi.save()
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=last_oi_status,
-                            assigned_to=oi.assigned_to)
+            elif oi.product.type_flow == 6:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 82
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
 
-                elif oi.product.type_flow == 5:
-                    if oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists():
-                        last_oi_status = oi.oi_status
-                        oi.oi_status = 61
-                        oi.last_oi_status = last_oi_status
-                        oi.save()
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=last_oi_status,
-                            assigned_to=oi.assigned_to)
-                    else:
-                        last_oi_status = oi.oi_status
-                        oi.oi_status = 2
-                        oi.last_oi_status = last_oi_status
-                        oi.save()
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=last_oi_status,
-                            assigned_to=oi.assigned_to)
+            elif oi.product.type_flow == 7:
+                depending_ois = order.orderitems.filter(
+                    product__type_flow=1, no_process=False)
 
-                elif oi.product.type_flow == 6:
+                if depending_ois.exists():
                     last_oi_status = oi.oi_status
-                    oi.oi_status = 82
+                    oi.oi_status = 61
                     oi.last_oi_status = last_oi_status
                     oi.save()
                     oi.orderitemoperation_set.create(
@@ -107,39 +121,25 @@ def update_initiat_orderitem_sataus(order=None):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
 
-                elif oi.product.type_flow == 7:
-                    depending_ois = order.orderitems.filter(
-                        product__type_flow=1, no_process=False)
+            elif oi.product.type_flow == 8:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 49
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
 
-                    if depending_ois.exists():
-                        last_oi_status = oi.oi_status
-                        oi.oi_status = 61
-                        oi.last_oi_status = last_oi_status
-                        oi.save()
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=last_oi_status,
-                            assigned_to=oi.assigned_to)
-
-                elif oi.product.type_flow == 8:
-                    last_oi_status = oi.oi_status
-                    oi.oi_status = 49
-                    oi.last_oi_status = last_oi_status
-                    oi.save()
-                    oi.orderitemoperation_set.create(
-                        oi_status=oi.oi_status,
-                        last_oi_status=last_oi_status,
-                        assigned_to=oi.assigned_to)
-
-                elif oi.product.type_flow == 10:
-                    last_oi_status = oi.oi_status
-                    oi.oi_status = 101
-                    oi.last_oi_status = last_oi_status
-                    oi.save()
-                    oi.orderitemoperation_set.create(
-                        oi_status=oi.oi_status,
-                        last_oi_status=last_oi_status,
-                        assigned_to=oi.assigned_to)
+            elif oi.product.type_flow == 10:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 101
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
 
 
 def get_upload_path_order_invoice(instance, filename):

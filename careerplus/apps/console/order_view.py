@@ -1111,7 +1111,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ClosedOrderItemQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=4, no_process=False)
+        queryset = queryset.filter(order__status__in=[1, 3], oi_status=4, no_process=False)
         user = self.request.user
         vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
 

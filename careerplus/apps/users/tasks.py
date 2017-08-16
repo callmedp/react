@@ -53,11 +53,6 @@ def user_register(data={}, order=None):
                 SendMail().send(to_emails, mail_type, email_data)
             except Exception as e:
                 logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-            # try:
-            #     SendSMS().send(sms_type=mail_type, data=email_data)
-            # except Exception as e:
-            #     logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
         if candidate_id:
             order.candidate_id = candidate_id
             order.save()
