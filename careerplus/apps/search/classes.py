@@ -13,7 +13,7 @@ from haystack.query import EmptySearchQuerySet
 
 #local imports
 from search import inputs
-from .helpers import search_clean_fields, pop_stop_words, clean_all_fields, clean_id_fields, clean_list_fields, \
+from .helpers import clean_all_fields, clean_id_fields, clean_list_fields, \
     handle_special_chars, get_filters, remove_quote_in_q
 from .lookups import FILLERS
 
@@ -35,7 +35,7 @@ class BaseSearch(object):
 
     fields = ["text", "pURL", "pTt", "pHd", "pNm", "pSg", "pPc", "pTP", "pIc",
               "pImA", "pvurl", "pDM", "pDD", "id", "pCert", "pAttr", "pCT", "pAR", "pARx", "pRC", "pNJ",
-              "pPvn", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pPChs"]
+              "pPvn", "pCmbs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pPChs"]
 
     similar_fields = []
 
@@ -62,12 +62,12 @@ class BaseSearch(object):
     }
 
     facet_list = [
-        # '{!ex=level}pCL',
-        # '{!ex=ratng}pAR',
-        # '{!ex=funa}pFA',
-        # '{!ex=durm}pDM',
+        '{!ex=level}pCL',
+        '{!ex=ratng}pAR',
+        '{!ex=funa}pFA',
+        '{!ex=durm}pDM',
         '{!ex=cert}pCert',
-        # '{!ex=mode}pSM'
+        '{!ex=mode}pStM'
     ]
 
     # These are the filters shown on search page
@@ -77,7 +77,7 @@ class BaseSearch(object):
         '{!tag=funa}pFA': 'farea',
         '{!tag=ratng}pAR': 'frating',
         '{!tag=durm}pDM':'fduration',
-        '{!tag=mode}pSM': 'fmode'
+        '{!tag=mode}pStM': 'fmode'
     }
 
     boost_mapping = {
@@ -246,7 +246,7 @@ class BaseSearch(object):
 
         return extra_params
 
-    def add_basic_filters(self,results):
+    def add_basic_filters(self, results):
         """
         Filter search results on the basis of form params sent by user.
         Search filter mapping used for filtering.
@@ -297,38 +297,38 @@ class BaseSearch(object):
             results = results.facet(facet)
         return results
 
-    def add_sws_filters(self,results):
-        """
-        sws stands for Search-Within-Search.
-        Basic filtering already performed.
-        Get sws data from the params and filter further.
-        """
-        self.swsh = {'valid': [], 'exclude': []}
-
-        if self.params.get('swsv'):
-            self.swsh['valid'] = []
-            sws_list = self.params.get('swsv').split('||')
-            for sws in sws_list:
-                if sws.lower() != "search within results":
-                    self.swsh['valid'].append(sws)
-
-        if self.params.get('swse'):
-            self.swsh['exclude'] = self.params.get('swse').split('||')
-
-        if self.params.get('sws') and str(self.params.get('sws')).lower() != "search within results":
-            self.swsh['valid'].append(self.params.get('sws'))
-
-        for sws in self.swsh['valid']:
-            results = results.narrow('text:(%s)' % inputs.Cleaned().prepare(sws))
-
-        return results
+    # def add_sws_filters(self,results):
+    #     """
+    #     sws stands for Search-Within-Search.
+    #     Basic filtering already performed.
+    #     Get sws data from the params and filter further.
+    #     """
+    #     self.swsh = {'valid': [], 'exclude': []}
+    #
+    #     if self.params.get('swsv'):
+    #         self.swsh['valid'] = []
+    #         sws_list = self.params.get('swsv').split('||')
+    #         for sws in sws_list:
+    #             if sws.lower() != "search within results":
+    #                 self.swsh['valid'].append(sws)
+    #
+    #     if self.params.get('swse'):
+    #         self.swsh['exclude'] = self.params.get('swse').split('||')
+    #
+    #     if self.params.get('sws') and str(self.params.get('sws')).lower() != "search within results":
+    #         self.swsh['valid'].append(self.params.get('sws'))
+    #
+    #     for sws in self.swsh['valid']:
+    #         results = results.narrow('text:(%s)' % inputs.Cleaned().prepare(sws))
+    #
+    #     return results
 
     def add_filters(self):
 
         results = self.results
         results = self.add_basic_filters(results)
 
-        results = self.add_sws_filters(results)
+        # results = self.add_sws_filters(results)
         return results
 
     def add_custom_boost(self):
@@ -422,7 +422,7 @@ class BaseSearch(object):
 
 class SimpleSearch(BaseSearch):
 
-    needed_params_options = {'q', 'fprice', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
+    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
 
     extra_params = {
         'search_type': 'simple'
