@@ -290,6 +290,19 @@ class SearchListView(SearchBaseView):
         self.request_get = request_get
         context = super(SearchListView, self).get_extra_context()
 
+        if self.search_params.getlist('fclevel'):
+            context['clevel'] = self.search_params.getlist('fclevel')
+        if self.search_params.getlist('fcert'):
+            context['cert'] = self.search_params.getlist('fcert')
+        if self.search_params.getlist('frating'):
+            context['rating'] = self.search_params.getlist('frating')
+        if self.search_params.getlist('farea'):
+            context['area'] = self.search_params.getlist('farea')
+        if self.search_params.getlist('fduration'):
+            context['duration'] = self.search_params.getlist('fduration')
+        if self.search_params.getlist('fmode'):
+            context['mode'] = self.search_params.getlist('fmode')
+
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
         return context

@@ -1,5 +1,5 @@
 {% extends "basic/base1.html" %}
-{% load static %}
+{% load static custom_filters %}
 
 {% block css_section %}
     {{block.super}}
@@ -12,41 +12,6 @@
 {% block title %}Search Result Page - Shine Learning{% endblock title %}
 
 {% block main_container %}
-    {% comment %}
-    <form method="get" action=".">
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Search">
-                </td>
-            </tr>
-        </table>
-
-        {% if query %}
-            <h3>Results</h3>
-
-            {% for result in page.object_list %}
-                <p>
-                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
-                </p>
-            {% empty %}
-                <p>No results found.</p>
-            {% endfor %}
-
-            {% if page.has_previous or page.has_next %}
-                <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                    |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                </div>
-            {% endif %}
-        {% else %}
-            {# Show some example queries to run, maybe query syntax, something else? #}
-        {% endif %}
-    </form>
-    {% endcomment %}
     {% block page_heading %}
         <!-- header -->
         <header class="search-header">
@@ -83,228 +48,21 @@
     <!-- page content body start -->
     <div class="row">
 
-    <!-- left content start -->
-    <div class="col-sm-3 col-md-2 mt-40">
-      <div id="filters" class="panel-group filters">
-        <h2>Filter</h2>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
-                Functional area
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse">
-            <div class="panel-body scroll">
-              <label>
-                <input type="checkbox">
-                <span>Operation</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Finance</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Sales</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Marketing</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Human Resources</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Operation</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Finance</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Sales</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Marketing</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Human Resources</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
-                Course Level  
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse">
-            <div class="panel-body">
-              <label>
-                <input type="checkbox">
-                <span>Beginner</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Intermediate</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Advanced</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
-                Review 
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse">
-            <div class="panel-body">
-                <div class="rating-review-box">
-                  <input type="checkbox">
-                  <figure class="full-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                </div>
-                <div class="rating-review-box">
-                  <input type="checkbox">
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                </div>
-                <div class="rating-review-box">
-                  <input type="checkbox">
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="blank-star"></figure>
-                  <figure class="blank-star"></figure>
-                </div> 
-                <div class="rating-review-box">
-                  <input type="checkbox">
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="blank-star"></figure>
-                </div>
-                <div class="rating-review-box">
-                  <input type="checkbox">
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                  <figure class="full-star"></figure>
-                </div> 
+    {% include "search/partials/search_filters.html" %}
 
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
-                Certification 
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse">
-            <div class="panel-body">
-              <label>
-                <input type="checkbox">
-                <span>Required</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Not required</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
-                Duration 
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse">
-            <div class="panel-body">
-              <label>
-                <input type="checkbox">
-                <span>3 months</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>6 months</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>12 months</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a>
-                Study mode 
-              </a>
-            </h4>
-          </div>
-          <div class="panel-collapse">
-            <div class="panel-body">
-              <label>
-                <input type="checkbox">
-                <span>Online</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Classroom</span>
-              </label>
-              <label>
-                <input type="checkbox">
-                <span>Blended</span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>       
-    <!-- left content end -->
 
     <!-- mid content start -->
     <div class="col-sm-9 col-md-10 mt-40 ">
+        {% if page.object_list|length > 0 %}
         <div class="listing-heading-box">
-        <div class="form-group custom-select">
-        <select class="form-control">
-          <option>Relevance</option>
-          <option>Latest</option>
-        </select>
+            <div class="form-group custom-select">
+                <select name="sort" hdn="id_sort" class="form-control cls_filter">
+                    <option value="">Relevance</option>
+                    <option value="1" {% if search_params.sort %}selected="selected"{% endif %}>Latest</option>
+                </select>
+            </div>
+            <h2>{{ paginator.count }} products found</h2>
         </div>
-        <h2>11 products found</h2>
-      </div>
 
         <ul class="listing">
             {% for result in page.object_list %}
@@ -335,6 +93,14 @@
                        Provider
                        <span>{{ result.pPvn|title }}</span>
                     </div>
+                    {% with result.pCmbs|jsonify as combos %}
+                        {% if combos.combo %}
+                            <div class="providers">
+                               Includes
+                               {% for combo in combos.combo_list %}<span>{{ combo.name }}</span>{% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
                     <div class="pricing-box">
                        Starting at <strong>Rs. {{ result.pPinr |floatformat:'0' }}/-</strong>{% if result.pPfinr|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfinr|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
                     </div>
@@ -344,279 +110,22 @@
               </a>
             </li>
             {% endfor %}
-            {% comment %}
-            <li class="box-panel">
-              <a title="Background Verification" href="#">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color2">
-                        <img class="media-object" src="{% static "shinelearn/images/course-logo2.png" %}" alt="Resume / Visual Resume / LinkedIn">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-                    </div>
-
-                    <h3 class="listing-heading">Background Verification</h3>
-
-                    <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-                    </div> 
-
-                    <div class="providers">
-                       Providers
-                       <span>Softskills</span>
-                       <span>Vskills</span>
-                       <span>IATC</span>
-                       <span>Grey Campus</span>
-                    </div>
-
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li class="box-panel">
-              <a title="The Complete Career Package" href="#">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color3">
-                        <img class="media-object" src="{% static "shinelearn/images/course-logo3.png" %}" alt="Resume / Visual Resume / LinkedIn">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-                    </div>
-
-                    <h3 class="listing-heading">The Complete Career Package</h3>
-
-                    <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-                    </div> 
-
-                    <div class="providers">
-                       Providers
-                       <span>Resume showcase</span>
-                       <span>LinkedIn Profile</span>
-                    </div>
-
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li class="box-panel">
-              <a title="Featured Profile" href="#">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color4">
-                        <img class="media-object" src="{% static "shinelearn/images/course-logo4.png" %}" alt="Resume / Visual Resume / LinkedIn">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-                    </div>
-
-                    <h3 class="listing-heading">Featured Profile</h3>
-
-                    <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-                    </div> 
-
-
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li class="box-panel">
-              <a title="Resume / Visual Resume / LinkedIn" href="#">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color1">
-                        <img class="media-object" src="{% static "shinelearn/images/course-logo1.png" %}" alt="Resume / Visual Resume / LinkedIn">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-                    </div>
-
-                    <h3 class="listing-heading">Resume / Visual Resume / LinkedIn</h3>
-
-                    <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-                    </div> 
-
-                    <div class="providers">
-                       Providers
-                       <span>Career Plus</span>
-                    </div>
-
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li class="box-panel">
-              <a title="Background Verification" href="#">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color2">
-                        <img class="media-object" src="{% static "shinelearn/images/course-logo2.png" %}" alt="Resume / Visual Resume / LinkedIn">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-                    </div>
-
-                    <h3 class="listing-heading">Background Verification</h3>
-
-                    <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-                    </div> 
-
-                    <div class="providers">
-                       Providers
-                       <span>Softskills</span>
-                       <span>Vskills</span>
-                       <span>IATC</span>
-                       <span>Grey Campus</span>
-                    </div>
-
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li class="box-panel">
-              <a title="The Complete Career Package" href="#">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color3">
-                        <img class="media-object" src="{% static "shinelearn/images/course-logo3.png" %}" alt="Resume / Visual Resume / LinkedIn">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-                    </div>
-
-                    <h3 class="listing-heading">The Complete Career Package</h3>
-
-                    <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-                    </div> 
-
-                    <div class="providers">
-                       Providers
-                       <span>Resume showcase</span>
-                       <span>LinkedIn Profile</span>
-                    </div>
-
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li class="box-panel">
-              <a title="Featured Profile" href="#">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color4">
-                        <img class="media-object" src="{% static "shinelearn/images/course-logo4.png" %}" alt="Resume / Visual Resume / LinkedIn">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      <span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
-                    </div>
-
-                    <h3 class="listing-heading">Featured Profile</h3>
-
-                    <div class="rating-review-box">
-                        <figure class="full-star"></figure>
-                        <figure class="full-star"></figure>
-                        <figure class="half-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <figure class="blank-star"></figure>
-                        <strong>3.9/5</strong> | 21 ratings <b>18 reviews</b>
-                    </div> 
-
-
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            {% endcomment %}
-          </ul>
+        </ul>
+        {% else %}
+            <span>No results found</span>
+        {%endif%}
     </div>       
     <!-- mid content end -->
 
-    
+    {% if paginator.num_pages > 0%}
+        {% if page.number > 1 %}
+            <input type="button" data-type="previous" class="cls_paginate submit" value="Previous"/>
+        {%endif%}
+
+        {% if paginator.num_pages > page.number  %}
+            <input type="button" data-type="next" class="cls_paginate submit" value="Next"/>
+        {%endif%}
+    {%endif%}
 
     </div>
     <!-- page content body end -->
@@ -657,8 +166,8 @@
     </script>
 
     <script type="text/javascript">
-        $('#query').typeahead({
-            local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
+        $('#id_q').typeahead({
+            local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
         });
 
         $('.tt-query').css('background-color','#fff');
