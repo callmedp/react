@@ -1933,7 +1933,7 @@ class AssignmentOrderItemView(View):
             try:
                 User = get_user_model()
                 assign_to = User.objects.get(pk=user_pk)
-                ActionUserMixin().assign_orderitem_func(
+                ActionUserMixin().assign_single_orderitem(
                     orderitem_list=selected_id,
                     assigned_to=assign_to,
                     user=request.user

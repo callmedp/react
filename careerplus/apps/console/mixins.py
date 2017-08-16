@@ -9,7 +9,7 @@ from order.models import OrderItem
 
 class ActionUserMixin(object):
 
-    def assign_orderitem_func(self, orderitem_list=[], assigned_to=None, user=None, data={}):
+    def assign_single_orderitem(self, orderitem_list=[], assigned_to=None, user=None, data={}):
         orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list).select_related('order')
         for obj in orderitem_objs:
             obj.assigned_to = assigned_to
