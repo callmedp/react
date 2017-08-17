@@ -104,6 +104,7 @@ class LoginApiView(FormView):
         return context
 
     def form_valid(self, form):
+        context = self.get_context_data()
         login_dict = {}
         remember_me = self.request.POST.get('remember_me', None)
         user_email = self.request.POST.get('email')
@@ -134,19 +135,19 @@ class LoginApiView(FormView):
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form})
+                    {'form': form, 'reset_form':context['reset_form']})
 
             elif not user_exist.get('response', ''):
                 messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form,})
+                    {'form': form, 'reset_form':context['reset_form']})
 
             elif not user_exist.get('exists', ''):
                 messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form,})
+                    {'form': form, 'reset_form':context['reset_form']})
 
         except Exception as e:
             logging.getLogger('error_log').error("Exception while logging in a user with email: %s. "
@@ -154,7 +155,7 @@ class LoginApiView(FormView):
             messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
             return render(
                 self.request, self.template_name,
-                {'form': form})
+                {'form': form, 'reset_form':context['reset_form']})
 
     def dispatch(self, request, *args, **kwargs):
 
