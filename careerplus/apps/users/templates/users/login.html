@@ -66,7 +66,7 @@
             <div class="social-login">
                 <span>or login with</span>
                 <a class="facebook" onclick="Login();"></a>
-                <a class="linkedin" href="#"></a>
+                <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
                 <a class="gplus" onclick="glogin()"></a>
             </div>
             <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
@@ -154,6 +154,7 @@
                         "expiresIn":expiresIn, 'key':'gplus'});
             }   
     }
+
 
     function glogin() 
     {

@@ -4,7 +4,8 @@ from users.views import (
 	ForgotPasswordResetView,
 	ForgotHtmlView,
 	ForgotPasswordEmailView,
-    SocialLoginView,)
+    SocialLoginView,
+    LinkedinLoginView,)
 
 
 urlpatterns = [
@@ -18,4 +19,6 @@ urlpatterns = [
         ForgotPasswordEmailView.as_view(), name='forgot-email-sent'),
     url(r'^social/login/$',
         SocialLoginView.as_view(), name='social-login'),
+    url(r'^linkedin/code/$',
+        LinkedinLoginView.as_view(), name='linkedin-code'),
 ]

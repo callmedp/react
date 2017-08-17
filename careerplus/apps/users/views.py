@@ -1,6 +1,7 @@
 import logging
 import mimetypes
 import json
+import urllib.parse
 
 from django.shortcuts import render
 from wsgiref.util import FileWrapper
@@ -134,7 +135,7 @@ class LoginApiView(FormView):
                     messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form})
+                    {'form': form,})
 
             elif not user_exist.get('response', ''):
                 messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
@@ -154,7 +155,7 @@ class LoginApiView(FormView):
             messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
             return render(
                 self.request, self.template_name,
-                {'form': form})
+                {'form': form,})
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -302,6 +303,8 @@ class SocialLoginView(View):
                         shine_id=candidateid)
                     request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
+                elif fb_user.get('response') == 400:
+                    return HttpResponseRedirect('/login/')
             elif request.GET.get('key') == 'gplus':
                 gplus_user = RegistrationLoginApi.social_login(request.GET)
                 if gplus_user.get('response'):
@@ -311,5 +314,63 @@ class SocialLoginView(View):
                             shine_id=fb_user['user_details']['candidate_id'])
                     request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
+                elif gplus_user.get('response') == 400:
+                    return HttpResponseRedirect('/login/')
         except Exception as e:
             raise e
+
+
+class LinkedinLoginView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            params = {
+                'client_id': '757gbstpwa6dqp',
+                'redirect_uri': 'https://sumosc.shine.com/linkedin/login',
+                'response_type': 'code',
+                'scope': 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo',
+                'state': '9899002507upender'
+            }
+            url = "https://www.linkedin.com/oauth/v2/authorization?" + urllib.parse.urlencode(params)
+            return HttpResponseRedirect(url)
+        except Exception as e:
+            raise e
+
+
+class LinkedinCallbackView(View):
+    success_url = '/'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            params = {
+                'grant_type':'authorization_code',
+                'code': request.GET.get('code') if 'code' in request.GET else '',
+                'redirect_uri': 'https://sumosc.shine.com/linkedin/login',
+                'client_id': '757gbstpwa6dqp',
+                'client_secret': 'creqezZ0kPJnJWRk',
+            }
+            if not params['code']:
+                return HttpResponseRedirect('/login/')
+            params = urllib.parse.urlencode(params)
+            info = urllib.request.urlopen("https://www.linkedin.com/oauth/v2/accessToken", params.encode("utf-8"))
+            read_data = info.read()
+            # convert byte object into string
+            str_data = str(read_data,'utf-8')
+            data_dict = json.loads(str_data)
+            data_dict.update({'key':'linkedin'})
+            linkedin_user = RegistrationLoginApi.social_login(data_dict)
+            if linkedin_user.get('response'):
+                candidateid = linkedin_user['user_details']['candidate_id']
+                resp_status = ShineCandidateDetail().get_status_detail(
+                        email=None,
+                        shine_id=candidateid)
+                request.session.update(resp_status)
+                return HttpResponseRedirect(self.success_url)
+            elif linkedin_user['status_code'] == 400:
+                return HttpResponseRedirect('/login/')
+
+        except Exception as e:
+            return HttpResponseRedirect('/login/')
+        
+
+

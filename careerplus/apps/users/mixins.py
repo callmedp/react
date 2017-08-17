@@ -124,19 +124,31 @@ class RegistrationLoginApi(object):
     def social_login(data_dict):
         response_json = {"response": False}
         post_url = None
-        post_data = {
-            'access_token': data_dict.get('accessToken', ''),
-            'expires_on': data_dict.get('expiresIn', '')
-        }
+        post_data = {}
         if data_dict.get('key') == 'fb':
+            post_data = {
+                'access_token': data_dict.get('accessToken', ''),
+                'expires_on': data_dict.get('expiresIn', '')
+            }
             post_url = "{}/api/v2/facebook/login/?format=json".format(settings.SHINE_SITE)
 
         elif data_dict.get('key') == 'gplus':
+            post_data = {
+                'access_token': data_dict.get('accessToken', ''),
+                'expires_on': data_dict.get('expiresIn', '')
+            }
             post_url = "{}/api/v2/google-plus/login/?format=json".format(settings.SHINE_SITE)
 
-        request_header = ShineCandidateDetail().get_api_headers()
-        request_header.update({'Content-Type':'application/json'})
+        elif data_dict.get('key') == 'linkedin':
+            post_data = {
+                'token': data_dict.get('access_token', ''),
+                'expires_in': data_dict.get('expires_in', '')
+            }
+            post_url = "{}/api/v2/linkedin/login/?format=json".format(settings.SHINE_SITE)
+
         try:
+            request_header = ShineCandidateDetail().get_api_headers()
+            request_header.update({'Content-Type':'application/json'})
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()
