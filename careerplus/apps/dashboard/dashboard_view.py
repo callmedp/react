@@ -41,9 +41,7 @@ class DashboardView(TemplateView):
         email = self.request.session.get('email')
 
         empty_inbox = DashboardInfo().check_empty_inbox(candidate_id=candidate_id)
-        if empty_inbox:
-            pass
-        else:
+        if not empty_inbox:
             inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
 
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
@@ -84,6 +82,7 @@ class DashboardView(TemplateView):
                     file_name = file_name + '.' + resume_extn
 
                     order_items = OrderItem.objects.filter(
+                        order__status=1,
                         id__in=list_ids, order__candidate_id=candidate_id,
                         no_process=False, oi_status=2)
                     for obj in order_items:
@@ -184,7 +183,7 @@ class DashboardDetailView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardDetailView, self).get_context_data(**kwargs)
-        if self.oi and self.oi.order.candidate_id == self.candidate_id:
+        if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])
@@ -538,17 +537,6 @@ class DashboardNotificationBoxView(TemplateView):
 
 
 class DashboardInvoiceDownload(View):
-    # template_name = 'invoice/invoice.html'
-
-    # def get(self, request, *args, **kwargs):
-    #     return super(DashboardInvoiceDownload, self).get(request, args, **kwargs)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(DashboardInvoiceDownload, self).get_context_data(**kwargs)
-
-    #     order = Order.objects.get(id=31)
-    #     context.update(InvoiceGenerate().get_invoice_data(order=order))
-    #     return context
 
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
@@ -556,7 +544,7 @@ class DashboardInvoiceDownload(View):
         try:
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
-            if candidate_id and (order.email == email or order.candidate_id == candidate_id):
+            if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
                 if order.invoice:
                     invoice = order.invoice
                 else:

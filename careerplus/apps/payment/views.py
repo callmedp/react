@@ -7,10 +7,14 @@ from cart.models import Cart
 from order.mixins import OrderMixin
 from order.models import Order
 from console.decorators import Decorate, stop_browser_cache
+from dashboard.dashboard_mixin import DashboardInfo
+from django.core.files.base import ContentFile
+from django.utils import timezone
+
+from core.api_mixin import ShineCandidateDetail
 
 from .forms import StateForm, PayByCheckForm
 from .mixin import PaymentMixin
-from microsite.roundoneapi import RoundOneAPI
 
 
 @Decorate(stop_browser_cache())
@@ -110,11 +114,11 @@ class ThankYouView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if self.request.session.get('order_pk'):
-            return super(self.__class__, self).get(request, *args, **kwargs)
+            return super(ThankYouView, self).get(request, *args, **kwargs)
         return HttpResponseRedirect(reverse('homepage'))
 
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(ThankYouView, self).get_context_data(**kwargs)
         order_pk = self.request.session.get('order_pk')
         if order_pk:
             order = Order.objects.get(pk=order_pk)
@@ -124,13 +128,91 @@ class ThankYouView(TemplateView):
                 for p_oi in parent_ois:
                     data = {}
                     data['oi'] = p_oi
-                    data['addons'] = order.orderitems.filter(parent=p_oi, is_combo=False, is_variation=False, no_process=False).select_related('product', 'partner')
-                    data['variations'] = order.orderitems.filter(parent=p_oi, is_variation=True).select_related('product', 'partner')
+                    data['addons'] = order.orderitems.filter(
+                        parent=p_oi, is_combo=False,
+                        is_variation=False,
+                        no_process=False).select_related('product', 'partner')
+                    data['variations'] = order.orderitems.filter(
+                        parent=p_oi,
+                        is_variation=True).select_related('product', 'partner')
                     order_items.append(data)
                 context.update({
                     'orderitems': order_items,
                     'order': order})
+
+                pending_resume_items = order.orderitems.filter(
+                    order__status__in=[0, 1],
+                    no_process=False, oi_status=2)
+                context.update({
+                    "pending_resume_items": pending_resume_items,
+                })
+                if not self.request.session.get('resume_id', None):
+                    DashboardInfo().check_user_shine_resume(
+                        candidate_id=self.request.session.get('candidate_id'),
+                        request=self.request)
         return context
+
+    def post(self, request, *args, **kwargs):
+        action_type = request.POST.get('action_type', '').strip()
+        order_pk = request.session.get('order_pk')
+        order = Order.objects.get(pk=order_pk)
+        file = request.FILES.get('resume_file', '')
+        resume_id = request.session.get('resume_id', None)
+        candidate_id = request.session.get('candidate_id', None)
+
+        if action_type == 'upload_resume' and order_pk and file:
+
+            order = Order.objects.get(pk=order_pk)
+            pending_resumes = order.orderitems.filter(order__status__in=[0, 1], no_process=False, oi_status=2)
+            for obj in pending_resumes:
+                obj.oi_resume = file
+                last_oi_status = obj.oi_status
+                obj.oi_status = 5
+                obj.last_oi_status = 3
+                obj.save()
+                obj.orderitemoperation_set.create(
+                    oi_status=3,
+                    oi_resume=obj.oi_resume,
+                    last_oi_status=last_oi_status,
+                    assigned_to=obj.assigned_to)
+
+                obj.orderitemoperation_set.create(
+                    oi_status=obj.oi_status,
+                    last_oi_status=obj.last_oi_status,
+                    assigned_to=obj.assigned_to)
+
+        elif action_type == "shine_reusme" and order_pk and candidate_id and resume_id:
+            order = Order.objects.get(pk=order_pk)
+            pending_resumes = order.orderitems.filter(
+                order__status__in=[0, 1],
+                no_process=False, oi_status=2)
+            response = ShineCandidateDetail().get_shine_candidate_resume(
+                candidate_id=candidate_id,
+                resume_id=request.session.get('resume_id'))
+            if response.status_code == 200:
+                default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
+                file_name = request.session.get('shine_resume_name', default_name)
+                resume_extn = request.session.get('resume_extn', '')
+                file_name = file_name + '.' + resume_extn
+
+                for obj in pending_resumes:
+                    obj.oi_resume.save(file_name, ContentFile(response.content))
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 5
+                    obj.last_oi_status = 13
+                    obj.save()
+                    obj.orderitemoperation_set.create(
+                        oi_status=13,
+                        oi_resume=obj.oi_resume,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to)
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=obj.last_oi_status,
+                        assigned_to=obj.assigned_to)
+
+        return HttpResponseRedirect(reverse('payment:thank-you'))
 
 
 @Decorate(stop_browser_cache())

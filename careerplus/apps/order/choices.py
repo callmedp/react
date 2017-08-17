@@ -50,6 +50,7 @@ OI_OPS_STATUS = (
     (27, 'Service has been processed and Document is finalized'),  # user Accept the draft flow 8 too
     (28, 'Feature profile initiated'),
     (29, 'Feature profile expired'),
+    (30, 'Feature profile updated'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),
@@ -106,6 +107,7 @@ OI_USER_STATUS = (
     (27, 'Service has been processed and Document is finalized'),
     (28, 'Feature profile initiated'),
     (29, 'Feature profile expired'),
+    (30, 'Feature profile updated'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),

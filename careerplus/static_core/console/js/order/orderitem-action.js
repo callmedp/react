@@ -127,7 +127,7 @@ function redirectToShineProfile(oi_id, ){
             success: function(data){
                 if (data.status){
                     var token = data.token;
-                    var link='https://www.shine.com/myshine/login/'+ token +'/'
+                    var link = window.SHINE_SITE + '/myshine/login/' + token + '/'
                     window.open(link, '_blank');
                     // window.open(link, 'width=650,height=450,scrollbars=yes');
                 }
