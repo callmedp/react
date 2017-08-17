@@ -101,7 +101,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product')
+        return queryset.select_related('order', 'product').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_hold_orderitem_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -189,7 +189,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product')
+        return queryset.select_related('order', 'product').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_varification_report_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -277,4 +277,4 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product')
+        return queryset.select_related('order', 'product').order_by('-modified')
