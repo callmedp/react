@@ -874,6 +874,7 @@ class ProfileUpdationView(DetailView):
         context = super(ProfileUpdationView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         profile_url_dict = {}
+        country_obj = None
         profile_urls = None
         order = self.get_object()
         try:
