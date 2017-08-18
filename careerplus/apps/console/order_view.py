@@ -1740,7 +1740,7 @@ class ActionOrderItemView(View):
                 approval = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
-                    obj.oi_status = 24  # approved
+                    obj.oi_status = 30  # approved
                     obj.last_oi_status = last_oi_status
                     obj.approved_on = timezone.now()
                     obj.save()

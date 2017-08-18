@@ -29,42 +29,78 @@
     <div class="row">
 
     <!-- left content start -->
-    <div class="col-sm-6">
-      <div class="text-center payment-done">
-        <figure class="waiting-icon"></figure>
-        <h1>Waiting for payment to be made, meanwhile order has been created!</h1>
-        <article>Your transaction ID is <strong>{{order.txn}}</strong></article>
-        <article>An email, along with all the details, has been sent to <a href="mailto:abc@gmail.com">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+    <div class="col-sm-7">
 
-        {% if pending_resume_items %}
-            <p>To proceed further please upload your resume or fill the questionnaire.</p>
-            {% if request.session.resume_id %}
+        <div class="text-center payment-done">
+            <figure class="waiting-icon"></figure>
+            <h1>Waiting for payment to be made, meanwhile order has been created!</h1>
+            <article>Your transaction ID is <strong>CP23879030973</strong></article>
+            <article>An email, along with all the details, has been sent to <a href="mailto:abc@gmail.com">abc@gmail.com</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+
+            {% if pending_resume_items %}
+
+                <p>To proceed further please upload your resume or fill the questionnaire.</p>
+                <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
+                    <div class="latest-resume selected" id="upload-resume-box">
+                        <figure></figure>
+                        <a href="#">Upload</a> new resume
+                        <input type="file" name="resume_file">
+                        <span class="db">or</span>
+                        fill this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and upload
+                    </div>
+
+                    {% if request.session.resume_id %}
+                        <div class="latest-resume" id="shine-resume-box">
+                            <figure></figure>
+                            Use latest shine resume
+                        </div>
+                    {% endif %}
+                    <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
+                    <a role="button" class="blue-button mt-20" id="resume-sumbmit-button">Proceed</a>
+                </form>
+
+            {% endif %}
+
+        </div>
+
+        {% comment %}
+        <div class="text-center payment-done">
+            <figure class="waiting-icon"></figure>
+            <h1>Waiting for payment to be made, meanwhile order has been created!</h1>
+            <article>Your transaction ID is <strong>{{order.txn}}</strong></article>
+            <article>An email, along with all the details, has been sent to <a href="mailto:abc@gmail.com">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+
+            {% if pending_resume_items %}
+                <p>To proceed further please upload your resume or fill the questionnaire.</p>
+                {% if request.session.resume_id %}
+                    <div class="latest-resume">
+                        <figure class="checked-blue-icon"></figure>
+                        Use latest shine resume
+                        <input type="file">
+                    </div>
+                {% endif %}
+
                 <div class="latest-resume">
-                    <figure class="checked-blue-icon"></figure>
-                    Use latest shine resume
-                    <input type="file">
+                    <figure class="{% if request.session.resume_id %}checked-grey-icon{% else %}checked-blue-icon{% endif %}"></figure>
+                    <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
+                        Upload new resume
+                        <input type="file" placeholder="Upload new resume" name="resume_file">
+                        <span class="db">or</span>
+                        fill this <a href="">questionnaire</a> and upload
+                        <input type="hidden" name="action_type" value="upload_resume">
+                        <button type="button" id="resume-sumbmit-button">submit</button>
+                    </form>
                 </div>
             {% endif %}
 
-            <div class="latest-resume">
-                <figure class="{% if request.session.resume_id %}checked-grey-icon{% else %}checked-blue-icon{% endif %}"></figure>
-                <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
-                    Upload new resume
-                    <input type="file" placeholder="Upload new resume" name="resume_file">
-                    <span class="db">or</span>
-                    fill this <a href="">questionnaire</a> and upload
-                    <input type="hidden" name="action_type" value="upload_resume">
-                    <button type="button" id="resume-sumbmit-button">submit</button>
-                </form>
-            </div>
-        {% endif %}
+        </div>
+        {% endcomment %}
 
-      </div>
     </div>    
     <!-- left content end -->
 
     <!-- right content start -->
-    <div class="col-sm-6">
+    <div class="col-sm-5">
       <div class="box-panel subcribe-box">
         <h2>You have subscribed to the following services</h2>
         {% for item in orderitems %}

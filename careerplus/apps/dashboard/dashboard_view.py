@@ -1,5 +1,8 @@
 import json
 import logging
+import mimetypes
+
+from wsgiref.util import FileWrapper
 
 from django.http import (
     HttpResponse,
@@ -557,3 +560,19 @@ class DashboardInvoiceDownload(View):
         except:
             pass
         return HttpResponseForbidden()
+
+
+class DownloadQuestionnaireView(View):
+    def get(self, request, *args, **kwargs):
+        file_path = settings.MEDIA_ROOT + '/attachment/' + 'Resume Questionnaire.docx'
+        path = file_path
+        try:
+            fsock = FileWrapper(open(path, 'rb'))
+        except IOError:
+            raise Exception("Resume not found.")
+
+        filename = 'reseme_questionnaire' + '.docx'
+
+        response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
+        response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+        return response

@@ -132,7 +132,7 @@ class DashboardInfo(object):
     def check_user_shine_resume(self, candidate_id=None, request=None):
         if not request:
             request = self.request
-        if candidate_id and request.session.get('resume_id', None):
+        if candidate_id and not request.session.get('resume_id', None):
             res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
             resumes = res['resumes']
             default_resumes = [resume for resume in resumes if resume['is_default']]
