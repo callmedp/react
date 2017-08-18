@@ -93,3 +93,4 @@ ENV/
 careerplus/templates/.gitignore
 # Pycharm files
 .idea
+media/
