@@ -422,7 +422,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByAdminView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=47, product__type_flow__in=[8])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=47, product__type_flow=8)
         try:
             if self.query:
                 queryset = queryset.filter(Q(id__icontains=self.query) |

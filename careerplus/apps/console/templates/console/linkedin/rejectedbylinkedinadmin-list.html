@@ -240,7 +240,7 @@
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
-                      <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                      <td>{{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                       
                       <td>Delivery Type</td>
                       <td>User Category</td>
@@ -251,7 +251,7 @@
                       </td>
 
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
-                      {% if obj.counselling_form_status == 42 %}
+                      {% if obj.oi_flow_status == 42 %}
                       <td>
                         <a href="{% url 'counselling-form' obj.pk %}" 
                         style="color:green">
