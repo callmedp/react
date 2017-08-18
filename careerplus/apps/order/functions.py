@@ -119,6 +119,8 @@ def update_initiat_orderitem_sataus(order=None):
         # mai and sms
         midout_services = orderitems.filter(
             product__type_flow__in=[1, 3, 4, 5, 12, 13])
+        linkedin_item = orderitems.filter(product__type_flow=8)
+            
         if midout_services.exists() and order.status == 1:
             to_emails = [order.email]
             mail_type = "MIDOUT"
@@ -141,6 +143,30 @@ def update_initiat_orderitem_sataus(order=None):
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
+        if linkedin_item.exists():
+            try:
+                obj_oi_linkedin = linkedin_item[o]
+                if obj_oi_linkedin.oi_status == 'Couselling form is pending':
+                    to_emails = [order.email]
+                    mail_type = "Pending Items"
+                    data = {}
+                    data.update({
+                        "subject": 'To initiate your service(s) fulfil these pending requirements',
+                        "username": order.first_name if order.first_name else order.candidate_id,
+                        'order_item': obj_oi_linkedin.pk,
+                        'candidateid': order.candidate_id,
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+            except:
+                pass
 
 def get_upload_path_order_invoice(instance, filename):
     return "invoice/order/{order_id}/{filename}".format(

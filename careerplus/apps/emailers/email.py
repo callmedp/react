@@ -50,11 +50,10 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
-        if str(mail_type) == "2":
-            send_dict['subject'] = "Linkedin Profile"
-            send_dict['template'] = 'emailers/payment_confirm.html'
+        if mail_type == "Pending Items":
+            send_dict['subject'] = "To initiate your service(s) fulfil these pending requirements"
+            send_dict['template'] = 'emailers/candidate/pending_item.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
-            send_dict['cc_list'] = [data.get('cc')]
             data['email'] = [to]
             data['token'] = AutoLogin().encode(to, data.get('candidateid'), data.get('orderitem'))
             data['button_text'] = "click here to dashboard"

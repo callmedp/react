@@ -340,6 +340,7 @@ class ChangeDraftView(DetailView):
                     elif not ord_obj.draft_counter:
                         ord_obj.draft_counter += 1
                     ord_obj.oi_status = 45  # pending Approval
+                    ord_obj.oi_flow_status = 50
                     ord_obj.last_oi_status = last_status
                     ord_obj.draft_added_on = timezone.now()
                     ord_obj.save()
