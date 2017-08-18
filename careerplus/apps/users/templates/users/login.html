@@ -120,9 +120,7 @@
                {
                     var accessToken = response.authResponse.accessToken;
                     var expiresIn = response.authResponse.expiresIn;
-
-                    $.get( "/user/social/login/", {"accessToken": accessToken, 
-                        "expiresIn":expiresIn, 'key':'fb'});
+                    window.location.href = '/user/social/login/?accessToken='+accessToken+'&expiresIn='+expiresIn+'&key=fb';
                     console.log(response);
                } 
             else 
@@ -150,8 +148,7 @@
                 console.log(result);
                 var access_token = result.access_token
                 var expiresIn = result.expires_in
-                $.get( "/user/social/login/", {"accessToken": access_token, 
-                        "expiresIn":expiresIn, 'key':'gplus'});
+                window.location.href = '/user/social/login/?accessToken='+access_token+'&expiresIn='+expiresIn+'&key=gplus';
             }   
     }
 

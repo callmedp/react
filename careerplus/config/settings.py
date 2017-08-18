@@ -178,6 +178,14 @@ EMAIL_SERVER = 'http://localhost:8000'
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
+# Linkedin Cridential
+CLIENT_ID  = "757gbstpwa6dqp"
+CLIENT_SECRET = "creqezZ0kPJnJWRk"
+REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
+STATE = "9899002507upender"
+SCOPE = 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo'
+TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
+OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
 # Do Not Change #
 COURSE_SLUG = ['course',]

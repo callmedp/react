@@ -11,6 +11,7 @@ from django.http import (
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
@@ -311,13 +312,13 @@ class SocialLoginView(View):
                     candidateid = gplus_user['user_details']['candidate_id']
                     resp_status = ShineCandidateDetail().get_status_detail(
                             email=None,
-                            shine_id=fb_user['user_details']['candidate_id'])
+                            shine_id=candidateid)
                     request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
                 elif gplus_user.get('response') == 400:
                     return HttpResponseRedirect('/login/')
         except Exception as e:
-            raise e
+            return HttpResponseRedirect('/login/')
 
 
 class LinkedinLoginView(View):
@@ -325,13 +326,13 @@ class LinkedinLoginView(View):
     def get(self, request, *args, **kwargs):
         try:
             params = {
-                'client_id': '757gbstpwa6dqp',
-                'redirect_uri': 'https://sumosc.shine.com/linkedin/login',
+                'client_id': settings.CLIENT_ID,
+                'redirect_uri': settings.REDIRECT_URI,
                 'response_type': 'code',
-                'scope': 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo',
-                'state': '9899002507upender'
+                'scope': settings.SCOPE,
+                'state': settings.STATE,
             }
-            url = "https://www.linkedin.com/oauth/v2/authorization?" + urllib.parse.urlencode(params)
+            url = settings.OAUTH_URL + urllib.parse.urlencode(params)
             return HttpResponseRedirect(url)
         except Exception as e:
             raise e
@@ -345,14 +346,14 @@ class LinkedinCallbackView(View):
             params = {
                 'grant_type':'authorization_code',
                 'code': request.GET.get('code') if 'code' in request.GET else '',
-                'redirect_uri': 'https://sumosc.shine.com/linkedin/login',
-                'client_id': '757gbstpwa6dqp',
-                'client_secret': 'creqezZ0kPJnJWRk',
+                'redirect_uri': settings.REDIRECT_URI,
+                'client_id': settings.CLIENT_ID,
+                'client_secret': settings.CLIENT_SECRET,
             }
             if not params['code']:
                 return HttpResponseRedirect('/login/')
             params = urllib.parse.urlencode(params)
-            info = urllib.request.urlopen("https://www.linkedin.com/oauth/v2/accessToken", params.encode("utf-8"))
+            info = urllib.request.urlopen(settings.TOKEN_URL, params.encode("utf-8"))
             read_data = info.read()
             # convert byte object into string
             str_data = str(read_data,'utf-8')
