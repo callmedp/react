@@ -77,6 +77,10 @@ urlpatterns += [
     url(r'^order-invoicedownload/$',
         dashboard_view.DashboardInvoiceDownload.as_view(),
         name='dashboard-invoicedownload'),
+
+    url(r'^downloadquestionnaire/$',
+        dashboard_view.DownloadQuestionnaireView.as_view(),
+        name='dashboard-downloadquestionnaire'),
 ]
 
 

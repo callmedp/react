@@ -93,7 +93,7 @@ class ActionUserMixin(object):
                 elif obj.is_addon and obj.parent.product.type_flow in [1, 12, 13]:
                     addons = obj.order.orderitems.filter(parent=obj.parent, product__type_flow__in=[1, 12, 13], is_addon=True)
                     if not obj.parent.no_process:
-                        addons = addons | obj.order.orderitems.filter(pk=obj.pk)
+                        addons = addons | obj.order.orderitems.filter(pk=obj.parent.pk)
 
                 if obj.is_variation:
                     variations = obj.order.orderitems.filter(parent=obj.parent, is_variation=True)

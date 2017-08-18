@@ -118,7 +118,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'careerplus.config.context_processors.common_context_processor',
                 'django_mobile.context_processors.flavour',
-                'careerplus.config.context_processors.common_context_processor',
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings'
             ],

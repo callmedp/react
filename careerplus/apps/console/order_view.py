@@ -122,7 +122,7 @@ class OrderListView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset
+        return queryset.order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -220,7 +220,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset
+        return queryset.order_by('modified')
 
 
 @method_decorator(permission_required('order.can_show_midout_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -315,7 +315,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         except:
             pass
 
-        return queryset
+        return queryset.order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_inbox_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -459,7 +459,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product')
+        return queryset.select_related('order', 'product').order_by('-modified')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -664,7 +664,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -765,7 +765,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_rejectedbyadmin_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -870,7 +870,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
                 pass
         except:
             pass
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_rejectedbycandidate_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -976,7 +976,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1069,7 +1069,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_closed_oi_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1111,7 +1111,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ClosedOrderItemQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=4, no_process=False)
+        queryset = queryset.filter(order__status__in=[1, 3], oi_status=4, no_process=False)
         user = self.request.user
         vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
 
@@ -1162,7 +1162,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1234,10 +1234,10 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
         queryset = queryset.exclude(id__in=exclude_list)
 
-        if user.is_superuser or user.has_perm('order.domestic_profile_update_assigner'):
+        if user.is_superuser:
             pass
         elif user.has_perm('order.domestic_profile_update_assigner'):
-            queryset = queryset.filter(assigned_to__isnull=True)
+            queryset = queryset.filter(assigned_to=None)
         elif user.has_perm('order.domestic_profile_update_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
@@ -1282,7 +1282,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_domestic_profile_approval_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1367,7 +1367,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_booster_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1461,7 +1461,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset
+        return queryset.order_by('-modified')
 
 
 class ActionOrderItemView(View):
@@ -1740,7 +1740,7 @@ class ActionOrderItemView(View):
                 approval = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
-                    obj.oi_status = 24  # approved
+                    obj.oi_status = 30  # approved
                     obj.last_oi_status = last_oi_status
                     obj.approved_on = timezone.now()
                     obj.save()

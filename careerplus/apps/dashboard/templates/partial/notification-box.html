@@ -1,5 +1,5 @@
 {% if pending_resume_items %}
-To initiate your services.
+To initiate your services, upload resume or download this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and upload it.
 
 <form role="form" method="post" action="." id="resume-upload-form" enctype='multipart/form-data'>{% csrf_token %}
     <small id="non-field-errors" class="error">{{validation_error}}</small>

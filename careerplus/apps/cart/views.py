@@ -227,6 +227,8 @@ class PaymentShippingView(UpdateView, CartMixin):
 
         if cart_obj and not (cart_obj.email or self.request.session.get('candidate_id')):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
+        elif not cart_obj:
+            return HttpResponsePermanentRedirect(reverse('homepage'))
         return None
 
     def get_object(self):

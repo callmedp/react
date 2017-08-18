@@ -160,7 +160,7 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "AUTO_REGISTER":
-            send_dict['subject'] = data.get('subject', "Your login credential on shinelearning")
+            send_dict['subject'] = data.get('subject', "Your login credential on shine.com")
             template_name = data.get('template_name', 'auto-register.html')
             send_dict['template'] = 'emailers/' + template_name
 

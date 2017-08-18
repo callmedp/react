@@ -4,7 +4,7 @@
     <!-- Other packages start here -->
     <div class="sidebar" id="sidebar-secondary">
       <div class="upload-resume p-15">
-        <p class="fs-16 c6 mt-20">To initiate your services.</p>
+        <p class="fs-16 c6 mt-20">To initiate your services, upload resume or download this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and upload it.</p>
         <form role="form" method="post" action="{% url "dashboard:dashboard" %}" id="resume-upload-form" enctype='multipart/form-data'>{% csrf_token %}
             <div class="rel mt-10">
                 <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
