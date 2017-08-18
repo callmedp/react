@@ -13,8 +13,7 @@ build/
 develop-eggs/
 #dist/
 download/
-media/
-!media/attachment/*
+
 eggs/
 .eggs/
 lib/
