@@ -131,7 +131,9 @@
           </div>
 
           <div class="x_content">
-
+            {% if page %}
+                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+            {% endif %}
             <div class="table-responsive">
               <table class="table table-striped jambo_table bulk_action">
                 <thead>
@@ -162,11 +164,11 @@
                       <td>{{obj.email}}</td>
                       <td>{{obj.country_code}} {{obj.mobile}}</td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
-                      <td><a href="">Detail Txns</a></td>
-                      <td>INR</td>
+                      <td><a href="">{{obj.txn}}</a></td>
+                      <td>{% if obj.currency %}{{obj.currency}}{% else %}Rs.{% endif %}</td>
                       <td>{{obj.total_incl_tax}}</td>
                       <td>{{obj.get_status}}
-                        {% if obj.status in not_paid_status and perms.order.can_mark_order_as_paid %}
+                        {% if obj.status == 0 and perms.order.can_mark_order_as_paid %}
                             <form role="form" method="post" id="order-paid-form{{obj.id}}">{% csrf_token %}
                            <input type="hidden" name="order_pk" id="order-id" value="{{obj.pk}}">
                           <center>

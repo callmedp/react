@@ -340,6 +340,7 @@ class ChangeDraftView(DetailView):
                     elif not ord_obj.draft_counter:
                         ord_obj.draft_counter += 1
                     ord_obj.oi_status = 45  # pending Approval
+                    ord_obj.oi_flow_status = 50
                     ord_obj.last_oi_status = last_status
                     ord_obj.draft_added_on = timezone.now()
                     ord_obj.save()
@@ -874,6 +875,7 @@ class ProfileUpdationView(DetailView):
         context = super(ProfileUpdationView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         profile_url_dict = {}
+        country_obj = None
         profile_urls = None
         order = self.get_object()
         try:

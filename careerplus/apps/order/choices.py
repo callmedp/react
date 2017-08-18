@@ -31,10 +31,10 @@ OI_OPS_STATUS = (
     (0, 'Default'),
     (1, 'Assigned'),
     (2, 'Resume upload is pending'),
-    (3, 'Resume Uploded'),
+    (3, 'Resume Uploaded'),
     (4, 'Closed'),
     (5, 'Service is under progress'),
-    (6, 'Services has been processed'),
+    (6, 'Service has been processed'),
     (10, 'On Hold by Vendor'),
     (11, 'Archived'),
     (12, 'Unhold by Vendor'),
@@ -50,6 +50,7 @@ OI_OPS_STATUS = (
     (27, 'Service has been processed and Document is finalized'),  # user Accept the draft flow 8 too
     (28, 'Feature profile initiated'),
     (29, 'Feature profile expired'),
+    (30, 'Feature profile updated'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),
@@ -106,6 +107,7 @@ OI_USER_STATUS = (
     (27, 'Service has been processed and Document is finalized'),
     (28, 'Feature profile initiated'),
     (29, 'Feature profile expired'),
+    (30, 'Feature profile updated'),
 
     # for linkedin flow8 41 - 60
     (43, 'Linkedin Draft Create'),
@@ -137,7 +139,15 @@ OI_USER_STATUS = (
 
 )
 
-COUNSELLING_FORM_STATUS = (
+OI_LINKEDIN_FLOW_STATUS = (
+    (0, 'default'),
     (41, 'Counselling Form Not Submitted'),
     (42, 'Counselling Form Submitted'),
+    (50, 'Draft 1 Send'),
+    (51, 'Linked In Tip 1'),
+    (52, 'Linked In Tip 2'),
+    (53, 'Linked In Tip 3'),
+    (54, 'Linked In Tip 4'),
+    (55, 'Linked In Tip 5'),
+    (56, 'Linked In Tip 6'),
 )

@@ -1,0 +1,52 @@
+{% load static %}
+<!-- Section 1 -->
+{% for data in order_list %}
+    {% with order=data.order orderitems=data.orderitems item_count=data.item_count %}
+        <div class="accordion_in {% if forloop.counter == 1 %}acc_active {% endif %}box mb-20">
+            <div class="acc_head">{{order.number}}
+                <div class="sub-head"><span>{{order.date_placed.date}}</span>  <span>Status <strong>{% if order.status == 1 %}Open{% elif order.status == 0 and order.payment_mode == 1 %}Unpaid{% elif order.status == 0 and order.payment_mode == 4 %}Unpaid{% elif order.status == 3 %}Closed{% endif %}</strong></span>  <span><strong>{{item_count}}</strong> items</span></div>
+            </div>
+            <div class="acc_content">
+                <table>
+                    {% for obj in orderitems %}
+                        <tr>
+                            <td>
+                                <a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.heading}}{% if obj.product.get_exp %} - {{obj.product.get_exp}}{% endif %}</a>
+                                <!--p class="c6 fs-12 pb-0">SRI3284683246</p-->
+                            </td>
+                            <td class="text-right">
+                                {% if obj.oi_status == 4 %}
+                                    Closed
+                                {% elif order.status == 0 and order.payment_mode == 1 %}
+                                    Unpaid
+                                {% elif order.status == 0 and order.payment_mode == 4 %}
+                                    Unpaid
+                                {% elif order.status == 1 %}
+                                    Service in progress
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <p class="c6 fs-12 pb-0">Total amount</p>
+                            <p class="price">{% if order.currency %}{{order.currency}}{% else %}Rs.{% endif %}{{order.total_incl_tax}}/-</p>
+                        </td>
+                        {% if order.status == 1 or order.status == 3 %}
+                            <td class="text-right">
+                                <form role="form" id="download-invoice-form{{order.pk}}" method="POST" action="{% url "dashboard:dashboard-invoicedownload" %}">
+                                    <div style="display:none">
+                                        <input type="hidden" name="csrfmiddlewaretoken" 
+                                        value="{{csrf_token}}" />
+                                        <input type="hidden" name="order_pk" value="{{order.pk}}" />
+                                   </div>
+                                   <a role="button" class="btn btn-outline" onclick="downloadOrderInvoice('{{order.pk}}')" id="download-order-invoice{{order.pk}}">Download invoice</a>
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                </table>
+            </div>
+        </div><!-- Section 1 edns here  -->
+    {% endwith %}
+{% endfor %}

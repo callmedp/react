@@ -109,10 +109,9 @@ function rejectService(oi_pk) {
    
 };
 
-function acceptService(oi_pk, ) {
+function acceptService(oi_pk) {
     if (oi_pk){
         $("#accept-modal" + oi_pk).modal("show");
-
         $(document).on('click', '#accept-submit-button' + oi_pk, function () {
             var formData = $('#accept-form-id' + oi_pk).serialize();
             $.ajax({
@@ -128,14 +127,12 @@ function acceptService(oi_pk, ) {
                 }
             });
         });
-
-        
+ 
     }
 };
 
 function downloadOrderInvoice(order_pk, ) {
     if (order_pk){
-        console.log("hello submit");
         $('#download-invoice-form' + order_pk).submit();
     }
 };
@@ -236,7 +233,7 @@ $(document).ready(function(){
             rules:{
                 file:{
                     required: function(element) {
-                        if ($("#shine-resume-id").is(":checked"))
+                        if ($("#shine-res").is(":checked"))
                             return false;
                         else
                             return true;
@@ -254,6 +251,9 @@ $(document).ready(function(){
                 shine_resume:{
                     required: 'this value is required.',
                 }
+            },
+            errorPlacement: function(error, element){
+                $(element).siblings('.error').html(error.text());
             },
 
         });
@@ -278,6 +278,15 @@ $(document).ready(function(){
 
     $(document).on('click', '[name="resume_pending"]', function () {
         $('#required_product_error').text('');
+    });
+
+    $(document).on('click', '#shine-res', function () {
+        if ($(this).is(':checked')){
+            $('#file-error').text('');
+        }
+        else{
+            $('#file-error').text('this value is required');
+        }
     });
 
     $(document).on('click', '#upload_resume', function () {
@@ -311,9 +320,17 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '[name="rating"]', function () {
-        var html = $(this).attr('value') + '<small>/5</small>';
-        $('#selected-rating').html(html);
+        var flavour = $('[name="flavour"]').val();
+        if (flavour == 'mobile'){
+            var rating_val = $(this).attr('value');
+            $('#selected-rating').text(rating_val);
+        }
+        else {
+            var html = $(this).attr('value') + '<small>/5</small>';
+            $('#selected-rating').html(html);
+        }
         $('#rating-error').text('');
+       
     });
 
     $(document).on('click', '#rating-submit', function () {
@@ -400,19 +417,26 @@ $(document).ready(function(){
         var flag = $('#user-comment-form').valid();
 
         if (flag){
-            var formData = $('#user-comment-form').serialize();
-            $.ajax({
-                url: '/dashboard/inbox-comment/',
-                type: 'POST',
-                data : formData,
-                dataType: 'html',
-                success: function(html) {
-                    $('#right-content-id').html(html);
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert("Something went wrong");
-                }
-            });
+            var flavour = $('[name="flavour"]').val();
+            if (flavour == "mobile"){
+                $('#user-comment-form').submit();
+                $('#user-comment-form').reset();
+            }
+            else{
+                var formData = $('#user-comment-form').serialize();
+                $.ajax({
+                    url: '/dashboard/inbox-comment/',
+                    type: 'POST',
+                    data : formData,
+                    dataType: 'html',
+                    success: function(html) {
+                        $('#right-content-id').html(html);
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert("Something went wrong");
+                    }
+                });
+            }
         }
     });
 

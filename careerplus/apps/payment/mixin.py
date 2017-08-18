@@ -26,7 +26,7 @@ class PaymentMixin(object):
             order = Order.objects.get(pk=request.session.get('order_pk'))
             txn = 'CP%d%s' % (order.pk, int(time.time()))
             # mail_type = mailers_config.MAIL_TYPE[6]
-            order_status = 2
+            order_status = 0
             payment_mode = 1
             # sms_type = mailers_config.SMS_TYPE[4]
             x_mailertag = "CASH_PAYMENT"
@@ -48,7 +48,7 @@ class PaymentMixin(object):
             order.instrument_issue_date = request.POST.get('deposit_date')
             txn = 'CP%d%s%s' % (order.pk, int(time.time()), request.POST.get(
                 'cheque_no'))
-            order_status = 2
+            order_status = 0
             payment_mode = 4
             x_mailertag = "CHEQUE_PAYMENT"
             return_parameter = reverse('payment:thank-you')
