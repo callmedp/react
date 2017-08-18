@@ -921,7 +921,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByCandidateQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=26, product__type_flow__in=[1, 3])
+        queryset = queryset.filter(order__status=1, no_process=False, oi_status=26, product__type_flow__in=[1, 3, 12, 13])
 
         user = self.request.user
 
@@ -1740,7 +1740,7 @@ class ActionOrderItemView(View):
                 approval = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
-                    obj.oi_status = 24  # approved
+                    obj.oi_status = 30  # approved
                     obj.last_oi_status = last_oi_status
                     obj.approved_on = timezone.now()
                     obj.save()

@@ -686,7 +686,7 @@
   display: inline-block;
   border: 1px solid #e1e1e1;
   padding: 15px 15px 10px 15px;
-  min-height: 200px;
+  min-height: 150px;
   width: 48%;
   vertical-align: top;
   margin-left: 1%;
@@ -695,8 +695,12 @@
 .latest-resume:first-child {
   margin-left: 0;
 }
-.latest-resume:hover, .latest-resume:focus, .latest-resume:visited {
+.latest-resume:hover, .latest-resume:focus, .latest-resume:visited, .latest-resume.selected {
   border: 1px solid #85b1c8;
+  cursor: pointer;
+}
+.latest-resume:hover figure, .latest-resume:focus figure, .latest-resume:visited figure, .latest-resume.selected figure {
+  background: url(../../images/sprite.png) no-repeat -287px -120px;
 }
 @media (max-width: 991px) {
   .latest-resume {
@@ -707,6 +711,11 @@
 .latest-resume figure {
   display: block;
   margin: 0 auto 10px auto;
+  width: 27px;
+  height: 27px;
+  background: url(../../images/sprite.png) no-repeat -317px -120px;
+  display: block;
+  vertical-align: sub;
 }
 .latest-resume input {
   margin: 10px auto;

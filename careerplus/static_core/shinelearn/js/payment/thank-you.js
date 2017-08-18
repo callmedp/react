@@ -11,27 +11,51 @@ $(document).ready(function() {
             
     });
 
+    $(document).on('click', '#upload-resume-box', function () {
+        $('#upload-resume-box').removeClass('selected');
+        $('#shine-resume-box').removeClass('selected');
+        $('#upload-resume-box').addClass('selected');
+        $('#action-type-id').val('upload_resume');
+    });
+
+    $(document).on('click', '#shine-resume-box', function () {
+        $('#shine-resume-box').removeClass('selected');
+        $('#upload-resume-box').removeClass('selected');
+        $('#shine-resume-box').addClass('selected');
+        $('#action-type-id').val('shine_reusme');
+    });
+
+
 	$(document).on('click', '#resume-sumbmit-button', function () {
-        $("#upload-order-resume-form").validate({
-            rules: {
-                resume_file: {
-                    required: true,
-                    extn: true
-                },
-            },
-            messages: {
-                resume_file: {
-                	required: 'This value is required',
-                	extn: 'only pdf, doc and docx formats are allowed',
-                },
-            },
 
-        });
+        var action_type = $('#action-type-id').val();
+        var flag = false;
 
-        var flag = $('#upload-order-resume-form').valid();
+        if (action_type == 'upload_resume'){
+            $("#upload-order-resume-form").validate({
+                rules: {
+                    resume_file: {
+                        required: true,
+                        extn: true
+                    },
+                },
+                messages: {
+                    resume_file: {
+                        required: 'This value is required',
+                        extn: 'only pdf, doc and docx formats are allowed',
+                    },
+                },
+
+            });
+            var flag = $('#upload-order-resume-form').valid();
+        }
+        else{
+            flag = true
+        }
 
         if (flag){
-            $('#upload-order-resume-form').submit();
+            console.log(action_type);
+            $('#upload-order-resume-form')[0].submit();
         }
         
     });

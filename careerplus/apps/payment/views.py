@@ -37,13 +37,15 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 return HttpResponsePermanentRedirect(reverse('homepage'))
         if self.cart_obj and not (self.cart_obj.shipping_done):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
+        elif not self.cart_obj:
+            return HttpResponsePermanentRedirect(reverse('homepage'))
         return None
 
     def get(self, request, *args, **kwargs):
         redirect = self.redirect_if_necessary()
         if redirect:
             return redirect
-        return super(self.__class__, self).get(request, *args, **kwargs)
+        return super(PaymentOptionView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         payment_type = request.POST.get('payment_type', '').strip()
@@ -98,7 +100,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
            return HttpResponseRedirect(reverse('cart:cart-product-list'))
 
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(PaymentOptionView, self).get_context_data(**kwargs)
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
@@ -146,6 +148,7 @@ class ThankYouView(TemplateView):
                 context.update({
                     "pending_resume_items": pending_resume_items,
                 })
+
                 if not self.request.session.get('resume_id', None):
                     DashboardInfo().check_user_shine_resume(
                         candidate_id=self.request.session.get('candidate_id'),
@@ -155,10 +158,13 @@ class ThankYouView(TemplateView):
     def post(self, request, *args, **kwargs):
         action_type = request.POST.get('action_type', '').strip()
         order_pk = request.session.get('order_pk')
-        order = Order.objects.get(pk=order_pk)
         file = request.FILES.get('resume_file', '')
         resume_id = request.session.get('resume_id', None)
         candidate_id = request.session.get('candidate_id', None)
+        try:
+            order = Order.objects.get(pk=order_pk)
+        except:
+            return HttpResponseRedirect(reverse('payment:thank-you'))
 
         if action_type == 'upload_resume' and order_pk and file:
 
