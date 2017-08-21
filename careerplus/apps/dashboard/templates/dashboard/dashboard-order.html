@@ -54,11 +54,22 @@
             {% endblock left_content %}
 
             {% block right_content %}
-                <!-- right content start -->
-                <div class="col-sm-9 bdr dashboard-tab-content">
-                    {{order_list|safe}}
-                </div>
-                <!-- right content end -->
+                {% if order_list %}
+                    <!-- right content start -->
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                        {{order_list|safe}}
+                    </div>
+                    <!-- right content end -->
+                {% else %}
+                    <!-- right content start -->
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                        <div class="empty-wallet">
+                            <figure class="empty-cart-pic"></figure>
+                            <article>Start with your first order and earn loyalty points</article>
+                        </div>
+                    </div>
+                    <!-- right content end -->
+                {% endif %}
             {% endblock right_content %}
 
             </div>

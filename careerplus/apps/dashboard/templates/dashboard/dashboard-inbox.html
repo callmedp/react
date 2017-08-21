@@ -39,13 +39,12 @@
             <div class="row">
             
             {% block upload_box %}
-
-            {% if pending_resume_items %}
-            <!-- resume upload box -->
-            <div class="notification-resume" id="notification-box-id">
-              To initiate your services. <a role="button" id="upload_resume">Upload resume</a>
-            </div>
-            {% endif %}
+                {% if pending_resume_items %}
+                    <!-- resume upload box -->
+                    <div class="notification-resume" id="notification-box-id">
+                      To initiate your services. <a role="button" id="upload_resume">Upload resume</a>
+                    </div>
+                {% endif %}
             {% endblock upload_box %}
 
             {% block left_content %}
@@ -64,33 +63,44 @@
             {% endblock left_content %}
 
             {% block right_content %}
-            <!-- right content start -->
-            <div class="col-sm-9 bdr dashboard-tab-content" id="right-content-id">
-
-              <div class="filter-by">
-              Filter by
-                <form role="form" id="order-filter-form">{% csrf_token %}
-                    <div class="form-group custom-select">
-                        <select class="form-control" name="last_month_from" id="lastmonth-id">
-                          <option value="6">Last six months</option>
-                          <option value="3">Last three months</option>
-                        </select>
+                {% if empty_inbox %}
+                    <!-- right content start -->
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                        <div class="empty-wallet">
+                            <figure class="empty-cart-pic"></figure>
+                            <article>Start with your first order and earn loyalty points</article>
+                        </div>
                     </div>
-                    <div class="form-group custom-select">
-                        <select class="form-control" name="select_type" id="select-type-id">
-                          <option value="0">All Items</option>
-                          <option value="1">Active Items</option>
-                          <option value="2">Inactive Items</option>
-                        </select>
-                    </div>
-                </form>
-              </div>
-              <ul class="products-inbox" id="orderitem-inbox-box">
-                   {{inbox_list|safe}}
-              </ul>
+                    <!-- right content end -->
+                {% else %}
+                    <!-- right content start -->
+                    <div class="col-sm-9 bdr dashboard-tab-content" id="right-content-id">
 
-            </div>
-            <!-- right content end -->
+                      <div class="filter-by">
+                      Filter by
+                        <form role="form" id="order-filter-form">{% csrf_token %}
+                            <div class="form-group custom-select">
+                                <select class="form-control" name="last_month_from" id="lastmonth-id">
+                                  <option value="6">Last six months</option>
+                                  <option value="3">Last three months</option>
+                                </select>
+                            </div>
+                            <div class="form-group custom-select">
+                                <select class="form-control" name="select_type" id="select-type-id">
+                                  <option value="0">All Items</option>
+                                  <option value="1">Active Items</option>
+                                  <option value="2">Inactive Items</option>
+                                </select>
+                            </div>
+                        </form>
+                      </div>
+                      <ul class="products-inbox" id="orderitem-inbox-box">
+                           {{inbox_list|safe}}
+                      </ul>
+
+                    </div>
+                    <!-- right content end -->
+                {% endif %}
             {% endblock right_content %}
 
             </div>

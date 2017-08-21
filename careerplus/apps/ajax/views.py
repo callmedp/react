@@ -539,7 +539,7 @@ class MarkedPaidOrderView(View):
                 obj.save()
                 data['display_message'] = "order %s marked paid successfully" % (order_pk)
                 # update initial operation status
-                update_initiat_orderitem_sataus(order=obj)
+                # update_initiat_orderitem_sataus(order=obj)
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), order_pk)
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -548,4 +548,3 @@ class MarkedPaidOrderView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
-        

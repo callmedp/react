@@ -23,6 +23,7 @@ from users.views import (
 from homepage.views import HomePageView
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
+from users.views import LinkedinCallbackView
 
 urlpatterns = []
 
@@ -66,6 +67,8 @@ urlpatterns += [
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
     url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
+    url(r'^linkedin/login/$',
+        LinkedinCallbackView.as_view(), name='linkedin-login'),
 
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

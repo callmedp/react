@@ -10,7 +10,8 @@
             var align, sbw, ssbInit, ssbStyle, maskInit, maskStyle,
                 attr = cfg.attr,
                 $sidebar = $(this),
-                $opener = $(cfg.opener),
+                // $opener = $(cfg.opener),
+                $opener = cfg.opener,
                 $links = cfg.sidebar.closingLinks,
                 duration = cfg.animation.duration,
                 sbMaxW = cfg.sidebar.width,
@@ -114,7 +115,8 @@
             }
 
             //Opening and closing the Sidebar when $opener is clicked
-            $opener.click(function() {
+/*            $opener.click(function() {
+*/            $(document).on('click', $opener, function () {
                 var isWhat = $sidebar.attr('data-' + attr),
                     csbw = $sidebar.width();
 

@@ -4,7 +4,7 @@
 
 <ul class="products-inbox">
   <li class="col-sm-12">
-    <h2>Resume Writing - Exp: 0 to 1 Year</h2>
+    <h2>{{oi.product.heading}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
     <span class="transaction">Order ID : {{oi.order.number}}</span>
     <div class="hr mt-20"></div>
     <form role="form" id="feedback-form">{% csrf_token %}
@@ -30,8 +30,7 @@
                 <strong id="selected-rating">0<small>/5</small></strong>
             </div>
             <span>Click to rate on scale of 1-5</span></br>
-            <span class="error" style="color:red" id="rating-error"></span>
-            
+            <span class="error" style="color:red" id="rating-error"></span>    
        </div> 
       <textarea class="form-control" id="id_review" name="review" placeholder="Feedback" rows="4"></textarea>
       <span class="error"></span></br>

@@ -3,7 +3,9 @@ from users.views import (
 	DownloadBoosterResume, 
 	ForgotPasswordResetView,
 	ForgotHtmlView,
-	ForgotPasswordEmailView,)
+	ForgotPasswordEmailView,
+    SocialLoginView,
+    LinkedinLoginView,)
 
 
 urlpatterns = [
@@ -15,4 +17,8 @@ urlpatterns = [
         ForgotHtmlView.as_view(), name='forgot-html'),
     url(r'^submit/forgot-email/$',
         ForgotPasswordEmailView.as_view(), name='forgot-email-sent'),
+    url(r'^social/login/$',
+        SocialLoginView.as_view(), name='social-login'),
+    url(r'^linkedin/code/$',
+        LinkedinLoginView.as_view(), name='linkedin-code'),
 ]
