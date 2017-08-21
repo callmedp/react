@@ -41,24 +41,23 @@ class BaseSearch(object):
 
     extra_params = {
         'mm': '1',
-        'qt': 'dismax',
+        'qt': 'edismax',
         'facet': 'on',
         'facet.mincount': '1',
-        'qf': 'text pHd^0.5 pFA^0.3 pCtg^0.2 pMtD^0.1 pMK^0.1 pChts^0.1 pAb^0.05',
-        'pf': 'pHd^0.5 pFA^0.2 pCtg^0.2 pMtD^0.1 pMK^0.1 pPChs^0.1 pAb^0.05',
-        'pf2': 'pFA^03 pCtg^0.2 pPChs^0.1',
+        'qf': 'text pHd^10 pFA^6 pCtg^4 pMtD^2 pMK^2 pChs^2 pAb^1',
+        'pf': 'pHd^10 pFA^4 pCtg^4 pMtD^2 pMK^2 pPChs^2 pAb^1',
+        'pf2': 'pFA^6 pCtg^4 pPChs^2',
         'ps2': 1,
         'tie': 1,
-        'hl': False,
+        'hl': 'false',
         # 'boost': 'product(recip(ms(NOW/HOUR,jPDate),3.16e-11,0.08,0.05),jDup)',
-        'spellcheck': 'true',
-        'spellcheck.dictionary': 'default',
-        'spellcheck.onlyMorePopular': 'true',
-        'spellcheck.maxResultsForSuggest': 10000,
-        'spellcheck.maxCollations': 4,
-        'spellcheck.maxCollationTries': 100,
-        'spellcheck.collateExtendedResults': 'true',
-        'bq': 'date:[NOW/DAY-1YEAR TO NOW/DAY]'
+        'spellcheck': 'false',
+        # 'spellcheck.dictionary': 'default',
+        # 'spellcheck.onlyMorePopular': 'true',
+        # 'spellcheck.maxResultsForSuggest': 10000,
+        # 'spellcheck.maxCollations': 4,
+        # 'spellcheck.maxCollationTries': 100,
+        # 'spellcheck.collateExtendedResults': 'true'
     }
 
     facet_list = [
@@ -89,7 +88,7 @@ class BaseSearch(object):
 
     needed_params_options = {}
 
-    sort_mapping = {'sort': {'1': '-pCDate', '2': 'pAR'}}
+    sort_mapping = {'sort': {'1': '-pCD', '2': 'pAR'}}
 
     query_param_name = 'q'
 
@@ -424,9 +423,7 @@ class SimpleSearch(BaseSearch):
 
     needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
 
-    extra_params = {
-        'search_type': 'simple'
-    }
+
 
     def get_extra_params(self):
         """
@@ -434,7 +431,7 @@ class SimpleSearch(BaseSearch):
         Take into consideration semantic inferred_words.
         """
         extra_params = super(SimpleSearch,self).get_extra_params()
-        extra_params.update(self.extra_params)
+        extra_params.update({'search_type': 'simple'})
         # params_solr_mapping = {'job_title':'jJT',
         #             'skill':'jKwd',
         #             'company_name':'jCName'}
