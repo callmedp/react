@@ -105,7 +105,7 @@ class SendMail():
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
-        elif mail_type == "AUTO_CLOSER":
+        elif mail_type == "WRITING_SERVICE_CLOSED":
             send_dict['subject'] = data.get('subject', "Auto Closer Your Order item")
             template_name = data.get('template_name', 'auto_closer.html')
             send_dict['template'] = 'emailers/' + template_name
@@ -196,11 +196,10 @@ class SendMail():
 
         elif mail_type == "FORGOT_PASSWORD":
 
-            send_dict['subject'] = "Forgot Password"
-            send_dict['template'] = 'emailers/payment_confirm.html'
+            send_dict['subject'] = "Your Shine.com password"
+            send_dict['template'] = 'emailers/candidate/reset_pass.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)
             data['reset_url'] = "http://%s/user/update/password/?token=%s" % (settings.SITE_DOMAIN, token)
-            data['button_text'] = "Click Here To Reset Password"
             self.process(to, send_dict, data)

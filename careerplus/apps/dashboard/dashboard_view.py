@@ -404,13 +404,12 @@ class DashboardAcceptService(View):
                         data['display_message'] = "You Accept draft successfully"
 
                         to_emails = [oi.order.email]
-                        mail_type = 'AUTO_CLOSER'
+                        mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
-                            "info": 'Auto closer mail',
-                            "draft_level": oi.draft_counter,
-                            "name": oi.order.first_name + ' ' + oi.order.last_name,
-                            "mobile": oi.order.mobile,
+                            "subject": 'Closing your '+oi.product.name+' service',
+                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                            'draft_added':oi.draft_added_on,
                         })
 
                         try:
