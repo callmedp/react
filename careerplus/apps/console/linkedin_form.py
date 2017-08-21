@@ -23,7 +23,7 @@ class DraftForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    summary = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'ckeditor'}))
+    summary = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'form-control'}))
 
     profile_photo = forms.CharField(label=("Profile Photo"), max_length=85,
         widget=forms.TextInput(
@@ -138,7 +138,7 @@ class OrganizationForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control'}))
 
-    org_desc = forms.CharField(widget=forms.Textarea(attrs={'class':'ckeditor'}))
+    org_desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
     
     work_from = forms.DateField(
           widget=forms.DateInput(attrs={'class': 'form-control work_from'}))
@@ -226,7 +226,7 @@ class EducationForm(forms.ModelForm):
     level = forms.ChoiceField(choices = LEVEL, 
         widget=forms.Select(attrs={'class': 'form-control'}))
 
-    edu_desc = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'ckeditor'}))
+    edu_desc = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'form-control'}))
     
     study_from = forms.DateField(
           widget=forms.DateInput(attrs={'class': 'form-control study_from'}))

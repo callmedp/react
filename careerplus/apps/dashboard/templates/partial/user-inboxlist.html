@@ -102,7 +102,7 @@
                 {% if obj.oi_status == 2 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
 
-                {% elif obj.oi_status == 4 %}
+                {% elif obj.oi_status == 4 or obj.oi_status == 28 or obj.oi_status == 29 %}
                     <p><strong>Status:</strong> Service has been processed</p>
 
                 {% elif obj.oi_status == 61 %}
@@ -114,14 +114,13 @@
                 {% endif %}
 
             {% elif obj.product.type_flow == 6 %}
-                {% if obj.oi_status == 82 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} </p>
-                
-                {% elif obj.oi_status == 81 %}
+                {% if obj.oi_status == 81 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
 
                 {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% else %}
+                  <p><strong>Status:</strong> {{obj.get_user_oi_status}} </p>
 
                 {% endif %}
 

@@ -849,7 +849,7 @@
 /*----------------feddback & interview page css----------------*/
 .feedback-header {
   clear: both;
-  background: url(../../images/detail-header-bg.jpg) no-repeat center top;
+  background: url(../images/detail-header-bg.jpg) no-repeat center top;
   background-size: cover;
   display: block;
 }
@@ -1176,7 +1176,7 @@
   padding-right: 10px;
 }
 .profile-data li .pro-select, .profile-data li .pro-select2 {
-  background: url(../../images/dropdown.png);
+  background: url(../images/dropdown.png);
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: right;

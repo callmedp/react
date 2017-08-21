@@ -120,6 +120,50 @@ class RegistrationLoginApi(object):
                                                  "%s " % str(e))
         return response_json
 
+    @staticmethod
+    def social_login(data_dict):
+        response_json = {"response": False}
+        post_url = None
+        post_data = {}
+        if data_dict.get('key') == 'fb':
+            post_data = {
+                'access_token': data_dict.get('accessToken', ''),
+                'expires_on': data_dict.get('expiresIn', '')
+            }
+            post_url = "{}/api/v2/facebook/login/?format=json".format(settings.SHINE_SITE)
+
+        elif data_dict.get('key') == 'gplus':
+            post_data = {
+                'access_token': data_dict.get('accessToken', ''),
+                'expires_on': data_dict.get('expiresIn', '')
+            }
+            post_url = "{}/api/v2/google-plus/login/?format=json".format(settings.SHINE_SITE)
+
+        elif data_dict.get('key') == 'linkedin':
+            post_data = {
+                'token': data_dict.get('access_token', ''),
+                'expires_in': data_dict.get('expires_in', '')
+            }
+            post_url = "{}/api/v2/linkedin/login/?format=json".format(settings.SHINE_SITE)
+
+        try:
+            request_header = ShineCandidateDetail().get_api_headers()
+            request_header.update({'Content-Type':'application/json'})
+            response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
+            if response.status_code == 201:
+                response_json = response.json()
+                response_json.update({'response':True})
+
+            if response.status_code == 400:
+                response_json = response.json()
+                response_json.update({'status_code':response.status_code})
+                logging.getLogger('error_log').error(
+                    "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
+        except Exception as e:
+            logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
+                                                 "%s " % str(e))
+        return response_json
+
 
 class UserMixin(object):
     def get_client_ip(self, request):
