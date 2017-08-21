@@ -7,7 +7,7 @@ from geolocation.models import Country
 from linkedin.models import Draft
 
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
-    PAYMENT_MODE, OI_OPS_STATUS, COUNSELLING_FORM_STATUS,\
+    PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS
 from .functions import get_upload_path_order_invoice
 
@@ -174,8 +174,8 @@ class OrderItem(AbstractAutoDate):
     is_addon = models.BooleanField(default=False)
 
     #counselling form status
-    counselling_form_status = models.PositiveSmallIntegerField(
-        default=0, choices=COUNSELLING_FORM_STATUS)
+    oi_flow_status = models.PositiveSmallIntegerField(
+        default=0, choices=OI_LINKEDIN_FLOW_STATUS)
     # operation fields
     oi_status = models.PositiveIntegerField(
         _("Operation Status"), default=0, choices=OI_OPS_STATUS)

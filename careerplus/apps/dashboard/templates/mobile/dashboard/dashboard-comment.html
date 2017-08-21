@@ -1,0 +1,97 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block title %} orderitem conversations | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    
+{% endblock css_section %}
+
+{% block header %}
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <a class="icon-search pull-left" href="search-listing.html">search</a>
+                <a class="icon-cart pull-left" href="#">cart</a>
+
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">Comments</h1>
+        
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+
+    <section class="content-box">
+        <h2 class="mb-5">{{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
+        <p class="fs-12 c9">Order ID : {{oi.order.number}}</p>
+        <form class="comment-form" method="POST" role="form" action="{% url "dashboard:dashboard-conversation" %}" id="user-comment-form"> {% csrf_token %}
+            <div class="mt-10 feedback-mgs">
+                <textarea placeholder="" class="form-control" id="id_comment" name="comment" required></textarea>
+                <span class="error" style="color:red"></span>
+                <input type="hidden" name="oi_pk" value="{{oi.pk}}" />
+                <input type="hidden" name="flavour" value="mobile" />
+            </div>
+            <p class="fs-12 c9 mt-10">Max 100 characters</p>
+            <button type="button" class="btn btn-slg btn-blue mt-20" id="comment_submit_button">Submit</button>
+        </form>
+
+        <div class="message_detail mt-30">
+              <ul class="chat_items">
+                   {% for msg in comments %}
+                        {% if msg.added_by %}
+                            <li class="user_1">
+                                <div class="chat">
+                                    <sup></sup>
+                                    {{msg.message|safe}}
+                                </div>
+
+                                <div class="user-info">
+                                    <strong class="name">{{msg.added_by}}</strong>
+                                    {{msg.created.date}}
+                                </div>
+
+                              </li><!-- end of LI here -->
+                        {% elif msg.candidate_id %}
+                            <li class="user_2">
+                                <div class="chat">
+                                    <sup></sup>
+                                    {{msg.message|safe}}
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="user-info">
+                                    {{msg.created.date}}
+                                    <strong class="name">Me</strong>
+                                </div>                   
+                            </li><!-- end of LI here -->
+                        {% endif %}
+                  {% endfor %}
+                   
+              </ul><!-- end of UL here -->
+        </div>
+        <div class="clearfix"></div>
+    </section><!-- end of section here -->
+
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+{% endblock js_section %}

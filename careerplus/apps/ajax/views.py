@@ -84,7 +84,7 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
                     comment_list=comments, page_obj=page_obj)
                 return HttpResponse(json.dumps({'comment_list': comment_list}))
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Error in loading more comments %s " % str(e))
         return HttpResponseForbidden()
 
 
@@ -633,7 +633,7 @@ class MarkedPaidOrderView(View):
                 obj.save()
                 data['display_message'] = "order %s marked paid successfully" % (order_pk)
                 # update initial operation status
-                update_initiat_orderitem_sataus(order=obj)
+                # update_initiat_orderitem_sataus(order=obj)
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), order_pk)
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -642,4 +642,3 @@ class MarkedPaidOrderView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
-        

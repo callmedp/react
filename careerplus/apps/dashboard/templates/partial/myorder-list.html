@@ -34,11 +34,14 @@
               <datalist class="col-sm-1">
                 {% if order.status == 1 %}
                     Open
-                {% elif order.status == 2 %}
-                    Pending
-                {% else %}
-                    Close
+                {% elif order.status == 0 and order.payment_mode == 1 %}
+                    Unpaid
+                {% elif order.status == 0 and order.payment_mode == 4 %}
+                    Unpaid
+                {% elif order.status == 3 %}
+                    Closed
                 {% endif %}
+
               </datalist>
               <datalist class="col-sm-2">
                 <strong>{{item_count}} item</strong>
@@ -79,10 +82,14 @@
                     {% endif %}
                   </datalist>
                   <datalist class="col-sm-3">
-                    {% if order.status == 1 or order.status == 3 %}
-                        <strong>Paid</strong>
-                    {% elif order.status == 2 %}
-                        Not Paid
+                    {% if obj.oi_status == 4 %}
+                        Closed
+                    {% elif order.status == 0 and order.payment_mode == 1 %}
+                        Unpaid
+                    {% elif order.status == 0 and order.payment_mode == 4 %}
+                        Unpaid
+                    {% elif order.status == 1 %}
+                        Service in progress
                     {% endif %}
                   </datalist>
                 </li>

@@ -1,0 +1,74 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block title %} Reject confirmation | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    <style rel="stylesheet" type="text/css">
+        .error{
+            color:red;
+        }
+    </style>
+    
+{% endblock css_section %}
+
+{% block header %}
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <a class="icon-search pull-left" href="search-listing.html">search</a>
+                <a class="icon-cart pull-left" href="#">cart</a>
+
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">Reject confirmation</h1>
+        
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <section class="content-box">
+        <form role="form" id="reject-form-id{{obj.pk}}" enctype='multipart/form-data'>{% csrf_token %}
+            <p class="mt-30">If you have made changes to resume upload here</p>
+            <div class="fileUpload">
+                <span>Upload</span>
+                <input id="uploadBtn" type="file" name="reject_file" class="upload"/>
+                <span class="upload-file" id="upload-file-info"></span>
+            </div>
+
+            <p class="text-center mt-20 mb-10">OR</p>
+
+            <p>Leave your comments</p>
+            <div class="custom-select">
+                <textarea placeholder="Comments" id="reject-reason" name="comment" class="form-control"></textarea>
+            </div>
+            <input type="hidden" name="oi_pk" value="{{obj.pk}}" />
+
+            <button type="button" onclick="mobileRejectService('{{obj.pk}}')" class="btn w100 btn-round btn-blue mt-30">Submit</button>
+        </form>
+
+
+    </section><!-- end of section here -->
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    <script src="{% static "shinelearn/js/mobile/dashboard/dashboard.js" %}"></script>
+{% endblock js_section %}

@@ -49,7 +49,7 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
-        if mail_type == "REGISTRATION":
+        elif mail_type == "REGISTRATION":
             send_dict['template'] = 'emailers/candidate/register.html'
             send_dict['subject'] = "Welcome to Shine"
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
@@ -57,7 +57,7 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             self.process(to, send_dict, data)
 
-        if mail_type == "PAYMENT_PENDING":
+        elif mail_type == "PAYMENT_PENDING":
             send_dict['template'] = 'emailers/candidate/payment_pending.html'
             send_dict['subject'] = "Your shine payment confirmation"
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
@@ -65,11 +65,14 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             self.process(to, send_dict, data)
             
-        if str(mail_type) == "2":
+        elif str(mail_type) == "2":
             send_dict['subject'] = "Linkedin Profile"
             send_dict['template'] = 'emailers/payment_confirm.html'
+
+        elif mail_type == "Pending Items":
+            send_dict['subject'] = "To initiate your service(s) fulfil these pending requirements"
+            send_dict['template'] = 'emailers/candidate/pending_item.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
-            send_dict['cc_list'] = [data.get('cc')]
             data['email'] = [to]
             data['token'] = AutoLogin().encode(to, data.get('candidateid'), data.get('orderitem'))
             data['button_text'] = "click here to dashboard"
@@ -186,7 +189,7 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "AUTO_REGISTER":
-            send_dict['subject'] = data.get('subject', "Your login credential on shinelearning")
+            send_dict['subject'] = data.get('subject', "Your login credential on shine.com")
             template_name = data.get('template_name', 'auto-register.html')
             send_dict['template'] = 'emailers/' + template_name
 

@@ -1,0 +1,176 @@
+{% extends "basic/base1.html" %}
+{% load static custom_filters %}
+
+{% block css_section %}
+    {{block.super}}
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+    <link href="{% static '/shinelearn/css/common/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static '/shinelearn/css/product/detail.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/search/listing.css' %}" rel="stylesheet">
+{% endblock css_section %}
+{% block title %}Search Result Page - Shine Learning{% endblock title %}
+
+{% block main_container %}
+    {% block page_heading %}
+        <!-- header -->
+        <header class="search-header">
+            <div class="container">
+                <!-- breadcrums -->
+                {% block breadcrumbs %}
+                  {% include "product/partials/breadcrumb.html" %}
+                {% endblock breadcrumbs %}
+
+                {% block product_header %}
+                    <div class="search-caption">
+                        <div class="search-box">
+                            <form class="form-inline" id="search_form" data-role="form">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                <div class="form-group">
+                                    {{field}}
+                                </div>
+                                {% endfor %}
+                                <button type="submit" class="find-jobs-btn btn">Find</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endblock product_header %}
+            </div>
+        </header>
+    {% endblock page_heading %}
+
+
+
+    <!-- main section start -->
+    <section class="container">
+
+    <!-- page content body start -->
+    <div class="row">
+
+    {% include "search/partials/search_filters.html" %}
+
+
+    <!-- mid content start -->
+    <div class="col-sm-9 col-md-10 mt-40 ">
+        {% if page.object_list|length > 0 %}
+        <div class="listing-heading-box">
+            <div class="form-group custom-select">
+                <select name="sort" hdn="id_sort" class="form-control cls_filter">
+                    <option value="">Relevance</option>
+                    <option value="1" {% if search_params.sort %}selected="selected"{% endif %}>Latest</option>
+                </select>
+            </div>
+            <h2>{{ paginator.count }} products found</h2>
+        </div>
+
+        <ul class="listing">
+            {% for result in page.object_list %}
+            <li class="box-panel">
+                <a title="{{ result.pTt|title }}" href="{{ result.pURL }}">
+                <div class="media">
+                  <div class="media-left">
+                      <figure class="color1">
+                        <img class="media-object" src="{{ result.pIc }}" alt="{{ result.pTt|title }}">
+                      </figure>
+                  </div>
+                  <div class="media-body">
+                    <div class="certification-jobs-box">
+                      {% if "true" in result.pCert %}<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>{% endif %}
+                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>
+                    </div>
+
+                    <h3 class="listing-heading">{{ result.pHd }}</h3>
+
+                    <div class="rating-review-box">
+                        {% for star in result.pStar %}
+                        <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
+                        {% endfor %}
+                        <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
+                    </div> 
+
+                    <div class="providers">
+                       Provider
+                       <span>{{ result.pPvn|title }}</span>
+                    </div>
+                    {% with result.pCmbs|jsonify as combos %}
+                        {% if combos.combo %}
+                            <div class="providers">
+                               Includes
+                               {% for combo in combos.combo_list %}<span>{{ combo.name }}</span>{% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="pricing-box">
+                       Starting at <strong>Rs. {{ result.pPinr |floatformat:'0' }}/-</strong>{% if result.pPfinr|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfinr|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
+                    </div>
+
+                  </div>
+                </div>
+              </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <span>No results found</span>
+        {%endif%}
+    </div>       
+    <!-- mid content end -->
+
+    {% if paginator.num_pages > 0%}
+        {% if page.number > 1 %}
+            <input type="button" data-type="previous" class="cls_paginate submit" value="Previous"/>
+        {%endif%}
+
+        {% if paginator.num_pages > page.number  %}
+            <input type="button" data-type="next" class="cls_paginate submit" value="Next"/>
+        {%endif%}
+    {%endif%}
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+{% endblock main_container %}
+
+{% block js_section %}
+    {{block.super}}
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+        });
+        $('.dropdown').hover(function(){
+            $('.dropdown-toggle', this).trigger('click');
+        });
+    </script>
+
+    <script>
+        (function($){
+            $(window).on("load",function(){
+                $("#filters .scroll").mCustomScrollbar({
+                  setHeight:140,
+                  theme:"dark-3"
+                });
+            });
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        $("#ex2").slider({});
+    </script>
+
+    <script type="text/javascript">
+        $('#id_q').typeahead({
+            local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
+        });
+
+        $('.tt-query').css('background-color','#fff');
+    </script>
+
+{% endblock js_section %}

@@ -76,7 +76,7 @@ def dict_username(key, dict):
 @register.filter(name='dict_password')
 def dict_password(key, dict):
     if key in dict:
-        return dict[key].Password
+        return dict[key].password
     else:
         return ''
 

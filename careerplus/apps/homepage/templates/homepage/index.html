@@ -82,7 +82,7 @@
                   <input class="form-control input2" name="query2" id="query2" placeholder="Key skills" type="text">
                   <input class="form-control input3" name="query3" id="query3" placeholder="Experience" type="text">              
                 </div>
-                <button type="button" onclick="location.href='/search/listing/'" class="find-jobs-btn btn">Find</button>
+                <button type="button" onclick="redirectToSearch()" class="find-jobs-btn btn">Find</button>
               </form>
             </div>
 
@@ -99,7 +99,7 @@
                     <input class="form-control input2" name="query2" id="query2" placeholder="Key skills" type="text">
                     <input class="form-control input3" name="query3" id="query3" placeholder="Experience" type="text">              
                   </div>
-                  <button type="submit" class="find-jobs-btn btn">Find</button>
+                  <button type="submit" onclick="redirectToSearch()" class="find-jobs-btn btn">Find</button>
                 </form>
             </div>
         </div>
@@ -298,40 +298,45 @@
 
 
 {% block js_section %}
-  {{block.super}} 
-  <script type="text/javascript">
-      $(document).ready(function() {
-          // Header Scroll
-          $(window).on('scroll', function() {
-              var scroll = $(window).scrollTop();
+    {{block.super}}
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Header Scroll
+            $(window).on('scroll', function() {
+                var scroll = $(window).scrollTop();
 
-              if (scroll >= 50) {
-                  $('.navbar').addClass('navbar-color');
-              } else {
-                  $('.navbar').removeClass('navbar-color');
-              }
-          });
+                if (scroll >= 50) {
+                    $('.navbar').addClass('navbar-color');
+                } else {
+                    $('.navbar').removeClass('navbar-color');
+                }
+            });
 
-      });
+        });
     </script>
 
     <script type="text/javascript">
-      $('#query1').typeahead({        
-        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
-      });
+        $('#query1').typeahead({
+            local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
+        });
 
-      $('.tt-query').css('background-color','#fff'); 
+        $('.tt-query').css('background-color','#fff');
 
-      $('#query2').typeahead({        
-        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
-      });
+        $('#query2').typeahead({
+            local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
+        });
 
-      $('.tt-query').css('background-color','#fff'); 
+        $('.tt-query').css('background-color','#fff');
 
-      $('#query3').typeahead({        
-        local: ['alpha','allpha2','alpha3','bravo','charlie','delta','epsilon','gamma','zulu']
-      });
+        $('#query3').typeahead({
+            local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
+        });
 
-      $('.tt-query').css('background-color','#fff'); 
+        $('.tt-query').css('background-color','#fff');
+
+        function redirectToSearch() {
+            location.href = '/search/results/?q='+encodeURI($('#query1').val())
+        }
     </script>   
 {% endblock js_section %}

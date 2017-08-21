@@ -671,6 +671,16 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
+    cp_id = models.IntegerField(
+        _('CP Variation'),
+        blank=True,
+        null=True,
+        editable=False)
+    cpv_id = models.IntegerField(
+        _('CP Variation'),
+        blank=True,
+        null=True,
+        editable=False)
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
@@ -863,7 +873,12 @@ class Product(AbstractProduct, ModelMeta):
         through='ProductAttribute',
         through_fields=('product', 'attribute'),
         blank=True)
-    
+    archive_json = models.TextField(
+        _('Archive Jason'),
+        blank=True,
+        editable=False
+        )
+
     active = models.BooleanField(default=False)
     profile_country = models.ForeignKey(Country, null=True)
     is_indexable = models.BooleanField(default=False)
@@ -901,7 +916,8 @@ class Product(AbstractProduct, ModelMeta):
 
     def __init__(self, *args, **kwargs):
         super(Product, self).__init__(*args, **kwargs)
-        self.attr = ProductAttributesContainer(product=self)
+        if self.product_class:
+            self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):
         return self.name
@@ -918,7 +934,8 @@ class Product(AbstractProduct, ModelMeta):
                 if not self.meta_desc:
                     self.meta_desc = self.get_meta_desc()
         super(Product, self).save(*args, **kwargs)
-        self.attr.save()
+        if getattr(self, 'attr', None):
+            self.attr.save()
 
     @property
     def category_main(self):
@@ -938,7 +955,7 @@ class Product(AbstractProduct, ModelMeta):
         return None
 
     def get_exp(self, *args, **kwargs):
-        return getattr(self.attr, 'experience', None)
+        return getattr(self.attr, 'experience', '')
     
     @property
     def is_course(self):
@@ -1046,8 +1063,21 @@ class Product(AbstractProduct, ModelMeta):
         return final_score
 
     def get_avg_ratings(self):
-        return round(self.avg_rating, 1)
-
+        AR = float(self.avg_rating)
+        if 0.0 <= AR <= 0.5:
+            return 0
+        elif 0.5 < AR <= 1.5:
+            return 1
+        elif 1.5 < AR <= 2.5:
+            return 2
+        elif 2.5 < AR <= 3.5:
+            return 3
+        elif 3.5 < AR <= 4.5:
+            return 4
+        elif 4.5 < AR <= 5.0:
+            return 5
+        else:
+            return 2.5
     def get_screen(self):
         if self.screenproduct.all().exists():
             return self.screenproduct.all()[0]
@@ -1083,7 +1113,6 @@ class Product(AbstractProduct, ModelMeta):
                 return (round(fake_inr_price, 0), percent_diff)
         return None
 
-    
     def verify_category(self, cat_slug=None):
         try:
             prod_cat = self.categories.filter(
@@ -1245,11 +1274,13 @@ class ProductScreen(AbstractProduct):
 
     def __init__(self, *args, **kwargs):
         super(ProductScreen, self).__init__(*args, **kwargs)
-        self.attr = ProductAttributesContainer(product=self)
+        if self.product and self.product_class:
+            self.attr = ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
         super(ProductScreen, self).save(*args, **kwargs)
-        self.attr.save_screen()
+        if getattr(self, 'attr', None):
+            self.attr.save_screen()
 
 
     def __str__(self):

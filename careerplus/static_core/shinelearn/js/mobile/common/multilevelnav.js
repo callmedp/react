@@ -31,7 +31,7 @@
         level: '.level-control',
         backButton: '.backthis',
         defaultButton: '#sidebar-main-trigger',
-        rightButton: '#sidebar-secondary-trigger',
+        rightButton: '.sidebar-secondary-trigger',
         countriesButton: '#sidebar-countries-trigger',
         navClass: 'fixed-nav',
         opacityClass: 'opacity-add',

@@ -5,11 +5,11 @@
 
 <ul class="products-inbox">
   <li class="col-sm-12">
-    <h2>{{oi.product.name}} - Exp: {{oi.product.get_exp}}</h2>
+    <h2>{{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
     <span class="transaction">Transaction ID : {{oi.order.txn}}</span>
     <ul class="view-comments-links col-sm-7 col-md-8">
       <li><a role="button" onclick="viewDetailOrderitem('{{oi.pk}}',)">View details</a></li>
-      <li>Comment to writer</li>
+      <li>Leave us a message</li>
     </ul>
     <div class="hr"></div>
     <form class="comment-form" role="form" id="user-comment-form"> {% csrf_token %}

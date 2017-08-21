@@ -22,6 +22,14 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+    'oldDB': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shinecp',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
 }
 
 # Apps specific for this project go here.
@@ -36,21 +44,6 @@ DEV_MIDDLEWARE = [
 ]
 
 MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
-LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
-
-DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
-DOWNLOAD_URL = '/download/'
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
@@ -135,9 +128,6 @@ ROUNDONE_API_DICT = {
     'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
 }
 
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
-CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
-CITIES_LIGHT_APP_NAME = 'geolocation'
 
 # Shine settings
 SHINE_SITE = 'https://sumosc.shine.com'
@@ -150,6 +140,7 @@ SHINE_API_TIMEOUT = 60
 
 
 # Email settings
+
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #  email backend as console.
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_USE_TLS = True
@@ -177,7 +168,41 @@ EMAIL_SERVER = 'http://localhost:8000'
 # encode decode settings
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #  email backend as console.
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'upendra.rockon@gmail.com'
+# EMAIL_HOST_PASSWORD = '9616744875'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+
+# VARIABLE FOR SENDING RESUME SERVICES MAILS
+CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
+CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
+REPLY_TO = 'resume@shine.com'
+
+EMAIL_HOST = '172.22.65.55'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = 0
+SERVER_EMAIL = 'recruiter@shine.com'
+DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
+EMAIL_SERVER = 'http://localhost:8000'
+
+# Booster Recruiters
+BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
+
+# Linkedin Cridential
+CLIENT_ID  = "757gbstpwa6dqp"
+CLIENT_SECRET = "creqezZ0kPJnJWRk"
+REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
+STATE = "9899002507upender"
+SCOPE = 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo'
+TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
+OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
 # Do Not Change #
 COURSE_SLUG = ['course',]
@@ -198,8 +223,48 @@ CP_VENDOR_ID = '12345'
 ############ SOLR SETTINGS #######################
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
         'URL': 'http://172.22.65.33:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
 }
+
+############# REDIS SETTINGS ###################
+# Cache related settings
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            "redis://172.22.67.80:6379/10",
+            "redis://172.22.67.80:6379/11",
+            ],
+        "TIMEOUT": 86400,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.ShardClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        }
+    },
+    'session': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            "redis://172.22.67.80:6379/12",
+            "redis://172.22.67.80:6379/13",
+            ],
+        "TIMEOUT": 86400,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.ShardClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        }
+    },
+    'search_lookup': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.80:6379/7",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+        }
+    },
+}
+
+###### CLICK TRACKING #######################
+CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
