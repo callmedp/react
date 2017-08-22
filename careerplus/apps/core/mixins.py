@@ -88,7 +88,10 @@ class InvoiceGenerate(object):
             invoice_no = order.id
             email = order.email
             mobile = order.mobile
-            invoice_date = timezone.now()
+            if order.payment_date:
+                invoice_date = order.payment_date
+            else:
+                invoice_date = timezone.now()
 
             tax_amount = Decimal(0)
             total_price = Decimal(0)

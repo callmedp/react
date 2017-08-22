@@ -94,7 +94,7 @@ $().ready(function() {
                 required:"Mobile Number is Mandatory",
                 number:"Enter only number",
                 indiaMobile:"Length must be 10 digits.",
-                maxlength: "Please enter below 15 digits",
+                maxlength: "Please enter less than 15 digits",
                 minlength: "Please enter atleast 4 digits",
             },
             term_conditions:{

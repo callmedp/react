@@ -73,7 +73,6 @@ class OrderListView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
-            # "not_paid_status": [0],
         })
         return context
 
@@ -681,7 +680,9 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -793,7 +794,9 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_rejectedbyadmin_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -909,7 +912,9 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
                         delivery_service=self.delivery_type)
         except:
             pass
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_rejectedbycandidate_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1026,7 +1031,9 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to', 'delivery_service').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1135,7 +1142,9 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_to',
+            'assigned_by', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_closed_oi_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1229,7 +1238,9 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_to',
+            'assigned_by', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1854,7 +1865,7 @@ class ActionOrderItemView(View):
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4  # closed
-                    obj.last_oi_status = last_oi_status
+                    obj.last_oi_status = 6
                     obj.approved_on = timezone.now()
                     obj.save()
                     approval += 1
@@ -1881,8 +1892,14 @@ class ActionOrderItemView(View):
                         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
+                        oi_status=6,
                         last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=obj.last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
                 msg = str(approval) + ' orderitems approved.'

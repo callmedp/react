@@ -25,6 +25,7 @@ from django.utils.decorators import method_decorator
 from linkedin.models import Draft, Organization, Education
 from geolocation.models import Country
 from quizs.models import QuizResponse
+from shop.models import DeliveryService
 
 from .linkedin_form import (
     DraftForm,
@@ -32,7 +33,7 @@ from .linkedin_form import (
     OrganizationForm,
     EducationForm,
     OrganizationInlineFormSet,
-    EducationInlineFormSet, 
+    EducationInlineFormSet,
     LinkedinOIFilterForm,
     AssignmentInterNationalForm)
 
@@ -193,7 +194,14 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
         try:
             if self.delivery_type:
-                queryset = queryset.filter(delivery_service=self.delivery_type)
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
 
@@ -487,8 +495,14 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
 
         try:
             if self.delivery_typ:
-                queryset = queryset.filter(
-                    delivery_service=self.delivery_type)
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
@@ -584,9 +598,15 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.delivery_type != -1:
-                queryset = queryset.filter(
-                    delivery_service=self.delivery_type)
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
 
@@ -604,7 +624,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.modified, self.draft_level = '', -1
-        self.writer, self.delivery_type = '', -1
+        self.writer, self.delivery_type = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -615,7 +635,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
             self.draft_level = -1
-        self.delivery_type = request.GET.get('delivery_type', -1)
+        self.delivery_type = request.GET.get('delivery_type', '')
         return super(LinkedinApprovalVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -685,9 +705,15 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if self.delivery_type != -1:
-                queryset = queryset.filter(
-                    delivery_service=self.delivery_type)
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
 
