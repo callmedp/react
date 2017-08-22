@@ -160,7 +160,9 @@
           </div>
 
           <div class="x_content">
-
+            {% if page %}
+                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+            {% endif %}
             <div class="table-responsive">
               <form id="welcome_table_form" method="post" action=".">{% csrf_token %}
               <input type="hidden" name="action_type" id="action_type_id" class="flat">
@@ -191,7 +193,7 @@
                       <td class="a-center ">
                           <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                       </td>
-                      <td>{{obj.pk}}</td>
+                      <td>{{obj.number}}</td>
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
                       <td>{{obj.country_code}} {{obj.mobile}}</td>

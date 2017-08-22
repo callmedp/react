@@ -28,6 +28,37 @@ function removeFromCart(line_id){
 
 };
 
+function deliveryOptionUpdate(line_id){
+    if (line_id){
+        var formData = $('#delivery-option-form' + line_id).serialize();
+        $.ajax({
+            url: '/cart/update-deliverytype/',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(data, textStatus, jqXHR){
+                if (data.total_cart_amount != -1 && data.delivery_charge != -1){
+                    if (data.delivery_charge){
+                        var text_str = '+ Rs. ' + data.delivery_charge.toString() + '/-';
+                        $('#delivery-charge' + line_id).text(text_str);
+                    }
+                    else{
+                        $('#delivery-charge' + line_id).text('');
+                    }
+                    console.log(data.total_cart_amount);
+                    $('#total-cart-amount-id').text(data.total_cart_amount);
+                }
+            },
+            failure: function(response){
+                alert("Something went wrong, Please try again")
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong, Please try again")
+            }
+        });
+    }
+}
+
 
 $(document).ready(function() {
 

@@ -113,6 +113,11 @@
                                 <li>{{addon.product.name}}</li>
                             {% endfor %}
                         </ul>
+                        {% if variations.first.delivery_service %}
+                            <ul>
+                                <li>{{variations.first.delivery_service.name}}</li>
+                            </ul>
+                        {% endif %}
                     </div>
                 {% else %}
                     <div class="subcribe-services">
@@ -127,6 +132,11 @@
                                 <li>{{addon.product.name}}</li>
                             {% endfor %}
                         </ul>
+                        {% if oi.delivery_service %}
+                            <ul>
+                                <li>{{oi.delivery_service.name}}</li>
+                            </ul>
+                        {% endif %}
                     </div>
                 {% endif %}
             {% endwith %}

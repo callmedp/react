@@ -84,7 +84,7 @@
                             </div>
                             <br/>
                         </div>
-                       {% if self.query %}
+                       {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
                     </form>
@@ -131,7 +131,9 @@
           </div>
 
           <div class="x_content">
-
+            {% if page %}
+                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+            {% endif %}
             <div class="table-responsive">
               <form id="inbox_table_form" method="post" action=".">{% csrf_token %}
               <input type="hidden" name="action_type" id="action_type_id" class="flat">
@@ -145,8 +147,6 @@
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Order Deatils</th>
-                    <th class="column-title">User Category</th>
-                    <th class="column-title">Delivery Type</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Added On</th>
@@ -157,7 +157,7 @@
                   {% for obj in page %}
                     <tr class="even pointer">
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.id}}</td>
+                      <td>{{obj.order.number}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -166,8 +166,6 @@
                           {% endif %}
                           {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
-                      <td>User Category</td>
-                      <td>Delivery Type</td>
                       <td>{{obj.modified|naturaltime}}</td>
                       <td>{{obj.order.payment_date}}</td>
                       <td>{{obj.created}}</td>

@@ -1218,7 +1218,7 @@ class Product(AbstractProduct, ModelMeta):
             usd_price=0.0, aed_price=0.0,
             gbp_price=0.0).exists()
         if flag and delivery_services.count() > 1:
-            return delivery_services
+            return delivery_services.order_by('inr_price')
         else:
             return delivery_services.none()
 

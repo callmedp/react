@@ -65,9 +65,10 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -153,9 +154,10 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -241,9 +243,10 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:

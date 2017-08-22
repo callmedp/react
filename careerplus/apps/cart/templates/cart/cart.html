@@ -63,17 +63,35 @@
                                 <span class="cart-sub-heading">{{li.product.name}}</span>
                                 <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
                             </li>
-                            <li class="col-sm-3">
-                                <span class="custom-select">
-                                    <select class="form-control">
-                                        <option>Normal</option>
-                                    </select>
-                                </span>
-                            </li>
+                            {% with li.product.get_delivery_types as delivery_types %}
+                                {% if delivery_types %}
+                                    <li class="col-sm-3">
+                                        <span class="custom-select">
+                                            <select class="form-control" id="delivery-option{{variations.first.id}}" name="delivery_type{{variations.first.id}}" on>
+                                                {% for d_obj in delivery_types %}
+                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.inr_price}}" {% if d_obj == variations.first.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </span>
+                                    </li>
+                                {% else %}
+                                    <li class="col-sm-3">
+                                        <!--span class="custom-select">
+                                          <select class="form-control">
+                                            <option>Normal</option>
+                                          </select>
+                                        </span-->
+                                    </li>
+                                {% endif %}
+                            {% endwith %}
                             <li class="col-sm-2">
                                 <strong>Rs. {{variations.first.product.get_price}}/-</strong>
+                                {% if variations.first.delivery_service and variations.first.delivery_service.inr_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{variations.first.id}}">+ Rs. {{variations.first.delivery_service.inr_price|floatformat:0}}/-</span>
+                                {% else %}
+                                    <span class="delivery-charges" id="delivery-charge{{variations.first.id}}"></span>
+                                {% endif %}
                             </li>
-
 
                             <form role="form" id="cart_remove_form{{li.id}}">{% csrf_token %}
                                 <input type="hidden" name="reference_id" value="{{variations.first.reference}}">
@@ -112,15 +130,44 @@
                                 <span class="cart-sub-heading">{{li.product.name}}</span>
                                 <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
                             </li>
-                            <li class="col-sm-3">
+                            {% with li.product.get_delivery_types as delivery_types %}
+                                {% if delivery_types %}
+                                    <li class="col-sm-3">
+                                        <span class="custom-select">
+                                            <form id="delivery-option-form{{li.pk}}">{% csrf_token %}
+                                                <select class="form-control" id="delivery-option{{li.id}}" onchange="deliveryOptionUpdate('{{li.id}}')" name="delivery_type">
+                                                    {% for d_obj in delivery_types %}
+                                                        <option value="{{d_obj.id}}" delivery-price="{{d_obj.inr_price}}" {% if d_obj == li.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <input type="hidden" name="lineid" value="{{li.pk}}" />
+                                            </form>
+                                        </span>
+                                    </li>
+                                {% else %}
+                                    <li class="col-sm-3">
+                                        <!--span class="custom-select">
+                                          <select class="form-control">
+                                            <option>Normal</option>
+                                          </select>
+                                        </span-->
+                                    </li>
+                                {% endif %}
+                            {% endwith %}
+                            <!--li class="col-sm-3">
                                 <span class="custom-select">
                                     <select class="form-control">
                                         <option>Normal</option>
                                     </select>
                                 </span>
-                            </li>
+                            </li-->
                             <li class="col-sm-2">
                                 <strong>Rs. {{li.product.get_price}}/-</strong>
+                                {% if li.delivery_service and li.delivery_service.inr_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{li.id}}">+ Rs. {{li.delivery_service.inr_price|floatformat:0}}/-</span>
+                                {% else %}
+                                    <span class="delivery-charges" id="delivery-charge{{li.id}}"></span>
+                                {% endif %}
                             </li>
 
 
@@ -187,7 +234,7 @@
           <div class="col-sm-3 payment-summary-tab">
           <div class="box-panel checkout-box">
             Amount Payable
-            <strong>Rs. {{total_amount}}/-</strong>
+            <strong>Rs. <span id="total-cart-amount-id">{{total_amount}}</span>/-</strong>
             <a href="{% url "cart:payment-login" %}">Proceed to checkout</a>
           </div>
 

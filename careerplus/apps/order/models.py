@@ -147,6 +147,21 @@ class OrderItem(AbstractAutoDate):
     quantity = models.PositiveIntegerField(
         _("Quantity"), default=1)
 
+    delivery_service = models.ForeignKey(
+        'shop.DeliveryService',
+        related_name='delivery_orderitems',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True)
+
+    delivery_price_incl_tax = models.DecimalField(
+        _("Delivery Price (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+
+    delivery_price_excl_tax = models.DecimalField(
+        _("Delivery Price (excl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+
     oi_price_incl_tax = models.DecimalField(
         _("Price (inc. tax)"), decimal_places=2, max_digits=12, default=0)
     oi_price_excl_tax = models.DecimalField(
