@@ -1791,13 +1791,16 @@ class ActionOrderItemView(View):
                     approval += 1
 
                     # mail to user about writer information
+                    profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
+                    country_obj = Country.objects.get(pk=profile_obj.object_id)
+                    profiles = InternationalProfileCredential.objects.filter(oi=obj.pk)
                     to_emails = [obj.order.email]
                     data = {}
                     data.update({
-                        "name": obj.order.first_name + ' ' + obj.order.last_name,
-                        "mobile": obj.order.mobile,
-                        "subject": "Your International Profile updated",
-
+                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "subject": "Your International Profile is updated",
+                        "profiles": profiles,
+                        "country_name": country_obj.name,
                     })
                     mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATE_MAIL'
 

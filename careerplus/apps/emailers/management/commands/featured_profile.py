@@ -65,14 +65,12 @@ def featured_updated():
 
                     # Send mail and sms with subject line as Your Profile updated
                     try:
-                        mail_type = "FEATURED_UPDATE_MAIL"
+                        mail_type = "YOUR_RESUME_FEATURED_SERVICE_STARTED"
                         to_emails = [obj.order.email]
                         data = {}
                         data.update({
-                            "info": 'your profile updated',
-                            "subject": 'your profile updated',
-                            "name": obj.order.first_name + ' ' + obj.order.last_name,
-                            "mobile": obj.order.mobile,
+                            "subject": 'Your featured profile service has been started',
+                            "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         })
                         SendMail().send(to_emails, mail_type, data)
                         SendSMS().send(sms_type=mail_type, data=data)

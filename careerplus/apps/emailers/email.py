@@ -59,7 +59,7 @@ class SendMail():
 
         elif mail_type == "PAYMENT_PENDING":
             send_dict['template'] = 'emailers/candidate/payment_pending.html'
-            send_dict['subject'] = "Your shine payment confirmation"
+            send_dict['subject'] = "To initiate your services fulfil these details"
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
@@ -134,7 +134,7 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "BOOSTER_RECRUITER":
-            send_dict['subject'] = data.get('subject', "Candidate Resume")
+            send_dict['subject'] = data.get('subject', "Resumes of active candidates seeking jobs")
             template_name = data.get('template_name', 'booster_recruiter.html')
             send_dict['template'] = 'emailers/' + template_name
 
@@ -155,8 +155,8 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
-        elif mail_type == "FEATURED_UPDATE_MAIL":
-            send_dict['subject'] = data.get('subject', "your profile updated")
+        elif mail_type == "YOUR_RESUME_FEATURED_SERVICE_STARTED":
+            send_dict['subject'] = data.get('subject', "Your featured profile service has been started")
             template_name = data.get('template_name', 'featured_profile.html')
             send_dict['template'] = 'emailers/' + template_name
 

@@ -82,15 +82,14 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 # for linkedin
                 order_items = order.orderitems.filter(product__type_flow__in=[8])
 
-                if order.orderitems.filter(product__type_flow__in=[1, 3, 4, 5]) and order.status == 1:
+                if order.orderitems.filter(product__type_flow__in=[1, 3, 4, 5, 12,13]) and order.status == 1:
                     to_emails = [order.email]
                     mail_type = "MIDOUT"
                     data = {}
                     data.update({
-                        "info": 'Upload Your resume',
-                        "subject": 'Upload Your Resume',
-                        "name": order.first_name + ' ' + order.last_name,
-                        "mobile": order.mobile,
+                        "subject": 'To initiate your services fulfil these details',
+                        "username": order.first_name if order.first_name else order.candidate_id,
+                        "flag": 'uploadresume',
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)

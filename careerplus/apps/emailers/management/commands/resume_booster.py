@@ -22,7 +22,7 @@ def booster():
     days = 7
     candidate_data = {}
     recruiter_data = {}
-
+    
     for oi in booster_ois:
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
         candidate_data.update({
@@ -37,18 +37,17 @@ def booster():
                 settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)
 
-            link_title = candidate_data.get('user_name') if candidate_data.get('user_name') else candidate_data.get('email')
+            email = candidate_data.get('email') if candidate_data.get('email') else ''
             download_link = resumevar
             recruiter_data.update({
-                "link_title": link_title,
-                "download_link": download_link,
+                email: download_link,
             })
 
             try:
                 # send mail to rectuter
-                recruiters = settings.BOOSTER_RECRUITERS
-                SendMail().send(
-                    to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
+                #recruiters = settings.BOOSTER_RECRUITERS
+                #SendMail().send(
+                    #to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
 
                 # send mail to candidate
                 SendMail().send(
@@ -70,3 +69,10 @@ def booster():
                 print (str(e))
         else:
             continue
+    try:
+        # send mail to rectuter
+        recruiters = settings.BOOSTER_RECRUITERS
+        SendMail().send(to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
+    except Exception as e:
+        print (str(e))
+    
