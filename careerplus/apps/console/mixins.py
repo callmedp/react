@@ -86,17 +86,43 @@ class ActionUserMixin(object):
 
                 addons = []
                 variations = []
+                combos = []
 
                 if not obj.parent and obj.product.type_flow in [1, 12, 13]:
-                    addons = obj.order.orderitems.filter(parent=obj, product__type_flow__in=[1, 12, 13], is_addon=True)
+                    addons = obj.order.orderitems.filter(
+                        parent=obj,
+                        product__type_flow__in=[1, 12, 13], is_addon=True)
+                    variations = obj.order.orderitems.filter(
+                        parent=obj.parent, is_variation=True)
 
                 elif obj.is_addon and obj.parent.product.type_flow in [1, 12, 13]:
-                    addons = obj.order.orderitems.filter(parent=obj.parent, product__type_flow__in=[1, 12, 13], is_addon=True)
+                    addons = obj.order.orderitems.filter(
+                        parent=obj.parent,
+                        product__type_flow__in=[1, 12, 13], is_addon=True)
                     if not obj.parent.no_process:
                         addons = addons | obj.order.orderitems.filter(pk=obj.parent.pk)
 
-                if obj.is_variation:
-                    variations = obj.order.orderitems.filter(parent=obj.parent, is_variation=True)
+                    variations = obj.order.orderitems.filter(
+                        parent=obj.parent, is_variation=True)
+
+                    combos = obj.order.orderitems.filter(
+                        parent=obj.parent,
+                        product__type_flow__in=[1, 12, 13],
+                        is_combo=True)
+
+                elif obj.is_variation:
+                    variations = obj.order.orderitems.filter(
+                        parent=obj.parent, is_variation=True)
+                    addons = obj.order.orderitems.filter(
+                        parent=obj.parent,
+                        product__type_flow__in=[1, 12, 13],
+                        is_addon=True)
+
+                elif obj.is_combo and obj.product.type_flow in [1, 12, 13]:
+                    addons = obj.order.orderitems.filter(
+                        parent=obj.parent,
+                        product__type_flow__in=[1, 12, 13],
+                        is_addon=True)
 
                 for obj in addons:
                     if not obj.assigned_to:
@@ -134,6 +160,41 @@ class ActionUserMixin(object):
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                 for obj in variations:
+                    if not obj.assigned_to:
+                        obj.assigned_to = assigned_to
+                        obj.assigned_by = user
+                        obj.save()
+
+                        obj.orderitemoperation_set.create(
+                            oi_status=1,
+                            last_oi_status=obj.oi_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=user
+                        )
+
+                        # mail to user about writer information
+                        to_emails = [obj.order.email]
+                        mail_type = 'ASSIGNMENT_ACTION'
+                        email_data = {}
+                        email_data.update({
+                            "name": obj.order.first_name + ' ' + obj.order.last_name,
+                            "writer_name": assigned_to.name,
+                            "writer_email": assigned_to.email,
+                            "writer_mobile": assigned_to.contact_number,
+                            "mobile": obj.order.mobile
+                        })
+
+                        try:
+                            SendMail().send(to_emails, mail_type, email_data)
+                        except Exception as e:
+                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=email_data)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                for obj in combos:
                     if not obj.assigned_to:
                         obj.assigned_to = assigned_to
                         obj.assigned_by = user
