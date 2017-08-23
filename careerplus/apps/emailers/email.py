@@ -69,23 +69,21 @@ class SendMail():
             send_dict['subject'] = "Linkedin Profile"
             send_dict['template'] = 'emailers/payment_confirm.html'
 
-        elif mail_type == "Pending Items":
+        elif mail_type == "PENDING_ITEMS":
             send_dict['subject'] = "To initiate your service(s) fulfil these pending requirements"
             send_dict['template'] = 'emailers/candidate/pending_item.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             data['email'] = [to]
-            data['token'] = AutoLogin().encode(to, data.get('candidateid'), data.get('orderitem'))
-            data['button_text'] = "click here to dashboard"
             self.process(to, send_dict, data)
 
-        elif mail_type == "ASSIGNMENT_ACTION":
-            send_dict['subject'] = data.get('subject', 'Details of your services')
-            template_name = data.get('template_name', 'assignment_action.html')
-            send_dict['template'] = 'emailers/' + template_name
+        elif mail_type == "ALLOCATED_TO_WRITER":
+            send_dict['subject'] = data.get('subject', '')
+            template_name = data.get('template_name', 'Your developed document has been uploaded')
+            send_dict['template'] = 'emailers/candidate' + template_name
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
-        elif mail_type == "Draft Upload":
+        elif mail_type == "DRAFT_UPLOAD":
             # for first draft
             if data.get('draft_level') == 1:
                 send_dict['template'] = 'emailers/candidate/initial_document.html'
@@ -102,16 +100,16 @@ class SendMail():
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
-        elif mail_type == "Draft Reminder":
+        elif mail_type == "REMINDER":
             send_dict['template'] = 'emailers/candidate/draft_reminder.html'
             send_dict['subject'] = "Reminder:Your developed document has been uploaded"
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
         elif mail_type == "WRITING_SERVICE_CLOSED":
-            send_dict['subject'] = data.get('subject', "Auto Closer Your Order item")
-            template_name = data.get('template_name', 'auto_closer.html')
-            send_dict['template'] = 'emailers/' + template_name
+            send_dict['subject'] = data.get('subject', "")
+            template_name = data.get('template_name', 'writing_service_closed.html')
+            send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
@@ -119,16 +117,16 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
-        elif mail_type == "MIDOUT":
-            send_dict['subject'] = data.get('subject', "Upload your resume")
-            template_name = data.get('template_name', 'midout_mail.html')
-            send_dict['template'] = 'emailers/' + template_name
+        elif mail_type == "PENDING_ITEMS":
+            send_dict['subject'] = data.get('subject', "To initiate your services fulfil these details")
+            template_name = data.get('template_name', 'pending_item.html')
+            send_dict['template'] = 'emailers/candidate/' + template_name
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
         elif mail_type == "RESUME_CRITIQUE":
             send_dict['subject'] = data.get('subject', "Your developed document is ready")
-            send_dict['template'] = 'candidate/resume_critique_closed.html'
+            send_dict['template'] = 'emailers/candidate/resume_critique_closed.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             data['review_document'] = "Review Document"
             self.process(to, send_dict, data)
@@ -136,7 +134,7 @@ class SendMail():
         elif mail_type == "BOOSTER_RECRUITER":
             send_dict['subject'] = data.get('subject', "Resumes of active candidates seeking jobs")
             template_name = data.get('template_name', 'booster_recruiter.html')
-            send_dict['template'] = 'emailers/' + template_name
+            send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
@@ -147,7 +145,7 @@ class SendMail():
         elif mail_type == "BOOSTER_CANDIDATE":
             send_dict['subject'] = data.get('subject', "Your resume has been shared with relevant consultants")
             template_name = data.get('template_name', 'booster_candidate.html')
-            send_dict['template'] = 'emailers/candidate' + template_name
+            send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
@@ -158,7 +156,7 @@ class SendMail():
         elif mail_type == "YOUR_RESUME_FEATURED_SERVICE_STARTED":
             send_dict['subject'] = data.get('subject', "Your featured profile service has been started")
             template_name = data.get('template_name', 'featured_profile.html')
-            send_dict['template'] = 'emailers/' + template_name
+            send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
@@ -177,10 +175,10 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
-        elif mail_type == "INTERNATIONATIONAL_PROFILE_UPDATE_MAIL":
-            send_dict['subject'] = data.get('subject', "your profile updated")
-            template_name = data.get('template_name', 'featured_profile.html')
-            send_dict['template'] = 'emailers/' + template_name
+        elif mail_type == "INTERNATIONATIONAL_PROFILE_UPDATED":
+            send_dict['subject'] = data.get('subject', "Your International Profile is updated")
+            template_name = data.get('template_name', 'international_profile.html')
+            send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]

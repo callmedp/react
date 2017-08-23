@@ -292,7 +292,7 @@ class ApproveByAdminDraft(View):
 
                     if obj.draft_counter == 1:
                         email_dict['subject'] = "Your developed document has been uploaded" 
-                        mail_type = 'Draft Upload'
+                        mail_type = 'DRAFT_UPLOAD'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
@@ -305,7 +305,7 @@ class ApproveByAdminDraft(View):
 
                     if obj.draft_counter == 2:
                         email_dict['subject'] = "Your developed document is ready"
-                        mail_type = 'Draft Upload'
+                        mail_type = 'DRAFT_UPLOAD'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
@@ -318,7 +318,7 @@ class ApproveByAdminDraft(View):
 
                     if obj.draft_counter == 3:
                         email_dict['subject'] = "Your final document is ready"
-                        mail_type = 'Draft Upload'
+                        mail_type = 'DRAFT_UPLOAD'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
@@ -378,7 +378,7 @@ class ApproveByAdminDraft(View):
 
                         if obj.draft_counter == 1:
                             email_dict['subject'] = "Your developed document has been uploaded" 
-                            mail_type = 'Draft Upload'
+                            mail_type = 'DRAFT_UPLOAD'
                             try:
                                 SendMail().send(to_emails, mail_type, email_dict)
                             except Exception as e:
@@ -391,7 +391,7 @@ class ApproveByAdminDraft(View):
 
                         elif obj.draft_counter == 2:
                             email_dict['subject'] = "Your developed document is ready"
-                            mail_type = 'Draft Upload'
+                            mail_type = 'DRAFT_UPLOAD'
                             try:
                                 SendMail().send(to_emails, mail_type, email_dict)
                             except Exception as e:
@@ -404,7 +404,7 @@ class ApproveByAdminDraft(View):
 
                     elif obj.draft_counter == settings.DRAFT_MAX_LIMIT:
                         email_dict['subject'] = "Your final document is ready"
-                        mail_type = 'Draft Upload'
+                        mail_type = 'DRAFT_UPLOAD'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
@@ -520,7 +520,7 @@ class ApproveDraftByLinkedinAdmin(View):
                     })
 
                     if obj.draft_counter == 1:
-                        mail_type = 'Draft Upload'
+                        mail_type = 'DRAFT_UPLOAD'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
@@ -531,7 +531,7 @@ class ApproveDraftByLinkedinAdmin(View):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
                     if obj.draft_counter == 2:
-                        mail_type = 'Draft Upload'
+                        mail_type = 'DRAFT_UPLOAD'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
@@ -543,7 +543,7 @@ class ApproveDraftByLinkedinAdmin(View):
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     if obj.draft_counter == 3:
-                        mail_type = 'Draft Upload'
+                        mail_type = 'DRAFT_UPLOAD'
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:

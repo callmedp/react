@@ -19,18 +19,86 @@
       </td>
     </tr>
     <tr>
-      <td style="padding: 10px">
+      <td style="padding: 10px; background-color: #f8f8f8;">
         <strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {{username}},</strong>
-        <span>To start with your <a href="#" style="text-decoration: none; color: #2196f3">LinkedIn</a> services,  please complete your counselling form.</span>
+        
       </td>
     </tr>
+  {% if flow_type == 1 or  flow_type == 3 or flow_type == 4 or flow_type == 5 or flow_type == 12 or flow_type == 13 %}
     <tr>
-      <td style="padding: 10px;">
-        <a href="#" style="text-decoration: none; font-size: 14px; background: #3c5b9b; color: #ffffff; display: inline-block; padding: 7px 20px; border-radius: 3px;">Complete your form</a>
+      <td style="padding:10px;background-color: #f8f8f8;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+            <tr>
+              <td style="font-size:13px; color:#666; padding-bottom:10px;"><span>To start  with <a href="#" style="text-decoration: none; color: #2196f3">
+              {{product_name}}</a>services, please upload your resume.</span></td>
+            </tr>
+            <tr>
+             <td style="">
+                <a href="{{upload_url}}" style="text-decoration: none; font-size: 14px; background: #3c5b9b; color: #ffffff; display:table; padding: 7px 0px; border-radius: 3px; width:160px; text-align: center;">Upload your resume</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </td>
     </tr>
+  {% endif %}
+  {% if flow_type == 8 %}
     <tr>
-      <td style="padding: 10px;">
+      <td style="padding:10px;background-color: #f8f8f8;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+            <tr>
+              <td style="font-size:13px; color:#666; padding-bottom:10px;"><span>To start with your <a href="#" style="text-decoration: none; color: #2196f3">LinkedIn</a> services,  please complete your counselling form.</span></td>
+            </tr>
+            <tr>
+             <td style="">
+                <a href="{{counselling_form}}" style="text-decoration: none; font-size: 14px; background: #3c5b9b; color: #ffffff; display:table; padding: 7px 0px; border-radius: 3px; width:160px; text-align: center;">Complete your form</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+  {% if flow_type == 9 %}
+   <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+            <tr>
+              <td style="font-size:13px; color:#666; padding-bottom:10px;"> <span>To start your <a href="#" style="text-decoration: none; color: #2196f3">Round one service</a>,  complete round one profile.</span></td>
+            </tr>
+            <tr>
+             <td style="">
+                <a href="{{complete_profile}}" style="text-decoration: none; font-size: 14px; background: #3c5b9b; color: #ffffff; display:table; padding: 7px 0px; border-radius: 3px; width:170px; text-align: center;">Complete your profile</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+  {% if flow_type == 10 %}
+    <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+            <tr>
+              <td style="font-size:13px; color:#666; padding-bottom:10px;"> <span>Take a compulsory test to start your <a href="#" style="text-decoration: none; color: #2196f3">study mate course</a>.</span></td>
+            </tr>
+            <tr>
+             <td style="">
+                <a href="#" style="text-decoration: none; font-size: 14px; background: #3c5b9b; color: #ffffff; display:table; padding: 7px 0px; border-radius: 3px; width:90px; text-align: center;">Take now</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+    <tr>
+      <td style="padding: 10px;background-color: #f8f8f8;">
         <strong style="display: block; font-weight: normal; font-size: 12px; color: #333333; padding-top: 10px;">
          Warm Regards, <br>
          Shine Learning Team
@@ -38,7 +106,7 @@
       </td>
     </tr>
     <tr>
-      <td style="padding: 10px; border-top: 1px solid #f4f4f4">
+      <td style="padding: 10px; border-top: 1px solid #f4f4f4;background-color: #f8f8f8;">
         <span style="color: #999999; padding-bottom: 5px; display: block; font-size: 11px; line-height: 16px;">
           Please add <a href="mailto:alert@shinelearning.com" style="color: #2196f3; text-decoration: none;">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.
         </span>

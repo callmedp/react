@@ -135,11 +135,12 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        # import ipdb; ipdb.set_trace()
         queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48])
 
         user = self.request.user
-        if user.has_perm('order.writer_inbox_assigner'):
+        if user.is_superuser:
+            pass
+        elif user.has_perm('order.writer_inbox_assigner'):
             queryset = queryset.filter(assigned_to=None)
         elif user.has_perm('order.writer_inbox_assignee'):
             queryset = queryset.filter(assigned_to=user)
@@ -175,51 +176,11 @@ class LinkedinQueueView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product')
+        return queryset.select_related('order', 'product').order_by('-modified')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(LinkedinQueueView, self).dispatch(request, *args, **kwargs)
-
-
-class DraftListing(ListView, PaginationMixin):
-    model = Draft
-    context_object_name = 'draft_list'
-    template_name = 'console/linkedin/draft_list.html'
-    http_method_names = [u'get', ]
-
-    def dispatch(self, request, *args, **kwargs):
-        self.page = 1
-        self.paginated_by = 50
-        self.query = ''
-        return super(DraftListing, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
-        return super(DraftListing, self).get(request, args, **kwargs)
-
-    def get_queryset(self):
-        queryset = super(DraftListing, self).get_queryset()
-        try:
-            if self.query:
-                queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
-            pass
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(DraftListing, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        context.update({'messages': alert})
-        paginator = Paginator(context['draft_list'], self.paginated_by)
-        context.update(self.pagination(paginator, self.page))
-        alert = messages.get_messages(self.request)
-        context.update({
-            "query": self.query,
-            "messages": alert,
-        })
-        return context
 
 
 class LinkedinOrderDetailVeiw(DetailView):
@@ -466,7 +427,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                 pass
         except:
             pass
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
 class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
@@ -561,7 +522,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
 class LinkedinApprovalVeiw(ListView, PaginationMixin):
@@ -657,7 +618,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to')
+        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
 class InterNationalUpdateQueueView(ListView, PaginationMixin):
@@ -702,7 +663,6 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(InterNationalUpdateQueueView, self).get_queryset()
         queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=4, no_process=False, oi_status__in=[5, 25, 61])
-        # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
         user = self.request.user
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
@@ -775,7 +735,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
 class InterNationalApprovalQueue(ListView, PaginationMixin):
@@ -859,7 +819,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
 class ProfileUpdationView(DetailView):
@@ -993,15 +953,12 @@ class InterNationalAssignmentOrderItemView(View):
                     to_emails = [obj.order.email]
                     data = {}
                     data.update({
-                        "name": obj.order.first_name + ' ' + obj.order.last_name,
-                        "mobile": obj.order.mobile,
+                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         "writer_name": assign_to.name,
-                        "writer_email": assign_to.email,
-                        "writer_mobile": assign_to.contact_number,
-                        "subject": "Information of your profile update service",
+                        "subject": "Your developed document has been uploaded",
 
                     })
-                    mail_type = 'ASSIGNMENT_ACTION'
+                    mail_type = 'ALLOCATED_TO_WRITER'
 
                     try:
                         SendMail().send(to_emails, mail_type, data)

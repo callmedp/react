@@ -1,6 +1,7 @@
 import logging
 
 from django.utils import timezone
+from django.conf import settings
 
 from emailers.email import SendMail
 from emailers.sms import SendSMS
@@ -171,3 +172,110 @@ def update_initiat_orderitem_sataus(order=None):
 def get_upload_path_order_invoice(instance, filename):
     return "invoice/order/{order_id}/{filename}".format(
         order_id=instance.id, filename=filename)
+
+def pending_item_email(order=None):
+    if order.status == 1:
+        orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
+        for oi in orderitems:
+            try:
+                if oi.product.type_flow in [1, 3, 4, 5, 12, 13]:
+                    to_emails = [oi.order.email]
+                    mail_type = "PENDING_ITEMS"
+                    data = {}
+                    data.update({
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'product_name': oi.product.name,
+                        'upload_url': "http://%s/dashboard" % (settings.SITE_DOMAIN) 
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("pending items %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                if oi.product.type_flow == 8:
+                    to_emails = [oi.order.email]
+                    mail_type = "PENDING_ITEMS"
+                    data = {}
+                    data.update({
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'counselling_form': "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk) 
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("pending items %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                if oi.product.type_flow == 9:
+                    to_emails = [oi.order.email]
+                    mail_type = "PENDING_ITEMS"
+                    data = {}
+                    data.update({
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'complete_profile': "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN) 
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("pending items %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                if oi.product.type_flow == 10:
+                    to_emails = [oi.order.email]
+                    mail_type = "PENDING_ITEMS"
+                    data = {}
+                    data.update({
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'test_url': "http://%s/dashboard" % (settings.SITE_DOMAIN) 
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("pending items %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+            except Exception as e:
+                raise e
+
+def process_mailer(order=None):
+    if order.status == 1:
+        orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
+        for oi in orderitems:
+            try:
+                if oi.product.type_flow == 6:
+                    to_emails = [oi.order.email]
+                    mail_type = "PROCESS_MAILERS"
+                    data = {}
+                    data.update({
+                        'subject': 'Your service details related to order <'+oi.id+'>',
+                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        'type_flow': oi.product.type_flow, 
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+            except Exception as e:
+                raise e
+
+def payment_pending_mailer(order=None):
+    if order.status == 2 and (order.payment_mode == 1 or order.payment_mode == 4):
+        to_emails = [order.email]
+        mail_type = "PAYMENT_PENDING"
+        data = {}
+        data.update({
+            "subject": 'Your shine payment confirmation',
+            "first_name": order.first_name if order.first_name else order.candidate_id,
+            "transactionid": order.txn,
+        })
+        try:
+            SendMail().send(to_emails, mail_type, login_dict)
+        except Exception as e:
+            logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+def payment_realisation_mailer(order=None):
+    pass
+

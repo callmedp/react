@@ -1802,7 +1802,7 @@ class ActionOrderItemView(View):
                         "profiles": profiles,
                         "country_name": country_obj.name,
                     })
-                    mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATE_MAIL'
+                    mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
 
                     try:
                         SendMail().send(to_emails, mail_type, data)
@@ -1899,18 +1899,21 @@ class ActionOrderItemView(View):
                 if mid_out_sent:
                     # mail to user about writer information
                     to_emails = [order.email]
-                    mail_type = 'MIDOUT'
+                    mail_type = "PENDING_ITEMS"
                     data = {}
                     data.update({
-                        "info": 'Upload your resume',
-                        "subject": 'Upload your resume',
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': order.first_name if order.first_name else order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'product_name': oi.product.name,
+                        'upload_url': "http://%s/dashboard" % (settings.SITE_DOMAIN) 
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
                         order.midout_sent_on = timezone.now()
                         order.save()
                     except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                        logging.getLogger('email_log').error("midout mail %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             messages.add_message(request, messages.SUCCESS, "Midout sent Successfully for selected items")
             return HttpResponseRedirect(reverse('console:queue-midout'))

@@ -9,7 +9,11 @@ from quizs.models import QuizResponse
 from users.tasks import user_register
 
 from .models import Order, OrderItem
-from .functions import update_initiat_orderitem_sataus
+from .functions import (
+    update_initiat_orderitem_sataus,
+    pending_item_email,
+    process_mailer,
+    payment_pending_mailer,)
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -57,20 +61,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.save()
 
 
-                if order.status == 2 and (order.payment_mode == 1 or order.payment_mode == 4):
-                    to_emails = [order.email]
-                    mail_type = "PAYMENT_PENDING"
-                    data = {}
-                    data.update({
-                        "subject": 'Your shine payment confirmation',
-                        "first_name": order.first_name if order.first_name else order.candidate_id,
-                        "transactionid": order.txn,
-                    })
-                    try:
-                        SendMail().send(to_emails, mail_type, login_dict)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-                        pass
+                # payment pending email
+                payment_pending_mailer(order=order)
 
                 self.createOrderitems(order, cart_obj)
                 # update initial operation status
@@ -80,29 +72,35 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                     user_register(data={}, order=order.pk)
 
                 # for linkedin
-                order_items = order.orderitems.filter(product__type_flow__in=[8])
+                linkedin_product = order.orderitems.filter(product__type_flow=8)
 
-                if order.orderitems.filter(product__type_flow__in=[1, 3, 4, 5, 12,13]) and order.status == 1:
-                    to_emails = [order.email]
-                    mail_type = "MIDOUT"
-                    data = {}
-                    data.update({
-                        "subject": 'To initiate your services fulfil these details',
-                        "username": order.first_name if order.first_name else order.candidate_id,
-                        "flag": 'uploadresume',
-                    })
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                        order.midout_sent_on = timezone.now()
-                    except Exception as e:
-                        logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                # pending item email send
+                pending_item_email(order=order)
 
-                    try:
-                        SendSMS().send(sms_type=mail_type, data=data)
-                    except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                # send email through process mailers
+                process_mailer(order=order)
 
-                if order_items:
+                # if order.orderitems.filter(product__type_flow__in=[1, 3, 4, 5, 12,13]) and order.status == 1:
+                #     to_emails = [order.email]
+                #     mail_type = "MIDOUT"
+                #     data = {}
+                #     data.update({
+                #         "subject": 'To initiate your services fulfil these details',
+                #         "username": order.first_name if order.first_name else order.candidate_id,
+                #         "flag": 'uploadresume',
+                #     })
+                #     try:
+                #         SendMail().send(to_emails, mail_type, data)
+                #         order.midout_sent_on = timezone.now()
+                #     except Exception as e:
+                #         logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+                #     try:
+                #         SendSMS().send(sms_type=mail_type, data=data)
+                #     except Exception as e:
+                #         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                if linkedin_product:
                     # associate draft object with order
                     order_item = order_items.first()
                     draft_obj = Draft.objects.create()
