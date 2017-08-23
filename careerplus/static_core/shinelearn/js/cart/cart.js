@@ -59,8 +59,68 @@ function deliveryOptionUpdate(line_id){
     }
 }
 
+function update_variation_price(req_price, actual_price){
+    var req_price = req_price, actual_price = actual_price, sum_price, actual_total
+    try{
+        sum_price = parseFloat($('#total-price').attr('sum-price'));
+        actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
+        // current price updation
+        sum_price = req_price + sum_price;
+        var show_price = 'Rs. ' + sum_price.toString() + '/-';
+        $('#total-price').text(show_price);
+        $("#total-price").attr("sum-price", sum_price);
+
+        // actual price updation
+        actual_total = actual_total + actual_price;
+        var show_price = 'Rs. ' + actual_total.toString() + '/';
+        $('#id-total-actual-price').text(show_price);
+        $("#id-total-actual-price").attr("total-actual-price", actual_total);
+
+        // update percentage-off
+        try{
+            var per_off;
+            per_off = actual_total - sum_price;
+            per_off = (per_off/actual_total)*100
+            per_off = Math.round(per_off);
+            $('#id_percentage-off').attr("percentage-off", per_off);
+            var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
+            $('#id_percentage-off').text(str_off);
+
+        }catch(err){
+            console.log(err);
+        }
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
 
 $(document).ready(function() {
+    var req_selected = true;
+    $('input[name="required_option"]').each(function(){
+        if ($(this).is(':checked')){
+            req_selected = false;
+            return false;
+        }
+    });
+
+    if (req_selected){
+        $('input[name="required_option"]').each(function(){
+            if (!$(this).is(':checked')){
+                try{
+                    req_price =  parseFloat($(this).attr('data-price'));
+                    actual_price = parseFloat($(this).attr('actual-price'));
+                    update_variation_price(req_price, actual_price);
+                    $(this).attr('checked', true);
+
+                }catch(err){
+                    console.log(err);
+                }
+            }
+            return false;
+        });
+    }
 
     $('input[name="radio"]').click(function(){
         if ($(this).is(':checked'))
@@ -201,39 +261,40 @@ $(document).ready(function() {
             try{
                 req_price =  parseFloat($(this).attr('data-price'));
                 actual_price = parseFloat($(this).attr('actual-price'));
-                try{
-                    sum_price = parseFloat($('#total-price').attr('sum-price'));
-                    actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
+                update_variation_price(req_price, actual_price);
+                // try{
+                //     sum_price = parseFloat($('#total-price').attr('sum-price'));
+                //     actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
 
-                    // current price updation
-                    sum_price = req_price + sum_price;
-                    var show_price = 'Rs. ' + sum_price.toString() + '/-';
-                    $('#total-price').text(show_price);
-                    $("#total-price").attr("sum-price", sum_price);
+                //     // current price updation
+                //     sum_price = req_price + sum_price;
+                //     var show_price = 'Rs. ' + sum_price.toString() + '/-';
+                //     $('#total-price').text(show_price);
+                //     $("#total-price").attr("sum-price", sum_price);
 
-                    // actual price updation
-                    actual_total = actual_total + actual_price;
-                    var show_price = 'Rs. ' + actual_total.toString() + '/';
-                    $('#id-total-actual-price').text(show_price);
-                    $("#id-total-actual-price").attr("total-actual-price", actual_total);
+                //     // actual price updation
+                //     actual_total = actual_total + actual_price;
+                //     var show_price = 'Rs. ' + actual_total.toString() + '/';
+                //     $('#id-total-actual-price').text(show_price);
+                //     $("#id-total-actual-price").attr("total-actual-price", actual_total);
 
-                    // update percentage-off
-                    try{
-                        var per_off;
-                        per_off = actual_total - sum_price;
-                        per_off = (per_off/actual_total)*100
-                        per_off = Math.round(per_off);
-                        $('#id_percentage-off').attr("percentage-off", per_off);
-                        var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
-                        $('#id_percentage-off').text(str_off);
+                //     // update percentage-off
+                //     try{
+                //         var per_off;
+                //         per_off = actual_total - sum_price;
+                //         per_off = (per_off/actual_total)*100
+                //         per_off = Math.round(per_off);
+                //         $('#id_percentage-off').attr("percentage-off", per_off);
+                //         var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
+                //         $('#id_percentage-off').text(str_off);
 
-                    }catch(err){
-                        console.log(err);
-                    }
+                //     }catch(err){
+                //         console.log(err);
+                //     }
 
-                }catch(err){
-                    console.log(err);
-                }
+                // }catch(err){
+                //     console.log(err);
+                // }
 
             }catch(err){
                 console.log(err);

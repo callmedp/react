@@ -1290,7 +1290,7 @@ class ProductScreen(AbstractProduct):
 
     def __init__(self, *args, **kwargs):
         super(ProductScreen, self).__init__(*args, **kwargs)
-        if self.product and self.product_class:
+        if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
