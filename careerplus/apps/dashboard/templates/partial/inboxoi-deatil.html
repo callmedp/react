@@ -58,8 +58,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h1 class="modal-title" id="myModalLabel">Reject confirmation</h1>
                   </div>
-                    <form class="reject-msg" id="reject-form-id{{oi.pk}}" enctype='multipart/form-data'>
-                      <div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/></div>
+                    <form class="reject-msg" id="reject-form-id{{oi.pk}}" enctype='multipart/form-data'>{% csrf_token %}
                       <div class="form-group">
                         <label>If you have made changes to resume upload here</label>
                         <div class="input-file">
@@ -112,8 +111,8 @@
                                 {{op.get_user_oi_status}}
                             {% elif op.oi_status == 24 and op.draft_counter < max_draft_limit %}
                                 Revised Document is ready
-                            {% elif op_oi_status == 4 %}
-                                Document is finalized
+                            {% elif op.oi_status == 24 and op.draft_counter == max_draft_limit %}
+                                Final Document is ready
                             {% else %}
                                {{op.get_user_oi_status}}
                             {% endif %}

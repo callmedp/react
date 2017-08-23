@@ -1193,7 +1193,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_pops(self):
         if self.type_product in [0, 1, 3, 5]:
             category = self.category_main
-            if category:    
+            if category:
                 if self.is_course:
                     pop_list = category.get_products().filter(
                         type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
@@ -1202,9 +1202,25 @@ class Product(AbstractProduct, ModelMeta):
                     pop_list = category.get_products().filter(
                         type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
                     return pop_list
-            return None        
+            return None
         else:
             return None
+
+    def get_delivery_types(self):
+        delivery_objs = self.productextrainfo_set.filter(info_type='delivery_service')
+        delivery_obj_ids = list(delivery_objs.all().values_list('object_id', flat=True))
+
+        delivery_services = DeliveryService.objects.filter(
+            id__in=delivery_obj_ids, active=True)
+
+        flag = delivery_services.filter(
+            name="Normal", inr_price=0.0,
+            usd_price=0.0, aed_price=0.0,
+            gbp_price=0.0).exists()
+        if flag and delivery_services.count() > 1:
+            return delivery_services.order_by('inr_price')
+        else:
+            return delivery_services.none()
 
 
 class ProductScreen(AbstractProduct):
@@ -1274,7 +1290,7 @@ class ProductScreen(AbstractProduct):
 
     def __init__(self, *args, **kwargs):
         super(ProductScreen, self).__init__(*args, **kwargs)
-        if self.product and self.product_class:
+        if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
@@ -1727,7 +1743,8 @@ class ProductExtraInfo(models.Model):
     """
     CHOICES = (
         ('default', 'Default'),
-        ('profile_update', 'Profile Update Country')
+        ('profile_update', 'Profile Update Country'),
+        ('delivery_service', 'Delivery Service'),
     )
 
     info_type = models.CharField(
@@ -1840,7 +1857,6 @@ class ScreenChapter(AbstractAutoDate):
         Chapter,
         related_name='orig_ch',
         null=True, blank=True)
-        
 
     class Meta:
         ordering = ['ordering']
@@ -1863,4 +1879,30 @@ class ScreenChapter(AbstractAutoDate):
                 self.save()
                 return chapter
         return self.chapter
-    
+
+
+class DeliveryService(AbstractAutoDate):
+    name = models.CharField(
+        _('Delivery Type'),
+        max_length=255, unique=True, null=False, blank=False)
+    inr_price = models.DecimalField(
+        _('INR Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    usd_price = models.DecimalField(
+        _('USD Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    aed_price = models.DecimalField(
+        _('AED Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+    gbp_price = models.DecimalField(
+        _('GBP Price'),
+        max_digits=12, decimal_places=2,
+        default=0.0)
+
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name

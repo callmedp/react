@@ -29,6 +29,15 @@ $(document).ready(function() {
             showLeadForm();
         }
     });
+
+    $.validator.addMethod("indiaMobile", function(value, element) {
+        var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
+
     var $pdfForm = $("#downloadpdf_form");
     $pdfForm.validate({
 
@@ -38,14 +47,15 @@ $(document).ready(function() {
                     maxlength: 100
                 },
                 email:{
-                    required:false,
+                    required: false,
                     maxlength: 100
                 },
                 mobile_number:{
-                    required:true,
-                    number: true,
-                    minlength: 5,
-                    maxlength: 15
+                    required: true,
+                    digits: true,
+                    indiaMobile: true,
+                    minlength: 4,
+                    maxlength: 15,
                 },
                 term_condition:{
                     required: true
@@ -61,10 +71,12 @@ $(document).ready(function() {
                     maxlength: "At most 100 characters"
                 },
                 mobile_number:{
-                    required:"Mobile Number is Mandatory",
-                    number:"Enter only numbers",
-                    maxlength: "Please enter less than 15 digits",
-                    minlength: "Please enter atleast 5 digits"
+                    required: "Mobile Number is Mandatory",
+                    digits: "Enter only digits",
+                    indiaMobile: "Please enter 10 digits only",
+                    minlength: "Please enter atleast 4 digits",
+                    maxlength: "Please enter less than 16 digits",
+                   
                 },
                 term_condition: {
                     required: "Please accept our Terms & Conditions"
@@ -189,7 +201,8 @@ $(document).ready(function() {
             mobile_number:{
                 required: true,
                 number: true,
-                minlength: 5,
+                indiaMobile: true,
+                minlength: 4,
                 maxlength: 15
             },
             message_box:{
@@ -203,10 +216,11 @@ $(document).ready(function() {
                 maxlength: "Maximum 80 characters."
             },
             mobile_number:{
-                required:"Mobile Number is Mandatory",
-                number:"Enter only number",
-                maxlength: "Please enter below 15 digits",
-                minlength: "Please enter atleast 5 digits"
+                required: "Mobile Number is Mandatory",
+                number: "Enter only number",
+                indiaMobile: "Please enter 10 digits only",
+                maxlength: "Please enter less than 16 digits",
+                minlength: "Please enter atleast 4 digits"
             },
             message_box:{
                 required: "Message is required.",

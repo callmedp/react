@@ -20,7 +20,7 @@
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <a class="navbar-brand" href="#"></a>
+          <a class="navbar-brand" href="/"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -82,11 +82,17 @@
               {% endif %}
 
               {% if li.product.is_course and variations %}
-                  <li>
-                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
-                    </span>
-                    <strong class="col-sm-4 col-md-3">Rs. {{variations.first.product.get_price}}/-</strong>
-                  </li>
+                    <li>
+                        <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
+                        </span>
+                        <strong class="col-sm-4 col-md-3">Rs. {{variations.first.product.get_price}}/-</strong>
+                    </li>
+                    {% if variations.first.delivery_serivce and variations.first.delivery_serivce.inr_price %}
+                        <li>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{variations.first.delivery_serivce.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{variations.first.delivery_serivce.inr_price|floatformat:0}}/-</span>
+                        </li>
+                    {% endif %}
                   {% for addon in addons %}
                        <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
@@ -100,6 +106,12 @@
                     </span>
                     <strong class="col-sm-4 col-md-3">Rs. {{li.product.get_price}}/-</strong>
                   </li>
+                  {% if li.delivery_service and li.delivery_service.inr_price %}
+                        <li>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{li.delivery_service.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{li.delivery_service.inr_price|floatformat:0}}/-</span>
+                        </li>
+                  {% endif %}
                   {% for var in variations %}
                        <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{var.product.name}}</span>

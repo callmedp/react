@@ -15,7 +15,7 @@ from django.template.response import TemplateResponse
 from django.conf import settings
 
 from shine.core import ShineCandidateDetail
-from shop.models import Product, ProductClass
+from shop.models import Product, ProductClass, DeliveryService
 from users.mixins import RegistrationLoginApi, UserMixin
 from console.decorators import Decorate, stop_browser_cache
 
@@ -344,7 +344,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 "total_amount": self.getTotalAmount(),
             })
         cart_obj, wal_obj = None, None
-        cart_coupon, cart_wallet  = None, None
+        cart_coupon, cart_wallet = None, None
         wal_txn, wal_total, wal_point = None, None, None
         
         cart_pk = self.request.session.get('cart_pk')
@@ -405,3 +405,28 @@ class PaymentSummaryView(TemplateView, CartMixin):
             "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),
         })
         return context
+
+
+class UpdateDeliveryType(View, CartMixin):
+    def post(self, request, *args, **kwargs):
+        cart_pk = request.session.get('cart_pk')
+        data = {"total_cart_amount": -1, "delivery_charge": -1}
+        if cart_pk:
+            lineid = request.POST.get('lineid', None)
+            delivery_type = request.POST.get('delivery_type', None)
+            cart_obj = Cart.objects.get(pk=cart_pk)
+
+            line_obj = cart_obj.lineitems.get(pk=lineid)
+            delivery_servieces = line_obj.product.get_delivery_types()
+            if delivery_servieces:
+                delivery_obj = delivery_servieces.get(pk=delivery_type)
+                line_obj.delivery_service = delivery_obj
+                line_obj.save()
+                total_cart_amount = self.getTotalAmount(cart_obj=cart_obj)
+                delivery_charge = delivery_obj.inr_price
+                data.update({
+                    "total_cart_amount": int(total_cart_amount),
+                    "delivery_charge": int(delivery_charge),
+                })
+
+        return HttpResponse(json.dumps(data), content_type="application/json")

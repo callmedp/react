@@ -4,6 +4,7 @@ from ckeditor.widgets import CKEditorWidget
 from django.contrib.auth import get_user_model
 from cart.choices import DELIVERY_TYPE
 from order.choices import OI_OPS_STATUS
+from shop.models import DeliveryService
 
 
 User = get_user_model()
@@ -354,12 +355,19 @@ class LinkedinOIFilterForm(forms.Form):
             'placeholder': "from date - to date",
             "readonly": True, }))
 
-    delivery_type = forms.ChoiceField(
-        label=("Delivery Type:"), choices=[],
-        required=False,
-        initial=-1,
-        widget=forms.Select(
-            attrs={'class': 'form-control'}))
+    # delivery_type = forms.ChoiceField(
+    #     label=("Delivery Type:"), choices=[],
+    #     required=False,
+    #     initial=-1,
+    #     widget=forms.Select(
+    #         attrs={'class': 'form-control'}))
+
+    delivery_type = forms.ModelChoiceField(
+        label=("Delivery Type:"), required=False,
+        queryset=DeliveryService.objects.none(),
+        empty_label="Select Delivery",
+        to_field_name='pk',
+        widget=forms.Select())
 
     modified = forms.CharField(
         label=("Modified On:"), required=False,
@@ -393,8 +401,12 @@ class LinkedinOIFilterForm(forms.Form):
         self.fields['writer'].widget.attrs['class'] = 'form-control'
         self.fields['writer'].queryset = users
 
-        NEW_DELIVERY_TYPE = ((-1, 'Select Delivery'),) + DELIVERY_TYPE
-        self.fields['delivery_type'].choices = NEW_DELIVERY_TYPE
+        delivery_objs = DeliveryService.objects.all()
+        self.fields['delivery_type'].widget.attrs['class'] = 'form-control'
+        self.fields['delivery_type'].queryset = delivery_objs
+
+        # NEW_DELIVERY_TYPE = ((-1, 'Select Delivery'),) + DELIVERY_TYPE
+        # self.fields['delivery_type'].choices = NEW_DELIVERY_TYPE
 
         NEW_OI_OPS_STATUS = ((-1, 'Select Status'),) + OI_OPS_STATUS
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS

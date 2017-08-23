@@ -1,15 +1,16 @@
 import datetime
 import base64
 
+from decimal import Decimal, ROUND_HALF_DOWN
+from Crypto.Cipher import XOR
+
 from django.conf import settings
 from django.template import Context
 from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from Crypto.Cipher import XOR
 from weasyprint import HTML
-from decimal import Decimal
 
 
 # from filebrowser.base import FileObject
@@ -82,13 +83,20 @@ class TokenGeneration(object):
 
 class InvoiceGenerate(object):
 
+    def get_quantize(self, amount):
+        return Decimal(amount).quantize(
+            Decimal('.01'), rounding=ROUND_HALF_DOWN)
+
     def get_invoice_data(self, order=None):
         invoice_data = {}
         if order:
             invoice_no = order.id
             email = order.email
             mobile = order.mobile
-            invoice_date = timezone.now()
+            if order.payment_date:
+                invoice_date = order.payment_date
+            else:
+                invoice_date = timezone.now()
 
             tax_amount = Decimal(0)
             total_price = Decimal(0)
@@ -99,7 +107,7 @@ class InvoiceGenerate(object):
                 data['oi'] = p_oi
                 data['addons'] = order.orderitems.filter(
                     parent=p_oi, is_combo=False,
-                    is_variation=False,
+                    is_addon=True,
                     no_process=False).select_related('product', 'partner')
                 data['variations'] = order.orderitems.filter(
                     parent=p_oi, no_process=False,

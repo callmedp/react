@@ -239,6 +239,10 @@ class CartMixin(object):
 						pass
 					else:
 						total += li.product.get_price()
+				lis_with_delivery = cart_obj.lineitems.filter(no_process=False).exclude(delivery_service=None)
+				for li in lis_with_delivery:
+					if li.delivery_service:
+						total += li.delivery_service.inr_price
 			return round(total, 0)
 		except Exception as e:
 			logging.getLogger('error_log').error(str(e))

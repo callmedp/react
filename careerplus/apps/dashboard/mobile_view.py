@@ -41,7 +41,7 @@ class DashboardItemDetailView(TemplateView):
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27])
             elif self.oi.product.type_flow == 2:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6])
 

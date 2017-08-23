@@ -58,6 +58,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.currency = 'Rs.'
 
                 order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
+                order.total_incl_tax = self.getTotalAmount(cart_obj=cart_obj)
                 order.save()
 
 
@@ -124,6 +125,11 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
                         p_oi.oi_price_before_discounts_excl_tax = parent_li.product.get_price()
+                        p_oi.oi_price_before_discounts_incl_tax = parent_li.product.get_price()
+                        if parent_li.delivery_service:
+                            p_oi.delivery_service = parent_li.delivery_service
+                            p_oi.delivery_price_incl_tax = parent_li.delivery_service.inr_price
+                            p_oi.delivery_price_excl_tax = parent_li.delivery_service.inr_price
                         p_oi.save()
 
                         combos = self.get_combos(parent_li.product).get('combos')
@@ -139,45 +145,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.parent = p_oi
                             oi.is_combo = True
                             oi.oi_price_before_discounts_excl_tax = product.get_price()
-                            oi.save()
-
-                        addons = item.get('addons')
-                        for addon in addons:
-                            oi = OrderItem.objects.create(
-                                order=order,
-                                product=addon.product,
-                                title=addon.product.name,
-                                partner=addon.product.vendor
-                            )
-                            oi.upc = str(order.pk) + "_" + str(oi.pk)
-                            oi.parent = p_oi
-                            oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
-                            oi.save()
-
-                    elif parent_li:
-                        p_oi = OrderItem.objects.create(
-                            order=order,
-                            product=parent_li.product,
-                            title=parent_li.product.name,
-                            partner=parent_li.product.vendor,
-                            no_process=parent_li.no_process,
-                        )
-                        p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-                        p_oi.oi_price_before_discounts_excl_tax = parent_li.price_excl_tax
-                        p_oi.save()
-
-                        variations = item.get('variations')
-                        for var in variations:
-                            oi = OrderItem.objects.create(
-                                order=order,
-                                product=var.product,
-                                title=var.product.name,
-                                partner=var.product.vendor
-                            )
-                            oi.upc = str(order.pk) + "_" + str(oi.pk)
-                            oi.parent = p_oi
-                            oi.oi_price_before_discounts_excl_tax = var.price_excl_tax
-                            oi.is_variation = True
+                            oi.oi_price_before_discounts_incl_tax = product.get_price()
                             oi.save()
 
                         addons = item.get('addons')
@@ -191,7 +159,64 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             )
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             oi.parent = p_oi
-                            oi.oi_price_before_discounts_excl_tax = addon.price_excl_tax
+                            oi.oi_price_before_discounts_excl_tax = addon.product.get_price()
+                            oi.oi_price_before_discounts_incl_tax = addon.product.get_price()
+                            oi.save()
+
+                    elif parent_li:
+                        p_oi = OrderItem.objects.create(
+                            order=order,
+                            product=parent_li.product,
+                            title=parent_li.product.name,
+                            partner=parent_li.product.vendor,
+                            no_process=parent_li.no_process,
+                        )
+                        p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
+
+                        p_oi.oi_price_before_discounts_excl_tax = parent_li.product.get_price()
+                        p_oi.oi_price_before_discounts_incl_tax = parent_li.product.get_price()
+                        if parent_li.delivery_service:
+                            p_oi.delivery_service = parent_li.delivery_service
+                            p_oi.delivery_price_incl_tax = parent_li.delivery_service.inr_price
+                            p_oi.delivery_price_excl_tax = parent_li.delivery_service.inr_price
+                        p_oi.save()
+
+                        variations = item.get('variations')
+                        for var in variations:
+                            oi = OrderItem.objects.create(
+                                order=order,
+                                product=var.product,
+                                title=var.product.name,
+                                partner=var.product.vendor
+                            )
+                            oi.upc = str(order.pk) + "_" + str(oi.pk)
+                            oi.parent = p_oi
+                            oi.oi_price_before_discounts_excl_tax = var.product.get_price()
+                            oi.oi_price_before_discounts_incl_tax = var.product.get_price()
+                            oi.is_variation = True
+                            if parent_li.delivery_service:
+                                # in case other variation in which base price included
+                                oi.delivery_service = parent_li.delivery_service
+                            elif var.delivery_service:
+                                # in case of course variation
+                                oi.delivery_service = var.delivery_service
+                                oi.delivery_price_incl_tax = var.delivery_service.inr_price
+                                oi.delivery_price_excl_tax = var.delivery_service.inr_price
+                            oi.save()
+
+                        addons = item.get('addons')
+                        for addon in addons:
+                            oi = OrderItem.objects.create(
+                                order=order,
+                                product=addon.product,
+                                title=addon.product.name,
+                                partner=addon.product.vendor,
+                                is_addon=True,
+                            )
+                            oi.upc = str(order.pk) + "_" + str(oi.pk)
+                            oi.parent = p_oi
+                            oi.oi_price_before_discounts_excl_tax = addon.product.get_price()
+                            oi.oi_price_before_discounts_incl_tax = addon.product.get_price()
                             oi.save()
 
         except Exception as e:

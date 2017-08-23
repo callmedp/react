@@ -108,6 +108,11 @@ class LineItem(AbstractAutoDate):
         'shop.Product', related_name='cart_lineitems',
         verbose_name=_("Product"))
     quantity = models.PositiveIntegerField(_('Quantity'), default=1)
+    delivery_service = models.ForeignKey(
+        'shop.DeliveryService',
+        related_name='delivery_lineitems',
+        on_delete=models.SET_NULL,
+        null=True, blank=True)
     # price_currency = models.ForeignKey(
     #     _("Currency"), max_length=12,)
     price_excl_tax = models.DecimalField(
@@ -117,7 +122,7 @@ class LineItem(AbstractAutoDate):
         _('Price incl. Tax'), decimal_places=2, max_digits=12, null=True)
 
     no_process = models.BooleanField(default=False)
-    parent_deleted = models.BooleanField(default=False)  #  True for variation and False for Addon
+    parent_deleted = models.BooleanField(default=False)  # True for variation and False for Addon
 
     def __init__(self, *args, **kwargs):
         super(LineItem, self).__init__(*args, **kwargs)
