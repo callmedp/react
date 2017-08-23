@@ -283,7 +283,7 @@ class DraftDownloadView(View):
                         'orderitem': order_item,
                         'draft': draft,
                         'name': name,
-                        'skill_list': skill_list,
+                        'skill_list': skill_list.split(','),
                         'organization_list': organization_list,
                         'education_list': education_list,
                         'flag2': flag2,
