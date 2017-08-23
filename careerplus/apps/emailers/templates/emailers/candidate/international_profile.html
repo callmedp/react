@@ -1,0 +1,78 @@
+{% load static %}
+{% spaceless %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shine Learning</title>
+</head>
+
+<body style="margin: 0; padding: 0;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
+  <tbody>
+    <tr>
+      <td bgcolor="#fff8d8">
+      	<img src="{% static 'shinelearn/images/emailers/banner.jpg' %}" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
+      	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #18549e; padding: 5px 10px 15px 10px;">
+      		{{subject}}
+      	</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:10px">
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #666; padding-bottom: 5px; padding-top: 2px;"><span style="color: #333;">Dear {{username}},</span></strong>
+      	<span>
+          Congratulations! We have created your online profiles on the following leading job sites for career opportunities in the below countries: 
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px;">
+        <span style="background: #fffbe9; color: #333333;  display: block; padding: 15px 10px 15px 15px; font-size: 13px;">
+        <span style="font-weight: bold; color: #1e3d79; ">{{country_name}}</span>
+        {% for profile in profiles %}
+     			<span style=" font-weight: bold; padding-top:12px;display:block;">
+          <a href="" target="_blank" style="text-decoration: none; color: #333;">
+          {{profile.site_url}}</a>
+          </span>
+          <span style=" font-weight: bold; padding-top:5px;display:block;">Username: <a href="mailto:amanshhh@yahoo.co.in" style=" color: #333; text-decoration: none; font-weight: normal;">{{profile.username}}</a>
+          </span>
+          <span style=" font-weight: bold; padding-top:5px;display:block;">Password:  <span style=" font-weight: normal;">{{profile.password}}</span>
+          </span>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px;">
+    		<strong style="display: block; font-weight: normal; font-size: 13px; color: #666; padding-top: 0px;">
+    		 These sites are the job portals of choice for several recruiters in the respective countries. Your profile has been created on these sites to enable recruiters to see and shortlist you for suitable jobs. 
+    		</strong>
+    		<strong style="display: block; font-weight: normal; font-size: 13px; color: #666; padding-top: 10px;">
+    		 We advise you to login to these websites from time to time using these credentials and keep your profile up-to-date.
+    		</strong>
+    	</td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px;">
+    		<strong style="display: block; font-weight: normal; font-size: 12px; color: #333333; padding-top: 10px;">
+    		 Warm Regards, <br>
+    		 Shine Learning Team
+    		</strong>
+    	</td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px; border-top: 1px solid #f4f4f4">
+    		<span style="color: #999999; padding-bottom: 5px; display: block; font-size: 11px; line-height: 16px;">
+	    		Please add <a href="mailto:alert@shinelearning.com" style="color: #2196f3; text-decoration: none;">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.
+	    	</span>
+	    	<span style="color: #999999; padding-bottom: 10px; display: block; font-size: 11px; line-height: 16px;">
+	    		<strong style="color: #525252; font-weight: normal;">Security Alert</strong> - In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="#" style="color: #2196f3; text-decoration: none;">Shinelearning.com</a> by writing to us at <a href="mailto:contactus@shinelearning.com" style="color: #2196f3; text-decoration: none;">contactus@shinelearning.com</a>. Please note that such offers / emails are a violation of our Terms and Conditions, and Shine.com does not endorse such communication with candidates. Please <a href="#" style="color: #2196f3; text-decoration: none;">click here</a> if you do not want to receive any further communication from us.
+	    	</span>
+    	</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+{% endspaceless %}

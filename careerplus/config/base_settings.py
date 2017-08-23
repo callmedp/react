@@ -207,7 +207,7 @@ CKEDITOR_CONFIGS = {
 }
 
 
-# BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = 'redis://localhost:6379/0'
 
 # try:
 #     REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)

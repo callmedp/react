@@ -65,9 +65,9 @@
             </small>
             <div class="social-login">
                 <span>or login with</span>
-                <a class="facebook" href="#"></a>
-                <a class="linkedin" href="#"></a>
-                <a class="gplus" href="#"></a>
+                <a class="facebook" onclick="Login();"></a>
+                <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+                <a class="gplus" onclick="glogin()"></a>
             </div>
             <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
         </form>
@@ -100,10 +100,139 @@
       </div>
     </div>
   </div>
-</div>  
+</div>
+<script>
+    // Social Facebook Login 
+    window.fbAsyncInit = function() {
+        FB.init({
+          appId  : '473197949429502', // App ID
+          status : true, // check login status
+          cookie : true, // enable cookies to allow the server to access the session
+          xfbml  : true , // parse XFBML
+          version: 'v2.10',
+        });
+    };
+    
+    function Login()
+    {
+        FB.login(function(response) {
+           if (response.status == 'connected')
+               {
+                    var accessToken = response.authResponse.accessToken;
+                    var expiresIn = response.authResponse.expiresIn;
+                    window.location.href = '/user/social/login/?accessToken='+accessToken+'&expiresIn='+expiresIn+'&key=fb';
+                    console.log(response);
+               } 
+            else 
+                {
+                 console.log('User cancelled login or did not fully authorize.');
+                }
+        },{scope: 'email'});
+     }
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10&appId=473197949429502";
+            fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    
+    // Social Gplus Login
+
+    function loginCallback(result)
+    {
+
+        if(result['status']['signed_in'])
+            {
+                console.log(result);
+                var access_token = result.access_token
+                var expiresIn = result.expires_in
+                window.location.href = '/user/social/login/?accessToken='+access_token+'&expiresIn='+expiresIn+'&key=gplus';
+            }   
+    }
+
+
+    function glogin() 
+    {
+        var myParams = {
+            'clientid' : '284765467291-lo164ec1u4pcnhtrbicird7tsdt553sm.apps.googleusercontent.com',
+            'cookiepolicy' : 'single_host_origin',
+            'callback' : 'loginCallback', //callback function
+            'approvalprompt':'force',
+            'scope' : 'profile email',
+        };
+        gapi.auth.signIn(myParams);
+    }
+
+    var auth2;
+    var startApp = function() {
+        gapi.load('auth2', function(){
+            /* Retrieve the singleton for the GoogleAuth library and set up the client.*/
+            auth2 = gapi.auth2.init({
+                client_id: '284765467291-lo164ec1u4pcnhtrbicird7tsdt553sm.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                /* Request scopes in addition to 'profile' and 'email'*/
+                scope: 'profile email'
+            });
+        });
+    };
+
+    (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; 
+       po.async = true;
+       po.src = 'https://apis.google.com/js/client.js?onload=startApp';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+     })();
+</script>  
 {% endblock container %}
 
 {% block js_section %}
     {{block.super}}
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script>
+        window.fbAsyncInit = function() {
+                FB.init({
+                appId: '248883485624245',
+                status: true,
+                cookie: true,
+                xfbml: true
+            });
+        };
+
+        // Load the SDK asynchronously
+        (function(d){
+        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement('script'); js.id = id; js.async = true;
+        js.src = "//connect.facebook.net/en_US/all.js";
+        ref.parentNode.insertBefore(js, ref);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function Login()
+        {
+            FB.login(function(response) {
+               if (response.authResponse) 
+               {
+                    getUserInfo(); // Get User Information.
+
+                } else
+                {
+                 console.log('Authorization failed.');
+                }
+             },{scope: 'email'});
+        }
+
+        function logout() {
+            FB.logout(function(response) {
+              // user is now logged out
+            });
+        }
+
+        var status = FB.getLoginStatus();
+
+        console.log(status);
+
+        </script>
 {% endblock js_section %} 

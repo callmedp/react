@@ -21,12 +21,13 @@
   {% if draft %}  
     <!-- mid content start here -->
     <div class="col-sm-12 linkedin_resume">
-      <img src="images/resume_linkedin.jpg" class="pull-left mr-20 mt-20" alt="Linkedin">
+      <img src="{% static 'shinelearn/images/resume_linkedin.jpg' %}" class="pull-left mr-20 mt-20"
+      alt="Linkedin">
       <div class="downloadpdf"><a href="{% url "linkedin-draf-download" orderitem.pk op_id.linkedin %}">Download PDF</a></div>
         <div class="card card-block nobdr pull-left">
-          <h2 class="card-title">{{name}}</h2>
-          <p class="card-text"></p>
-          <p class="card-text1">{{draft.headline}}</p>
+          <h2 class="card-title">{{orderitem.order.first_name}}</h2>
+          <p class="card-text">{{draft.headline}}</p>
+          <p class="card-text1"></p>
           {% if current_org %}
               <span class="wd10">Current</span>   
               <span class="wd80">{{current_org.org_name}}</span>  

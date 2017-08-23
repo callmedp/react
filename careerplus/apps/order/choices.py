@@ -139,7 +139,15 @@ OI_USER_STATUS = (
 
 )
 
-COUNSELLING_FORM_STATUS = (
+OI_LINKEDIN_FLOW_STATUS = (
+    (0, 'default'),
     (41, 'Counselling Form Not Submitted'),
     (42, 'Counselling Form Submitted'),
+    (50, 'Draft 1 Send'),
+    (51, 'Linked In Tip 1'),
+    (52, 'Linked In Tip 2'),
+    (53, 'Linked In Tip 3'),
+    (54, 'Linked In Tip 4'),
+    (55, 'Linked In Tip 5'),
+    (56, 'Linked In Tip 6'),
 )

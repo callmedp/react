@@ -1741,7 +1741,8 @@ class ActionOrderItemView(View):
                     candidate_data.update({
                         "email": oi.order.email,
                         "mobile": oi.order.mobile,
-                        "user_name": oi.order.first_name + ' ' + oi.order.last_name
+                        'subject': 'Your resume has been shared with relevant consultants',
+                        "user_name": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                     })
 
                     if oi.oi_draft:
@@ -1871,15 +1872,18 @@ class ActionOrderItemView(View):
                     approval += 1
 
                     # mail to user about writer information
+                    profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
+                    country_obj = Country.objects.get(pk=profile_obj.object_id)
+                    profiles = InternationalProfileCredential.objects.filter(oi=obj.pk)
                     to_emails = [obj.order.email]
                     data = {}
                     data.update({
-                        "name": obj.order.first_name + ' ' + obj.order.last_name,
-                        "mobile": obj.order.mobile,
-                        "subject": "Your International Profile updated",
-
+                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "subject": "Your International Profile is updated",
+                        "profiles": profiles,
+                        "country_name": country_obj.name,
                     })
-                    mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATE_MAIL'
+                    mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
 
                     try:
                         SendMail().send(to_emails, mail_type, data)
@@ -1982,18 +1986,21 @@ class ActionOrderItemView(View):
                 if mid_out_sent:
                     # mail to user about writer information
                     to_emails = [order.email]
-                    mail_type = 'MIDOUT'
+                    mail_type = "PENDING_ITEMS"
                     data = {}
                     data.update({
-                        "info": 'Upload your resume',
-                        "subject": 'Upload your resume',
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': order.first_name if order.first_name else order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'product_name': oi.product.name,
+                        'upload_url': "http://%s/dashboard" % (settings.SITE_DOMAIN) 
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
                         order.midout_sent_on = timezone.now()
                         order.save()
                     except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                        logging.getLogger('email_log').error("midout mail %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             messages.add_message(request, messages.SUCCESS, "Midout sent Successfully for selected items")
             return HttpResponseRedirect(reverse('console:queue-midout'))

@@ -266,7 +266,7 @@
                         <b>Updated On: {{obj.modified}}</b>
                       </td>
                     {% if perms.order.can_show_linkedin_writer_draft %}
-                      {% if obj.counselling_form_status == 42 %}
+                      {% if obj.quizresponse.submitted %}
                       <td><a href="{% url 'counselling-form' obj.pk %}" style="color:green">
                         Counselling Form Submitted</a>
                       </td>

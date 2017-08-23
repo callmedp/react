@@ -20,15 +20,12 @@ class ActionUserMixin(object):
             to_emails = [obj.order.email]
             email_data = {}
             email_data.update({
-                "name": obj.order.first_name + ' ' + obj.order.last_name,
-                "mobile": obj.order.mobile,
-                "writer_name": assigned_to.name,
-                "writer_email": assigned_to.email,
-                "writer_mobile": assigned_to.contact_number,
-                "subject": "Information of your profile update service",
+                "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                "writer_name": assign_to.name,
+                "subject": "Your developed document has been uploaded",
 
             })
-            mail_type = 'ASSIGNMENT_ACTION'
+            mail_type = 'ALLOCATED_TO_WRITER'
 
             try:
                 SendMail().send(to_emails, mail_type, email_data)
@@ -64,14 +61,12 @@ class ActionUserMixin(object):
 
                 # mail to user about writer information
                 to_emails = [obj.order.email]
-                mail_type = 'ASSIGNMENT_ACTION'
+                mail_type = 'ALLOCATED_TO_WRITER'
                 email_data = {}
                 email_data.update({
-                    "name": obj.order.first_name + ' ' + obj.order.last_name,
-                    "writer_name": assigned_to.name,
-                    "writer_email": assigned_to.email,
-                    "writer_mobile": assigned_to.contact_number,
-                    "mobile": obj.order.mobile
+                    "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                    "writer_name": assign_to.name,
+                    "subject": "Your developed document has been uploaded",
                 })
 
                 try:
@@ -139,14 +134,12 @@ class ActionUserMixin(object):
 
                         # mail to user about writer information
                         to_emails = [obj.order.email]
-                        mail_type = 'ASSIGNMENT_ACTION'
+                        mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
-                            "name": obj.order.first_name + ' ' + obj.order.last_name,
-                            "writer_name": assigned_to.name,
-                            "writer_email": assigned_to.email,
-                            "writer_mobile": assigned_to.contact_number,
-                            "mobile": obj.order.mobile
+                            "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                            "writer_name": assign_to.name,
+                            "subject": "Your developed document has been uploaded",
                         })
 
                         try:
@@ -174,15 +167,14 @@ class ActionUserMixin(object):
 
                         # mail to user about writer information
                         to_emails = [obj.order.email]
-                        mail_type = 'ASSIGNMENT_ACTION'
+                        mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
-                            "name": obj.order.first_name + ' ' + obj.order.last_name,
-                            "writer_name": assigned_to.name,
-                            "writer_email": assigned_to.email,
-                            "writer_mobile": assigned_to.contact_number,
-                            "mobile": obj.order.mobile
+                            "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                            "writer_name": assign_to.name,
+                            "subject": "Your developed document has been uploaded",
                         })
+
 
                         try:
                             SendMail().send(to_emails, mail_type, email_data)
