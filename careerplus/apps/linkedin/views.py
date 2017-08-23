@@ -123,7 +123,7 @@ class LinkedinDraftView(TemplateView):
         op_id = kwargs.get('op_id', '')
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
-            op_id = oi.orderitemoperation_set.get(linkedin = op_id)
+            op_id = oi.orderitemoperation_set.filter(linkedin = op_id)[0]
             try:
                 draft = ''
                 if op_id:    
