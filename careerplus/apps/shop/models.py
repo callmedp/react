@@ -377,7 +377,6 @@ class AttributeOption(models.Model):
         verbose_name_plural = _('Attribute options')
 
 
-
 class Attribute(AbstractAutoDate):
     product_class = models.ForeignKey(
         ProductClass,
@@ -645,7 +644,6 @@ class Attribute(AbstractAutoDate):
         if value and not isinstance(value, File):
             raise ValidationError(_("Must be a file field"))
     _validate_image = _validate_file
-
 
 
 class Keyword(AbstractAutoDate):
@@ -1126,7 +1124,6 @@ class Product(AbstractProduct, ModelMeta):
             pass
         return None
 
-    
     def create_icon(self):
         if not self.image:
             return
@@ -1221,6 +1218,7 @@ class Product(AbstractProduct, ModelMeta):
             return delivery_services.order_by('inr_price')
         else:
             return delivery_services.none()
+
 
 
 class ProductScreen(AbstractProduct):

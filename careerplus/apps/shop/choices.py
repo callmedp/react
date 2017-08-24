@@ -111,3 +111,66 @@ def convert_to_month(days=0):
         elif 36 < months:
             return 'D7'
     return 'D0'
+
+def convert_inr_price_to_code(price=0):
+    if price:
+        price = int(price)
+        if 0 <= price <= 10000:
+            return 1
+        elif 10001 <= price <= 20000:
+            return 2
+        elif 20001 <= price <= 30000:
+            return 3
+        elif 30001 <= price <= 40000:
+            return 4
+        elif 40000 < price:
+            return 5
+    return 0
+
+
+def convert_usd_price_to_code(price=0):
+    if price:
+        price = int(price)
+        if 0 <= price <= 100:
+            return 1
+        elif 101 <= price <= 200:
+            return 2
+        elif 201 <= price <= 300:
+            return 3
+        elif 301 <= price <= 400:
+            return 4
+        elif 400 < price:
+            return 5
+    return 0
+
+
+def convert_aed_price_to_code(price=0):
+    if price:
+        price = int(price)
+        if 0 <= price <= 1000:
+            return 1
+        elif 101 <= price <= 200:
+            return 2
+        elif 201 <= price <= 300:
+            return 3
+        elif 301 <= price <= 400:
+            return 4
+        elif 400 < price:
+            return 5
+    return 0
+
+
+def convert_gbp_price_to_code(price=0):
+    if price:
+        price = int(price)
+        if 0 <= price <= 100:
+            return 1
+        elif 101 <= price <= 200:
+            return 2
+        elif 201 <= price <= 300:
+            return 3
+        elif 301 <= price <= 400:
+            return 4
+        elif 400 < price:
+            return 5
+    return 0

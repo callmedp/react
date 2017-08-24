@@ -226,7 +226,7 @@ class SearchBaseView(TemplateView):
         """
         param_context_mapping = {
             'skills': 'skills',
-            'farea': 'farea'
+            'area': 'area'
         }
 
         for param, value in param_context_mapping.items():
@@ -297,7 +297,7 @@ class SearchListView(SearchBaseView):
         if self.search_params.getlist('frating'):
             context['rating'] = self.search_params.getlist('frating')
         if self.search_params.getlist('farea'):
-            context['area'] = self.search_params.getlist('farea')
+            context['areaf'] = self.search_params.getlist('farea')
         if self.search_params.getlist('fduration'):
             context['duration'] = self.search_params.getlist('fduration')
         if self.search_params.getlist('fmode'):

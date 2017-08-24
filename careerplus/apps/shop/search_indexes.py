@@ -2,7 +2,27 @@ import json
 from haystack import indexes
 from .models import Product
 from django.template.loader import render_to_string
-from shop.choices import DURATION_DICT, convert_to_month
+from shop.choices import DURATION_DICT, convert_to_month, convert_inr_price_to_code, convert_usd_price_to_code, \
+    convert_aed_price_to_code, convert_gbp_price_to_code
+
+
+def get_attributes(obj, currency='INR'):
+    SM = getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '0'
+    CL = getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else '0'
+    CERT = getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0
+    CERT = 'CERT1' if CERT else 'CERT0'
+    DM = getattr(obj.attr, 'duration_days') if getattr(obj.attr, 'duration_days', None) else 0
+    DM = convert_to_month(DM)
+    if currency == 'USD':
+        price = convert_usd_price_to_code(obj.usd_price)
+    elif currency == 'AED':
+        price = convert_aed_price_to_code(obj.aed_price)
+    elif currency == 'GBP':
+        price = convert_gbp_price_to_code(obj.gbp_price)
+    else:
+        price = convert_inr_price_to_code(obj.inr_price)
+    return 'SM' + str(SM) + ' ' + 'CL' + str(CL) + ' ' \
+        + str(CERT) + ' ' + 'DM' + str(DM) + ' ' + 'P' + str(price)
 
 
 class ProductIndex(indexes.SearchIndex, indexes.Indexable):
@@ -43,7 +63,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pDM = indexes.MultiValueField(default=0, faceted=True)
     pCert = indexes.MultiValueField(default=False, faceted=True)
     pCL = indexes.MultiValueField(null=True, faceted=True)
-    pAttr = indexes.MultiValueField(null=True)
+    pAttrINR = indexes.MultiValueField(null=True)
+    pAttrUSD = indexes.MultiValueField(null=True)
+    pAttrAED = indexes.MultiValueField(null=True)
+    pAttrGBP = indexes.MultiValueField(null=True)
     
     # Content Field #
     pIc = indexes.CharField(indexed=False)
@@ -63,15 +86,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pDD = indexes.IntegerField(default=0, indexed=False)
     pRD = indexes.BooleanField(default=True, indexed=False)
     pEX = indexes.CharField(null=True, indexed=False)
-    
-    pPinr = indexes.DecimalField(model_attr='inr_price', indexed=False)
-    pPfinr = indexes.DecimalField(model_attr='fake_inr_price', indexed=False)
-    pPusd = indexes.DecimalField(model_attr='usd_price', indexed=False)
-    pPfusd = indexes.DecimalField(model_attr='fake_usd_price', indexed=False)
-    pPaed = indexes.DecimalField(model_attr='aed_price', indexed=False)
-    pPfaed = indexes.DecimalField(model_attr='fake_aed_price', indexed=False)
-    pPgbp = indexes.DecimalField(model_attr='gbp_price', indexed=False)
-    pPfgbp = indexes.DecimalField(model_attr='fake_gbp_price', indexed=False)
+
+    # Prices
+    pPinr = indexes.MultiValueField(faceted=True)
+    pPusd = indexes.MultiValueField(faceted=True)
+    pPaed = indexes.MultiValueField(faceted=True)
+    pPgbp = indexes.MultiValueField(faceted=True)
+
+
     pAbx = indexes.CharField(model_attr='about', default='', indexed=False) 
     pARx = indexes.DecimalField(model_attr='avg_rating', indexed=False) 
     pFAQs = indexes.CharField(indexed=False)
@@ -80,7 +102,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pVrs = indexes.CharField(indexed=False)
     pFBT = indexes.CharField(indexed=False)
     pPOP = indexes.CharField(indexed=False)
-    pCD = indexes.DateTimeField(model_attr='created', indexed=False)
+    pCD = indexes.DateTimeField(model_attr='created', indexed=True)
     pMD = indexes.DateTimeField(model_attr='modified', indexed=False)
     
     def get_model(self):
@@ -219,34 +241,85 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return CL
         return []
 
-    def prepare_pAttr(self, obj):
+    def prepare_pPinr(self, obj):
+        Pinr = list()
+        Pinr.append(convert_inr_price_to_code(obj.inr_price))
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                Pinr.append(convert_inr_price_to_code(pv.inr_price))
+            Pinr = list(set(Pinr))
+        return Pinr
+
+    def prepare_pPusd(self, obj):
+        Pusd = list()
+        Pusd.append(convert_usd_price_to_code(obj.usd_price))
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                Pusd.append(convert_usd_price_to_code(pv.usd_price))
+            Pusd = list(set(Pusd))
+        return Pusd
+
+    def prepare_pPaed(self, obj):
+        Paed = list()
+        Paed.append(convert_aed_price_to_code(obj.aed_price))
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                Paed.append(convert_aed_price_to_code(pv.aed_price))
+            Paed = list(set(Paed))
+        return Paed
+
+    def prepare_pPgbp(self, obj):
+        Pgbp = list()
+        Pgbp.append(convert_gbp_price_to_code(obj.gbp_price))
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                Pgbp.append(convert_gbp_price_to_code(pv.gbp_price))
+            Pgbp = list(set(Pgbp))
+        return Pgbp
+
+    def prepare_pAttrINR(self, obj):
         ATTR = []
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                SM = getattr(pv.attr, 'study_mode').code if getattr(pv.attr, 'study_mode', None) else '0'
-                CL = getattr(pv.attr, 'course_level').code if getattr(pv.attr, 'course_level', None) else '0'
-                CERT = getattr(pv.attr, 'certification') if getattr(pv.attr, 'certification', None) else 0
-                CERT = 'CERT1' if CERT else 'CERT0'
-                DM = getattr(pv.attr, 'duration_days') if getattr(pv.attr, 'duration_days', None) else 0
-                DM = convert_to_month(DM)
-                AR = obj.get_avg_ratings()
-                ATTR.append(
-                    'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
-                    + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'AR' + str(AR))
+                ATTR.append(get_attributes(pv, 'INR'))
         else:
-            SM = getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '0'
-            CL = getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else '0'
-            CERT = getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0
-            CERT = 'CERT1' if CERT else 'CERT0'
-            DM = getattr(obj.attr, 'duration_days') if getattr(obj.attr, 'duration_days', None) else 0
-            DM = convert_to_month(DM)
-            AR = obj.get_avg_ratings()
-            ATTR.append(
-                'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
-                + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'AR' + str(AR))
+            ATTR.append(get_attributes(obj, 'INR'))
         return ATTR
 
+    def prepare_pAttrGBP(self, obj):
+        ATTR = []
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                ATTR.append(get_attributes(pv, 'GBP'))
+        else:
+            ATTR.append(get_attributes(obj, 'GBP'))
+        return ATTR
+
+    def prepare_pAttrUSD(self, obj):
+        ATTR = []
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                ATTR.append(get_attributes(pv, 'USD'))
+        else:
+            ATTR.append(get_attributes(obj, 'USD'))
+        return ATTR
+
+    def prepare_pAttrAED(self, obj):
+        ATTR = []
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                ATTR.append(get_attributes(pv, 'AED'))
+        else:
+            ATTR.append(get_attributes(obj, 'AED'))
+        return ATTR
     
     def prepare_pCT(self, obj):
         if obj.is_course:
