@@ -11,31 +11,31 @@
 			<p class="question">{{ques_dict.q1}}</p>                        
 			<textarea rows="5" cols="50" class="js-answer" 
 			name="q1">{{quiz_resp.anser1}}</textarea>
-			<p class='submit-error'></p>        
+			<p class='submit-error' style="color:red;"></p>        
 		</li>
 		<li>
 			<p class="question">{{ques_dict.q2}}</p>                        
 			<textarea class="js-answer " rows="5" cols="50" class="js-answer"
 			name="q2">{{quiz_resp.anser2}}</textarea>
-			<p class='submit-error'></p>         
+			<p class='submit-error' style="color:red;"></p>         
 		</li>
 		<li>
 			<p class="question">{{ques_dict.q3}}</p>                        
 			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
 			name="q3">{{quiz_resp.anser3}}</textarea>
-			<p class='submit-error'></p>         
+			<p class='submit-error' style="color:red;"></p>         
 		</li>
 		<li>
 			<p class="question1">{{ques_dict.q4}}</p>                        
 			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
 			name="q4">{{quiz_resp.anser4}}</textarea>
-			<p class='submit-error'></p>         
+			<p class='submit-error' style="color:red;"></p>         
 		</li>
 		<li>
 			<p class="question">{{ques_dict.q5}}</p>                        
 			<textarea class="js-answer" rows="5" cols="50" class="js-answer"
 			name="q5">{{quiz_resp.anser5}}</textarea>
-			<p class='submit-error'></p>         
+			<p class='submit-error' style="color:red;"></p>         
 		</li>  
 	 </ol>
          	<button type="submit" name="save" class="grp-button grp-default js-click" 
@@ -72,6 +72,9 @@
             q3:{ required:"This field is required",},
             q4:{ required:"This field is required",},
             q5:{ required:"This field is required",},   
+        },
+        errorPlacement: function(error, element) {
+            element.siblings(".submit-error").text('This field is required');
         }
     });
 });
