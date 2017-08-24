@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 
 from cart.mixins import CartMixin
+from console.decorators import (
+    Decorate, stop_browser_cache)
 
 from .models import Product, Category, Attribute
 from review.models import Review
@@ -215,6 +217,7 @@ class ProductInformationMixin(object):
             }
 
 
+@Decorate(stop_browser_cache())
 class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
     http_method_names = ['get', 'post']
