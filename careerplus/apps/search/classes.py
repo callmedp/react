@@ -14,7 +14,7 @@ from haystack.query import EmptySearchQuerySet
 #local imports
 from search import inputs
 from .helpers import clean_all_fields, clean_id_fields, clean_list_fields, \
-    handle_special_chars, get_filters, remove_quote_in_q
+    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys
 from .lookups import FILLERS
 
 #inter app imports
@@ -33,9 +33,9 @@ class BaseSearch(object):
     search_params = {}
     allow_empty_query = True
 
-    fields = ["text", "pURL", "pTt", "pHd", "pNm", "pSg", "pPc", "pTP", "pIc",
-              "pImA", "pvurl", "pDM", "pDD", "id", "pCert", "pAttr", "pCT", "pAR", "pARx", "pRC", "pNJ",
-              "pPvn", "pCmbs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pPChs"]
+    fields = ["text", "pURL", "pTt", "pHd", "pTP", "pStar",
+              "pImA", "id", "pAR", "pARx", "pRC", "pNJ", "pImg",
+              "pPvn", "pCmbs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp"]
 
     similar_fields = []
 
@@ -61,12 +61,12 @@ class BaseSearch(object):
     }
 
     facet_list = [
-        '{!ex=level}pCL',
-        '{!ex=ratng}pAR',
-        '{!ex=funa}pFA',
-        '{!ex=durm}pDM',
-        '{!ex=cert}pCert',
-        '{!ex=mode}pStM'
+        '{!ex=level,ratng,funa,durm,cert,mode}pCL',
+        '{!ex=level,ratng,funa,durm,cert,mode}pAR',
+        '{!ex=level,ratng,funa,durm,cert,mode}pFA',
+        '{!ex=level,ratng,funa,durm,cert,mode}pDM',
+        '{!ex=level,ratng,funa,durm,cert,mode}pCert',
+        '{!ex=level,ratng,funa,durm,cert,mode}pStM'
     ]
 
     # These are the filters shown on search page
@@ -421,7 +421,7 @@ class BaseSearch(object):
 
 class SimpleSearch(BaseSearch):
 
-    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
+    needed_params_options = {'q', 'fclevel', 'fcert', 'area', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
 
 
 
@@ -583,16 +583,6 @@ class SimpleParams(BaseParams):
         params = get_filters(params)
         return params
 
-    def pop_null_parameters(self,params):
-        """
-        Null params sent from app.
-        Pop them to enable semantic to infer words.
-        """
-        for key in params.keys():
-            if not params.get(key) or params.get(key) == u'null':
-                params.pop(key)
-        return params
-
     def get_request_params(self):
         """
         Collect and prepare all the request params.
@@ -627,7 +617,7 @@ class SimpleParams(BaseParams):
         # Incase of GET request if all arguments are found in lookup then it states that no keyword
         # have been entered so set solr query as *:* in separate param so that it does not get displayed in form
 
-        params = self.pop_null_parameters(params)
+        params = clear_empty_keys(params)
 
         if not params_filtered:
             if 'q' not in params:
@@ -652,7 +642,7 @@ class SimpleParams(BaseParams):
 
         quoted_string = quoted_string.strip()
         unquoted_string = (" ".join(q.split("\"")[0::2])).lower()
-        classifiers_to_process = ["farea", "skills"]
+        classifiers_to_process = ["area", "skills"]
         words_to_and = []
         for classifier in classifiers_to_process:
             words_to_and = words_to_and + self.search_params.get(classifier, [])
@@ -698,8 +688,8 @@ class SimpleParams(BaseParams):
         Special checks for no javascript.
         Handled for both mobile and desktop.
         """
-        if 'farea' in params and params['farea'] == "Functional Area":
-            params['farea'] = ""
+        if 'area' in params and params['area'] == "Functional Area":
+            params['area'] = ""
         if 'q' in params and params['q'] == "Search for courses, services etc..":
             params['q'] = ""
         if 'skills' in params and params['skills'] == 'Key Skills':

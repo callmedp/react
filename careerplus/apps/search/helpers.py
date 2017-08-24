@@ -53,7 +53,7 @@ def clean_all_fields(param):
     remove : ,?,forward slashes,back slashes,[,],{,}
     escape . dot
     """
-    for key in ["q", "farea", "skills"]:
+    for key in ["q", "area", "skills"]:
         val = param.get(key, "")
         if val:
             val = str(val)
@@ -79,7 +79,7 @@ def clean_list_fields(param):
     @summary: to clean list type request parameters ()
     """
 
-    invalid_keyword = {None, "None", -1 , "-1", "-1'", "", " "}
+    invalid_keyword = {None, "None", -1, "-1", "-1'", "", " "}
     for key in ["fclevel", "fcert", "frating", "fduration", "fmode", "skills"]:
         val = param.getlist(key)
         if val:
@@ -90,28 +90,27 @@ def clean_list_fields(param):
                     cln_list.append(v)
                 else:
                     v = re.sub(r'[\?\\\[\]\{\}\'\"/]', "", v)
-                    if v.isdigit():
-                        cln_list.append(v)
+                    cln_list.append(v)
             param.setlist(key, cln_list)
     return param
 
 
 def clean_id_fields(param):
     """
-    @summary: function to clean request parameters (Salary, minsal, minexp, area, ind, Location, Team, PreferredJobType, PreferredIndustry, PreferredLocation, jsal, jexp, PreferredMinimumSalary, rect, sort, page )
+    @summary: function to clean request parameters (area, sort, page )
     """
-    for key in ["farea", "ind", "sort", "page", "active"]:
+    for key in ["area", "sort", "page"]:
         val = param.get(key)
         if val:
             val = str(val)
             if not val.isdigit():
-                val = re.sub(r'[\?\\\[\]\{\}\'\"/]',"",val)
+                val = re.sub(r'[\?\\\[\]\{\}\'\"/]', "", val)
                 if val.isdigit():
                     param[key] = val
                 else:
                     param[key] = ""
     none_query = False
-    if param.get("q") == "" and param.get("farea") == "" and param.get("skills") == "":
+    if param.get("q") == "" and param.get("area") == "" and param.get("skills") == "":
         none_query = True
     if param.get("q") in ['*','*.*']:
         none_query = True
@@ -203,9 +202,9 @@ def pop_inferred_words_from_query(words_to_pop,query):
     return query_to_return
 
 
-def prepare_singlevalue_params(inferred_words,params):
+def prepare_singlevalue_params(inferred_words, params):
 
-    SINGLEVALUE_PARAMS = {'farea'}
+    SINGLEVALUE_PARAMS = {'area'}
     for param in SINGLEVALUE_PARAMS:
         if params.get(param) and len(params.get(param)):
             continue
@@ -234,7 +233,7 @@ def clear_empty_keys(params):
     Prevent empty spaces from entering into the params.
     """
     for key in list(params):
-        if not params.get(key):
+        if not params.get(key) or params.get(key) == u'null':
             params.pop(key)
     return params
 
@@ -256,7 +255,7 @@ def replace_multiple_occurrences(query, params):
     Prevent multiple repetitions of words in query.
     """
 
-    keys_to_process = ['skills', 'farea', 'company_name']
+    keys_to_process = ['skills', 'area', 'skills']
     words_to_remove = []
 
     for key in keys_to_process:
@@ -272,7 +271,7 @@ def replace_multiple_occurrences(query, params):
                     handle_special_chars(word), '', query_count-1)
                 params[key] = list(set(params[key]))
 
-    return handle_special_chars(params['q'],False,True)
+    return handle_special_chars(params['q'], False, True)
 
 
 def get_filters(params):
@@ -306,7 +305,7 @@ def get_filters(params):
             pass
 
     inferred_words['q'] = filter(len,inferred_words.get('q', []) + words_list)
-    words_to_pop = inferred_words.get('skills', []) + inferred_words.get('farea', [])
+    words_to_pop = inferred_words.get('skills', []) + inferred_words.get('area', [])
     params['q'] = inputs.Cleaned().prepare(params['q'])
     params['q'] = params['q'].replace("/","-")
     params['q'] = handle_special_chars(params['q'], False, False, False, True)
@@ -318,8 +317,8 @@ def get_filters(params):
 
     params['q'] = pop_inferred_words_from_query(words_to_pop, params['q'])
     params['q'] = re.sub("\s\s+", " ", params['q'])
-    params = prepare_multivalue_params(inferred_words,params)
-    params = prepare_singlevalue_params(inferred_words,params)
+    params = prepare_multivalue_params(inferred_words, params)
+    params = prepare_singlevalue_params(inferred_words, params)
     params['q'] = handle_special_chars(params['q'], False, True, False, True)
     params = clear_empty_keys(params)
 

@@ -25,7 +25,6 @@
                     <div class="search-caption">
                         <div class="search-box">
                             <form class="form-inline" id="search_form" data-role="form">
-                                {% csrf_token %}
                                 {% for field in form %}
                                 <div class="form-group">
                                     {{field}}
@@ -58,7 +57,8 @@
             <div class="form-group custom-select">
                 <select name="sort" hdn="id_sort" class="form-control cls_filter">
                     <option value="">Relevance</option>
-                    <option value="1" {% if search_params.sort %}selected="selected"{% endif %}>Latest</option>
+                    <option value="1" {% if search_params.sort == '1' %}selected="selected"{% endif %}>Latest</option>
+                    <option value="2" {% if search_params.sort == '2' %}selected="selected"{% endif %}>Review(High to Low)</option>
                 </select>
             </div>
             <h2>{{ paginator.count }} products found</h2>
@@ -71,13 +71,13 @@
                 <div class="media">
                   <div class="media-left">
                       <figure class="color1">
-                        <img class="media-object" src="{{ result.pIc }}" alt="{{ result.pTt|title }}">
+                        <img class="media-object" src="{{ result.pImg}}" alt="{{ result.pImA|title }}">
                       </figure>
                   </div>
                   <div class="media-body">
                     <div class="certification-jobs-box">
                       {% if "true" in result.pCert %}<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>{% endif %}
-                      <span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>
+                      {% if result.pNJ %}<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>{% endif %}
                     </div>
 
                     <h3 class="listing-heading">{{ result.pHd }}</h3>
@@ -111,22 +111,14 @@
             </li>
             {% endfor %}
         </ul>
+        {% if paginator.num_pages > page.number %}
+            <a href="#" class="load-more cls_load_more"> Load more</a>
+        {% endif %}
         {% else %}
             <span>No results found</span>
         {%endif%}
     </div>       
     <!-- mid content end -->
-
-    {% if paginator.num_pages > 0%}
-        {% if page.number > 1 %}
-            <input type="button" data-type="previous" class="cls_paginate submit" value="Previous"/>
-        {%endif%}
-
-        {% if paginator.num_pages > page.number  %}
-            <input type="button" data-type="next" class="cls_paginate submit" value="Next"/>
-        {%endif%}
-    {%endif%}
-
     </div>
     <!-- page content body end -->
 
@@ -140,6 +132,7 @@
     <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
 
     <script type="text/javascript">
         $('.nav-tabs > li > a').hover(function() {
