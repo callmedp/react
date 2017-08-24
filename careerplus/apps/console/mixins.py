@@ -21,7 +21,7 @@ class ActionUserMixin(object):
             email_data = {}
             email_data.update({
                 "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
-                "writer_name": assign_to.name,
+                "writer_name": assigned_to.name,
                 "subject": "Your developed document has been uploaded",
 
             })
@@ -65,7 +65,7 @@ class ActionUserMixin(object):
                 email_data = {}
                 email_data.update({
                     "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
-                    "writer_name": assign_to.name,
+                    "writer_name": assigned_to.name,
                     "subject": "Your developed document has been uploaded",
                 })
 
@@ -138,7 +138,7 @@ class ActionUserMixin(object):
                         email_data = {}
                         email_data.update({
                             "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
-                            "writer_name": assign_to.name,
+                            "writer_name": assigned_to.name,
                             "subject": "Your developed document has been uploaded",
                         })
 
@@ -171,7 +171,7 @@ class ActionUserMixin(object):
                         email_data = {}
                         email_data.update({
                             "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
-                            "writer_name": assign_to.name,
+                            "writer_name": assigned_to.name,
                             "subject": "Your developed document has been uploaded",
                         })
 
