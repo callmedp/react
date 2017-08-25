@@ -101,10 +101,11 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
 
     def get_context_data(self, **kwargs):
         context = super(PaymentOptionView, self).get_context_data(**kwargs)
+        payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
-            "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),
+            "total_amount": payment_dict.get('total_payable_amount'),
             "cart_id": self.request.session.get('cart_pk'),
         })
         return context

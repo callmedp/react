@@ -95,7 +95,7 @@
                     {% endif %}
                   {% for addon in addons %}
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.product.name}}</span>
                             <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
                         </li>
                   {% endfor %}
@@ -114,13 +114,13 @@
                   {% endif %}
                   {% for var in variations %}
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{var.product.name}}</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{var.product.name}}</span>
                             <span class="col-sm-4 col-md-3">Rs. {{var.product.get_price}}/-</span>
                         </li>
                   {% endfor %}
                   {% for addon in addons %}
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{addon.product.name}}</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.product.name}}</span>
                             <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
                         </li>
                   {% endfor %}
@@ -206,8 +206,8 @@
                 <span class="col-sm-6 text-right">Shine loyalty points</span>
                 <span class="col-sm-6">-Rs. 1000/-</span>  
               {% endif %}
-              
-              
+              <span class="col-sm-6 text-right">GST @ 18%</span>
+              <span class="col-sm-6">+Rs. <span id="tax-amount-id">{{tax_amount}}</span>/-</span> 
             </span>
           </li>
         </ul>
@@ -216,7 +216,7 @@
         <ul>
           <li class="payable-amount">
             <span class="col-sm-8 col-md-9 text-right">Payable amount</span>
-            <span class="col-sm-4 col-md-3">Rs. {{total_amount}}/-</span>
+            <span class="col-sm-4 col-md-3">Rs. {{total_payable_amount}}/-</span>
           </li>
         </ul>
 

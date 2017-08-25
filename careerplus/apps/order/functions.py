@@ -117,32 +117,41 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-        # mai and sms
-        midout_services = orderitems.filter(
-            product__type_flow__in=[1, 3, 4, 5, 12, 13])
+        # mail and sms
+        # midout_services = orderitems.filter(
+        #     product__type_flow__in=[1, 3, 4, 5, 12, 13])
         linkedin_item = orderitems.filter(product__type_flow=8)
-            
-        if midout_services.exists() and order.status == 1:
-            to_emails = [order.email]
-            mail_type = "MIDOUT"
-            data = {}
-            data.update({
-                "info": 'Upload Your resume',
-                "subject": 'Upload Your Resume',
-                "name": order.first_name + ' ' + order.last_name,
-                "mobile": order.mobile,
-            })
-            try:
-                SendMail().send(to_emails, mail_type, data)
-                order.midout_sent_on = timezone.now()
-                order.save()
-            except Exception as e:
-                logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
-            try:
-                SendSMS().send(sms_type=mail_type, data=data)
-            except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+        # payment pending email
+        payment_pending_mailer(order=order)
+
+        # pending item email send
+        pending_item_email(order=order)
+
+        # send email through process mailers
+        process_mailer(order=order)
+
+        # if midout_services.exists() and order.status == 1:
+        #     to_emails = [order.email]
+        #     mail_type = "MIDOUT"
+        #     data = {}
+        #     data.update({
+        #         "info": 'Upload Your resume',
+        #         "subject": 'Upload Your Resume',
+        #         "name": order.first_name + ' ' + order.last_name,
+        #         "mobile": order.mobile,
+        #     })
+        #     try:
+        #         SendMail().send(to_emails, mail_type, data)
+        #         order.midout_sent_on = timezone.now()
+        #         order.save()
+        #     except Exception as e:
+        #         logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
+        #     try:
+        #         SendSMS().send(sms_type=mail_type, data=data)
+        #     except Exception as e:
+        #         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
         if linkedin_item.exists():
             try:
@@ -169,9 +178,11 @@ def update_initiat_orderitem_sataus(order=None):
             except:
                 pass
 
+
 def get_upload_path_order_invoice(instance, filename):
     return "invoice/order/{order_id}/{filename}".format(
         order_id=instance.id, filename=filename)
+
 
 def pending_item_email(order=None):
     if order.status == 1:
@@ -191,6 +202,8 @@ def pending_item_email(order=None):
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
+                        order.midout_sent_on = timezone.now()
+                        order.save()
                     except Exception as e:
                         logging.getLogger('email_log').error("pending items %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
                 if oi.product.type_flow == 8:
@@ -240,6 +253,7 @@ def pending_item_email(order=None):
             except Exception as e:
                 raise e
 
+
 def process_mailer(order=None):
     if order.status == 1:
         orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
@@ -261,6 +275,7 @@ def process_mailer(order=None):
             except Exception as e:
                 raise e
 
+
 def payment_pending_mailer(order=None):
     if order.status == 2 and (order.payment_mode == 1 or order.payment_mode == 4):
         to_emails = [order.email]
@@ -272,10 +287,10 @@ def payment_pending_mailer(order=None):
             "transactionid": order.txn,
         })
         try:
-            SendMail().send(to_emails, mail_type, login_dict)
+            SendMail().send(to_emails, mail_type, data)
         except Exception as e:
             logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
+
 def payment_realisation_mailer(order=None):
     pass
-

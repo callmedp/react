@@ -110,7 +110,8 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         context_dict.update(self.default_params(request, cart_obj))
         order_id = 'CP%d%s' % (cart_obj.pk, int(time.time()))
         # amount = round(order.amount_payable)
-        amount = round(self.getTotalAmount())
+        payment_dict = self.getPayableAmount(cart_obj=cart_obj)
+        amount = payment_dict.get('total_payable_amount')
         surl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("success",))
         curl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("cancel",))
 

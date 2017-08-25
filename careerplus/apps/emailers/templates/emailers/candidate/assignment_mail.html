@@ -24,16 +24,44 @@
       	<span>
           I am {{ writer_name }} from Shine Resume Services. I will be working with you to create a profile that highlights your accomplishments and capabilities and helps you meet your career objectives. Below is an outline of our document development process: <br><br>
 			<ul style="margin:0px;">
-				<li style="padding-bottom: 7px;"> You will get a call from me within 3 working days. In case 
-       you have availed super express delivery, you will be
-       called within 24 hours and in case of express delivery you
-       will be called within 36 hours.</li>
-       <li style="padding-bottom: 7px;">You will get an initial draft of resume within 5 working
-       days of the telephonic consultation, provided you have
-       given us all the required information.</li>
-       <li style="padding-bottom: 7px;">In case you are not satisfied with the initial resume, you
-       can discuss the same with us within the next 10 days of
-       receiving the draft.</li>
+                {% if oi.delivery_service and oi.delivery_service.name == 'Super Express' %}
+                    <li style="padding-bottom: 7px;">
+                        You will get a call from me within 15 hours for Super Express delivery on your resume. Request you to be available for the call, so the resume can be processed as per timelines. The resume would then be prepared by me and delivered to you within the next 24 hours. 
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                        In case we are not able to connect with you even after 2 days the resume would be prepared as per inputs available on the resume sent by you and submitted.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                       You will have a maximum of 7 days after delivery of the initial resume to discuss the document with me and to incorporate changes in case you are not satisfied with the initial resume.
+                    </li>
+
+                {% elif oi.delivery_service and oi.delivery_service.name == 'Express' %}
+                    <li style="padding-bottom: 7px;">
+                        You will get a call from me within 48 hours for Express delivery on your resume. Request you to be available for the call, so the resume can be processed as per timelines. The resume would then be prepared by me and delivered to you within 4 working days.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                        In case we are not able to connect with you even after 4 days the resume would be prepared as per inputs available on the resume sent by you and submitted.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                       You will have a maximum of 7 days after delivery of the initial resume to discuss the document with me and to incorporate changes in case you are not satisfied with the initial resume.
+                    </li>
+
+                {% else %}
+    				<li style="padding-bottom: 7px;">
+                        You will get a call from me within 3 working days. In case 
+                        you have availed super express delivery, you will be
+                        called within 24 hours and in case of express delivery you
+                        will be called within 36 hours.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                        You will get an initial draft of resume within 5 working days of the telephonic consultation, provided you have given us all the required information.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                       In case you are not satisfied with the initial resume, you
+                       can discuss the same with us within the next 10 days of
+                       receiving the draft.
+                    </li>
+                {% endif %}
 			</ul>
         </span>
       </td>

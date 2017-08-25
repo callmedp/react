@@ -107,10 +107,10 @@
             {% with oi=item.oi addons=item.addons variations=item.variations %}
                 {% if oi.product.is_course and variations %}
                     <div class="subcribe-services">
-                         <strong>{{oi.product.name}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
+                         <strong>{{oi.product.heading}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
                         <ul>
                             {% for addon in addons %}
-                                <li>{{addon.product.name}}</li>
+                                <li>{{addon.product.heading}}</li>
                             {% endfor %}
                         </ul>
                         {% if variations.first.delivery_service %}
@@ -121,15 +121,15 @@
                     </div>
                 {% else %}
                     <div class="subcribe-services">
-                        <strong>{{oi.product.name}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
+                        <strong>{{oi.product.heading}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
                         <ul>
                             {% for var in variations %}
-                                <li>{{var.product.name}}</li>
+                                <li>{{var.product.heading}}</li>
                             {% endfor %}
                         </ul>
                         <ul>
                             {% for addon in addons %}
-                                <li>{{addon.product.name}}</li>
+                                <li>{{addon.product.heading}}</li>
                             {% endfor %}
                         </ul>
                         {% if oi.delivery_service %}

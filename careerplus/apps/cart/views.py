@@ -15,7 +15,7 @@ from django.template.response import TemplateResponse
 from django.conf import settings
 
 from shine.core import ShineCandidateDetail
-from shop.models import Product, ProductClass, DeliveryService
+from shop.models import Product, ProductClass
 from users.mixins import RegistrationLoginApi, UserMixin
 from console.decorators import Decorate, stop_browser_cache
 
@@ -400,9 +400,17 @@ class PaymentSummaryView(TemplateView, CartMixin):
         context.update({
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
+
+        payment_dict = self.getPayableAmount(cart_obj=cart_obj)
+        total_amount = payment_dict.get('total_amount', Decimal(0))
+        tax_amount = payment_dict.get('tax_amount', Decimal(0))
+        total_payable_amount = payment_dict.get('total_payable_amount', Decimal(0))
+
         context.update({
             "cart_items": self.get_cart_items(cart_obj=self.cart_obj),
-            "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),
+            "total_amount": total_amount,
+            "tax_amount": tax_amount,
+            "total_payable_amount": total_payable_amount,
         })
         return context
 

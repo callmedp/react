@@ -53,7 +53,7 @@ THIRD_PARTY_APPS = [
     'sekizai',
     'sorl.thumbnail',
     'rest_framework',
-    'haystack'
+    'haystack',
 ]
 
 # Apps specific for this project go here.
@@ -84,7 +84,7 @@ LOCAL_APPS = [
     'linkedin',
     'emailers',
     'quizs',
-    'database'
+    'database',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

@@ -10,10 +10,7 @@ from users.tasks import user_register
 
 from .models import Order, OrderItem
 from .functions import (
-    update_initiat_orderitem_sataus,
-    pending_item_email,
-    process_mailer,
-    payment_pending_mailer,)
+    update_initiat_orderitem_sataus,)
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -56,14 +53,13 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
                 # set currency
                 order.currency = 'Rs.'
+                payment_dict = self.getPayableAmount(cart_obj=cart_obj)
+                total_amount = payment_dict.get('total_amount')
+                total_payable_amount = payment_dict.get('total_payable_amount')
 
-                order.total_excl_tax = self.getTotalAmount(cart_obj=cart_obj)
-                order.total_incl_tax = self.getTotalAmount(cart_obj=cart_obj)
+                order.total_excl_tax = total_amount
+                order.total_incl_tax = total_payable_amount
                 order.save()
-
-
-                # payment pending email
-                payment_pending_mailer(order=order)
 
                 self.createOrderitems(order, cart_obj)
                 # update initial operation status
@@ -74,12 +70,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
                 # for linkedin
                 linkedin_product = order.orderitems.filter(product__type_flow=8)
-
-                # pending item email send
-                pending_item_email(order=order)
-
-                # send email through process mailers
-                process_mailer(order=order)
 
                 if linkedin_product:
                     # associate draft object with order
@@ -125,7 +115,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
                         p_oi.oi_price_before_discounts_excl_tax = parent_li.product.get_price()
-                        p_oi.oi_price_before_discounts_incl_tax = parent_li.product.get_price()
+                        p_oi.oi_price_before_discounts_incl_tax = parent_li.product.get_price() 
                         if parent_li.delivery_service:
                             p_oi.delivery_service = parent_li.delivery_service
                             p_oi.delivery_price_incl_tax = parent_li.delivery_service.inr_price
@@ -146,6 +136,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.is_combo = True
                             oi.oi_price_before_discounts_excl_tax = product.get_price()
                             oi.oi_price_before_discounts_incl_tax = product.get_price()
+                            if parent_li.delivery_service:
+                                oi.delivery_service = parent_li.delivery_service
                             oi.save()
 
                         addons = item.get('addons')
@@ -161,6 +153,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.parent = p_oi
                             oi.oi_price_before_discounts_excl_tax = addon.product.get_price()
                             oi.oi_price_before_discounts_incl_tax = addon.product.get_price()
+                            if parent_li.delivery_service:
+                                oi.delivery_service = parent_li.delivery_service
                             oi.save()
 
                     elif parent_li:
@@ -217,6 +211,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.parent = p_oi
                             oi.oi_price_before_discounts_excl_tax = addon.product.get_price()
                             oi.oi_price_before_discounts_incl_tax = addon.product.get_price()
+                            if parent_li.delivery_service:
+                                oi.delivery_service = parent_li.delivery_service
                             oi.save()
 
         except Exception as e:

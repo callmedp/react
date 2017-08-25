@@ -67,11 +67,14 @@
                                 {% if delivery_types %}
                                     <li class="col-sm-3">
                                         <span class="custom-select">
-                                            <select class="form-control" id="delivery-option{{variations.first.id}}" name="delivery_type{{variations.first.id}}" on>
+                                          <form id="delivery-option-form{{variations.first.id}}">{% csrf_token %}
+                                            <select class="form-control" id="delivery-option{{variations.first.id}}" name="delivery_type" onchange="deliveryOptionUpdate('{{variations.first.id}}')">
                                                 {% for d_obj in delivery_types %}
                                                     <option value="{{d_obj.id}}" delivery-price="{{d_obj.inr_price}}" {% if d_obj == variations.first.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
                                                 {% endfor %}
                                             </select>
+                                            <input type="hidden" name="lineid" value="{{variations.first.pk}}" />
+                                          </form>
                                         </span>
                                     </li>
                                 {% else %}

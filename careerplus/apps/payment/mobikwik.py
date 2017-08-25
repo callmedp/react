@@ -113,8 +113,8 @@ class MobikwikRequestView(SingleObjectMixin, TemplateView, OrderMixin):
             user_mobile = self.request.session.get('mobile_no')
         else:
             user_mobile = ""
-
-        order_amount = round(self.getTotalAmount())
+        payment_dict = self.getPayableAmount(cart_obj=cart_obj)
+        order_amount = payment_dict.get('total_payable_amount')
         order_amount = "%.2f" % order_amount
         txn_id = 'MK%d_%d' % (cart_obj.pk, int(time.time()))
         context = super(self.__class__, self).get_context_data(**kwargs)
@@ -161,7 +161,7 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                 actual_amount = "%.2f" % round(self.getTotalAmount())
 
                 if order_id != str(cart_obj.pk):
-                    err_mesg = "Original orderid # %s and actual orderid # %s do not match" % (str(order.pk), order_id)
+                    err_mesg = "Original orderid # %s and actual orderid # %s do not match" % (str(cart_obj.pk), order_id)
 
                 elif float(actual_amount) == float(amount):
                     csumstring = send_checksum_string(orderid)

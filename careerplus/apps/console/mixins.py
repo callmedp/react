@@ -22,7 +22,9 @@ class ActionUserMixin(object):
             email_data.update({
                 "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                 "writer_name": assigned_to.name,
-                "subject": "Your developed document has been uploaded",
+                "writer_email": assigned_to.email,
+                "subject": "Your developed document has been shared with our expert",
+                "oi": obj,
 
             })
             mail_type = 'ALLOCATED_TO_WRITER'
@@ -66,7 +68,9 @@ class ActionUserMixin(object):
                 email_data.update({
                     "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                     "writer_name": assigned_to.name,
-                    "subject": "Your developed document has been uploaded",
+                    "writer_email": assigned_to.email,
+                    "subject": "Your developed document has been shared with our expert",
+                    "oi": obj,
                 })
 
                 try:
@@ -78,6 +82,8 @@ class ActionUserMixin(object):
                     SendSMS().send(sms_type=mail_type, data=email_data)
                 except Exception as e:
                     logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                # sms to writer in case of express and super express delivery
 
                 addons = []
                 variations = []
@@ -119,13 +125,13 @@ class ActionUserMixin(object):
                         product__type_flow__in=[1, 12, 13],
                         is_addon=True)
 
-                for obj in addons:
-                    if not obj.assigned_to:
-                        obj.assigned_to = assigned_to
-                        obj.assigned_by = user
-                        obj.save()
+                for oi in addons:
+                    if not oi.assigned_to:
+                        oi.assigned_to = assigned_to
+                        oi.assigned_by = user
+                        oi.save()
 
-                        obj.orderitemoperation_set.create(
+                        oi.orderitemoperation_set.create(
                             oi_status=1,
                             last_oi_status=obj.oi_status,
                             assigned_to=obj.assigned_to,
@@ -133,13 +139,15 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [obj.order.email]
+                        to_emails = [oi.order.email]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
-                            "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                             "writer_name": assigned_to.name,
-                            "subject": "Your developed document has been uploaded",
+                            "writer_email": assigned_to.email,
+                            "subject": "Your developed document has been shared with our expert",
+                            "oi": oi,
                         })
 
                         try:
@@ -152,13 +160,15 @@ class ActionUserMixin(object):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                for obj in variations:
-                    if not obj.assigned_to:
-                        obj.assigned_to = assigned_to
-                        obj.assigned_by = user
-                        obj.save()
+                        # sms to writer in case of express and super express delivery
 
-                        obj.orderitemoperation_set.create(
+                for oi in variations:
+                    if not oi.assigned_to:
+                        oi.assigned_to = assigned_to
+                        oi.assigned_by = user
+                        oi.save()
+
+                        oi.orderitemoperation_set.create(
                             oi_status=1,
                             last_oi_status=obj.oi_status,
                             assigned_to=obj.assigned_to,
@@ -166,15 +176,16 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [obj.order.email]
+                        to_emails = [oi.order.email]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
-                            "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                             "writer_name": assigned_to.name,
-                            "subject": "Your developed document has been uploaded",
+                            "writer_email": assigned_to.email,
+                            "subject": "Your developed document has been shared with our expert",
+                            "oi": oi,
                         })
-
 
                         try:
                             SendMail().send(to_emails, mail_type, email_data)
@@ -186,13 +197,15 @@ class ActionUserMixin(object):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                for obj in combos:
-                    if not obj.assigned_to:
-                        obj.assigned_to = assigned_to
-                        obj.assigned_by = user
-                        obj.save()
+                        # sms to writer in case of express and super express delivery
 
-                        obj.orderitemoperation_set.create(
+                for oi in combos:
+                    if not oi.assigned_to:
+                        oi.assigned_to = assigned_to
+                        oi.assigned_by = user
+                        oi.save()
+
+                        oi.orderitemoperation_set.create(
                             oi_status=1,
                             last_oi_status=obj.oi_status,
                             assigned_to=obj.assigned_to,
@@ -200,15 +213,15 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [obj.order.email]
+                        to_emails = [oi.order.email]
                         mail_type = 'ASSIGNMENT_ACTION'
                         email_data = {}
                         email_data.update({
-                            "name": obj.order.first_name + ' ' + obj.order.last_name,
+                            "username": obj.order.first_name + ' ' + obj.order.last_name,
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
-                            "writer_mobile": assigned_to.contact_number,
-                            "mobile": obj.order.mobile
+                            "subject": "Your developed document has been shared with our expert",
+                            "oi": oi,
                         })
 
                         try:
@@ -220,6 +233,8 @@ class ActionUserMixin(object):
                             SendSMS().send(sms_type=mail_type, data=email_data)
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                        # sms to writer in case of express and super express delivery
 
     def upload_candidate_resume(self, oi=None, data={}, user=None):
         oi_resume = data.get('candidate_resume', '')
