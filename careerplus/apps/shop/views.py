@@ -1,3 +1,4 @@
+import json
 from collections import OrderedDict
 from django.core.paginator import Paginator
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseForbidden
@@ -6,10 +7,12 @@ from django.utils.http import urlquote
 from django.views.generic import DetailView, ListView
 from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
-
-from cart.mixins import CartMixin
+from django.core.urlresolvers import reverse
+from haystack.query import SearchQuerySet
 from console.decorators import (
-    Decorate, stop_browser_cache)
+    Decorate,
+    stop_browser_cache,)
+from cart.mixins import CartMixin
 
 from .models import Product, Category, Attribute
 from review.models import Review
@@ -45,46 +48,112 @@ class ProductInformationMixin(object):
             'breadcrumbs': breadcrumbs
         }
 
+    def get_category_skill_url(self, slug, pk):
+        if pk:
+            return reverse('skillpage:skill-page-listing',
+                kwargs={'slug': slug, 'pk': pk})
+
+    def solar_breadcrumbs(self, product):
+        breadcrumbs = []
+        breadcrumbs.append(
+            OrderedDict({
+                'label': 'Home',
+                'url': '/',
+                'active': True}))
+        if product.pFAn:
+            breadcrumbs.append(
+                OrderedDict({
+                    'label': product.pFAn[0],
+                    'url': self.get_category_skill_url(product.pFAn[0], product.pFA_exact[0]),
+                    'active': True}))
+
+        breadcrumbs.append(
+                OrderedDict({
+                    'label': product.pCtgn[0],
+                    'url': self.get_category_skill_url(product.pCtgn[0], product.pCtg[0]),
+                    'active': True}))
+
+        breadcrumbs.append(
+            OrderedDict({
+                'label': product.pNm,
+                'active': None}))
+        return {'breadcrumbs':breadcrumbs} 
+
     def get_info(self, product):
         info = {}
-        info['prd_img'] = product.image.url
-        info['prd_img_alt'] = product.image_alt
-        info['prd_img_bg'] = product.get_bg
-        info['prd_H1'] = product.heading if product.heading else product.name
-        info['prd_about'] = product.about
-        info['prd_desc'] = product.description
-        info['prd_uget'] = product.buy_shine
-        info['prd_rating'] = round(product.avg_rating, 1)
-        info['prd_num_rating'] = product.no_review
-        info['prd_num_bought'] = product.buy_count
-        info['prd_num_jobs'] = product.num_jobs
-        info['prd_vendor'] = product.vendor.name
-        info['prd_vendor_img'] = product.vendor.image.url
-        info['prd_vendor_img_alt'] = product.vendor.image_alt
-        info['prd_rating_star'] = product.get_ratings()
-        info['prd_video'] = product.video_url
-        if product.is_course:
+        info['prd_img'] = product.pImg
+        info['prd_img_alt'] = product.pImA
+        info['prd_img_bg'] = product.pIBg
+        info['prd_H1'] = product.pHd if product.pHd else product.pNm
+        info['prd_about'] = product.pAb
+        info['prd_desc'] = product.pDsc
+        info['prd_uget'] = product.pBS
+        info['prd_rating'] = round(float(product.pARx), 1)
+        info['prd_num_rating'] = product.pRC
+        info['prd_num_bought'] = product.pBC
+        info['prd_num_jobs'] = product.pNJ
+        info['prd_vendor'] = product.pPvn
+        info['prd_vendor_img'] = product.pVi
+        # info['prd_vendor_img_alt'] = product.vendor.image_alt
+        info['prd_rating_star'] = product.pStar
+        info['prd_video'] = product.pvurl
+        if product.pPc == 'course':
             info['prd_service'] = 'course'
-        elif product.is_writing:
+        elif product.pPc == 'writing':
             info['prd_service'] = 'resume'
-        elif product.is_service:
+        elif product.pPc == 'service':
             info['prd_service'] = 'service'
         else:
             info['prd_service'] = 'other'
-        info['prd_product'] = product.type_product
-        info['prd_exp'] = product.get_exp
+        info['prd_product'] = product.pTP
+        info['prd_exp'] = product.pEX
+
+
+
+        # info['prd_img'] = product.image.url
+        # info['prd_img_alt'] = product.image_alt
+        # info['prd_img_bg'] = product.get_bg
+        # info['prd_H1'] = product.heading if product.heading else product.name
+        # info['prd_about'] = product.about
+        # info['prd_desc'] = product.description
+        # info['prd_uget'] = product.buy_shine
+        # info['prd_rating'] = round(product.avg_rating, 1)
+        # info['prd_num_rating'] = product.no_review
+        # info['prd_num_bought'] = product.buy_count
+        # info['prd_num_jobs'] = product.num_jobs
+        # info['prd_vendor'] = product.vendor.name
+        # info['prd_vendor_img'] = product.vendor.image.url
+        # info['prd_vendor_img_alt'] = product.vendor.image_alt
+        # info['prd_rating_star'] = product.get_ratings()
+        # info['prd_video'] = product.video_url
+        # if product.is_course:
+        #     info['prd_service'] = 'course'
+        # elif product.is_writing:
+        #     info['prd_service'] = 'resume'
+        # elif product.is_service:
+        #     info['prd_service'] = 'service'
+        # else:
+        #     info['prd_service'] = 'other'
+        # info['prd_product'] = product.type_product
+        # info['prd_exp'] = product.get_exp
         return info
 
     def get_program_structure(self, product):
         structure = {
-            'prd_program_struct': False
+            # 'prd_program_struct': False
+            'chapter': False,
         }
         chapter_list = product.chapter_product.filter(status=True)
         if chapter_list:
             structure.update({
-                'prd_program_struct': True,
-                'chap_list': chapter_list
+                # 'prd_program_struct': True,
+                'chapter':True,
+                'chapter_list': chapter_list
             })
+        return structure
+
+    def solar_program_structure(self, product):
+        structure = json.loads(product.pPChs)
         return structure
 
     def get_faq(self, product):
@@ -98,6 +167,10 @@ class ProductInformationMixin(object):
                 'prd_faq': True,
                 'faq_list': faqs
             })
+        return structure
+
+    def solar_faq(self, product):
+        structure = json.loads(product.pFAQs)
         return structure
 
     def get_recommendation(self, product):
@@ -177,6 +250,10 @@ class ProductInformationMixin(object):
                 siblingproduct__active=True).order_by('-siblingproduct__sort_order')
             return {'country_variation_list': service_list}
 
+    def solar_product_variation(self, product):
+        course_variation_list = json.loads(sqs.pVrs)
+        return course_variation_list
+
     def get_frequentlybought(self, product, category):
         prd_fbt = {
             'prd_fbt': False,
@@ -216,7 +293,6 @@ class ProductInformationMixin(object):
                 'prd_rv_page': page
             }
 
-
 @Decorate(stop_browser_cache())
 class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
@@ -245,12 +321,16 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
+        sqs = SearchQuerySet().filter(id=11)[0]
         product = self.object
         category = self.category
-        ctx.update(self.get_breadcrumbs(product, category))
-        ctx.update(self.get_info(product))
-        ctx.update(self.get_program_structure(product))
-        ctx.update(self.get_faq(product))
+        ctx.update(self.solar_breadcrumbs(sqs))
+        # ctx.update(self.get_breadcrumbs(product, category))
+        ctx.update(self.get_info(sqs))
+        # ctx.update(self.get_program_structure(product))
+        ctx.update(self.solar_program_structure(sqs))
+        # ctx.update(self.get_faq(product))
+        ctx.update(self.solar_faq(sqs))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
         if product.is_course:

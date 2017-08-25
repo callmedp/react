@@ -1,5 +1,5 @@
-{% if prd_faq %}
-<!-- FAQs container -->
+{% if faq %}
+<!-- FAQs container  if prd_fag -->
 <section class="container-fluid detail-box">
   <div class="container">
     <div class="row">
@@ -12,7 +12,7 @@
               <h3 class="panel-title">
                 <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo{{forloop.counter}}" {% if forloop.counter == 1 %}
                   aria-expanded="true"{% else %}aria-expanded="false" class="collapsed"{% endif %} aria-controls="collapseTwo{{forloop.counter}}">
-                  {{forloop.counter}}.&nbsp;{{ques.text}}
+                  {{forloop.counter}}.&nbsp;{{ques.question}}
                 </a>
               </h3>
             </div>
