@@ -110,14 +110,14 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
                             # mail to user about writer information
                             to_emails = [obj.order.email]
-                            mail_type = 'Writer_Information'
+                            mail_type = 'ALLOCATED_TO_WRITER'
                             data = {}
                             data.update({
-                                "name": obj.order.first_name + ' ' + obj.order.last_name,
+                                "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                                 "writer_name": writer.name,
                                 "writer_email": writer.email,
-                                "writer_mobile": writer.contact_number,
-                                "mobile": obj.order.mobile
+                                "subject": "Your developed document has been shared with our expert",
+                                "oi": obj,
                             })
 
                             try:

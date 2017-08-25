@@ -117,9 +117,6 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-        # mail and sms
-        # midout_services = orderitems.filter(
-        #     product__type_flow__in=[1, 3, 4, 5, 12, 13])
         linkedin_item = orderitems.filter(product__type_flow=8)
 
         # payment pending email
@@ -130,28 +127,6 @@ def update_initiat_orderitem_sataus(order=None):
 
         # send email through process mailers
         process_mailer(order=order)
-
-        # if midout_services.exists() and order.status == 1:
-        #     to_emails = [order.email]
-        #     mail_type = "MIDOUT"
-        #     data = {}
-        #     data.update({
-        #         "info": 'Upload Your resume',
-        #         "subject": 'Upload Your Resume',
-        #         "name": order.first_name + ' ' + order.last_name,
-        #         "mobile": order.mobile,
-        #     })
-        #     try:
-        #         SendMail().send(to_emails, mail_type, data)
-        #         order.midout_sent_on = timezone.now()
-        #         order.save()
-        #     except Exception as e:
-        #         logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-        #     try:
-        #         SendSMS().send(sms_type=mail_type, data=data)
-        #     except Exception as e:
-        #         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
         if linkedin_item.exists():
             try:
@@ -259,19 +234,20 @@ def process_mailer(order=None):
         orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
         for oi in orderitems:
             try:
-                if oi.product.type_flow == 6:
-                    to_emails = [oi.order.email]
-                    mail_type = "PROCESS_MAILERS"
-                    data = {}
-                    data.update({
-                        'subject': 'Your service details related to order <'+oi.id+'>',
-                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-                        'type_flow': oi.product.type_flow, 
-                    })
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                to_emails = [oi.order.email]
+                mail_type = "PROCESS_MAILERS"
+                data = {}
+                data.update({
+                    'subject': 'Your service details related to order <'+oi.id+'>',
+                    'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                    'type_flow': oi.product.type_flow,
+                    'partner': oi.product.vender.name,
+                    'pk': oi.pk,
+                })
+                try:
+                    SendMail().send(to_emails, mail_type, data)
+                except Exception as e:
+                    logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
             except Exception as e:
                 raise e
 
@@ -284,7 +260,7 @@ def payment_pending_mailer(order=None):
         data.update({
             "subject": 'Your shine payment confirmation',
             "first_name": order.first_name if order.first_name else order.candidate_id,
-            "transactionid": order.txn,
+            "txn": order.txn,
         })
         try:
             SendMail().send(to_emails, mail_type, data)

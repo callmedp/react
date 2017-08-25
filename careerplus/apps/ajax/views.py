@@ -229,15 +229,17 @@ class ApproveByAdminDraft(View):
                     obj.closed_on = timezone.now()
                     obj.save()
 
-                    # mail to candidate
+                    # mail to candidate for resume critique closed
                     to_emails = [obj.order.email]
                     email_dict = {}
                     email_dict.update({
-                        "first_name": obj.order.first_name,
+                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.first_name,
+                        "subject": 'Your developed document has been uploaded',
+                        "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                     })
 
-                    mail_type = 'RESUME_CRITIQUE'
+                    mail_type = 'RESUME_CRITIQUE_CLOSED'
                     try:
                         SendMail().send(to_emails, mail_type, email_dict)
                     except Exception as e:
@@ -275,20 +277,10 @@ class ApproveByAdminDraft(View):
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name,
+                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "email": obj.order.email,
+                        "candidateid": obj.order.candidate_id,
                     })
-
-                    if obj.draft_counter < 3:
-                        mail_type = 'REMINDER'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     if obj.draft_counter == 1:
                         email_dict['subject'] = "Your developed document has been uploaded" 
@@ -303,7 +295,7 @@ class ApproveByAdminDraft(View):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    if obj.draft_counter == 2:
+                    elif obj.draft_counter < settings.DRAFT_MAX_LIMIT:
                         email_dict['subject'] = "Your developed document is ready"
                         mail_type = 'DRAFT_UPLOAD'
                         try:
@@ -316,7 +308,7 @@ class ApproveByAdminDraft(View):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    if obj.draft_counter == 3:
+                    elif obj.draft_counter == settings.DRAFT_MAX_LIMIT:
                         email_dict['subject'] = "Your final document is ready"
                         mail_type = 'DRAFT_UPLOAD'
                         try:
@@ -354,67 +346,6 @@ class ApproveByAdminDraft(View):
                             last_oi_status=obj.last_oi_status,
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
-
-                    # mail to candidate
-                    to_emails = [obj.order.email]
-                    email_dict = {}
-                    email_dict.update({
-                        "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name,
-                        "candidateid": obj.order.candidate_id,
-                    })
-
-                    if obj.draft_counter < settings.DRAFT_MAX_LIMIT:
-                        # mail_type = 'REMINDER'
-                        # try:
-                        #     SendMail().send(to_emails, mail_type, email_dict)
-                        # except Exception as e:
-                        #     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        # try:
-                        #     SendSMS().send(sms_type=mail_type, data=email_dict)
-                        # except Exception as e:
-                        #     logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                        if obj.draft_counter == 1:
-                            email_dict['subject'] = "Your developed document has been uploaded" 
-                            mail_type = 'DRAFT_UPLOAD'
-                            try:
-                                SendMail().send(to_emails, mail_type, email_dict)
-                            except Exception as e:
-                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=email_dict)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                        elif obj.draft_counter == 2:
-                            email_dict['subject'] = "Your developed document is ready"
-                            mail_type = 'DRAFT_UPLOAD'
-                            try:
-                                SendMail().send(to_emails, mail_type, email_dict)
-                            except Exception as e:
-                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=email_dict)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    elif obj.draft_counter == settings.DRAFT_MAX_LIMIT:
-                        email_dict['subject'] = "Your final document is ready"
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
             except:
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")

@@ -70,9 +70,17 @@ class SendMail():
             send_dict['subject'] = "Linkedin Profile"
             send_dict['template'] = 'emailers/payment_confirm.html'
 
-        elif mail_type == "PENDING_ITEMS":
-            send_dict['subject'] = "To initiate your service(s) fulfil these pending requirements"
-            send_dict['template'] = 'emailers/candidate/pending_item.html'
+        elif mail_type == "PROCESS_MAILERS":
+            send_dict['subject'] = data.get('subject', '')
+            send_dict['template'] = 'emailers/candidate/process_mailers.html'
+            if data.get('type_flow') == 1:
+                send_dict['upload_url'] = "http://%s/dashboard" % (settings.SITE_DOMAIN)
+            elif data.get('type_flow') == 8:
+                send_dict['counselling_form'] = "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, data.get('pk'))
+            elif data.get('type_flow') == 9:
+                send_dict['complete_profile'] = "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN)
+            elif data.get('type_flow') == 10:
+                pass
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             data['email'] = [to]
             self.process(to, send_dict, data)
@@ -102,7 +110,8 @@ class SendMail():
             elif data.get('draft_level') == 3:
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
-
+            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
+            data['autologin'] = "http://%s/autologin/%s/" % (settings.SITE_DOMAIN, token)
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
@@ -130,11 +139,12 @@ class SendMail():
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
-        elif mail_type == "RESUME_CRITIQUE":
-            send_dict['subject'] = data.get('subject', "Your developed document is ready")
+        elif mail_type == "RESUME_CRITIQUE_CLOSED":
+            send_dict['subject'] = data.get('subject', "Your developed document has been uploaded")
             send_dict['template'] = 'emailers/candidate/resume_critique_closed.html'
+            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
+            data['autologin'] = "http://%s/autologin/%s/" % (settings.SITE_DOMAIN, token)
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
-            data['review_document'] = "Review Document"
             self.process(to, send_dict, data)
 
         elif mail_type == "BOOSTER_RECRUITER":
