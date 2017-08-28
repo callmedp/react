@@ -1033,7 +1033,7 @@ class Product(AbstractProduct, ModelMeta):
             return self.get_full_url(url=self.image.url) if not relative else self.image.url
         return ''
     
-    def get_url(self):
+    def get_url(self, relative=False):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
 
     def get_absolute_url(self, prd_slug=None, cat_slug=None):
@@ -1176,21 +1176,21 @@ class Product(AbstractProduct, ModelMeta):
             return self.variation.filter(
                 siblingproduct__active=True, active=True).order_by('-siblingproduct__sort_order')
         else:
-            return None
+            return []
 
     def get_fbts(self):
         if self.type_product in [0, 1, 3, 5]:
             return self.related.filter(
                 secondaryproduct__active=True, active=True).order_by('-secondaryproduct__sort_order')
         else:
-            return None
+            return []
 
     def get_combos(self):
         if self.type_product == 3:
             return self.childs.filter(
                 active=True, childrenproduct__active=True).order_by('-childrenproduct__sort_order')
         else:
-            return None
+            return []
 
     def get_pops(self):
         if self.type_product in [0, 1, 3, 5]:
@@ -1204,9 +1204,9 @@ class Product(AbstractProduct, ModelMeta):
                     pop_list = category.get_products().filter(
                         type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
                     return pop_list
-            return None
+            return []
         else:
-            return None
+            return []
 
     def get_delivery_types(self):
         delivery_objs = self.productextrainfo_set.filter(info_type='delivery_service')
@@ -1301,21 +1301,21 @@ class Product(AbstractProduct, ModelMeta):
         if self.usd_price:
             price = self.usd_price
         else:
-            price = self.inr_price * CURRENCY_EXCHANGE.get('US')
+            price = self.inr_price * dict(CURRENCY_EXCHANGE).get('US')
         return convert_usd(price)    
     
     def get_aed_price(self):
         if self.aed_price:
             price = self.aed_price
         else:
-            price = self.inr_price * CURRENCY_EXCHANGE.get('AE')
+            price = self.inr_price * dict(CURRENCY_EXCHANGE).get('AE')
         return convert_aed(price)
     
     def get_gbp_price(self):
         if self.gbp_price:
             price = self.gbp_price
         else:
-            price = self.inr_price * CURRENCY_EXCHANGE.get('GB')
+            price = self.inr_price * dict(CURRENCY_EXCHANGE).get('GB')
         return convert_gbp(price)
 
 class ProductScreen(AbstractProduct):
