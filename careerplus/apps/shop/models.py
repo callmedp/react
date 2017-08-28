@@ -1188,6 +1188,7 @@ class Product(AbstractProduct, ModelMeta):
             return None
 
     def get_pops(self):
+        # Products from other vendors
         if self.type_product in [0, 1, 3, 5]:
             category = self.category_main
             if category:    

@@ -86,7 +86,7 @@
                         {% for star in result.pStar %}
                         <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
                         {% endfor %}
-                        <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
+                        <strong>{{ result.pARx|floatformat }}/5</strong>{% if result.pRC %} | {{ result.pRC }} ratings{% endif %}
                     </div> 
 
                     <div class="providers">

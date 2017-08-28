@@ -282,6 +282,14 @@ class SearchListView(SearchBaseView):
             else:
                 self.search_sid = self.search_params.get('sid')
 
+    def post_processor(self):
+        """
+        Called just before building response and after results are generated
+        """
+        for result in self.results:
+            print()
+        print(self.__dict__)
+
     def get_extra_context(self):
 
         request_get = self.search_params.copy()
@@ -291,17 +299,19 @@ class SearchListView(SearchBaseView):
         context = super(SearchListView, self).get_extra_context()
 
         if self.search_params.getlist('fclevel'):
-            context['clevel'] = self.search_params.getlist('fclevel')
+            context['clevel'] = self.request.GET.getlist('fclevel')
         if self.search_params.getlist('fcert'):
-            context['cert'] = self.search_params.getlist('fcert')
+            context['cert'] = self.request.GET.getlist('fcert')
         if self.search_params.getlist('frating'):
             context['rating'] = self.search_params.getlist('frating')
         if self.search_params.getlist('farea'):
             context['areaf'] = self.search_params.getlist('farea')
         if self.search_params.getlist('fduration'):
-            context['duration'] = self.search_params.getlist('fduration')
+            context['duration'] = self.request.GET.getlist('fduration')
         if self.search_params.getlist('fmode'):
-            context['mode'] = self.search_params.getlist('fmode')
+            context['mode'] = self.request.GET.getlist('fmode')
+        if self.search_params.getlist('fprice'):
+            context['price'] = self.request.GET.getlist('fprice')
 
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
