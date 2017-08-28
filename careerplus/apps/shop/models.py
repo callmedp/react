@@ -15,13 +15,12 @@ from meta.models import ModelMeta
 from partner.models import Vendor
 from faq.models import (
     FAQuestion, ScreenFAQ)
-from geolocation.models import Country, Currency
+from geolocation.models import Country, Currency, CURRENCY_EXCHANGE
 from .managers import (
     ProductManager,
     IndexableProductManager,
     BrowsableProductManager,
     SaleableProductManager)
-
 from .utils import ProductAttributesContainer
 from .functions import (
     get_upload_path_category,
@@ -38,7 +37,15 @@ from .choices import (
     RELATION_CHOICES,
     COURSE_TYPE_CHOICES,
     MODE_CHOICES,
-    BG_CHOICES)
+    BG_CHOICES,
+    C_ATTR_DICT,
+    R_ATTR_DICT,
+    S_ATTR_DICT,
+    convert_to_month,
+    convert_inr,
+    convert_usd,
+    convert_aed,
+    convert_gbp)
 
 
 class ProductClass(AbstractAutoDate,AbstractSEO,):
@@ -366,13 +373,13 @@ class AttributeOption(models.Model):
         'shop.AttributeOptionGroup', related_name='options',
         verbose_name=_("Group"))
     option = models.CharField(_('Option'), max_length=255)
-    code = models.CharField(_('Option Code'), max_length=4)
+    code = models.CharField(_('Option Code'), max_length=4, unique=True)
 
     def __str__(self):
         return self.option
 
     class Meta:
-        unique_together = ('group', 'option')
+        unique_together = ('group', 'code')
         verbose_name = _('Attribute option')
         verbose_name_plural = _('Attribute options')
 
@@ -765,19 +772,19 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         return self.product_class
     
     @property
-    def var_child(self, *args, **kwargs):
+    def var_child(self):
         return self.type_product == 2
 
     @property
-    def var_parent(self, *args, **kwargs):
+    def var_parent(self):
         return self.type_product == 1
 
     @property
-    def is_combo(self, *args, **kwargs):
+    def is_combo(self):
         return self.type_product == 3
 
     @property
-    def is_virtual(self, *args, **kwargs):
+    def is_virtual(self):
         return self.type_product == 4
 
     def get_active(self):
@@ -872,11 +879,12 @@ class Product(AbstractProduct, ModelMeta):
         through_fields=('product', 'attribute'),
         blank=True)
     archive_json = models.TextField(
-        _('Archive Jason'),
+        _('Archive JSON'),
         blank=True,
         editable=False
         )
-
+    cp_page_view = models.IntegerField(
+        _('CP Page View'),default= 0)
     active = models.BooleanField(default=False)
     profile_country = models.ForeignKey(Country, null=True)
     is_indexable = models.BooleanField(default=False)
@@ -952,9 +960,6 @@ class Product(AbstractProduct, ModelMeta):
                 return prod_cat[0]
         return None
 
-    def get_exp(self, *args, **kwargs):
-        return getattr(self.attr, 'experience', '')
-    
     @property
     def is_course(self):
         if self.product_class and self.product_class.slug in settings.COURSE_SLUG:
@@ -1018,18 +1023,18 @@ class Product(AbstractProduct, ModelMeta):
         
         return ''
 
-    def get_icon_url(self):
+    def get_icon_url(self, relative=False):
         if self.icon:
-            return self.get_full_url(url=self.icon.url)
+            return self.get_full_url(url=self.icon.url) if not relative else self.icon.url
         return ''
 
-    def get_image_url(self):
+    def get_image_url(self, relative=False):
         if self.image:
-            return self.get_full_url(url=self.image.url)
+            return self.get_full_url(url=self.image.url) if not relative else self.image.url
         return ''
     
     def get_url(self):
-        return self.get_full_url(self.get_absolute_url())
+        return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
 
     def get_absolute_url(self, prd_slug=None, cat_slug=None):
         if not cat_slug:
@@ -1083,10 +1088,10 @@ class Product(AbstractProduct, ModelMeta):
             return None
 
     @property
-    def get_bg(self, *args, **kwargs):
+    def get_bg(self):
         return dict(BG_CHOICES).get(self.image_bg)
 
-    def pv_name(self, *args, **kwargs):
+    def pv_name(self):
         if self.is_course:
             return self.name + ' ( ' + str(self.get_exp()) + ' ) '
         elif self.is_writing:
@@ -1095,13 +1100,13 @@ class Product(AbstractProduct, ModelMeta):
             return self.name + ' by ' + self.vendor.name
         return self.name
 
-    def get_price(self, *args, **kwargs):
+    def get_price(self):
         
         if self.inr_price:
             return round(self.inr_price, 0)
         return Decimal(0)
 
-    def get_fakeprice(self, *args, **kwargs):
+    def get_fakeprice(self):
         if self.inr_price:
             inr_price = self.inr_price
             fake_inr_price = self.fake_inr_price
@@ -1219,7 +1224,99 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return delivery_services.none()
 
+    def get_exp(self):
+        if self.is_writing:
+            return getattr( self.attr, R_ATTR_DICT.get('EXP')).code \
+                        if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
+                        else '' 
+        elif self.is_service:
+            return getattr( self.attr, R_ATTR_DICT.get('EXP')).code \
+                        if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
+                        else ''
+        else:
+            return ''
+    
+    def get_studymode(self):
+        if self.is_course:
+            return getattr( self.attr, C_ATTR_DICT.get('SM')).code \
+                        if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
+                        else '' 
+        else:
+            return ''
 
+    def get_courselevel(self):
+        if self.is_course:
+            return getattr( self.attr, C_ATTR_DICT.get('CL')).code \
+                        if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
+                        else '' 
+        else:
+            return ''
+    
+    def get_coursetype(self):
+        if self.is_course:
+            return getattr( self.attr, C_ATTR_DICT.get('CT')).code \
+                        if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
+                        else '' 
+        else:
+            return ''
+
+    def get_cert(self):
+        if self.is_course:
+            return getattr( self.attr, C_ATTR_DICT.get('CERT')) \
+                        if getattr(self.attr, C_ATTR_DICT.get('CERT'), None) \
+                        else 0 
+        else:
+            return 0
+
+    def get_duration(self):
+        if self.is_course:
+            dd = getattr( self.attr, C_ATTR_DICT.get('DD')) \
+                        if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                        else 0
+            return convert_to_month(dd) 
+        else:
+            return ''
+
+    def get_profile_country(self):
+        pf_obj = product.productextrainfo_set.filter(info_type='profile_update')
+        if pf_obj:
+            country_obj = Country.objects.filter(pk=profile_obj.object_id)[0].code2 
+        else:
+            return ''
+
+    def get_delivery(self):
+        pf_obj = product.productextrainfo_set.filter(info_type='delivery_service')
+        if pf_obj:
+            return ''
+            # country_obj = Country.objects.filter(pk=profile_obj.object_id)[0].code2 
+        else:
+            return ''
+
+    def get_inr_price(self):
+        price = self.inr_price
+
+        return convert_inr(price)
+
+    def get_usd_price(self):
+        if self.usd_price:
+            price = self.usd_price
+        else:
+            price = self.inr_price * CURRENCY_EXCHANGE.get('US')
+        return convert_usd(price)    
+    
+    def get_aed_price(self):
+        if self.aed_price:
+            price = self.aed_price
+        else:
+            price = self.inr_price * CURRENCY_EXCHANGE.get('AE')
+        return convert_aed(price)
+    
+    def get_gbp_price(self):
+        if self.gbp_price:
+            price = self.gbp_price
+        else:
+            price = self.inr_price * CURRENCY_EXCHANGE.get('GB')
+        return convert_gbp(price)
 
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(
@@ -1697,8 +1794,7 @@ class FAQProduct(AbstractAutoDate):
         _('Question Order'), default=1)
 
     def __str__(self):
-        return _("%(product)s to '%(question)s'") % {
-            'product': self.product,
+        return _("'%(question)s'") % {
             'question': self.question}
 
     class Meta:
@@ -1724,8 +1820,7 @@ class FAQProductScreen(AbstractAutoDate):
         _('Question Order'), default=1)
 
     def __str__(self):
-        return _("%(product)s to '%(question)s'") % {
-            'product': self.product,
+        return _("'%(question)s'") % {
             'question': self.question}
 
     class Meta:
@@ -1742,8 +1837,7 @@ class ProductExtraInfo(models.Model):
     CHOICES = (
         ('default', 'Default'),
         ('profile_update', 'Profile Update Country'),
-        ('delivery_service', 'Delivery Service'),
-    )
+        ('delivery_service', 'Delivery Service'),)
 
     info_type = models.CharField(
         choices=CHOICES,

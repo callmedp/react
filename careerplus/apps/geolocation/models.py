@@ -1,3 +1,4 @@
+from decimal import Decimal
 from cities_light.abstract_models import (
     AbstractCity, AbstractRegion,
     AbstractCountry)
@@ -12,6 +13,11 @@ CURRENCY_SYMBOL = (
     (2, 'AED'),
     (3, 'GBP'),)
 
+CURRENCY_EXCHANGE = (
+    ('IN', Decimal(1)),
+    ('US', Decimal(0.0153)),
+    ('AE', Decimal(0.05)),
+    ('GB', Decimal(0.0117)),)
 
 class Currency(AbstractAutoDate):
     name = models.CharField(

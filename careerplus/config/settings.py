@@ -206,7 +206,7 @@ OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
 # Do Not Change #
 COURSE_SLUG = ['course',]
-WRITING_SLUG = ['writing','resume']
+WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service',]
 
 VENDOR_GROUP_LIST = ['VENDOR']
@@ -214,6 +214,7 @@ PRODUCT_GROUP_LIST = ['PRODUCT']
 OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
 SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['WRITERS']
+
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']

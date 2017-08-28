@@ -2,28 +2,12 @@ import json
 from haystack import indexes
 from .models import Product
 from django.template.loader import render_to_string
-from shop.choices import DURATION_DICT, convert_to_month, convert_inr_price_to_code, convert_usd_price_to_code, \
-    convert_aed_price_to_code, convert_gbp_price_to_code
-
-
-def get_attributes(obj, currency='INR'):
-    SM = getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '0'
-    CL = getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else '0'
-    CERT = getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0
-    CERT = 'CERT1' if CERT else 'CERT0'
-    DM = getattr(obj.attr, 'duration_days') if getattr(obj.attr, 'duration_days', None) else 0
-    DM = convert_to_month(DM)
-    if currency == 'USD':
-        price = convert_usd_price_to_code(obj.usd_price)
-    elif currency == 'AED':
-        price = convert_aed_price_to_code(obj.aed_price)
-    elif currency == 'GBP':
-        price = convert_gbp_price_to_code(obj.gbp_price)
-    else:
-        price = convert_inr_price_to_code(obj.inr_price)
-    return 'SM' + str(SM) + ' ' + 'CL' + str(CL) + ' ' \
-        + str(CERT) + ' ' + 'DM' + str(DM) + ' ' + 'P' + str(price)
-
+from shop.choices import DURATION_DICT, convert_to_month
+from shop.choices import (
+    DURATION_DICT, convert_to_month,
+    COURSE_ATTRIBUTE_DICT,
+    RESUME_ATTRIBUTE_DICT,
+    SERVICE_ATTRIBUTE_DICT)
 
 class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(
@@ -192,142 +176,196 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_pDM(self, obj):
         if obj.is_course:
             DM = []
-            duration_month = getattr(obj.attr, 'duration_days') if getattr(obj.attr, 'duration_days', None) else 0
-            duration_month = convert_to_month(duration_month)
-            DM.append(duration_month)
             if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    duration_month = getattr(pv.attr, 'duration_days') if getattr(pv.attr, 'duration_days', None) else 0
-                    duration_month = convert_to_month(duration_month)
-                    DM.append(duration_month)
+                    DM.append(pv.get_duration())
                 DM = list(set(DM))
+            else:
+                DM.append(obj.get_duration())
             return DM
         return []
 
     def prepare_pCert(self, obj):
         if obj.is_course:
             CERT = list()
-            CERT.append(getattr(obj.attr, 'certification') if getattr(obj.attr, 'certification', None) else 0)
             if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    CERT.append(getattr(pv.attr, 'certification') if getattr(pv.attr, 'certification', None) else 0)
+                    CERT.append(pv.get_cert())
                 CERT = list(set(CERT))
+            else:
+                CERT.append(obj.get_cert())
             return CERT
         return []
 
     def prepare_pStM(self, obj):
         if obj.is_course:
             SM = list()
-            SM.append(getattr(obj.attr, 'study_mode').code if getattr(obj.attr, 'study_mode', None) else '')
             if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    SM.append(getattr(pv.attr, 'study_mode').code if getattr(pv.attr, 'study_mode', None) else '')
+                    SM.append(pv.get_studymode())
                 SM = list(set(SM))
+            else:
+                SM.append(obj.get_studymode())
             return SM
         return []
 
     def prepare_pCL(self, obj):
         if obj.is_course:
             CL = []
-            CL.append(getattr(obj.attr, 'course_level').code if getattr(obj.attr, 'course_level', None) else '')
             if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    CL.append(getattr(pv.attr, 'course_level').code if getattr(pv.attr, 'course_level', None) else '')
+                    CL.append(pv.get_courselevel())
                 CL = list(set(CL))
+            else:
+                CL.append(obj.get_courselevel())
             return CL
         return []
 
     def prepare_pPinr(self, obj):
         Pinr = list()
-        Pinr.append(convert_inr_price_to_code(obj.inr_price))
+        Pinr.append(obj.get_inr_price())
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                Pinr.append(convert_inr_price_to_code(pv.inr_price))
+                Pinr.append(pv.get_inr_price())
             Pinr = list(set(Pinr))
         return Pinr
 
     def prepare_pPusd(self, obj):
         Pusd = list()
-        Pusd.append(convert_usd_price_to_code(obj.usd_price))
+        Pusd.append(obj.get_usd_price())
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                Pusd.append(convert_usd_price_to_code(pv.usd_price))
+                Pusd.append(pv.get_usd_price())
             Pusd = list(set(Pusd))
         return Pusd
 
     def prepare_pPaed(self, obj):
         Paed = list()
-        Paed.append(convert_aed_price_to_code(obj.aed_price))
+        Paed.append(obj.get_aed_price())
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                Paed.append(convert_aed_price_to_code(pv.aed_price))
+                Paed.append(pv.get_aed_price())
             Paed = list(set(Paed))
         return Paed
 
     def prepare_pPgbp(self, obj):
         Pgbp = list()
-        Pgbp.append(convert_gbp_price_to_code(obj.gbp_price))
+        Pgbp.append(obj.get_gbp_price())
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                Pgbp.append(convert_gbp_price_to_code(pv.gbp_price))
+                Pgbp.append(pv.get_gbp_price())
             Pgbp = list(set(Pgbp))
         return Pgbp
 
     def prepare_pAttrINR(self, obj):
-        ATTR = []
+        ATTR = list()
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                ATTR.append(get_attributes(pv, 'INR'))
+                SM = pv.get_studymode()
+                CL = pv.get_courselevel()
+                CERT = 'CERT1' if pv.get_cert() else 'CERT0'
+                DM = pv.get_duration()
+                PI = pv.get_inr_price()
+                ATTR.append(
+                    'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                    + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PI))
         else:
-            ATTR.append(get_attributes(obj, 'INR'))
-        return ATTR
-
-    def prepare_pAttrGBP(self, obj):
-        ATTR = []
-        if obj.type_product == 1:
-            var = obj.get_variations()
-            for pv in var:
-                ATTR.append(get_attributes(pv, 'GBP'))
-        else:
-            ATTR.append(get_attributes(obj, 'GBP'))
+            SM = obj.get_studymode()
+            CL = obj.get_courselevel()
+            CERT = 'CERT1' if obj.get_cert() else 'CERT0'
+            DM = obj.get_duration()
+            PI = obj.get_inr_price()
+            ATTR.append(
+                'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PI))
         return ATTR
 
     def prepare_pAttrUSD(self, obj):
-        ATTR = []
+        ATTR = list()
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                ATTR.append(get_attributes(pv, 'USD'))
+                SM = pv.get_studymode()
+                CL = pv.get_courselevel()
+                CERT = 'CERT1' if pv.get_cert() else 'CERT0'
+                DM = pv.get_duration()
+                PU = pv.get_usd_price()
+                ATTR.append(
+                    'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                    + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PU))
         else:
-            ATTR.append(get_attributes(obj, 'USD'))
+            SM = obj.get_studymode()
+            CL = obj.get_courselevel()
+            CERT = 'CERT1' if obj.get_cert() else 'CERT0'
+            DM = obj.get_duration()
+            PU = obj.get_usd_price()
+            ATTR.append(
+                'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PU))
         return ATTR
 
     def prepare_pAttrAED(self, obj):
-        ATTR = []
+        ATTR = list()
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                ATTR.append(get_attributes(pv, 'AED'))
+                SM = pv.get_studymode()
+                CL = pv.get_courselevel()
+                CERT = 'CERT1' if pv.get_cert() else 'CERT0'
+                DM = pv.get_duration()
+                PA = pv.get_aed_price()
+                ATTR.append(
+                    'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                    + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PA))
         else:
-            ATTR.append(get_attributes(obj, 'AED'))
+            SM = obj.get_studymode()
+            CL = obj.get_courselevel()
+            CERT = 'CERT1' if obj.get_cert() else 'CERT0'
+            DM = obj.get_duration()
+            PA = obj.get_aed_price()
+            ATTR.append(
+                'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PA))
         return ATTR
-    
-    def prepare_pCT(self, obj):
-        if obj.is_course:
-            return getattr(obj.attr, 'course_type', None).code if getattr(obj.attr, 'course_type', None) else None
 
+    def prepare_pAttrGBP(self, obj):
+        ATTR = list()
+        if obj.type_product == 1:
+            var = obj.get_variations()
+            for pv in var:
+                SM = pv.get_studymode()
+                CL = pv.get_courselevel()
+                CERT = 'CERT1' if pv.get_cert() else 'CERT0'
+                DM = pv.get_duration()
+                PG = pv.get_gbp_price()
+                ATTR.append(
+                    'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                    + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PG))
+        else:
+            SM = obj.get_studymode()
+            CL = obj.get_courselevel()
+            CERT = 'CERT1' if obj.get_cert() else 'CERT0'
+            DM = obj.get_duration()
+            PG = obj.get_gbp_price()
+            ATTR.append(
+                'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
+                + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PG))
+        return ATTR
+
+    def prepare_pCT(self, obj):
+        return obj.get_coursetype()
 
     def prepare_pURL(self, obj):
-        return obj.get_url() if obj.get_url() else ''
+        return obj.get_url(relative=True) if obj.get_url(relative=True) else ''
 
     def prepare_pPc(self, obj):
         return obj.product_class.slug if obj.product_class else ''
@@ -345,10 +383,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     
         
     def prepare_pIc(self, obj):
-        return obj.get_icon_url()
+        return obj.get_icon_url(relative=True)
         
     def prepare_pImg(self, obj):
-        return obj.get_image_url()
+        return obj.get_image_url(relative=True)
 
     def prepare_pIBg(self, obj):
         return obj.image_bg
@@ -372,9 +410,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return getattr(obj.attr, 'requires_delivery', False)
     
     def prepare_pEX(self, obj):
-        if obj.is_service or obj.is_writing:
-            return getattr(obj.attr, 'experience', None).code if getattr(obj.attr, 'experience', None) else None
-
+        return obj.get_exp()
+    
     def prepare_pFAQs(self, obj):
         structure = {
             'faq': False
@@ -415,7 +452,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 combo_list.append({
                     'pk': cmb.pk,
                     'name': cmb.heading,
-                    'url': cmb.get_url()
+                    'url': cmb.get_url(relative=True)
                 })
             combo_dict.update({
                 'combo_list': combo_list
@@ -441,10 +478,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     var_list.append({
                         'id': pv.id,
                         'label': pv.name,
-                        'mode': str(getattr(pv.attr, 'study_mode', '')),
-                        'duration': str(getattr(pv.attr, 'duration_months', '')),
-                        'type': str(getattr(pv.attr, 'course_type', '')),
-                        'certify': str(getattr(pv.attr, 'certification', '')),
+                        'mode': pv.get_studymode(),
+                        'duration': pv.get_duration(),
+                        'type': pv.get_coursetype(),
+                        'certify': pv.get_cert(),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
                         'usd_price': float(pv.usd_price),
@@ -465,8 +502,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         var_list.append({
                             'id': pv.id,
                             'label': pv.name,
-                            'country': str(getattr(pv.attr, 'profile_country', '')),
-                            'experience': str(getattr(pv.attr, 'experience', None)),
+                            'country': pv.get_profile_country(),
+                            'experience': pv.get_exp(),
                             'inr_price': float(pv.inr_price),
                             'fake_inr_price': float(pv.fake_inr_price),
                             'usd_price': float(pv.usd_price),
@@ -510,18 +547,19 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         fbt_list = []
         fbt = obj.get_fbts() 
         if fbt:
-            if obj.is_course:
                 fbt_dict.update({
                     'fbt': True
                 })
-                for pv in fbt:
+                
+            for pv in fbt:
+                if pv.is_course:    
                     fbt_list.append({
                         'id': pv.id,
                         'label': pv.name,
-                        'mode': str(getattr(pv.attr, 'study_mode', '')),
-                        'duration': str(getattr(pv.attr, 'duration_months', '')),
-                        'type': str(getattr(pv.attr, 'course_type', '')),
-                        'certify': str(getattr(pv.attr, 'certification', '')),
+                        'mode': pv.get_studymode(),
+                        'duration': pv.get_duration(),
+                        'type': pv.get_coursetype(),
+                        'certify': pv.get_cert(),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
                         'usd_price': float(pv.usd_price),
@@ -530,28 +568,20 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price)})
-                fbt_dict.update({
-                    'fbt_list': fbt_list
-                })
-            elif obj.is_writing or obj.is_service:
-                fbt_dict.update({
-                    'fbt': True
-                })
-                for pv in fbt:
-                    for pv in fbt:
-                        fbt_list.append({
-                            'id': pv.id,
-                            'label': pv.name,
-                            'country': str(getattr(pv.attr, 'profile_country', '')),
-                            'experience': str(getattr(pv.attr, 'experience', None)),
-                            'inr_price': float(pv.inr_price),
-                            'fake_inr_price': float(pv.fake_inr_price),
-                            'usd_price': float(pv.usd_price),
-                            'fake_usd_price': float(pv.fake_usd_price),
-                            'aed_price': float(pv.aed_price),
-                            'fake_aed_price': float(pv.fake_aed_price),
-                            'gbp_price': float(pv.gbp_price),
-                            'fake_gbp_price': float(pv.fake_gbp_price)})
+                elif pv.is_writing or pv.is_service:
+                    fbt_list.append({
+                        'id': pv.id,
+                        'label': pv.name,
+                        'country': pv.get_profile_country(),
+                        'experience': pv.get_exp(),
+                        'inr_price': float(pv.inr_price),
+                        'fake_inr_price': float(pv.fake_inr_price),
+                        'usd_price': float(pv.usd_price),
+                        'fake_usd_price': float(pv.fake_usd_price),
+                        'aed_price': float(pv.aed_price),
+                        'fake_aed_price': float(pv.fake_aed_price),
+                        'gbp_price': float(pv.gbp_price),
+                        'fake_gbp_price': float(pv.fake_gbp_price)})
                 fbt_dict.update({
                     'fbt_list': fbt_list
                 })
@@ -574,7 +604,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'id': pv.id,
                         'label': pv.name,
                         'vendor': pv.vendor.name,
-                        'url': pv.get_url(),
+                        'url': pv.get_url(relative=True),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
                         'usd_price': float(pv.usd_price),
@@ -595,8 +625,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         pop_list.append({
                             'id': pv.id,
                             'label': pv.name,
-                            'experience': str(getattr(pv.attr, 'experience', None)),
-                            'url': pv.get_url(),
+                            'experience': pv.get_exp(),
+                            'url': pv.get_url(relative=True),
                             'inr_price': float(pv.inr_price),
                             'fake_inr_price': float(pv.fake_inr_price),
                             'usd_price': float(pv.usd_price),
