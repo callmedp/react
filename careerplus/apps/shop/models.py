@@ -886,7 +886,6 @@ class Product(AbstractProduct, ModelMeta):
     cp_page_view = models.IntegerField(
         _('CP Page View'),default= 0)
     active = models.BooleanField(default=False)
-    profile_country = models.ForeignKey(Country, null=True)
     is_indexable = models.BooleanField(default=False)
 
     objects = ProductManager()
@@ -1278,14 +1277,14 @@ class Product(AbstractProduct, ModelMeta):
             return ''
 
     def get_profile_country(self):
-        pf_obj = product.productextrainfo_set.filter(info_type='profile_update')
+        pf_obj = self.productextrainfo_set.filter(info_type='profile_update')
         if pf_obj:
             country_obj = Country.objects.filter(pk=profile_obj.object_id)[0].code2 
         else:
             return ''
 
     def get_delivery(self):
-        pf_obj = product.productextrainfo_set.filter(info_type='delivery_service')
+        pf_obj = self.productextrainfo_set.filter(info_type='delivery_service')
         if pf_obj:
             return ''
             # country_obj = Country.objects.filter(pk=profile_obj.object_id)[0].code2 
