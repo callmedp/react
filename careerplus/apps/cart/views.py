@@ -45,7 +45,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
         context.update({
             "cart_items": self.get_cart_items(cart_obj=cart_obj),
             "total_amount": self.getTotalAmount(cart_obj=cart_obj),
-            # "country_obj": self.get_client_country(self.request),
+            "country_obj": self.get_client_country(self.request),
         })
         if not context['cart_items']:
             context.update(self.get_recommended_products())

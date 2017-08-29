@@ -102,6 +102,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.UpgradedMobileDetectionMiddleware',
     'core.middleware.UpgradedSetFlavourMiddleware',
+    'core.middleware.LearningShineMiddleware',
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'

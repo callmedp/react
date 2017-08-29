@@ -6,9 +6,17 @@ from cities_light.receivers import connect_default_signals
 from django.db import models
 from seo.models import AbstractAutoDate
 
+# display on site
 CURRENCY_SYMBOL = (
     (0, 'Rs.'),
     (1, '$'),
+    (2, 'AED'),
+    (3, 'GBP'),)
+
+# pass to payement gateway
+PAYMENT_CURRENCY_SYMBOL = (
+    (0, 'INR'),
+    (1, 'USD'),
     (2, 'AED'),
     (3, 'GBP'),)
 
@@ -52,6 +60,21 @@ class Country(AbstractCountry):
         blank=True,
         help_text='comma separated(,) profile url, e.g. www.test1.com, www.test2.com')
 
+    def get_payment_currency(self):
+        currency_symbol_dict = dict(PAYMENT_CURRENCY_SYMBOL)
+        if self.currency:
+            currency = currency_symbol_dict.get(self.currnecy.value)
+        else:
+            currency = 'USD'
+        return currency
+
+    def get_display_currency(self):
+        currency_symbol_dict = dict(CURRENCY_SYMBOL)
+        if self.currency:
+            currency = currency_symbol_dict.get(self.currnecy.value)
+        else:
+            currency = '$'
+        return currency
 
 connect_default_signals(Country)
 

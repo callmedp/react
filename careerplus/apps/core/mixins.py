@@ -264,7 +264,7 @@ class InvoiceGenerate(object):
             context_dict = self.get_invoice_data(order=order)
             pdf_file = self.generate_pdf(
                 context_dict=context_dict,
-                template_src='invoice/invoice_gst.html')
+                template_src='invoice/invoice-product.html')
             file_name = 'invoice-' + str(order.number) + '-'\
                 + timezone.now().strftime('%d%m%Y') + '.pdf'
             order.invoice = SimpleUploadedFile(
