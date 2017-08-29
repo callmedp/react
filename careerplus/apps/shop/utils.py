@@ -377,7 +377,7 @@ class ProductModeration(object):
                 for chap in screenchap:
                     pchap = chap.create_chapter()
                     pchap.heading = chap.heading
-                    pchap.answer = chap.heading
+                    pchap.answer = chap.answer
                     pchap.status = chap.status
                     pchap.ordering = chap.ordering
                     pchap.product = product
@@ -514,7 +514,7 @@ class ProductModeration(object):
                 for chap in prdchap:
                     schap = chap.create_screen()
                     schap.heading = chap.heading
-                    schap.answer = chap.heading
+                    schap.answer = chap.answer
                     schap.status = chap.status
                     schap.ordering = chap.ordering
                     schap.product = screen

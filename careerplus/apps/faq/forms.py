@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from .models import FAQuestion
-
+from partner.models import Vendor
 
 class AddFaqForm(forms.ModelForm):
 
@@ -76,7 +76,8 @@ class ChangeFaqForm(forms.ModelForm):
         
     class Meta:
         model = FAQuestion
-        fields = ('text', 'answer', 'status', 'sort_order', 'vendor')
+        fields = ('text', 'answer', 'status', 'sort_order',
+            'vendor')
 
     def clean_text(self):
         text = self.cleaned_data.get('text', '')
@@ -104,3 +105,24 @@ class ChangeFaqForm(forms.ModelForm):
         return faq
 
 
+
+class ChangePublicFaqForm(forms.ModelForm):
+
+    public_vendor = forms.ModelMultipleChoiceField(
+        queryset=Vendor.objects.all(),
+        to_field_name='pk',
+        widget=forms.SelectMultiple(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    def __init__(self, *args, **kwargs):
+        super(ChangePublicFaqForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = FAQuestion
+        fields = (
+            'public_vendor',)
+
+    def clean(self):
+        super(ChangePublicFaqForm, self).clean()
+
+    

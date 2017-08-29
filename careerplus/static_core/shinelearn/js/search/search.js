@@ -5,15 +5,11 @@ function filterquery(type) {
     $('#form_facets').find('input').removeAttr('disabled', 'disabled');
     $('#id_page').val(1);
     $('#id_rstart').val(1);
-    if($('.cls_paginate').length) {
-    	$('.cls_paginate').first().click();
-	} else {
-		$('#form_facets').submit();
-	}
+    $('#form_facets').submit();
 }
 
 function paginate() {
-    $('.cls_paginate').click(function(e){
+    $('.cls_load_more').click(function(e){
         var jObj={};
         jObj.element = $(this);
         jObj.val = (e.originalEvent == undefined ? 1 : (jObj.element.data('type') == 'next' ? parseInt($('#id_rstart').val()) + 1 : parseInt($('#id_rstart').val()) - 1));
@@ -63,14 +59,14 @@ function SearchFilter() {
         var $formFacets = $('#form_facets');
         $formFacets.find('input#' + $(this).attr('hdn')).val($(this).val());
         $formFacets.find('input').removeAttr('disabled', 'disabled');
+        const query = new URLSearchParams(window.location.search);
+        query[$(this).attr('name')] = $(this).val();
         $('#id_page').val(1);
         $('#id_rstart').val(1);
-        if($('.cls_paginate').length){
-            $('.cls_paginate').first().click();
-        } else {
-            $app.overLay(true);
-            $('#form_facets').submit();
-        }
+        $('#form_facets').submit();
+    });
+    $(document).on('click', '.js_apply_filter', function () {
+        filterquery();
     });
 }
 

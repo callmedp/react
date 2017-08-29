@@ -1,5 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
-
+from decimal import Decimal
 RELATION_CHOICES = (
     (0, 'Default'),
     (1, 'UpSell'),
@@ -111,3 +111,85 @@ def convert_to_month(days=0):
         elif 36 < months:
             return 'D7'
     return 'D0'
+
+
+C_ATTR_DICT = {
+    'SM': 'study_mode',
+    'DD': 'duration_days',
+    'CERT': 'certification',
+    'CL': 'course_level',
+    'CT': 'course_type'
+}
+R_ATTR_DICT = {
+    'EXP': 'experience_resume',
+}
+S_ATTR_DICT = {
+    'EXP': 'experience_service',
+}
+
+STUDY_MODE = dict((
+    ('ON', 'Online'),
+    ('OF', 'Offline'),
+    ('IL', 'Instructor Led'),
+    ('BL', 'Blended'),
+    ('CA', 'Classroom'),
+    ('CF', 'Certifications'),
+    ('DL', 'Distance Learning'),
+    ))
+
+
+def convert_inr(price=Decimal(0)):
+    if price:
+        if Decimal(0) <= price <= Decimal(1000):
+            return '1'
+        elif Decimal(1000) < price <= Decimal(5000):
+            return '2'
+        elif Decimal(5000) < price <= Decimal(10000):
+            return '3'
+        elif Decimal(10000) < price <= Decimal(25000):
+            return '4'
+        elif Decimal(25000) < price:
+            return '5'
+    return '0'
+
+def convert_usd(price=Decimal(0)):
+    if price:
+        if Decimal(0) <= price <= Decimal(20):
+            return '1'
+        elif Decimal(20) < price <= Decimal(100):
+            return '2'
+        elif Decimal(100) < price <= Decimal(200):
+            return '3'
+        elif Decimal(200) < price <= Decimal(500):
+            return '4'
+        elif Decimal(500) < price:
+            return '5'
+    return '0'
+
+def convert_aed(price=Decimal(0)):
+    if price:
+        if Decimal(0) <= price <= Decimal(50):
+            return '1'
+        elif Decimal(50) < price <= Decimal(100):
+            return '2'
+        elif Decimal(100) < price <= Decimal(200):
+            return '3'
+        elif Decimal(200) < price <= Decimal(500):
+            return '4'
+        elif Decimal(500) < price:
+            return '5'
+    return '0'
+
+def convert_gbp(price=Decimal(0)):
+    if price:
+        if Decimal(0) <= price <= Decimal(15):
+            return '1'
+        elif Decimal(15) < price <= Decimal(60):
+            return '2'
+        elif Decimal(60) < price <= Decimal(120):
+            return '3'
+        elif Decimal(120) < price <= Decimal(360):
+            return '4'
+        elif Decimal(360) < price:
+            return '5'
+    return '0'

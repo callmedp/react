@@ -1,6 +1,6 @@
 #python imports
 import re
-import string
+import itertools
 
 #django imports
 from django.contrib.auth.models import AnonymousUser
@@ -14,7 +14,7 @@ from haystack.query import EmptySearchQuerySet
 #local imports
 from search import inputs
 from .helpers import clean_all_fields, clean_id_fields, clean_list_fields, \
-    handle_special_chars, get_filters, remove_quote_in_q
+    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys
 from .lookups import FILLERS
 
 #inter app imports
@@ -33,9 +33,9 @@ class BaseSearch(object):
     search_params = {}
     allow_empty_query = True
 
-    fields = ["text", "pURL", "pTt", "pHd", "pNm", "pSg", "pPc", "pTP", "pIc",
-              "pImA", "pvurl", "pDM", "pDD", "id", "pCert", "pAttr", "pCT", "pAR", "pARx", "pRC", "pNJ",
-              "pPvn", "pCmbs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pPChs"]
+    fields = ["text", "pURL", "pTt", "pHd", "pTP", "pStar", "pImA", "id", "pAR", "pARx", "pRC", "pNJ", "pImg",
+              "pPvn", "pCmbs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
+              "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb"]
 
     similar_fields = []
 
@@ -44,39 +44,33 @@ class BaseSearch(object):
         'qt': 'edismax',
         'facet': 'on',
         'facet.mincount': '1',
-        'qf': 'text pHd^10 pFA^6 pCtg^4 pMtD^2 pMK^2 pChs^2 pAb^1',
-        'pf': 'pHd^10 pFA^4 pCtg^4 pMtD^2 pMK^2 pPChs^2 pAb^1',
-        'pf2': 'pFA^6 pCtg^4 pPChs^2',
+        'qf': 'text pHd^10 pFA^6 pCtg^4 pMtD^2 pMK^2 pCC^2 pAb^1',
+        'pf': 'pHd^10 pFA^4 pCtg^4 pMtD^2 pMK^2 pPCC^2 pAb^1',
+        'pf2': 'pFA^6 pCtg^4 pPCC^2',
         'ps2': 1,
         'tie': 1,
         'hl': 'false',
-        # 'boost': 'product(recip(ms(NOW/HOUR,jPDate),3.16e-11,0.08,0.05),jDup)',
-        'spellcheck': 'false',
-        # 'spellcheck.dictionary': 'default',
-        # 'spellcheck.onlyMorePopular': 'true',
-        # 'spellcheck.maxResultsForSuggest': 10000,
-        # 'spellcheck.maxCollations': 4,
-        # 'spellcheck.maxCollationTries': 100,
-        # 'spellcheck.collateExtendedResults': 'true'
+        'spellcheck': 'false'
     }
 
     facet_list = [
-        '{!ex=level}pCL',
-        '{!ex=ratng}pAR',
-        '{!ex=funa}pFA',
-        '{!ex=durm}pDM',
-        '{!ex=cert}pCert',
-        '{!ex=mode}pStM'
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pCL',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pAR',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pFA',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pDM',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pCert',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pStM',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pPinr'
     ]
 
     # These are the filters shown on search page
     filter_mapping = {
-        '{!tag=level}pCL': 'fclevel',
-        '{!tag=cert}pCert': 'fcert',
         '{!tag=funa}pFA': 'farea',
         '{!tag=ratng}pAR': 'frating',
-        '{!tag=durm}pDM':'fduration',
-        '{!tag=mode}pStM': 'fmode'
+        '{!tag=inr}pAttrINR': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        '{!tag=usd}pAttrUSD': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        '{!tag=aed}pAttrAED': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        '{!tag=gbp}pAttrGBP': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice']
     }
 
     boost_mapping = {
@@ -259,9 +253,14 @@ class BaseSearch(object):
                     p2 = '*' if not p2 else p2
                     results = results.narrow('%s:[%s TO %s]' % (field, p1, p2))
             elif type(param) == list:
+                attrs = []
                 for p in param:
                     if self.params.get(p):
-                        results = results.narrow('%s:(%s)' % (field, ' '.join(self.params.getlist(p))))
+                        attrs.append(self.params.getlist(p))
+                if attrs:
+                    attrs = list(itertools.product(*attrs))
+                    solr_attrs = ['"{}"~4'.format(' '.join(attr)) for attr in attrs]
+                    results = results.narrow('%s:(%s)' % (field, ' OR '.join(solr_attrs)))
             else:
                 if self.params.get(param):
                     fields = field.split(',')
@@ -421,7 +420,7 @@ class BaseSearch(object):
 
 class SimpleSearch(BaseSearch):
 
-    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
+    needed_params_options = {'q', 'fclevel', 'fcert', 'area', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
 
 
 
@@ -583,16 +582,6 @@ class SimpleParams(BaseParams):
         params = get_filters(params)
         return params
 
-    def pop_null_parameters(self,params):
-        """
-        Null params sent from app.
-        Pop them to enable semantic to infer words.
-        """
-        for key in params.keys():
-            if not params.get(key) or params.get(key) == u'null':
-                params.pop(key)
-        return params
-
     def get_request_params(self):
         """
         Collect and prepare all the request params.
@@ -627,7 +616,7 @@ class SimpleParams(BaseParams):
         # Incase of GET request if all arguments are found in lookup then it states that no keyword
         # have been entered so set solr query as *:* in separate param so that it does not get displayed in form
 
-        params = self.pop_null_parameters(params)
+        params = clear_empty_keys(params)
 
         if not params_filtered:
             if 'q' not in params:
@@ -652,7 +641,7 @@ class SimpleParams(BaseParams):
 
         quoted_string = quoted_string.strip()
         unquoted_string = (" ".join(q.split("\"")[0::2])).lower()
-        classifiers_to_process = ["farea", "skills"]
+        classifiers_to_process = ["area", "skills"]
         words_to_and = []
         for classifier in classifiers_to_process:
             words_to_and = words_to_and + self.search_params.get(classifier, [])
@@ -698,8 +687,8 @@ class SimpleParams(BaseParams):
         Special checks for no javascript.
         Handled for both mobile and desktop.
         """
-        if 'farea' in params and params['farea'] == "Functional Area":
-            params['farea'] = ""
+        if 'area' in params and params['area'] == "Functional Area":
+            params['area'] = ""
         if 'q' in params and params['q'] == "Search for courses, services etc..":
             params['q'] = ""
         if 'skills' in params and params['skills'] == 'Key Skills':
