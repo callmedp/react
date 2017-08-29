@@ -102,7 +102,7 @@
                         {% endif %}
                     {% endwith %}
                     <div class="pricing-box">
-                       Starting at <strong>Rs. {{ result.pPinr |floatformat:'0' }}/-</strong>{% if result.pPfinr|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfinr|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
+                       Starting at <strong>Rs. {{ result.pPin |floatformat:'0' }}/-</strong>{% if result.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfin|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
                     </div>
 
                   </div>
