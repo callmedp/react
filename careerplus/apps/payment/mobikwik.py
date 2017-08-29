@@ -158,7 +158,9 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
         if response_checksum == checksum and cart_obj:
             if str(statuscode) == "0":
                 order_id = cart_pk
-                actual_amount = "%.2f" % round(self.getTotalAmount())
+                payment_dict = self.getPayableAmount(cart_obj=cart_obj)
+                total_payable_amount = payment_dict.get('total_payable_amount')
+                actual_amount = "%.2f" % total_payable_amount
 
                 if order_id != str(cart_obj.pk):
                     err_mesg = "Original orderid # %s and actual orderid # %s do not match" % (str(cart_obj.pk), order_id)

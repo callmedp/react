@@ -1906,3 +1906,9 @@ class DeliveryService(AbstractAutoDate):
 
     def __str__(self):
         return self.name
+
+    def get_price(self, *args, **kwargs):
+        
+        if self.inr_price:
+            return round(self.inr_price, 0)
+        return Decimal(0)

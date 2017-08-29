@@ -49,6 +49,8 @@ class Order(AbstractAutoDate):
     total_excl_tax = models.DecimalField(
         _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
 
+    tax_config = models.CharField(max_length=255, null=True, blank=True)
+
     date_placed = models.DateTimeField(db_index=True)
     closed_on = models.DateTimeField(null=True, blank=True)
 
@@ -428,7 +430,7 @@ class Message(AbstractAutoDate):
 
 class InternationalProfileCredential(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
-    country =  models.ForeignKey(Country)
+    country = models.ForeignKey(Country)
     username = models.CharField(_('Username'), max_length=100)
     password = models.CharField(_('Password'), max_length=100)
     candidateid = models.CharField(_('CandidateId'), max_length=100)
@@ -439,3 +441,16 @@ class InternationalProfileCredential(AbstractAutoDate):
     def __str__(self):
         return self.username
 
+
+class CouponOrder(AbstractAutoDate):
+    order = models.ForeignKey(Order)
+    coupon = models.ForeignKey(
+        'coupon.Coupon',
+        on_delete=models.SET_NULL,
+        verbose_name=_("Coupon"), null=True)
+
+    coupon_code = models.CharField(
+        _("Coupon Code"), max_length=30, blank=True, null=True)
+
+    value = models.DecimalField(
+        _("Value"), max_digits=8, decimal_places=2, default=0.0)

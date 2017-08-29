@@ -9,28 +9,9 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
+# from django.http import HttpResponse
 
 from weasyprint import HTML
-
-
-# from filebrowser.base import FileObject
-
-
-# class ImageCompressedMixin(object):
-
-#     def save_image(self, image, variant=None):
-#         try:
-#             image_orig = FileObject(image.path)
-#             if image_orig.filetype == "Image":
-#                 variant_list = [variant]
-#                 if not variant:
-#                     variant_list = ['large', 'medium']
-#                 for variant in variant_list:
-#                     image_orig.version_generate(variant)
-#                 return True
-#         except:
-#             pass
-#         return False
 
 
 class TokenExpiry(object):
@@ -87,10 +68,83 @@ class InvoiceGenerate(object):
         return Decimal(amount).quantize(
             Decimal('.01'), rounding=ROUND_HALF_DOWN)
 
+    def getTaxAmountByPart(self, tax_amount, tax_rate_per, cart_obj=None, order=None):
+        data = {
+            "sgst": round((tax_rate_per / 2), 0),
+            "cgst": round((tax_rate_per / 2), 0),
+            "igst": 0,
+            "sgst_amount": Decimal(0.00),
+            "cgst_amount": Decimal(0.00),
+            "igst_amount": Decimal(0.00),
+        }
+        if order:
+            # tax in percentage
+            if order.country.lower() == 'india' and order.state.lower() == 'haryana':
+                sgst = round((tax_rate_per / 2), 0)
+                cgst = round((tax_rate_per / 2), 0)
+                igst = 0
+
+                sgst_amount = self.get_quantize(tax_amount / 2)
+                cgst_amount = sgst_amount
+                igst_amount = Decimal(0.00)
+
+            elif order.country.lower() == 'india':
+                sgst = round((tax_rate_per / 2), 0)
+                cgst = round((tax_rate_per / 2), 0)
+                igst = 0
+
+                sgst_amount = self.get_quantize(tax_amount / 2)
+                cgst_amount = sgst_amount
+                igst_amount = Decimal(0.00)
+            else:
+                sgst = 0
+                cgst = 0
+                igst = 0
+
+                sgst_amount = self.get_quantize(tax_amount / 2)
+                cgst_amount = sgst_amount
+                igst_amount = Decimal(0.00)
+        elif cart_obj:
+            # tax in percentage
+            if cart_obj.country.lower() == 'india' and cart_obj.state.lower() == 'haryana':
+                sgst = round((tax_rate_per / 2), 0)
+                cgst = round((tax_rate_per / 2), 0)
+                igst = 0
+
+                sgst_amount = self.get_quantize(tax_amount / 2)
+                cgst_amount = sgst_amount
+                igst_amount = Decimal(0.00)
+
+            elif cart_obj.country.lower() == 'india':
+                sgst = round((tax_rate_per / 2), 0)
+                cgst = round((tax_rate_per / 2), 0)
+                igst = 0
+
+                sgst_amount = self.get_quantize(tax_amount / 2)
+                cgst_amount = sgst_amount
+                igst_amount = Decimal(0.00)
+            else:
+                sgst = 0
+                cgst = 0
+                igst = 0
+
+                sgst_amount = self.get_quantize(tax_amount / 2)
+                cgst_amount = sgst_amount
+                igst_amount = Decimal(0.00)
+        data.update({
+            "sgst": sgst,
+            "cgst": cgst,
+            "igst": igst,
+            "sgst_amount": sgst_amount,
+            "cgst_amount": cgst_amount,
+            "igst_amount": igst_amount,
+        })
+        return data
+
     def get_invoice_data(self, order=None):
         invoice_data = {}
         if order:
-            invoice_no = order.id
+            invoice_no = 'IN' + str(order.id)
             email = order.email
             mobile = order.mobile
             if order.payment_date:
@@ -98,15 +152,67 @@ class InvoiceGenerate(object):
             else:
                 invoice_date = timezone.now()
 
-            tax_amount = Decimal(0)
-            total_price = Decimal(0)
+            coupons_applied = order.couponorder_set.all()
+            coupon_amount = Decimal(0)
+
+            for coupon in coupons_applied:
+                coupon_amount += coupon.value
+
+            # loyalty point used
+            redeemed_reward_point = Decimal(0)
+            wal_txn = order.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
+            if wal_txn.exists():
+                wal_txn = wal_txn[0]
+                redeemed_reward_point = wal_txn.point_value
+
+            total_payable_amount = order.total_incl_tax
+
+            total_amount_before_discount = order.total_excl_tax  # without discount
+            total_amount_after_discount = total_amount_before_discount - coupon_amount
+            total_amount_after_discount = total_amount_before_discount - redeemed_reward_point
+
+            tax_amount = total_payable_amount - total_amount_after_discount
+
+            tax_rate_per = (tax_amount * 100) / total_amount_after_discount
+            tax_rate_per = self.get_quantize(tax_rate_per)
+
+            # tax in percentage
+            invoice_data.update(self.getTaxAmountByPart(
+                tax_amount, tax_rate_per, cart_obj=None, order=order))
+            # if order.country.lower() == 'india' and order.state.lower() == 'haryana':
+            #     sgst = round((tax_rate_per / 2), 0)
+            #     cgst = round((tax_rate_per / 2), 0)
+            #     igst = 0
+
+            #     sgst_amount = self.get_quantize(tax_amount / 2)
+            #     cgst_amount = sgst_amount
+            #     igst_amount = Decimal(0.00)
+
+            # elif order.country.lower() == 'india':
+            #     sgst = round((tax_rate_per / 2), 0)
+            #     cgst = round((tax_rate_per / 2), 0)
+            #     igst = 0
+
+            #     sgst_amount = self.get_quantize(tax_amount / 2)
+            #     cgst_amount = sgst_amount
+            #     igst_amount = Decimal(0.00)
+            # else:
+            #     sgst = 0
+            #     cgst = 0
+            #     igst = 0
+
+            #     sgst_amount = self.get_quantize(tax_amount / 2)
+            #     cgst_amount = sgst_amount
+            #     igst_amount = Decimal(0.00)
+
             order_items = []
-            parent_ois = order.orderitems.filter(parent=None).select_related('product', 'partner')
+            parent_ois = order.orderitems.filter(
+                parent=None).select_related('product', 'partner')
             for p_oi in parent_ois:
                 data = {}
                 data['oi'] = p_oi
                 data['addons'] = order.orderitems.filter(
-                    parent=p_oi, is_combo=False,
+                    parent=p_oi,
                     is_addon=True,
                     no_process=False).select_related('product', 'partner')
                 data['variations'] = order.orderitems.filter(
@@ -117,61 +223,24 @@ class InvoiceGenerate(object):
                     is_combo=True).select_related('product', 'partner')
                 order_items.append(data)
 
-            for data in order_items:
-                parent_oi = data.get('oi')
-                addons = data.get('addons')
-                variations = data.get('variations')
-                combos = data.get('combos')
-                product_price = parent_oi.product.get_price()
-                product_tax = product_price * Decimal(18 / 100)
-                parent_oi.oi_price_incl_tax = product_price + product_tax
-                parent_oi.save()
-                if parent_oi.no_process == True and parent_oi.product.type_flow == 12:
-                    tax_amount += product_tax
-                    total_price += parent_oi.oi_price_incl_tax
-                elif parent_oi.no_process == False:
-                    tax_amount += product_tax
-                    total_price += parent_oi.oi_price_incl_tax
-
-                for oi in addons:
-                    product_price = oi.product.get_price()
-                    product_tax = product_price * Decimal(18 / 100)
-                    oi.oi_price_incl_tax = product_price + product_tax
-                    oi.save()
-                    tax_amount += product_tax
-                    total_price += oi.oi_price_incl_tax
-
-                for oi in variations:
-                    product_price = oi.product.get_price()
-                    product_tax = product_price * Decimal(18 / 100)
-                    oi.oi_price_incl_tax = product_price + product_tax
-                    oi.save()
-                    tax_amount += product_tax
-                    total_price += oi.oi_price_incl_tax
-
-                for oi in combos:
-                    product_price = oi.product.get_price()
-                    product_tax = product_price * Decimal(18 / 100)
-                    oi.oi_price_incl_tax = product_price + product_tax
-                    oi.save()
-                    tax_amount += product_tax
-                    total_price += oi.oi_price_incl_tax
-
-            tax_amount = round(tax_amount, 2)
-            tax_level1 = round(tax_amount / 2, 2)
-            tax_level2 = round(tax_amount / 2, 2)
-            total_price = round(total_price, 2)
             invoice_data.update({
                 "invoice_no": invoice_no,
                 "email": email,
                 "mobile": mobile,
                 "invoice_date": invoice_date,
                 "order_items": order_items,
-                "tax_amount": tax_amount,
-                "tax_level1": tax_level1,
-                "tax_level2": tax_level2,
-                "total_price": total_price,
+                "total_amount_before_discount": total_amount_before_discount,
+                "total_amount_after_discount": total_amount_after_discount,
+                "total_payable_amount": total_payable_amount,
                 "order": order,
+                "coupon_amount": coupon_amount,
+                "redeemed_reward_point": redeemed_reward_point,
+                # "sgst": sgst,
+                # "cgst": cgst,
+                # "igst": igst,
+                # "sgst_amount": sgst_amount,
+                # "cgst_amount": cgst_amount,
+                # "igst_amount": igst_amount,
             })
 
         return invoice_data
@@ -181,22 +250,21 @@ class InvoiceGenerate(object):
             html_template = get_template(template_src)
             context = Context(context_dict)
 
-            rendered_html = html_template.render(context).encode(
-                encoding="UTF-8")
+            rendered_html = html_template.render(context).encode(encoding='UTF-8')
 
             pdf_file = HTML(string=rendered_html).write_pdf()
             return pdf_file
 
-        # http_response = HttpResponse(pdf_file, content_type='application/pdf')
-        # http_response['Content-Disposition'] = 'filename="report.pdf"'
-        # return http_response
+            # http_response = HttpResponse(pdf_file, content_type='application/pdf')
+            # http_response['Content-Disposition'] = 'filename="report.pdf"'
+            # return http_response
 
     def save_order_invoice_pdf(self, order=None):
         if order:
             context_dict = self.get_invoice_data(order=order)
             pdf_file = self.generate_pdf(
                 context_dict=context_dict,
-                template_src='invoice/invoice.html')
+                template_src='invoice/invoice_gst.html')
             file_name = 'invoice-' + str(order.number) + '-'\
                 + timezone.now().strftime('%d%m%Y') + '.pdf'
             order.invoice = SimpleUploadedFile(

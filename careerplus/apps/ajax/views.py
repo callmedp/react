@@ -23,6 +23,7 @@ from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
 from order.functions import pending_item_email, process_mailer
 from console.mixins import ActionUserMixin
+from order.mixins import OrderMixin
 
 
 class ArticleCommentView(View):
@@ -631,7 +632,9 @@ class MarkedPaidOrderView(View):
                 obj.paid_by = request.user
                 obj.payment_date = timezone.now()
                 obj.save()
-                data['display_message'] = "order %s marked paid successfully" % (order_pk)
+                data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
+                # add reward_point in wallet
+                OrderMixin().addRewardPointInWallet(order=obj)
                 # pending item email send
                 pending_item_email(order=obj)
 
@@ -639,7 +642,7 @@ class MarkedPaidOrderView(View):
                 process_mailer(order=obj)
 
             except Exception as e:
-                data['display_message'] = '%s order id - %s' % (str(e), order_pk)
+                data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
             return HttpResponse(json.dumps(data), content_type="application/json")
         elif request.is_ajax() and request.user.is_authenticated():
             data['display_message'] = "Permission denied"

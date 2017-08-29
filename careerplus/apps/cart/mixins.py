@@ -243,7 +243,7 @@ class CartMixin(object):
                 lis_with_delivery = cart_obj.lineitems.all().exclude(delivery_service=None)
                 for li in lis_with_delivery:
                     if li.delivery_service:
-                        total += li.delivery_service.inr_price
+                        total += li.delivery_service.get_price()
             return round(total, 0)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -253,6 +253,10 @@ class CartMixin(object):
         total_amount = Decimal(0)
         total_payable_amount = Decimal(0)
         tax_amount = Decimal(0)
+        coupon_amount = Decimal(0)
+        redeemed_reward_point = Decimal(0)
+        amount_after_discount = Decimal(0)
+        tax_rate_per = settings.TAX_RATE_PERCENTAGE
         try:
             if not cart_obj:
                 if not self.request.session.get('cart_pk'):
@@ -262,18 +266,40 @@ class CartMixin(object):
             if cart_obj:
                 total_amount = self.getTotalAmount(cart_obj=cart_obj)
                 total_amount = InvoiceGenerate().get_quantize(total_amount)
+                coupon_obj = cart_obj.coupon
+                wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
+                if coupon_obj and coupon_obj.coupon_type == 'flat':
+                    coupon_amount = coupon_obj.value
+                elif coupon_obj and coupon_obj.coupon_type == 'percent':
+                    coupon_amount = (total_amount * coupon_obj.value) / 100
+                    coupon_amount = InvoiceGenerate().get_quantize(coupon_amount)
+
+                elif wal_txn.exists():
+                    wal_txn = wal_txn[0]
+                    redeemed_reward_point = wal_txn.point_value
+
+                amount_after_discount = total_amount - coupon_amount
+                amount_after_discount = total_amount - redeemed_reward_point
                 tax_amount = Decimal(0)
                 if cart_obj.country.upper() == 'INDIA':
-                    tax_amount = (total_amount * 18) / 100
+                    tax_amount = (amount_after_discount * tax_rate_per) / 100
                     tax_amount = InvoiceGenerate().get_quantize(tax_amount)
-                total_payable_amount = total_amount + tax_amount
+                total_payable_amount = amount_after_discount + tax_amount
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
+
         data = {
             "total_amount": total_amount,
             "tax_amount": tax_amount,
             "total_payable_amount": total_payable_amount,
+            "tax_rate_per": tax_rate_per,
+            "coupon_amount": coupon_amount,
+            "amount_after_discount": amount_after_discount,
+            "redeemed_reward_point": redeemed_reward_point,
         }
+        data.update(
+            InvoiceGenerate().getTaxAmountByPart(
+                tax_amount, tax_rate_per, cart_obj=cart_obj))
         return data
 
     def getSelectedProduct(self, product):

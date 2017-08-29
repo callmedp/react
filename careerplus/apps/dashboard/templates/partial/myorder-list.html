@@ -52,12 +52,12 @@
               <datalist class="col-sm-2">
                 {% if order.status == 1 or order.status == 3 %}
                     <form role="form" id="download-invoice-form{{order.pk}}" method="POST" action="{% url "dashboard:dashboard-invoicedownload" %}">
-                    <div style="display:none">
-                        <input type="hidden" name="csrfmiddlewaretoken" 
-                        value="{{csrf_token}}" />
-                        <input type="hidden" name="order_pk" value="{{order.pk}}" />
-                   </div>
-                    <strong><a role="button" onclick="downloadOrderInvoice('{{order.pk}}')" id="download-order-invoice{{order.pk}}">Download invoice</a></strong>
+                      <div style="display:none">
+                          <input type="hidden" name="csrfmiddlewaretoken" 
+                          value="{{csrf_token}}" />
+                          <input type="hidden" name="order_pk" value="{{order.pk}}" />
+                     </div>
+                      <strong><a role="button" onclick="downloadOrderInvoice('{{order.pk}}')" id="download-order-invoice{{order.pk}}">Download invoice</a></strong>
                     </form>
                 {% endif %}
               </datalist>

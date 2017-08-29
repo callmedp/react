@@ -216,6 +216,9 @@ BROKER_URL = 'redis://localhost:6379/0'
 
 DRAFT_MAX_LIMIT = 3
 
+# GST tax rate on product
+TAX_RATE_PERCENTAGE = 18
+
 # HTMSL for SMS
 HTMSL_USER = 'sumo'
 HTMSL_PASS = 'w1XN75L'
