@@ -1,6 +1,6 @@
 #python imports
 import re
-import string
+import itertools
 
 #django imports
 from django.contrib.auth.models import AnonymousUser
@@ -33,9 +33,9 @@ class BaseSearch(object):
     search_params = {}
     allow_empty_query = True
 
-    fields = ["text", "pURL", "pTt", "pHd", "pTP", "pStar",
-              "pImA", "id", "pAR", "pARx", "pRC", "pNJ", "pImg",
-              "pPvn", "pCmbs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp"]
+    fields = ["text", "pURL", "pTt", "pHd", "pTP", "pStar", "pImA", "id", "pAR", "pARx", "pRC", "pNJ", "pImg",
+              "pPvn", "pCmbs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
+              "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb"]
 
     similar_fields = []
 
@@ -44,39 +44,33 @@ class BaseSearch(object):
         'qt': 'edismax',
         'facet': 'on',
         'facet.mincount': '1',
-        'qf': 'text pHd^10 pFA^6 pCtg^4 pMtD^2 pMK^2 pChs^2 pAb^1',
-        'pf': 'pHd^10 pFA^4 pCtg^4 pMtD^2 pMK^2 pPChs^2 pAb^1',
-        'pf2': 'pFA^6 pCtg^4 pPChs^2',
+        'qf': 'text pHd^10 pFA^6 pCtg^4 pMtD^2 pMK^2 pCC^2 pAb^1',
+        'pf': 'pHd^10 pFA^4 pCtg^4 pMtD^2 pMK^2 pPCC^2 pAb^1',
+        'pf2': 'pFA^6 pCtg^4 pPCC^2',
         'ps2': 1,
         'tie': 1,
         'hl': 'false',
-        # 'boost': 'product(recip(ms(NOW/HOUR,jPDate),3.16e-11,0.08,0.05),jDup)',
-        'spellcheck': 'false',
-        # 'spellcheck.dictionary': 'default',
-        # 'spellcheck.onlyMorePopular': 'true',
-        # 'spellcheck.maxResultsForSuggest': 10000,
-        # 'spellcheck.maxCollations': 4,
-        # 'spellcheck.maxCollationTries': 100,
-        # 'spellcheck.collateExtendedResults': 'true'
+        'spellcheck': 'false'
     }
 
     facet_list = [
-        '{!ex=level,ratng,funa,durm,cert,mode}pCL',
-        '{!ex=level,ratng,funa,durm,cert,mode}pAR',
-        '{!ex=level,ratng,funa,durm,cert,mode}pFA',
-        '{!ex=level,ratng,funa,durm,cert,mode}pDM',
-        '{!ex=level,ratng,funa,durm,cert,mode}pCert',
-        '{!ex=level,ratng,funa,durm,cert,mode}pStM'
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pCL',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pAR',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pFA',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pDM',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pCert',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pStM',
+        '{!ex=ratng,funa,inr,usd,aed,gbp}pPinr'
     ]
 
     # These are the filters shown on search page
     filter_mapping = {
-        '{!tag=level}pCL': 'fclevel',
-        '{!tag=cert}pCert': 'fcert',
         '{!tag=funa}pFA': 'farea',
         '{!tag=ratng}pAR': 'frating',
-        '{!tag=durm}pDM':'fduration',
-        '{!tag=mode}pStM': 'fmode'
+        '{!tag=inr}pAttrINR': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        '{!tag=usd}pAttrUSD': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        '{!tag=aed}pAttrAED': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        '{!tag=gbp}pAttrGBP': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice']
     }
 
     boost_mapping = {
@@ -259,9 +253,14 @@ class BaseSearch(object):
                     p2 = '*' if not p2 else p2
                     results = results.narrow('%s:[%s TO %s]' % (field, p1, p2))
             elif type(param) == list:
+                attrs = []
                 for p in param:
                     if self.params.get(p):
-                        results = results.narrow('%s:(%s)' % (field, ' '.join(self.params.getlist(p))))
+                        attrs.append(self.params.getlist(p))
+                if attrs:
+                    attrs = list(itertools.product(*attrs))
+                    solr_attrs = ['"{}"~4'.format(' '.join(attr)) for attr in attrs]
+                    results = results.narrow('%s:(%s)' % (field, ' OR '.join(solr_attrs)))
             else:
                 if self.params.get(param):
                     fields = field.split(',')

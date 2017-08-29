@@ -86,7 +86,7 @@
                         {% for star in result.pStar %}
                         <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
                         {% endfor %}
-                        <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
+                        <strong>{{ result.pARx|floatformat }}/5</strong>{% if result.pRC %} | {{ result.pRC }} ratings{% endif %}
                     </div> 
 
                     <div class="providers">
@@ -102,7 +102,7 @@
                         {% endif %}
                     {% endwith %}
                     <div class="pricing-box">
-                       Starting at <strong>Rs. {{ result.pPinr |floatformat:'0' }}/-</strong>{% if result.pPfinr|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfinr|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
+                       Starting at <strong>Rs. {{ result.pPin |floatformat:'0' }}/-</strong>{% if result.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfin|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
                     </div>
 
                   </div>

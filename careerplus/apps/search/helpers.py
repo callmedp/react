@@ -80,17 +80,22 @@ def clean_list_fields(param):
     """
 
     invalid_keyword = {None, "None", -1, "-1", "-1'", "", " "}
-    for key in ["fclevel", "fcert", "frating", "fduration", "fmode", "skills"]:
+    param_prefix_mapping = {
+        "fclevel": "CL",
+        "fcert": "CERT",
+        "frating": "",
+        "fduration": "DM",
+        "fmode": "SM",
+        "skills": "",
+        "fprice": "P"
+    }
+    for key, prefix in param_prefix_mapping.items():
         val = param.getlist(key)
         if val:
             val = set(val)
             cln_list = []
             for v in list(val - invalid_keyword):
-                if v.isdigit():
-                    cln_list.append(v)
-                else:
-                    v = re.sub(r'[\?\\\[\]\{\}\'\"/]', "", v)
-                    cln_list.append(v)
+                cln_list.append("{}{}".format(prefix, v))
             param.setlist(key, cln_list)
     return param
 
