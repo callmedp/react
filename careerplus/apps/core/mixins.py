@@ -179,31 +179,6 @@ class InvoiceGenerate(object):
             # tax in percentage
             invoice_data.update(self.getTaxAmountByPart(
                 tax_amount, tax_rate_per, cart_obj=None, order=order))
-            # if order.country.lower() == 'india' and order.state.lower() == 'haryana':
-            #     sgst = round((tax_rate_per / 2), 0)
-            #     cgst = round((tax_rate_per / 2), 0)
-            #     igst = 0
-
-            #     sgst_amount = self.get_quantize(tax_amount / 2)
-            #     cgst_amount = sgst_amount
-            #     igst_amount = Decimal(0.00)
-
-            # elif order.country.lower() == 'india':
-            #     sgst = round((tax_rate_per / 2), 0)
-            #     cgst = round((tax_rate_per / 2), 0)
-            #     igst = 0
-
-            #     sgst_amount = self.get_quantize(tax_amount / 2)
-            #     cgst_amount = sgst_amount
-            #     igst_amount = Decimal(0.00)
-            # else:
-            #     sgst = 0
-            #     cgst = 0
-            #     igst = 0
-
-            #     sgst_amount = self.get_quantize(tax_amount / 2)
-            #     cgst_amount = sgst_amount
-            #     igst_amount = Decimal(0.00)
 
             order_items = []
             parent_ois = order.orderitems.filter(
@@ -235,12 +210,7 @@ class InvoiceGenerate(object):
                 "order": order,
                 "coupon_amount": coupon_amount,
                 "redeemed_reward_point": redeemed_reward_point,
-                # "sgst": sgst,
-                # "cgst": cgst,
-                # "igst": igst,
-                # "sgst_amount": sgst_amount,
-                # "cgst_amount": cgst_amount,
-                # "igst_amount": igst_amount,
+                
             })
 
         return invoice_data
@@ -253,6 +223,7 @@ class InvoiceGenerate(object):
             rendered_html = html_template.render(context).encode(encoding='UTF-8')
 
             pdf_file = HTML(string=rendered_html).write_pdf()
+            # stylesheets=[CSS(settings.STATICFILES_DIRS[0] +  '/shinelearn/css/invoice/invoice.css')]
             return pdf_file
 
             # http_response = HttpResponse(pdf_file, content_type='application/pdf')

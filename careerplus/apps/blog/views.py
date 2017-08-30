@@ -396,6 +396,12 @@ class BlogLandingPageView(TemplateView, BlogMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         categories = Category.objects.filter(is_active=True)
+        exc_cat = []
+        for cat in categories:
+            if not cat.primary_category.filter(status=1).exists():
+                exc_cat.append(cat.pk)
+
+        categories = categories.exclude(pk__in=exc_cat)
 
         page_obj = self.scrollPagination(paginated_by=self.paginated_by,
             page=self.page, object_list=categories)
