@@ -33,36 +33,36 @@
 				<h1>{{category_obj.name}} <br> programs</h1>
 					<strong>
 					{% if top_3_prod.0 %}
-					    <a href="#">{{top_3_prod.0.name}}</a>  
+					    <a href="#">{{top_3_prod.0.pNm}}</a>  
 					{% endif %}
 
 					{% if top_3_prod.1 %}
 					                                  |    
-						<a href="#">{{top_3_prod.1.name}}</a>    
+						<a href="#">{{top_3_prod.1.pNm}}</a>    
 					{% endif %}
 					{% if top_3_prod.2 %}
 					                                   |
-						<a href="#">{{top_3_prod.2.name}}</a>
+						<a href="#">{{top_3_prod.2.pNm}}</a>
 					{% endif %}
 					</strong>
 				{% if top_4_vendors %}
 					<div class="provider">
 					       Provider
 					   {% for top_4_vendor in top_4_vendors %}    
-						{% if forloop.counter == 1 and top_4_vendor.image.url %}
-							<img src="{{top_4_vendor.image.url}}" 
+						{% if forloop.counter == 1 and top_4_vendor.pVi %}
+							<img src="{{top_4_vendor.pVi}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 2 and top_4_vendor.image.url %}
-							<img src="{{top_4_vendor.image.url}}" 
+						{% if forloop.counter == 2 and top_4_vendor.pVi %}
+							<img src="{{top_4_vendor.pVi}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 3 and top_4_vendor.image.url %}
-							<img src="{{top_4_vendor.image.url}}" 
+						{% if forloop.counter == 3 and top_4_vendor.pVi %}
+							<img src="{{top_4_vendor.pVi}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 4 and top_4_vendor.image.url %}
-							<img src="{{top_4_vendor.image.url}}" 
+						{% if forloop.counter == 4 and top_4_vendor.pVi %}
+							<img src="{{top_4_vendor.pVi}}" 
 							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
 						{% endif %}
 						{% endfor %}
@@ -159,21 +159,22 @@
 		    	<ul class="listing" id="product_list">
 		    		{% for product in products %}
 				        <li class="box-panel">
-				        	<a title="{{product.name}}" href="#">
+				        	<a title="{{product.pNm}}" href="#">
 					            <div class="media">
 					            	<div class="media-left">
-					                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.name}}">
+					                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.pNm}}">
 					            	</div>
 					            	<div class="media-body">
 					                	<div class="certification-jobs-box">
 					                  		<span class="certification-jobs"><figure class="certification-icon">
 					                  		</figure> Certification</span>
-					                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">212</span> jobs available</span>
+					                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">
+					                  		{{product.pNJ}}</span> jobs available</span>
 					                	</div>
-					                	<h3 class="listing-heading">{{product.name}}</h3>
+					                	<h3 class="listing-heading">{{product.pNm}}</h3>
 
 						                <div class="rating-review-box">
-						                {% for rating in product.get_ratings %}
+						                {% for rating in product.pStar %}
 						                    {% if rating == "*" %}
 						                    	<figure class="full-star">
 						                    	</figure>
@@ -187,12 +188,12 @@
 						                    	</figure>
 						                    {% endif %}
 						                {% endfor %}
-						                    <strong>{{product.avg_rating |floatformat:1}}/5</strong> | 21 ratings <b>{{product.no_review}} reviews</b>
+						                    <strong>{{product.pARx |floatformat:1}}/5</strong> | 21 ratings <b>{{product.pRC}} reviews</b>
 						                </div> 
 
 						                <div class="providers">
 						                   Providers
-						                   <span>{{product.vendor.name}}</span>
+						                   <span>{{product.pPvn}}</span>
 						                </div>
 
 						                <div class="pricing-box">
@@ -264,6 +265,8 @@
 			      		value="{{page_reviews.next_page_number}}" id="page_id1">
 			      		<input type="hidden" name="slug" value="{{slug}}" 
 	      				id="slug_id1">
+	      				<input type="hidden" name="pk" 
+	      				value="{{category_obj.pk}}" id="pk_id">
 					    {% endif %} 	
 			      	</div>
 		    </div>
@@ -274,41 +277,38 @@
 		<!-- right content start -->
 		
 	<div class="col-md-3 col-sm-12">
-
-			<!-- request a call -->
+	<!-- request a call -->
 	<div class="request-call box-panel mb-40 cleafix">
-    <h2 class="heading-right">request a call</h2>
-        </style>
-      <form class="mt-20" role="form" id="queryform" >
-        <div style='display:none'>
-            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" name="name" placeholder="Name">
-          <span class="error position-error" style="color:red"></span>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
-          <span class="error position-error" style="color:red"></span>
-        </div>
-        <div class="form-group">
-          <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
-          <span class="error position-error" style="color:red"></span>
-        </div>
-        
-      </form>
-      <button type="button" id="id_query"  class="submit-button">
-      Message
-      </button>
-      <div class="call-service">
-        <strong>
-          <span class="call-service-icon"></span>
-          0124-395 5001
-        </strong>
-        9am to 7pm ist monday-saturday
-      </div>
-	</div> 
+    	<h2 class="heading-right">request a call</h2>
+		<form class="mt-20" role="form" id="queryform" >
+		<div style='display:none'>
+		    <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
 		</div>
+		<div class="form-group">
+		  <input type="text" class="form-control" name="name" placeholder="Name">
+		  <span class="error position-error" style="color:red"></span>
+		</div>
+		<div class="form-group">
+		  <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
+		  <span class="error position-error" style="color:red"></span>
+		</div>
+		<div class="form-group">
+		  <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
+		  <span class="error position-error" style="color:red"></span>
+		</div>  
+		</form>
+	    <button type="button" id="id_query"  class="submit-button">
+	    Message
+	    </button>
+	    <div class="call-service">
+	        <strong>
+	          <span class="call-service-icon"></span>
+	          0124-395 5001
+	        </strong>
+	        9am to 7pm ist monday-saturday
+	    </div>
+	</div> 
+	</div>
 		<!-- request a call --> 
 	<!-- right content end -->
 	</div>

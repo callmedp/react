@@ -48,38 +48,36 @@ class ProductInformationMixin(object):
             'breadcrumbs': breadcrumbs
         }
 
-    def get_category_skill_url(self, slug, pk):
-        if pk:
-            return reverse('skillpage:skill-page-listing',
-                kwargs={'slug': slug, 'pk': pk})
-
-    def solar_breadcrumbs(self, product):
-        breadcrumbs = []
-        breadcrumbs.append(
-            OrderedDict({
-                'label': 'Home',
-                'url': '/',
-                'active': True}))
-        if product.pFAn:
-            breadcrumbs.append(
-                OrderedDict({
-                    'label': product.pFAn[0],
-                    'url': self.get_category_skill_url(product.pFAn[0], product.pFA_exact[0]),
-                    'active': True}))
-
-        breadcrumbs.append(
-                OrderedDict({
-                    'label': product.pCtgn[0],
-                    'url': self.get_category_skill_url(product.pCtgn[0], product.pCtg[0]),
-                    'active': True}))
-
-        breadcrumbs.append(
-            OrderedDict({
-                'label': product.pNm,
-                'active': None}))
-        return {'breadcrumbs':breadcrumbs} 
-
     def get_info(self, product):
+        info['prd_img'] = product.image.url
+        info['prd_img_alt'] = product.image_alt
+        info['prd_img_bg'] = product.get_bg
+        info['prd_H1'] = product.heading if product.heading else product.name
+        info['prd_about'] = product.about
+        info['prd_desc'] = product.description
+        info['prd_uget'] = product.buy_shine
+        info['prd_rating'] = round(product.avg_rating, 1)
+        info['prd_num_rating'] = product.no_review
+        info['prd_num_bought'] = product.buy_count
+        info['prd_num_jobs'] = product.num_jobs
+        info['prd_vendor'] = product.vendor.name
+        info['prd_vendor_img'] = product.vendor.image.url
+        info['prd_vendor_img_alt'] = product.vendor.image_alt
+        info['prd_rating_star'] = product.get_ratings()
+        info['prd_video'] = product.video_url
+        if product.is_course:
+            info['prd_service'] = 'course'
+        elif product.is_writing:
+            info['prd_service'] = 'resume'
+        elif product.is_service:
+            info['prd_service'] = 'service'
+        else:
+            info['prd_service'] = 'other'
+        info['prd_product'] = product.type_product
+        info['prd_exp'] = product.get_exp
+        return info
+
+    def solar_info(self, product):
         info = {}
         info['prd_img'] = product.pImg
         info['prd_img_alt'] = product.pImA
@@ -107,46 +105,17 @@ class ProductInformationMixin(object):
             info['prd_service'] = 'other'
         info['prd_product'] = product.pTP
         info['prd_exp'] = product.pEX
-
-
-
-        # info['prd_img'] = product.image.url
-        # info['prd_img_alt'] = product.image_alt
-        # info['prd_img_bg'] = product.get_bg
-        # info['prd_H1'] = product.heading if product.heading else product.name
-        # info['prd_about'] = product.about
-        # info['prd_desc'] = product.description
-        # info['prd_uget'] = product.buy_shine
-        # info['prd_rating'] = round(product.avg_rating, 1)
-        # info['prd_num_rating'] = product.no_review
-        # info['prd_num_bought'] = product.buy_count
-        # info['prd_num_jobs'] = product.num_jobs
-        # info['prd_vendor'] = product.vendor.name
-        # info['prd_vendor_img'] = product.vendor.image.url
-        # info['prd_vendor_img_alt'] = product.vendor.image_alt
-        # info['prd_rating_star'] = product.get_ratings()
-        # info['prd_video'] = product.video_url
-        # if product.is_course:
-        #     info['prd_service'] = 'course'
-        # elif product.is_writing:
-        #     info['prd_service'] = 'resume'
-        # elif product.is_service:
-        #     info['prd_service'] = 'service'
-        # else:
-        #     info['prd_service'] = 'other'
-        # info['prd_product'] = product.type_product
-        # info['prd_exp'] = product.get_exp
         return info
 
     def get_program_structure(self, product):
         structure = {
-            # 'prd_program_struct': False
+            'prd_program_struct': False,
             'chapter': False,
         }
         chapter_list = product.chapter_product.filter(status=True)
         if chapter_list:
             structure.update({
-                # 'prd_program_struct': True,
+                'prd_program_struct': True,
                 'chapter':True,
                 'chapter_list': chapter_list
             })
@@ -215,6 +184,12 @@ class ProductInformationMixin(object):
     def get_combos(self, product):
         combos = product.childs.filter(active=True)
         return {'combos': combos}
+
+    def is_combos(self, product):
+        combos = json.loads(product.pCmbs)
+        if combos['combo']:
+            return True
+        return False
 
     def get_variation(self, product):
         if product.is_course:
@@ -293,6 +268,7 @@ class ProductInformationMixin(object):
                 'prd_rv_page': page
             }
 
+
 @Decorate(stop_browser_cache())
 class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
@@ -324,26 +300,24 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
         sqs = SearchQuerySet().filter(id=11)[0]
         product = self.object
         category = self.category
-        ctx.update(self.solar_breadcrumbs(sqs))
-        # ctx.update(self.get_breadcrumbs(product, category))
-        ctx.update(self.get_info(sqs))
-        # ctx.update(self.get_program_structure(product))
+        ctx.update(self.get_breadcrumbs(product, category))
+        ctx.update(self.solar_info(sqs))
         ctx.update(self.solar_program_structure(sqs))
-        # ctx.update(self.get_faq(product))
         ctx.update(self.solar_faq(sqs))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
-        if product.is_course:
-            ctx.update(self.get_other_provider(product, category))
+        if sqs.pPc == 'course':
+            ctx.update(json.loads(sqs.pPOP))
         else:
-            ctx.update(self.get_other_package(product, category))
-        if product.type_product == 1:
-            ctx.update(self.get_variation(product))
-        if product.is_combo:
-            ctx.update(self.get_combos(product))
-        ctx.update(self.get_frequentlybought(product, category))
+            ctx.update(json.loads(sqs.pPOP))
+        if sqs.pTF == 1:
+            ctx.update(json.loads(sqs.pVrs))
+        if self.is_combos(sqs):
+            ctx.update(json.loads(sqs.pCmbs))
+        ctx.update(json.loads(sqs.pFBT))
         ctx.update(self.getSelectedProduct(product))
         ctx.update(self.getSelectedProductPrice(product))
+        ctx.update({'sqs':sqs})
         return ctx
 
     # def send_signal(self, request, response, product):
@@ -386,6 +360,101 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
         response = super(ProductDetailView, self).get(request, **kwargs)
         # self.send_signal(request, response, product)
         return response
+
+
+# @Decorate(stop_browser_cache())
+# class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
+#     context_object_name = 'product'
+#     http_method_names = ['get', 'post']
+
+#     model = Product
+    
+#     def __init__(self, *args, **kwargs):
+#         # _view_signal = product_viewed
+#         self.category = None
+#         # # Whether to redirect to the URL with the right path
+#         self._enforce_paths = True
+#         # # Whether to redirect child products to their parent's URL
+#         self._enforce_parent = True
+
+#         super(ProductDetailView, self).__init__(*args, **kwargs)
+
+#     def get_template_names(self):
+#         return ['product/detail1.html']
+
+#     def get_object(self, queryset=None):
+#         if hasattr(self, 'object'):
+#             return self.object
+#         else:
+#             return super(ProductDetailView, self).get_object(queryset)
+
+#     def get_context_data(self, **kwargs):
+#         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
+#         sqs = SearchQuerySet().filter(id=11)[0]
+#         product = self.object
+#         category = self.category
+#         ctx.update(self.solar_breadcrumbs(sqs))
+#         # ctx.update(self.get_breadcrumbs(product, category))
+#         ctx.update(self.get_info(sqs))
+#         # ctx.update(self.get_program_structure(product))
+#         ctx.update(self.solar_program_structure(sqs))
+#         # ctx.update(self.get_faq(product))
+#         ctx.update(self.solar_faq(sqs))
+#         ctx.update(self.get_recommendation(product))
+#         ctx.update(self.get_reviews(product, 1))
+#         if product.is_course:
+#             ctx.update(self.get_other_provider(product, category))
+#         else:
+#             ctx.update(self.get_other_package(product, category))
+#         if product.type_product == 1:
+#             ctx.update(self.get_variation(product))
+#         if product.is_combo:
+#             ctx.update(self.get_combos(product))
+#         ctx.update(self.get_frequentlybought(product, category))
+#         ctx.update(self.getSelectedProduct(product))
+#         ctx.update(self.getSelectedProductPrice(product))
+#         return ctx
+
+#     # def send_signal(self, request, response, product):
+#     #     self.view_signal.send(
+#     #         sender=self, product=product, user=request.user, request=request,
+#     #         response=response)
+
+#     def redirect_if_necessary(self, current_path, product, cat_slug=None):
+#         if self._enforce_paths:
+#             expected_path = product.get_absolute_url(cat_slug)
+#             if expected_path != urlquote(current_path):
+#                 return HttpResponsePermanentRedirect(expected_path)
+    
+#     def return_http404(self, product):
+#         if not product:
+#             return True
+#         if not product.active:
+#             return True
+#         if not self.category:
+#             return True
+#         if product.var_child:
+#             return True
+#         if product.is_virtual:
+#             return True
+#         return False
+    
+#     def get(self, request, **kwargs):
+#         self.object = product = self.get_object()
+#         if product:
+#             self.category = category = product.verify_category(kwargs.get('cat_slug', None))
+
+#         HTTP404 = self.return_http404(product)
+#         if HTTP404:
+#             raise Http404
+#         redirection = self.redirect_if_necessary(
+#             request.path, product, category)
+#         if redirection is not None:
+#             return redirection
+
+#         response = super(ProductDetailView, self).get(request, **kwargs)
+#         # self.send_signal(request, response, product)
+#         return response
 
 
 class ProductReviewListView(ListView, ProductInformationMixin):

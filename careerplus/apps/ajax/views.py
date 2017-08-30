@@ -23,6 +23,7 @@ from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
 from order.functions import update_initiat_orderitem_sataus
 from console.mixins import ActionUserMixin
+from haystack.query import SearchQuerySet
 
 
 class ArticleCommentView(View):
@@ -118,11 +119,11 @@ class AjaxProductLoadMoreView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AjaxProductLoadMoreView, self).get_context_data(**kwargs)
         slug = self.request.GET.get('slug', '')
+        pk = self.request.GET.get('pk', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            page_obj = Category.objects.get(slug=slug, active=True)
-            products = page_obj.product_set.all()
-            paginator = Paginator(products, 1)
+            all_results = SearchQuerySet().filter(pCtg=pk)
+            paginator = Paginator(all_results, 10)
             try:
                 products = paginator.page(page)
             except PageNotAnInteger:

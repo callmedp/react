@@ -1,7 +1,7 @@
 <!--hidden form -->
 <div style="display: none">
     <form role="form" method="POST" id="cartForm" > {% csrf_token %}
-        <input type="hidden" name="product_id" value="{{object.id}}">
+        <input type="hidden" name="product_id" value="{{sqs.id}}">
         <input type="hidden" name="cart_type" id="id-cart-type" value="">
     </form>
 </div>
@@ -20,9 +20,9 @@
     {% endif %}
     <span class="clearfix db"></span>
 
-    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{object.id}}" data-price="{{object.get_price}}" >Enrol now</a>
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enrol now</a>
 
-    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{object.id}}" data-price="{{object.get_price}}">Add to cart</a>
+    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}">Add to cart</a>
 
     <div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div>
 
