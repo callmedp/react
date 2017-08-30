@@ -39,3 +39,4 @@ tinycss2==0.5
 Unidecode==0.4.21
 WeasyPrint==0.39
 webencodings==0.5.1
+pandas==0.20.3
