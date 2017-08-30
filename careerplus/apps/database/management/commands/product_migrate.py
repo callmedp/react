@@ -137,7 +137,8 @@ class Command(BaseCommand):
             with transaction.atomic():
 
                 for i, row in df.iterrows():
-                    print(i) if not i%500 else pass
+                    if not i%500:
+                        print(i) 
                     if row['pvid'] != row['pvid']:
                         flag_course = row['course']
                         flag_combo = row['combo']
@@ -841,7 +842,8 @@ class Command(BaseCommand):
         try:
             with transaction.atomic():
                 for i, row in df.iterrows():
-                    print(i) if not i%500 else pass
+                    if not i%500:
+                        print(i) 
                     prd = Product.objects.get(cpv_id=row['course_parent_id'])
                     scr = ProductScreen.objects.get(cpv_id=row['course_parent_id'])
                     if row['with_certificate']:    
