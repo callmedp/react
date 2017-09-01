@@ -5,6 +5,8 @@ import re
 from django_mobile.middleware import MobileDetectionMiddleware, SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
 
+from .utils import set_session_country
+
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
     """
@@ -27,4 +29,13 @@ class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddlewa
         self.user_agents_exception_search_regex = re.compile(self.user_agents_exception_search, re.IGNORECASE)
 
 
+class LearningShineMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
 
+    def __call__(self, request):
+        from users.mixins import UserMixin
+        country_obj = UserMixin().get_client_country(request)
+        set_session_country(country_obj, request)
+        response = self.get_response(request)
+        return response

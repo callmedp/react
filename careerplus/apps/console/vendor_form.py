@@ -17,6 +17,8 @@ from partner.models import Vendor
 from geolocation.models import Country
 from shop.utils import ProductAttributesContainer
 from faq.models import ScreenFAQ, FAQuestion
+from shop.utils import ProductAttributesContainer
+
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
@@ -566,8 +568,9 @@ class ScreenProductFAQForm(forms.ModelForm):
         if not vendor:
             queryset = queryset.none()
         else:
-            queryset = queryset.filter(vendor=vendor)
-        
+            queryset = vendor.question_vendor.filter(status=2) | \
+                vendor.public_question.filter(status=2) 
+        queryset = queryset.distinct()
         if self.instance.pk:
             self.fields['question'].queryset = queryset
         else:

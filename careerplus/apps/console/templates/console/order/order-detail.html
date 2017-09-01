@@ -32,54 +32,97 @@
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-6 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2><small>Order Details</small></h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2><small>Order Details</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
 
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>OrderId</th>
-                      <th>Email</th>
-                      <th>Mobile</th>
-                      <th>Name</th>
-                      <th>Payment Status</th>
-                      <th>Payment Mode</th>
-                      <th>Payment Date</th>
-                      <th>Welcome Call</th>
-                      <th>Added On</th>
-                      <th>Closed On</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{{order.id}}</td>
-                      <td>{{order.email}}</td>
-                      <td>{{order.country_code}} {{order.mobile}}</td>
-                      <td>{{order.first_name}} {{order.last_name}}</td>
-                      <td>{{order.get_status}}</td>
-                      <td>{{order.get_payment_mode}}</td>
-                      <td>{{order.payment_date}}</td>
-                      <td>{% if order.welcome_call_done %}Done{% else %}Not Done{% endif %}</td>
-                      <td>{{order.date_placed}}</td>
-                      <td>{% if order.closed_on %}{{order.closed_on}}{% else %}Not Closed Yet.{% endif %}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>OrderId</th>
+                          <th>Email</th>
+                          <th>Mobile</th>
+                          <th>Name</th>
+                          <th>Order Status</th>
+                          <th>Payment Date</th>
+                          <th>Welcome Call</th>
+                          <th>Added On</th>
+                          <th>Closed On</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{order.id}}</td>
+                          <td>{{order.email}}</td>
+                          <td>{{order.country_code}} {{order.mobile}}</td>
+                          <td>{{order.first_name}} {{order.last_name}}</td>
+                          <td>{{order.get_status}}</td>
+                          <td>{{order.payment_date}}</td>
+                          <td>{% if order.welcome_call_done %}Done{% else %}Not Done{% endif %}</td>
+                          <td>{{order.date_placed}}</td>
+                          <td>{% if order.closed_on %}{{order.closed_on}}{% else %}Not Closed Yet.{% endif %}</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-              </div>
+                  </div>
+                </div>
             </div>
-          </div>
+
+            <div class="col-md-12 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2><small>Order Transactions</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>TxnId</th>
+                          <th>Payment Mode</th>
+                          <th>Payment Status</th>
+                          <th>Created On</th>
+                          <th>Paid On</th>
+                          <th>Instrument Number</th>
+                          <th>Instrument Issuer</th>
+                          <th>Instrument Issue Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for txn_obj in order.get_txns %}
+                        <tr>
+                          <td>{{txn_obj.txn}}</td>
+                          <td>{{txn_obj.get_payment_mode}}</td>
+                          <td>{{txn_obj.get_payment_status}}</td>
+                          <td>{{txn_obj.created}}</td>
+                          <td>{{txn_obj.payment_date}}</td>
+                          <td>{{txn_obj.instrument_number}}</td>
+                          <td>{{txn_obj.instrument_issuer}}</td>
+                          <td>{{txn_obj.instrument_issue_date}}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+            </div>
 
 
-          <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
                 <h2><small>Following are order related items</small></h2>
@@ -134,27 +177,7 @@
                           {% endif %}
                           {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
                           <td>{{obj.get_oi_status}}</td>
-                          {% comment %}
-                          <td>
-                              <table class="table table-bordered table-responsive">
-                                   <tbody>
-                                     {% if obj.oi_resume %}
-                                        <tr>
-                                          <td>Candidate Resume</td>
-                                          <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
-                                        </tr>
-                                      {% endif %}
-
-                                    {% for draft in obj.get_oi_drafts %}
-                                        <tr>
-                                        <td>Draft {% if draft.draft_counter == max_limit_draft %}Final{% else %}{{draft.draft_counter}}{% endif %}</td>
-                                        <td><a href="{{draft.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td></tr>
-                                    {% endfor %}
-
-                                   </tbody>
-                              </table>
-                          </td>
-                          {% endcomment %}
+                          
                           <td>
                               <table class="table table-bordered table-responsive">
                                   {% for op in obj.get_oi_operations %}

@@ -1,3 +1,5 @@
+import time
+
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.urls import reverse
@@ -12,6 +14,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 
 from core.api_mixin import ShineCandidateDetail
+from .models import PaymentTxn
 
 from .forms import StateForm, PayByCheckForm
 from .mixin import PaymentMixin
@@ -48,6 +51,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return super(PaymentOptionView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        
         payment_type = request.POST.get('payment_type', '').strip()
         if payment_type == 'cash':
             form = StateForm(request.POST)
@@ -55,10 +59,21 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 cart_pk = request.session.get('cart_pk')
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
-                    self.fridge_cart(cart_obj)
-                    self.createOrder(cart_obj)
-                    order_type = "CASH"
-                    return_parameter = self.process_payment_method(order_type, request)
+                    order = self.createOrder(cart_obj)
+                    self.closeCartObject(cart_obj)
+                    txn = 'CP%d%s' % (order.pk, int(time.time()))
+                    pay_txn = PaymentTxn.objects.create(
+                        txn=txn,
+                        order=order,
+                        cart=cart_obj,
+                        status=0,
+                        payment_mode=1,
+                        currency=order.currency,
+                        txn_amount=order.total_incl_tax,
+                    )
+                    payment_type = "CASH"
+                    return_parameter = self.process_payment_method(
+                        payment_type, request, pay_txn)
                     try:
                         del request.session['cart_pk']
                         del request.session['checkout_type']
@@ -78,10 +93,27 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 cart_pk = request.session.get('cart_pk')
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
-                    self.fridge_cart(cart_obj)
-                    self.createOrder(cart_obj)
-                    order_type = "CHEQUE"
-                    return_parameter = self.process_payment_method(order_type, request)
+                    order = self.createOrder(cart_obj)
+                    self.closeCartObject(cart_obj)
+                    txn = 'CP%d%s%s' % (
+                        order.pk,
+                        int(time.time()),
+                        request.POST.get('cheque_no'))
+                    pay_txn = PaymentTxn.objects.create(
+                        txn=txn,
+                        order=order,
+                        cart=cart_obj,
+                        status=0,
+                        payment_mode=4,
+                        currency=order.currency,
+                        txn_amount=order.total_incl_tax,
+                        instrument_number=request.POST.get('cheque_no'),
+                        instrument_issuer=request.POST.get('drawn_bank'),
+                        instrument_issue_date=request.POST.get('deposit_date')
+                    )
+                    payment_type = "CHEQUE"
+                    return_parameter = self.process_payment_method(
+                        payment_type, request, pay_txn)
                     try:
                         del request.session['cart_pk']
                         del request.session['checkout_type']

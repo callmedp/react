@@ -546,8 +546,16 @@
   font-size: 20px;
   font-weight: 400;
   color: #333;
-  display: block;
+  display: inline-block;
   margin: 0;
+}
+.products-inbox li .express-delivery {
+  font-size: 12px;
+  display: inline-block;
+  border: 1px solid #f2f2f2;
+  padding: 3px 10px;
+  margin: 0 0 0 5px;
+  color: #999;
 }
 .products-inbox li .transaction {
   font-size: 13px;
@@ -849,7 +857,7 @@
 /*----------------feddback & interview page css----------------*/
 .feedback-header {
   clear: both;
-  background: url(../images/detail-header-bg.jpg) no-repeat center top;
+  background: url(../../images/detail-header-bg.jpg) no-repeat center top;
   background-size: cover;
   display: block;
 }
@@ -1176,7 +1184,7 @@
   padding-right: 10px;
 }
 .profile-data li .pro-select, .profile-data li .pro-select2 {
-  background: url(../images/dropdown.png);
+  background: url(../../images/dropdown.png);
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: right;

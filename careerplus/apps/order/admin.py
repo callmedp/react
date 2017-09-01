@@ -4,9 +4,9 @@ from .models import Order, OrderItem, OrderItemOperation, Message
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'number', 'site', 'cart', 'candidate_id', 'email',
+    list_display = ['id', 'number', 'site', 'candidate_id', 'email',
         'status', 'date_placed']
-    list_filter = ('status', 'payment_mode')
+    list_filter = ('status', )
     search_fields = ('number', 'id', 'candidate_id', 'email')
 
 

@@ -15,9 +15,11 @@ from hashlib import sha256
 from xml.etree.ElementTree import XML
 
 from cart.models import Cart
+from order.models import Order
 from order.mixins import OrderMixin
 
 from .mixin import PaymentMixin
+from .models import PaymentTxn
 
 
 import platform
@@ -103,20 +105,30 @@ class MobikwikRequestView(SingleObjectMixin, TemplateView, OrderMixin):
     def get_context_data(self, **kwargs):
         cart_pk = self.request.session.get('cart_pk')
         cart_obj = Cart.objects.get(pk=cart_pk)
-        self.fridge_cart(cart_obj)
-        self.object = cart_obj
-        user_email = cart_obj.email
+        # self.fridge_cart(cart_obj)
+        order_obj = self.createOrder(cart_obj)
+        self.object = order_obj
+        txn = 'MK%d_%d' % (order_obj.pk, int(time.time()))
+        pay_txn = PaymentTxn.objects.create(
+            txn=txn,
+            order=order_obj,
+            cart=cart_obj,
+            status=0,
+            payment_mode=6,
+            currency=order_obj.currency,
+            txn_amount=order_obj.total_incl_tax,
+        )
+        user_email = order_obj.email
 
-        if cart_obj.mobile:
-            user_mobile = cart_obj.mobile  #excluding country code
+        if order_obj.mobile:
+            user_mobile = order_obj.mobile  #excluding country code
         elif self.request.session.get('mobile_no'):
             user_mobile = self.request.session.get('mobile_no')
         else:
             user_mobile = ""
-        payment_dict = self.getPayableAmount(cart_obj=cart_obj)
-        order_amount = payment_dict.get('total_payable_amount')
-        order_amount = "%.2f" % order_amount
-        txn_id = 'MK%d_%d' % (cart_obj.pk, int(time.time()))
+
+        order_amount = "%.2f" % order_obj.total_incl_tax
+        txn_id = pay_txn.txn
         context = super(self.__class__, self).get_context_data(**kwargs)
 
         return_url = "http://" + settings.SITE_DOMAIN + reverse("payment:mobikwik_response")
@@ -150,18 +162,20 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
         statuscode = request.POST.get('statuscode', '')
 
         # cart_pk = request.session.get('cart_pk')
-        cart_pk = orderid.split('_')[0]
-        cart_pk = cart_pk.replace('MK', '')
-        cart_obj = Cart.objects.get(pk=cart_pk)
+        txn = orderid
+        order_pk = orderid.split('_')[0]
+        order_pk = order_pk.replace('MK', '')
+        order_obj = Order.objects.get(pk=order_pk)
+        txn_obj = PaymentTxn.objects.get(txn=txn)
         response_checksum = calculate_response_checksum(statuscode, orderid, amount, statusmessage)
 
-        if response_checksum == checksum and cart_obj:
+        if response_checksum == checksum and order_obj:
             if str(statuscode) == "0":
-                order_id = cart_pk
-                actual_amount = "%.2f" % round(self.getTotalAmount())
+                order_id = order_pk
+                actual_amount = "%.2f" % order_obj.total_incl_tax
 
-                if order_id != str(cart_obj.pk):
-                    err_mesg = "Original orderid # %s and actual orderid # %s do not match" % (str(cart_obj.pk), order_id)
+                if str(order_id) != str(order_obj.pk):
+                    err_mesg = "Original orderid # %s and actual orderid # %s do not match" % (str(order_obj.pk), order_id)
 
                 elif float(actual_amount) == float(amount):
                     csumstring = send_checksum_string(orderid)
@@ -205,8 +219,8 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
 
                             if cksum2 == checksum2 and float(amount2) == float(actual_amount) and orderid2 == orderid:
                                 try:
-                                    order = self.createOrder(cart_obj)
-                                    return_url = self.process_payment_method(order_type='MOBIKWIK', request=request, data={'order_id': order.pk, 'txn_id': refid2})
+                                    self.closeCartObject(txn_obj.cart)
+                                    return_url = self.process_payment_method(payment_type='MOBIKWIK', request=request, txn_obj=txn_obj, data={'order_id': order_obj.pk, 'txn_id': refid2})
                                     try:
                                         del request.session['cart_pk']
                                         del request.session['checkout_type']
@@ -215,9 +229,8 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                                         pass
                                     return HttpResponseRedirect(return_url)
                                 except Exception as e:
-                                    cart_obj = self.get_cart_last_status(cart_obj)
                                     logging.getLogger('payment_log').error(str(e))
-                                    return HttpResponseRedirect(reverse('payment:payment_oops')+'?error=success&txn_id='+orderid)
+                                    return HttpResponseRedirect(reverse('payment:payment_oops')+'?error=success&txn_id='+txn)
                             else:
                                 err_mesg = "Fraud Detected for order id - %s" % orderid
                         else:
@@ -233,7 +246,6 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
             err_mesg = str(request.POST)
 
         logging.getLogger('payment_log').error(err_mesg)
-        cart_obj = self.get_cart_last_status(cart_obj)
         return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')
 
     @csrf_exempt

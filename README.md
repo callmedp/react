@@ -49,3 +49,8 @@ make entry in hosts files
 172.22.65.64 recruiter.shine.com
 172.22.65.140 www.shine.com
 
+Add access to Mysql
+https://stackoverflow.com/questions/19101243/error-1130-hy000-host-is-not-allowed-to-connect-to-this-mysql-server
+
+Run migrations
+

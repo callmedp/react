@@ -70,7 +70,7 @@
                                           <form id="delivery-option-form{{variations.first.id}}">{% csrf_token %}
                                             <select class="form-control" id="delivery-option{{variations.first.id}}" name="delivery_type" onchange="deliveryOptionUpdate('{{variations.first.id}}')">
                                                 {% for d_obj in delivery_types %}
-                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.inr_price}}" {% if d_obj == variations.first.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
+                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.first.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
                                                 {% endfor %}
                                             </select>
                                             <input type="hidden" name="lineid" value="{{variations.first.pk}}" />
@@ -89,8 +89,8 @@
                             {% endwith %}
                             <li class="col-sm-2">
                                 <strong>Rs. {{variations.first.product.get_price}}/-</strong>
-                                {% if variations.first.delivery_service and variations.first.delivery_service.inr_price %}
-                                    <span class="delivery-charges" id="delivery-charge{{variations.first.id}}">+ Rs. {{variations.first.delivery_service.inr_price|floatformat:0}}/-</span>
+                                {% if variations.first.delivery_service and variations.first.delivery_service.get_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{variations.first.id}}">+ Rs. {{variations.first.delivery_service.get_price|floatformat:0}}/-</span>
                                 {% else %}
                                     <span class="delivery-charges" id="delivery-charge{{variations.first.id}}"></span>
                                 {% endif %}
@@ -140,7 +140,7 @@
                                             <form id="delivery-option-form{{li.pk}}">{% csrf_token %}
                                                 <select class="form-control" id="delivery-option{{li.id}}" onchange="deliveryOptionUpdate('{{li.id}}')" name="delivery_type">
                                                     {% for d_obj in delivery_types %}
-                                                        <option value="{{d_obj.id}}" delivery-price="{{d_obj.inr_price}}" {% if d_obj == li.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
+                                                        <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == li.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
                                                     {% endfor %}
                                                 </select>
                                                 <input type="hidden" name="lineid" value="{{li.pk}}" />
@@ -166,8 +166,8 @@
                             </li-->
                             <li class="col-sm-2">
                                 <strong>Rs. {{li.product.get_price}}/-</strong>
-                                {% if li.delivery_service and li.delivery_service.inr_price %}
-                                    <span class="delivery-charges" id="delivery-charge{{li.id}}">+ Rs. {{li.delivery_service.inr_price|floatformat:0}}/-</span>
+                                {% if li.delivery_service and li.delivery_service.get_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{li.id}}">+ Rs. {{li.delivery_service.get_price|floatformat:0}}/-</span>
                                 {% else %}
                                     <span class="delivery-charges" id="delivery-charge{{li.id}}"></span>
                                 {% endif %}

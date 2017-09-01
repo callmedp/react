@@ -547,18 +547,20 @@ class DashboardInvoiceDownload(View):
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
-                if order.invoice:
-                    invoice = order.invoice
-                else:
-                    order = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                    invoice = order.invoice
+                # if order.invoice:
+                #     invoice = order.invoice
+                # else:
+                #     order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                #     invoice = order.invoice
+                order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                invoice = order.invoice
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(invoice, content_type='application/pdf')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
                 return response
         except:
             pass
-        return HttpResponseForbidden()
+        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
 class DownloadQuestionnaireView(View):

@@ -47,6 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
     name = models.CharField(_('Name'), max_length=100)
+    cp_id = models.CharField(_('CPID'), max_length=20, blank=True)
 
     email = models.EmailField(
         _('email address'),

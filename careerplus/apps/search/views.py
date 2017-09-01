@@ -1,15 +1,17 @@
 # built-in imports
 import re
 import uuid
+import json
 
 # django imports
 from django.shortcuts import render, HttpResponsePermanentRedirect
+from django.template.loader import render_to_string
 from django.views.generic import ListView, TemplateView
 from django.http import QueryDict, Http404
 from django.core.paginator import Paginator, InvalidPage
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse_lazy, resolve, reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.conf import settings
 
 # third party imports
@@ -19,7 +21,6 @@ from haystack.query import EmptySearchQuerySet
 # local imports
 from .forms import SearchForm
 from .classes import SimpleSearch, SimpleParams
-from .choices import AREA_WITH_LABEL, SKILL_WITH_LABEL
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
@@ -180,9 +181,6 @@ class SearchBaseView(TemplateView):
         if page_no < 1:
             raise Http404("Pages should be 1 or greater.")
 
-        start_offset = (page_no - 1) * self.results_per_page
-        self.results[start_offset:start_offset + self.results_per_page]
-
         paginator = Paginator(self.results, self.results_per_page)
 
         try:
@@ -215,7 +213,11 @@ class SearchBaseView(TemplateView):
         except:
             context['search_params'].update({'prod_count': 0})
         if self.request.is_ajax():
-            return render(self.request, self.ajax_template_name, context)
+            return HttpResponse(json.dumps({
+                'response': render_to_string(self.ajax_template_name, context, self.request),
+                'num_pages': paginator.num_pages,
+                'has_next': page.has_next()
+            }), content_type='application/json')
         else:
             return render(self.request, self.template_name, context)
 
@@ -226,7 +228,7 @@ class SearchBaseView(TemplateView):
         """
         param_context_mapping = {
             'skills': 'skills',
-            'farea': 'farea'
+            'area': 'area'
         }
 
         for param, value in param_context_mapping.items():
@@ -282,8 +284,21 @@ class SearchListView(SearchBaseView):
             else:
                 self.search_sid = self.search_params.get('sid')
 
-    def get_extra_context(self):
+    def post_processor(self):
+        """
+        Called just before building response and after results are generated
+        """
+        for result in self.results:
+            variations = json.loads(result.pVrs)
+            if variations['variation']:
+                selected_price = result.pPin
+                if result.pPc == 'writing' or result.pPc == 'service':
+                    for var in variations:
+                        pass
+                else:
+                    pass
 
+    def get_extra_context(self):
         request_get = self.search_params.copy()
         request_get.update(self.request.GET)
         request_get.update(self.request.POST)
@@ -291,17 +306,19 @@ class SearchListView(SearchBaseView):
         context = super(SearchListView, self).get_extra_context()
 
         if self.search_params.getlist('fclevel'):
-            context['clevel'] = self.search_params.getlist('fclevel')
+            context['clevel'] = self.request.GET.getlist('fclevel')
         if self.search_params.getlist('fcert'):
-            context['cert'] = self.search_params.getlist('fcert')
+            context['cert'] = self.request.GET.getlist('fcert')
         if self.search_params.getlist('frating'):
             context['rating'] = self.search_params.getlist('frating')
         if self.search_params.getlist('farea'):
-            context['area'] = self.search_params.getlist('farea')
+            context['areaf'] = self.search_params.getlist('farea')
         if self.search_params.getlist('fduration'):
-            context['duration'] = self.search_params.getlist('fduration')
+            context['duration'] = self.request.GET.getlist('fduration')
         if self.search_params.getlist('fmode'):
-            context['mode'] = self.search_params.getlist('fmode')
+            context['mode'] = self.request.GET.getlist('fmode')
+        if self.search_params.getlist('fprice'):
+            context['price'] = self.request.GET.getlist('fprice')
 
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})

@@ -3,7 +3,9 @@ from .models import Cart, LineItem, Subscription
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['id', 'owner_id', 'owner_email', 'session_id', 'status']
+    list_display = ['id', 'owner_id', 'owner_email', 'session_id', 'status',
+        'date_frozen', 'date_closed']
+    list_filter = ('status', )
 
 
 class LineitemAdmin(admin.ModelAdmin):

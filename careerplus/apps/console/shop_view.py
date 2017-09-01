@@ -58,7 +58,8 @@ from shop.forms import (
 from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
     AddFaqForm,
-    ChangeFaqForm,)
+    ChangeFaqForm,
+    ChangePublicFaqForm,)
 
 from faq.models import FAQuestion
 
@@ -499,9 +500,13 @@ class ChangeFaqView(DetailView):
         alert = messages.get_messages(self.request)
         main_change_form = ChangeFaqForm(
             instance=self.get_object())
+        vendor_form = ChangePublicFaqForm(
+            instance=self.get_object())
+        
         context.update({
             'messages': alert,
-            'form': main_change_form})
+            'form': main_change_form,
+            'vendor_form': vendor_form})
         return context
 
     def post(self, request, *args, **kwargs):
@@ -511,26 +516,48 @@ class ChangeFaqView(DetailView):
                 faq = int(request.POST.get('faq'))
                 if obj == faq:
                     obj = self.object = self.get_object()
+                    slug = request.POST.get('slug', None)
                     form = None
-                    form = ChangeFaqForm(
-                        request.POST, instance=obj)
-                    if form.is_valid():
-                        form.save()
-                        messages.success(
-                            self.request,
-                            "FAQ Changed Successfully")
-                        return HttpResponseRedirect(reverse('console:faq-list',))
-                    else:
-                        context = self.get_context_data()
-                        if form:
-                            context.update({'form': form})
-                        messages.error(
-                            self.request,
-                            "FAQ Object Change Failed, Changes not Saved")
-                        return TemplateResponse(
-                            request, [
-                                "console/shop/change_faq.html"
-                            ], context)
+                    if slug == 'main':
+                        form = ChangeFaqForm(
+                            request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "FAQ Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:faq-list',))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'form': form})
+                            messages.error(
+                                self.request,
+                                "FAQ Object Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_faq.html"
+                                ], context)
+                    elif slug == "vendor":
+                        form = ChangePublicFaqForm(
+                            request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "FAQ Changed Successfully")
+                            return HttpResponseRedirect(reverse('console:faq-list',))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'vendor_form': form})
+                            messages.error(
+                                self.request,
+                                "FAQ Object Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_faq.html"
+                                ], context)
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
