@@ -487,6 +487,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'mode': pv.get_studymode(),
                         'duration': pv.get_duration(),
                         'type': pv.get_coursetype(),
+                        'level': pv.get_courselevel(),
                         'certify': pv.get_cert(),
                         'inrp': pv.get_inr_price(),
                         'aedp': pv.get_aed_price(),
