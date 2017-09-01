@@ -4,6 +4,7 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 
 from order.models import Order
+from order.functions import payment_pending_mailer
 
 
 class PaymentMixin(object):
@@ -70,6 +71,7 @@ class PaymentMixin(object):
             order.payment_date = payment_date if payment_date else None
             order.save()
             request.session['order_pk'] = order.pk
+            payment_pending_mailer(order=order)
 
             if return_parameter:
                 return return_parameter

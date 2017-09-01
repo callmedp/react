@@ -14,15 +14,12 @@ class SendMail():
         '''
         if settings.DEBUG:
             subject = "Test Mail " + subject
-            to = ['priya.kharb@hindustantimes.com']
+            to = ['upender.singh@hindustantimes.com']
             cc = []
             bcc = []
             # cc = ['upenders379@gmail.com']
-
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
-
         emsg.content_subtype = "html"
-
         emsg.send()
 
     def render_template(self, template, context):
@@ -60,7 +57,7 @@ class SendMail():
 
         elif mail_type == "PAYMENT_PENDING":
             send_dict['template'] = 'emailers/candidate/payment_pending.html'
-            send_dict['subject'] = "To initiate your services fulfil these details"
+            send_dict['subject'] = data.get('subject', '')
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
@@ -212,11 +209,17 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
 
         elif mail_type == "FORGOT_PASSWORD":
-
             send_dict['subject'] = "Your Shine.com password"
             send_dict['template'] = 'emailers/candidate/reset_pass.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)
             data['reset_url'] = "http://%s/user/update/password/?token=%s" % (settings.SITE_DOMAIN, token)
+            self.process(to, send_dict, data)
+
+        elif mail_type == "CART_DROP_OUT":
+            send_dict['subject'] = "PMI Agile is ready to checkout"
+            send_dict['template'] = 'emailers/candidate/cart_drop_out.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             self.process(to, send_dict, data)

@@ -5,6 +5,7 @@ from django.conf import settings
 
 from emailers.email import SendMail
 from emailers.sms import SendSMS
+from core.mixins import InvoiceGenerate
 
 
 def update_initiat_orderitem_sataus(order=None):
@@ -118,10 +119,6 @@ def update_initiat_orderitem_sataus(order=None):
                     assigned_to=oi.assigned_to)
 
         linkedin_item = orderitems.filter(product__type_flow=8)
-
-        # payment pending email
-        payment_pending_mailer(order=order)
-
         # pending item email send
         pending_item_email(order=order)
 
@@ -253,7 +250,7 @@ def process_mailer(order=None):
 
 
 def payment_pending_mailer(order=None):
-    if order.status == 2 and (order.payment_mode == 1 or order.payment_mode == 4):
+    if order.payment_mode == 1 or order.payment_mode == 4:
         to_emails = [order.email]
         mail_type = "PAYMENT_PENDING"
         data = {}
@@ -261,6 +258,7 @@ def payment_pending_mailer(order=None):
             "subject": 'Your shine payment confirmation',
             "first_name": order.first_name if order.first_name else order.candidate_id,
             "txn": order.txn,
+            'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
         })
         try:
             SendMail().send(to_emails, mail_type, data)
@@ -269,4 +267,18 @@ def payment_pending_mailer(order=None):
 
 
 def payment_realisation_mailer(order=None):
-    pass
+    if order.status == 1:
+        invoice_data = InvoiceGenerate().get_invoice_data(order=order)
+        to_emails = [order.email]
+        mail_type = "SHINE_PAYMENT_CONFIRMATION"
+        invoice_data.update({
+            'subject': 'Your Shine Payment Confirmation',
+            "first_name": order.first_name if order.first_name else order.candidate_id,
+            "txn": order.txn,
+            "order_id": order.id,
+            'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+        })
+        try:
+            SendMail().send(to_emails, mail_type, invoice_data)
+        except Exception as e:
+            logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))  

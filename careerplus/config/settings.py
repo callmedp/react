@@ -6,7 +6,7 @@ IS_LIVE = False
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = '127.0.0.1:8000'
+SITE_DOMAIN = 'localhost:8000'
 SITE_PROTOCOL = 'https'
 
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
@@ -156,7 +156,7 @@ CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
 CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
 REPLY_TO = 'resume@shine.com'
 
-EMAIL_HOST = '172.22.65.55'
+EMAIL_HOST = '172.22.65.188'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
@@ -179,18 +179,18 @@ ENCODE_SALT = 'xfxa'
 
 
 # VARIABLE FOR SENDING RESUME SERVICES MAILS
-CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
-CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
-REPLY_TO = 'resume@shine.com'
+# CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
+# CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
+# REPLY_TO = 'resume@shine.com'
 
-EMAIL_HOST = '172.22.65.55'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = 0
-SERVER_EMAIL = 'recruiter@shine.com'
-DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
-EMAIL_SERVER = 'http://localhost:8000'
+# EMAIL_HOST = '172.22.65.188'
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_TLS = 0
+# SERVER_EMAIL = 'recruiter@shine.com'
+# DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
+# EMAIL_SERVER = 'http://localhost:8000'
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']

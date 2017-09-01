@@ -27,15 +27,15 @@ class AutoLoginView(View):
         token = kwargs.get('token', '')
         context = self.get_context_data(**kwargs)
         if token:
-            next = request.GET.get('next') or '/'
+            next1 = request.GET.get('next') or '/'
             email, candidateid, orderid = AutoLogin().decode(token)
-            if candidateid:
+            if candidateid and next1 == 'dashboard':
                 try:
                     resp_status = ShineCandidateDetail().get_status_detail(
                         email=None, shine_id=candidateid)
-                    
+                    request.session.update(resp_status)
                     if resp_status:
-                        return HttpResponseRedirect(next, {'orderid':orderid})
+                        return HttpResponseRedirect('/dashboard/')
                     else:
                         return HttpResponseRedirect('/?login_attempt=fail')
                 except Exception as e:

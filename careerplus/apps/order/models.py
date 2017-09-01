@@ -8,7 +8,7 @@ from linkedin.models import Draft
 
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
-    OI_USER_STATUS
+    OI_USER_STATUS, OI_EMAIL_STATUS
 from .functions import get_upload_path_order_invoice
 
 
@@ -439,3 +439,12 @@ class InternationalProfileCredential(AbstractAutoDate):
     def __str__(self):
         return self.username
 
+
+class EmailOrderItemOperation(AbstractAutoDate):
+    oi = models.ForeignKey(OrderItem)
+    email_oi_status = models.PositiveIntegerField(
+        _("Email Operation Status"), default=0, choices=OI_EMAIL_STATUS)
+    draft_counter = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['created']
