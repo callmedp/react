@@ -34,8 +34,8 @@
         <div class="text-center payment-done">
             <figure class="waiting-icon"></figure>
             <h1>Waiting for payment to be made, meanwhile order has been created!</h1>
-            <article>Your transaction ID is <strong>CP23879030973</strong></article>
-            <article>An email, along with all the details, has been sent to <a href="mailto:abc@gmail.com">abc@gmail.com</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+            <article>Your transaction ID is <strong>{{order.ordertxns.last.txn}}</strong></article>
+            <article>An email, along with all the details, has been sent to <a href="mailto:abc@gmail.com">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
 
             {% if pending_resume_items %}
 
@@ -63,39 +63,6 @@
 
         </div>
 
-        {% comment %}
-        <div class="text-center payment-done">
-            <figure class="waiting-icon"></figure>
-            <h1>Waiting for payment to be made, meanwhile order has been created!</h1>
-            <article>Your transaction ID is <strong>{{order.txn}}</strong></article>
-            <article>An email, along with all the details, has been sent to <a href="mailto:abc@gmail.com">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
-
-            {% if pending_resume_items %}
-                <p>To proceed further please upload your resume or fill the questionnaire.</p>
-                {% if request.session.resume_id %}
-                    <div class="latest-resume">
-                        <figure class="checked-blue-icon"></figure>
-                        Use latest shine resume
-                        <input type="file">
-                    </div>
-                {% endif %}
-
-                <div class="latest-resume">
-                    <figure class="{% if request.session.resume_id %}checked-grey-icon{% else %}checked-blue-icon{% endif %}"></figure>
-                    <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
-                        Upload new resume
-                        <input type="file" placeholder="Upload new resume" name="resume_file">
-                        <span class="db">or</span>
-                        fill this <a href="">questionnaire</a> and upload
-                        <input type="hidden" name="action_type" value="upload_resume">
-                        <button type="button" id="resume-sumbmit-button">submit</button>
-                    </form>
-                </div>
-            {% endif %}
-
-        </div>
-        {% endcomment %}
-
     </div>    
     <!-- left content end -->
 
@@ -107,25 +74,32 @@
             {% with oi=item.oi addons=item.addons variations=item.variations %}
                 {% if oi.product.is_course and variations %}
                     <div class="subcribe-services">
-                         <strong>{{oi.product.name}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
+                         <strong>{{oi.product.heading}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
                         <ul>
                             {% for addon in addons %}
                                 <li>{{addon.product.name}}</li>
                             {% endfor %}
+
+                            {% if variations.first.delivery_service %}
+                                <li>{{variations.first.delivery_service.name}}</li>
+                            {% endif %}
                         </ul>
                     </div>
                 {% else %}
                     <div class="subcribe-services">
-                        <strong>{{oi.product.name}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
+                        <strong>{{oi.product.heading}}</strong>{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}
                         <ul>
                             {% for var in variations %}
                                 <li>{{var.product.name}}</li>
                             {% endfor %}
-                        </ul>
-                        <ul>
+
                             {% for addon in addons %}
                                 <li>{{addon.product.name}}</li>
                             {% endfor %}
+
+                            {% if oi.delivery_service %}
+                                <li>{{oi.delivery_service.name}}</li>
+                            {% endif %}
                         </ul>
                     </div>
                 {% endif %}

@@ -87,7 +87,7 @@
                             </div>
                             <br/>
                         </div>
-                       {% if self.query %}
+                       {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
                     </form>
@@ -220,6 +220,9 @@
           </div>
 
           <div class="x_content">
+            {% if page %}
+                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+            {% endif %}
             <div class="table-responsive">
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
@@ -259,7 +262,7 @@
                             </td>
                       {% endif %}
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.id}}</td>
+                      <td>{{obj.order.number}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -271,8 +274,8 @@
                       <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a></td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>
                       <td>
-                          {% if dependency_obj.oi_draft %}
-                          <a href="{{dependency_obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploded Draft</button></a>
+                          {% if obj.oi_draft %}
+                            <a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploaded Draft</button></a>
                           {% endif %}
                       </td>
                       <td>

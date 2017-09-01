@@ -41,6 +41,8 @@ class AutoLoginView(View):
                 except Exception as e:
                     logging.getLogger('error_log').error(
                         "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
+            return HttpResponseRedirect('/?login_attempt=fail')
+        return HttpResponseRedirect('/?login_attempt=fail')
 
 
 class CounsellingSubmit(TemplateView):
@@ -121,7 +123,7 @@ class LinkedinDraftView(TemplateView):
         op_id = kwargs.get('op_id', '')
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
-            op_id = oi.orderitemoperation_set.get(linkedin = op_id)
+            op_id = oi.orderitemoperation_set.filter(linkedin = op_id)[0]
             try:
                 draft = ''
                 if op_id:    
@@ -281,7 +283,7 @@ class DraftDownloadView(View):
                         'orderitem': order_item,
                         'draft': draft,
                         'name': name,
-                        'skill_list': skill_list,
+                        'skill_list': skill_list.split(','),
                         'organization_list': organization_list,
                         'education_list': education_list,
                         'flag2': flag2,

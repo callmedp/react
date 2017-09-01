@@ -40,7 +40,19 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.created }}
+                            {{ filter_form.modified }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.delivery_type }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.draft_level }}
                         </div>
                         <br/>
                     </div>
@@ -81,13 +93,27 @@
                             <br/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.modified.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.created }}
+                                {{ filter_form.modified }}
                             </div>
                             <br/>
                         </div>
-                       {% if self.query %}
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.draft_level.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.draft_level }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.delivery_type.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.delivery_type }}
+                            </div>
+                            <br/>
+                        </div>
+                       {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
                     </form>
@@ -214,14 +240,14 @@
                       </td>
                     {% endif %}
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.id}}</td>
+                      <td>{{obj.order.number}}</td>
                       <td>
                         email:{{obj.order.email}}<br>
                         name:{{obj.order.first_name}}<br>
                         mobile:{{obj.order.mobile}}
                       </td>
                       <td>{{obj.product}}</td>
-                      <td>Regular</td>
+                      <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>User Category</td>
                       <!--
@@ -240,7 +266,7 @@
                         <b>Updated On: {{obj.modified}}</b>
                       </td>
                     {% if perms.order.can_show_linkedin_writer_draft %}
-                      {% if obj.oi_flow_status == 42 %}
+                      {% if obj.quizresponse.submitted %}
                       <td><a href="{% url 'counselling-form' obj.pk %}" style="color:green">
                         Counselling Form Submitted</a>
                       </td>

@@ -65,7 +65,7 @@ $().ready(function() {
                 success: function(json) {
                     $("#forgot_form")[0].reset();
                     if (json.exist == true){
-                        alert("Link has been sent your register email id");
+                        alert("Link has been sent to your registered email id");
                     }
                     else if (json.notexist == true){
                         alert("your email does not exist on shine learning");

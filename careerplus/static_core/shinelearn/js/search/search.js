@@ -8,48 +8,47 @@ function filterquery(type) {
     $('#form_facets').submit();
 }
 
+$("#load-id").click(function(){
+    load_page(
+        "/myapp/mymodels/",
+        "#pagination-id",
+        "#load-id",
+        "#pagediv-id"
+      );
+});
+
 function paginate() {
     $('.cls_load_more').click(function(e){
-        var jObj={};
-        jObj.element = $(this);
-        jObj.val = (e.originalEvent == undefined ? 1 : (jObj.element.data('type') == 'next' ? parseInt($('#id_rstart').val()) + 1 : parseInt($('#id_rstart').val()) - 1));
-        if(jObj.val < 2) {
-            $('#id_page').val(1);
-            jObj.val = '/';
-        } else {
-            $('#id_page').val(jObj.val)
-            jObj.val = '/'+ jObj.val + '/';
-        }
-
-        jObj.action = top.window.location.pathname;
-        switch ($('#id_search_type').val()) {
-            case 'similar':
-                jObj.newaction = jObj.action.replace((sc.LOGGEDIN == true ? '/myshine/job-search/similar/' : '/job-search/similar/'),'');
-                jObj.url = jObj.newaction.split('/');
-                jObj.newaction = (sc.LOGGEDIN == true ? '/myshine/job-search/similar' : '/job-search/similar');
-                jObj.newaction +=  jObj.val + top.window.location.search;
-                break;
-            default:
-                    /* For single keyword urls */
-                    jObj.urlArray = top.window.location.pathname.split('-');
-                    if(!isNaN(jObj.urlArray[jObj.urlArray.length-1])) {
-                        jObj.urlArray.splice(jObj.urlArray.length-1,1);
-                    }
-
-                    jObj.newaction =  jObj.urlArray.join('-') + (jObj.val == '/' ? '' : '-' + jObj.val.replace(/\//g,"")) + top.window.location.search;
-
-            break;
-        }
-
-        $('#form_facets').attr('action',jObj.newaction );
-        if(sc.isFromMsite) {
-            $.mobile_binder.showHideLoader('show');
-        } else {
-            $app.overLay(true);
-        }
-
-        $('#form_facets').submit();
-
+        e.preventDefault();
+        var $this = $(this),
+            $pageNo = $('#id_page'),
+            $formFacets = $('#form_facets');
+        $pageNo.val(parseInt($pageNo.val()) + 1);
+        var formData = $formFacets.serialize();
+        
+        $(this).prop("disabled", true);
+        $(this).text("Loading ...");
+        
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: $formFacets.attr('action'),
+            data: formData,
+            error: function() {
+                $this.replaceWith("<p>There was a problem loading more products. Try again later/</p>");
+            },
+            success: function(data){ // check if there is an additional page
+                                    // , disable load button if not
+                if (!data['has_next']) {
+                    $this.hide();
+                }
+                else {
+                    $this.text("Load more");
+                    $this.prop("disabled", false);
+                }
+                $('.js_listing').append(data["response"]);
+            }
+        });
     });
 
 }

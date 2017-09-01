@@ -85,7 +85,7 @@
                             </div>
                             <br/>
                         </div>
-                       {% if self.query %}
+                       {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
                     </form>
@@ -193,8 +193,8 @@
                     <th class="column-title">How Old</th>
                     
                     {% if perms.order.show_test_status_fields %}
-                    <th class="column-title">Test Status</th>
-                    <th class="column-title">Test Result </th>
+                      <th class="column-title">Test Status</th>
+                      <th class="column-title">Test Result </th>
                     {% endif %}
                   </tr>
                 </thead>
@@ -208,7 +208,7 @@
                       </td>
                       {% endif %}
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.id}}</td>
+                      <td>{{obj.order.number}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>

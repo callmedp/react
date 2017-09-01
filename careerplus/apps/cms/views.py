@@ -106,9 +106,9 @@ class CMSPageView(DetailView, LoadMoreMixin):
         context['page_obj'] = page_obj
         context['page_heading'] = page_obj.name
 
-        country_choices = [(m.id, m.phone + '-' + '(' + m.code3 + ')') for m in
+        country_choices = [(m.phone, m.phone) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        initial_country = Country.objects.filter(name='India', phone='91')[0].pk
+        initial_country = Country.objects.filter(phone='91')[0].phone
 
         download_docs = page_obj.document_set.filter(is_active=True)
         csrf_token_value = get_token(self.request)
@@ -182,7 +182,7 @@ class LeadManagementView(View, UploadInFile):
             path = request.path
 
             try:
-                country_obj = Country.objects.get(id=country_code)
+                country_obj = Country.objects.get(phone=country_code)
             except:
                 country_obj = Country.objects.get(phone='91')
 

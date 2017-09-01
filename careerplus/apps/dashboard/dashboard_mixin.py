@@ -8,6 +8,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from core.api_mixin import ShineCandidateDetail
 from order.models import Order, OrderItem
+from payment.models import PaymentTxn
 
 
 class DashboardInfo(object):
@@ -64,11 +65,10 @@ class DashboardInfo(object):
                 candidate_id=candidate_id,
                 date_placed__gte=last_dateplaced_date)
 
-            orders = orders | Order.objects.filter(
-                status=0,
-                payment_mode__in=[1, 4],
-                candidate_id=candidate_id,
-                date_placed__gte=last_dateplaced_date)
+            excl_txns = PaymentTxn.objects.filter(status=0, order__candidate_id=candidate_id).exclude(payment_mode__in=[1, 4])
+            excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+
+            orders = orders.exclude(id__in=excl_order_list)
 
             orders = orders.order_by('-date_placed')
 

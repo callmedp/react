@@ -15,7 +15,10 @@ from shop.models import (
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
+from shop.utils import ProductAttributesContainer
 from faq.models import ScreenFAQ, FAQuestion
+from shop.utils import ProductAttributesContainer
+
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
@@ -565,8 +568,9 @@ class ScreenProductFAQForm(forms.ModelForm):
         if not vendor:
             queryset = queryset.none()
         else:
-            queryset = queryset.filter(vendor=vendor)
-        
+            queryset = vendor.question_vendor.filter(status=2) | \
+                vendor.public_question.filter(status=2) 
+        queryset = queryset.distinct()
         if self.instance.pk:
             self.fields['question'].queryset = queryset
         else:
@@ -807,6 +811,7 @@ class AddScreenProductVariantForm(forms.ModelForm):
     def save(self, commit=True, *args, **kwargs):
         parent = self.parent
         self.instance.product_class = parent.product_class
+        self.instance.attr = ProductAttributesContainer(product=self.instance)
         self.instance.attr.initiate_attributes()
         for attribute in self.instance.attr.get_all_attributes():
             field_name = 'attribute_%s' % attribute.name

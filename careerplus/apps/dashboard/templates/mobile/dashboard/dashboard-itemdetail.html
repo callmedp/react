@@ -96,8 +96,8 @@
                                 {{op.get_user_oi_status}}
                             {% elif op.oi_status == 24 and op.draft_counter < max_draft_limit %}
                                 Revised Document is ready
-                            {% elif op_oi_status == 4 %}
-                                Document is finalized
+                            {% elif op.oi_status == 24 and op.draft_counter == max_draft_limit %}
+                                Final Document is ready
                             {% else %}
                                {{op.get_user_oi_status}}
                             {% endif %}

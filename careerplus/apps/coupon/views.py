@@ -7,10 +7,18 @@ from rest_framework.views import APIView
 from cart.models import Cart
 from .models import Coupon, CouponUser
 from cart.mixins import CartMixin
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 
 
 class CouponRedeemView(APIView, CartMixin):
     permission_classes = (AllowAny,)
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def post(self, request, format=None):
         code = request.data.get('code')
@@ -117,7 +125,7 @@ class CouponRedeemView(APIView, CartMixin):
             coupon_user.save()
             
             return Response(
-                {'success': True,'msg': 'Successfully Redeemed'
+                {'success': True, 'msg': 'Successfully Redeemed'
                  }, status=200, content_type='application/json')
            
         except:
@@ -129,6 +137,7 @@ class CouponRedeemView(APIView, CartMixin):
 
 class CouponRemoveView(APIView, CartMixin):
     permission_classes = (AllowAny,)
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def post(self, request, format=None):
         try:

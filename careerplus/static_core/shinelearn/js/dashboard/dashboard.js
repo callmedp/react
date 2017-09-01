@@ -83,6 +83,7 @@ function rejectService(oi_pk) {
         var flag = $('#reject-form-id' + oi_pk).valid();
         if (flag){
             var formData = new FormData($('#reject-form-id' + oi_pk)[0]);
+            console.log($('#reject-reason').val());
             $.ajax({
                 url: '/dashboard/inbox-rejectservice/',
                 type: "POST",
@@ -131,7 +132,7 @@ function acceptService(oi_pk) {
     }
 };
 
-function downloadOrderInvoice(order_pk, ) {
+function downloadOrderInvoice(order_pk) {
     if (order_pk){
         $('#download-invoice-form' + order_pk).submit();
     }

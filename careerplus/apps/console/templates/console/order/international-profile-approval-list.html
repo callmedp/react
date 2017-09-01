@@ -87,7 +87,7 @@
                             </div>
                             <br/>
                         </div>
-                       {% if self.query %}
+                       {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
                     </form>
@@ -170,7 +170,9 @@
           </div>
 
           <div class="x_content">
-
+            {% if page %}
+                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+            {% endif %}
             <div class="table-responsive">
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
@@ -190,7 +192,7 @@
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Candidate Doc</th>
-                    <th class="column-title">Order Deatils</th>
+                    <th class="column-title">Order Detail</th>
                     <th class="column-title">Submit Message</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">How Old</th>
@@ -208,7 +210,7 @@
                             </td>
                       {% endif %}
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.id}}</td>
+                      <td>{{obj.order.number}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -334,6 +336,7 @@
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
   <script type="text/javascript" 
     src="{% static "console/js/linkedin/international-profile.js" %}">
   </script>

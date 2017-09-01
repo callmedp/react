@@ -48,6 +48,12 @@
                             {{ filter_form.oi_status }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.delivery_type }}
+                        </div>
+                        <br/>
+                    </div>
                 </div>
 
                 <span class="input-group-btn">
@@ -96,7 +102,14 @@
                             </div>
                             <br/>
                         </div>
-                       {% if self.query %}
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.delivery_type.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.delivery_type }}
+                            </div>
+                            <br/>
+                        </div>
+                       {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
                     </form>
@@ -183,7 +196,9 @@
           </div>
 
           <div class="x_content">
-
+            {% if page %}
+                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+            {% endif %}
             <div class="table-responsive">
               <form id="inbox_table_form" method="post" action=".">{% csrf_token %}
               <input type="hidden" name="action_type" id="action_type_id" class="flat">
@@ -225,7 +240,7 @@
                           </td>
                       {% endif %}
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.id}}</td>
+                      <td>{{obj.order.number}}</td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>

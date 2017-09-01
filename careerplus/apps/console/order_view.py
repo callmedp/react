@@ -20,10 +20,12 @@ from django.utils import timezone
 from io import StringIO
 
 from order.models import Order, OrderItem
+from shop.models import DeliveryService
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
+from payment.models import PaymentTxn
 
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
@@ -72,14 +74,15 @@ class OrderListView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
-            # "not_paid_status": [0],
         })
         return context
 
     def get_queryset(self):
         queryset = super(OrderListView, self).get_queryset()
         user = self.request.user
-
+        excl_txns = PaymentTxn.objects.filter(status=0).exclude(payment_mode__in=[1, 4])
+        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        queryset = queryset.exclude(id__in=excl_order_list)
         if user.has_perm('order.can_show_all_order'):
             queryset = queryset
         elif user.has_perm('order.can_show_paid_order'):
@@ -89,8 +92,10 @@ class OrderListView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
-                    Q(email__icontains=self.query) | Q(mobile__icontains=self.query))
+                queryset = queryset.filter(
+                    Q(number__icontains=self.query) |
+                    Q(email__icontains=self.query) |
+                    Q(mobile__icontains=self.query))
         except:
             pass
 
@@ -187,8 +192,10 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
-                    Q(email__icontains=self.query) | Q(mobile__icontains=self.query))
+                queryset = queryset.filter(
+                    Q(number__icontains=self.query) |
+                    Q(email__icontains=self.query) |
+                    Q(mobile__icontains=self.query))
         except:
             pass
 
@@ -297,7 +304,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                     Q(product__name__icontains=self.query) |
                     Q(order__email__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
-                    Q(order__id__icontains=self.query))
+                    Q(order__number__icontains=self.query))
         except:
             pass
 
@@ -330,12 +337,14 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.writer, self.created = '', ''
+        self.delivery_type = ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.writer = request.GET.get('writer', '')
         self.created = request.GET.get('created', '')
+        self.delivery_type = request.GET.get('delivery_type', '')
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -404,7 +413,9 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        initial = {"created": self.created, "writer": self.writer}
+        initial = {
+            "created": self.created, "writer": self.writer,
+            "delivery_type": self.delivery_type}
         filter_form = OIFilterForm(initial)
         context.update({
             "action_form": InboxActionForm(),
@@ -431,9 +442,10 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             queryset = queryset.none()
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -459,7 +471,20 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product').order_by('-modified')
+        try:
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
+        except:
+            pass
+
+        return queryset.select_related('order', 'product', 'delivery_service').order_by('-modified')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -575,15 +600,18 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.modified, self.draft_level = '', -1
-        self.writer, self.delivery_type = '', -1
+        self.writer, self.delivery_type = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.draft_level = request.GET.get('draft_level', -1)
-        self.delivery_type = request.GET.get('delivery_type', -1)
+        try:
+            self.draft_level = int(request.GET.get('draft_level', -1))
+        except:
+            self.draft_level = -1
+        self.delivery_type = request.GET.get('delivery_type', '')
         return super(ApprovalQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -622,9 +650,10 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             queryset = queryset.none()
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -652,19 +681,28 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if int(self.draft_level) != -1:
+            if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
         except:
             pass
 
         try:
-            if int(self.delivery_type) != -1:
-                pass
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -679,15 +717,18 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.modified, self.draft_level = '', -1
-        self.writer, self.delivery_type = '', -1
+        self.writer, self.delivery_type = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.draft_level = request.GET.get('draft_level', -1)
-        self.delivery_type = request.GET.get('delivery_type', -1)
+        try:
+            self.draft_level = int(request.GET.get('draft_level', -1))
+        except:
+            self.draft_level = -1
+        self.delivery_type = request.GET.get('delivery_type', '')
         return super(ApprovedQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -724,9 +765,10 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -753,19 +795,28 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
             pass
 
         try:
-            if int(self.draft_level) != -1:
+            if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
         except:
             pass
 
         try:
-            if int(self.delivery_type) != -1:
-                pass
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_rejectedbyadmin_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -780,15 +831,18 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.modified, self.draft_level = '', -1
-        self.writer, self.delivery_type = '', -1
+        self.writer, self.delivery_type = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.draft_level = request.GET.get('draft_level', -1)
-        self.delivery_type = request.GET.get('delivery_type', -1)
+        try:
+            self.draft_level = int(request.GET.get('draft_level', -1))
+        except:
+            self.draft_level = -1
+        self.delivery_type = request.GET.get('delivery_type', '')
         return super(RejectedByAdminQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -829,9 +883,10 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -859,18 +914,27 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             pass
 
         try:
-            if int(self.draft_level) != -1:
+            if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
         except:
             pass
 
         try:
-            if int(self.delivery_type) != -1:
-                pass
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_rejectedbycandidate_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -885,15 +949,18 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.modified, self.draft_level = '', -1
-        self.writer, self.delivery_type = '', -1
+        self.writer, self.delivery_type = '', ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.draft_level = request.GET.get('draft_level', -1)
-        self.delivery_type = request.GET.get('delivery_type', -1)
+        try:
+            self.draft_level = int(request.GET.get('draft_level', -1))
+        except:
+            self.draft_level = -1
+        self.delivery_type = request.GET.get('delivery_type', '')
         return super(RejectedByCandidateQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -934,9 +1001,10 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -964,19 +1032,28 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             pass
 
         try:
-            if int(self.draft_level) != -1:
+            if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
         except:
             pass
 
         try:
-            if int(self.delivery_type) != -1:
-                pass
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -990,7 +1067,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.writer, self.created = '', ''
+        self.writer, self.created, self.delivery_type = '', '', ''
         self.oi_status = -1
 
     def get(self, request, *args, **kwargs):
@@ -999,6 +1076,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         self.writer = request.GET.get('writer', '')
         self.created = request.GET.get('created', '')
         self.oi_status = request.GET.get('oi_status', '')
+        self.delivery_type = request.GET.get('delivery_type', '')
         return super(AllocatedQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1009,7 +1087,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         initial = {
             "created": self.created,
             "writer": self.writer,
-            "oi_status": self.oi_status, }
+            "oi_status": self.oi_status,
+            "delivery_type": self.delivery_type}
         filter_form = OIFilterForm(initial)
         context.update({
             "assignment_form": AssignmentActionForm(queue_name='allocatedqueue'),
@@ -1035,9 +1114,10 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -1069,7 +1149,22 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        try:
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.name == 'Normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
+        except:
+            pass
+
+        return queryset.select_related(
+            'order', 'product', 'assigned_to',
+            'assigned_by', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_closed_oi_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1126,9 +1221,10 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -1162,7 +1258,9 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        return queryset.select_related(
+            'order', 'product', 'assigned_to',
+            'assigned_by', 'delivery_service').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -1245,9 +1343,10 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -1330,9 +1429,10 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -1439,9 +1539,10 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
-                    Q(order__id__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
         except:
@@ -1660,7 +1761,8 @@ class ActionOrderItemView(View):
                     candidate_data.update({
                         "email": oi.order.email,
                         "mobile": oi.order.mobile,
-                        "user_name": oi.order.first_name + ' ' + oi.order.last_name
+                        'subject': 'Your resume has been shared with relevant consultants',
+                        "user_name": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                     })
 
                     if oi.oi_draft:
@@ -1784,21 +1886,24 @@ class ActionOrderItemView(View):
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4  # closed
-                    obj.last_oi_status = last_oi_status
+                    obj.last_oi_status = 6
                     obj.approved_on = timezone.now()
                     obj.save()
                     approval += 1
 
                     # mail to user about writer information
+                    profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
+                    country_obj = Country.objects.get(pk=profile_obj.object_id)
+                    profiles = InternationalProfileCredential.objects.filter(oi=obj.pk)
                     to_emails = [obj.order.email]
                     data = {}
                     data.update({
-                        "name": obj.order.first_name + ' ' + obj.order.last_name,
-                        "mobile": obj.order.mobile,
-                        "subject": "Your International Profile updated",
-
+                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "subject": "Your International Profile is updated",
+                        "profiles": profiles,
+                        "country_name": country_obj.name,
                     })
-                    mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATE_MAIL'
+                    mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
 
                     try:
                         SendMail().send(to_emails, mail_type, data)
@@ -1811,8 +1916,14 @@ class ActionOrderItemView(View):
                         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
+                        oi_status=6,
                         last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=obj.last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
                 msg = str(approval) + ' orderitems approved.'
@@ -1895,18 +2006,21 @@ class ActionOrderItemView(View):
                 if mid_out_sent:
                     # mail to user about writer information
                     to_emails = [order.email]
-                    mail_type = 'MIDOUT'
+                    mail_type = "PENDING_ITEMS"
                     data = {}
                     data.update({
-                        "info": 'Upload your resume',
-                        "subject": 'Upload your resume',
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': order.first_name if order.first_name else order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'product_name': oi.product.name,
+                        'upload_url': "http://%s/dashboard" % (settings.SITE_DOMAIN) 
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
                         order.midout_sent_on = timezone.now()
                         order.save()
                     except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                        logging.getLogger('email_log').error("midout mail %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             messages.add_message(request, messages.SUCCESS, "Midout sent Successfully for selected items")
             return HttpResponseRedirect(reverse('console:queue-midout'))

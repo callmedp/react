@@ -18,10 +18,6 @@ class Order(AbstractAutoDate):
 
     site = models.PositiveSmallIntegerField(default=0, choices=SITE_CHOICES)
 
-    cart = models.ForeignKey(
-        'cart.Cart', verbose_name=_("Cart"),
-        null=True, blank=True, on_delete=models.SET_NULL)
-
     # customer information
     candidate_id = models.CharField(
         null=True,
@@ -29,18 +25,8 @@ class Order(AbstractAutoDate):
         max_length=255,
         verbose_name=_("Customer ID"))
 
-    txn = models.CharField(max_length=255, null=True, blank=True)
-
-    # pay by cheque/Draft
-    instrument_number = models.CharField(max_length=255, null=True, blank=True)
-    instrument_issuer = models.CharField(max_length=255, null=True, blank=True)
-    instrument_issue_date = models.CharField(
-        max_length=255, null=True, blank=True)
-
     status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
 
-    payment_mode = models.IntegerField(choices=PAYMENT_MODE, default=0)
-    payment_date = models.DateTimeField(null=True, blank=True)
     currency = models.CharField(
         _("Currency"), max_length=12, null=True, blank=True)
 
@@ -49,6 +35,9 @@ class Order(AbstractAutoDate):
     total_excl_tax = models.DecimalField(
         _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
 
+    tax_config = models.CharField(max_length=255, null=True, blank=True)
+
+    payment_date = models.DateTimeField(null=True, blank=True)  # order payment complete
     date_placed = models.DateTimeField(db_index=True)
     closed_on = models.DateTimeField(null=True, blank=True)
 
@@ -126,6 +115,9 @@ class Order(AbstractAutoDate):
         payD = dict(PAYMENT_MODE)
         return payD.get(self.payment_mode)
 
+    def get_txns(self):
+        return self.ordertxns.all()
+
 
 class OrderItem(AbstractAutoDate):
     order = models.ForeignKey(
@@ -146,6 +138,21 @@ class OrderItem(AbstractAutoDate):
     upc = models.CharField(_("UPC"), max_length=128, blank=True, null=True)
     quantity = models.PositiveIntegerField(
         _("Quantity"), default=1)
+
+    delivery_service = models.ForeignKey(
+        'shop.DeliveryService',
+        related_name='delivery_orderitems',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True)
+
+    delivery_price_incl_tax = models.DecimalField(
+        _("Delivery Price (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+
+    delivery_price_excl_tax = models.DecimalField(
+        _("Delivery Price (excl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
 
     oi_price_incl_tax = models.DecimalField(
         _("Price (inc. tax)"), decimal_places=2, max_digits=12, default=0)
@@ -355,6 +362,7 @@ class OrderItem(AbstractAutoDate):
         return self
 
 
+
 class OrderItemOperation(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
     linkedin = models.ForeignKey(Draft, null=True, blank=True)
@@ -413,7 +421,7 @@ class Message(AbstractAutoDate):
 
 class InternationalProfileCredential(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
-    country =  models.ForeignKey(Country)
+    country = models.ForeignKey(Country)
     username = models.CharField(_('Username'), max_length=100)
     password = models.CharField(_('Password'), max_length=100)
     candidateid = models.CharField(_('CandidateId'), max_length=100)
@@ -424,3 +432,16 @@ class InternationalProfileCredential(AbstractAutoDate):
     def __str__(self):
         return self.username
 
+
+class CouponOrder(AbstractAutoDate):
+    order = models.ForeignKey(Order)
+    coupon = models.ForeignKey(
+        'coupon.Coupon',
+        on_delete=models.SET_NULL,
+        verbose_name=_("Coupon"), null=True)
+
+    coupon_code = models.CharField(
+        _("Coupon Code"), max_length=30, blank=True, null=True)
+
+    value = models.DecimalField(
+        _("Value"), max_digits=8, decimal_places=2, default=0.0)

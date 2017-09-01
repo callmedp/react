@@ -21,6 +21,7 @@ lib64/
 parts/
 sdist/
 var/
+media/
 
 *.egg-info/
 .installed.cfg
@@ -94,3 +95,5 @@ careerplus/templates/.gitignore
 # Pycharm files
 .idea
 media/
+
+static/

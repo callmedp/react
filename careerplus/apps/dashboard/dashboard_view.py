@@ -189,7 +189,7 @@ class DashboardDetailView(TemplateView):
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 24, 26, 27])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27])
             elif self.oi.product.type_flow == 2:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6])
 
@@ -423,13 +423,12 @@ class DashboardAcceptService(View):
                         data['display_message'] = "You Accept draft successfully"
 
                         to_emails = [oi.order.email]
-                        mail_type = 'AUTO_CLOSER'
+                        mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
-                            "info": 'Auto closer mail',
-                            "draft_level": oi.draft_counter,
-                            "name": oi.order.first_name + ' ' + oi.order.last_name,
-                            "mobile": oi.order.mobile,
+                            "subject": 'Closing your '+oi.product.name+' service',
+                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                            'draft_added':oi.draft_added_on,
                         })
 
                         try:
@@ -548,18 +547,20 @@ class DashboardInvoiceDownload(View):
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
-                if order.invoice:
-                    invoice = order.invoice
-                else:
-                    order = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                    invoice = order.invoice
+                # if order.invoice:
+                #     invoice = order.invoice
+                # else:
+                #     order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                #     invoice = order.invoice
+                order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                invoice = order.invoice
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(invoice, content_type='application/pdf')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
                 return response
         except:
             pass
-        return HttpResponseForbidden()
+        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
 class DownloadQuestionnaireView(View):

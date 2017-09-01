@@ -234,10 +234,6 @@ urlpatterns += [
         linkedin_view.LinkedinQueueView.as_view(),
         name='linkedin-inbox'),
 
-    url(r'^linkedin/draft-listing/$',
-        linkedin_view.DraftListing.as_view(),
-        name='draft-listing'),
-
     url(r'^linkedin/change-draft/(?P<pk>\d+)/draft/$',
         linkedin_view.ChangeDraftView.as_view(),
         name='change-draft'),

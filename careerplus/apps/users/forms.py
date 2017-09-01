@@ -79,8 +79,8 @@ class RegistrationForm(forms.Form):
         super(RegistrationForm, self).__init__(*args, **kwargs)
 
         try:
-            country_choices = [(m.pk, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-            indian_obj = Country.objects.filter(name='India', phone='91')[0].pk if Country.objects.filter(name='India', phone='91').exists() else None
+            country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
         except:
             country_choices, indian_obj = [], None
         self.fields['country_code'].choices = country_choices

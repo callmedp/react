@@ -53,7 +53,7 @@ THIRD_PARTY_APPS = [
     'sekizai',
     'sorl.thumbnail',
     'rest_framework',
-    'haystack'
+    'haystack',
 ]
 
 # Apps specific for this project go here.
@@ -84,7 +84,7 @@ LOCAL_APPS = [
     'linkedin',
     'emailers',
     'quizs',
-    'database'
+    'database',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -102,6 +102,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.UpgradedMobileDetectionMiddleware',
     'core.middleware.UpgradedSetFlavourMiddleware',
+    'core.middleware.LearningShineMiddleware',
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -116,7 +117,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'careerplus.config.context_processors.common_context_processor',
+                'core.context_processors.common_context_processor',
                 'django_mobile.context_processors.flavour',
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings'
@@ -207,7 +208,7 @@ CKEDITOR_CONFIGS = {
 }
 
 
-# BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = 'redis://localhost:6379/0'
 
 # try:
 #     REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -215,6 +216,9 @@ CKEDITOR_CONFIGS = {
 #     REDIS_CON = None
 
 DRAFT_MAX_LIMIT = 3
+
+# GST tax rate on product
+TAX_RATE_PERCENTAGE = 18
 
 # HTMSL for SMS
 HTMSL_USER = 'sumo'
@@ -236,6 +240,7 @@ HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 HAYSTACK_BATCH_SIZE = 100
 HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
+##################################################
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
 CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
@@ -429,3 +434,15 @@ LOGGING = {
 
 ############ SEARCH SPECIFIC SETTINGS ##############
 PRODUCT_ALTERNATE_SEARCH_TERMS = []     # TODO: Enter commonly search terms
+
+
+###### CLICK TRACKING #######################
+CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
+
+
+####### PRODUCT SETTINGS ####################
+# Do Not Change #
+COURSE_SLUG = ['course',]
+WRITING_SLUG = ['writing', 'resume']
+SERVICE_SLUG = ['service',]
+############################################
