@@ -11,7 +11,7 @@
                         <div class="media-body rel">
                             <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>
                             <div class="mt-10">
-                                {% if request.session.candidate_id %}
+                                {% if not request.session.candidate_id %}
                                 <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
                                 <a href="{% url 'register' %}" class="btn btn-outline">Register</a>
                                 {% else %}
