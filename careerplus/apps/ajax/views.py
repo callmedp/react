@@ -628,10 +628,18 @@ class MarkedPaidOrderView(View):
             try:
                 obj = Order.objects.get(pk=order_pk)
                 data['status'] = 1
+                payment_date = timezone.now()
                 obj.status = 1
                 obj.paid_by = request.user
-                obj.payment_date = timezone.now()
+                obj.payment_date = payment_date
                 obj.save()
+
+                txn_objs = obj.ordertxns.filter(status=0)
+                for txn_obj in txn_objs:
+                    txn_obj.status = 1
+                    txn_obj.payment_date = payment_date
+                    txn_obj.save()
+
                 data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
                 # add reward_point in wallet
                 OrderMixin().addRewardPointInWallet(order=obj)

@@ -377,3 +377,12 @@ class CartMixin(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return total_count
+
+    def closeCartObject(self, cart_obj=None):
+        if cart_obj:
+            # update cart status
+            last_status = cart_obj.status
+            cart_obj.status = 5
+            cart_obj.last_status = last_status
+            cart_obj.date_closed = timezone.now()
+            cart_obj.save()

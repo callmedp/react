@@ -32,7 +32,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 current=reward_point,
                 expiry=expiry,
                 status=1,
-                txn=order.txn
+                txn=order.number
             )
 
     def fridge_cart(self, cart_obj):
@@ -56,7 +56,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
         try:
             candidate_id = self.request.session.get('candidate_id')
             if cart_obj:
-                order = Order.objects.create(cart=cart_obj, date_placed=timezone.now())
+                order = Order.objects.create(date_placed=timezone.now())
                 order.number = 'CP' + str(order.pk)
                 if candidate_id:
                     order.candidate_id = candidate_id
@@ -72,7 +72,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.country = cart_obj.country
 
                 # set currency
-                order.currency = 'Rs.'
+                order.currency = 'INR'
+
                 payment_dict = self.getPayableAmount(cart_obj=cart_obj)
                 total_amount = payment_dict.get('total_amount')
                 total_payable_amount = payment_dict.get('total_payable_amount')
@@ -101,13 +102,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                     wal_txn = wal_txn[0]
                     wal_txn.order = order
                     wal_txn.save()
-
-                # update cart status
-                last_status = cart_obj.status
-                cart_obj.status = 5
-                cart_obj.last_status = last_status
-                cart_obj.date_closed = timezone.now()
-                cart_obj.save()
 
                 self.createOrderitems(order, cart_obj)
 
@@ -191,9 +185,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             oi.parent = p_oi
                             oi.is_combo = True
-                            oi.oi_price_before_discounts_excl_tax = product.get_price()
-                            price_incl_tax = product.get_price() + ((product.get_price() * tax_rate_per) / 100)
-                            oi.oi_price_before_discounts_incl_tax = price_incl_tax
+                            # oi.oi_price_before_discounts_excl_tax = product.get_price()
+                            # price_incl_tax = product.get_price() + ((product.get_price() * tax_rate_per) / 100)
+                            # oi.oi_price_before_discounts_incl_tax = price_incl_tax
                             if parent_li.delivery_service:
                                 oi.delivery_service = parent_li.delivery_service
                             oi.save()

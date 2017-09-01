@@ -5,7 +5,7 @@ import re
 from django_mobile.middleware import MobileDetectionMiddleware, SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
 
-from .functions import set_session_country_currency
+from .utils import set_session_country
 
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
@@ -36,6 +36,6 @@ class LearningShineMiddleware(object):
     def __call__(self, request):
         from users.mixins import UserMixin
         country_obj = UserMixin().get_client_country(request)
-        set_session_country_currency(country_obj, request)
+        set_session_country(country_obj, request)
         response = self.get_response(request)
         return response

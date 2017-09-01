@@ -18,10 +18,6 @@ class Order(AbstractAutoDate):
 
     site = models.PositiveSmallIntegerField(default=0, choices=SITE_CHOICES)
 
-    cart = models.ForeignKey(
-        'cart.Cart', verbose_name=_("Cart"),
-        null=True, blank=True, on_delete=models.SET_NULL)
-
     # customer information
     candidate_id = models.CharField(
         null=True,
@@ -29,18 +25,8 @@ class Order(AbstractAutoDate):
         max_length=255,
         verbose_name=_("Customer ID"))
 
-    txn = models.CharField(max_length=255, null=True, blank=True)
-
-    # pay by cheque/Draft
-    instrument_number = models.CharField(max_length=255, null=True, blank=True)
-    instrument_issuer = models.CharField(max_length=255, null=True, blank=True)
-    instrument_issue_date = models.CharField(
-        max_length=255, null=True, blank=True)
-
     status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
 
-    payment_mode = models.IntegerField(choices=PAYMENT_MODE, default=0)
-    payment_date = models.DateTimeField(null=True, blank=True)
     currency = models.CharField(
         _("Currency"), max_length=12, null=True, blank=True)
 
@@ -51,6 +37,7 @@ class Order(AbstractAutoDate):
 
     tax_config = models.CharField(max_length=255, null=True, blank=True)
 
+    payment_date = models.DateTimeField(null=True, blank=True)  # order payment complete
     date_placed = models.DateTimeField(db_index=True)
     closed_on = models.DateTimeField(null=True, blank=True)
 
@@ -127,6 +114,9 @@ class Order(AbstractAutoDate):
     def get_payment_mode(self):
         payD = dict(PAYMENT_MODE)
         return payD.get(self.payment_mode)
+
+    def get_txns(self):
+        return self.ordertxns.all()
 
 
 class OrderItem(AbstractAutoDate):
@@ -370,6 +360,7 @@ class OrderItem(AbstractAutoDate):
 
     def get_test_obj(self):
         return self
+
 
 
 class OrderItemOperation(AbstractAutoDate):

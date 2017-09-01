@@ -25,6 +25,7 @@ from blog.mixins import PaginationMixin
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
+from payment.models import PaymentTxn
 
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
@@ -79,7 +80,9 @@ class OrderListView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(OrderListView, self).get_queryset()
         user = self.request.user
-
+        excl_txns = PaymentTxn.objects.filter(status=0).exclude(payment_mode__in=[1, 4])
+        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        queryset = queryset.exclude(id__in=excl_order_list)
         if user.has_perm('order.can_show_all_order'):
             queryset = queryset
         elif user.has_perm('order.can_show_paid_order'):
