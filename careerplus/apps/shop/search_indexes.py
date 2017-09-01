@@ -88,21 +88,32 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pRD = indexes.BooleanField(default=True, indexed=False)
     pEX = indexes.CharField(null=True, indexed=False)
 
-    # Prices
+    ##### Prices
+    ### Flat normalised array for filter on variations
     pPinr = indexes.MultiValueField(faceted=True)
     pPusd = indexes.MultiValueField(faceted=True)
     pPaed = indexes.MultiValueField(faceted=True)
     pPgbp = indexes.MultiValueField(faceted=True)
 
+    ### Calculated price of base + min var OR standalaone OR combos
+    pPin = indexes.DecimalField(indexed=False)
+    pPfin = indexes.DecimalField(indexed=False)
+    pPus = indexes.DecimalField(indexed=False)
+    pPfus = indexes.DecimalField(indexed=False)
+    pPae = indexes.DecimalField(indexed=False)
+    pPfae = indexes.DecimalField(indexed=False)
+    pPgb = indexes.DecimalField(indexed=False)
+    pPfgb = indexes.DecimalField(indexed=False)
 
-    pPin = indexes.DecimalField(model_attr='inr_price', indexed=False)
-    pPfin = indexes.DecimalField(model_attr='fake_inr_price', indexed=False)
-    pPus = indexes.DecimalField(model_attr='usd_price', indexed=False)
-    pPfus = indexes.DecimalField(model_attr='fake_usd_price', indexed=False)
-    pPae = indexes.DecimalField(model_attr='aed_price', indexed=False)
-    pPfae = indexes.DecimalField(model_attr='fake_aed_price', indexed=False)
-    pPgb = indexes.DecimalField(model_attr='gbp_price', indexed=False)
-    pPfgb = indexes.DecimalField(model_attr='fake_gbp_price', indexed=False)
+    ### DB price of each object
+    pPinb = indexes.DecimalField(model_attr='inr_price', indexed=False)
+    pPfinb = indexes.DecimalField(model_attr='fake_inr_price', indexed=False)
+    pPusb = indexes.DecimalField(model_attr='usd_price', indexed=False)
+    pPfusb = indexes.DecimalField(model_attr='fake_usd_price', indexed=False)
+    pPaeb = indexes.DecimalField(model_attr='aed_price', indexed=False)
+    pPfaeb = indexes.DecimalField(model_attr='fake_aed_price', indexed=False)
+    pPgbb = indexes.DecimalField(model_attr='gbp_price', indexed=False)
+    pPfgbb = indexes.DecimalField(model_attr='fake_gbp_price', indexed=False)
 
     pAbx = indexes.CharField(model_attr='about', default='', indexed=False) 
     pARx = indexes.DecimalField(model_attr='avg_rating', indexed=False) 
@@ -266,6 +277,90 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 CL.append(obj.get_courselevel())
             return list(set(CL))
         return []
+
+    def prepare_pPin(self, obj):
+        Pinr = obj.inr_price
+        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+            var = obj.get_variations()
+            var_price = None
+            for pv in var:
+                if (var_price and pv.inr_price < var_price) or not var_price:
+                    var_price = pv.inr_price
+            if var_price:
+                Pinr += var_price
+        return Pinr
+
+    def prepare_pPus(self, obj):
+        Pusd = obj.usd_price
+        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+            var = obj.get_variations()
+            var_price = None
+            for pv in var:
+                if (var_price and pv.usd_price < var_price) or not var_price:
+                    var_price = pv.usd_price
+            if var_price:
+                Pusd += var_price
+        return Pusd
+
+    def prepare_pPae(self, obj):
+        Paed = obj.aed_price
+        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+            var = obj.get_variations()
+            var_price = None
+            for pv in var:
+                if (var_price and pv.aed_price < var_price) or not var_price:
+                    var_price = pv.aed_price
+            if var_price:
+                Paed += var_price
+        return Paed
+
+    def prepare_pPfin(self, obj):
+        Pinr = obj.fake_inr_price
+        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+            var = obj.get_variations()
+            var_price = None
+            for pv in var:
+                if (var_price and pv.fake_inr_price < var_price) or not var_price:
+                    var_price = pv.fake_inr_price
+            if var_price:
+                Pinr += var_price
+        return Pinr
+
+    def prepare_pPfus(self, obj):
+        Pusd = obj.fake_usd_price
+        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+            var = obj.get_variations()
+            var_price = None
+            for pv in var:
+                if (var_price and pv.fake_usd_price < var_price) or not var_price:
+                    var_price = pv.fake_usd_price
+            if var_price:
+                Pusd += var_price
+        return Pusd
+
+    def prepare_pPfae(self, obj):
+        Paed = obj.fake_aed_price
+        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+            var = obj.get_variations()
+            var_price = None
+            for pv in var:
+                if (var_price and pv.fake_aed_price < var_price) or not var_price:
+                    var_price = pv.fake_aed_price
+            if var_price:
+                Paed += var_price
+        return Paed
+
+    def prepare_pPfgb(self, obj):
+        Pgbp = obj.fake_gbp_price
+        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+            var = obj.get_variations()
+            var_price = None
+            for pv in var:
+                if (var_price and pv.fake_gbp_price < var_price) or not var_price:
+                    var_price = pv.fake_gbp_price
+            if var_price:
+                Pgbp += var_price
+        return Pgbp
 
     def prepare_pPinr(self, obj):
         Pinr = list()
