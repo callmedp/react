@@ -35,7 +35,9 @@ class BaseSearch(object):
 
     fields = ["text", "pURL", "pTt", "pHd", "pTP", "pStar", "pImA", "id", "pAR", "pARx", "pRC", "pNJ", "pImg",
               "pPvn", "pCmbs", "pVrs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
-              "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb", "pPc"]
+              "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb",
+              "pPinb", "pPfinb", "pPusb", "pPfusb", "pPaeb", "pPfaeb", "pPgbb", "pPfgbb",
+              "pPc"]
 
     similar_fields = []
 

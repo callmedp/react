@@ -54,3 +54,6 @@ https://stackoverflow.com/questions/19101243/error-1130-hy000-host-is-not-allowe
 
 Run migrations
 
+apt-get install redis-server
+
+https://www.rosehosting.com/blog/how-to-install-configure-and-use-redis-on-ubuntu-16-04/
