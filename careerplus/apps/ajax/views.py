@@ -132,7 +132,10 @@ class AjaxProductLoadMoreView(TemplateView):
             except EmptyPage:
                 # products=paginator.page(paginator.num_pages)
                 products = 0
-            context.update({'products': products, 'page': page, 'slug': slug})
+            context.update({
+                'products': products, 'page': page,
+                'slug': slug, 'site': settings.SITE_DOMAIN,
+            })
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
         return context

@@ -159,7 +159,7 @@
 		    	<ul class="listing" id="product_list">
 		    		{% for product in products %}
 				        <li class="box-panel">
-				        	<a title="{{product.pNm}}" href="#">
+				        	<a title="{{product.pNm}}" href="{{site}}{{product.pURL}}">
 					            <div class="media">
 					            	<div class="media-left">
 					                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.pNm}}">

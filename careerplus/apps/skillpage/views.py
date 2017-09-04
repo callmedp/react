@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.http import urlquote
 from haystack.query import SearchQuerySet
+from django.conf import settings
 
 from shop.models import Category
 from cms.mixins import UploadInFile
@@ -70,6 +71,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         except:
             pass
         prd_obj = ContentType.objects.get_for_model(Product)
+        # import ipdb; ipdb.set_trace()
         all_results = SearchQuerySet().filter(pCtg=self.pk)
         prod_id_list = self.object.categoryproducts.values_list('id', flat=True)
         prod_reviews = Review.objects.filter(
@@ -110,6 +112,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
             "products": products,
+            'site': settings.SITE_DOMAIN,
             "page_reviews":prod_reviews[0:4] if self.request.flavour else page_reviews,
             'url': 'https://' + self.object.video_link
         })

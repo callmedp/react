@@ -95,6 +95,7 @@ class ProductInformationMixin(object):
         # info['prd_vendor_img_alt'] = product.vendor.image_alt
         info['prd_rating_star'] = product.pStar
         info['prd_video'] = product.pvurl
+        info['start_price'] = product.pPinb
         if product.pPc == 'course':
             info['prd_service'] = 'course'
         elif product.pPc == 'writing':
@@ -297,7 +298,7 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
-        sqs = SearchQuerySet().filter(id=11)[0]
+        sqs = SearchQuerySet().filter(id=12)[0]
         product = self.object
         category = self.category
         ctx.update(self.get_breadcrumbs(product, category))
