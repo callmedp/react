@@ -20,7 +20,7 @@ class CouponUserInline(admin.TabularInline):
 
 class CouponAdmin(admin.ModelAdmin):
     list_display = [
-        'created', 'code', 'coupon_type', 'value', 'user_count', 'user_limit', 'is_redeemed', 'valid_until', 'campaign'
+        'valid_from', 'active', 'code', 'coupon_type', 'value', 'user_count', 'user_limit', 'is_redeemed', 'valid_until', 'campaign'
     ]
     list_filter = ['coupon_type', 'campaign', 'created', 'valid_until']
     raw_id_fields = ()

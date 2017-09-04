@@ -16,11 +16,11 @@ MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careerplus1',
+        'NAME': 'careerplus',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
+        'HOST': '172.22.65.33',
+        'PORT': '3306',
     },
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
@@ -213,7 +213,7 @@ VENDOR_GROUP_LIST = ['VENDOR']
 PRODUCT_GROUP_LIST = ['PRODUCT']
 OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
 SEO_GROUP_LIST = ['SEO']
-WRITING_GROUP_LIST = ['WRITERS']
+WRITING_GROUP_LIST = ['WRITER']
 
 
 # Booster Recruiters

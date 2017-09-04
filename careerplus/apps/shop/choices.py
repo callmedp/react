@@ -115,16 +115,23 @@ def convert_to_month(days=0):
 
 C_ATTR_DICT = {
     'SM': 'study_mode',
-    'DD': 'duration_days',
+    'DD': 'duration_day',
     'CERT': 'certification',
     'CL': 'course_level',
-    'CT': 'course_type'
+    'CT': 'course_type',
+    'CD': 'course_doc',
+    'CI': 'course_im'
 }
+
 R_ATTR_DICT = {
-    'EXP': 'experience_resume',
+    'EXP': 'experience_writing',
 }
+
 S_ATTR_DICT = {
     'EXP': 'experience_service',
+    'FD': 'feature_duration',
+    'SD': 'service_doc',
+    'SI': 'service_im',
 }
 
 STUDY_MODE = dict((

@@ -60,6 +60,8 @@ class Command(BaseCommand):
         try:
             with transaction.atomic():
                 for i, row in df.iterrows():
+                    if not i%50:
+                        print(i)
                     if row['sluid'] and row['slpid']:
                         product_type = ContentType.objects.get(
                             app_label='shop', model='product')
