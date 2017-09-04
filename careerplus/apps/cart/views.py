@@ -15,7 +15,7 @@ from django.template.response import TemplateResponse
 from django.conf import settings
 
 from shine.core import ShineCandidateDetail
-from shop.models import Product, ProductClass, DeliveryService
+from shop.models import Product, ProductClass
 from users.mixins import RegistrationLoginApi, UserMixin
 from console.decorators import Decorate, stop_browser_cache
 
@@ -45,7 +45,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
         context.update({
             "cart_items": self.get_cart_items(cart_obj=cart_obj),
             "total_amount": self.getTotalAmount(cart_obj=cart_obj),
-            # "country_obj": self.get_client_country(self.request),
+            "country_obj": self.get_client_country(self.request),
         })
         if not context['cart_items']:
             context.update(self.get_recommended_products())
@@ -332,32 +332,16 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        if self.request.session.get('cart_pk') and self.request.session.get('checkout_type') == 'express':
-            context.update({
-                "cart_items": self.get_cart_items(),
-                "total_amount": self.getTotalAmount(),
-            })
-        else:
-            self.getCartObject()
-            context.update({
-                "cart_items": self.get_cart_items(),
-                "total_amount": self.getTotalAmount(),
-            })
-        cart_obj, wal_obj = None, None
+        cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
         wal_txn, wal_total, wal_point = None, None, None
         
-        cart_pk = self.request.session.get('cart_pk')
-        try:
-            cart_obj = Cart.objects.get(pk=cart_pk)
-        except Cart.DoesNotExist:
-            cart_obj = None
         if cart_obj:
             wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
             cart_coupon = cart_obj.coupon
             if cart_coupon:
                 wal_obj = None
-            elif wal_txn:
+            elif wal_txn.exists():
                 wal_obj = None
                 wal_txn = wal_txn[0]
                 points = wal_txn.point_txn.all()
@@ -400,9 +384,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
         context.update({
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
+
+        payment_dict = self.getPayableAmount(cart_obj=cart_obj)
+        context.update(payment_dict)
+
         context.update({
             "cart_items": self.get_cart_items(cart_obj=self.cart_obj),
-            "total_amount": self.getTotalAmount(cart_obj=self.cart_obj),
         })
         return context
 
@@ -423,7 +410,7 @@ class UpdateDeliveryType(View, CartMixin):
                 line_obj.delivery_service = delivery_obj
                 line_obj.save()
                 total_cart_amount = self.getTotalAmount(cart_obj=cart_obj)
-                delivery_charge = delivery_obj.inr_price
+                delivery_charge = delivery_obj.get_price()
                 data.update({
                     "total_cart_amount": int(total_cart_amount),
                     "delivery_charge": int(delivery_charge),

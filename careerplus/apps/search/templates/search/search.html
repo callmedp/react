@@ -64,55 +64,11 @@
             <h2>{{ paginator.count }} products found</h2>
         </div>
 
-        <ul class="listing">
-            {% for result in page.object_list %}
-            <li class="box-panel">
-                <a title="{{ result.pTt|title }}" href="{{ result.pURL }}" target="_blank">
-                <div class="media">
-                  <div class="media-left">
-                      <figure class="color1">
-                        <img class="media-object" src="{{ result.pImg}}" alt="{{ result.pImA|title }}">
-                      </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="certification-jobs-box">
-                      {% if "true" in result.pCert %}<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>{% endif %}
-                      {% if result.pNJ %}<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>{% endif %}
-                    </div>
-
-                    <h3 class="listing-heading">{{ result.pHd }}</h3>
-
-                    <div class="rating-review-box">
-                        {% for star in result.pStar %}
-                        <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
-                        {% endfor %}
-                        <strong>{{ result.pARx|floatformat }}/5</strong>{% if result.pRC %} | {{ result.pRC }} ratings{% endif %}
-                    </div> 
-
-                    <div class="providers">
-                       Provider
-                       <span>{{ result.pPvn|title }}</span>
-                    </div>
-                    {% with result.pCmbs|jsonify as combos %}
-                        {% if combos.combo %}
-                            <div class="providers">
-                               Includes
-                               {% for combo in combos.combo_list %}<span>{{ combo.name }}</span>{% endfor %}
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-                    <div class="pricing-box">
-                       Starting at <strong>Rs. {{ result.pPin |floatformat:'0' }}/-</strong>{% if result.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ result.pPfin|floatformat:"0" }}/-</strike> <span class="discount">10% OFF</span>{% endif %}
-                    </div>
-
-                  </div>
-                </div>
-              </a>
-            </li>
-            {% endfor %}
+        <ul class="listing js_listing">
+            {% include 'search/ajax/search_listing.html' %}
         </ul>
         {% if paginator.num_pages > page.number %}
-            <a href="#" class="load-more cls_load_more"> Load more</a>
+            <a href="#" class="load-more cls_load_more">Load more</a>
         {% endif %}
         {% else %}
             <span>No results found</span>

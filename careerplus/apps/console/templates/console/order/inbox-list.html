@@ -43,6 +43,12 @@
                         </div>
                         <br/>
                     </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.delivery_type }}
+                        </div>
+                        <br/>
+                    </div>
                 </div>
 
                 <span class="input-group-btn">
@@ -82,6 +88,13 @@
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 {{ filter_form.created }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.delivery_type.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.delivery_type }}
                             </div>
                             <br/>
                         </div>
@@ -220,7 +233,7 @@
                               {{obj.parent.product.name}}:</br>
                           {% endif %}
                           {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
-                      <td>Delivery Type</td>
+                      <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
                       <td>
                         {{obj.modified|naturaltime}}
                         <b>Updated On: {{obj.modified}}</b>

@@ -373,6 +373,3 @@ class LinkedinCallbackView(View):
 
         except Exception as e:
             return HttpResponseRedirect('/login/')
-        
-
-

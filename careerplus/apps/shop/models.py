@@ -1280,7 +1280,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_profile_country(self):
         pf_obj = self.productextrainfo_set.filter(info_type='profile_update')
         if pf_obj:
-            return Country.objects.filter(pk=pf_obj.object_id)[0].code2
+            return Country.objects.get(pk=pf_obj[0].object_id).code2
         else:
             return ''
 
@@ -1998,3 +1998,9 @@ class DeliveryService(AbstractAutoDate):
 
     def __str__(self):
         return self.name
+
+    def get_price(self, *args, **kwargs):
+        
+        if self.inr_price:
+            return round(self.inr_price, 0)
+        return Decimal(0)
