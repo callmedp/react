@@ -27,6 +27,7 @@ def send_linkedin_tips():
                 subject = 'Turn your LinkedIn into resume'
                 header = {'Reply-To': settings.REPLY_TO}
                 context_dict['subject'] = subject
+                context_dict['site'] = 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 html = render_to_string("emailers/candidate/linkedin_tip1.html", context_dict)
                 SendMail().base_send_mail(
                     subject, html, to=[oi.order.email], headers=headers)
@@ -36,6 +37,7 @@ def send_linkedin_tips():
                 subject = "Connect with more and more people"
                 header = {'Reply-To': settings.REPLY_TO}
                 context_dict['subject'] = subject
+                context_dict['site'] = 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 html = render_to_string("emailers/candidate/linkedin_tip2.html", context_dict)
                 SendMail().base_send_mail(
                     subject, html, to=[oi.order.email], headers=headers)
@@ -45,6 +47,7 @@ def send_linkedin_tips():
                 subject = "Customize your LinkedIn URL"
                 header = {'Reply-To': settings.REPLY_TO}
                 context_dict['subject'] = subject
+                context_dict['site'] = 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 html = render_to_string("emailers/candidate/linkedin_tip3.html", context_dict)
                 SendMail().base_send_mail(
                     subject, html, to=[oi.order.email], headers=headers)
@@ -54,6 +57,7 @@ def send_linkedin_tips():
                 subject = "Importance of joining groups on LinkedIn"
                 header = {'Reply-To': settings.REPLY_TO}
                 context_dict['subject'] = subject
+                context_dict['site'] = 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 html = render_to_string("emailers/candidate/linkedin_tip4.html", context_dict)
                 SendMail().base_send_mail(
                     subject, html, to=[oi.order.email], headers=headers)
@@ -63,6 +67,7 @@ def send_linkedin_tips():
                 subject = "Will you trust a profile without a profile picture?"
                 header = {'Reply-To': settings.REPLY_TO}
                 context_dict['subject'] = subject
+                context_dict['site'] = 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 html = render_to_string("emailers/candidate/linkedin_tip5.html", context_dict)
                 SendMail().base_send_mail(
                     subject, html, to=[oi.order.email], headers=headers)
@@ -72,6 +77,7 @@ def send_linkedin_tips():
                 subject = "You like writing?"
                 header = {'Reply-To': settings.REPLY_TO}
                 context_dict['subject'] = subject
+                context_dict['site'] = 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 html = render_to_string("emailers/candidate/linkedin_tip6.html", context_dict)
                 SendMail().base_send_mail(
                     subject, html, to=[oi.order.email], headers=headers)
