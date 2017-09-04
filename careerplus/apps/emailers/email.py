@@ -14,14 +14,12 @@ class SendMail():
         '''
         if settings.DEBUG:
             subject = "Test Mail " + subject
-            to = ['priya.kharb@hindustantimes.com']
+            to = ['upender.singh@hindustantimes.com']
             cc = []
             bcc = []
-
+            # cc = ['upenders379@gmail.com']
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
-
         emsg.content_subtype = "html"
-
         emsg.send()
 
     def render_template(self, template, context):
@@ -33,7 +31,7 @@ class SendMail():
         except Exception as e:
             logging.getLogger('email_log').error("%s - %s" % (str(to), str(e)))
 
-        self.base_send_mail(subject=send_dict.get('subject', 'Shinelearning'), body=body, to=to, from_email=send_dict.get('from_email', settings.DEFAULT_FROM_EMAIL), headers=send_dict.get('header', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
+        self.base_send_mail(subject=send_dict.get('subject', 'Shinelearning'), body=body, to=to, from_email=send_dict.get('from_email', settings.DEFAULT_FROM_EMAIL), headers=send_dict.get('header', None), cc=send_dict.get('cc_list', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
                 
     def send(self, to=None, mail_type=None, data={}):
         send_dict = {}
@@ -59,7 +57,7 @@ class SendMail():
 
         elif mail_type == "PAYMENT_PENDING":
             send_dict['template'] = 'emailers/candidate/payment_pending.html'
-            send_dict['subject'] = "To initiate your services fulfil these details"
+            send_dict['subject'] = data.get('subject', '')
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
@@ -69,18 +67,31 @@ class SendMail():
             send_dict['subject'] = "Linkedin Profile"
             send_dict['template'] = 'emailers/payment_confirm.html'
 
-        elif mail_type == "PENDING_ITEMS":
-            send_dict['subject'] = "To initiate your service(s) fulfil these pending requirements"
-            send_dict['template'] = 'emailers/candidate/pending_item.html'
+        elif mail_type == "PROCESS_MAILERS":
+            send_dict['subject'] = data.get('subject', '')
+            send_dict['template'] = 'emailers/candidate/process_mailers.html'
+            if data.get('type_flow') == 1:
+                send_dict['upload_url'] = "http://%s/dashboard" % (settings.SITE_DOMAIN)
+            elif data.get('type_flow') == 8:
+                send_dict['counselling_form'] = "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, data.get('pk'))
+            elif data.get('type_flow') == 9:
+                send_dict['complete_profile'] = "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN)
+            elif data.get('type_flow') == 10:
+                pass
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             data['email'] = [to]
             self.process(to, send_dict, data)
 
         elif mail_type == "ALLOCATED_TO_WRITER":
             send_dict['subject'] = data.get('subject', '')
-            template_name = data.get('template_name', 'Your developed document has been uploaded')
-            send_dict['template'] = 'emailers/candidate' + template_name
-            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            template_name = data.get('template_name', 'assignment_mail.html')
+            send_dict['template'] = 'emailers/candidate/' + template_name
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            if data.get('writer_email', None):
+                send_dict['cc_list'] = []
+                send_dict['cc_list'].append(data.get('writer_email'))
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             self.process(to, send_dict, data)
 
         elif mail_type == "DRAFT_UPLOAD":
@@ -96,7 +107,8 @@ class SendMail():
             elif data.get('draft_level') == 3:
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
-
+            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
+            data['autologin'] = "http://%s/autologin/%s/" % (settings.SITE_DOMAIN, token)
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
@@ -124,11 +136,12 @@ class SendMail():
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
-        elif mail_type == "RESUME_CRITIQUE":
-            send_dict['subject'] = data.get('subject', "Your developed document is ready")
+        elif mail_type == "RESUME_CRITIQUE_CLOSED":
+            send_dict['subject'] = data.get('subject', "Your developed document has been uploaded")
             send_dict['template'] = 'emailers/candidate/resume_critique_closed.html'
+            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
+            data['autologin'] = "http://%s/autologin/%s/" % (settings.SITE_DOMAIN, token)
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
-            data['review_document'] = "Review Document"
             self.process(to, send_dict, data)
 
         elif mail_type == "BOOSTER_RECRUITER":
@@ -196,11 +209,17 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
 
         elif mail_type == "FORGOT_PASSWORD":
-
             send_dict['subject'] = "Your Shine.com password"
             send_dict['template'] = 'emailers/candidate/reset_pass.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)
             data['reset_url'] = "http://%s/user/update/password/?token=%s" % (settings.SITE_DOMAIN, token)
+            self.process(to, send_dict, data)
+
+        elif mail_type == "CART_DROP_OUT":
+            send_dict['subject'] = "PMI Agile is ready to checkout"
+            send_dict['template'] = 'emailers/candidate/cart_drop_out.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             self.process(to, send_dict, data)

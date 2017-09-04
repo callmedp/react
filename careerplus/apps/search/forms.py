@@ -26,11 +26,11 @@ class SearchRecommendedForm(forms.Form):
     """
     Product Recommendation Form
     """
-    farea = forms.ChoiceField(
+    area = forms.ChoiceField(
         required=True,
         widget=forms.TextInput(
             attrs={
-                'class': 'form-control js_farea',
+                'class': 'form-control js_area',
                 'data-rulesid': "01",
                 'data-selecttype': 'multiple',
                 'maxlength': '150',

@@ -807,7 +807,9 @@ class ProductFAQForm(forms.ModelForm):
         if not vendor:
             queryset = queryset.none()
         else:
-            queryset = queryset.filter(vendor=vendor)
+            queryset = vendor.question_vendor.filter(status=2) | \
+                vendor.public_question.filter(status=2) 
+        queryset = queryset.distinct()
         
         if self.instance.pk:
             self.fields['question'].queryset = queryset

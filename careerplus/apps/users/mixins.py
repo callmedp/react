@@ -194,8 +194,9 @@ class UserMixin(object):
         code2 = code2.upper()
 
         try:
-            country_obj = Country.objects.get(code2=code2)
+            country_objs = Country.objects.filter(code2=code2)
+            country_obj = country_objs[0]
         except:
-            country_obj = Country.objects.get(code2='IN')
+            country_obj = Country.objects.get(phone='91')
 
         return country_obj

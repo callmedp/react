@@ -38,7 +38,7 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
     }
 
     class Meta:
-        ordering = ['-priority']
+        ordering = ['priority']
 
     def __str__(self):
         return self.name

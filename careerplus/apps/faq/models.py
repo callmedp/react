@@ -48,6 +48,13 @@ class FAQuestion(AbstractAutoDate):
         Vendor,
         related_name='question_vendor',
         null=True, blank=True)
+    
+    public_vendor = models.ManyToManyField(
+        Vendor,
+        verbose_name=_('Public To Vendor'),
+        related_name='public_question',
+        blank=True)
+
     objects = FAQuestionManager()
     
     class Meta:
@@ -106,6 +113,7 @@ class ScreenFAQ(AbstractAutoDate):
     vendor = models.ForeignKey(
         Vendor,
         null=True, blank=True)
+
     objects = FAQuestionManager()
     
     class Meta:

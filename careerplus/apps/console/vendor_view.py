@@ -520,7 +520,7 @@ class ChangeScreenProductView(DetailView):
             form=ScreenProductFAQForm,
             can_delete=False,
             formset=ScreenFAQInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
+            max_num=50, validate_max=True)
         if self.object:
             prdfaq_formset = ScreenProductFAQFormSet(
                 instance=self.get_object(),
@@ -533,7 +533,7 @@ class ChangeScreenProductView(DetailView):
             form=ScreenProductChapterForm,
             can_delete=False,
             formset=ScreenChapterInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
+            max_num=50, validate_max=True)
         if self.object:
             prdchapter_formset = ScreenProductChapterFormSet(
                 instance=self.get_object(),
@@ -546,7 +546,7 @@ class ChangeScreenProductView(DetailView):
                 form=ScreenProductVariationForm,
                 can_delete=False,
                 formset=ScreenVariationInlineFormSet, extra=0,
-                max_num=20, validate_max=True)
+                max_num=50, validate_max=True)
             if self.object:
                 prdvar_formset = ScreenProductVariationFormSet(
                     instance=self.get_object(),
@@ -696,7 +696,7 @@ class ChangeScreenProductView(DetailView):
                             form=ScreenProductFAQForm,
                             can_delete=False,
                             formset=ScreenFAQInlineFormSet, extra=0,
-                            max_num=20, validate_max=True)
+                            max_num=50, validate_max=True)
                         formset = ScreenProductFAQFormSet(
                             request.POST, instance=obj,
                             form_kwargs={'object': obj,
@@ -737,7 +737,7 @@ class ChangeScreenProductView(DetailView):
                             form=ScreenProductVariationForm,
                             can_delete=False,
                             formset=ScreenVariationInlineFormSet, extra=1,
-                            max_num=20, validate_max=True)
+                            max_num=50, validate_max=True)
                         formset = ScreenProductVariationFormSet(
                             request.POST, instance=obj,
                             form_kwargs={'object': obj},)
@@ -777,7 +777,7 @@ class ChangeScreenProductView(DetailView):
                             form=ScreenProductChapterForm,
                             can_delete=False,
                             formset=ScreenChapterInlineFormSet, extra=1,
-                            max_num=20, validate_max=True)
+                            max_num=50, validate_max=True)
                         formset = ScreenProductChapterFormSet(
                             request.POST, instance=obj,
                             form_kwargs={'object': obj},)

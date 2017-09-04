@@ -9,10 +9,18 @@ from .models import (
     Wallet, RewardPoint, ECash, 
     WalletTransaction, ECashTransaction, PointTransaction)
 from cart.mixins import CartMixin
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 
 
 class WalletRedeemView(APIView, CartMixin):
     permission_classes = (AllowAny,)
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def post(self, request, format=None):
         point = request.data.get('point')
@@ -80,7 +88,7 @@ class WalletRedeemView(APIView, CartMixin):
             wal_obj.owner_email = owner_email
             wal_obj.save()
             wallettxn = WalletTransaction.objects.create(
-                wallet=wal_obj,cart=cart_obj, txn_type=2, point_value=point)
+                wallet=wal_obj, cart=cart_obj, txn_type=2, point_value=point)
             for pts in points:
                 if pts.expiry >= timezone.now():
                     if pts.current >= point:
@@ -125,6 +133,7 @@ class WalletRedeemView(APIView, CartMixin):
 
 class WalletRemoveView(APIView, CartMixin):
     permission_classes = (AllowAny,)
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def post(self, request, format=None):
         try:

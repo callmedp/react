@@ -132,7 +132,7 @@ function acceptService(oi_pk) {
     }
 };
 
-function downloadOrderInvoice(order_pk, ) {
+function downloadOrderInvoice(order_pk) {
     if (order_pk){
         $('#download-invoice-form' + order_pk).submit();
     }

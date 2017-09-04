@@ -20,19 +20,19 @@
     </tr>
     <tr>
       <td style="padding: 10px; background-color: #f8f8f8;">
-      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear Nitin,</strong>
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {{username}},</strong>
       	<span style="display: block; padding-bottom: 3px;">Shine learning wishes you all the best for your learning ahead! </span>
       	<strong>You can avail your services as below:</strong>
       </td>
     </tr>
-  {% if flow_type == 6 %}
+  {% if type_flow == 2 or type_flow == 6%}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
           <tbody>
             <tr>
               <td style="font-size:14px; color:#333; padding-bottom:10px;">
-                <span>We bring  <a href="#" style="text-decoration: none; color: #2196f3">Six Sigma Black Belt</a>, <a href="#" style="text-decoration: none; color: #2196f3">Prince2</a> and <a href="#" style="text-decoration: none; color: #2196f3">PMI Agile</a> course(s) in collaboration with partner(s) <strong>Skillsoft</strong> respectively.</span>
+                <span>We bring  <a href="#" style="text-decoration: none; color: #2196f3">{{product_name}}</a> course(s) in collaboration with partner(s) <strong>{{partner}}</strong> respectively.</span>
                 <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
               </td>
             </tr>
@@ -55,13 +55,13 @@
       </td>
     </tr>
   {% endif %}
-  {% if flow_type == 1 or flow_type == 3 %}
+  {% if type_flow == 1 or type_flow == 3 %}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
           <tbody>
           <tr>
-            <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">Six Sigma Black Belt</a>, <a href="#" style="text-decoration: none; color: #2196f3">Prince2</a> and <a href="#" style="text-decoration: none; color: #2196f3">PMI Agile</a></span>
+            <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">{{product_name}}</a></span>
             <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
             </td>
           </tr>
@@ -69,7 +69,7 @@
            <td style=" padding:10px 0;">
             	<ol style="margin: 0px; padding: 0px 15px;">
             		<li style="padding-bottom: 10px;">  In order to start your services, we require your current resume.</li>
-      			<a href="" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Upload your details</a>
+      			<a href="{{upload_url}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Upload your details</a>
             		<li style="padding-bottom: 5px; padding-top:20px;">Our professional experts will contact you for detailed discussion.</li>
             		<li>Post discussion you will get your professional document from our experts. </li>
             		
@@ -81,7 +81,7 @@
       </td>
     </tr>
   {% endif %}
-  {% if flow_type == 8 %}
+  {% if type_flow == 8 %}
    <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
@@ -95,7 +95,7 @@
              <td style=" padding:10px 0;">
               	<ol style="margin: 0px; padding: 0px 15px;">
               		<li style="padding-bottom: 10px;">  In order to start your services, we require your current resume.</li>
-        			<a href="" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Upload your details</a>
+        			<a href="{{counselling_form}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Upload your details</a>
               		<li style="padding-bottom: 5px; padding-top:20px;">Our professional experts will contact you for detailed discussion. </li>
               		<li> Post discussion you will get your professional document from our experts.</li>
               		
@@ -107,53 +107,7 @@
       </td>
     </tr>
   {% endif %}
-    <tr>
-      <td style="padding:10px;background-color: #f8f8f8;">
-      	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
-          <tbody>
-            <tr>
-              <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">Six Sigma Black Belt</a>, and <a href="#" style="text-decoration: none; color: #2196f3">PMI Agile</a></span>
-              <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
-              </td>
-            </tr>
-            <tr>
-             <td style=" padding:10px 0;">
-              	<ol style="margin: 0px; padding: 0px 15px;">
-              		<li style="padding-bottom: 10px;">  If you have bought it with Resume Writing , your service will be initiated as soon as your resume will be finalised.</li>
-              		<li style="padding-bottom: 10px;">Otherwise please share your latest updated resume to initiate your service. </li>
-              		<li>Once your service will be processed, we will share credentials with you for International profile update and featured profile.</li>
-              		
-              	</ol>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding:10px;background-color: #f8f8f8;">
-      	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
-          <tbody>
-            <tr>
-              <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">Six Sigma Black Belt</a>, and <a href="#" style="text-decoration: none; color: #2196f3">PMI Agile</a></span>
-              <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
-              </td>
-            </tr>
-            <tr>
-             <td style=" padding:10px 0;">
-              	<ol style="margin: 0px; padding: 0px 15px;">
-              		<li style="padding-bottom: 10px;">  If you have bought it with resume, your service will be initiated as soon as your resume will be finalised.</li>
-              		<li style="padding-bottom: 10px;">Otherwise please share your latest updated resume to initiate your service. </li>
-              		<li>Post that we will share your resume with 1500+ recruiters.</li>
-              		
-              	</ol>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-  {% if flow_type == 9 %}
+  {% if type_flow == 9 %}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
@@ -167,7 +121,7 @@
              <td style=" padding:10px 0;">
               	<ol style="margin: 0px; padding: 0px 15px;">
               		<li style="padding-bottom: 10px;">  In order to apply for job referrals , please complete your profile.</li>
-        			<a href="" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 180px;font-size: 14px;">Complete your profile</a>
+        			<a href="{{complete_profile}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 180px;font-size: 14px;">Complete your profile</a>
               		<li style=" padding-top:20px;">Post the completion of your profile , your service will be initiated.</li>
               		
               	</ol>
@@ -178,7 +132,7 @@
       </td>
     </tr>
   {% endif %}
-  {% if flow_type == 10 %}
+  {% if type_flow == 10 %}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">

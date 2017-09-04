@@ -1,4 +1,5 @@
 from .base_settings import *  # noqa
+from .celery import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -6,7 +7,7 @@ IS_LIVE = False
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = '127.0.0.1:8000'
+SITE_DOMAIN = 'localhost:8000'
 SITE_PROTOCOL = 'https'
 
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
@@ -96,7 +97,7 @@ else:
     ROUNDONE_ENCODING_SALT = '#r0und0n354l7'
     ROUNDONE_DEFAULT_PASSWORD = 'cp@roundone'
     ROUNDONE_API_TIMEOUT = 60
-    SHINE_API_TIMEOUT = 5
+    SHINE_API_TIMEOUT = 60
 
 ROUNDONE_API_DICT = {
     'amount': 1999,
@@ -136,27 +137,16 @@ CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
 CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
-SHINE_API_TIMEOUT = 60
 
 
 # Email settings
-
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #  email backend as console.
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'upendra.rockon@gmail.com'
-# EMAIL_HOST_PASSWORD = '9616744875'
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 
 # VARIABLE FOR SENDING RESUME SERVICES MAILS
 CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
 CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
 REPLY_TO = 'resume@shine.com'
 
-EMAIL_HOST = '172.22.65.55'
+EMAIL_HOST = '172.22.65.188'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
@@ -168,29 +158,6 @@ EMAIL_SERVER = 'http://localhost:8000'
 # encode decode settings
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #  email backend as console.
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'upendra.rockon@gmail.com'
-# EMAIL_HOST_PASSWORD = '9616744875'
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-
-# VARIABLE FOR SENDING RESUME SERVICES MAILS
-CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
-CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
-REPLY_TO = 'resume@shine.com'
-
-EMAIL_HOST = '172.22.65.55'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = 0
-SERVER_EMAIL = 'recruiter@shine.com'
-DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
-EMAIL_SERVER = 'http://localhost:8000'
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
@@ -204,16 +171,12 @@ SCOPE = 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
-# Do Not Change #
-COURSE_SLUG = ['course',]
-WRITING_SLUG = ['writing','resume']
-SERVICE_SLUG = ['service',]
-
 VENDOR_GROUP_LIST = ['VENDOR']
 PRODUCT_GROUP_LIST = ['PRODUCT']
 OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
 SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['WRITERS']
+
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']
@@ -265,6 +228,3 @@ CACHES = {
         }
     },
 }
-
-###### CLICK TRACKING #######################
-CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'

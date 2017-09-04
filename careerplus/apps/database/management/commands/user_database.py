@@ -1,10 +1,13 @@
 import MySQLdb
 import csv
+import pandas as pd
+import numpy as np
+from django.utils import timezone
 from django.conf import settings
 from database.models import CPUser
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError, transaction
-
+from users.models import User
 
 class Command(BaseCommand):
     help = ('Get User Database from old Careerplus')
@@ -15,88 +18,157 @@ class Command(BaseCommand):
             Only Users with email are getting migrated
             User Migrated only for Orders places after "1-04-2014" 
         """
-        # db_settings=settings.DATABASES.get('oldDB')
+        db_settings=settings.DATABASES.get('oldDB')
     
-        # db_host = db_settings.get('HOST')
-        # if db_host is '':
-        #     db_host = "localhost"
-        # db_name = db_settings.get('NAME')
-        # db_pwd = db_settings.get('PASSWORD')
-        # db_user = db_settings.get('USER')
-        # db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
-        # cursor = db.cursor()
+        db_host = db_settings.get('HOST')
+        if db_host is '':
+            db_host = "localhost"
+        db_name = db_settings.get('NAME')
+        db_pwd = db_settings.get('PASSWORD')
+        db_user = db_settings.get('USER')
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        cursor = db.cursor()
 
+        df = pd.read_csv('CP_staffusers_for_migration.csv', sep=',')
+        df2 = pd.read_csv('CP_staffusers.csv')
+        try:
+            with transaction.atomic():
+                from django.contrib.auth.models import BaseUserManager
+                manager = BaseUserManager()
+                
+                for i, row in df.iterrows():
+                    if row['email'] == row['email']:
+                        if User.objects.filter(email=row['email']).exists():
+                            pass
+                        else:
+                            email = manager.normalize_email(row['email'])
+                            first_name = row['first_name'] if row['first_name'] == row['first_name'] else ''
+                            last_name = row['last_name'] if row['last_name'] == row['last_name'] else ''
+                            user_dict = {
+                                'name': first_name + ' ' + last_name,
+                                'email': row['email'],
+                                'cp_id': row['id'],
+                                'is_staff': False,
+                                'is_active': True,
+                                'date_joined': timezone.now(), 
+                                'last_login': timezone.now()
+                            }
+                            user = User(**user_dict)
+                            user.set_password('$hineP!us')
+                            user.save()
+
+                for i, row in df2.iterrows():
+                    if row['email'] == row['email']:
+                        if User.objects.filter(email=row['email']).exists():
+                            pass
+                        else:
+                            email = manager.normalize_email(row['email'])
+                            first_name = row['first_name'] if row['first_name'] == row['first_name'] else ''
+                            last_name = row['last_name'] if row['last_name'] == row['last_name'] else ''
+                            user_dict = {
+                                'name': first_name + ' ' + last_name,
+                                'email': row['email'],
+                                'cp_id': row['id'],
+                                'is_staff': False,
+                                'is_active': False,
+                                'date_joined': timezone.now(), 
+                                'last_login': timezone.now()
+                            }
+                            user = User(**user_dict)
+                            user.set_password('$hineP!us')
+                            user.save()
+        except IntegrityError:
+            print(row)
+            print('Fail')
+        sql = """
+                SELECT auth_user.username, auth_user.id,auth_user.email, cart_userprofile.shine_id, cart_userprofile.mobile, theme_country.isd_code 
+                FROM auth_user 
+                LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
+                LEFT OUTER JOIN theme_country ON ( cart_userprofile.country_id = theme_country.id ) 
+                WHERE (auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
+                """
+        df = pd.read_sql(sql, con=db)
         # sql = """
         #     SELECT auth_user.email, auth_user.username, cart_userprofile.shine_id 
         #     FROM auth_user LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
         #     WHERE auth_user.id IN (SELECT DISTINCT U0.candidate_id FROM cart_order U0 LEFT OUTER JOIN auth_user U1 ON ( U0.candidate_id = U1.id ) WHERE (U0.added_on >= '2014-04-01 00:00:00'  AND U0.candidate_id IS NOT NULL AND NOT (U1.email = ''  AND U1.email IS NOT NULL)))
         # """
 
-        # # sql = """
-        # #         SELECT auth_user.email, auth_user.username, cart_userprofile.shine_id 
-        # #         FROM auth_user LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
-        # #         WHERE (auth_user.email IS NOT NULL AND NOT (auth_user.email = ''))    
-        # #     """
+        # sql = """
+        #         SELECT auth_user.email, auth_user.username, cart_userprofile.shine_id 
+        #         FROM auth_user LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
+        #         WHERE (auth_user.email IS NOT NULL AND NOT (auth_user.email = ''))    
+        #     """
         # cursor.execute(sql,{})
         # result = cursor.fetchall()
-        # try:
-        #     with transaction.atomic():
-        #         for row in result:
-        #             try:
-        #                 CPUser.objects.create(
-        #                     username=row[1] if row[1] else '',
-        #                     email=row[0] if row[0] else '',
-        #                     shine_id=row[2] if row[2] else '')
-        #             except:
-        #                 continue    
-        # except IntegrityError:
-        #     pass
-        #     print('Fail')
-        # cursor.close()
-        # db.close()
+        try:
+            with transaction.atomic():
+                for i,row in df.iterrows():
+                    CPUser.objects.create(
+                        username=row['username'] if row['username'] else '',
+                        email=row['email'] if row['email'] else '',
+                        shine_id=row['shine_id'] if row['shine_id'] else '',
+                        cp_id=row['id'] if row['id'] else '',
+                        mobile=row['mobile'] if row['mobile'] else '',
+                        country=row['isd_code'] if row['isd_code'] else '')
+        except IntegrityError:
+            print(i, row)
+            print('Fail')
+        except:
+            print(i, row)
+            print('Wut')
+        cursor.close()
+        db.close()
         
-        generated_file = open('check_user.csv', 'w')
-        with open('CP_Data.csv', 'r', encoding='utf-8', errors='ignore') as upload:
-            uploader = csv.DictReader(upload, delimiter=',', quotechar='"')
-            fieldnames = uploader.fieldnames
-            fieldnames.append('Matching')
-            csvwriter = csv.DictWriter(generated_file, delimiter=',', fieldnames=fieldnames)
-            csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+        # generated_file = open('check_user.csv', 'w')
+        # with open('CP_Data.csv', 'r', encoding='utf-8', errors='ignore') as upload:
+        #     uploader = csv.DictReader(upload, delimiter=',', quotechar='"')
+        #     fieldnames = uploader.fieldnames
+        #     fieldnames.append('Matching')
+        #     csvwriter = csv.DictWriter(generated_file, delimiter=',', fieldnames=fieldnames)
+        #     csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
                         
-            for row in uploader:
-                email = row.get('Email')
-                ShineID = row.get('Shine_Id')
-                user = CPUser.objects.filter(email=email)[0] if CPUser.objects.filter(email=email) else None
-                if user:    
-                    if ShineID:    
-                        if user.shine_id:    
-                            if user.shine_id == ShineID:
-                                row['Matching'] = 'Yes'
-                            else:
-                                row['Matching'] = 'No'
-                        else:
-                            row['Matching'] = 'Yes'
-                    else:
-                        row['Matching'] = "Don't Know"
-                    csvwriter.writerow(row)
-                else:
-                    continue
+        #     for row in uploader:
+        #         email = row.get('Email')
+        #         ShineID = row.get('Shine_Id')
+        #         user = CPUser.objects.filter(email=email)[0] if CPUser.objects.filter(email=email) else None
+        #         if user:    
+        #             if ShineID:    
+        #                 if user.shine_id:    
+        #                     if user.shine_id == ShineID:
+        #                         row['Matching'] = 'Yes'
+        #                     else:
+        #                         row['Matching'] = 'No'
+        #                 else:
+        #                     row['Matching'] = 'Yes'
+        #             else:
+        #                 row['Matching'] = "Don't Know"
+        #             csvwriter.writerow(row)
+        #         else:
+        #             continue
+        
         
         # users = CPUser.objects.all()
         # generated_file = open('order_user.csv', 'w')
-        # fieldnames = ['Email', 'ShineID',]
+        # fieldnames = ['Email', 'ShineID', 'Mobile', 'Country_Code']
         # csvwriter = csv.DictWriter(generated_file, delimiter=',', fieldnames=fieldnames)
         # csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
                                 
-        # for user in users:
+        # for  i, row in df.iterrows():
         #     try:
-        #         if user.email:
-        #             row = {}
-        #             row['Email'] = user.email 
-        #             row['ShineID'] = ''
+        #             crow = {}
+        #             crow['Email'] = row['email'] 
+        #             crow['ShineID'] = row['shine_id']
+        #             crow['Mobile'] = row['mobile'] 
+        #             crow['Country_Code'] = row['isd_code']
                     
-        #             csvwriter.writerow(row)
+                    
+        #             csvwriter.writerow(crow)
         #     except:
         #         continue
 
         
+
+
+                    
+        pass

@@ -21,9 +21,10 @@ from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
-from order.functions import update_initiat_orderitem_sataus
+from order.functions import pending_item_email, process_mailer
 from console.mixins import ActionUserMixin
 from haystack.query import SearchQuerySet
+from order.mixins import OrderMixin
 
 
 class ArticleCommentView(View):
@@ -230,15 +231,17 @@ class ApproveByAdminDraft(View):
                     obj.closed_on = timezone.now()
                     obj.save()
 
-                    # mail to candidate
+                    # mail to candidate for resume critique closed
                     to_emails = [obj.order.email]
                     email_dict = {}
                     email_dict.update({
-                        "first_name": obj.order.first_name,
+                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.first_name,
+                        "subject": 'Your developed document has been uploaded',
+                        "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                     })
 
-                    mail_type = 'RESUME_CRITIQUE'
+                    mail_type = 'RESUME_CRITIQUE_CLOSED'
                     try:
                         SendMail().send(to_emails, mail_type, email_dict)
                     except Exception as e:
@@ -276,20 +279,10 @@ class ApproveByAdminDraft(View):
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name,
+                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "email": obj.order.email,
+                        "candidateid": obj.order.candidate_id,
                     })
-
-                    if obj.draft_counter < 3:
-                        mail_type = 'REMINDER'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     if obj.draft_counter == 1:
                         email_dict['subject'] = "Your developed document has been uploaded" 
@@ -304,7 +297,7 @@ class ApproveByAdminDraft(View):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    if obj.draft_counter == 2:
+                    elif obj.draft_counter < settings.DRAFT_MAX_LIMIT:
                         email_dict['subject'] = "Your developed document is ready"
                         mail_type = 'DRAFT_UPLOAD'
                         try:
@@ -317,7 +310,7 @@ class ApproveByAdminDraft(View):
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    if obj.draft_counter == 3:
+                    elif obj.draft_counter == settings.DRAFT_MAX_LIMIT:
                         email_dict['subject'] = "Your final document is ready"
                         mail_type = 'DRAFT_UPLOAD'
                         try:
@@ -355,67 +348,6 @@ class ApproveByAdminDraft(View):
                             last_oi_status=obj.last_oi_status,
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
-
-                    # mail to candidate
-                    to_emails = [obj.order.email]
-                    email_dict = {}
-                    email_dict.update({
-                        "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name,
-                        "candidateid": obj.order.candidate_id,
-                    })
-
-                    if obj.draft_counter < settings.DRAFT_MAX_LIMIT:
-                        # mail_type = 'REMINDER'
-                        # try:
-                        #     SendMail().send(to_emails, mail_type, email_dict)
-                        # except Exception as e:
-                        #     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        # try:
-                        #     SendSMS().send(sms_type=mail_type, data=email_dict)
-                        # except Exception as e:
-                        #     logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                        if obj.draft_counter == 1:
-                            email_dict['subject'] = "Your developed document has been uploaded" 
-                            mail_type = 'DRAFT_UPLOAD'
-                            try:
-                                SendMail().send(to_emails, mail_type, email_dict)
-                            except Exception as e:
-                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=email_dict)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                        elif obj.draft_counter == 2:
-                            email_dict['subject'] = "Your developed document is ready"
-                            mail_type = 'DRAFT_UPLOAD'
-                            try:
-                                SendMail().send(to_emails, mail_type, email_dict)
-                            except Exception as e:
-                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=email_dict)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    elif obj.draft_counter == settings.DRAFT_MAX_LIMIT:
-                        email_dict['subject'] = "Your final document is ready"
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
             except:
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -628,15 +560,29 @@ class MarkedPaidOrderView(View):
             try:
                 obj = Order.objects.get(pk=order_pk)
                 data['status'] = 1
+                payment_date = timezone.now()
                 obj.status = 1
                 obj.paid_by = request.user
-                obj.payment_date = timezone.now()
+                obj.payment_date = payment_date
                 obj.save()
-                data['display_message'] = "order %s marked paid successfully" % (order_pk)
-                # update initial operation status
-                # update_initiat_orderitem_sataus(order=obj)
+
+                txn_objs = obj.ordertxns.filter(status=0)
+                for txn_obj in txn_objs:
+                    txn_obj.status = 1
+                    txn_obj.payment_date = payment_date
+                    txn_obj.save()
+
+                data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
+                # add reward_point in wallet
+                OrderMixin().addRewardPointInWallet(order=obj)
+                # pending item email send
+                pending_item_email(order=obj)
+
+                # send email through process mailers
+                process_mailer(order=obj)
+
             except Exception as e:
-                data['display_message'] = '%s order id - %s' % (str(e), order_pk)
+                data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
             return HttpResponse(json.dumps(data), content_type="application/json")
         elif request.is_ajax() and request.user.is_authenticated():
             data['display_message'] = "Permission denied"
