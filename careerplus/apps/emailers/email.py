@@ -14,7 +14,7 @@ class SendMail():
         '''
         if settings.DEBUG:
             subject = "Test Mail " + subject
-            to = ['priya.kharb@hindustantimes.com']
+            to = ['upender.singh@hindustantimes.com']
             cc = []
             bcc = []
             # cc = ['upenders379@gmail.com']
@@ -220,6 +220,13 @@ class SendMail():
         elif mail_type == "CART_DROP_OUT":
             send_dict['subject'] = "PMI Agile is ready to checkout"
             send_dict['template'] = 'emailers/candidate/cart_drop_out.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            self.process(to, send_dict, data)
+
+        elif mail_type == "SHINE_PAYMENT_CONFIRMATION":
+            send_dict['subject'] = "Your Shine Payment Confirmation"
+            send_dict['template'] = 'emailers/candidate/payment_realisation.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             self.process(to, send_dict, data)
