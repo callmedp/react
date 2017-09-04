@@ -5,6 +5,7 @@ from django.conf import settings
 
 from emailers.email import SendMail
 from emailers.sms import SendSMS
+from core.mixins import InvoiceGenerate
 
 
 def update_initiat_orderitem_sataus(order=None):
@@ -117,41 +118,12 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-        # mail and sms
-        # midout_services = orderitems.filter(
-        #     product__type_flow__in=[1, 3, 4, 5, 12, 13])
         linkedin_item = orderitems.filter(product__type_flow=8)
-
-        # payment pending email
-        payment_pending_mailer(order=order)
-
         # pending item email send
         pending_item_email(order=order)
 
         # send email through process mailers
         process_mailer(order=order)
-
-        # if midout_services.exists() and order.status == 1:
-        #     to_emails = [order.email]
-        #     mail_type = "MIDOUT"
-        #     data = {}
-        #     data.update({
-        #         "info": 'Upload Your resume',
-        #         "subject": 'Upload Your Resume',
-        #         "name": order.first_name + ' ' + order.last_name,
-        #         "mobile": order.mobile,
-        #     })
-        #     try:
-        #         SendMail().send(to_emails, mail_type, data)
-        #         order.midout_sent_on = timezone.now()
-        #         order.save()
-        #     except Exception as e:
-        #         logging.getLogger('email_log').error("reminder cron %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-        #     try:
-        #         SendSMS().send(sms_type=mail_type, data=data)
-        #     except Exception as e:
-        #         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
         if linkedin_item.exists():
             try:
@@ -259,32 +231,34 @@ def process_mailer(order=None):
         orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
         for oi in orderitems:
             try:
-                if oi.product.type_flow == 6:
-                    to_emails = [oi.order.email]
-                    mail_type = "PROCESS_MAILERS"
-                    data = {}
-                    data.update({
-                        'subject': 'Your service details related to order <'+oi.id+'>',
-                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-                        'type_flow': oi.product.type_flow, 
-                    })
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                to_emails = [oi.order.email]
+                mail_type = "PROCESS_MAILERS"
+                data = {}
+                data.update({
+                    'subject': 'Your service details related to order <'+oi.id+'>',
+                    'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                    'type_flow': oi.product.type_flow,
+                    'partner': oi.product.vender.name,
+                    'pk': oi.pk,
+                })
+                try:
+                    SendMail().send(to_emails, mail_type, data)
+                except Exception as e:
+                    logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
             except Exception as e:
                 raise e
 
 
 def payment_pending_mailer(order=None):
-    if order.status == 2 and (order.payment_mode == 1 or order.payment_mode == 4):
+    if order.payment_mode == 1 or order.payment_mode == 4:
         to_emails = [order.email]
         mail_type = "PAYMENT_PENDING"
         data = {}
         data.update({
             "subject": 'Your shine payment confirmation',
             "first_name": order.first_name if order.first_name else order.candidate_id,
-            "transactionid": order.txn,
+            "txn": order.txn,
+            'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
         })
         try:
             SendMail().send(to_emails, mail_type, data)
@@ -293,4 +267,18 @@ def payment_pending_mailer(order=None):
 
 
 def payment_realisation_mailer(order=None):
-    pass
+    if order.status == 1:
+        invoice_data = InvoiceGenerate().get_invoice_data(order=order)
+        to_emails = [order.email]
+        mail_type = "SHINE_PAYMENT_CONFIRMATION"
+        invoice_data.update({
+            'subject': 'Your Shine Payment Confirmation',
+            "first_name": order.first_name if order.first_name else order.candidate_id,
+            "txn": order.txn,
+            "order_id": order.id,
+            'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+        })
+        try:
+            SendMail().send(to_emails, mail_type, invoice_data)
+        except Exception as e:
+            logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))  

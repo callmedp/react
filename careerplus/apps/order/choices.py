@@ -151,3 +151,22 @@ OI_LINKEDIN_FLOW_STATUS = (
     (55, 'Linked In Tip 5'),
     (56, 'Linked In Tip 6'),
 )
+
+OI_EMAIL_STATUS = (
+    # common status for sending email 1-20
+    (0, 'default'),
+    (1, 'Sent Payment Pending Email'),
+    (2, 'Sent Pending Item Email'),
+    (3, 'Sent Process Mailers'),
+    (4, 'Sent Welcome Email'),
+    (5, 'Sent Forgot Email'),
+    (6, 'Sent Feedback Email'),
+    (7, 'Sent Feedback Coupon Email'),
+    (8, 'Sent Payment Realisation Email'),
+
+    # flow 1, 8, 3, 4:21-40
+    (21, 'Sent Service Closed Email'),
+    (22, 'Sent Draft Reminder Email'),
+    (23, 'Sent Service Closed Email'),
+    (24, 'Sent International Profile Updated Email'),
+)
