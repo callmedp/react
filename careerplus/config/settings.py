@@ -1,4 +1,5 @@
 from .base_settings import *  # noqa
+from .celery import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
