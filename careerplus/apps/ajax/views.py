@@ -439,11 +439,12 @@ class ApproveDraftByLinkedinAdmin(View):
                 data['status'] = 1
                 last_status = obj.oi_status
                 if obj.product.type_flow == 8:
-                    if obj.draft_counter == 3:
+                    if (obj.draft_counter + 1) == settings.DRAFT_MAX_LIMIT:
                         obj.oi_status = 4
                         obj.closed_on = timezone.now()
                     else:
                         obj.oi_status = 46
+                    obj.draft_counter += 1
                     obj.approved_on = timezone.now()
                     obj.save()
 

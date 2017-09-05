@@ -7,6 +7,8 @@ from django.utils.http import urlquote
 from haystack.query import SearchQuerySet
 from django.conf import settings
 
+from geolocation.models import Country
+from django.db.models import Q
 from shop.models import Category
 from cms.mixins import UploadInFile
 from review.models import Review
@@ -61,6 +63,9 @@ class SkillPageView(DetailView, SkillPageMixin):
 
         api_data = self.get_job_count_and_fuctionan_area(slug)
         career_outcomes = self.object.split_career_outcomes()
+        country_choices = [(m.phone, m.phone) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
         prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
 
@@ -114,7 +119,9 @@ class SkillPageView(DetailView, SkillPageMixin):
             "products": products,
             'site': settings.SITE_DOMAIN,
             "page_reviews":prod_reviews[0:4] if self.request.flavour else page_reviews,
-            'url': 'https://' + self.object.video_link
+            'url': 'https://' + self.object.video_link,
+            'country_choices': country_choices,
+            'initial_country': initial_country,
         })
         context.update(self.get_breadcrumb_data())
         return context

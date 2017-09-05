@@ -6,7 +6,7 @@ from django.conf import settings
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import InvoiceGenerate
-
+from payment.models import PaymentTxn
 
 def update_initiat_orderitem_sataus(order=None):
     if order:
@@ -120,10 +120,10 @@ def update_initiat_orderitem_sataus(order=None):
 
         linkedin_item = orderitems.filter(product__type_flow=8)
         # pending item email send
-        pending_item_email(order=order)
+        # pending_item_email(order=order)
 
         # send email through process mailers
-        process_mailer(order=order)
+        # process_mailer(order=order)
 
         if linkedin_item.exists():
             try:
@@ -250,35 +250,46 @@ def process_mailer(order=None):
 
 
 def payment_pending_mailer(order=None):
-    if order.payment_mode == 1 or order.payment_mode == 4:
-        to_emails = [order.email]
-        mail_type = "PAYMENT_PENDING"
-        data = {}
-        data.update({
-            "subject": 'Your shine payment confirmation',
-            "first_name": order.first_name if order.first_name else order.candidate_id,
-            "txn": order.txn,
-            'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
-        })
-        try:
-            SendMail().send(to_emails, mail_type, data)
-        except Exception as e:
-            logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+    try:
+        pymt_objs = PaymentTxn.objects.filter(order=order)
+        for pymt_obj in pymt_objs:
+            if pymt_obj.payment_mode in [1, 4]:
+                to_emails = [order.email]
+                mail_type = "PAYMENT_PENDING"
+                data = {}
+                data.update({
+                    "subject": 'Your Shine Payment Confirmation pending',
+                    "first_name": order.first_name if order.first_name else order.candidate_id,
+                    "txn": pymt_obj.txn,
+                    'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+                })
+                try:
+                    SendMail().send(to_emails, mail_type, data)
+                except Exception as e:
+                    logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
+    except Exception as e:
+        raise e
 
 def payment_realisation_mailer(order=None):
-    if order.status == 1:
+    try:
         invoice_data = InvoiceGenerate().get_invoice_data(order=order)
-        to_emails = [order.email]
-        mail_type = "SHINE_PAYMENT_CONFIRMATION"
-        invoice_data.update({
-            'subject': 'Your Shine Payment Confirmation',
-            "first_name": order.first_name if order.first_name else order.candidate_id,
-            "txn": order.txn,
-            "order_id": order.id,
-            'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
-        })
-        try:
-            SendMail().send(to_emails, mail_type, invoice_data)
-        except Exception as e:
-            logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))  
+        pymt_objs = PaymentTxn.objects.filter(order=order)
+        for pymt_obj in pymt_objs:
+            if pymt_obj.status == 1:
+                to_emails = [order.email]
+                mail_type = "SHINE_PAYMENT_CONFIRMATION"
+                invoice_data.update({
+                    'subject': 'Your Shine Payment Confirmation',
+                    "first_name": order.first_name if order.first_name else order.candidate_id,
+                    "txn": pymt_obj.txn,
+                    "order_id": order.id,
+                    'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+                })
+                try:
+                    SendMail().send(to_emails, mail_type, invoice_data)
+                except Exception as e:
+                    logging.getLogger('email_log').error("payment pending %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+    except Exception as e:
+        raise e
+  

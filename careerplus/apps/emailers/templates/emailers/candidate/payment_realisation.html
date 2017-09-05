@@ -19,8 +19,8 @@
     </tr>
     <tr>
       <td style="padding: 10px">
-      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {{username}},</strong>
-      	<span>We have received your payment of Rs <strong>{{total_amount}}</strong>
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {{first_name}},</strong>
+      	<span>We have received your payment of Rs <strong>{{total_payable_amount}}</strong>
         </span>
       </td>
     </tr>
@@ -54,31 +54,40 @@
                 <td><strong>Subscription</strong></td>
                 <td><strong>Price (in Rs.)</strong></td>
               </tr>
+            {% for data in order_items %}
+              {% with oi=data.oi addons=data.addons variations=data.variations combos=data.combos %}
+
               <tr valign="top">
-                <td>Combo: Professional Profile Package<br>
-                Exp: 4 to 8 years</td>
-                <td>5175.34</td>
+                <td>{{oi.product.name}}<br>
+                {% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</td>
+                <td>{{oi.oi_price_before_discounts_excl_tax}}</td>
               </tr>
-              <tr valign="top">
-                <td>Resume Showcase</td>
-                <td>2300.00</td>
-              </tr>
-              <tr valign="top">
-                <td>Resume Showcase <br>
-                (Featured Profile: 6 months)
-                <ul style="list-style-type: none; padding: 0 0 0 10px; margin: 0;">
-                  <li>- Resume Writing</li>
-                  <li>- Linkedin Profile</li>
-                </ul>
-                </td>
-                <td>2450.00</td>
-              </tr>
+              {% for combo in combos %}
+                <tr valign="top">
+                  <td>{{combo.product.name}}</td>
+                  <td>{{combo.oi_price_before_discounts_excl_tax}}</td>
+                </tr>
+              {% endfor %}
+              {% for addon in addons %}
+                <tr valign="top">
+                  <td>{{addon.product.name}}</td>
+                  <td>{{addon.oi_price_before_discounts_excl_tax}}</td>
+                </tr>
+              {% endfor %}
+              {% for var in variations %}
+                <tr valign="top">
+                  <td>{{var.product.name}}</td>
+                  <td>{{var.oi_price_before_discounts_excl_tax}}</td>
+                </tr>
+              {% endfor %}
+              {% endwith %}
+            {% endfor %}
               <tr>
                 <td colspan="2"><span style="display: block; border-top: 1px dashed #333; margin: 5px 0"></span></td>
               </tr>
               <tr valign="top" style="font-size: 16px;">
                 <td><strong>Total (T)</strong></td>
-                <td><strong>{{total_amount}}</strong></td>
+                <td><strong>{{total_payable_amount}}</strong></td>
               </tr>
               <tr valign="top">
                 <td>Discount / Shine loyalty points</td>
@@ -89,7 +98,7 @@
               </tr>
               <tr valign="top" style="font-size: 18px;">
                 <td><strong>Net Payable</strong></td>
-                <td><strong>{{total_amount}}</strong></td>
+                <td><strong>{{total_payable_amount}}</strong></td>
               </tr>
               <tr>
                 <td style="font-size: 12px;" colspan="2">The above Net Payable amount includes GST of 1177.17</td>
