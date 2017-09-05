@@ -11,7 +11,6 @@ SITE_CHOICES = (
     (1, "Cpcrm"),
 )
 
-
 PAYMENT_MODE = (
     (0, 'Not Paid'),
     (1, 'Cash'),
@@ -169,4 +168,29 @@ OI_EMAIL_STATUS = (
     (22, 'Sent Draft Reminder Email'),
     (23, 'Sent Service Closed Email'),
     (24, 'Sent International Profile Updated Email'),
+)
+
+
+REFUND_MODE = (
+    ('neft', 'NEFT'),
+    ('cheque', 'CHEQUE'),
+    ('dd', 'DD'),
+)
+
+TYPE_REFUND = (
+    ('full', 'Full Refund'),
+    ('partial', 'Partial Refund'),
+)
+
+REFUND_OPS_STATUS = (
+    (0, "Default"),
+    (1, "Ops Head Approval"),
+    (2, "Ops Head Rejected"),
+    (3, "Business Head Approval"),
+    (4, "Business Head Rejected"),
+    (5, "Dept. Head Approval"),
+    (6, "Dept. Head Rejected"),
+    (7, "Approved"),  # show in finance queue to refund
+    (8, "Refunded"),
+    (9, "Request Updated"),
 )
