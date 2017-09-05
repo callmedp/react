@@ -163,7 +163,7 @@ ENCODE_SALT = 'xfxa'
 BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
 
 # Linkedin Cridential
-CLIENT_ID  = "757gbstpwa6dqp"
+CLIENT_ID = "757gbstpwa6dqp"
 CLIENT_SECRET = "creqezZ0kPJnJWRk"
 REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
 STATE = "9899002507upender"
@@ -176,6 +176,14 @@ PRODUCT_GROUP_LIST = ['PRODUCT']
 OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
 SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['WRITERS']
+
+# Refund Application level
+OPS_GROUP_LIST = ['OPERATION']
+OPS_HEAD_GROUP_LIST = ['OPS_HEAD']
+BUSINESS_HEAD_GROUP_LIST = ['BUSINESS_HEAD']
+DEPARTMENT_HEAD_GROUP_LIST = ['DEPARTMENT_HEAD']
+FINANCE_GROUP_LIST = ['FINANCE']
+
 
 
 # Booster Recruiters

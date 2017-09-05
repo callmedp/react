@@ -68,6 +68,27 @@ class InvoiceGenerate(object):
         return Decimal(amount).quantize(
             Decimal('.01'), rounding=ROUND_HALF_DOWN)
 
+    def get_order_item_list(self, order=None):
+        order_items = []
+        if order:
+            parent_ois = order.orderitems.filter(
+                parent=None).select_related('product', 'partner')
+            for p_oi in parent_ois:
+                data = {}
+                data['oi'] = p_oi
+                data['addons'] = order.orderitems.filter(
+                    parent=p_oi,
+                    is_addon=True,
+                    no_process=False).select_related('product', 'partner')
+                data['variations'] = order.orderitems.filter(
+                    parent=p_oi, no_process=False,
+                    is_variation=True).select_related('product', 'partner')
+                data['combos'] = order.orderitems.filter(
+                    parent=p_oi, no_process=False,
+                    is_combo=True).select_related('product', 'partner')
+                order_items.append(data)
+        return order_items
+
     def getTaxAmountByPart(self, tax_amount, tax_rate_per, cart_obj=None, order=None):
         data = {
             "sgst": round((tax_rate_per / 2), 0),
@@ -180,23 +201,25 @@ class InvoiceGenerate(object):
             invoice_data.update(self.getTaxAmountByPart(
                 tax_amount, tax_rate_per, cart_obj=None, order=order))
 
-            order_items = []
-            parent_ois = order.orderitems.filter(
-                parent=None).select_related('product', 'partner')
-            for p_oi in parent_ois:
-                data = {}
-                data['oi'] = p_oi
-                data['addons'] = order.orderitems.filter(
-                    parent=p_oi,
-                    is_addon=True,
-                    no_process=False).select_related('product', 'partner')
-                data['variations'] = order.orderitems.filter(
-                    parent=p_oi, no_process=False,
-                    is_variation=True).select_related('product', 'partner')
-                data['combos'] = order.orderitems.filter(
-                    parent=p_oi, no_process=False,
-                    is_combo=True).select_related('product', 'partner')
-                order_items.append(data)
+            order_items = self.get_order_item_list(order=order)
+
+            # order_items = []
+            # parent_ois = order.orderitems.filter(
+            #     parent=None).select_related('product', 'partner')
+            # for p_oi in parent_ois:
+            #     data = {}
+            #     data['oi'] = p_oi
+            #     data['addons'] = order.orderitems.filter(
+            #         parent=p_oi,
+            #         is_addon=True,
+            #         no_process=False).select_related('product', 'partner')
+            #     data['variations'] = order.orderitems.filter(
+            #         parent=p_oi, no_process=False,
+            #         is_variation=True).select_related('product', 'partner')
+            #     data['combos'] = order.orderitems.filter(
+            #         parent=p_oi, no_process=False,
+            #         is_combo=True).select_related('product', 'partner')
+            #     order_items.append(data)
 
             invoice_data.update({
                 "invoice_no": invoice_no,
@@ -210,6 +233,7 @@ class InvoiceGenerate(object):
                 "order": order,
                 "coupon_amount": coupon_amount,
                 "redeemed_reward_point": redeemed_reward_point,
+                "tax_rate_per": tax_rate_per,
                 
             })
 

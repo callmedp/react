@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -8,7 +10,8 @@ from linkedin.models import Draft
 
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
-    OI_USER_STATUS, OI_EMAIL_STATUS
+    OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
+    TYPE_REFUND
 from .functions import get_upload_path_order_invoice
 
 
@@ -154,11 +157,6 @@ class OrderItem(AbstractAutoDate):
         _("Delivery Price (excl. tax)"),
         decimal_places=2, max_digits=12, default=0)
 
-    oi_price_incl_tax = models.DecimalField(
-        _("Price (inc. tax)"), decimal_places=2, max_digits=12, default=0)
-    oi_price_excl_tax = models.DecimalField(
-        _("Price (excl. tax)"), decimal_places=2, max_digits=12, default=0)
-
     # Price information before discounts are applied
     oi_price_before_discounts_incl_tax = models.DecimalField(
         _("Price before discounts (inc. tax)"),
@@ -167,20 +165,28 @@ class OrderItem(AbstractAutoDate):
         _("Price before discounts (excl. tax)"),
         decimal_places=2, max_digits=12, default=0)
 
-    # Normal site price for item (without discounts)
-    unit_price_incl_tax = models.DecimalField(
-        _("Unit Price (inc. tax)"), decimal_places=2, max_digits=12,
-        blank=True, null=True)
-    unit_price_excl_tax = models.DecimalField(
-        _("Unit Price (excl. tax)"), decimal_places=2, max_digits=12,
-        blank=True, null=True)
+    # price fields
+    cost_price = models.DecimalField(
+        _("Price before discounts (Site Price)"),
+        decimal_places=2, max_digits=12, default=0)
+    selling_price = models.DecimalField(
+        _("Selling Price (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+
+    tax_amount = models.DecimalField(
+        _("tax amount"),
+        decimal_places=2, max_digits=12, default=0)
+
+    discount_amount = models.DecimalField(
+        _("Total Discount (incl. Wallet)"),
+        decimal_places=2, max_digits=12, default=0)
 
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
     is_addon = models.BooleanField(default=False)
 
-    #counselling form status
+    # counselling form status
     oi_flow_status = models.PositiveSmallIntegerField(
         default=0, choices=OI_LINKEDIN_FLOW_STATUS)
     # operation fields
@@ -361,6 +367,33 @@ class OrderItem(AbstractAutoDate):
     def get_test_obj(self):
         return self
 
+    def get_refund_amount(self):
+        refund_amount = Decimal(0)
+        coupons_applied = self.order.couponorder_set.all()
+
+        coupon_amount = Decimal(0)
+        for coupon in coupons_applied:
+            coupon_amount += coupon.value
+
+        # loyalty point used
+        redeemed_reward_point = Decimal(0)
+        wal_txn = self.order.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
+        if wal_txn.exists():
+            wal_txn = wal_txn[0]
+            redeemed_reward_point = wal_txn.point_value
+
+        total_payable_amount = self.order.total_incl_tax
+
+        total_amount_before_discount = self.order.total_excl_tax  # without discount
+        total_amount_after_discount = total_amount_before_discount - coupon_amount
+        total_amount_after_discount = total_amount_before_discount - redeemed_reward_point
+
+        tax_amount = total_payable_amount - total_amount_after_discount
+
+        tax_rate_per = (tax_amount * 100) / total_amount_after_discount
+        tax_rate_per = self.get_quantize(tax_rate_per)
+
+        return refund_amount
 
 
 class OrderItemOperation(AbstractAutoDate):
@@ -442,6 +475,7 @@ class EmailOrderItemOperation(AbstractAutoDate):
     class Meta:
         ordering = ['created']
 
+
 class CouponOrder(AbstractAutoDate):
     order = models.ForeignKey(Order)
     coupon = models.ForeignKey(
@@ -454,3 +488,78 @@ class CouponOrder(AbstractAutoDate):
 
     value = models.DecimalField(
         _("Value"), max_digits=8, decimal_places=2, default=0.0)
+
+
+class RefundRequest(AbstractAutoDate):
+    order = models.ForeignKey(
+        'order.Order', verbose_name=_("Order"))
+
+    message = models.TextField()
+
+    document = models.FileField(
+        max_length=255, upload_to='refund/refund_request/',
+        null=True, blank=True)
+
+    # assigened_group = models.ForeignKey(Group, null=True, blank=True)
+    # last_assigned_group = models.ForeignKey(Group, null=True, blank=True)
+
+    status = models.PositiveIntegerField(
+        _("Status"), default=0, choices=REFUND_OPS_STATUS)
+    last_status = models.PositiveIntegerField(
+        _("Last Status"), default=0, choices=REFUND_OPS_STATUS)
+
+    refund_mode = models.CharField(
+        max_length=255, default='neft',
+        choices=REFUND_MODE)
+    currency = models.CharField(max_length=255, blank=True, null=True)
+    refund_amount = models.DecimalField(
+        _("Refund Amount (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+    txn_no = models.CharField(
+        max_length=255,
+        blank=True, null=True,
+        help_text=_(
+            'transaction no. in case of neft and serial no. in case cheque/dd'))
+    added_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='refund_request_added_by',
+        null=True, blank=True)
+
+    class Meta:
+        ordering = ('-modified', )
+
+    def __str__(self):
+        return 'Order number %s and request id %s' % (
+            self.order.number, self.id)
+
+
+class RefundItem(AbstractAutoDate):
+    refund_request = models.ForeignKey('order.RefundRequest')
+    oi = models.ForeignKey(
+        'order.OrderItem', on_delete=models.SET_NULL,
+        related_name='refund_items',
+        null=True, blank=True)
+    type_refund = models.CharField(
+        max_length=255, default='full',
+        choices=TYPE_REFUND)
+    amount = models.DecimalField(
+        _("Amount (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+
+
+class RefundOperation(AbstractAutoDate):
+    refund_request = models.ForeignKey(RefundRequest)
+    status = models.PositiveIntegerField(
+        _("Status"), default=0, choices=REFUND_OPS_STATUS)
+    last_status = models.PositiveIntegerField(
+        _("Last Status"), default=0, choices=REFUND_OPS_STATUS)
+
+    message = models.TextField()
+
+    document = models.FileField(
+        max_length=255, upload_to='refund/refund_ops/', null=True, blank=True)
+
+    added_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='refund_ops_added_by',
+        null=True, blank=True)

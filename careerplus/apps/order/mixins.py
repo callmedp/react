@@ -2,6 +2,8 @@ import logging
 import json
 import datetime
 
+from decimal import Decimal
+
 from django.utils import timezone
 
 from cart.mixins import CartMixin
@@ -145,6 +147,23 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             if order and cart_obj:
                 payment_dict = self.getPayableAmount(cart_obj=cart_obj)
                 tax_rate_per = payment_dict.get('tax_rate_per')
+                total_amount_before_discount = payment_dict.get('total_amount')
+
+                coupon_amount = Decimal(0)
+                coupons_applied = order.couponorder_set.all()
+                for coupon in coupons_applied:
+                    coupon_amount += coupon.value
+
+                # loyalty point used
+                redeemed_reward_point = Decimal(0)
+                wal_txn = order.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
+                if wal_txn.exists():
+                    wal_txn = wal_txn[0]
+                    redeemed_reward_point = wal_txn.point_value
+
+                total_discount = coupon_amount + redeemed_reward_point
+
+                percentage_discount = (total_discount * 100) / total_amount_before_discount
 
                 self.request.session.update({
                     "order_pk": order.pk,
@@ -166,11 +185,26 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                         p_oi.oi_price_before_discounts_excl_tax = parent_li.product.get_price()
                         price_incl_tax = parent_li.product.get_price() + ((parent_li.product.get_price() * tax_rate_per) / 100)
                         p_oi.oi_price_before_discounts_incl_tax = price_incl_tax
+
+                        cost_price = parent_li.product.get_price()
+                        p_oi.cost_price = cost_price
+                        discount = (cost_price * percentage_discount) / 100
+                        cost_price_after_discount = cost_price - discount
+                        tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                        selling_price = cost_price_after_discount + tax_amount
+                        p_oi.selling_price = selling_price
+                        p_oi.tax_amount = tax_amount
+                        p_oi.discount_amount = discount
+
                         if parent_li.delivery_service:
                             p_oi.delivery_service = parent_li.delivery_service
-                            p_oi.delivery_price_excl_tax = parent_li.delivery_service.get_price()
-                            price_incl_tax = parent_li.delivery_service.get_price() + ((parent_li.delivery_service.get_price() * tax_rate_per) / 100)
-                            p_oi.delivery_price_incl_tax = price_incl_tax
+                            cost_price = parent_li.delivery_service.get_price()
+                            p_oi.delivery_price_excl_tax = cost_price
+                            discount = (cost_price * percentage_discount) / 100
+                            cost_price_after_discount = cost_price - discount
+                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            selling_price = cost_price_after_discount + tax_amount
+                            p_oi.delivery_price_incl_tax = selling_price
                         p_oi.save()
 
                         combos = self.get_combos(parent_li.product).get('combos')
@@ -275,3 +309,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
+
+
+

@@ -9,7 +9,7 @@ urlpatterns = [
 
 from django.conf.urls import url
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
-from . import shop_view, vendor_view, blog_view, order_view
+from . import shop_view, vendor_view, blog_view, order_view, refund_view
 from geolocation import adminviews
 
 urlpatterns += [
@@ -225,6 +225,17 @@ urlpatterns += [
     url(r'^queue/orderitem/assignment/$',
         order_view.AssignmentOrderItemView.as_view(),
         name='assignment-orderitem-view'),
+]
+
+# refunf flow
+urlpatterns += [
+    url(r'^refund/refundrequest/$',
+        refund_view.RefundOrderRequestView.as_view(),
+        name='refund-request'),
+
+    url(r'^refund/refundraise/$',
+        refund_view.RefundRaiseRequestView.as_view(),
+        name='refund-raiserequest'),
 ]
 
 from . import linkedin_view
