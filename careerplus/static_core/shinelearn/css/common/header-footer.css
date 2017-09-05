@@ -365,6 +365,11 @@ footer .footer-links span {
   width: 100%;
   vertical-align: top;
 }
+@media (max-width: 991px) {
+  .col-main {
+    display: block;
+  }
+}
 
 .col-left {
   display: table-cell;
@@ -378,6 +383,11 @@ footer .footer-links span {
     max-width: auto;
   }
 }
+@media (max-width: 991px) {
+  .col-left {
+    width: 100%;
+  }
+}
 
 .col-right {
   width: 100%;
@@ -389,6 +399,12 @@ footer .footer-links span {
   .col-right {
     width: auto;
     max-width: auto;
+  }
+}
+@media (max-width: 991px) {
+  .col-right {
+    max-width: 100%;
+    margin-left: 20px;
   }
 }
 
@@ -712,7 +728,7 @@ footer .footer-links span {
 }
 @media (max-width: 991px) {
   .request-call .country-code .form-control {
-    width: 74%;
+    width: 91%;
   }
 }
 .request-call .call-service {
