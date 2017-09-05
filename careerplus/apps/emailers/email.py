@@ -223,3 +223,10 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             self.process(to, send_dict, data)
+
+        elif mail_type == "SHINE_PAYMENT_CONFIRMATION":
+            send_dict['subject'] = "Your Shine Payment Confirmation"
+            send_dict['template'] = 'emailers/candidate/payment_realisation.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            self.process(to, send_dict, data)
