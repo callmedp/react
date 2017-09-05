@@ -215,7 +215,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
 class LinkedinOrderDetailVeiw(DetailView):
     model = Order
-    template_name = "console/linkedin/linkedin-order.html"
+    template_name = "console/order/order-detail.html"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
