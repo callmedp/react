@@ -2,11 +2,12 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 
-from order.models import Order
 from order.functions import (
-    payment_pending_mailer, 
+    payment_pending_mailer,
     pending_item_email,
-    payment_realisation_mailer,) 
+    payment_realisation_mailer,
+    process_mailer,)
+
 
 class PaymentMixin(object):
 
@@ -40,8 +41,7 @@ class PaymentMixin(object):
             txn_obj.payment_mode = payment_mode
             txn_obj.payment_date = payment_date
             txn_obj.save()
-            process_mailer(order=order)
-            payment_realisation_mailer(order=order)
+
             x_mailertag = "CCAVENUE_PAYMENT"
             return_parameter = reverse('payment:thank-you')
 
@@ -56,19 +56,22 @@ class PaymentMixin(object):
             order.payment_date = payment_date
             order.status = 1
             order.save()
+
             txn_obj.status = 1
             txn_obj.payment_mode = payment_mode
             txn_obj.payment_date = payment_date
             txn_obj.save()
-            process_mailer(order=order)
-            payment_realisation_mailer(order=order)
+
             x_mailertag = "MOBIKWIK_PAYMENT"
             return_parameter = reverse('payment:thank-you')
 
         if order:
             request.session['order_pk'] = order.pk
+            process_mailer(order=order)
             payment_pending_mailer(order=order)
             pending_item_email(order=order)
+            payment_realisation_mailer(order=order)
+
             if return_parameter:
                 return return_parameter
             else:
