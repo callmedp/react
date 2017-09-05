@@ -113,7 +113,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             mail_type = 'ALLOCATED_TO_WRITER'
                             data = {}
                             data.update({
-                                "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                                "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                                 "writer_name": writer.name,
                                 "writer_email": writer.email,
                                 "subject": "Your developed document has been shared with our expert",
@@ -326,10 +326,10 @@ class ChangeDraftView(DetailView):
                         form.instance.delete()
                     # for update oi status
                     last_status = ord_obj.oi_status  
-                    if ord_obj.oi_status == 8:
-                        ord_obj.draft_counter += 1
-                    elif not ord_obj.draft_counter:
-                        ord_obj.draft_counter += 1
+                    # if ord_obj.oi_status == 8:
+                    #     ord_obj.draft_counter += 1
+                    # elif not ord_obj.draft_counter:
+                    #     ord_obj.draft_counter += 1
                     ord_obj.oi_status = 45  # pending Approval
                     ord_obj.oi_flow_status = 50
                     ord_obj.last_oi_status = last_status
@@ -337,7 +337,7 @@ class ChangeDraftView(DetailView):
                     ord_obj.save()
                     ord_obj.orderitemoperation_set.create(
                         linkedin = draft_obj,
-                        draft_counter=ord_obj.draft_counter,
+                        draft_counter=ord_obj.draft_counter + 1,
                         oi_status=44,
                         last_oi_status=last_status,
                         assigned_to=ord_obj.assigned_to,
@@ -348,15 +348,15 @@ class ChangeDraftView(DetailView):
                         assigned_to=ord_obj.assigned_to,
                         added_by=request.user)
 
-                    messages.success(self.request, "Draft updated Successfully")
-                    return HttpResponseRedirect(reverse('console:change-draft', kwargs={'pk': self.get_object().pk}))
+                    messages.success(self.request, "Draft Saved Successfully")
+                    return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
                 self.object = self.get_object()
                 context = super(ChangeDraftView, self).get_context_data(**kwargs)
                 context['form'] = draft_form
                 context['org_formset'] = org_formset
                 context['edu_formset'] = edu_formset
-                messages.success(self.request, "Draft is not updated successfully")
+                messages.success(self.request, "Draft is not Saved successfully")
                 return render(request, self.template_name, context)
 
             else:
