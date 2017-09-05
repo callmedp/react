@@ -240,6 +240,17 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.oi_price_before_discounts_excl_tax = addon.product.get_price()
                             price_incl_tax = addon.product.get_price() + ((addon.product.get_price() * tax_rate_per) / 100)
                             oi.oi_price_before_discounts_incl_tax = price_incl_tax
+
+                            cost_price = addon.product.get_price()
+                            oi.cost_price = cost_price
+                            discount = (cost_price * percentage_discount) / 100
+                            cost_price_after_discount = cost_price - discount
+                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            selling_price = cost_price_after_discount + tax_amount
+                            oi.selling_price = selling_price
+                            oi.tax_amount = tax_amount
+                            oi.discount_amount = discount
+
                             if parent_li.delivery_service:
                                 oi.delivery_service = parent_li.delivery_service
                             oi.save()
@@ -257,11 +268,27 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                         p_oi.oi_price_before_discounts_excl_tax = parent_li.product.get_price()
                         price_incl_tax = parent_li.product.get_price() + ((parent_li.product.get_price() * tax_rate_per) / 100)
                         p_oi.oi_price_before_discounts_incl_tax = price_incl_tax
+
+                        cost_price = parent_li.product.get_price()
+                        p_oi.cost_price = cost_price
+                        discount = (cost_price * percentage_discount) / 100
+                        cost_price_after_discount = cost_price - discount
+                        tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                        selling_price = cost_price_after_discount + tax_amount
+                        p_oi.selling_price = selling_price
+                        p_oi.tax_amount = tax_amount
+                        p_oi.discount_amount = discount
+
                         if parent_li.delivery_service:
                             p_oi.delivery_service = parent_li.delivery_service
-                            p_oi.delivery_price_excl_tax = parent_li.delivery_service.get_price()
-                            price_incl_tax = parent_li.delivery_service.get_price() + ((parent_li.delivery_service.get_price() * tax_rate_per) / 100)
-                            p_oi.delivery_price_incl_tax = price_incl_tax
+
+                            cost_price = parent_li.delivery_service.get_price()
+                            p_oi.delivery_price_excl_tax = cost_price
+                            discount = (cost_price * percentage_discount) / 100
+                            cost_price_after_discount = cost_price - discount
+                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            selling_price = cost_price_after_discount + tax_amount
+                            p_oi.delivery_price_incl_tax = selling_price
                         p_oi.save()
 
                         variations = item.get('variations')
@@ -277,6 +304,18 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.oi_price_before_discounts_excl_tax = var.product.get_price()
                             price_incl_tax = var.product.get_price() + ((var.product.get_price() * tax_rate_per) / 100)
                             oi.oi_price_before_discounts_incl_tax = price_incl_tax
+
+                            cost_price = var.product.get_price()
+                            oi.cost_price = cost_price
+                            discount = (cost_price * percentage_discount) / 100
+                            cost_price_after_discount = cost_price - discount
+                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            selling_price = cost_price_after_discount + tax_amount
+                            oi.selling_price = selling_price
+                            oi.tax_amount = tax_amount
+                            oi.discount_amount = discount
+
+
                             oi.is_variation = True
                             if parent_li.delivery_service:
                                 # in case other variation in which base price included
@@ -284,9 +323,13 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             elif var.delivery_service:
                                 # in case of course variation
                                 oi.delivery_service = var.delivery_service
-                                oi.delivery_price_excl_tax = var.delivery_service.get_price()
-                                price_incl_tax = var.delivery_service.get_price() + ((var.delivery_service.get_price() * tax_rate_per) / 100)
-                                oi.delivery_price_incl_tax = var.delivery_service.get_price()
+                                cost_price = var.delivery_service.get_price()
+                                oi.delivery_price_excl_tax = cost_price
+                                discount = (cost_price * percentage_discount) / 100
+                                cost_price_after_discount = cost_price - discount
+                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                selling_price = cost_price_after_discount + tax_amount
+                                oi.delivery_price_incl_tax = selling_price
                             oi.save()
 
                         addons = item.get('addons')
@@ -303,12 +346,20 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.oi_price_before_discounts_excl_tax = addon.product.get_price()
                             price_incl_tax = addon.product.get_price() + ((addon.product.get_price() * tax_rate_per) / 100)
                             oi.oi_price_before_discounts_incl_tax = price_incl_tax
+
+                            cost_price = addon.product.get_price()
+                            oi.cost_price = cost_price
+                            discount = (cost_price * percentage_discount) / 100
+                            cost_price_after_discount = cost_price - discount
+                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            selling_price = cost_price_after_discount + tax_amount
+                            oi.selling_price = selling_price
+                            oi.tax_amount = tax_amount
+                            oi.discount_amount = discount
+
                             if parent_li.delivery_service:
                                 oi.delivery_service = parent_li.delivery_service
                             oi.save()
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-
-
-
