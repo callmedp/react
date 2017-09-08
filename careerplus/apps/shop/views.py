@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.http import urlquote
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
@@ -288,7 +288,7 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
-        return ['product/detail1.html']
+        return ['shop/detail1.html']
 
     def get_object(self, queryset=None):
         if hasattr(self, 'object'):
@@ -298,7 +298,7 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
-        sqs = SearchQuerySet().filter(id=12)[0]
+        sqs = SearchQuerySet().filter(id=1)[0]
         product = self.object
         category = self.category
         ctx.update(self.get_breadcrumbs(product, category))
@@ -311,7 +311,7 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
             ctx.update(json.loads(sqs.pPOP))
         else:
             ctx.update(json.loads(sqs.pPOP))
-        if sqs.pTF == 1:
+        if sqs.pTP == 1:
             ctx.update(json.loads(sqs.pVrs))
         if self.is_combos(sqs):
             ctx.update(json.loads(sqs.pCmbs))
@@ -381,7 +381,7 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
 #         super(ProductDetailView, self).__init__(*args, **kwargs)
 
 #     def get_template_names(self):
-#         return ['product/detail1.html']
+#         return ['shop/detail1.html']
 
 #     def get_object(self, queryset=None):
 #         if hasattr(self, 'object'):
@@ -394,13 +394,10 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
 #         sqs = SearchQuerySet().filter(id=11)[0]
 #         product = self.object
 #         category = self.category
-#         ctx.update(self.solar_breadcrumbs(sqs))
-#         # ctx.update(self.get_breadcrumbs(product, category))
-#         ctx.update(self.get_info(sqs))
-#         # ctx.update(self.get_program_structure(product))
+#         ctx.update(self.get_breadcrumbs(product, category))
+#         ctx.update(self.get_program_structure(product))
 #         ctx.update(self.solar_program_structure(sqs))
-#         # ctx.update(self.get_faq(product))
-#         ctx.update(self.solar_faq(sqs))
+#         ctx.update(self.get_faq(product))
 #         ctx.update(self.get_recommendation(product))
 #         ctx.update(self.get_reviews(product, 1))
 #         if product.is_course:

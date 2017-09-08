@@ -76,7 +76,6 @@ class SkillPageView(DetailView, SkillPageMixin):
         except:
             pass
         prd_obj = ContentType.objects.get_for_model(Product)
-        # import ipdb; ipdb.set_trace()
         all_results = SearchQuerySet().filter(pCtg=self.pk)
         prod_id_list = self.object.categoryproducts.values_list('id', flat=True)
         prod_reviews = Review.objects.filter(
