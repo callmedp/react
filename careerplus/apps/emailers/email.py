@@ -210,7 +210,7 @@ class SendMail():
 
         elif mail_type == "FORGOT_PASSWORD":
             send_dict['subject'] = "Your Shine.com password"
-            send_dict['template'] = 'emailers/candidate/reset_pass.html'
+            send_dict['template'] = 'emailers/candidate/email_forgot_pass.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)

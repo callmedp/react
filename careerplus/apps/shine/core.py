@@ -52,10 +52,10 @@ class ShineRequestHeader(object):
 
 class ShineCandidateDetail(ShineToken):
 
-    def get_api_headers(self):
+    def get_api_headers(self, token):
         try:
             client_token = self.get_client_token()
-            if client_token:
+            if client_token and not token:
                 access_token_json = self.get_access_token(
                     email=settings.SHINE_API_USER,
                     password=settings.SHINE_API_USER_PWD)
@@ -67,6 +67,13 @@ class ShineCandidateDetail(ShineToken):
                                    "Client-Access-Token": client_token,
                                    "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
                         return headers
+            elif client_token and token:
+                headers = {
+                    "User-Access-Token": token,
+                    "Client-Access-Token": client_token,
+                    "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
+                }
+                return headers
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return None
@@ -113,10 +120,10 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error(str(e))
         return None
 
-    def get_status_detail(self, email=None, shine_id=None):
+    def get_status_detail(self, email=None, shine_id=None, token=None):
         try:
             if shine_id:
-                headers = self.get_api_headers()
+                headers = self.get_api_headers(token=token)
                 status_url = "{}/api/v2/candidate/{}/status/?format=json".format(settings.SHINE_SITE, shine_id)
                 status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                 if status_response.status_code == 200 and status_response.json():

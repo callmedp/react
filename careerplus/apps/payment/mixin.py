@@ -6,7 +6,8 @@ from order.models import Order
 from order.functions import (
     payment_pending_mailer, 
     pending_item_email,
-    payment_realisation_mailer,) 
+    payment_realisation_mailer,
+    process_mailer,) 
 
 class PaymentMixin(object):
 

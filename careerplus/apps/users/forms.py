@@ -50,22 +50,22 @@ class RegistrationForm(forms.Form):
         country_choices, indian_obj = [], None
 
     email = forms.EmailField(
-        max_length=60, required=True, widget=forms.TextInput(
+        max_length=60, widget=forms.TextInput(
             attrs={'placeholder': 'Email', 'class': 'form-control'}))
 
     raw_password = forms.CharField(
-        max_length=16, required=True, widget=forms.PasswordInput(
+        max_length=16, widget=forms.PasswordInput(
             attrs={'placeholder': 'Password', 'class': 'form-control'}))
 
-    country_code = forms.ChoiceField(label=("Country:"), required=True,
+    country_code = forms.ChoiceField(label=("Country:"),
         widget=forms.Select(attrs={'class': 'form-control'}))
 
     cell_phone = forms.CharField(validators=[mobile_validators], widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mobile'}), max_length=15)
 
-    vendor_id = forms.CharField(
-        max_length=30, required=True, initial=settings.CP_VENDOR_ID, widget=forms.HiddenInput(
-            attrs={'class': 'form-control'}))
+    # vendor_id = forms.CharField(
+    #     max_length=30, required=True, initial=settings.CP_VENDOR_ID, widget=forms.HiddenInput(
+    #         attrs={'class': 'form-control'}))
 
     is_job_seeker = forms.BooleanField(widget=forms.CheckboxInput(check_test=lambda x: x=='on'), initial=False)
 
