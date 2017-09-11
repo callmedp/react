@@ -1,14 +1,28 @@
 from django.contrib import admin
 
-from .models import Order, OrderItem, OrderItemOperation, Message
+from .models import Order, OrderItem, OrderItemOperation, Message, CouponOrder
+from wallet.models import WalletTransaction
+from payment.models import PaymentTxn
+
+class CouponOrderInline(admin.TabularInline):
+    model = CouponOrder
+    extra = 0
 
 
+class WalletOrderInline(admin.TabularInline):
+    model = WalletTransaction
+    extra = 0
+
+class TxnOrderInline(admin.TabularInline):
+    model = PaymentTxn
+    extra = 0
+    
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'number', 'site', 'candidate_id', 'email',
         'status', 'date_placed']
     list_filter = ('status', )
     search_fields = ('number', 'id', 'candidate_id', 'email')
-
+    inlines = [CouponOrderInline, WalletOrderInline, TxnOrderInline]
 
 class OrderItemOperationInline(admin.TabularInline):
     model = OrderItemOperation
