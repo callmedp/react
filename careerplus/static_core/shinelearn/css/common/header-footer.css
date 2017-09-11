@@ -29,6 +29,10 @@ h2 {
   border: 1px solid #e1e1e1;
 }
 
+.bdr-btm {
+  border-bottom: 1px solid #e1e1e1;
+}
+
 datalist {
   display: block;
 }
@@ -361,6 +365,11 @@ footer .footer-links span {
   width: 100%;
   vertical-align: top;
 }
+@media (max-width: 991px) {
+  .col-main {
+    display: block;
+  }
+}
 
 .col-left {
   display: table-cell;
@@ -374,6 +383,11 @@ footer .footer-links span {
     max-width: auto;
   }
 }
+@media (max-width: 991px) {
+  .col-left {
+    width: 100%;
+  }
+}
 
 .col-right {
   width: 100%;
@@ -385,6 +399,12 @@ footer .footer-links span {
   .col-right {
     width: auto;
     max-width: auto;
+  }
+}
+@media (max-width: 991px) {
+  .col-right {
+    max-width: 100%;
+    margin-left: 20px;
   }
 }
 
@@ -708,7 +728,7 @@ footer .footer-links span {
 }
 @media (max-width: 991px) {
   .request-call .country-code .form-control {
-    width: 74%;
+    width: 91%;
   }
 }
 .request-call .call-service {
@@ -725,6 +745,28 @@ footer .footer-links span {
   color: #2f5da5;
   display: block;
   margin: 10px 0 0 0;
+}
+
+.query-form-right h2 {
+  text-align: center;
+  border-bottom: none;
+  text-transform: uppercase;
+  font-size: 20px;
+  padding-bottom: 0;
+}
+.query-form-right .country-code .form-control {
+  width: 75%;
+  display: inline-block;
+}
+@media (max-width: 1190px) {
+  .query-form-right .country-code .form-control {
+    width: 68%;
+  }
+}
+@media (max-width: 991px) {
+  .query-form-right .country-code .form-control {
+    width: 92%;
+  }
 }
 
 .modal-custom {
@@ -935,6 +977,27 @@ footer .footer-links span {
   background-color: #3f5f94;
   border: 1px solid #2f5da5;
   color: #fff;
+}
+
+.apply-filter {
+  background-color: #3f5f94;
+  font-size: 11px;
+  color: #fff !important;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid #3f5f94;
+  text-align: center;
+  float: right;
+  margin-top: 5px;
+}
+.apply-filter:hover, .apply-filter:focus {
+  background-color: #3f5f94;
+  border: 1px solid #2f5da5;
+  color: #fff;
+}
+.apply-filter:first-child {
+  margin-top: 0;
 }
 
 /*---------icons css---------*/
@@ -1648,6 +1711,115 @@ footer .footer-links span {
   padding: 20px 0;
 }
 
+/*---------static pages css---------*/
+.static-page-content h1 {
+  padding-bottom: 10px;
+}
+.static-page-content article {
+  margin-top: 30px;
+  display: block;
+  font-size: 17px;
+  color: #333;
+}
+.static-page-content article h2 {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+.static-page-content article ol {
+  margin: 0 0 0 10px;
+  padding: 10px 0 10px 20px;
+}
+.static-page-content article ol li {
+  padding-bottom: 5px;
+}
+.static-page-content article strong {
+  font-weight: 600;
+}
+.static-page-content figure {
+  margin-top: 30px;
+}
+.static-page-content figure img {
+  width: 100%;
+}
+.static-page-content .page-header {
+  border-bottom: 1px solid #f1f1f1;
+}
+.static-page-content .social-login {
+  text-align: left;
+}
+
+/*---------error page css---------*/
+.error-page {
+  font-size: 14px;
+  padding: 2% 5% 10% 5%;
+}
+@media (max-width: 1190px) {
+  .error-page {
+    padding: 2% 5% 5% 5%;
+  }
+}
+@media (max-width: 991px) {
+  .error-page {
+    padding: 0.1% 5% 2% 5%;
+  }
+}
+.error-page h1 {
+  font-size: 34px;
+  font-weight: 300;
+}
+@media (max-width: 991px) {
+  .error-page h1 {
+    font-size: 30px;
+  }
+}
+.error-page strong {
+  font-weight: 300;
+  display: block;
+  margin: 20px 0 10px 0;
+}
+.error-page ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 70%;
+}
+.error-page ul li {
+  display: inline-block;
+  width: 49%;
+  margin: 3px 0;
+}
+.error-page ul li:before {
+  content: '';
+  background: url(../../images/sprite.png) no-repeat no-repeat -258px -248px;
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+}
+.error-page ul li a {
+  padding-left: 7px;
+}
+@media (max-width: 991px) {
+  .error-page ul li {
+    margin: 1px 0;
+  }
+}
+
+.bg-404 {
+  background: url(../../images/404-bg.jpg) no-repeat 0 0;
+  width: 100%;
+  height: auto;
+  background-size: cover;
+}
+
+.bg-500 {
+  background: url(../../images/500-bg.jpg) no-repeat 0 0;
+  width: 100%;
+  height: auto;
+  background-size: cover;
+}
+
 /*---------margin padding css---------*/
 .mt-0 {
   margin-top: 0 !important;
@@ -1786,6 +1958,4 @@ footer .footer-links span {
   background-color: #c8c04a;
 }
 
-
-/*# sourceMappingURL=header-footer.css.map */
 /*# sourceMappingURL=header-footer.css.map */

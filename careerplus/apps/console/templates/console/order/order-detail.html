@@ -185,13 +185,19 @@
                                       <td>{{op.created|naturaltime}}</td>
                                       <td>{{op.get_oi_status}}</td>
                                       <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
-                                      <td>{% if op.oi_resume %}
+                                      <td>
+                                      {% if op.oi_resume %}
                                               <strong>Candidate Reume:</strong></br>
                                               <a href="{{op.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
-                                          {% elif op.oi_draft %}
+                                      {% elif op.oi_draft %}
                                               <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
                                               <a href="{{op.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
-                                          {% endif %}
+                                      {% elif op.linkedin %}
+                                          <strong>Candidate Draft</strong></br>
+                                          <a href="{% url "linkedin-draf-download" obj.pk obj.oio_linkedin.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>
+                                          <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
+                                          <a href="{% url 'linkedin-draft' obj.pk op.linkedin.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a>
+                                      {% endif %}
                                       </td>
                                     </tr>
                                   {% endfor %}

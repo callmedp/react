@@ -262,7 +262,9 @@
                         Detailed Information</button></a>
                       </td>
                       <td>
-                        {{obj.tat_date|naturaltime}}
+                        {% if obj.tat_date %}
+                          {{obj.tat_date|naturaltime}}
+                        {% endif %}
                         <b>Updated On: {{obj.modified}}</b>
                       </td>
                     {% if perms.order.can_show_linkedin_writer_draft %}

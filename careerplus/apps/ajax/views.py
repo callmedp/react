@@ -238,6 +238,7 @@ class ApproveByAdminDraft(View):
                         "subject": 'Your developed document has been uploaded',
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
+                        "order_id": obj.order.id,
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -281,6 +282,8 @@ class ApproveByAdminDraft(View):
                         "first_name": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
+                        "order_id": obj.order.id,
+                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
                     })
 
                     if obj.draft_counter == 1:
@@ -435,11 +438,12 @@ class ApproveDraftByLinkedinAdmin(View):
                 data['status'] = 1
                 last_status = obj.oi_status
                 if obj.product.type_flow == 8:
-                    if obj.draft_counter == 3:
+                    if (obj.draft_counter + 1) == settings.DRAFT_MAX_LIMIT:
                         obj.oi_status = 4
                         obj.closed_on = timezone.now()
                     else:
                         obj.oi_status = 46
+                    obj.draft_counter += 1
                     obj.approved_on = timezone.now()
                     obj.save()
 
@@ -448,7 +452,11 @@ class ApproveDraftByLinkedinAdmin(View):
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name,
+                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "email": obj.order.email,
+                        "candidateid": obj.order.candidate_id,
+                        "order_id": obj.order.id,
+                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
                     })
 
                     if obj.draft_counter == 1:
