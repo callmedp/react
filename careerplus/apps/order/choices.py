@@ -53,7 +53,7 @@ OI_OPS_STATUS = (
     (30, 'Feature profile updated'),
 
     # for linkedin flow8 41 - 60
-    (43, 'Linkedin Draft Create'),
+    (42, 'Counselling Form Submitted'),
     (44, 'Linkedin Draft Created'),
     (45, 'Linkedin Pending Approval'),
     (46, 'Linkedin Approved'),
@@ -66,7 +66,7 @@ OI_OPS_STATUS = (
     (62, 'Resume Boosted'),
 
     # flow6 81 - 100
-    (81, 'Pending Varification Reports'),
+    (81, 'Pending Verification Reports'),
     (82, 'Service is initiated'),
 
     # flow10 101 - 120
@@ -137,6 +137,9 @@ OI_USER_STATUS = (
     (142, 'Service is under progress'),
     (143, 'Service has been expired'),
 
+    # flow4 161 - 180
+    
+
 )
 
 OI_LINKEDIN_FLOW_STATUS = (
@@ -156,17 +159,60 @@ OI_EMAIL_STATUS = (
     # common status for sending email 1-20
     (0, 'default'),
     (1, 'Sent Payment Pending Email'),
-    (2, 'Sent Pending Item Email'),
-    (3, 'Sent Process Mailers'),
-    (4, 'Sent Welcome Email'),
-    (5, 'Sent Forgot Email'),
-    (6, 'Sent Feedback Email'),
-    (7, 'Sent Feedback Coupon Email'),
-    (8, 'Sent Payment Realisation Email'),
+    (2, 'Sent Process Mailers'),
+    (3, 'Sent Welcome Email'),
+    (4, 'Sent Forgot Email'),
+    (5, 'Sent Feedback Email'),
+    (6, 'Sent Feedback Coupon Email'),
+    (7, 'Sent Payment Realisation Email'),
+    (8, 'Sent Cart Drop Out Mailer'),
 
-    # flow 1, 8, 3, 4:21-40
-    (21, 'Sent Service Closed Email'),
-    (22, 'Sent Draft Reminder Email'),
-    (23, 'Sent Service Closed Email'),
-    (24, 'Sent International Profile Updated Email'),
+    # flow1 :21 - 40
+    (21, 'Sent Flow1 Pending Resume Email'),
+    (22, 'Sent First Draft Email'),
+    (23, 'Sent Second Draft Email'),
+    (24, 'Sent Final Draft Email'),
+    (25, 'Sent Service Closed Email'),
+    (26, 'Sent Reminder Draft1 Email'),
+    (27, 'Sent Reminder Draft2 Email'),
+
+    # flow3 :41 - 60
+    (41, 'Sent Resume Critique Pending Resume Email'),
+    (42, 'Sent Resume Critique Allocated To Writer Email'),
+    (42, 'Sent Resume Critique Closed Email'),
+
+    # flow4 :61 - 70
+    (61, 'Sent International Profile Pending Resume Email'),
+    (62, 'Sent International profile updated Email'),
+
+    # flow5 :71 - 80
+    (71, 'Sent Feature Profile Pending Resume Email'),
+    (72, 'Sent Feature profile Service Started Email'),
+
+    # flow7 :91 - 100
+    (91, 'Sent Resume Booster Pending Resume Email'),
+    (92, 'Sent Resume Booster consultant/Recruiter Email'),
+    (93, 'Sent Resume Booster Candidate Email'),
+    
+    # linkedin flow 8:101-120
+    (101, 'Sent Allocated To Writer Email For Linkedin'),
+    (102, 'Sent Linkedin First Draft Email'),
+    (103, 'Sent Linkedin Second Draft Email'),
+    (104, 'Sent Linkedin Final Draft Email'),
+    (105, 'Sent Linkedin Service Closed Email'),
+    (106, 'Sent Linkedin Draft1 Reminder Email'),
+    (107, 'Sent Linkedin Draft2 Reminder Email'),
+    (108, 'Sent Pending Counselling Form Email'),
+    (109, 'Linked In Tip 1'),
+    (110, 'Linked In Tip 2'),
+    (111, 'Linked In Tip 3'),
+    (112, 'Linked In Tip 4'),
+    (113, 'Linked In Tip 5'),
+    (114, 'Linked In Tip 6'),
+
+    # flow9 :121 - 130
+    (121, 'Sent RoundOne Incomplete Profile Email'),
+
+    # flow10 :131 - 140
+    (131, 'Sent Pending Studymate Test Email'),    
 )
