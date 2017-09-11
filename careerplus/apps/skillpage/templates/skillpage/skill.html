@@ -159,7 +159,8 @@
 		    	<ul class="listing" id="product_list">
 		    		{% for product in products %}
 				        <li class="box-panel">
-				        	<a title="{{product.name}}" href="#">
+				        	<a title="{{product.name}}" 
+				        	href="{{product.get_absolute_url}}">
 					            <div class="media">
 					            	<div class="media-left">
 					                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.name}}">
@@ -276,7 +277,7 @@
 	<div class="col-md-3 col-sm-12">
 
 			<!-- request a call -->
-	<div class="request-call box-panel mb-40 cleafix">
+	<div class="request-call query-form-right box-panel mt-40 cleafix">
     <h2 class="heading-right">request a call</h2>
         </style>
       <form class="mt-20" role="form" id="queryform" >
@@ -288,14 +289,22 @@
           <span class="error position-error" style="color:red"></span>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
-          <span class="error position-error" style="color:red"></span>
+            <div class="country-code">
+                <div class="custom-select">
+                  <select class="form-control">
+                    {% for country in country_choices %}
+                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.1}}</option>
+                  {% endfor %}
+                  </select>
+                </div>
+                <input type="text" class="form-control" name="mobile_number"placeholder="Mobile">
+                <span class="error position-error" style="color:red"></span>
+            </div>
         </div>
         <div class="form-group">
-          <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
-          <span class="error position-error" style="color:red"></span>
+            <textarea class="form-control" rows="1" name="message_box" placeholder="Message"></textarea>
+            <span class="error position-error" style="color:red"></span>
         </div>
-        
       </form>
       <button type="button" id="id_query"  class="submit-button">
       Message

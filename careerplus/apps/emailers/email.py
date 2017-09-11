@@ -15,7 +15,7 @@ class SendMail():
         if settings.DEBUG:
             subject = "Test Mail " + subject
             to = ['priya.kharb@hindustantimes.com']
-            cc = []
+            cc = ['upender.singh@hindustantimes.com']
             bcc = []
             # cc = ['upenders379@gmail.com']
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
@@ -70,13 +70,14 @@ class SendMail():
         elif mail_type == "PROCESS_MAILERS":
             send_dict['subject'] = data.get('subject', '')
             send_dict['template'] = 'emailers/candidate/process_mailers.html'
-            if data.get('type_flow') == 1:
-                send_dict['upload_url'] = "http://%s/dashboard" % (settings.SITE_DOMAIN)
-            elif data.get('type_flow') == 8:
+            if data.get('oi').product.type_flow == [1, 3]:
+                token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('pk', ''))
+                send_dict['upload_url'] = "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())
+            elif data.get('oi').product.type_flow == 8:
                 send_dict['counselling_form'] = "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, data.get('pk'))
-            elif data.get('type_flow') == 9:
+            elif data.get('oi').product.type_flow == 9:
                 send_dict['complete_profile'] = "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN)
-            elif data.get('type_flow') == 10:
+            elif data.get('oi').product.type_flow == 10:
                 pass
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             data['email'] = [to]
@@ -107,8 +108,8 @@ class SendMail():
             elif data.get('draft_level') == 3:
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
-            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
-            data['autologin'] = "http://%s/autologin/%s/" % (settings.SITE_DOMAIN, token)
+            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('order_id', ''))
+            data['autologin'] = "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
@@ -210,7 +211,7 @@ class SendMail():
 
         elif mail_type == "FORGOT_PASSWORD":
             send_dict['subject'] = "Your Shine.com password"
-            send_dict['template'] = 'emailers/candidate/reset_pass.html'
+            send_dict['template'] = 'emailers/candidate/email_forgot_pass.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)

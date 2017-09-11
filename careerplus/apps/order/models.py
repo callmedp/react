@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from seo.models import AbstractAutoDate
-from geolocation.models import Country
+from geolocation.models import Country, CURRENCY_SYMBOL
 from linkedin.models import Draft
 
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
@@ -16,8 +16,19 @@ from .functions import get_upload_path_order_invoice
 
 
 class Order(AbstractAutoDate):
+    co_id = models.IntegerField(
+        _('CP Order'),
+        blank=True,
+        null=True,
+        editable=False)
+    archive_json = models.TextField(
+        _('Archive JSON'),
+        blank=True,
+        editable=False
+        )
+    
     number = models.CharField(
-        _("Order number"), max_length=128, db_index=True, unique=True)
+        _("Order number"), max_length=128, db_index=True)
 
     site = models.PositiveSmallIntegerField(default=0, choices=SITE_CHOICES)
 
@@ -30,13 +41,17 @@ class Order(AbstractAutoDate):
 
     status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
 
-    currency = models.CharField(
-        _("Currency"), max_length=12, null=True, blank=True)
+    currency = models.PositiveIntegerField(
+        _("Currency"), choices=CURRENCY_SYMBOL, default=0)
 
     total_incl_tax = models.DecimalField(
-        _("Payable Amount (inc. tax)"), decimal_places=2, max_digits=12, default=0)
+        _("Payable Amount (inc. tax)"),
+        decimal_places=2, max_digits=12, default=0)
     total_excl_tax = models.DecimalField(
-        _("Total Amount (excl. tax excl. Point)"), decimal_places=2, max_digits=12, default=0)
+        _("Total Amount (excl. tax excl. Point)"),
+        decimal_places=2, max_digits=12, default=0)
+    conv_charge = models.DecimalField(
+        _("Convienance Charges"), decimal_places=2, max_digits=12, default=0)
 
     tax_config = models.CharField(max_length=255, null=True, blank=True)
 
@@ -66,7 +81,7 @@ class Order(AbstractAutoDate):
     pincode = models.CharField(max_length=15, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.CharField(max_length=200, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True)
 
     # welcome call done or not
     welcome_call_done = models.BooleanField(default=False)
@@ -93,7 +108,7 @@ class Order(AbstractAutoDate):
             ("can_show_order_queue", "Can Show Order Queue"),
             ("can_show_all_order", "Can View All Orders"),
             ("can_show_paid_order", "Can View Only Paid Orders"),
-
+            
             # welcome call permission
             ("can_show_welcome_queue", "Can Show Welcome Queue"),
 
@@ -122,6 +137,17 @@ class Order(AbstractAutoDate):
 
 
 class OrderItem(AbstractAutoDate):
+    coi_id = models.IntegerField(
+        _('CP Order'),
+        blank=True,
+        null=True,
+        editable=False)
+    archive_json = models.TextField(
+        _('Archive JSON'),
+        blank=True,
+        editable=False
+        )
+    
     order = models.ForeignKey(
         'order.Order', related_name='orderitems', verbose_name=_("Order"))
 
