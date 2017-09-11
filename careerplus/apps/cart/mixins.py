@@ -279,7 +279,7 @@ class CartMixin(object):
                     redeemed_reward_point = wal_txn.point_value
 
                 amount_after_discount = total_amount - coupon_amount
-                amount_after_discount = total_amount - redeemed_reward_point
+                amount_after_discount = amount_after_discount - redeemed_reward_point
                 tax_amount = Decimal(0)
                 if cart_obj.country.upper() == 'INDIA':
                     tax_amount = (amount_after_discount * tax_rate_per) / 100

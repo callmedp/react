@@ -289,9 +289,12 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             tax_amount = (cost_price_after_discount * tax_rate_per) / 100
                             selling_price = cost_price_after_discount + tax_amount
                             p_oi.delivery_price_incl_tax = selling_price
-                        p_oi.save()
 
                         variations = item.get('variations')
+                        if variations:
+                            p_oi.is_variation = True
+                        p_oi.save()
+
                         for var in variations:
                             oi = OrderItem.objects.create(
                                 order=order,
@@ -314,7 +317,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.selling_price = selling_price
                             oi.tax_amount = tax_amount
                             oi.discount_amount = discount
-
 
                             oi.is_variation = True
                             if parent_li.delivery_service:

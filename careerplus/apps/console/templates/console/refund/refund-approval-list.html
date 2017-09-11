@@ -2,30 +2,14 @@
 {% load static %}
 {% load humanize %}
 {% load thumbnail %}
-{% load console_tags %}
 
 {% block title %}
-  <title>Request Refunds- Shinelearning</title>
+  <title>Refund Request Approval- Shinelearning</title>
 {% endblock title %}
 
 {% block css_block %}
     {{block.super}}
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
-    <style>
-        ul.parsley-errors-list {
-            list-style: none;
-            color: #E74C3C !important;
-            padding-left: 0;
-        }
-        ul.parsley-errors-list {
-            list-style: none;
-            color: #E74C3C;
-            padding-left: 0;
-        }
-        .error{
-            color: #E74C3C;
-        }
-    </style>
 {% endblock css_block %}
 
 
@@ -36,10 +20,10 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Refund Request</h3>
+        <h3>Refund Request Approval</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:refund-request" %}" id="filter-tables">
+      <form class="form-group" method="GET" action="{% url "console:refund-request-approval" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -83,8 +67,8 @@
                 </div>
                 <div class="modal-body">
                   <form class="form-group" method="GET" action="{% url "console:queue-order" %}" id="list-filter-form">
-                      {% for field in filter_form %}
-                      <div class="form-group">
+                       {% for field in filter_form %}
+                        <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ field.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 {{ field }}
@@ -108,10 +92,6 @@
             </div>
         </div>
         <!-- /modals -->
-
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a href="{% url "console:refund-raiserequest" %}"><button type="button" class="btn btn-app"><i class="fa fa-send"></i>Raise A New Request</button></a>
-        </div>
     </div>
 
     <div class="row">
@@ -140,7 +120,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Refund Request Listing</h2>
+            <h2>Refund Approval Listing</h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -162,7 +142,6 @@
                     <th class="column-title">status</th>
                     <th class="column-title">View request Details</th>
                     <th class="column-title">View Order Details</th>
-                    <th class="column-title">Edit Request</th>
                   </tr>
                 </thead>
 
@@ -175,12 +154,6 @@
                       <td>{{obj.get_status}}</td>
                       <td><a target="_blank" href="{% url "console:refundrequest-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Request Details</button></a></td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Order Details</button></a></td>
-                      <td>
-                          {% if obj.status == 0 or obj.status == 1 or obj.status == 9 %}
-                              <a target="_blank" href="{% url "console:refundrequest-edit" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-edit"></i>Edit request</button></a>
-                          {% endif %}
-                      </td>
-                      
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -241,7 +214,6 @@
                 </div>
                 {% endif %}
 
-
       </div><!-- main_pagination end here -->
       {% endblock main_pagination %}
      
@@ -264,11 +236,9 @@
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/refund/refund.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/order-action.js" %}"></script>
 
   <script type="text/javascript">
-
-    
 
     $(document).ready(function() {
         $('.date-range-picker').daterangepicker({

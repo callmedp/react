@@ -79,6 +79,10 @@ OI_OPS_STATUS = (
     (142, 'Round one is not expired'),
     (143, 'Round one is expired'),
 
+    # refund flow 161 - 180
+    (161, 'Refund initiated'),
+    (162, 'Refund under progress'),
+    (163, 'Refunded'),
 )
 
 OI_USER_STATUS = (
@@ -136,6 +140,11 @@ OI_USER_STATUS = (
     (142, 'Service is under progress'),
     (143, 'Service has been expired'),
 
+    # refund flow 161 - 180
+    (161, 'Refund initiated'),
+    (162, 'Refund under progress'),
+    (163, 'Refunded'),
+
 )
 
 OI_LINKEDIN_FLOW_STATUS = (
@@ -172,12 +181,14 @@ OI_EMAIL_STATUS = (
 
 
 REFUND_MODE = (
+    ('select', 'Select Mode'),
     ('neft', 'NEFT'),
     ('cheque', 'CHEQUE'),
     ('dd', 'DD'),
 )
 
 TYPE_REFUND = (
+    ('select', 'Select Refund Type'),
     ('full', 'Full Refund'),
     ('partial', 'Partial Refund'),
 )
@@ -190,7 +201,11 @@ REFUND_OPS_STATUS = (
     (4, "Business Head Rejected"),
     (5, "Dept. Head Approval"),
     (6, "Dept. Head Rejected"),
-    (7, "Approved"),  # show in finance queue to refund
-    (8, "Refunded"),
-    (9, "Request Updated"),
+    (7, "Finance Approval"),
+    (8, "Refund Approved"),  # show in finance queue to refund
+    (9, "Refund Initiate"),
+    (10, "Refund under progress"),
+    (11, "Refunded"),
+    (12, "Request Updated"),
+    (13, "Cancel Request"),
 )

@@ -34,9 +34,9 @@ class Order(AbstractAutoDate):
         _("Currency"), max_length=12, null=True, blank=True)
 
     total_incl_tax = models.DecimalField(
-        _("Order total (inc. tax)"), decimal_places=2, max_digits=12, default=0)
+        _("Payable Amount (inc. tax)"), decimal_places=2, max_digits=12, default=0)
     total_excl_tax = models.DecimalField(
-        _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
+        _("Total Amount (excl. tax excl. Point)"), decimal_places=2, max_digits=12, default=0)
 
     tax_config = models.CharField(max_length=255, null=True, blank=True)
 
@@ -102,7 +102,6 @@ class Order(AbstractAutoDate):
 
             # order Action permissions
             ("can_mark_order_as_paid", "Can Mark Order As Paid"),
-
         )
 
     def __str__(self):
@@ -150,11 +149,11 @@ class OrderItem(AbstractAutoDate):
         blank=True)
 
     delivery_price_incl_tax = models.DecimalField(
-        _("Delivery Price (incl. tax)"),
+        _("Delivery Price (incl. tax excl Discount)"),
         decimal_places=2, max_digits=12, default=0)
 
     delivery_price_excl_tax = models.DecimalField(
-        _("Delivery Price (excl. tax)"),
+        _("Delivery Price (site price)"),
         decimal_places=2, max_digits=12, default=0)
 
     # Price information before discounts are applied
@@ -369,30 +368,8 @@ class OrderItem(AbstractAutoDate):
 
     def get_refund_amount(self):
         refund_amount = Decimal(0)
-        coupons_applied = self.order.couponorder_set.all()
-
-        coupon_amount = Decimal(0)
-        for coupon in coupons_applied:
-            coupon_amount += coupon.value
-
-        # loyalty point used
-        redeemed_reward_point = Decimal(0)
-        wal_txn = self.order.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
-        if wal_txn.exists():
-            wal_txn = wal_txn[0]
-            redeemed_reward_point = wal_txn.point_value
-
-        total_payable_amount = self.order.total_incl_tax
-
-        total_amount_before_discount = self.order.total_excl_tax  # without discount
-        total_amount_after_discount = total_amount_before_discount - coupon_amount
-        total_amount_after_discount = total_amount_before_discount - redeemed_reward_point
-
-        tax_amount = total_payable_amount - total_amount_after_discount
-
-        tax_rate_per = (tax_amount * 100) / total_amount_after_discount
-        tax_rate_per = self.get_quantize(tax_rate_per)
-
+        refund_amount += self.selling_price
+        refund_amount += self.delivery_price_incl_tax
         return refund_amount
 
 
@@ -509,7 +486,7 @@ class RefundRequest(AbstractAutoDate):
         _("Last Status"), default=0, choices=REFUND_OPS_STATUS)
 
     refund_mode = models.CharField(
-        max_length=255, default='neft',
+        max_length=255, default='select',
         choices=REFUND_MODE)
     currency = models.CharField(max_length=255, blank=True, null=True)
     refund_amount = models.DecimalField(
@@ -526,11 +503,20 @@ class RefundRequest(AbstractAutoDate):
         null=True, blank=True)
 
     class Meta:
+        app_label = 'order'
         ordering = ('-modified', )
+        permissions = (
+            ("can_view_refund_request_queue", "Can View Refund Request Queue"),
+            ("can_view_refund_approval_queue", "Can View Refund Approval Queue"),
+        )
 
     def __str__(self):
         return 'Order number %s and request id %s' % (
             self.order.number, self.id)
+
+    def get_status(self):
+        status_dict = dict(REFUND_OPS_STATUS)
+        return status_dict.get(self.status)
 
 
 class RefundItem(AbstractAutoDate):
@@ -540,11 +526,15 @@ class RefundItem(AbstractAutoDate):
         related_name='refund_items',
         null=True, blank=True)
     type_refund = models.CharField(
-        max_length=255, default='full',
+        max_length=255, default='select',
         choices=TYPE_REFUND)
     amount = models.DecimalField(
         _("Amount (incl. tax)"),
         decimal_places=2, max_digits=12, default=0)
+
+    def get_type_refund(self):
+        type_refund_dict = dict(TYPE_REFUND)
+        return type_refund_dict.get(self.type_refund)
 
 
 class RefundOperation(AbstractAutoDate):
@@ -563,3 +553,11 @@ class RefundOperation(AbstractAutoDate):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='refund_ops_added_by',
         null=True, blank=True)
+
+    def get_status(self):
+        statusD = dict(REFUND_OPS_STATUS)
+        return statusD.get(self.status)
+
+    def get_last_status(self):
+        statusD = dict(REFUND_OPS_STATUS)
+        return statusD.get(self.last_status)

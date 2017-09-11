@@ -42,7 +42,6 @@ urlpatterns += [
         vendor_view.ActionScreenProductView.as_view(),
         name='screenproduct-action'),
     
-    
     url(r'^screenfaq/list/$',
         vendor_view.ListScreenFaqView.as_view(),
         name='screenfaq-list'),
@@ -233,9 +232,42 @@ urlpatterns += [
         refund_view.RefundOrderRequestView.as_view(),
         name='refund-request'),
 
+    url(r'^refund/refundrequestapproval/$',
+        refund_view.RefundRequestApprovalView.as_view(),
+        name='refund-request-approval'),
+
     url(r'^refund/refundraise/$',
         refund_view.RefundRaiseRequestView.as_view(),
         name='refund-raiserequest'),
+
+    url(r'^refund/validatecheckeditems/$',
+        refund_view.ValidateCheckedItems.as_view(),
+        name='refund-validateitems'),
+
+    url(r'^refund/validateuncheckeditems/$',
+        refund_view.ValidateUnCheckedItems.as_view(),
+        name='refund-validateitems'),
+
+    url(r'^refund/refundrequest-detail/(?P<pk>\d+)/$',
+        refund_view.RefundRequestDetail.as_view(),
+        name='refundrequest-detail'),
+
+    url(r'^refund/refundrequest/(?P<pk>\d+)/edit/$',
+        refund_view.RefundRequestEditView.as_view(),
+        name='refundrequest-edit'),
+
+    url(r'^refund/sendforapproval-refundrequest/',
+        refund_view.SendForApprovalRefundRequest.as_view(),
+        name='sendforapproval-refundrequest'),
+
+    url(r'^refund/reject-refundrequest/',
+        refund_view.RejectRefundRequestView.as_view(),
+        name='refundrequest-reject'),
+
+    url(r'^refund/approve-refundrequest/',
+        refund_view.ApproveRefundRequestView.as_view(),
+        name='refundrequest-approve'),
+
 ]
 
 from . import linkedin_view

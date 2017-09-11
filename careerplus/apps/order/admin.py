@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Order, OrderItem, OrderItemOperation, Message
+from .models import Order, OrderItem, OrderItemOperation, Message,\
+    RefundRequest, RefundItem, RefundOperation
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -21,6 +22,8 @@ class OrderItemOperationAdmin(admin.ModelAdmin):
     list_display = ['created']
     ordering = ('-created',)
 
+    extra = 0
+
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'order', 'partner',
@@ -33,7 +36,34 @@ class OrderItemAdmin(admin.ModelAdmin):
         'order__candidate_id', 'order__email', 'partner__name')
 
 
+class RefundItemInline(admin.TabularInline):
+    model = RefundItem
+    readonly_fields = ('oi', 'type_refund', 'amount')
+
+    extra = 0
+
+
+class RefundOperationInline(admin.TabularInline):
+    model = RefundOperation
+    readonly_fields = ('status', 'last_status', 'message', 'document', 'added_by')
+    ordering = ['created', ]
+
+    extra = 0
+
+
+class RefundRequestAdmin(admin.ModelAdmin):
+    list_display = ['id', 'order', 'status', 'last_status',
+        'refund_mode', 'currency', 'refund_amount',
+        'txn_no', 'added_by']
+
+    list_filter = ('status', 'last_status', 'refund_mode')
+    search_fields = ('order__number', 'id',
+        'order__candidate_id', 'order__email', 'txn_no')
+    inlines = [RefundItemInline, RefundOperationInline]
+
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(OrderItemOperation, OrderItemOperationAdmin)
 admin.site.register(Message)
+admin.site.register(RefundRequest, RefundRequestAdmin)
