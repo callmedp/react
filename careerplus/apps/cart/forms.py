@@ -9,8 +9,14 @@ from .models import Cart
 class ShippingDetailUpdateForm(forms.ModelForm):
     country_code = forms.ChoiceField(
         required=True, widget=forms.Select())
-    country = forms.ChoiceField(
-        required=True, widget=forms.Select())
+    # country = forms.ChoiceField(
+    #     required=True, widget=forms.Select())
+    country = forms.ModelChoiceField(
+        queryset=Country.objects.filter(active=True),
+        empty_label='Select Country',
+        required=True,
+        to_field_name='pk',
+        widget=forms.Select())
 
     class Meta:
         model = Cart
@@ -20,13 +26,17 @@ class ShippingDetailUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ShippingDetailUpdateForm, self).__init__(*args, **kwargs)
         try:
-            country_choices, CHOICE_COUNTRY = [], []
-            for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')):
+            country_choices = []
+            for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='') | Q(active__exact=False)):
                 country_choices.append((m.phone, m.phone))
-                CHOICE_COUNTRY.append((m.name, m.name))
 
         except:
-            country_choices, CHOICE_COUNTRY = [('91', '91')], [('India', 'India')]
+            country_choices = [('91', '91')]
+
+        try:
+            initial_country = Country.objects.get(phone='91', active=True)
+        except:
+            initial_country = None
 
         form_class = 'form-control'
         self.fields['first_name'].required = True
@@ -65,8 +75,8 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 
         self.fields['country'].required = True
         self.fields['country'].widget.attrs['class'] = form_class
-        self.fields['country'].choices = CHOICE_COUNTRY
-        self.fields['country'].initial = 'India'
+        if initial_country:
+            self.fields['country'].initial = initial_country
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '').strip()

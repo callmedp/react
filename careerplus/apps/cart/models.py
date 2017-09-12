@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from seo.models import AbstractAutoDate
 from order.models import Order
+from geolocation.models import Country, CURRENCY_SYMBOL
 
 from .managers import OpenBasketManager, SavedBasketManager
 from .choices import STATUS_CHOICES
@@ -60,10 +61,8 @@ class Cart(AbstractAutoDate):
 
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.CharField(
-        max_length=200,
-        null=True, blank=True)
-    
+    country = models.ForeignKey(Country, null=True, blank=True)
+
     shipping_done = models.BooleanField(default=False)  #shipping process
     # summary_done = models.BooleanField(default=False)  #summary process
 
