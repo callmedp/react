@@ -14,7 +14,7 @@ from haystack.query import EmptySearchQuerySet
 #local imports
 from search import inputs
 from .helpers import clean_all_fields, clean_id_fields, clean_list_fields, \
-    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys
+    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys, search_clean_fields
 from .lookups import FILLERS
 
 #inter app imports
@@ -29,7 +29,6 @@ class BaseSearch(object):
     results = SQS()
     results_per_page = RESULTS_PER_PAGE
     clean_query = True
-    none_query = False
     search_params = {}
     allow_empty_query = True
 
@@ -420,103 +419,6 @@ class BaseSearch(object):
         return self.results.count()
 
 
-class SimpleSearch(BaseSearch):
-
-    needed_params_options = {'q', 'fclevel', 'fcert', 'area', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
-
-
-
-    def get_extra_params(self):
-        """
-        Override to selectively boost the results.
-        Take into consideration semantic inferred_words.
-        """
-        extra_params = super(SimpleSearch,self).get_extra_params()
-        extra_params.update({'search_type': 'simple'})
-        # params_solr_mapping = {'job_title':'jJT',
-        #             'skill':'jKwd',
-        #             'company_name':'jCName'}
-
-        # default_boosts = {'pf': ['jLoc^6','jArea^2','jInd^2'],
-        #         'pf2': [],
-        #         'pf3':[]}
-
-        # field_related_pf_boost = {"jJT":{"pf2":"20","pf3":"20"},
-        #                         "jCName":{"pf2":"20","pf3":"20"},
-        #                         "jKwd":{"pf2":"20","pf3":"20",},}
-
-
-        # for key,value in params_solr_mapping.items():
-        #     pf_covered = False
-        #     pf2_covered = False
-        #     pf3_covered = False
-        #
-        #     for param in self.params.get(key,[]):
-        #
-        #         if len(param.split(" ")) == 2 and not pf2_covered:
-        #             pf2_covered = True
-        #             default_boosts["pf2"].append(value+"^"+field_related_pf_boost[value]["pf2"])
-        #
-        #         if len(param.split(" ")) == 3 and not pf3_covered:
-        #             pf3_covered = True
-        #             default_boosts["pf3"].append(value+"^"+field_related_pf_boost[value]["pf3"])
-
-        # if default_boosts['pf2']:
-        #     extra_params.update({'pf2':" ".join(default_boosts['pf2'])})
-        #
-        # if default_boosts['pf3']:
-        #     extra_params['pf3'] = " ".join(default_boosts['pf3'])
-
-        # if self.params.get('skill'):
-        #     extra_params['qf'] = extra_params['qf']+" "+"jKwd^40"
-        # else:
-        #     extra_params['qf'] = extra_params['qf']+" "+"jKwd^6"
-        #
-        # if self.params.get('company_name'):
-        #     extra_params['qf'] = extra_params['qf']+" "+"jCName^25"
-        # else:
-        #     extra_params['qf'] = extra_params['qf']+" "+"jCName^5"
-
-        #
-        # if self.params.get('job_title'):
-        #     extra_params['qf'] = extra_params['qf']+" "+"jJT^35"
-        #
-        # else:
-        #     extra_params['qf'] = extra_params['qf']+" "+"jJT^15"
-
-        return extra_params
-
-    # def add_filters(self):
-    #     results = super(SimpleSearch, self).add_filters()
-    #     loc = ''
-    #
-    #     # Text Location Filter
-    #     if self.params.get('loc') and not self.params.get('locid') and search_clean_fields(self.params.get('loc')):
-    #         results = results.narrow('jLoc:(%s)' % inputs.Phraser().prepare(self.params.get('loc')))
-    #
-    #     if loc:
-    #         results = results.narrow('jLoc:(%s)' % inputs.Phraser().prepare(loc))
-    #
-    #     # Salary Filter
-    #     if self.params.get('minsal') and search_clean_fields(self.params.get('minsal')):
-    #         results = results.narrow('jSalMinID:[%(sal)s TO *] jSalMaxID:[%(sal)s TO *]' % {'sal': self.params.get('minsal')})
-    #
-    #     return results
-
-    def add_boost(self):
-        """
-        Perform basic boosts by calling the Parent class.
-        Also, perform custom_boost defined for Simple/Similar search.
-        """
-        self.results = super(SimpleSearch,self).add_boost()
-        results = self.add_custom_boost()
-        boost_rect = self.params.get('boost_rect')
-
-        # if self.params.has_key('rect') and self.user.is_authenticated():
-        #     results = self.add_user_preferences_boost(results)
-        return results
-
-
 class BaseParams(object):
 
     args = ''
@@ -551,7 +453,7 @@ class BaseParams(object):
         self.search_params = clean_id_fields(self.search_params)
         self.search_params = clean_list_fields(self.search_params)
 
-    def set_args(self,args,kwargs):
+    def set_args(self, args, kwargs):
         self.args = args
         self.keywords = self.args
         self.kwargs = kwargs
@@ -573,6 +475,34 @@ class BaseParams(object):
         self.search_params = self.get_request_params()
         self.clean_search_params()
         return self.search_params
+
+
+class SimpleSearch(BaseSearch):
+
+    needed_params_options = {'q', 'fclevel', 'fcert', 'area', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
+
+
+
+    def get_extra_params(self):
+        """
+        Override to selectively boost the results.
+        Take into consideration semantic inferred_words.
+        """
+        extra_params = super(SimpleSearch,self).get_extra_params()
+        extra_params.update({'search_type': 'simple'})
+
+        return extra_params
+
+
+    def add_boost(self):
+        """
+        Perform basic boosts by calling the Parent class.
+        Also, perform custom_boost defined for Simple/Similar search.
+        """
+        self.results = super(SimpleSearch,self).add_boost()
+        results = self.add_custom_boost()
+
+        return results
 
 
 class SimpleParams(BaseParams):
@@ -681,19 +611,28 @@ class SimpleParams(BaseParams):
         query_to_return = re.sub("\(\s\s+\)", "", query_to_return).strip()
         return query_to_return
 
-    def query_cleaner(self):
-        return inputs.Cleaned().prepare(self.query)
 
-    def handle_params_for_no_javascript(self,params):
-        """
-        Special checks for no javascript.
-        Handled for both mobile and desktop.
-        """
-        if 'area' in params and params['area'] == "Functional Area":
-            params['area'] = ""
-        if 'q' in params and params['q'] == "Search for courses, services etc..":
-            params['q'] = ""
-        if 'skills' in params and params['skills'] == 'Key Skills':
-            params['skills'] = ""
+class FuncAreaSearch(BaseSearch):
 
-        return params
+    needed_params_options = {'pk', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
+
+    def add_filters(self):
+        results = super(FuncAreaSearch, self).add_filters()
+        loc = ''
+
+        # Functional Area Filter
+        if self.params.get('pk') and search_clean_fields(self.params.get('pk')):
+            results = results.narrow('pFA:%s' % self.params.get('pk'))
+
+        return results
+
+
+class FuncAreaParams(BaseParams):
+    query_param_name = None
+
+    def get_search_params(self):
+        self.search_params = self.get_request_params()
+        self.clean_search_params()
+        self.search_params['pk'] = self.kwargs.get('pk')
+        return self.search_params
+
