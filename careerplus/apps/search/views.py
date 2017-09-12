@@ -19,8 +19,8 @@ from django.conf import settings
 from haystack.query import EmptySearchQuerySet
 
 # local imports
-from .forms import SearchForm
-from .classes import SimpleSearch, SimpleParams
+from .forms import SearchForm, SearchRecommendedForm
+from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams #,RecommendedSearch
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
@@ -61,7 +61,6 @@ class SearchBaseView(TemplateView):
         response = self.post_processor()    # Handle relaxation.
         if response:
             return response
-
         return self.create_response()
 
     def get_search_class(self):
@@ -107,13 +106,6 @@ class SearchBaseView(TemplateView):
             self.results = EmptySearchQuerySet()
             return self.create_response()
 
-    def get_fields(self):
-        """
-        List here all the fields needed.
-        If not mentioned, all the fields will be returned.
-        """
-        return []
-
     def get_results(self):
         """
         This gets the results from search_class.
@@ -129,7 +121,57 @@ class SearchBaseView(TemplateView):
         """
         Called just before building response and after results are generated
         """
-        pass
+        filter_mapping = {
+            'fprice': 'inrp',
+            'fmode': 'mode',
+            'fduration': 'duration',
+            'fclevel': 'level',
+            'fcert': 'certify'
+        }
+
+        ## Following code is for generating starting from price according to variation filtered TODO: move to ajax later on
+        requested_filters = [x for x in ['fprice', 'fmode', 'fduration', 'fclevel', 'fcert'] if x in self.request.GET]
+        # if filters are not applied, skip
+        if len(requested_filters):
+            for result in self.results:
+                variations = json.loads(result.pVrs)
+                # if no variations, skip
+                if variations['variation']:
+                    if result.pPc == 'writing' or result.pPc == 'service':
+                        selected_price = result.pPinb
+                        selected_fprice = result.pPfinb
+                        # add variation price to parent price
+                        for var in variations['var_list']:
+                            continue_flag = 0
+                            for att in requested_filters:
+                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
+                                    continue_flag = 1
+                                    break
+                            if continue_flag:
+                                continue
+                            if var['inr_price'] < selected_price:
+                                selected_price = var['inr_price']
+                                selected_fprice = var['fake_inr_price']
+                        selected_price += selected_price
+                        selected_fprice += selected_fprice
+                    else:
+                        selected_price = result.pPin
+                        selected_fprice = result.pPfin
+                        # only variation price
+                        for var in variations['var_list']:
+                            for att in requested_filters:
+                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
+                                    break
+                            if var['inr_price'] < selected_price:
+                                selected_price = var['inr_price']
+                                selected_fprice = var['fake_inr_price']
+                    result.pPin = selected_price
+                    result.pPfin = selected_fprice
+
+        # calculate discount on the fly
+        for result in self.results:
+            if float(result.pPfin):
+                result.discount = round((float(result.pPfin) - float(result.pPin)) * 100 / float(result.pPfin), 2)
 
     def get_extra_context(self):
         """
@@ -144,7 +186,8 @@ class SearchBaseView(TemplateView):
         """
         context = self.extra_context.copy()
         context['searchquery'] = self.request.get_full_path()
-        context['form'] = self.form(self.search_params)
+        if self.form:
+            context['form'] = self.form(self.search_params)
         context['search_params'] = self.search_params
         context['QUERY_STRING'] = self.request.get_full_path()
 
@@ -163,7 +206,20 @@ class SearchBaseView(TemplateView):
         else:
             context['tracking_medium'] = 'web'
         context['prod_type'] = self.search_params.getlist('prod_type', [])
-
+        if self.search_params.getlist('fclevel'):
+            context['clevel'] = self.request.GET.getlist('fclevel')
+        if self.search_params.getlist('fcert'):
+            context['cert'] = self.request.GET.getlist('fcert')
+        if self.search_params.getlist('frating'):
+            context['rating'] = self.search_params.getlist('frating')
+        if self.search_params.getlist('farea'):
+            context['areaf'] = self.search_params.getlist('farea')
+        if self.search_params.getlist('fduration'):
+            context['duration'] = self.request.GET.getlist('fduration')
+        if self.search_params.getlist('fmode'):
+            context['mode'] = self.request.GET.getlist('fmode')
+        if self.search_params.getlist('fprice'):
+            context['price'] = self.request.GET.getlist('fprice')
         return context
 
     def build_page(self):
@@ -236,10 +292,10 @@ class SearchBaseView(TemplateView):
                 context[value] = self.search_params.getlist(param)
         return context
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         return self.prepare_response()
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         return self.prepare_response()
 
 
@@ -249,24 +305,19 @@ class SearchListView(SearchBaseView):
     """
     form = SearchForm
     __name__ = 'SimpleSearch'
-    search_type = "keyword"
+    search_type = "simple"
     extra_context = {'type': 'search'}
     track_query_dict = QueryDict('').copy()
     search_class = SimpleSearch
     params_class = SimpleParams
-
-    def get_fields(self):
-        return ["id", "pURL", "pHdx", "pCDate", "pSg", "pIc", "pImA",
-                "pAb", "pAR", "pFA", "pCtg", "pPChs", "pCert", "pStM",
-                "pCL", "pStar", "pRC", "pNJ", "pCmbs", "pPv"]
 
     def prepare_response(self):
         self.keywords = self.args
         current_url = resolve(self.request.path_info).url_name
         if current_url == 'search_listing' and not self.request.GET:
             return HttpResponsePermanentRedirect(reverse('search:recommended_listing',
-                                                         kwargs={'f_area':'it-software',
-                                                                 'skill':'development'}))
+                                                         kwargs={'f_area': 'it-software',
+                                                                 'skill': 'development'}))
         return super(SearchListView, self).prepare_response()
 
     def pre_processor(self):
@@ -284,83 +335,12 @@ class SearchListView(SearchBaseView):
             else:
                 self.search_sid = self.search_params.get('sid')
 
-    def post_processor(self):
-        """
-        Called just before building response and after results are generated
-        """
-        filter_mapping = {
-            'fprice': 'inrp',
-            'fmode': 'mode',
-            'fduration': 'duration',
-            'fclevel': 'level',
-            'fcert': 'certify'
-        }
-
-        ## Following code is for generating starting from price according to variation filtered TODO: move to ajax later on
-        requested_filters = [x for x in ['fprice', 'fmode', 'fduration', 'fclevel', 'fcert'] if x in self.request.GET]
-        # if filters are not applied, skip
-        if len(requested_filters):
-            for result in self.results:
-                variations = json.loads(result.pVrs)
-                # if no variations, skip
-                if variations['variation']:
-                    if result.pPc == 'writing' or result.pPc == 'service':
-                        selected_price = result.pPinb
-                        selected_fprice = result.pPfinb
-                        # add variation price to parent price
-                        for var in variations['var_list']:
-                            continue_flag = 0
-                            for att in requested_filters:
-                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
-                                    continue_flag = 1
-                                    break
-                            if continue_flag:
-                                continue
-                            if var['inr_price'] < selected_price:
-                                selected_price = var['inr_price']
-                                selected_fprice = var['fake_inr_price']
-                        selected_price += selected_price
-                        selected_fprice += selected_fprice
-                    else:
-                        selected_price = result.pPin
-                        selected_fprice = result.pPfin
-                        # only variation price
-                        for var in variations['var_list']:
-                            for att in requested_filters:
-                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
-                                    break
-                            if var['inr_price'] < selected_price:
-                                selected_price = var['inr_price']
-                                selected_fprice = var['fake_inr_price']
-                    result.pPin = selected_price
-                    result.pPfin = selected_fprice
-
-        # calculate discount on the fly
-        for result in self.results:
-            if float(result.pPfin):
-                result.discount = round((float(result.pPfin) - float(result.pPin))*100/float(result.pPfin), 2)
-
     def get_extra_context(self):
         request_get = self.search_params.copy()
         request_get.update(self.request.GET)
         request_get.update(self.request.POST)
         self.request_get = request_get
         context = super(SearchListView, self).get_extra_context()
-
-        if self.search_params.getlist('fclevel'):
-            context['clevel'] = self.request.GET.getlist('fclevel')
-        if self.search_params.getlist('fcert'):
-            context['cert'] = self.request.GET.getlist('fcert')
-        if self.search_params.getlist('frating'):
-            context['rating'] = self.search_params.getlist('frating')
-        if self.search_params.getlist('farea'):
-            context['areaf'] = self.search_params.getlist('farea')
-        if self.search_params.getlist('fduration'):
-            context['duration'] = self.request.GET.getlist('fduration')
-        if self.search_params.getlist('fmode'):
-            context['mode'] = self.request.GET.getlist('fmode')
-        if self.search_params.getlist('fprice'):
-            context['price'] = self.request.GET.getlist('fprice')
 
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
@@ -377,3 +357,109 @@ class SearchListView(SearchBaseView):
         return paginator, page
 
 
+class RecommendedSearchView(SearchBaseView):
+    """
+    Simple text search
+    """
+    form = SearchRecommendedForm
+    __name__ = 'RecommendedSearch'
+    search_type = "recommended"
+    extra_context = {'type': 'search'}
+    track_query_dict = QueryDict('').copy()
+    # search_class = RecommendedSearch
+    params_class = SimpleParams
+
+    def prepare_response(self):
+        self.keywords = self.args
+        current_url = resolve(self.request.path_info).url_name
+        if current_url == 'search_listing' and not self.request.GET:
+            return HttpResponsePermanentRedirect(reverse('search:recommended_listing',
+                                                         kwargs={'f_area':'it-software',
+                                                                 'skill':'development'}))
+        return super(RecommendedSearchView, self).prepare_response()
+
+    def pre_processor(self):
+        """
+        Called before any other processing
+        """
+
+        if self.search_params.get("none_query"):
+            self.none_query = True
+
+        # Analytics Relevance Tracking
+        if hasattr(self, 'request'):
+            if not self.request.is_ajax():
+                self.search_sid = uuid.uuid4().hex
+            else:
+                self.search_sid = self.search_params.get('sid')
+
+    def get_extra_context(self):
+        request_get = self.search_params.copy()
+        request_get.update(self.request.GET)
+        request_get.update(self.request.POST)
+        self.request_get = request_get
+        context = super(RecommendedSearchView, self).get_extra_context()
+
+        context['track_query_dict'] = self.track_query_dict.urlencode()
+        context.update({"search_type": "recommended"})
+        return context
+
+    def prepare_track(self, page):
+        self.track_query_dict = QueryDict(self.search_params.urlencode()).copy()
+        self.track_query_dict['template'] = 'psrp_impressions'
+
+    def build_page(self):
+        (paginator, page) = super(RecommendedSearchView, self).build_page()
+        self.prepare_track(page)
+        return paginator, page
+
+
+class FuncAreaPageView(SearchBaseView):
+    """
+    Functional Area Page
+    """
+    form = None
+    __name__ = 'FuncAreaSearch'
+    search_type = "func_area"
+    extra_context = {'type': 'search'}
+    track_query_dict = QueryDict('').copy()
+    search_class = FuncAreaSearch
+    params_class = FuncAreaParams
+    allow_empty_query = False
+
+    def pre_processor(self):
+        """
+        Called before any other processing
+        """
+        # Analytics Relevance Tracking
+        if hasattr(self, 'request'):
+            if not self.request.is_ajax():
+                self.search_sid = uuid.uuid4().hex
+            else:
+                self.search_sid = self.search_params.get('sid')
+
+    def empty_query_handler(self):
+        """
+        Override for allowing no query search
+        """
+        pass    # Do nothing
+
+    def get_extra_context(self):
+        request_get = self.search_params.copy()
+        request_get.update(self.request.GET)
+        request_get.update(self.request.POST)
+        self.request_get = request_get
+        context = super(FuncAreaPageView, self).get_extra_context()
+
+        context['track_query_dict'] = self.track_query_dict.urlencode()
+        context.update({"search_type": "func_area"})
+        return context
+
+    def prepare_track(self, page):
+        self.track_query_dict = QueryDict(self.search_params.urlencode()).copy()
+        self.track_query_dict['template'] = 'psrp_impressions'
+
+    def build_page(self):
+        (paginator, page) = super(FuncAreaPageView, self).build_page()
+        self.prepare_track(page)
+        return paginator, page
