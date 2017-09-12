@@ -593,3 +593,26 @@ class DownloadQuestionnaireView(View):
         response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
         response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
         return response
+
+
+class DashboardMyWalletView(TemplateView):
+    template_name = 'dashboard/dashboard-wallet.html'
+    
+    def get(self, request, *args, **kwargs):
+        if request.session.get('candidate_id', None):
+            return super(DashboardMyWalletView, self).get(request, args, **kwargs)
+        return HttpResponseRedirect(reverse('homepage'))
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardMyWalletView, self).get_context_data(**kwargs)
+        candidate_id = self.request.session.get('candidate_id', None)
+        if candidate_id:
+            order_list = DashboardInfo().get_myorder_list(candidate_id=candidate_id, request=self.request)
+        else:
+            order_list = ''
+
+        context.update({
+            "order_list": order_list,
+        })
+
+        return context
