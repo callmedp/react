@@ -5,6 +5,7 @@ STATUS_CHOICES = (
     (3, "Aborted"),
     (4, "Invalid"),
     (5, "Cancel"),
+    (6, "Refunded"),
 )
 
 SITE_CHOICES = (

@@ -181,7 +181,7 @@ OI_EMAIL_STATUS = (
 
 
 REFUND_MODE = (
-    ('select', 'Select Mode'),
+    ('select', 'Select Refund Mode'),
     ('neft', 'NEFT'),
     ('cheque', 'CHEQUE'),
     ('dd', 'DD'),

@@ -8,6 +8,7 @@ from django.views.generic import ListView, TemplateView, View, DetailView
 from django.contrib import messages
 from django.db.models import Q
 from django.conf import settings
+from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
@@ -42,6 +43,22 @@ class RefundInfoMixin(object):
                     is_combo=True).select_related('product', 'partner').exclude(oi_status=163)
                 order_items.append(data)
         return order_items
+
+    def update_refund_oi_status(self, status, refund_obj):
+        if refund_obj and status:
+            refunditems = refund_obj.refunditem_set.all().select_related('oi')
+            for refunditem in refunditems:
+                oi = refunditem.oi
+                last_oi_status = oi.oi_status
+                oi.oi_status = status
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    assigned_to=oi.assigned_to,
+                    added_by=self.request.user,
+                )
 
 
 class RefundRequestApprovalView(ListView, PaginationMixin):
@@ -78,7 +95,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RefundRequestApprovalView, self).get_queryset()
-        queryset = queryset.filter(status__in=[1, 3, 5, 7])
+        queryset = queryset.filter(status__in=[1, 3, 5, 8])
         user = self.request.user
         if user.is_superuser:
             pass
@@ -93,7 +110,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
             queryset = queryset.filter(status=5)
 
         elif has_group(user=user, grp_list=settings.FINANCE_GROUP_LIST):
-            queryset = queryset.filter(status=7)
+            queryset = queryset.filter(status=8)
         else:
             queryset = queryset.none()
 
@@ -156,7 +173,7 @@ class RefundOrderRequestView(ListView, PaginationMixin):
         return queryset
 
 
-class RefundRequestDetail(DetailView):
+class RefundRequestDetail(DetailView, RefundInfoMixin):
     model = RefundRequest
     template_name = "console/refund/refund-request-detail.html"
 
@@ -170,7 +187,7 @@ class RefundRequestDetail(DetailView):
         try:
             obj = queryset.get()
             user = self.request.user
-            if obj.status in [0, 1, 9] and has_group(user=user, grp_list=settings.REFUND_GROUP_LIST):
+            if has_group(user=user, grp_list=settings.REFUND_GROUP_LIST):
                 pass
             else:
                 raise Http404
@@ -182,6 +199,67 @@ class RefundRequestDetail(DetailView):
         self.object = self.get_object()
         context = super(RefundRequestDetail, self).get(request, *args, **kwargs)
         return context
+
+    def post(self, request, *args, **kwargs):
+        try:
+            refund_pk = request.POST.get('refund_pk', None)
+            txn = request.POST.get('txn', '').strip()
+            refund_mode = request.POST.get('refund_mode', 'select').strip()
+            refund_obj = RefundRequest.objects.get(pk=refund_pk, status=8)
+
+            if refund_obj and refund_mode and txn and has_group(user=request.user, grp_list=settings.FINANCE_GROUP_LIST):
+                if refund_mode in ['neft', 'cheque', 'dd']:
+                    last_status = refund_obj.status
+                    refund_obj.status = 11
+                    refund_obj.last_status = last_status
+                    refund_obj.refund_mode = refund_mode
+                    refund_obj.txn = txn
+                    refund_obj.refund_date = timezone.now()
+                    refund_obj.save()
+
+                    refund_obj.refundoperation_set.create(
+                        status=refund_obj.status,
+                        last_status=refund_obj.last_status,
+                        added_by=request.user
+                    )
+                    self.update_refund_oi_status(
+                        status=163, refund_obj=refund_obj)
+
+                    order = refund_obj.order
+                    if refund_obj.refund_mode == 'neft':
+                        payment_mode = 10,
+                    else:
+                        payment_mode = 4
+                    order.ordertxns.create(
+                        txn=txn,
+                        status=6,
+                        payment_mode=payment_mode,
+                        payment_date=refund_obj.refund_date,
+                        currency=refund_obj.currency,
+                        txn_amount=float(refund_obj.refund_amount)
+                    )
+
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        'Refund Settled Successfully.')
+                else:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        'select valid refund mode')
+
+                return HttpResponseRedirect(reverse('console:refundrequest-detail', kwargs={"pk": refund_obj.pk}))
+
+        except Exception as e:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                str(e))
+
+        if refund_obj:
+            return HttpResponseRedirect(reverse('console:refundrequest-detail', kwargs={"pk": refund_obj.pk}))
+        return HttpResponseRedirect(reverse('console:refund-request-approval'))
 
     def get_context_data(self, **kwargs):
         context = super(RefundRequestDetail, self).get_context_data(**kwargs)
@@ -398,7 +476,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 messages.add_message(
                     request, messages.SUCCESS,
                     "refund request changed successfully of order number %s" % (order.number))
-        next_url = reverse('console:refundrequest-edit', {"pk": refund_obj.pk})
+        next_url = reverse('console:refundrequest-edit', kwargs={"pk": refund_obj.pk})
         return HttpResponseRedirect(next_url)
 
     def get_context_data(self, **kwargs):
@@ -585,7 +663,7 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                     order=order,
                     message=message,
                     document=attached_file,
-                    status=9,
+                    status=1,
                     last_status=0,
                     currency=order.currency,
                     added_by=request.user
@@ -641,8 +719,14 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                 refund_obj.save()
 
                 refund_obj.refundoperation_set.create(
-                    status=refund_obj.status,
+                    status=9,
                     last_status=refund_obj.last_status,
+                    added_by=request.user,
+                )
+
+                refund_obj.refundoperation_set.create(
+                    status=refund_obj.status,
+                    last_status=9,
                     added_by=request.user,
                 )
                 messages.add_message(
@@ -699,7 +783,7 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                             "combos": [],
                         }
                         refundedit_items.append(data_dict)
- 
+
                 else:
                     data_dict = {
                         "oi": oi,
@@ -919,7 +1003,7 @@ class RejectRefundRequestView(View):
         return HttpResponseRedirect(reverse('console:refund-request'))
 
 
-class ApproveRefundRequestView(View):
+class ApproveRefundRequestView(View, RefundInfoMixin):
     def post(self, request, *args, **kwargs):
         try:
             message = request.POST.get('message', '').strip()
@@ -955,6 +1039,9 @@ class ApproveRefundRequestView(View):
                         added_by=request.user,
                     )
 
+                    if refund_obj.status == 8:
+                        self.update_refund_oi_status(status=162, refund_obj=refund_obj)
+
                 elif refund_obj.status == 5 and has_group(user=user, grp_list=settings.DEPARTMENT_HEAD_GROUP_LIST):
                     last_status = refund_obj.status
                     refund_obj.status = 8
@@ -966,7 +1053,7 @@ class ApproveRefundRequestView(View):
                         message=message,
                         added_by=request.user,
                     )
-
+                    self.update_refund_oi_status(status=162, refund_obj=refund_obj)
                 else:
                     raise PermissionDenied
 

@@ -237,13 +237,36 @@
             </div>
             <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}} ({{refund_obj.currency}})</span><br/><br/>
           </div>
+          {% if refund_obj.status == 8 and request.user|has_group:FINANCE_GROUP_LIST %}
+              <form id="refund-settled-form" method="POST" action="." data-parsley-validate>{% csrf_token %}
+                  <div style="display:none">
+                      <input type="hidden" name="refund_pk" value="{{refund_obj.pk}}">
+                  </div>
+                  <div class="form-group col-md-6">
+                      <label for="refund-mode-id">Refund mode*:</label>
+                      <select id="refund-mode-id" name="refund_mode" class="form-control" required>
+                        <option value="">Select Refund Mode</option>
+                        <option value="neft">NEFT</option>
+                        <option value="cheque">CHEQUE</option>
+                        <option value="dd">DD</option>
+                      </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                      <label for="transaction-id">Transaction* :</label>
+                      <input type="text" id="transaction-id" class="form-control" name="txn" required />
+                      <small>serial number in case of cheque/dd.</small>
+                  </div>
+                  <br/>
+                  <button type="submit" class="btn btn-primary">Refund Settled</button>
+              </form>
+          {% endif %}
         </div>
       </div>
 
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Refund Operation's Histories </h2>
+            <h2>Refund Request Operations </h2>
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>

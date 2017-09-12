@@ -528,6 +528,8 @@ class RefundRequest(AbstractAutoDate):
         related_name='refund_request_added_by',
         null=True, blank=True)
 
+    refund_date = models.DateTimeField(blank=True, null=True)
+
     class Meta:
         app_label = 'order'
         ordering = ('-modified', )

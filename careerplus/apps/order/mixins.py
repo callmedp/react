@@ -74,7 +74,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.country = cart_obj.country
 
                 # set currency
-                order.currency = 'INR'
+                order.currency = 0
 
                 payment_dict = self.getPayableAmount(cart_obj=cart_obj)
                 total_amount = payment_dict.get('total_amount')

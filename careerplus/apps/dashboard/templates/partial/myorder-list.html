@@ -82,6 +82,8 @@
                   <datalist class="col-sm-3">
                     {% if obj.oi_status == 4 %}
                         Closed
+                    {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                      {{obj.get_user_oi_status}}
                     {% elif order.status == 0 %}
                         Unpaid
                     {% elif order.status == 0 %}

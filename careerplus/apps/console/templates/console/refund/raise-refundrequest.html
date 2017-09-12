@@ -189,8 +189,8 @@
               </table>
             </div>
 
-            <label for="message">Message (20 chars min) :</label>
-            <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="300" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
+            <label for="message">Message:</label>
+            <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-maxlength="300" data-parsley-minlength-message="Come on! You need to enter at least a 10 caracters long comment.."
             data-parsley-validation-threshold="10"></textarea>
             <br/>
 
@@ -210,7 +210,7 @@
                       <h4 class="modal-title" id="myModalLabel">Raise Refund Request</h4>
                     </div>
                     <div class="modal-body" id="myModalbody">
-                      Are you sure to raise refund request on order number {{order.number}}
+                      Are you sure to raise refund request on order number {{order.number}} and send for approval?
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
