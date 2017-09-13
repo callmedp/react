@@ -36,25 +36,23 @@ class Command(BaseCommand):
         
 
         sql = """
-            SELECT product_feedback.user_id AS uid, product_feedback.productvariation_id AS pid, product_feedback.published, 
+            SELECT product_feedback.user_id AS uid, auth_user.email as Email, product_feedback.productvariation_id AS pid, product_feedback.published, 
                 product_feedback.more_feedback, product_feedback.rating, product_feedback.added_on, product_feedback.title 
-                FROM product_feedback 
+                FROM product_feedback
+                LEFT JOIN auth_user
+                ON product_feedback.user_id = auth_user.id 
                 WHERE (product_feedback.productvariation_id IS NOT NULL AND product_feedback.user_id IS NOT NULL AND product_feedback.published = True );
             """
         sqlp = """
                 SELECT shop_product.id AS slpid, shop_product.cpv_id AS pid FROM shop_product WHERE shop_product.cpv_id IS NOT NULL ;
                 """
-        sqlu = """
-            SELECT database_cpuser.id AS sluid, database_cpuser.username, database_cpuser.email, database_cpuser.shine_id, database_cpuser.cp_id AS uid
-            FROM database_cpuser WHERE database_cpuser.cp_id IS NOT NULL
-            """
         df = pd.read_sql(sql,con=db)
-
         dfp = pd.read_sql(sqlp,con=db2)
-        dfu = pd.read_sql(sqlu,con=db2)
-        dfu['uid'] = dfu['uid'].apply(int)
-
-        df = pd.merge(df, dfu, on='uid', how='left')
+        user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
+        user_df = user_df[['Email', 'C_ID']]
+        user_df = user_df.drop_duplicates(subset=['Email'], keep='last')
+        
+        df = pd.merge(df, user_df, on='Email', how='left')
         df = pd.merge(df, dfp, on='pid', how='left')
          
         try:
@@ -62,19 +60,21 @@ class Command(BaseCommand):
                 for i, row in df.iterrows():
                     if not i%50:
                         print(i)
-                    if row['sluid'] and row['slpid']:
+                    if row['slpid']:
                         product_type = ContentType.objects.get(
                             app_label='shop', model='product')
                         rating = math.ceil(row['rating']/2) if row['rating'] == row['rating'] else 2
                         content = row['more_feedback'] if row['more_feedback'] == row['more_feedback'] else ''
                         created = timezone.make_aware(row['added_on'],
                                     timezone.get_current_timezone()) if row['added_on'] else timezone.now()
-                            
+                        row['Email'] = row['Email'] if row['Email'] and row['Email'] == row['Email'] else '' 
+                        row['C_ID'] = row['C_ID'] if row['C_ID'] and row['C_ID'] == row['C_ID'] else '' 
+                        
                         rr = Review.objects.create(
                             content_type=product_type,
                             object_id=row['slpid'],
-                            user_email=row['email'],
-                            user_id=row['shine_id'],
+                            user_email=row['Email'],
+                            user_id=row['C_ID'],
                             content=content,
                             average_rating=rating,
                             status=1,
