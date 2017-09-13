@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from collections import OrderedDict
 from decimal import Decimal
@@ -20,6 +21,7 @@ from blog.mixins import PaginationMixin
 from order.choices import TYPE_REFUND
 
 from .decorators import Decorate, stop_browser_cache, has_group
+from .refund_form import RefundFilterForm
 
 
 class RefundInfoMixin(object):
@@ -61,6 +63,7 @@ class RefundInfoMixin(object):
                 )
 
 
+@method_decorator(permission_required('order.can_view_refund_approval_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class RefundRequestApprovalView(ListView, PaginationMixin):
     context_object_name = 'refund_approval_list'
     template_name = 'console/refund/refund-approval-list.html'
@@ -71,10 +74,16 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
+        self.created, self.status = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
+        self.created = request.GET.get('created', '')
+        try:
+            self.status = request.GET.get('status', -1)
+        except:
+            self.status = -1
         return super(RefundRequestApprovalView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -87,9 +96,15 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
             context['refund_approval_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        initial = {
+            "created": self.created,
+            "status": self.status,
+        }
+        filter_form = RefundFilterForm(initial)
         context.update({
             "messages": alert,
             "query": self.query,
+            "filter_form": filter_form,
         })
         return context
 
@@ -120,6 +135,39 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query))
         except:
             pass
+
+
+
+        try:
+            if self.status != -1:
+                queryset = queryset.filter(status=self.status)
+        except:
+            pass
+
+        try:
+            if self.created:
+                date_range = self.created.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    created__range=[start_date, end_date])
+            else:
+                end_date = timezone.now()
+                start_date = end_date - datetime.timedelta(days=30)
+                queryset = queryset.filter(
+                    created__range=[start_date, end_date])
+
+                start = start_date.strftime("%d/%m/%Y")
+                end = end_date.strftime("%d/%m/%Y")
+
+                self.created = start + '-' + end
+        except:
+            pass
+
         return queryset
 
 
@@ -134,10 +182,16 @@ class RefundOrderRequestView(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
+        self.created, self.status = '', -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
+        self.created = request.GET.get('created', '')
+        try:
+            self.status = int(request.GET.get('status', -1))
+        except:
+            self.status = -1
         return super(RefundOrderRequestView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -150,9 +204,15 @@ class RefundOrderRequestView(ListView, PaginationMixin):
             context['refund_request_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        initial = {
+            "created": self.created,
+            "status": self.status,
+        }
+        filter_form = RefundFilterForm(initial)
         context.update({
             "messages": alert,
             "query": self.query,
+            "filter_form": filter_form,
         })
         return context
 
@@ -170,6 +230,37 @@ class RefundOrderRequestView(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query))
         except:
             pass
+
+        try:
+            if self.status != -1:
+                queryset = queryset.filter(status=self.status)
+        except:
+            pass
+
+        try:
+            if self.created:
+                date_range = self.created.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    created__range=[start_date, end_date])
+            else:
+                end_date = timezone.now()
+                start_date = end_date - datetime.timedelta(days=30)
+                queryset = queryset.filter(
+                    created__range=[start_date, end_date])
+
+                start = start_date.strftime("%d/%m/%Y")
+                end = end_date.strftime("%d/%m/%Y")
+
+                self.created = start + '-' + end
+        except:
+            pass
+
         return queryset
 
 

@@ -263,6 +263,7 @@ $(document).ready(function() {
 
 
     $(document).on('click', '#comment_load_more', function(event) {
+        $('#comment_load_more').prop('disable', true);
         var formData = $("#loadform").serialize();
         $.ajax({
             url : "/ajax/page/load-more/",

@@ -181,8 +181,8 @@ class AjaxStateView(View):
     def get(self, request, *args, **kwargs):
         data = {"states": []}
         try:
-            country = request.GET.get('country', 'India')
-            country_obj = Country.objects.get(name=country)
+            country = request.GET.get('country', None)
+            country_obj = Country.objects.get(pk=country, active=True)
             states = country_obj.state_set.all().values_list('name', flat=True)
             data['states'] = list(states)
         except:
