@@ -271,7 +271,7 @@ class ProductInformationMixin(object):
 
 
 @Decorate(stop_browser_cache())
-class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
+class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
     http_method_names = ['get', 'post']
 
@@ -280,45 +280,38 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     def __init__(self, *args, **kwargs):
         # _view_signal = product_viewed
         self.category = None
+        self.product_obj = None
         # # Whether to redirect to the URL with the right path
         self._enforce_paths = True
         # # Whether to redirect child products to their parent's URL
         self._enforce_parent = True
+        self.sqs = None
 
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
         return ['shop/detail1.html']
 
-    def get_object(self, queryset=None):
-        if hasattr(self, 'object'):
-            return self.object
-        else:
-            return super(ProductDetailView, self).get_object(queryset)
-
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
-        sqs = SearchQuerySet().filter(id=1)[0]
-        product = self.object
-        category = self.category
-        ctx.update(self.get_breadcrumbs(product, category))
-        ctx.update(self.solar_info(sqs))
-        ctx.update(self.solar_program_structure(sqs))
-        ctx.update(self.solar_faq(sqs))
-        ctx.update(self.get_recommendation(product))
-        ctx.update(self.get_reviews(product, 1))
-        if sqs.pPc == 'course':
-            ctx.update(json.loads(sqs.pPOP))
+        ctx.update(self.get_breadcrumbs(self.product, self.category))
+        ctx.update(self.solar_info(self.sqs))
+        ctx.update(self.solar_program_structure(self.sqs))
+        ctx.update(self.solar_faq(self.sqs))
+        # ctx.update(self.get_recommendation(product))
+        ctx.update(self.get_reviews(self.product, 1))
+        if self.sqs.pPc == 'course':
+            ctx.update(json.loads(self.sqs.pPOP))
         else:
-            ctx.update(json.loads(sqs.pPOP))
-        if sqs.pTP == 1:
-            ctx.update(json.loads(sqs.pVrs))
-        if self.is_combos(sqs):
-            ctx.update(json.loads(sqs.pCmbs))
-        ctx.update(json.loads(sqs.pFBT))
-        ctx.update(self.getSelectedProduct(product))
-        ctx.update(self.getSelectedProductPrice(product))
-        ctx.update({'sqs':sqs})
+            ctx.update(json.loads(self.sqs.pPOP))
+        if self.sqs.pTP == 1:
+            ctx.update(json.loads(self.sqs.pVrs))
+        if self.is_combos(self.sqs):
+            ctx.update(json.loads(self.sqs.pCmbs))
+        ctx.update(json.loads(self.sqs.pFBT))
+        ctx.update(self.getSelectedProduct(self.product))
+        ctx.update(self.getSelectedProductPrice(self.product))
+        ctx.update({'sqs':self.sqs})
         return ctx
 
     # def send_signal(self, request, response, product):
@@ -326,38 +319,20 @@ class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
     #         sender=self, product=product, user=request.user, request=request,
     #         response=response)
 
-    def redirect_if_necessary(self, current_path, product, cat_slug=None):
-        if self._enforce_paths:
-            expected_path = product.get_absolute_url(cat_slug)
-            if expected_path != urlquote(current_path):
-                return HttpResponsePermanentRedirect(expected_path)
-    
-    def return_http404(self, product):
-        if not product:
-            return True
-        if not product.active:
-            return True
-        if not self.category:
-            return True
-        if product.var_child:
-            return True
-        if product.is_virtual:
+    def return_http404(self, sqs_ob):
+        if sqs_obj:
             return True
         return False
     
     def get(self, request, **kwargs):
-        self.object = product = self.get_object()
-        if product:
-            self.category = category = product.verify_category(kwargs.get('cat_slug', None))
-
-        HTTP404 = self.return_http404(product)
+        pk = self.kwargs.get('pk')
+        self.sqs = SearchQuerySet().filter(id=pk)[0]
+        self.product_obj = Product.objects.get(pk=pk)
+        if self.product_obj:
+            self.category = self.product_obj.verify_category(kwargs.get('cat_slug', None))
+        HTTP404 = self.return_http404(self.sqs)
         if HTTP404:
             raise Http404
-        redirection = self.redirect_if_necessary(
-            request.path, product, category)
-        if redirection is not None:
-            return redirection
-
         response = super(ProductDetailView, self).get(request, **kwargs)
         # self.send_signal(request, response, product)
         return response
