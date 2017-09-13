@@ -119,23 +119,31 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
                 if linkedin_product:
                     # associate draft object with order
-                    order_item = linkedin_product.first()
-                    draft_obj = Draft.objects.create()
-                    org_obj = Organization()
-                    org_obj.draft = draft_obj
-                    org_obj.save()
+                    for oi in linkedin_product:
+                        order_item = oi
+                        draft_obj = Draft.objects.create()
+                        org_obj = Organization()
+                        org_obj.draft = draft_obj
+                        org_obj.save()
 
-                    edu_obj = Education()
-                    edu_obj.draft = draft_obj
-                    edu_obj.save()
+                        edu_obj = Education()
+                        edu_obj.draft = draft_obj
+                        edu_obj.save()
 
-                    quiz_rsp = QuizResponse()
-                    quiz_rsp.oi = order_item
-                    quiz_rsp.save()
+                        quiz_rsp = QuizResponse()
+                        quiz_rsp.oi = oi #order_item
+                        quiz_rsp.save()
+                        
+                        last_oi_status = oi.oi_status
 
-                    order_item.counselling_form_status = 41
-                    order_item.oio_linkedin = draft_obj
-                    order_item.save()
+                        oi.oi_status = 49
+                        oi.oio_linkedin = draft_obj
+                        oi.last_oi_status = last_oi_status
+                        oi.save()
+                        oi.orderitemoperation_set.create(
+                            oi_status=oi.oi_status,
+                            last_oi_status=last_oi_status,
+                            assigned_to=oi.assigned_to)
                 return order
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

@@ -4,7 +4,7 @@ from django.conf import settings
 
 from order.models import OrderItem
 from core.common import TokenExpiry
-from emailers.email import SendMail
+from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 
 
@@ -25,6 +25,7 @@ def booster():
     
     for oi in booster_ois:
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
+        email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
         candidate_data.update({
             "email": oi.order.email,
             "mobile": oi.order.mobile,
@@ -50,9 +51,11 @@ def booster():
                     #to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
 
                 # send mail to candidate
-                SendMail().send(
-                    to=[candidate_data.get('email')], mail_type="BOOSTER_CANDIDATE", data=candidate_data)
-
+                if 93 not in email_sets:
+                    mail_type = 'BOOSTER_CANDIDATE'
+                    return_val = send_email_task.delay([candidate_data.get('email')], mail_type, candidate_data)
+                    if return_val.result:
+                        oi.emailorderitemoperation_set.create(email_oi_status=93)
                 # send sms to candidate
                 SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
                 last_oi_status = oi.oi_status
@@ -72,7 +75,11 @@ def booster():
     try:
         # send mail to rectuter
         recruiters = settings.BOOSTER_RECRUITERS
-        SendMail().send(to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
+        if 92 not in email_sets:
+            mail_type = 'BOOSTER_RECRUITER'
+            return_val = send_email_task.delay(recruiters, mail_type, recruiter_data)
+            if return_val.result:
+                oi.emailorderitemoperation_set.create(email_oi_status=92)
     except Exception as e:
         print (str(e))
     

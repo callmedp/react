@@ -18,12 +18,14 @@ from users.mixins import RegistrationLoginApi
 from order.models import Order, OrderItem
 from console.order_form import FileUploadForm, VendorFileUploadForm
 from emailers.email import SendMail
+from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
 from order.functions import pending_item_email, process_mailer
 from console.mixins import ActionUserMixin
 from order.mixins import OrderMixin
+from . import *
 
 
 class ArticleCommentView(View):
@@ -232,6 +234,7 @@ class ApproveByAdminDraft(View):
 
                     # mail to candidate for resume critique closed
                     to_emails = [obj.order.email]
+                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     email_dict = {}
                     email_dict.update({
                         "first_name": obj.order.first_name if obj.order.first_name else obj.order.first_name,
@@ -242,11 +245,12 @@ class ApproveByAdminDraft(View):
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
-                    try:
-                        SendMail().send(to_emails, mail_type, email_dict)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
 
+                    if 42 not in email_sets:
+                        return_val = send_email_task.delay(to_emails, mail_type, email_dict)
+                        if return_val.result:
+                            obj.emailorderitemoperation_set.create(email_oi_status=42)
+                    
                     obj.orderitemoperation_set.create(
                         oi_draft=obj.oi_draft,
                         draft_counter=obj.draft_counter,
@@ -275,7 +279,9 @@ class ApproveByAdminDraft(View):
                     obj.save()
 
                     # mail to candidate
+                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct()) 
                     to_emails = [obj.order.email]
+                    mail_type = 'DRAFT_UPLOAD'
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
@@ -283,48 +289,8 @@ class ApproveByAdminDraft(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
-                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
                     })
-
-                    if obj.draft_counter == 1:
-                        email_dict['subject'] = "Your developed document has been uploaded" 
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    elif obj.draft_counter < settings.DRAFT_MAX_LIMIT:
-                        email_dict['subject'] = "Your developed document is ready"
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    elif obj.draft_counter == settings.DRAFT_MAX_LIMIT:
-                        email_dict['subject'] = "Your final document is ready"
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
+                    draft_upload_email(oi=obj, to_emails=to_emails, mail_type=mail_type, data=email_dict)
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
                             oi_status=24,
@@ -449,6 +415,8 @@ class ApproveDraftByLinkedinAdmin(View):
 
                     # mail to candidate
                     to_emails = [obj.order.email]
+                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                    mail_type = 'DRAFT_UPLOAD'
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
@@ -456,39 +424,30 @@ class ApproveDraftByLinkedinAdmin(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
-                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
                     })
 
-                    if obj.draft_counter == 1:
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
+                    if obj.draft_counter == 1 and 102 not in email_sets:
+                        return_val = send_email_task.delay(to_emails, mail_type, email_dict)
+                        if return_val.result:
+                            obj.emailorderitemoperation_set.create(email_oi_status=102)
+                        
                         try:
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-                    if obj.draft_counter == 2:
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
+                    elif obj.draft_counter == 2 and 103 not in email_sets:
+                        return_val = send_email_task.delay(to_emails, mail_type, email_dict)
+                        if return_val.result:
+                            obj.emailorderitemoperation_set.create(email_oi_status=103)
                         try:
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    if obj.draft_counter == 3:
-                        mail_type = 'DRAFT_UPLOAD'
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
+                    elif obj.draft_counter == settings.DRAFT_MAX_LIMIT and 104 not in email_sets:
+                        return_val = send_email_task.delay(to_emails, mail_type, email_dict)
+                        if return_val.result:
+                            obj.emailorderitemoperation_set.create(email_oi_status=104)
                         try:
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
@@ -508,6 +467,8 @@ class ApproveDraftByLinkedinAdmin(View):
                             added_by=request.user)
                     else:
                         obj.orderitemoperation_set.create(
+                            linkedin=obj.oio_linkedin,
+                            draft_counter=obj.draft_counter,
                             oi_status=obj.oi_status,
                             last_oi_status=last_status,
                             assigned_to=obj.assigned_to,

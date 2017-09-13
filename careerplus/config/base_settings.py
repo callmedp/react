@@ -54,6 +54,7 @@ THIRD_PARTY_APPS = [
     'sorl.thumbnail',
     'rest_framework',
     'haystack',
+    'celery',
 ]
 
 # Apps specific for this project go here.
@@ -85,6 +86,7 @@ LOCAL_APPS = [
     'emailers',
     'quizs',
     'database',
+    # 'celery',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

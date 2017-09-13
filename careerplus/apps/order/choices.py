@@ -166,15 +166,17 @@ OI_EMAIL_STATUS = (
     (6, 'Sent Feedback Coupon Email'),
     (7, 'Sent Payment Realisation Email'),
     (8, 'Sent Cart Drop Out Mailer'),
+    (9, 'Sent Closer Mailer'),
 
     # flow1 :21 - 40
     (21, 'Sent Flow1 Pending Resume Email'),
     (22, 'Sent First Draft Email'),
     (23, 'Sent Second Draft Email'),
     (24, 'Sent Final Draft Email'),
-    (25, 'Sent Service Closed Email'),
+    # (25, 'Sent Flow1 Service Closed Email'),
     (26, 'Sent Reminder Draft1 Email'),
     (27, 'Sent Reminder Draft2 Email'),
+    (28, 'Sent Flow1 Allocated Writer Email'),
 
     # flow3 :41 - 60
     (41, 'Sent Resume Critique Pending Resume Email'),
@@ -184,10 +186,11 @@ OI_EMAIL_STATUS = (
     # flow4 :61 - 70
     (61, 'Sent International Profile Pending Resume Email'),
     (62, 'Sent International profile updated Email'),
+    (63, 'Sent International profile Writer Assignment Email'),
 
     # flow5 :71 - 80
     (71, 'Sent Feature Profile Pending Resume Email'),
-    (72, 'Sent Feature profile Service Started Email'),
+    (72, 'Sent Feature profile Updated Email'),
 
     # flow7 :91 - 100
     (91, 'Sent Resume Booster Pending Resume Email'),
@@ -199,20 +202,32 @@ OI_EMAIL_STATUS = (
     (102, 'Sent Linkedin First Draft Email'),
     (103, 'Sent Linkedin Second Draft Email'),
     (104, 'Sent Linkedin Final Draft Email'),
-    (105, 'Sent Linkedin Service Closed Email'),
+    # (105, 'Sent Linkedin Service Closed Email'),
     (106, 'Sent Linkedin Draft1 Reminder Email'),
     (107, 'Sent Linkedin Draft2 Reminder Email'),
     (108, 'Sent Pending Counselling Form Email'),
-    (109, 'Linked In Tip 1'),
-    (110, 'Linked In Tip 2'),
-    (111, 'Linked In Tip 3'),
-    (112, 'Linked In Tip 4'),
-    (113, 'Linked In Tip 5'),
-    (114, 'Linked In Tip 6'),
+    (109, 'Sent Linked In Tip 1'),
+    (110, 'Sent Linked In Tip 2'),
+    (111, 'Sent Linked In Tip 3'),
+    (112, 'Sent Linked In Tip 4'),
+    (113, 'Sent Linked In Tip 5'),
+    (114, 'Sent Linked In Tip 6'),
 
     # flow9 :121 - 130
     (121, 'Sent RoundOne Incomplete Profile Email'),
 
     # flow10 :131 - 140
-    (131, 'Sent Pending Studymate Test Email'),    
+    (131, 'Sent Pending Studymate Test Email'),
+
+    # flow12 :141 - 150
+    (141, 'Sent Flow12 Pending Resume Email'),
+    (142, 'Sent Flow12 First Draft Email'),
+    (143, 'Sent Flow12 Second Draft Email'),
+    (144, 'Sent Flow12 Final Draft Email'),
+
+    # flow13 :151 - 160
+    (151, 'Sent Flow13 Pending Resume Email'),
+    (152, 'Sent Flow13 First Draft Email'),
+    (153, 'Sent Flow13 Second Draft Email'),
+    (154, 'Sent Flow13 Final Draft Email'),   
 )

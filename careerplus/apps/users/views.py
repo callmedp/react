@@ -17,6 +17,7 @@ from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from order.models import OrderItem
 from emailers.email import SendMail
+from emailers.tasks import send_email_task
 
 from .forms import (
     RegistrationForm,
@@ -65,12 +66,8 @@ class RegistrationApiView(FormView):
                 'email':resp['email'],
                 'password': request.POST.get('raw_password'),
             })
-
-            try:
-                SendMail().send([resp['email']], mail_type, email_dict)
-            except Exception as e:
-                logging.getLogger('email_log').error("%s - %s - %s" % (str(email), str(e), str(mail_type)))
-
+            # task for email
+            send_email_task.delay([resp['email']], mail_type, email_dict)
             resp_status = ShineCandidateDetail().get_status_detail(shine_id=resp['id'], token=resp['access_token'])
             request.session.update(resp_status)
             return HttpResponseRedirect(self.success_url)
@@ -283,10 +280,12 @@ class ForgotPasswordEmailView(View):
             })
 
             if user_exist.get('exists', ''):
-                try:
-                    SendMail().send(to_emails, mail_type, email_dict)
-                except Exception as e:
-                    logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                # task call for email
+                send_email_task.delay(to_emails, mail_type, email_dict)
+                # try:
+                #     SendMail().send(to_emails, mail_type, email_dict)
+                # except Exception as e:
+                #     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
                 return HttpResponse(json.dumps({'exist':True}), content_type="application/json")
 
             elif not user_exist.get('exists', ''):

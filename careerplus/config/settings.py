@@ -4,7 +4,11 @@ from .celery import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 IS_LIVE = False
-
+CELERY_ALWAYS_EAGER = True
+CELERY_RESULT_BACKEND = 'redis'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
 SITE_DOMAIN = 'localhost:8000'
@@ -177,6 +181,9 @@ OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
 SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['WRITERS']
 
+CELERY_IMPORTS = (
+    'emailers.tasks',
+)
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']

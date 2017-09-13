@@ -105,9 +105,14 @@ class CounsellingSubmit(TemplateView):
                 quiz_obj.submitted = True
                 quiz_obj.save()
                 if not orderitem.tat_date:
+                    last_oi_status = orderitem.oi_status
                     orderitem.tat_date = datetime.now()
-                    orderitem.oi_flow_status = 42
+                    orderitem.oi_status = 42
                     orderitem.save()
+                    orderitem.orderitemoperation_set.create(
+                        oi_status=orderitem.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=orderitem.assigned_to)
                 return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
 
