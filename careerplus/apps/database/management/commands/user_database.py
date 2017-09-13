@@ -101,24 +101,24 @@ class Command(BaseCommand):
         #     """
         # cursor.execute(sql,{})
         # result = cursor.fetchall()
-        try:
-            with transaction.atomic():
-                for i,row in df.iterrows():
-                    CPUser.objects.create(
-                        username=row['username'] if row['username'] else '',
-                        email=row['email'] if row['email'] else '',
-                        shine_id=row['shine_id'] if row['shine_id'] else '',
-                        cp_id=row['id'] if row['id'] else '',
-                        mobile=row['mobile'] if row['mobile'] else '',
-                        country=row['isd_code'] if row['isd_code'] else '')
-        except IntegrityError:
-            print(i, row)
-            print('Fail')
-        except:
-            print(i, row)
-            print('Wut')
-        cursor.close()
-        db.close()
+        # try:
+        #     with transaction.atomic():
+        #         for i,row in df.iterrows():
+        #             CPUser.objects.create(
+        #                 username=row['username'] if row['username'] else '',
+        #                 email=row['email'] if row['email'] else '',
+        #                 shine_id=row['shine_id'] if row['shine_id'] else '',
+        #                 cp_id=row['id'] if row['id'] else '',
+        #                 mobile=row['mobile'] if row['mobile'] else '',
+        #                 country=row['isd_code'] if row['isd_code'] else '')
+        # except IntegrityError:
+        #     print(i, row)
+        #     print('Fail')
+        # except:
+        #     print(i, row)
+        #     print('Wut')
+        # cursor.close()
+        # db.close()
         
         # generated_file = open('check_user.csv', 'w')
         # with open('CP_Data.csv', 'r', encoding='utf-8', errors='ignore') as upload:
