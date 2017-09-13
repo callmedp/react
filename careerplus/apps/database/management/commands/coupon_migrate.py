@@ -156,7 +156,6 @@ class Command(BaseCommand):
             with transaction.atomic():
                 count = 0
                 for row in result:
-                    print(row[0])
                     data = {
                             'code': row[0],
                             'user': row[1],
