@@ -294,12 +294,13 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
-        ctx.update(self.get_breadcrumbs(self.product, self.category))
+        product = self.product_obj
+        ctx.update(self.get_breadcrumbs(product, self.category))
         ctx.update(self.solar_info(self.sqs))
         ctx.update(self.solar_program_structure(self.sqs))
         ctx.update(self.solar_faq(self.sqs))
         # ctx.update(self.get_recommendation(product))
-        ctx.update(self.get_reviews(self.product, 1))
+        ctx.update(self.get_reviews(product, 1))
         if self.sqs.pPc == 'course':
             ctx.update(json.loads(self.sqs.pPOP))
         else:
@@ -309,8 +310,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         if self.is_combos(self.sqs):
             ctx.update(json.loads(self.sqs.pCmbs))
         ctx.update(json.loads(self.sqs.pFBT))
-        ctx.update(self.getSelectedProduct(self.product))
-        ctx.update(self.getSelectedProductPrice(self.product))
+        ctx.update(self.getSelectedProduct(product))
+        ctx.update(self.getSelectedProductPrice(product))
         ctx.update({'sqs':self.sqs})
         return ctx
 
@@ -319,18 +320,19 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     #         sender=self, product=product, user=request.user, request=request,
     #         response=response)
 
-    def return_http404(self, sqs_ob):
-        if sqs_obj:
-            return True
-        return False
+    def return_http404(self, sqs_obj):
+        if sqs_obj.count() == 1:
+            return False
+        return True
     
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
-        self.sqs = SearchQuerySet().filter(id=pk)[0]
+        sqs = SearchQuerySet().filter(id=pk)
+        self.sqs = sqs[0]
         self.product_obj = Product.objects.get(pk=pk)
         if self.product_obj:
             self.category = self.product_obj.verify_category(kwargs.get('cat_slug', None))
-        HTTP404 = self.return_http404(self.sqs)
+        HTTP404 = self.return_http404(sqs)
         if HTTP404:
             raise Http404
         response = super(ProductDetailView, self).get(request, **kwargs)
