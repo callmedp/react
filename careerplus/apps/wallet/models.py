@@ -36,7 +36,7 @@ TXN_TYPE = (
 class Wallet(AbstractAutoDate):
     owner = models.CharField(
         max_length=255,
-        unique = True,
+        unique=True,
         verbose_name=_("Owner ID"))
     owner_email = models.CharField(
         max_length=255,
@@ -92,7 +92,7 @@ class RewardPoint(AbstractAutoDate):
         ordering = ("-modified", "-created")
 
     def __str__(self):
-        return self.wallet.owner + ' - ' +str(self.pk)
+        return self.wallet.owner + ' - ' + str(self.pk)
 
 
 class ECash(AbstractAutoDate):
@@ -124,7 +124,7 @@ class ECash(AbstractAutoDate):
         ordering = ("-modified", "-created")
 
     def __str__(self):
-        return self.wallet.owner + ' - ' +str(self.pk)
+        return self.wallet.owner + ' - ' + str(self.pk)
 
 
 class WalletTransaction(AbstractAutoDate):
@@ -179,13 +179,28 @@ class WalletTransaction(AbstractAutoDate):
     ecash_value = models.DecimalField(
         _('Cash Value'), decimal_places=2, max_digits=12,
         null=True)
+
+    current_value = models.DecimalField(
+        _('Current Value'), decimal_places=2, max_digits=12,
+        null=True)
+
     class Meta:
         verbose_name = _('Wallet Transaction')
         verbose_name_plural = _('Wallet Transactions')
         ordering = ("-modified", "-created")
 
     def __str__(self):
-        return self.wallet.owner + ' - ' +str(self.pk)
+        return self.wallet.owner + ' - ' + str(self.pk)
+
+    def added_point_expiry(self):
+        pointtxns = self.usedpoint.all()
+        if pointtxns.exists():
+            return pointtxns[0].point.expiry.date()
+        return ''
+
+    def get_txn_type(self):
+        txn_type_dict = dict(TXN_TYPE)
+        return txn_type_dict.get(self.txn_type)
    
 
 class PointTransaction(AbstractAutoDate):
@@ -203,7 +218,6 @@ class PointTransaction(AbstractAutoDate):
     txn_type = models.PositiveSmallIntegerField(
         _("Type"),
         default=0, choices=TXN_TYPE)
-    
     
     def __str__(self):
         return _("%(pt)s to '%(txn)s'") % {

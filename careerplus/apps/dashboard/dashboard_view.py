@@ -22,6 +22,7 @@ from order.models import Order, OrderItem
 from review.models import Review
 from emailers.email import SendMail
 from emailers.sms import SendSMS
+from wallet.models import Wallet
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
@@ -246,7 +247,7 @@ class DashboardCommentView(TemplateView):
             comments = self.oi.message_set.filter(is_internal=False).order_by('created')
             context.update({
                 "oi": self.oi,
-                "comments": comments
+                "comments": comments,
             })
         return context
 
@@ -442,9 +443,9 @@ class DashboardAcceptService(View):
                         mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
-                            "subject": 'Closing your '+oi.product.name+' service',
+                            "subject": 'Closing your ' + oi.product.name + ' service',
                             "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-                            'draft_added':oi.draft_added_on,
+                            'draft_added': oi.draft_added_on,
                         })
 
                         try:
@@ -563,13 +564,11 @@ class DashboardInvoiceDownload(View):
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
-                # if order.invoice:
-                #     invoice = order.invoice
-                # else:
-                #     order = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                #     invoice = order.invoice
-                order = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                invoice = order.invoice
+                if order.invoice:
+                    invoice = order.invoice
+                else:
+                    order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                    invoice = order.invoice
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(invoice, content_type='application/pdf')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
@@ -606,13 +605,13 @@ class DashboardMyWalletView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardMyWalletView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id', None)
-        if candidate_id:
-            order_list = DashboardInfo().get_myorder_list(candidate_id=candidate_id, request=self.request)
-        else:
-            order_list = ''
-
+        wal_obj, created = Wallet.objects.get_or_create(owner=candidate_id)
+        wal_total = wal_obj.get_current_amount()
+        wal_txns = wal_obj.wallettxn.filter(txn_type__in=[1, 2, 3, 4, 5]).order_by('-created')
+        wal_txns = wal_txns.order_by('-created').select_related('order', 'cart')[:10]
         context.update({
-            "order_list": order_list,
+            "wal_obj": wal_obj,
+            "wal_total": wal_total,
+            "wal_txns": wal_txns,
         })
-
         return context

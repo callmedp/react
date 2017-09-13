@@ -56,223 +56,71 @@
 
             {% block right_content %}
                 <!-- right content start -->
-                <div class="col-sm-9 bdr dashboard-tab-content">
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="notification">loyality points - 100 <small>|</small> Shine cash - 100 <small>|</small> <a href="#">Redeem now</a></div>
+                {% if wal_total or wal_txns.exists %}
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="notification">loyality points - {{wal_total|floatformat:2}} <small>|</small><a href="/">Redeem now</a></div>
+                        </div>
+                      </div>
+                      
+                      <div class="table-heading">Shine loyality points</div>
+                      <ul class="table-data">
+                        <li class="data-heading">
+                          <datalist class="col-sm-2">
+                            Date
+                          </datalist>
+                          <datalist class="col-sm-2">
+                            Description
+                          </datalist>
+                          <datalist class="col-sm-2 col-md-3">
+                            Order id
+                          </datalist>
+                          <datalist class="col-sm-2">
+                            Loyality points
+                          </datalist>
+                          <datalist class="col-sm-2">
+                            Expiry date
+                          </datalist>
+                          <datalist class="col-sm-2 col-md-1">
+                            Balance
+                          </datalist>
+                        </li>
+                        {% for obj in wal_txns %}
+                            <li>
+                              <datalist class="col-sm-2">
+                                {{obj.created.date}}
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                {{obj.get_txn_type}}
+                              </datalist>
+                              <datalist class="col-sm-2 col-md-3">
+                                <strong>{{obj.order.number}}</strong>
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                <strong>{{obj.point_value}}</strong>
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                {% if obj.txn_type == 1 %}
+                                    {{obj.added_point_expiry}}
+                                {% endif %}
+                              </datalist>
+                              <datalist class="col-sm-2 col-md-1">
+                                  <strong>{{obj.current_value}}</strong>
+                              </datalist>
+                            </li>
+                        {% endfor %}
+
+                      </ul>
                     </div>
-                  </div>
-                  
-                  <div class="table-heading">Shine loyality points</div>
-                  <ul class="table-data">
-                    <li class="data-heading">
-                      <datalist class="col-sm-2">
-                        Date
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Description
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        Order id
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Loyality points
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Expiry date
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        Balance
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Refunded
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Hold
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Detucted
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Credited
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                  </ul>
-
-                  <div class="table-heading">Shine cash</div>
-                  <ul class="table-data">
-                    <li class="data-heading">
-                      <datalist class="col-sm-2">
-                        Date
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Description
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        Order id
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Shine cash
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Expiry date
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        Balance
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Refunded
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Hold
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Detucted
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                    <li>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        Credited
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-3">
-                        <strong>CP7627981470196866</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        <strong>100</strong>
-                      </datalist>
-                      <datalist class="col-sm-2">
-                        July 12, 2016
-                      </datalist>
-                      <datalist class="col-sm-2 col-md-1">
-                        <strong>100</strong>
-                      </datalist>
-                    </li>
-                  </ul>
-
-                
-                </div>
+                {% else %}
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                        <div class="empty-wallet">
+                            <figure class="empty-cart-pic"></figure>
+                            <article>Start with your first order and earn loyalty points</article>
+                        </div>
+                    </div>
+                {% endif %}
                 <!-- right content end -->
             {% endblock right_content %}
 

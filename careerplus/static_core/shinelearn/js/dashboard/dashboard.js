@@ -7,6 +7,7 @@ function viewDetailOrderitem(oi_pk, ) {
             dataType: 'html',
             success: function(html) {
                 $('#right-content-id').html(html);
+                window.scrollTo(0, 0);
                // $("#load_more" + article_id).remove();
                // $("#page_comment" + article_id).append(html);
             },
@@ -26,6 +27,7 @@ function viewCommentOrderitem(oi_pk, ) {
             dataType: 'html',
             success: function(html) {
                 $('#right-content-id').html(html);
+                window.scrollTo(0, 0);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong");
@@ -43,6 +45,7 @@ function giveFeedbackOrderitem(oi_pk) {
             dataType: 'html',
             success: function(html) {
                 $('#right-content-id').html(html);
+                window.scrollTo(0, 0);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong, try after sometimes.");
@@ -149,6 +152,7 @@ $(document).ready(function(){
     // });
 
     $(document).on('click', '#load-more-orderitem', function(event) {
+        $('#load-more-orderitem').prop('disable', true);
         var formData = $("#load-orderitem-form").serialize();
         $.ajax({
             url : "/dashboard/loadmore/orderitem/",
@@ -290,13 +294,14 @@ $(document).ready(function(){
         }
     });
 
-    $(document).on('click', '#upload_resume', function () {
+    $(document).on('click', '.upload-resume', function () {
         $.ajax({
             url: '/dashboard/inbox-notificationbox/',
             type: 'GET',
             dataType: 'html',
             success: function(html) {
                 $('#notification-box-id').html(html);
+                window.scrollTo(0, 0);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong");

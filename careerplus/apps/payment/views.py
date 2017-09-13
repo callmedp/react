@@ -61,26 +61,27 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     cart_obj = Cart.objects.get(pk=cart_pk)
                     order = self.createOrder(cart_obj)
                     self.closeCartObject(cart_obj)
-                    txn = 'CP%d%s' % (order.pk, int(time.time()))
-                    pay_txn = PaymentTxn.objects.create(
-                        txn=txn,
-                        order=order,
-                        cart=cart_obj,
-                        status=0,
-                        payment_mode=1,
-                        currency=order.currency,
-                        txn_amount=order.total_incl_tax,
-                    )
-                    payment_type = "CASH"
-                    return_parameter = self.process_payment_method(
-                        payment_type, request, pay_txn)
-                    try:
-                        del request.session['cart_pk']
-                        del request.session['checkout_type']
-                        request.session.modified = True
-                    except:
-                        pass
-                    return HttpResponseRedirect(return_parameter)
+                    if order:
+                        txn = 'CP%d%s' % (order.pk, int(time.time()))
+                        pay_txn = PaymentTxn.objects.create(
+                            txn=txn,
+                            order=order,
+                            cart=cart_obj,
+                            status=0,
+                            payment_mode=1,
+                            currency=order.currency,
+                            txn_amount=order.total_incl_tax,
+                        )
+                        payment_type = "CASH"
+                        return_parameter = self.process_payment_method(
+                            payment_type, request, pay_txn)
+                        try:
+                            del request.session['cart_pk']
+                            del request.session['checkout_type']
+                            request.session.modified = True
+                        except:
+                            pass
+                        return HttpResponseRedirect(return_parameter)
                 else:
                     return HttpResponseRedirect(reverse('homepage'))
             else:
@@ -95,32 +96,33 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     cart_obj = Cart.objects.get(pk=cart_pk)
                     order = self.createOrder(cart_obj)
                     self.closeCartObject(cart_obj)
-                    txn = 'CP%d%s%s' % (
-                        order.pk,
-                        int(time.time()),
-                        request.POST.get('cheque_no'))
-                    pay_txn = PaymentTxn.objects.create(
-                        txn=txn,
-                        order=order,
-                        cart=cart_obj,
-                        status=0,
-                        payment_mode=4,
-                        currency=order.currency,
-                        txn_amount=order.total_incl_tax,
-                        instrument_number=request.POST.get('cheque_no'),
-                        instrument_issuer=request.POST.get('drawn_bank'),
-                        instrument_issue_date=request.POST.get('deposit_date')
-                    )
-                    payment_type = "CHEQUE"
-                    return_parameter = self.process_payment_method(
-                        payment_type, request, pay_txn)
-                    try:
-                        del request.session['cart_pk']
-                        del request.session['checkout_type']
-                        request.session.modified = True
-                    except:
-                        pass
-                    return HttpResponseRedirect(return_parameter)
+                    if order:
+                        txn = 'CP%d%s%s' % (
+                            order.pk,
+                            int(time.time()),
+                            request.POST.get('cheque_no'))
+                        pay_txn = PaymentTxn.objects.create(
+                            txn=txn,
+                            order=order,
+                            cart=cart_obj,
+                            status=0,
+                            payment_mode=4,
+                            currency=order.currency,
+                            txn_amount=order.total_incl_tax,
+                            instrument_number=request.POST.get('cheque_no'),
+                            instrument_issuer=request.POST.get('drawn_bank'),
+                            instrument_issue_date=request.POST.get('deposit_date')
+                        )
+                        payment_type = "CHEQUE"
+                        return_parameter = self.process_payment_method(
+                            payment_type, request, pay_txn)
+                        try:
+                            del request.session['cart_pk']
+                            del request.session['checkout_type']
+                            request.session.modified = True
+                        except:
+                            pass
+                        return HttpResponseRedirect(return_parameter)
                 else:
                     return HttpResponseRedirect(reverse('homepage'))
             else:
@@ -128,8 +130,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 context['check_form'] = form
                 return render(request, self.template_name, context)
 
-        else:
-           return HttpResponseRedirect(reverse('cart:cart-product-list'))
+        return HttpResponseRedirect(reverse('cart:cart-product-list'))
 
     def get_context_data(self, **kwargs):
         context = super(PaymentOptionView, self).get_context_data(**kwargs)

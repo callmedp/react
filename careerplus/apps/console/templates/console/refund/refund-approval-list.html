@@ -66,7 +66,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-order" %}" id="list-filter-form">
+                  <form class="form-group" method="GET" action="{% url "console:refund-request-approval" %}" id="list-filter-form">
                        {% for field in filter_form %}
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ field.label }}</label></br>
@@ -226,7 +226,6 @@
 </div>
 <!-- /page content -->
 
-
 {% endblock pagecontent %}
 
         
@@ -236,7 +235,8 @@
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/order-action.js" %}"></script>
+
+  <script type="text/javascript" src="{% static "console/js/refund/refund.js" %}"></script>
 
   <script type="text/javascript">
 
