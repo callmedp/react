@@ -316,7 +316,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pPfin(self, obj):
         Pinr = obj.fake_inr_price
-        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+        if Pinr and obj.type_product == 1 and (obj.is_writing or obj.is_service):
             var = obj.get_variations()
             var_price = None
             for pv in var:
@@ -328,7 +328,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pPfus(self, obj):
         Pusd = obj.fake_usd_price
-        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+        if Pusd and obj.type_product == 1 and (obj.is_writing or obj.is_service):
             var = obj.get_variations()
             var_price = None
             for pv in var:
@@ -340,7 +340,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pPfae(self, obj):
         Paed = obj.fake_aed_price
-        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+        if Paed and obj.type_product == 1 and (obj.is_writing or obj.is_service):
             var = obj.get_variations()
             var_price = None
             for pv in var:
@@ -352,7 +352,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pPfgb(self, obj):
         Pgbp = obj.fake_gbp_price
-        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+        if Pgbp and obj.type_product == 1 and (obj.is_writing or obj.is_service):
             var = obj.get_variations()
             var_price = None
             for pv in var:

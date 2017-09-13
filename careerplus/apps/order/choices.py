@@ -11,11 +11,10 @@ SITE_CHOICES = (
     (1, "Cpcrm"),
 )
 
-
 PAYMENT_MODE = (
     (0, 'Not Paid'),
     (1, 'Cash'),
-    # (2, 'Citrus Pay'),
+    (2, 'Citrus Pay'),
     (3, 'EMI'),
     (4, 'Cheque or Draft'),
     (5, 'CC-Avenue'),
@@ -23,8 +22,8 @@ PAYMENT_MODE = (
     (7, 'CC-Avenue-International'),
     (8, 'Debit Card'),
     (9, 'Credit Card'),
-    (10, 'Net Banking'),
-    (11, 'Emi'),)
+    (10, 'Net Banking'),)
+
 
 OI_OPS_STATUS = (
     # common status 1 - 20
@@ -80,6 +79,10 @@ OI_OPS_STATUS = (
     (142, 'Round one is not expired'),
     (143, 'Round one is expired'),
 
+    # refund flow 161 - 180
+    (161, 'Refund initiated'),
+    (162, 'Refund under progress'),
+    (163, 'Refunded'),
 )
 
 OI_USER_STATUS = (
@@ -137,6 +140,11 @@ OI_USER_STATUS = (
     (142, 'Service is under progress'),
     (143, 'Service has been expired'),
 
+    # refund flow 161 - 180
+    (161, 'Refund initiated'),
+    (162, 'Refund under progress'),
+    (163, 'Refunded'),
+
 )
 
 OI_LINKEDIN_FLOW_STATUS = (
@@ -169,4 +177,35 @@ OI_EMAIL_STATUS = (
     (22, 'Sent Draft Reminder Email'),
     (23, 'Sent Service Closed Email'),
     (24, 'Sent International Profile Updated Email'),
+)
+
+
+REFUND_MODE = (
+    ('select', 'Select Refund Mode'),
+    ('neft', 'NEFT'),
+    ('cheque', 'CHEQUE'),
+    ('dd', 'DD'),
+)
+
+TYPE_REFUND = (
+    ('select', 'Select Refund Type'),
+    ('full', 'Full Refund'),
+    ('partial', 'Partial Refund'),
+)
+
+REFUND_OPS_STATUS = (
+    (0, "Default"),
+    (1, "Ops Head Approval"),
+    (2, "Ops Head Rejected"),
+    (3, "Business Head Approval"),
+    (4, "Business Head Rejected"),
+    (5, "Dept. Head Approval"),
+    (6, "Dept. Head Rejected"),
+    (7, "Finance Approval"),
+    (8, "Refund Approved"),  # show in finance queue to refund
+    (9, "Refund Initiate"),
+    (10, "Refund under progress"),
+    (11, "Refunded"),
+    (12, "Request Updated"),
+    (13, "Cancel Request"),
 )

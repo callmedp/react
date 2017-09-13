@@ -6,7 +6,7 @@ from .choices import STATUS_CHOICES, PAYMENT_MODE
 
 
 class PaymentTxn(AbstractAutoDate):
-    txn = models.CharField(max_length=255, null=True, blank=True, unique=True)
+    txn = models.CharField(max_length=255, null=True, blank=True)
     order = models.ForeignKey(
         'order.Order', related_name='ordertxns',
         verbose_name=("Order"))

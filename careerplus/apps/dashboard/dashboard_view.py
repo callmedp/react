@@ -189,25 +189,25 @@ class DashboardDetailView(TemplateView):
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163])
             elif self.oi.product.type_flow == 2:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163])
 
             elif self.oi.product.type_flow == 3:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 121])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 121, 161, 162, 163])
             elif self.oi.product.type_flow == 4:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 5:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 6:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163])
             elif self.oi.product.type_flow == 7:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 61, 62])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 61, 62, 161, 162, 163])
             elif self.oi.product.type_flow == 8:
-                oi_status_list = [49, 5, 46, 48, 27, 4]
+                oi_status_list = [49, 5, 46, 48, 27, 4, 161, 162, 163]
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=oi_status_list)
             elif self.oi.product.type_flow == 10:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163])
             context.update({
                 "oi": self.oi,
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,

@@ -61,7 +61,7 @@ class DashboardInfo(object):
             days = 6 * 30
             last_dateplaced_date = timezone.now() - datetime.timedelta(days=days)
             orders = Order.objects.filter(
-                status__in=[1, 3],
+                status__in=[0, 1, 3],
                 candidate_id=candidate_id,
                 date_placed__gte=last_dateplaced_date)
 

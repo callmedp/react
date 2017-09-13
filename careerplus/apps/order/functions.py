@@ -7,6 +7,7 @@ from emailers.email import SendMail
 from emailers.sms import SendSMS
 from core.mixins import InvoiceGenerate
 from payment.models import PaymentTxn
+from linkedin.autologin import AutoLogin
 
 def update_initiat_orderitem_sataus(order=None):
     if order:
@@ -164,13 +165,15 @@ def pending_item_email(order=None):
                 if oi.product.type_flow in [1, 3, 4, 5, 12, 13]:
                     to_emails = [oi.order.email]
                     mail_type = "PENDING_ITEMS"
+                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
                     data = {}
                     data.update({
                         'subject': 'To initiate your services fulfil these details',
                         'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                         'type_flow': oi.product.type_flow,
                         'product_name': oi.product.name,
-                        'upload_url': "http://%s/dashboard" % (settings.SITE_DOMAIN) 
+                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+                        'upload_url': "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
@@ -235,11 +238,13 @@ def process_mailer(order=None):
                 mail_type = "PROCESS_MAILERS"
                 data = {}
                 data.update({
-                    'subject': 'Your service details related to order <'+oi.id+'>',
+                    'subject': 'Your service details related to order <'+str(oi.order.id)+'>',
                     'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-                    'type_flow': oi.product.type_flow,
-                    'partner': oi.product.vender.name,
+                    'oi': oi,
                     'pk': oi.pk,
+                    'email': oi.order.email,
+                    'candidateid': oi.order.email,
+                    'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 })
                 try:
                     SendMail().send(to_emails, mail_type, data)

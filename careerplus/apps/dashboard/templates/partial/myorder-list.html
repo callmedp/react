@@ -34,9 +34,7 @@
               <datalist class="col-sm-1">
                 {% if order.status == 1 %}
                     Open
-                {% elif order.status == 0 and order.payment_mode == 1 %}
-                    Unpaid
-                {% elif order.status == 0 and order.payment_mode == 4 %}
+                {% elif order.status == 0 %}
                     Unpaid
                 {% elif order.status == 3 %}
                     Closed
@@ -84,9 +82,11 @@
                   <datalist class="col-sm-3">
                     {% if obj.oi_status == 4 %}
                         Closed
-                    {% elif order.status == 0 and order.payment_mode == 1 %}
+                    {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                      {{obj.get_user_oi_status}}
+                    {% elif order.status == 0 %}
                         Unpaid
-                    {% elif order.status == 0 and order.payment_mode == 4 %}
+                    {% elif order.status == 0 %}
                         Unpaid
                     {% elif order.status == 1 %}
                         Service in progress

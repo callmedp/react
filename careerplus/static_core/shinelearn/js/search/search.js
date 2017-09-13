@@ -1,21 +1,23 @@
 function filterquery(type) {
+    var $formFacets = $('#form_facets');
     if (type != undefined) {
-        $('#form_facets').find('input[name='+type+']').removeAttr('checked');
+        $formFacets.find('input[name='+type+']').removeAttr('checked');
     }
-    $('#form_facets').find('input').removeAttr('disabled', 'disabled');
+    $formFacets.find('input').removeAttr('disabled', 'disabled');
+    //TODO: uncomment below code when non existing attribute handling is done in solr.
+    // $formFacets.find('.js_filter_sxn').each(function () {
+    //     var totalInputs = $(this).find('input').length;
+    //     var checkedInputs = $(this).find('input:checked').length;
+    //     if (checkedInputs == totalInputs) {
+    //         $(this).find('input').each(function() {
+    //            $(this).attr('name', 'ign_'+ $(this).attr('name'));
+    //         });
+    //     }
+    // });
     $('#id_page').val(1);
     $('#id_rstart').val(1);
-    $('#form_facets').submit();
+    $formFacets.submit();
 }
-
-$("#load-id").click(function(){
-    load_page(
-        "/myapp/mymodels/",
-        "#pagination-id",
-        "#load-id",
-        "#pagediv-id"
-      );
-});
 
 function paginate() {
     $('.cls_load_more').click(function(e){
@@ -58,11 +60,9 @@ function SearchFilter() {
         var $formFacets = $('#form_facets');
         $formFacets.find('input#' + $(this).attr('hdn')).val($(this).val());
         $formFacets.find('input').removeAttr('disabled', 'disabled');
-        const query = new URLSearchParams(window.location.search);
-        query[$(this).attr('name')] = $(this).val();
         $('#id_page').val(1);
         $('#id_rstart').val(1);
-        $('#form_facets').submit();
+        $formFacets.submit();
     });
     $(document).on('click', '.js_apply_filter', function () {
         filterquery();

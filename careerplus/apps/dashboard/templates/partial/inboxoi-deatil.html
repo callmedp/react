@@ -118,7 +118,7 @@
                             {% endif %}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
-                          {% if op.oi_status == 2 and not oi.oi_resume %}
+                          {% if oi.oi_status == 2 %}
                           <a href="#">Upload Resume</a>
                           {% elif op.oi_status == 24 %}
                               <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
@@ -172,7 +172,7 @@
 
                           {% if op.oi_draft %}
                               <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
-                          {% elif op.oi_status and not oi.oi_resume %}
+                          {% elif oi.oi_status == 2 %}
                               <a href="#" >Upload Resume</a>
                           {% endif %}
                         </datalist>
@@ -206,7 +206,7 @@
                             {{op.get_user_oi_status}}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
-                          {% if op.oi_status == 2 and not oi.oi_resume %}
+                          {% if oi.oi_status == 2 and not oi.oi_resume %}
                               <a href="#">Upload Resume</a>
                           {% elif op.oi_status == 6 %}
                               <a href="#">Download Credential</a>
@@ -225,7 +225,7 @@
                             {{op.get_user_oi_status}}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
-                          {% if op.oi_status == 2 and not oi.oi_resume %}
+                          {% if oi.oi_status == 2 and not oi.oi_resume %}
                               <a href="#">Upload Resume</a>
                           {% endif %}
                         </datalist>

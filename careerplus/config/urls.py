@@ -24,9 +24,11 @@ from homepage.views import HomePageView
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 from users.views import LinkedinCallbackView
+from search.views import FuncAreaPageView
 
 urlpatterns = []
 
+# Product Detail URLs
 urlpatterns += [
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
@@ -38,6 +40,9 @@ urlpatterns += [
         ProductDetailView.as_view(), name='other-detail'),
 ]
 
+urlpatterns += [
+    url(r'^(?P<fa_slug>[-\w]+)-courses/(?P<pk>\d+)/$', FuncAreaPageView.as_view(), name='func_area_results'),
+]
 urlpatterns += [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/',

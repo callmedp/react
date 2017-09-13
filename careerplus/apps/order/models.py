@@ -1,20 +1,34 @@
+from decimal import Decimal
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from seo.models import AbstractAutoDate
-from geolocation.models import Country
+from geolocation.models import Country, CURRENCY_SYMBOL
 from linkedin.models import Draft
 
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
-    OI_USER_STATUS, OI_EMAIL_STATUS
+    OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
+    TYPE_REFUND
 from .functions import get_upload_path_order_invoice
 
 
 class Order(AbstractAutoDate):
+    co_id = models.IntegerField(
+        _('CP Order'),
+        blank=True,
+        null=True,
+        editable=False)
+    archive_json = models.TextField(
+        _('Archive JSON'),
+        blank=True,
+        editable=False
+        )
+    
     number = models.CharField(
-        _("Order number"), max_length=128, db_index=True, unique=True)
+        _("Order number"), max_length=128, db_index=True)
 
     site = models.PositiveSmallIntegerField(default=0, choices=SITE_CHOICES)
 
@@ -27,13 +41,17 @@ class Order(AbstractAutoDate):
 
     status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
 
-    currency = models.CharField(
-        _("Currency"), max_length=12, null=True, blank=True)
+    currency = models.PositiveIntegerField(
+        _("Currency"), choices=CURRENCY_SYMBOL, default=0)
 
     total_incl_tax = models.DecimalField(
-        _("Order total (inc. tax)"), decimal_places=2, max_digits=12, default=0)
+        _("Payable Amount (inc. tax)"),
+        decimal_places=2, max_digits=12, default=0)
     total_excl_tax = models.DecimalField(
-        _("Order total (excl. tax)"), decimal_places=2, max_digits=12, default=0)
+        _("Total Amount (excl. tax excl. Point)"),
+        decimal_places=2, max_digits=12, default=0)
+    conv_charge = models.DecimalField(
+        _("Convienance Charges"), decimal_places=2, max_digits=12, default=0)
 
     tax_config = models.CharField(max_length=255, null=True, blank=True)
 
@@ -63,7 +81,7 @@ class Order(AbstractAutoDate):
     pincode = models.CharField(max_length=15, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.CharField(max_length=200, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True)
 
     # welcome call done or not
     welcome_call_done = models.BooleanField(default=False)
@@ -90,7 +108,7 @@ class Order(AbstractAutoDate):
             ("can_show_order_queue", "Can Show Order Queue"),
             ("can_show_all_order", "Can View All Orders"),
             ("can_show_paid_order", "Can View Only Paid Orders"),
-
+            
             # welcome call permission
             ("can_show_welcome_queue", "Can Show Welcome Queue"),
 
@@ -99,7 +117,6 @@ class Order(AbstractAutoDate):
 
             # order Action permissions
             ("can_mark_order_as_paid", "Can Mark Order As Paid"),
-
         )
 
     def __str__(self):
@@ -120,6 +137,17 @@ class Order(AbstractAutoDate):
 
 
 class OrderItem(AbstractAutoDate):
+    coi_id = models.IntegerField(
+        _('CP Order'),
+        blank=True,
+        null=True,
+        editable=False)
+    archive_json = models.TextField(
+        _('Archive JSON'),
+        blank=True,
+        editable=False
+        )
+    
     order = models.ForeignKey(
         'order.Order', related_name='orderitems', verbose_name=_("Order"))
 
@@ -147,17 +175,12 @@ class OrderItem(AbstractAutoDate):
         blank=True)
 
     delivery_price_incl_tax = models.DecimalField(
-        _("Delivery Price (incl. tax)"),
+        _("Delivery Price (incl. tax excl Discount)"),
         decimal_places=2, max_digits=12, default=0)
 
     delivery_price_excl_tax = models.DecimalField(
-        _("Delivery Price (excl. tax)"),
+        _("Delivery Price (site price)"),
         decimal_places=2, max_digits=12, default=0)
-
-    oi_price_incl_tax = models.DecimalField(
-        _("Price (inc. tax)"), decimal_places=2, max_digits=12, default=0)
-    oi_price_excl_tax = models.DecimalField(
-        _("Price (excl. tax)"), decimal_places=2, max_digits=12, default=0)
 
     # Price information before discounts are applied
     oi_price_before_discounts_incl_tax = models.DecimalField(
@@ -167,20 +190,28 @@ class OrderItem(AbstractAutoDate):
         _("Price before discounts (excl. tax)"),
         decimal_places=2, max_digits=12, default=0)
 
-    # Normal site price for item (without discounts)
-    unit_price_incl_tax = models.DecimalField(
-        _("Unit Price (inc. tax)"), decimal_places=2, max_digits=12,
-        blank=True, null=True)
-    unit_price_excl_tax = models.DecimalField(
-        _("Unit Price (excl. tax)"), decimal_places=2, max_digits=12,
-        blank=True, null=True)
+    # price fields
+    cost_price = models.DecimalField(
+        _("Price before discounts (Site Price)"),
+        decimal_places=2, max_digits=12, default=0)
+    selling_price = models.DecimalField(
+        _("Selling Price (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+
+    tax_amount = models.DecimalField(
+        _("tax amount"),
+        decimal_places=2, max_digits=12, default=0)
+
+    discount_amount = models.DecimalField(
+        _("Total Discount (incl. Wallet)"),
+        decimal_places=2, max_digits=12, default=0)
 
     no_process = models.BooleanField(default=False)
     is_combo = models.BooleanField(default=False)
     is_variation = models.BooleanField(default=False)
     is_addon = models.BooleanField(default=False)
 
-    #counselling form status
+    # counselling form status
     oi_flow_status = models.PositiveSmallIntegerField(
         default=0, choices=OI_LINKEDIN_FLOW_STATUS)
     # operation fields
@@ -361,6 +392,11 @@ class OrderItem(AbstractAutoDate):
     def get_test_obj(self):
         return self
 
+    def get_refund_amount(self):
+        refund_amount = Decimal(0)
+        refund_amount += self.selling_price
+        refund_amount += self.delivery_price_incl_tax
+        return refund_amount
 
 
 class OrderItemOperation(AbstractAutoDate):
@@ -442,6 +478,7 @@ class EmailOrderItemOperation(AbstractAutoDate):
     class Meta:
         ordering = ['created']
 
+
 class CouponOrder(AbstractAutoDate):
     order = models.ForeignKey(Order)
     coupon = models.ForeignKey(
@@ -454,3 +491,101 @@ class CouponOrder(AbstractAutoDate):
 
     value = models.DecimalField(
         _("Value"), max_digits=8, decimal_places=2, default=0.0)
+
+
+class RefundRequest(AbstractAutoDate):
+    order = models.ForeignKey(
+        'order.Order', verbose_name=_("Order"))
+
+    message = models.TextField()
+
+    document = models.FileField(
+        max_length=255, upload_to='refund/refund_request/',
+        null=True, blank=True)
+
+    # assigened_group = models.ForeignKey(Group, null=True, blank=True)
+    # last_assigned_group = models.ForeignKey(Group, null=True, blank=True)
+
+    status = models.PositiveIntegerField(
+        _("Status"), default=0, choices=REFUND_OPS_STATUS)
+    last_status = models.PositiveIntegerField(
+        _("Last Status"), default=0, choices=REFUND_OPS_STATUS)
+
+    refund_mode = models.CharField(
+        max_length=255, default='select',
+        choices=REFUND_MODE)
+    currency = models.CharField(max_length=255, blank=True, null=True)
+    refund_amount = models.DecimalField(
+        _("Refund Amount (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+    txn_no = models.CharField(
+        max_length=255,
+        blank=True, null=True,
+        help_text=_(
+            'transaction no. in case of neft and serial no. in case cheque/dd'))
+    added_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='refund_request_added_by',
+        null=True, blank=True)
+
+    refund_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        app_label = 'order'
+        ordering = ('-modified', )
+        permissions = (
+            ("can_view_refund_request_queue", "Can View Refund Request Queue"),
+            ("can_view_refund_approval_queue", "Can View Refund Approval Queue"),
+        )
+
+    def __str__(self):
+        return 'Order number %s and request id %s' % (
+            self.order.number, self.id)
+
+    def get_status(self):
+        status_dict = dict(REFUND_OPS_STATUS)
+        return status_dict.get(self.status)
+
+
+class RefundItem(AbstractAutoDate):
+    refund_request = models.ForeignKey('order.RefundRequest')
+    oi = models.ForeignKey(
+        'order.OrderItem', on_delete=models.SET_NULL,
+        related_name='refund_items',
+        null=True, blank=True)
+    type_refund = models.CharField(
+        max_length=255, default='select',
+        choices=TYPE_REFUND)
+    amount = models.DecimalField(
+        _("Amount (incl. tax)"),
+        decimal_places=2, max_digits=12, default=0)
+
+    def get_type_refund(self):
+        type_refund_dict = dict(TYPE_REFUND)
+        return type_refund_dict.get(self.type_refund)
+
+
+class RefundOperation(AbstractAutoDate):
+    refund_request = models.ForeignKey(RefundRequest)
+    status = models.PositiveIntegerField(
+        _("Status"), default=0, choices=REFUND_OPS_STATUS)
+    last_status = models.PositiveIntegerField(
+        _("Last Status"), default=0, choices=REFUND_OPS_STATUS)
+
+    message = models.TextField()
+
+    document = models.FileField(
+        max_length=255, upload_to='refund/refund_ops/', null=True, blank=True)
+
+    added_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='refund_ops_added_by',
+        null=True, blank=True)
+
+    def get_status(self):
+        statusD = dict(REFUND_OPS_STATUS)
+        return statusD.get(self.status)
+
+    def get_last_status(self):
+        statusD = dict(REFUND_OPS_STATUS)
+        return statusD.get(self.last_status)

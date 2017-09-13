@@ -357,8 +357,8 @@ class AttributeOptionGroup(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('Attribute option group')
-        verbose_name_plural = _('Attribute option groups')
+        verbose_name = _('Attribute Option Group')
+        verbose_name_plural = _('Attribute Option Groups')
         
 
 
