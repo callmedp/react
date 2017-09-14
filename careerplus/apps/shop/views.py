@@ -1,5 +1,6 @@
 import json
 from collections import OrderedDict
+from decimal import Decimal
 from django.core.paginator import Paginator
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
@@ -19,6 +20,16 @@ from review.models import Review
 
 
 class ProductInformationMixin(object):
+
+    def get_solar_fakeprice(self, inr_price, fake_inr_price):
+        if inr_price:
+            inr_price = inr_price
+            fake_inr_price = fake_inr_price
+            if fake_inr_price > Decimal('0.00'):
+                diff = float(fake_inr_price) - float(inr_price)
+                percent_diff = round((diff / float(fake_inr_price)) * 100, 0)
+                return (round(fake_inr_price, 0), percent_diff)
+        return None
 
     def get_breadcrumbs(self, product, category):
         breadcrumbs = []
@@ -295,7 +306,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.product_obj
-        ctx.update(self.get_breadcrumbs(product, self.category))
+        if product:
+            ctx.update(self.get_breadcrumbs(product, self.category))
         ctx.update(self.solar_info(self.sqs))
         ctx.update(self.solar_program_structure(self.sqs))
         ctx.update(self.solar_faq(self.sqs))
@@ -317,9 +329,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             ctx.update(json.loads(self.sqs.pCmbs))
 
         ctx.update(json.loads(self.sqs.pFBT))
+        percent_dif = self.get_solar_fakeprice(self.sqs.pPinb, self.sqs.pPfinb)
         # ctx.update(self.getSelectedProduct(product))
         # ctx.update(self.getSelectedProductPrice(product))
         ctx.update({'sqs':self.sqs})
+        ctx.update({'percent_diff':percent_dif})
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
@@ -346,8 +360,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             self.sqs = sqs[0]
         except Exception as e:
             raise Http404
-
-        self.product_obj = Product.objects.get(pk=pk)
+        try:
+            self.product_obj = Product.objects.get(pk=pk)
+        except Exception as e:
+            pass
         if self.product_obj:
             self.category = self.product_obj.verify_category(kwargs.get('cat_slug', None))
         HTTP404 = self.return_http404(sqs)

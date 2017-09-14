@@ -55,7 +55,6 @@ class Command(BaseCommand):
                 ON ( cart_orderitem.order_id = cart_order.id ) WHERE cart_order.added_on >= '2014-04-01 00:00:00'  
                 ORDER BY cart_orderitem.added_on DESC
                 """
-        import ipdb;ipdb.set_trace()
         oi_df = pd.read_sql(sql,con=db)
                 
         new_order_df = pd.read_sql('SELECT id AS order_obj, co_id as order_id  from order_order', con=db2)
