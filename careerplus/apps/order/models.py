@@ -135,6 +135,10 @@ class Order(AbstractAutoDate):
     def get_txns(self):
         return self.ordertxns.all()
 
+    def get_currency(self):
+        currency_dict = dict(CURRENCY_SYMBOL)
+        return currency_dict.get(self.currency)
+
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(

@@ -136,8 +136,6 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
         except:
             pass
 
-
-
         try:
             if self.status != -1:
                 queryset = queryset.filter(status=self.status)
@@ -164,7 +162,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
                 start = start_date.strftime("%d/%m/%Y")
                 end = end_date.strftime("%d/%m/%Y")
 
-                self.created = start + '-' + end
+                self.created = start + ' - ' + end
         except:
             pass
 
@@ -257,7 +255,7 @@ class RefundOrderRequestView(ListView, PaginationMixin):
                 start = start_date.strftime("%d/%m/%Y")
                 end = end_date.strftime("%d/%m/%Y")
 
-                self.created = start + '-' + end
+                self.created = start + ' - ' + end
         except:
             pass
 
@@ -894,6 +892,12 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                         }
                         refundedit_items.append(data_dict)
 
+            if not refundedit_items:
+                messages.add_message(
+                    self.request,
+                    messages.ERROR,
+                    'This order is already refunded or there is no item to refund.')
+                return context
             context.update({
                 "order": order,
                 "refundedit_items": refundedit_items,

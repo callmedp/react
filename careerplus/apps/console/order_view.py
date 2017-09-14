@@ -60,7 +60,6 @@ class OrderListView(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
         self.status = request.GET.get('status', -1)
-
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1331,7 +1330,6 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                     order__payment_date__range=[start_date, end_date])
         except:
             pass
-
 
         try:
             if self.modified:

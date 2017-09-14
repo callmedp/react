@@ -367,11 +367,12 @@ class CartMixin(object):
             cart_pk = request.session.get('cart_pk')
 
             if cart_pk:
+
                 course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
                 cart_obj = Cart.objects.get(pk=cart_pk)
                 total_count += cart_obj.lineitems.all().count()
                 total_count -= cart_obj.lineitems.filter(
-                    parent=None, product_class__in=course_classes,
+                    parent=None, product__product_class__in=course_classes,
                     no_process=True).count()
                 
         except Exception as e:
