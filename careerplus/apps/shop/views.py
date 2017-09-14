@@ -74,7 +74,7 @@ class ProductInformationMixin(object):
         info['prd_vendor'] = product.vendor.name
         info['prd_vendor_img'] = product.vendor.image.url
         info['prd_vendor_img_alt'] = product.vendor.image_alt
-        info['prd_rating_star'] = product.get_ratings()
+        info['prd_rating_star'] = product.pStar
         info['prd_video'] = product.video_url
         if product.is_course:
             info['prd_service'] = 'course'
@@ -329,11 +329,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             ctx.update(json.loads(self.sqs.pCmbs))
 
         ctx.update(json.loads(self.sqs.pFBT))
-        percent_dif = self.get_solar_fakeprice(self.sqs.pPinb, self.sqs.pPfinb)
+        get_fakeprice = self.get_solar_fakeprice(self.sqs.pPinb, self.sqs.pPfinb)
         # ctx.update(self.getSelectedProduct(product))
         # ctx.update(self.getSelectedProductPrice(product))
         ctx.update({'sqs':self.sqs})
-        ctx.update({'percent_diff':percent_dif})
+        ctx.update({'get_fakeprice':get_fakeprice})
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
@@ -355,7 +355,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
         sqs = SearchQuerySet().filter(id=pk)
-
         try:
             self.sqs = sqs[0]
         except Exception as e:

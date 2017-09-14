@@ -36,28 +36,6 @@
         <h1 class="heading-back w100fl pb-0">{{prd_H1}}</h1>
         <div class="clearfix"></div>
         {% include "shop/partials/packagediv.html" %}
-        <!--<div class="detail-wrap">
-            <div class="provided-by">
-                <div class="media">         
-                    <figure class="media-left">
-                      <span><img src=""></span>
-                    </figure>
-                    <div class="media-body rel">
-                        <p class="pb-0">Provided by</p>
-                        <a href="#"></a>
-                        <p class="pb-0">Starting at <strong>Rs. /-</strong></p>
-                    </div>  
-                </div>
-            </div>
-            <div class="select-provider">
-                <div class="form-control sidebar-secondary-trigger">
-                    Select other provider
-                </div>
-            </div>
-        </div>-->
-        <!-- Course detail header Ends here -->
-        <!-- Search listing tagging starts here -->
-        <!-- Search listing tagging ends here -->
     </header><!-- header ends here -->    
 {% endblock header %}
 
@@ -153,18 +131,15 @@
                 <ul class="underline mt-30">
                 {% for provider in pop_list|slice:"0:4" %}
                     <li>
-                        <input type="checkbox" id="test1">
-                        <label for="test1">
-                            <span><img src="{{provider.vendor.image.url}}">{{provider.vendor}}</span>
-                        </label>
+                        <a href="{{provider.url}}" for="test1">
+                            <span>
+                                <img src="{{provider.vendor.image.url}}">
+                                {{provider.vendor}}
+                            </span>
+                        </a>
                     </li>
                 {% endfor %}
                 </ul>
-                <div class="bottom-btn">
-                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center">
-                        DONE
-                    </a>
-                </div>
             </div>
         </div>
     {% else %}
@@ -175,17 +150,12 @@
         <ul class="underline">
         {% for package in pop_list|slice:"0:4"  %}
             <li>
-                <input type="checkbox" id="test1 ">
-                <label for="test1 ">
-                    <p class="fs-12 c9 pb-0">Experience</p>
-                    <p class="blue-link pb-0"><strong></strong></p>
-                </label>
+                <a href="{{package.url}}" class="blue-link pb-0">
+                    <strong>{{package.experience}}</strong>
+                </a>
             </li>
         {% endfor %}
         </ul>
-        <div class="bottom-btn">
-            <a href="#" class="btn-slg btn-blue btn-round w100fl text-center">DONE</a>
-        </div>
       </div>
     </div><!-- Other packages ends here -->
     {% endif %}
