@@ -19,11 +19,11 @@
                 {% elif obj.oi_status == 26 and obj.draft_counter %}
                     <p><strong>Status:</strong> Modifications requested</p>
                 {% elif obj.oi_status == 24 and obj.draft_counter == 1 %}
-                    <p><strong>Status:</strong> Document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Document is ready - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
                 {% elif obj.oi_status == 24 and obj.draft_counter < max_draft_limit %}
-                    <p><strong>Status:</strong> Revised Document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Revised Document is ready - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
                 {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
-                    <p><strong>Status:</strong> Final Document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Final Document is ready - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
                 {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
                     <p><strong>Status:</strong> Service has been processed and Document is finalized - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
@@ -45,15 +45,15 @@
                 {% elif obj.oi_status == 48 and obj.draft_counter %}
                     <p><strong>Status:</strong> Modifications requested</p>
                 {% elif obj.oi_status == 46 and obj.draft_counter == 1 %}
-                    <p><strong>Status:</strong> Document is ready - <a href="#" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Document is ready - <a href="#" download>Download</a></p>
 
                 {% elif obj.oi_status == 46 and obj.draft_counter < max_draft_limit %}
-                    <p><strong>Status:</strong> Revised Document is ready - <a href="#" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Revised Document is ready - <a href="#" download>Download</a></p>
                 {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
-                    <p><strong>Status:</strong> Final Document is ready - <a href="#" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Final Document is ready - <a href="#" download>Download</a></p>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
-                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a href="#" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a href="#" download>Download</a></p>
 
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
@@ -66,7 +66,7 @@
                 {% if obj.oi_status == 2 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#" class="sidebar-secondary-trigger">Upload Resume</a></p>
                 {% elif obj.oi_status == 4 %}
-                    <p><strong>Status:</strong> Service has been processed and Final document is ready - <a href="{{obj.oi_draft.url}}" download>Dwonload</a></p>
+                    <p><strong>Status:</strong> Service has been processed and Final document is ready - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% else %}

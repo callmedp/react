@@ -1,5 +1,6 @@
 function openCommentBox(article_id) {
     if (article_id){
+        $('#total_comment' + article_id).prop('disable', true);
         $.ajax({
             url: '/article/show-comment-box/?art_id=' + article_id,
             dataType: 'html',
@@ -19,6 +20,7 @@ function openCommentBox(article_id) {
 
 function loadMoreComment(article_id) {
     if (article_id){
+        $('#comment_load_more' + article_id).prop('disable', true);
         var formData = $("#loadform" + article_id).serialize();
         $.ajax({
             url: '/article/load-more-comment/',

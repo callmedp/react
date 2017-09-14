@@ -61,7 +61,6 @@ class OrderListView(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
         self.status = request.GET.get('status', -1)
-
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -366,40 +365,6 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                             assigned_to=writer,
                             user=request.user,
                             data={})
-
-                        # for obj in orderitem_objs:
-                        #     obj.assigned_to = writer
-                        #     obj.assigned_by = request.user
-                        #     obj.save()
-
-                        #     # mail to user about writer information
-                        #     to_emails = [obj.order.email]
-                        #     mail_type = 'ASSIGNMENT_ACTION'
-                        #     data = {}
-                        #     data.update({
-                        #         "name": obj.order.first_name + ' ' + obj.order.last_name,
-                        #         "writer_name": writer.name,
-                        #         "writer_email": writer.email,
-                        #         "writer_mobile": writer.contact_number,
-                        #         "mobile": obj.order.mobile
-                        #     })
-
-                        #     try:
-                        #         SendMail().send(to_emails, mail_type, data)
-                        #     except Exception as e:
-                        #         logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                        #     try:
-                        #         SendSMS().send(sms_type=mail_type, data=data)
-                        #     except Exception as e:
-                        #         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                        #     obj.orderitemoperation_set.create(
-                        #         oi_status=1,
-                        #         last_oi_status=obj.oi_status,
-                        #         assigned_to=obj.assigned_to,
-                        #         added_by=request.user
-                        #     )
 
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
@@ -1366,7 +1331,6 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                     order__payment_date__range=[start_date, end_date])
         except:
             pass
-
 
         try:
             if self.modified:

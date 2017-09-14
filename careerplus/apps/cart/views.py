@@ -18,11 +18,12 @@ from shine.core import ShineCandidateDetail
 from shop.models import Product, ProductClass
 from users.mixins import RegistrationLoginApi, UserMixin
 from console.decorators import Decorate, stop_browser_cache
+from wallet.models import Wallet
+from geolocation.models import Country
 
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
-from wallet.models import Wallet
 
 
 @Decorate(stop_browser_cache())
@@ -277,8 +278,12 @@ class PaymentShippingView(UpdateView, CartMixin):
                 'country_code': '91'})
 
         if not form.initial.get('country'):
+            try:
+                initial_country = Country.objects.get(phone='91', active=True)
+            except:
+                initial_country = None
             form.initial.update({
-                'country': 'India'})
+                'country': initial_country})
 
         return context
 

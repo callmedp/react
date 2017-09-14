@@ -48,8 +48,8 @@ class Command(BaseCommand):
                 cart_order.extra_info, theme_country.country_code as code2,  
                 cart_order.order_mobile,  
                 cart_order.flat_discount, cart_order.invoice_file,
-                cart_order.wallettransaction,
-                cart_order.wallettransaction_redeem,
+                cart_order.wallettransaction_id,
+                cart_order.wallettransaction_redeem_id,
                 cart_order.wallet_cashback
 
                 FROM cart_order 
@@ -293,16 +293,16 @@ class Command(BaseCommand):
                 print( 'Bulk Insert Txns' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 
-                #cursor.executemany(update_sql2, update_values)
+                cursor.executemany(update_sql2, update_values)
                 update_values = []
                 
         if update_values:
-            #cursor.executemany(update_sql2, update_values)
+            cursor.executemany(update_sql2, update_values)
             update_values = []
         
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print( 'Migrating Wallet Transactions')
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        # print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        # print( 'Migrating Wallet Transactions')
+        # print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
 
         # update_sql2 = """INSERT INTO payment_paymenttxn (created, modified, txn, status, payment_mode, payment_date,
@@ -332,11 +332,11 @@ class Command(BaseCommand):
         #         print( 'Bulk Insert Txns' + str(i))
         #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 
-        #         #cursor.executemany(update_sql2, update_values)
+        #         cursor.executemany(update_sql2, update_values)
         #         update_values = []
                 
         # if update_values:
-        #     #cursor.executemany(update_sql2, update_values)
+        #     cursor.executemany(update_sql2, update_values)
         #     update_values = []
         
         db.close()

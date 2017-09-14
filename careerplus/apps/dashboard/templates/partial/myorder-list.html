@@ -42,10 +42,10 @@
 
               </datalist>
               <datalist class="col-sm-2">
-                <strong>{{item_count}} item</strong>
+                <strong>{{item_count}} {% if item_count > 1 %}items{% else %}item{% endif %}</strong>
               </datalist>
               <datalist class="col-sm-2">
-                <strong>{% if order.currency %}{{order.currency}}{% else %}Rs.{% endif %}{{order.total_incl_tax}}/-</strong>
+                <strong>{{order.get_currency}} {{order.total_incl_tax}}/-</strong>
               </datalist>
               <datalist class="col-sm-2">
                 {% if order.status == 1 or order.status == 3 %}

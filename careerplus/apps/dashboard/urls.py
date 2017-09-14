@@ -41,6 +41,10 @@ urlpatterns += [
         dashboard_view.DashboardMyorderView.as_view(),
         name='dashboard-myorder'),
 
+    url(r'^mywallet/$',
+        dashboard_view.DashboardMyWalletView.as_view(),
+        name='dashboard-mywallet'),
+
     # ajax call
     url(r'^inbox-detail/$',
         dashboard_view.DashboardDetailView.as_view(),
