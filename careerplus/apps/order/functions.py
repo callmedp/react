@@ -189,7 +189,7 @@ def pending_item_email(order=None):
                         'subject': 'To initiate your services fulfil these details',
                         'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                         'type_flow': oi.product.type_flow,
-                        'counselling_form': "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk) 
+                        'counselling_form': "http://%s/linkdin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk) 
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
@@ -233,23 +233,61 @@ def process_mailer(order=None):
     if order.status == 1:
         orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
         for oi in orderitems:
+            data = {}
+            to_emails = [oi.order.email]
+            mail_type = "PROCESS_MAILERS"
+            data['subject'] = 'Your service details related to order <'+str(oi.order.id)+'>'
+            data['username'] = oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+            token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
             try:
-                to_emails = [oi.order.email]
-                mail_type = "PROCESS_MAILERS"
-                data = {}
-                data.update({
-                    'subject': 'Your service details related to order <'+str(oi.order.id)+'>',
-                    'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-                    'oi': oi,
-                    'pk': oi.pk,
-                    'email': oi.order.email,
-                    'candidateid': oi.order.email,
-                    'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
-                })
-                try:
-                    SendMail().send(to_emails, mail_type, data)
-                except Exception as e:
-                    logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                if oi.product.type_flow == [1, 3]:
+                    to_emails = [oi.order.email]
+                    mail_type = "PROCESS_MAILERS"
+                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
+                    data = {}
+                    data.update({
+                        'oi': oi,
+                        'pk': oi.pk,
+                        'upload_url': "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                elif oi.product.type_flow == [2, 6]:
+                    data.update({
+                        'oi': oi,
+                        'pk': oi.pk,
+                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                elif oi.product.type_flow == 8:
+                    data.update({
+                        'oi': oi,
+                        'pk': oi.pk,
+                        'counselling_form': "http://%s/linkdin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk),
+                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                elif oi.product.type_flow == 9:
+                    data.update({
+                        'oi': oi,
+                        'pk': oi.pk,
+                        'complete_profile': "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN),
+                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+
             except Exception as e:
                 raise e
 
