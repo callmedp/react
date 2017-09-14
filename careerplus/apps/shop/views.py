@@ -306,14 +306,27 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         else:
             ctx.update(json.loads(self.sqs.pPOP))
         if self.sqs.pTP == 1:
-            ctx.update(json.loads(self.sqs.pVrs))
-        if self.is_combos(self.sqs):
+            pvrs_data = json.loads(self.sqs.pVrs)
+            try:
+                selected_var = pvrs_data['var_list'][0]
+            except Exception as e:
+                selected_var = None
+            ctx.update({'selected_var':selected_var})
+            ctx.update(pvrs_data)
+        if self.is_combos(self.sqs): 
             ctx.update(json.loads(self.sqs.pCmbs))
+
         ctx.update(json.loads(self.sqs.pFBT))
-        ctx.update(self.getSelectedProduct(product))
-        ctx.update(self.getSelectedProductPrice(product))
+        # ctx.update(self.getSelectedProduct(product))
+        # ctx.update(self.getSelectedProductPrice(product))
         ctx.update({'sqs':self.sqs})
         return ctx
+
+    def redirect_if_necessary(self, current_path, product):
+        if self._enforce_paths:
+            expected_path = product.pURL
+            if expected_path != urlquote(current_path):
+                return HttpResponsePermanentRedirect(expected_path)
 
     # def send_signal(self, request, response, product):
     #     self.view_signal.send(
@@ -328,13 +341,23 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
         sqs = SearchQuerySet().filter(id=pk)
-        self.sqs = sqs[0]
+
+        try:
+            self.sqs = sqs[0]
+        except Exception as e:
+            raise Http404
+
         self.product_obj = Product.objects.get(pk=pk)
         if self.product_obj:
             self.category = self.product_obj.verify_category(kwargs.get('cat_slug', None))
         HTTP404 = self.return_http404(sqs)
+
         if HTTP404:
             raise Http404
+
+        redirection = self.redirect_if_necessary(request.path, self.sqs)
+        if redirection is not None:
+            return redirection
         response = super(ProductDetailView, self).get(request, **kwargs)
         # self.send_signal(request, response, product)
         return response

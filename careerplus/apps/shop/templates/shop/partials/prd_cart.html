@@ -11,7 +11,9 @@
   <!-- right fixed content start -->
   <div id="price-box" class="col-sm-5 col-md-4  price-box">
   <div class="box-panel enrol-cart">
-     <strong id="total-price" name="price_total" sum-price="{% if selected_products %}{{product_total_price}}{% elif selected_var %}{{selected_var.get_price}}{% else %}{{object.get_price}} {% endif %}" >Rs. {% if selected_products %}{{product_total_price}}{% elif selected_var %}{{selected_var.get_price}}{% else %}{{object.get_price}} {% endif %}/-</strong>
+     <strong id="total-price" name="price_total" sum-price="{% if selected_products %}{{product_total_price}}{% elif selected_var %}{{selected_var.get_price}}{% else %}{{object.get_price}} {% endif %}" >Rs. {% if selected_products %}{{product_total_price}}{% elif selected_var %}
+     {{var_list.0.inr_price}}{% else %}
+     {{sqs.pPinb}} {% endif %}/-</strong>
 
     
     {% if fake_total or selected_var.get_fakeprice or object.get_fakeprice %}
