@@ -496,6 +496,8 @@ class ApproveDraftByLinkedinAdmin(View):
                             
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
+                            linkedin=obj.oio_linkedin,
+                            draft_counter=obj.draft_counter,
                             oi_status=46,
                             last_oi_status=last_status,
                             assigned_to=obj.assigned_to,
@@ -508,6 +510,8 @@ class ApproveDraftByLinkedinAdmin(View):
                             added_by=request.user)
                     else:
                         obj.orderitemoperation_set.create(
+                            linkedin=obj.oio_linkedin,
+                            draft_counter=obj.draft_counter,
                             oi_status=obj.oi_status,
                             last_oi_status=last_status,
                             assigned_to=obj.assigned_to,
