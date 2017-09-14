@@ -29,9 +29,9 @@
 
     <!-- left content start -->
       <div class="col-sm-3 dashboard-tab">
-        <a href="dashboard-inbox.html"><span class="inbox-icon"></span> Inbox</a>
-        <a href="dashboard-orders.html"><span class="orders-icon"></span> My orders</a>
-        <a href="dashboard-wallet.html"><span class="wallet-icon"></span> My wallet</a>
+        <a href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
+        <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
+        <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
         <a class="active" href="dashboard-roundone.html"><span class="referal-icon"></span> Referral</a>
         <div class="please-call">
           Please call us at <strong>0120-4959420/32</strong> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.

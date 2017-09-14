@@ -14,7 +14,7 @@ $(function(){
             });
 
             if (selected.length > 0){
-            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected  '+ selected.length +' order items to do action' + ' ?</div>');
+            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected '+ selected.length +' order items to do action' + ' ?</div>');
                 $('#action_inbox').show();
                 $('#actionModal').modal("show");
             }

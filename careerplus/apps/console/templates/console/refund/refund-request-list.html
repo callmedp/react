@@ -70,7 +70,7 @@
     <div class="row top_tiles">
 
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter Order</button>
+        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter Request</button>
       </div>
       <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -82,7 +82,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-order" %}" id="list-filter-form">
+                  <form class="form-group" method="GET" action="{% url "console:refund-request" %}" id="list-filter-form">
                       {% for field in filter_form %}
                       <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ field.label }}</label></br>
@@ -277,6 +277,7 @@
               format: 'DD/MM/YYYY',
               cancelLabel: 'Clear',
             },
+            maxDate: moment().endOf("day"),
         },function(start, end, label) {
           
         });

@@ -33,11 +33,6 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         except:
             country_choices = [('91', '91')]
 
-        try:
-            initial_country = Country.objects.get(phone='91', active=True)
-        except:
-            initial_country = None
-
         form_class = 'form-control'
         self.fields['first_name'].required = True
         self.fields['first_name'].widget.attrs['placeholder'] = 'First name'
@@ -75,8 +70,6 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 
         self.fields['country'].required = True
         self.fields['country'].widget.attrs['class'] = form_class
-        if initial_country:
-            self.fields['country'].initial = initial_country
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '').strip()
