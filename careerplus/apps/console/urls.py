@@ -1,5 +1,10 @@
 from django.conf.urls import url, include
 
+from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
+from . import shop_view, vendor_view, blog_view, order_view, refund_view
+from geolocation import adminviews
+
+
 urlpatterns = [
     url(r'^cms/', include('console.cms.urls', namespace='cms')),
     url(r'^order/', include('console.order.urls', namespace='order')),
@@ -7,10 +12,6 @@ urlpatterns = [
     url(r'^operations/', include('console.operations.urls', namespace='operations')),
 ]
 
-from django.conf.urls import url
-from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
-from . import shop_view, vendor_view, blog_view, order_view, refund_view
-from geolocation import adminviews
 
 urlpatterns += [
     url(r'^$', ConsoleDashboardView.as_view(), name='dashboard'),
@@ -256,9 +257,9 @@ urlpatterns += [
         refund_view.RefundRequestEditView.as_view(),
         name='refundrequest-edit'),
 
-    url(r'^refund/sendforapproval-refundrequest/',
-        refund_view.SendForApprovalRefundRequest.as_view(),
-        name='sendforapproval-refundrequest'),
+    # url(r'^refund/sendforapproval-refundrequest/',
+    #     refund_view.SendForApprovalRefundRequest.as_view(),
+    #     name='sendforapproval-refundrequest'),
 
     url(r'^refund/reject-refundrequest/',
         refund_view.RejectRefundRequestView.as_view(),

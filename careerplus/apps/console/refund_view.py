@@ -490,7 +490,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
 
             if valid and selected_items:
                 refund_items = refund_obj.refunditem_set.all()
-                excluded_items = refund_items.all().values_list('oi', flat=True)
+                excluded_items = list(refund_items.all().values_list('oi', flat=True))
                 excluded_ois = order.orderitems.filter(id__in=excluded_items)
                 refund_items.all().delete()
                 for oi in excluded_ois:
@@ -499,6 +499,16 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                         oi.oi_status = oi.last_oi_status
                         oi.last_oi_status = last_oi_status
                         oi.save()
+
+                    if oi.is_combo and not oi.parent:
+                        combos = oi.order.orderitems.filter(
+                            parent=oi, is_combo=True)
+                        for combo in combos:
+                            if combo.oi_status == 161:
+                                last_oi_status = combo.oi_status
+                                combo.oi_status = combo.last_oi_status
+                                combo.last_oi_status = last_oi_status
+                                combo.save()
 
                 total_refund = Decimal(0)
                 for item_id in selected_items:
@@ -524,6 +534,21 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                                 assigned_to=oi.assigned_to,
                                 added_by=request.user
                             )
+
+                        if oi.is_combo and not oi.parent:
+                            combos = oi.order.orderitems.filter(parent=oi, is_combo=True)
+                            for combo in combos:
+                                combo.last_oi_status = combo.oi_status
+                                combo.oi_status = 161
+                                combo.save()
+                                ops_set = combo.orderitemoperation_set.all()
+                                if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
+                                    combo.orderitemoperation_set.create(
+                                        oi_status=combo.oi_status,
+                                        last_oi_status=combo.last_oi_status,
+                                        assigned_to=combo.assigned_to,
+                                        added_by=request.user
+                                    )
                     elif payment_type == 'partial':
                         refund_amount = 'refund-amount-' + str(item_id)
                         refund_amount = Decimal(request.POST.get(refund_amount, 0))
@@ -546,6 +571,21 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                                     assigned_to=oi.assigned_to,
                                     added_by=request.user
                                 )
+
+                            if oi.is_combo and not oi.parent:
+                                combos = oi.order.orderitems.filter(parent=oi, is_combo=True)
+                                for combo in combos:
+                                    combo.last_oi_status = combo.oi_status
+                                    combo.oi_status = 161
+                                    combo.save()
+                                    ops_set = combo.orderitemoperation_set.all()
+                                    if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
+                                        combo.orderitemoperation_set.create(
+                                            oi_status=combo.oi_status,
+                                            last_oi_status=combo.last_oi_status,
+                                            assigned_to=combo.assigned_to,
+                                            added_by=request.user
+                                        )
 
                 refund_obj.refund_amount = total_refund
                 refund_obj.message = message
@@ -591,8 +631,8 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 variations = data.get('variations')
                 combos = data.get('combos')
                 refund_item = None
-                if oi.product.is_course and variations:
-                    if oi.pk in refunditems_ois:
+                if oi.product.is_course and oi.is_variation and variations:
+                    if variations.first().pk in refunditems_ois:
                         refund_item = refunditems.get(oi=variations.first())
                     else:
                         refund_item = None
@@ -744,7 +784,7 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                 else:
                     messages.add_message(
                         request, messages.ERROR,
-                        "Please select valid payment type")
+                        "Please select valid refund type")
                     valid = False
 
             if valid and selected_items:
@@ -781,6 +821,21 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                                 assigned_to=oi.assigned_to,
                                 added_by=request.user
                             )
+                        if oi.is_combo and not oi.parent:
+                            combos = oi.order.orderitems.filter(parent=oi, is_combo=True)
+                            for combo in combos:
+                                combo.last_oi_status = combo.oi_status
+                                combo.oi_status = 161
+                                combo.save()
+                                ops_set = combo.orderitemoperation_set.all()
+                                if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
+                                    combo.orderitemoperation_set.create(
+                                        oi_status=combo.oi_status,
+                                        last_oi_status=combo.last_oi_status,
+                                        assigned_to=combo.assigned_to,
+                                        added_by=request.user
+                                    )
+
                     elif payment_type == 'partial':
                         refund_amount = 'refund-amount-' + str(item_id)
                         refund_amount = Decimal(request.POST.get(refund_amount, 0))
@@ -803,6 +858,21 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                                     assigned_to=oi.assigned_to,
                                     added_by=request.user
                                 )
+
+                            if oi.is_combo and not oi.parent:
+                                combos = oi.order.orderitems.filter(parent=oi, is_combo=True)
+                                for combo in combos:
+                                    combo.last_oi_status = combo.oi_status
+                                    combo.oi_status = 161
+                                    combo.save()
+                                    ops_set = combo.orderitemoperation_set.all()
+                                    if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
+                                        combo.orderitemoperation_set.create(
+                                            oi_status=combo.oi_status,
+                                            last_oi_status=combo.last_oi_status,
+                                            assigned_to=combo.assigned_to,
+                                            added_by=request.user
+                                        )
 
                 refund_obj.refund_amount = total_refund
                 refund_obj.save()
@@ -837,6 +907,11 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                 order = Order.objects.get(number=self.query, status__in=[1, 3])
             except Exception as e:
                 messages.add_message(self.request, messages.ERROR, str(e))
+                messages.add_message(
+                    self.request,
+                    messages.ERROR,
+                    'Order is not found from this query.'
+                )
 
         context.update({
             "messages": alert,
@@ -992,11 +1067,16 @@ class ValidateUnCheckedItems(View):
                             'id', flat=True))
                 elif oi.is_addon:
                     parent_oi = oi.parent
-                    variations = oi.order.orderitems.filter(parent=parent_oi, is_variation=True)
-                    if not parent_oi.product.is_course and parent_oi.no_process:
+                    variations = oi.order.orderitems.filter(
+                        parent=parent_oi, is_variation=True)
+                    if parent_oi.product.is_course and parent_oi.is_variation:
+                        pass
+                    else:
                         variations = variations | oi.order.orderitems.filter(
                             id=parent_oi.pk
                         )
+                    var_list = list(variations.all().values_list(
+                        'id', flat=True))
                 item_list.append(oi.pk)
                 data['item_list'] = item_list + addon_list + var_list
                 data['status'] = 1
@@ -1005,36 +1085,6 @@ class ValidateUnCheckedItems(View):
                 data['error_message'] = str(e)
 
         return HttpResponse(json.dumps(data), content_type="application/json")
-
-
-class SendForApprovalRefundRequest(View):
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        grp_list = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST
-        refund_pk = request.POST.get('refund_pk', None)
-        if has_group(user=user, grp_list=grp_list):
-            try:
-                refund_obj = RefundRequest.objects.get(pk=refund_pk, status=9)
-            except Exception as e:
-                refund_obj = None
-                messages.add_message(self.request, messages.ERROR, str(e))
-
-            if refund_obj and refund_obj.status == 9:
-                last_status = refund_obj.status
-                refund_obj.status = 1
-                refund_obj.last_status = last_status
-                refund_obj.save()
-                refund_obj.refundoperation_set.create(
-                    status=refund_obj.status,
-                    last_status=refund_obj.last_status,
-                    added_by=request.user
-                )
-            else:
-                messages.add_message(
-                    request, messages.ERROR,
-                    'select valid request for approval')
-
-        return HttpResponseRedirect(reverse('console:refund-request'))
 
 
 class RejectRefundRequestView(View):
