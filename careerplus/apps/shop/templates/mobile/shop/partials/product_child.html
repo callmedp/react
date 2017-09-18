@@ -1,0 +1,11 @@
+<!-- Combo includes starts here -->
+{% if combo %}
+	<div class="container">
+		<h2>Combo includes</h2>
+		<ul class="combos grey-bg p-10">
+			{% for i in combo_list  %}
+				<li><a href="{{i.url}}">{{i.name}}</a></li>
+			{% endfor %}
+		</ul>
+	</div><!-- Combo includes ends here -->
+{% endif %}

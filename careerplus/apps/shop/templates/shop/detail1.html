@@ -17,7 +17,7 @@
           <div class="container">
             <!-- breadcrums -->
             {% block breadcrumbs %}
-              {% include "product/partials/breadcrumb.html" %}  
+              {% include "shop/partials/breadcrumb.html" %}  
             {% endblock breadcrumbs %}
             
             {% block product_header %}
@@ -31,7 +31,7 @@
                 <div class="course-caption-content">
                   <h1>{{prd_H1}}</h1>
 
-                  {% include "product/partials/packagediv.html" %}
+                  {% include "shop/partials/packagediv.html" %}
                 </div>
               </div>
             {% endblock product_header %}
@@ -39,7 +39,7 @@
         </div>
 
             {% block product_cart %}
-              {% include "product/partials/prd_cart.html" %}
+              {% include "shop/partials/prd_cart.html" %}
             {% endblock product_cart %}
         
       </header>
@@ -121,11 +121,11 @@
                 </div>
               </div>
 
-            {% include "product/partials/product_child.html" %}
+            {% include "shop/partials/product_child.html" %}
             
-            {% include "product/partials/product_variations.html" %}
+            {% include "shop/partials/product_variations.html" %}
             
-            {% include "product/partials/frequentlybought.html" %}
+            {% include "shop/partials/frequentlybought.html" %}
             
             
 
@@ -154,7 +154,7 @@
                   {% if prd_uget %}
                     <a title="What’ll you get" href="#get">What’ll you get</a>
                   {% endif %}
-                  {% if prd_program_struct %}
+                  {% if chapter %}
                     <a title="Courses" href="#programs">Program structure</a>
                   {% endif %}
                      <a title="Delivery flow" href="#delivery">Delivery flow</a>
@@ -200,13 +200,13 @@
             {% endif %}
               
             
-          {% include "product/partials/program_structure.html" %}
+          {% include "shop/partials/program_structure.html" %}
           
-          {% include "product/partials/delivery_flow.html" %}
+          {% include "shop/partials/delivery_flow.html" %}
             
-          {% include "product/partials/faq.html" %}
+          {% include "shop/partials/faq.html" %}
 
-          {% include "product/partials/reviews.html" %}
+          {% include "shop/partials/reviews.html" %}
     
     
           
@@ -217,7 +217,7 @@
 
     {% block prdrecommended %}
 
-              {% include "product/partials/recommended_prd.html" %}
+              {% include "shop/partials/recommended_prd.html" %}
 
     {% endblock prdrecommended %}
 {% endblock main_container %}
