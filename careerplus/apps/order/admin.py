@@ -34,13 +34,15 @@ class OrderItemOperationInline(admin.TabularInline):
     model = OrderItemOperation
     readonly_fields = ('oi_resume', 'oi_draft', 'draft_counter', 'oi_status',
         'last_oi_status', 'assigned_to', 'added_by')
+    raw_id_fields = ('oi',)
     ordering = ('-created',)
+    extra = 0
 
 
 class OrderItemOperationAdmin(admin.ModelAdmin):
     list_display = ['created']
     ordering = ('-created',)
-
+    raw_id_fields = ('oi',)
     extra = 0
 
 
@@ -48,7 +50,8 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'order', 'parent', 'product', 'title', 'is_addon',
         'is_combo', 'no_process', 'is_variation', 'oi_status', 'draft_counter']
     inlines = [OrderItemOperationInline, ]
-
+    raw_id_fields = ('order', 'parent', 'product', 'partner')
+    
     list_filter = ('oi_status', 'partner')
     search_fields = ('order__number', 'id',
         'order__candidate_id', 'order__email', 'partner__name')
@@ -68,6 +71,9 @@ class RefundOperationInline(admin.TabularInline):
 
     extra = 0
 
+class MessageAdmin(admin.ModelAdmin):
+    model = Message
+    raw_id_fields = ('oi', 'oio')
 
 class RefundRequestAdmin(admin.ModelAdmin):
     list_display = ['id', 'order', 'status', 'last_status',
@@ -83,5 +89,5 @@ class RefundRequestAdmin(admin.ModelAdmin):
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(OrderItemOperation, OrderItemOperationAdmin)
-admin.site.register(Message)
+admin.site.register(Message, MessageAdmin)
 admin.site.register(RefundRequest, RefundRequestAdmin)
