@@ -67,7 +67,7 @@ class Command(BaseCommand):
             for i, row in df_nomatch.iterrows():
                 if not i%50:
                     print(i)
-                if i > 60000:    
+                if i > 99000:    
                     password = manager.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
                     email = manager.normalize_email(row['Email'])
                     email = email.lower()
@@ -104,7 +104,7 @@ class Command(BaseCommand):
                                 shine_id = shine_id_json[0].get("id", None)
                     if shine_id:
                         df_nomatch.loc[df_nomatch.Email == row['Email'], 'C_ID'] = shine_id
-                if i == 70000:
+                if i == 104000:
                     break
         except:
             pass

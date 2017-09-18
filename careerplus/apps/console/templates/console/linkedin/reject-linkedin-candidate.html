@@ -223,7 +223,7 @@
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
                     <th class="column-title">Draft</th>
-                    <!--<th class="column-title">Upload Draft</th>-->
+                    <th class="column-title">Draft Submit</th>
                     <th class="column-title">Review Order</th>
                     <th class="column-title">Submit Msg</th>
                     <th class="column-title">Wating For Input</th>
@@ -288,6 +288,15 @@
                           
                       </td>
                       -->
+                      <td>
+                        <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
+                        <button type="button" class="btn btn-success btn-xs">
+                        <i class="fa fa-eye"></i>
+                          Edit
+                          Linkedin
+                          Draft 
+                        </button></a>
+                      </td>
                       <td><a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
 
                       <td>
