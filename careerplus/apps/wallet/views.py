@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
 from .models import (
-    Wallet, RewardPoint, ECash, 
+    Wallet, RewardPoint, ECash,
     WalletTransaction, ECashTransaction, PointTransaction)
 from cart.mixins import CartMixin
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
@@ -119,6 +119,7 @@ class WalletRedeemView(APIView, CartMixin):
                     break
             wallettxn.status = 1
             wallettxn.notes = 'Redeemed from cart'
+            wallettxn.current_value = wal_obj.get_current_amount()
             wallettxn.save()
             return Response(
                 {'success': True,'msg': 'Successfully Redeemed'
@@ -180,6 +181,7 @@ class WalletRemoveView(APIView, CartMixin):
             wal_txn.txn_type = 5
             wal_txn.notes = 'Reverted From Cart'
             wal_txn.status = 1
+            wal_txn.current_value = wal_txn.wallet.get_current_amount()
             wal_txn.save()
             return Response(
                 {'success': True,'msg': 'Successfully Removed'

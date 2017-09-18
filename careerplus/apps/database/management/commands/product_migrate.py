@@ -179,6 +179,9 @@ class Command(BaseCommand):
                     psc.vendor = vendor
                     psc.save()    
                     prd = psc.create_product()
+                    prd.cp_id = row['pid']
+                    
+                    
                     prd.created = timezone.make_aware(datetime.strptime(str(row['added_on']), "%Y-%m-%d %H:%M:%S"),
                         timezone.get_current_timezone()) if str(row['added_on']) else timezone.now()
                     prd.type_flow = type_flow
@@ -198,6 +201,8 @@ class Command(BaseCommand):
         try:
             with transaction.atomic():
                 for i, row in product_standalone.iterrows():
+                    if not i%50:
+                        print(i)
                     flag_course = row['course']
                     flag_combo = row['combo']
                     type_of_product = row['type_of_product']
@@ -367,6 +372,8 @@ class Command(BaseCommand):
         try:
             with transaction.atomic():
                 for i, row in product_variation.iterrows():
+                    if not i%50:
+                        print(i)
                     flag_course = row['course']
                     flag_combo = row['combo']
                     type_of_product = row['type_of_product']
@@ -566,14 +573,20 @@ class Command(BaseCommand):
         question = dict(df.groupby(['id'])['question'].apply(list))
         answer = dict(df.groupby(['id'])['answer'].apply(list))
         vendorfaq = Vendor.objects.get(name='ops')
+        j = 1 
         try:
             with transaction.atomic():
         
                 for key in dict(question).keys():
+                    j += 1
+                    if not j %50:
+                        print(j)
+                    
                     sfaq, created = ScreenFAQ.objects.get_or_create(
                         text=question.get(key)[0],
                         vendor=vendorfaq
                         )
+                    
                     sfaq.answer = answer.get(key)[0]
                     sfaq.save()
                     faq = sfaq.create_faq()
@@ -605,7 +618,7 @@ class Command(BaseCommand):
             LEFT OUTER JOIN cart_productvariation 
             ON ( cart_courseinfo.course_parent_id = cart_productvariation.id )"""
         df = pd.read_sql(sql, con=db)
-        SM1 = AttributeOption.objects.get(code='ON')
+        SM1 = AttributeOption.objects.get(code='OL')
         SM2 = AttributeOption.objects.get(code='OF')
         SM3 = AttributeOption.objects.get(code='IL')
         SM4 = AttributeOption.objects.get(code='BL')
@@ -615,6 +628,9 @@ class Command(BaseCommand):
         try:
             with transaction.atomic():
                 for i, row in df.iterrows():
+                    if not i%50:
+                        print(i)
+                    
                     prd = Product.objects.get(cpv_id=row['course_parent_id'])
                     scr = ProductScreen.objects.get(cpv_id=row['course_parent_id'])
                     if row['with_certificate']:    

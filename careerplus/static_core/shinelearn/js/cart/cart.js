@@ -63,6 +63,7 @@ function update_variation_price(req_price, actual_price){
     var req_price = req_price, actual_price = actual_price, sum_price, actual_total
     try{
         sum_price = parseFloat($('#total-price').attr('sum-price'));
+        console.log(sum_price);
         actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
         // current price updation
         sum_price = req_price + sum_price;
@@ -113,6 +114,7 @@ $(document).ready(function() {
                     actual_price = parseFloat($(this).attr('actual-price'));
                     update_variation_price(req_price, actual_price);
                     $(this).attr('checked', true);
+                    console.log(req_price, actual_price);
 
                 }catch(err){
                     console.log(err);

@@ -1,0 +1,336 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+{% load console_tags %}
+
+
+{% block title %}
+  <title>Refund Request Detail- Shinelearning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <style>
+        ul.parsley-errors-list {
+            list-style: none;
+            color: #E74C3C !important;
+            padding-left: 0;
+        }
+        ul.parsley-errors-list {
+            list-style: none;
+            color: #E74C3C;
+            padding-left: 0;
+        }
+        .error{
+            color: #E74C3C;
+        }
+    </style>
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Refund Request Detail</h3>
+      </div>
+    </div>
+
+    <div class="row top_tiles">
+
+    {% if edit_permission %}
+      <a target="_blank" href="{% url "console:refundrequest-edit" refund_obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-edit"></i>Edit request</button></a>
+    {% endif %}
+
+    {% if approval_permission %}
+        <button type="button" onclick="rejectRequestAction('{{refund_obj.pk}}')" class="btn btn-warning btn-xs"><i class="fa fa-close"></i>Reject Request</button>
+
+        <button type="button" onclick="approveRequestAction('{{refund_obj.pk}}')" class="btn btn-danger btn-xs"><i class="fa fa-check-circle"></i>Approve Request</button>
+    
+        <!-- reject modal-->
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="reject-modal{{refund_obj.pk}}">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Action on refund request (order no. {{refund_obj.order.number}})</h4>
+                </div>
+                <div class="modal-body">
+                  Are you sure to reject refund request?
+                  <form class="form-group" method="POST" action="{% url "console:refundrequest-reject" %}" id="reject-request-form{{refund_obj.pk}}" data-parsley-validate>{% csrf_token %}
+                   <div style="display:none">
+                    <input type="hide" name="refund_pk" value="{{refund_obj.pk}}">
+                   </div>
+                   <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-maxlength="300"
+                   placeholder="type reject reason here.." 
+                   data-parsley-validation-threshold="10">
+                   </textarea>
+                      
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" id="reject-confirm-button{{refund_obj.pk}}" class="btn btn-primary">Yes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- /modals -->
+
+        <!-- Approve modal-->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="approve-modal{{refund_obj.pk}}">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Action on refund request (order no {{refund_obj.order.number}})</h4>
+                </div>
+                <div class="modal-body">
+                  Are you sure to Approve refund request?
+                  <form class="form-group" method="POST" action="{% url "console:refundrequest-approve" %}" id="approve-request-form{{refund_obj.pk}}" data-parsley-validate>{% csrf_token %}
+                   <div style="display:none">
+                    <input type="hide" name="refund_pk" value="{{refund_obj.pk}}">
+                   </div>
+                   <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-maxlength="300"
+                   placeholder="type reason here.." 
+                   data-parsley-validation-threshold="10">
+                   </textarea>
+                      
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" id="approve-confirm-button{{refund_obj.pk}}" class="btn btn-primary">Yes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    {% endif %}
+      
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+    {% if order %}
+    <div class="row">
+       <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Order Details</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">#OrderNumber</th>
+                    <th class="column-title">Refund Status</th>
+                    <th class="column-title">Email</th>
+                    <th class="column-title">Mobile</th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Order Status</th>
+                    <th class="column-title">Currency</th>
+                    <th class="column-title">Payment Date</th>
+                    <th class="column-title">Order Details</th>
+                    <th class="column-title">Agent Name</th>
+                    <th class="column-title">TL Name</th>
+                    <th class="column-title">BH Name</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="even pointer">
+                      <td>{{order.number}}</td>
+                      <td>{{refund_obj.get_status}}</td>
+                      <td>{{order.email}}</td>
+                      <td>{{order.mobile}}</td>
+                      <td>{{order.first_name}} {{order.last_name}}</td>
+                      <td>{{order.get_status}}</td>
+                      <td>{{order.currency}}</td>
+                      <td>{{order.payment_date}}</td>
+                      <td><a target="_blank" href="{% url "console:order-detail" order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Refund Initiated Items</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">Item Name</th>
+                    <th class="column-title">Refund Type</th>
+                    <th class="column-title">Refund Amount</th>
+                    <th class="column-title">Actual Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for obj in refunditems %}
+                        <tr class="even pointer">
+                          <td>
+                              {% if obj.oi.parent %}
+                                  {{obj.oi.parent.product.name}}:
+                              {% endif %}
+                              {{obj.oi.product.name}}
+                              {% if obj.oi.product.get_exp %}
+                               - {{obj.oi.product.get_exp}}
+                              {% endif %}
+                          </td>
+                          <td>
+                          {{obj.get_type_refund}}
+                          </td>
+                          <td>
+                          {{obj.amount}}
+                          </td>
+                          <td>{{obj.oi.get_refund_amount}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}} ({{refund_obj.get_currency}})</span><br/><br/>
+          </div>
+          {% if refund_obj.status == 8 and request.user|has_group:FINANCE_GROUP_LIST %}
+              <form id="refund-settled-form" method="POST" action="." data-parsley-validate>{% csrf_token %}
+                  <div style="display:none">
+                      <input type="hidden" name="refund_pk" value="{{refund_obj.pk}}">
+                  </div>
+                  <div class="form-group col-md-6">
+                      <label for="refund-mode-id">Refund mode*:</label>
+                      <select id="refund-mode-id" name="refund_mode" class="form-control" required>
+                        <option value="">Select Refund Mode</option>
+                        <option value="neft">NEFT</option>
+                        <option value="cheque">CHEQUE</option>
+                        <option value="dd">DD</option>
+                      </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                      <label for="transaction-id">Transaction* :</label>
+                      <input type="text" id="transaction-id" class="form-control" name="txn" required />
+                      <small>serial number in case of cheque/dd.</small>
+                  </div>
+                  <br/>
+                  <button type="submit" class="btn btn-primary">Refund Settled</button>
+              </form>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Refund Request Operations </h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Last Status</th>
+                    <th class="column-title">Message</th>
+                    <th class="column-title">Added By</th>
+                    <th class="column-title">Added On</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for op in refundops %}
+                        <tr class="even pointer">
+                          <td>{{op.get_status}}</td>
+                          <td>{{op.get_last_status}}</td>
+                          <td>
+                              {% if op.message %}
+                              <div class="x_content col-md-6">
+                                  <ul class="list-unstyled msg_list">
+                                        <li>
+                                          <a>
+                                            <span class="message">
+                                              {{op.message}}
+                                            </span>
+                                          </a>
+                                        </li>                                    
+                                    </ul>
+                                </div>
+                               {% endif %}
+                          </td>
+                          <td>{{op.added_by}}</td>
+                          <td>{{op.created}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+    </div>
+    {% endif %}
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/refund/refund.js" %}"></script>
+{% endblock js_block %}

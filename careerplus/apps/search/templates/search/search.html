@@ -46,29 +46,31 @@
     <!-- page content body start -->
     <div class="row">
 
-    {% include "search/partials/search_filters.html" %}
+    {% if page.object_list|length > 0 %}
+        {% include "search/partials/search_filters.html" %}
+    {% endif %}
 
 
     <!-- mid content start -->
     <div class="col-sm-9 col-md-10 mt-40 ">
         {% if page.object_list|length > 0 %}
-        <div class="listing-heading-box">
-            <div class="form-group custom-select">
-                <select name="sort" hdn="id_sort" class="form-control cls_filter">
-                    <option value="">Relevance</option>
-                    <option value="1" {% if search_params.sort == '1' %}selected="selected"{% endif %}>Latest</option>
-                    <option value="2" {% if search_params.sort == '2' %}selected="selected"{% endif %}>Review(High to Low)</option>
-                </select>
+            <div class="listing-heading-box">
+                <div class="form-group custom-select">
+                    <select name="sort" hdn="id_sort" class="form-control cls_filter">
+                        <option value="">Relevance</option>
+                        <option value="1" {% if search_params.sort == '1' %}selected="selected"{% endif %}>Latest</option>
+                        <option value="2" {% if search_params.sort == '2' %}selected="selected"{% endif %}>Review(High to Low)</option>
+                    </select>
+                </div>
+                <h2>{{ paginator.count }} products found</h2>
             </div>
-            <h2>{{ paginator.count }} products found</h2>
-        </div>
 
-        <ul class="listing js_listing">
-            {% include 'search/ajax/search_listing.html' %}
-        </ul>
-        {% if paginator.num_pages > page.number %}
-            <a href="#" class="load-more cls_load_more">Load more</a>
-        {% endif %}
+            <ul class="listing js_listing">
+                {% include 'search/ajax/search_listing.html' %}
+            </ul>
+            {% if paginator.num_pages > page.number %}
+                <a href="#" class="load-more cls_load_more">Load more</a>
+            {% endif %}
         {% else %}
             <span>No results found</span>
         {%endif%}

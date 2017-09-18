@@ -27,6 +27,7 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
+from linkedin.autologin import AutoLogin
 
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
@@ -61,7 +62,6 @@ class OrderListView(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
         self.status = request.GET.get('status', -1)
-
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -366,40 +366,6 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                             assigned_to=writer,
                             user=request.user,
                             data={})
-
-                        # for obj in orderitem_objs:
-                        #     obj.assigned_to = writer
-                        #     obj.assigned_by = request.user
-                        #     obj.save()
-
-                        #     # mail to user about writer information
-                        #     to_emails = [obj.order.email]
-                        #     mail_type = 'ASSIGNMENT_ACTION'
-                        #     data = {}
-                        #     data.update({
-                        #         "name": obj.order.first_name + ' ' + obj.order.last_name,
-                        #         "writer_name": writer.name,
-                        #         "writer_email": writer.email,
-                        #         "writer_mobile": writer.contact_number,
-                        #         "mobile": obj.order.mobile
-                        #     })
-
-                        #     try:
-                        #         SendMail().send(to_emails, mail_type, data)
-                        #     except Exception as e:
-                        #         logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                        #     try:
-                        #         SendSMS().send(sms_type=mail_type, data=data)
-                        #     except Exception as e:
-                        #         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                        #     obj.orderitemoperation_set.create(
-                        #         oi_status=1,
-                        #         last_oi_status=obj.oi_status,
-                        #         assigned_to=obj.assigned_to,
-                        #         added_by=request.user
-                        #     )
 
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
@@ -1367,7 +1333,6 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         except:
             pass
 
-
         try:
             if self.modified:
                 date_range = self.modified.split('-')
@@ -2020,19 +1985,21 @@ class ActionOrderItemView(View):
                     # mail to user about writer information
                     to_emails = [order.email]
                     mail_type = "PENDING_ITEMS"
+                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
                     data = {}
                     data.update({
                         'subject': 'To initiate your services fulfil these details',
                         'username': order.first_name if order.first_name else order.candidate_id,
                         'type_flow': oi.product.type_flow,
                         'product_name': oi.product.name,
-                        'upload_url': "http://%s/dashboard" % (settings.SITE_DOMAIN) 
+                        'upload_url': "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
                         order.midout_sent_on = timezone.now()
                         order.save()
                     except Exception as e:
+                        messages.add_message(request, messages.ERROR, str(e))
                         logging.getLogger('email_log').error("midout mail %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             messages.add_message(request, messages.SUCCESS, "Midout sent Successfully for selected items")

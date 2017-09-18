@@ -7,7 +7,7 @@
             {% if obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
 
                 {% if obj.oi_status == 2 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% elif obj.oi_status == 23 and obj.draft_counter %}
                     <p><strong>Status:</strong> Modifications requested</p>
 
@@ -18,16 +18,18 @@
                     <p><strong>Status:</strong> Modifications requested</p>
 
                 {% elif obj.oi_status == 24 and obj.draft_counter == 1 %}
-                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
 
                 {% elif obj.oi_status == 24 and obj.draft_counter < max_draft_limit %}
-                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
-                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
                     <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
                 {% endif %}
@@ -46,16 +48,18 @@
                     <p><strong>Status:</strong> Modifications requested</p>
 
                 {% elif obj.oi_status == 46 and obj.draft_counter == 1 %}
-                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="#">Dwonload</a></p>
+                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="#">Download</a></p>
 
                 {% elif obj.oi_status == 46 and obj.draft_counter < max_draft_limit %}
-                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="#">Dwonload</a></p>
+                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="#">Download</a></p>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
-                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="#">Dwonload</a></p>
+                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="#">Download</a></p>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
-                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="#">Dwonload</a></p>
+                    <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="#">Download</a></p>
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
@@ -65,9 +69,11 @@
             {% elif obj.product.type_flow == 3 %}
 
                 {% if obj.oi_status == 2 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% elif obj.oi_status == 4 %}
-                    <p><strong>Status:</strong> Service has been processed and Final document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Dwonload</a></p>
+                    <p><strong>Status:</strong> Service has been processed and Final document is ready - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
                 
@@ -81,16 +87,21 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
                 {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% endif %}
 
             {% elif obj.product.type_flow == 4 %}
                 {% if obj.oi_status == 2 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
 
                 {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> Service has been processed - <a href="#">Download Credential</a></p>
 
                 {% elif obj.oi_status == 61 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% else %}
@@ -100,12 +111,15 @@
 
             {% elif obj.product.type_flow == 5 %}
                 {% if obj.oi_status == 2 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Upload Resume</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
 
                 {% elif obj.oi_status == 4 or obj.oi_status == 28 or obj.oi_status == 29 %}
                     <p><strong>Status:</strong> Service has been processed</p>
 
                 {% elif obj.oi_status == 61 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% else %}
@@ -118,6 +132,8 @@
 
                 {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% else %}
                   <p><strong>Status:</strong> {{obj.get_user_oi_status}} </p>
 
@@ -136,6 +152,8 @@
 
                     {% elif op_status == 143 %}
                         <p><strong>Status:</strong> Service has been expired</p>
+                    {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                     {% endif %}
                 {% endwith %}
 
@@ -148,6 +166,9 @@
 
                 {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> Service has been processed - <a target="_blank" href="{{obj.oi_draft.url}}">Download</a></p>
+                    
+                {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% endif %}
 

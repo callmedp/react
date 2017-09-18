@@ -43,7 +43,7 @@
                 <div class="col-sm-3 dashboard-tab">
                     <a href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
                     <a class="active" href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
-                    <a href="dashboard-wallet.html"><span class="wallet-icon"></span> My wallet</a>
+                    <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
                     <!-- <a href="dashboard-recommended.html"><span class="recommended-icon"></span> Recommended courses</a> -->
                     <a href="dashboard-roundone.html"><span class="referal-icon"></span> Referral</a>
                     <div class="please-call">

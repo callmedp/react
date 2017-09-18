@@ -23,6 +23,7 @@ from review.models import Review
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
+from wallet.models import Wallet
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
@@ -190,25 +191,25 @@ class DashboardDetailView(TemplateView):
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163])
             elif self.oi.product.type_flow == 2:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163])
 
             elif self.oi.product.type_flow == 3:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 121])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 121, 161, 162, 163])
             elif self.oi.product.type_flow == 4:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 5:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 6:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163])
             elif self.oi.product.type_flow == 7:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 61, 62])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 61, 62, 161, 162, 163])
             elif self.oi.product.type_flow == 8:
-                oi_status_list = [49, 5, 46, 48, 27, 4]
+                oi_status_list = [49, 5, 46, 48, 27, 4, 161, 162, 163]
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=oi_status_list)
             elif self.oi.product.type_flow == 10:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163])
             context.update({
                 "oi": self.oi,
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,
@@ -247,7 +248,7 @@ class DashboardCommentView(TemplateView):
             comments = self.oi.message_set.filter(is_internal=False).order_by('created')
             context.update({
                 "oi": self.oi,
-                "comments": comments
+                "comments": comments,
             })
         return context
 
@@ -444,9 +445,9 @@ class DashboardAcceptService(View):
                         mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
-                            "subject": 'Closing your '+oi.product.name+' service',
+                            "subject": 'Closing your ' + oi.product.name + ' service',
                             "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-                            'draft_added':oi.draft_added_on,
+                            'draft_added': oi.draft_added_on,
                         })
 
                         if oi.product.type_flow == 1 and len(email_sets) == 0:
@@ -570,13 +571,11 @@ class DashboardInvoiceDownload(View):
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
-                # if order.invoice:
-                #     invoice = order.invoice
-                # else:
-                #     order = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                #     invoice = order.invoice
-                order = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                invoice = order.invoice
+                if order.invoice:
+                    invoice = order.invoice
+                else:
+                    order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                    invoice = order.invoice
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(invoice, content_type='application/pdf')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
@@ -600,3 +599,26 @@ class DownloadQuestionnaireView(View):
         response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
         response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
         return response
+
+
+class DashboardMyWalletView(TemplateView):
+    template_name = 'dashboard/dashboard-wallet.html'
+    
+    def get(self, request, *args, **kwargs):
+        if request.session.get('candidate_id', None):
+            return super(DashboardMyWalletView, self).get(request, args, **kwargs)
+        return HttpResponseRedirect(reverse('homepage'))
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardMyWalletView, self).get_context_data(**kwargs)
+        candidate_id = self.request.session.get('candidate_id', None)
+        wal_obj, created = Wallet.objects.get_or_create(owner=candidate_id)
+        wal_total = wal_obj.get_current_amount()
+        wal_txns = wal_obj.wallettxn.filter(txn_type__in=[1, 2, 3, 4, 5]).order_by('-created')
+        wal_txns = wal_txns.order_by('-created').select_related('order', 'cart')[:10]
+        context.update({
+            "wal_obj": wal_obj,
+            "wal_total": wal_total,
+            "wal_txns": wal_txns,
+        })
+        return context

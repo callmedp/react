@@ -250,7 +250,11 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 8 and 108 not in email_sets:
                     data.update({
-                        'counselling_form': "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk) 
+                        'counselling_form': "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk) ,
+                        'subject': 'To initiate your services fulfil these details',
+                        'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        'type_flow': oi.product.type_flow,
+                        'counselling_form': "http://%s/linkdin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk),
                     })
                     return_val = send_email_task.delay(to_emails, mail_type, data)
                     if return_val:
@@ -297,6 +301,12 @@ def process_mailer(order=None):
     if order.status == 1:
         orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
         for oi in orderitems:
+            data = {}
+            to_emails = [oi.order.email]
+            mail_type = "PROCESS_MAILERS"
+            data['subject'] = 'Your service details related to order <'+str(oi.order.id)+'>'
+            data['username'] = oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+            token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
             try:
                 email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                 to_emails = [oi.order.email]
@@ -309,13 +319,36 @@ def process_mailer(order=None):
                     'pk': oi.pk,
                     'email': oi.order.email,
                     'candidateid': oi.order.email,
-                    'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 })
-
-                if 2 not in email_sets:
-                    return_val = send_email_task.delay(to_emails, mail_type, data)
-                    if return_val:
-                        oi.emailorderitemoperation_set.create(email_oi_status=2)
+                if oi.product.type_flow == [1, 3]:
+                    data.update({
+                        'upload_url': "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                elif oi.product.type_flow == [2, 6]:
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                elif oi.product.type_flow == 8:
+                    data.update({
+                        'counselling_form': "http://%s/linkdin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk),
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                elif oi.product.type_flow == 9:
+                    data.update({
+                        'complete_profile': "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN),
+                    })
+                    try:
+                        SendMail().send(to_emails, mail_type, data)
+                    except Exception as e:
+                        logging.getLogger('email_log').error("process mailers %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
             except Exception as e:
                 raise e
 

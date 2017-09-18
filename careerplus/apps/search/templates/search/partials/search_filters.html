@@ -24,7 +24,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body scroll">
+                    <div class="panel-body scroll js_filter_sxn">
                         {% if facets.fields.pFA|length == 1 %}
                             <label title="{{facets.fields.pFA.0.0|get_choice_display:"FA_FACETS"}}">
                                 <input type="checkbox" {% if areaf %}name="farea" {% else %}name="ign_farea"{% endif %} value="{{facets.fields.pFA.0.0}}" checked="checked" disabled="disabled" />
@@ -52,7 +52,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body">
+                    <div class="panel-body js_filter_sxn">
                         {% if facets.fields.pCL|length == 1 %}
                             <label title="{{facets.fields.pCL.0.0|get_choice_display:"CL_FACETS"}}">
                                 <input type="checkbox" {% if clevel %}name="fclevel" {% else %}name="ign_fclevel"{% endif %}
@@ -84,7 +84,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body">
+                    <div class="panel-body js_filter_sxn">
                     {% for i in '12345' %}
                         <div class="rating-review-box">
                             <input name="frating" type="checkbox" {% if i in rating %}checked="checked"{% endif %}
@@ -109,7 +109,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body">
+                    <div class="panel-body js_filter_sxn">
                         {% if facets.fields.pCert|length == 1 %}
                         <label title="{{facets.fields.pCert.0.0|get_choice_display:"CERT_FACETS"}}">
                             <input type="checkbox" {% if cert %}name="fcert" {% else %}name="ign_fcert"{% endif %}
@@ -141,7 +141,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body">
+                    <div class="panel-body js_filter_sxn">
                         {% if facets.fields.pDM|length == 1 %}
                         <label title="{{facets.fields.pDM.0.0|get_choice_display:"DURATION_FACETS"}}">
                             <input type="checkbox" {% if duration %}name="fduration" {% else %}name="ign_fduration"{% endif %}
@@ -173,7 +173,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body">
+                    <div class="panel-body js_filter_sxn">
                         {% if facets.fields.pStM|length == 1 %}
                         <label title="{{facets.fields.pStM.0.0|get_choice_display:"STUDY_FACETS"}}">
                             <input type="checkbox" {% if study_mode %}name="fmode" {% else %}name="ign_fmode"{% endif %}
@@ -205,7 +205,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body">
+                    <div class="panel-body js_filter_sxn">
                         {% if facets.fields.pPinr|length == 1 %}
                         <label title="{{facets.fields.pPinr.0.0|get_choice_display:"PRICE_FACETS"}}">
                             <input type="checkbox" {% if price %}name="fprice" {% else %}name="ign_fprice"{% endif %}

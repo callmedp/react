@@ -1,0 +1,344 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+
+{% block css_section %}
+  {{block.super}}
+  <link type="text/css" href="{% static '/shinelearn/css/product/detail.css' %}" rel="stylesheet">
+{% endblock css_section %}
+    
+
+{% block main_container %}
+    {% block page_heading %}
+
+      <!-- header -->
+      <header>
+        
+        <div class="detail-course-header">
+          <div class="container">
+            <!-- breadcrums -->
+            {% block breadcrumbs %}
+              {% include "shop/partials/breadcrumb.html" %}  
+            {% endblock breadcrumbs %}
+            
+            {% block product_header %}
+              <div class="course-caption">
+                <div class="course-caption-img">
+                  <figure style="background-color:{{prd_img_bg}};">
+                    <img src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
+                  </figure>
+                </div>
+
+                <div class="course-caption-content">
+                  <h1>{{prd_H1}}</h1>
+
+                  {% include "shop/partials/packagediv.html" %}
+                </div>
+              </div>
+            {% endblock product_header %}
+          </div>
+        </div>
+
+            {% block product_cart %}
+              {% include "shop/partials/prd_cart.html" %}
+            {% endblock product_cart %}
+        
+      </header>
+
+      
+    {% endblock page_heading %}
+
+    {% block section1 %}
+      <!-- main parent1 section start -->
+      <section class="container-fluid cls_scroller_parent pr">
+          <div class="row detail-box bt-none">
+
+            <!-- sticky sub header 1 -->
+            <div class="course-caption-bottom cls_scroller">
+              <div class="container">
+                <div class="visible-onscroll hidden cls_scroller_hiddenDiv">
+                  <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
+                </div>
+
+                  <ul>
+                        
+                    <li>
+                      <div class="rating-review-box">
+                        {% for star in prd_rating_star %}
+                          {% if star == '*' %}
+                            <figure class="full-star"></figure>
+                          {% elif star == '+' %}
+                            <figure class="half-star"></figure>
+                          {% else %}
+                            <figure class="blank-star"></figure>
+                          {% endif %}
+                        {% endfor %}  
+                    
+                          <strong>{{prd_rating}}/5</strong>{{prd_num_rating}}&nbsp;ratings
+                      </div> 
+                    </li>
+                    
+                    <li>
+                     <a href="javascript:void(0);">
+                      <figure class="review-icon"></figure>
+                      <span><strong class="anchor-color">&nbsp;{{prd_num_rating}}</strong>&nbsp;reviews</span>
+                     </a> 
+                    </li>
+                    <li>
+                    <figure class="bought-icon"></figure>
+                    <span><strong>&nbsp;{{prd_num_bought}}</strong>&nbsp;people bought</span>
+                    </li>
+                    {% if prd_num_jobs %}
+                      <li>
+                       <a href="javascript:void(0);">
+                        <figure class="course-jobs-icon"></figure>
+                        <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong> Jobs available</span>
+                       </a> 
+                      </li>
+                    {% endif %}
+                    
+                    {% if prd_cert %}
+                      <li>
+                        <figure class="certification-icon"></figure>
+                        <span>&nbsp;Certification</span>
+                      </li>
+                    {% endif %}
+
+                </ul>
+
+              </div>
+            </div>
+
+            
+            <div class="container">
+            <!-- About course -->
+              <div class="row">
+                <div class="col-sm-12 col-md-8 mt-40">
+                {% if prd_about %}
+                  <h2 class="detail-heading">About {% if prd_service == 'course' %}course{% else %}service{% endif %}</h2>
+                  {{prd_about|safe}}
+                  <a href="#about-course">know more</a>
+                {% endif %}
+                </div>
+              </div>
+
+            {% include "shop/partials/product_child.html" %}
+            
+            {% include "shop/partials/product_variations.html" %}
+            
+            {% include "shop/partials/frequentlybought.html" %}
+            
+            
+
+          </div>
+      </section>
+      <!-- main parent1 section end -->
+
+
+    {% endblock section1 %}
+
+    {% block section2 %}
+      
+      <!-- main parent2 section start -->
+      <section class="container-fluid cls_scroller_parent pr">
+        <div class="row">
+
+             <!-- About course container -->
+            <section id="about-course" class="container-fluid">
+              <div class="row detail-course-links cls_scroller pr">
+              <!-- sticky sub header 2 -->
+                <div class="container">
+                  <div class="col-sm-12 col-md-8">
+                  {% if prd_desc %}
+                    <a title="About Six Sigma" class="active" href="#course">About {{prd_H1}}</a>
+                  {% endif %}
+                  {% if prd_uget %}
+                    <a title="What’ll you get" href="#get">What’ll you get</a>
+                  {% endif %}
+                  {% if chapter %}
+                    <a title="Courses" href="#programs">Program structure</a>
+                  {% endif %}
+                     <a title="Delivery flow" href="#delivery">Delivery flow</a>
+                  {% if prd_faq %}
+                    <a title="FAQ" href="#faq">FAQ</a>  
+                  {% endif %}
+                  {% if prd_review_list %}
+                    <a title="Review" href="#review">Review</a> 
+                  {% endif %}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {% if prd_desc %}
+                <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="course" class="col-sm-12 col-md-8 scroll">
+                      <h2>About {{prd_H1}}</h2>
+                      <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
+                      {{prd_desc|safe}}
+                     </div>
+                  </div>
+                </div>
+              </section>
+      
+            {% endif %}
+
+            {% if prd_uget %}
+      
+            <!-- What’ll you get container -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="get" class="col-sm-12 col-md-8 scroll">
+                    <h2>What’ll you get</h2>
+                        {{prd_uget|safe}}
+                   </div>
+                  </div>
+                </div>      
+            </section>
+            {% endif %}
+              
+            
+          {% include "shop/partials/program_structure.html" %}
+          
+          {% include "shop/partials/delivery_flow.html" %}
+            
+          {% include "shop/partials/faq.html" %}
+
+          {% include "shop/partials/reviews.html" %}
+    
+    
+          
+      </div>
+      </section>
+      <!-- main parent2 section end -->      
+    {% endblock section2 %}
+
+    {% block prdrecommended %}
+
+              {% include "shop/partials/recommended_prd.html" %}
+
+    {% endblock prdrecommended %}
+{% endblock main_container %}
+
+
+{% block js_section %}
+  {{block.super}} 
+  <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+  
+  <script type="text/javascript">
+  function LoadMoreProductReview(pv_id) {
+      if (processing) {
+          return false;
+      }
+      else{    
+        if (pv_id) {
+          try{
+            let page, elem;
+            elem = document.getElementById("id_review_page");
+            try {
+                elem.value = parseInt(elem.value) + 1;
+            } catch (_error) {
+              i = _error;
+              elem.value = 2;
+            }
+            page = document.getElementById("id_review_page").value;
+            processing = true;
+            $.ajax({
+                url: '/shop/reviews/' + encodeURIComponent(pv_id) + '/?pg=' + encodeURIComponent(page),
+                dataType: 'html',
+                success: function(html) {
+                    $('#loadmorereviewbtn').remove();
+                    
+                    $('#id_review_list').append(html);
+                    
+               },
+               complete: function(response){
+                    return processing = false;
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
+        catch(e){
+          alert("Invalid Page");
+        }
+        }
+      }
+    };
+    var processing = false;
+  
+
+  </script> 
+
+  <script>
+    /*$(window).scroll(function() {
+        scroll($('#about-sticky'));
+    });*/
+
+
+    var Scroller = function(itm,className) {
+        this.item = itm;
+        this.parentItem = this.item.parent();
+        this.className = className || '.cls_scroller';
+    }
+
+    Scroller.prototype = {
+      constructor : Scroller,
+      scroll :  function() {
+        var that = this,
+        parentDivTop = that.parentItem.offset().top,
+        windowTop = $(window).scrollTop();
+
+        if(windowTop >= parentDivTop && windowTop < (that.item.closest('.cls_scroller_parent').height() + parentDivTop)) {
+          that.item.css({
+            'top': (windowTop - parentDivTop) + 53
+          })
+          that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
+        } else {
+          that.item.css({
+            'top': 0
+          })
+          that.item.find('.cls_scroller_hiddenDiv').addClass('hidden');
+        }
+      } 
+    }
+
+
+    $.fn.scrollerdiv = function() {
+      var that = this;
+      that.each(function(index,item){
+        var data  = $(item).data('scrollerdiv');
+        if(!data) {
+          data = new Scroller($(item));
+          $(item).data('scrollerdiv',data);
+        }
+        $(window).scroll(function() { 
+          data.scroll();
+        });
+      })
+    }
+
+    $('.cls_scroller').scrollerdiv();
+
+    /*function scroll(obj) {
+        var ControlDivTop = obj;
+        var parentDivTop = ControlDivTop.parent();
+        var sTop = $(this).scrollTop();
+        if (sTop >= parentDivTop.offset().top) {
+            console.log(parentDivTop.offset().top+'------'+sTop);
+            ControlDivTop.css({
+                'top': sTop - parentDivTop.offset().top
+            });
+            $('.navbar').css('position','relative');
+        } else {
+          ControlDivTop.css({
+                'top': 0
+            });
+        }*/
+    </script> 
+
+     
+{% endblock js_section %}

@@ -24,6 +24,7 @@ from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
 from order.functions import pending_item_email, process_mailer
 from console.mixins import ActionUserMixin
+from haystack.query import SearchQuerySet
 from order.mixins import OrderMixin
 from . import *
 
@@ -121,11 +122,11 @@ class AjaxProductLoadMoreView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AjaxProductLoadMoreView, self).get_context_data(**kwargs)
         slug = self.request.GET.get('slug', '')
+        pk = self.request.GET.get('pk', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            page_obj = Category.objects.get(slug=slug, active=True)
-            products = page_obj.product_set.all()
-            paginator = Paginator(products, 1)
+            all_results = SearchQuerySet().filter(pCtg=pk)
+            paginator = Paginator(all_results, 10)
             try:
                 products = paginator.page(page)
             except PageNotAnInteger:
@@ -133,7 +134,10 @@ class AjaxProductLoadMoreView(TemplateView):
             except EmptyPage:
                 # products=paginator.page(paginator.num_pages)
                 products = 0
-            context.update({'products': products, 'page': page, 'slug': slug})
+            context.update({
+                'products': products, 'page': page,
+                'slug': slug, 'site': settings.SITE_DOMAIN,
+            })
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
         return context
@@ -179,8 +183,8 @@ class AjaxStateView(View):
     def get(self, request, *args, **kwargs):
         data = {"states": []}
         try:
-            country = request.GET.get('country', 'India')
-            country_obj = Country.objects.get(name=country)
+            country = request.GET.get('country', None)
+            country_obj = Country.objects.get(pk=country, active=True)
             states = country_obj.state_set.all().values_list('name', flat=True)
             data['states'] = list(states)
         except:
@@ -455,6 +459,8 @@ class ApproveDraftByLinkedinAdmin(View):
                             
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
+                            linkedin=obj.oio_linkedin,
+                            draft_counter=obj.draft_counter,
                             oi_status=46,
                             last_oi_status=last_status,
                             assigned_to=obj.assigned_to,

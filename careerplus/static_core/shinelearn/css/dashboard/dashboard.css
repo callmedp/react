@@ -734,6 +734,7 @@
   color: #333;
   width: 80%;
   margin-top: 30px;
+  clear: both;
 }
 .products-inbox li .writer-comment p {
   border-radius: 5px;

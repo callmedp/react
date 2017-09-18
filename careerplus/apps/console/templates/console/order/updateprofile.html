@@ -168,7 +168,7 @@
                                     name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}" id="{{forloop.counter}}_password"
                                     maxlength="35">
                                   <label>
-                                  <input type="checkbox" name="flag{{forloop.counter}}" class="flag" {% if profile_url|profile_status:profile_url_dict%} checked{% endif %} id="">Profile Updation Flag</label>
+                                  <input type="checkbox" name="flag{{forloop.counter}}" class="flag" {% if profile_url|profile_status:profile_url_dict%} checked{% endif %} id="{{forloop.counter}}_flag">Profile Updation Flag</label>
                                   <br>
                                   <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

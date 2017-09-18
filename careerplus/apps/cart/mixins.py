@@ -279,9 +279,9 @@ class CartMixin(object):
                     redeemed_reward_point = wal_txn.point_value
 
                 amount_after_discount = total_amount - coupon_amount
-                amount_after_discount = total_amount - redeemed_reward_point
+                amount_after_discount = amount_after_discount - redeemed_reward_point
                 tax_amount = Decimal(0)
-                if cart_obj.country.upper() == 'INDIA':
+                if cart_obj.country.phone == '91':
                     tax_amount = (amount_after_discount * tax_rate_per) / 100
                     tax_amount = InvoiceGenerate().get_quantize(tax_amount)
                 total_payable_amount = amount_after_discount + tax_amount
@@ -367,11 +367,12 @@ class CartMixin(object):
             cart_pk = request.session.get('cart_pk')
 
             if cart_pk:
+
                 course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
                 cart_obj = Cart.objects.get(pk=cart_pk)
                 total_count += cart_obj.lineitems.all().count()
                 total_count -= cart_obj.lineitems.filter(
-                    parent=None, product_class__in=course_classes,
+                    parent=None, product__product_class__in=course_classes,
                     no_process=True).count()
                 
         except Exception as e:
