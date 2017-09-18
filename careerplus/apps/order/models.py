@@ -24,9 +24,8 @@ class Order(AbstractAutoDate):
     archive_json = models.TextField(
         _('Archive JSON'),
         blank=True,
-        editable=False
-        )
-    
+        editable=False)
+
     number = models.CharField(
         _("Order number"), max_length=128, db_index=True)
 
@@ -501,9 +500,6 @@ class RefundRequest(AbstractAutoDate):
     document = models.FileField(
         max_length=255, upload_to='refund/refund_request/',
         null=True, blank=True)
-
-    # assigened_group = models.ForeignKey(Group, null=True, blank=True)
-    # last_assigned_group = models.ForeignKey(Group, null=True, blank=True)
 
     status = models.PositiveIntegerField(
         _("Status"), default=0, choices=REFUND_OPS_STATUS)
