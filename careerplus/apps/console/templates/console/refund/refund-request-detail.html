@@ -235,7 +235,7 @@
                 </tbody>
               </table>
             </div>
-            <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}} ({{refund_obj.currency}})</span><br/><br/>
+            <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}} ({{refund_obj.get_currency}})</span><br/><br/>
           </div>
           {% if refund_obj.status == 8 and request.user|has_group:FINANCE_GROUP_LIST %}
               <form id="refund-settled-form" method="POST" action="." data-parsley-validate>{% csrf_token %}

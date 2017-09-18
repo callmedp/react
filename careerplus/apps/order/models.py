@@ -513,7 +513,8 @@ class RefundRequest(AbstractAutoDate):
     refund_mode = models.CharField(
         max_length=255, default='select',
         choices=REFUND_MODE)
-    currency = models.CharField(max_length=255, blank=True, null=True)
+    currency = models.PositiveIntegerField(
+        _("Currency"), choices=CURRENCY_SYMBOL, default=0)
     refund_amount = models.DecimalField(
         _("Refund Amount (incl. tax)"),
         decimal_places=2, max_digits=12, default=0)
@@ -544,6 +545,10 @@ class RefundRequest(AbstractAutoDate):
     def get_status(self):
         status_dict = dict(REFUND_OPS_STATUS)
         return status_dict.get(self.status)
+
+    def get_currency(self):
+        currency_dict = dict(CURRENCY_SYMBOL)
+        return currency_dict.get(self.currency)
 
 
 class RefundItem(AbstractAutoDate):
