@@ -45,9 +45,8 @@ class OrderItemOperationAdmin(admin.ModelAdmin):
 
 
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'order', 'partner',
-        'partner_name', 'parent', 'product', 'title', 'upc',
-        'is_combo', 'no_process', 'is_variation', 'oi_status']
+    list_display = ['id', 'order', 'parent', 'product', 'title', 'is_addon',
+        'is_combo', 'no_process', 'is_variation', 'oi_status', 'draft_counter']
     inlines = [OrderItemOperationInline, ]
 
     list_filter = ('oi_status', 'partner')

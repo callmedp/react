@@ -80,14 +80,17 @@ class Command(BaseCommand):
         except IntegrityError:
             print(row)
             print('Fail')
-        sql = """
-                SELECT auth_user.username, auth_user.id,auth_user.email, cart_userprofile.shine_id, cart_userprofile.mobile, theme_country.isd_code 
-                FROM auth_user 
-                LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
-                LEFT OUTER JOIN theme_country ON ( cart_userprofile.country_id = theme_country.id ) 
-                WHERE (auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
-                """
-        df = pd.read_sql(sql, con=db)
+        
+        # sql = """
+        #         SELECT auth_user.username, auth_user.id,auth_user.email, cart_userprofile.shine_id, cart_userprofile.mobile, theme_country.isd_code 
+        #         FROM auth_user 
+        #         LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
+        #         LEFT OUTER JOIN theme_country ON ( cart_userprofile.country_id = theme_country.id ) 
+        #         WHERE (auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
+        #         """
+        # df = pd.read_sql(sql, con=db)
+
+
         # sql = """
         #     SELECT auth_user.email, auth_user.username, cart_userprofile.shine_id 
         #     FROM auth_user LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
@@ -167,8 +170,8 @@ class Command(BaseCommand):
         #     except:
         #         continue
 
-        
+        # df = pd.read_csv('cleaned_present_user.csv', sep=',')
+        # df2 = pd.read_csv('new_absent_user.csv',sep=',')
 
 
-                    
         pass

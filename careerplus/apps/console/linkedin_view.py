@@ -146,7 +146,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48])
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48, 161, 162, 163])
 
         user = self.request.user
         if user.is_superuser:
@@ -935,10 +935,12 @@ class ProfileUpdationView(DetailView):
         flag=request.POST.get('flag'+str(count)+'', None)
         
         if action == -9 and queue_name == "internationalprofileupdate":
+            count = 0
             counts = request.POST.getlist('count', None)
+            print(counts)
             for count in counts:
-                username=request.POST.get('username'+str(count)+'', None)
-                password=request.POST.get('password'+str(count)+'', None)
+                username=request.POST.get('username'+count+'', None)
+                password=request.POST.get('password'+count+'', None)
                 if not username and not password:
                     msg = 'Please update all the profiles first'
                     messages.add_message(request, messages.SUCCESS, msg)
@@ -968,10 +970,12 @@ class ProfileUpdationView(DetailView):
         elif update_sub == "1":
             try:
                 orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=kwargs.get('pk'))
+                profile_obj = orderitem.product.productextrainfo_set.get(info_type='profile_update')
+                country_obj = Country.objects.get(pk=profile_obj.object_id)
                 if username and password and flag:
                     profile_obj = InternationalProfileCredential()
                     profile_obj.oi = orderitem
-                    profile_obj.country = orderitem.product.profile_country
+                    profile_obj.country = country_obj
                     profile_obj.username = username
                     profile_obj.password = password
                     profile_obj.candidateid = orderitem.order.candidate_id
@@ -1016,6 +1020,7 @@ class InterNationalAssignmentOrderItemView(View):
                     data.update({
                         "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         "writer_name": assign_to.name,
+                        "writer_email": writer.email,
                         "subject": "Your developed document has been uploaded",
 
                     })

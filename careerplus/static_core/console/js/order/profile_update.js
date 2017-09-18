@@ -60,7 +60,7 @@ $(function(){
 
 function jobProfileUpdate(oi_id, ){
     
-    if($('#'+oi_id+'_username').val()=="" || $('#'+oi_id+'_password').val()=="")
+    if($('#'+oi_id+'_username').val()=="" || $('#'+oi_id+'_password').val()=="" || $('#'+oi_id+'_flag').is(":not(:checked)"))
         {
             alert('Please fill the required details.');
         }

@@ -19,7 +19,6 @@
           </thead>
           <tbody>
           {% for vars in var_list %}
-            
             <tr>
               <td><label><input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" data-price="{{vars.inr_price}}" data-id="{{vars.id}}" actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}"></label></td>
               <td>{{vars.mode}}</td>

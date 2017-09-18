@@ -135,6 +135,10 @@ class Order(AbstractAutoDate):
     def get_txns(self):
         return self.ordertxns.all()
 
+    def get_currency(self):
+        currency_dict = dict(CURRENCY_SYMBOL)
+        return currency_dict.get(self.currency)
+
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
@@ -244,13 +248,13 @@ class OrderItem(AbstractAutoDate):
     closed_on = models.DateTimeField(null=True, blank=True)
     draft_added_on = models.DateTimeField(null=True, blank=True)
     approved_on = models.DateTimeField(null=True, blank=True)  # draft approved on
-
+    expiry_date = models.DateTimeField(null=True, blank=True)
     user_feedback = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
-        ordering = ['pk']
+        ordering = ['-created']
         verbose_name = _("Order Item")
         verbose_name_plural = _("Order Items")
         permissions = (
@@ -342,12 +346,7 @@ class OrderItem(AbstractAutoDate):
         )
 
     def __str__(self):
-        if self.product:
-            title = self.product.title
-        else:
-            title = _('<missing product>')
-        return _("Product '%(name)s', quantity '%(qty)s'") % {
-            'name': title, 'qty': self.quantity}
+        return '#'+str(self.pk)
 
     @property
     def get_oi_status(self):
