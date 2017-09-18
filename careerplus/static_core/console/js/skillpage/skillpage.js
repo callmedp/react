@@ -65,7 +65,7 @@ $(function() {
         var page = parseInt($("#page_id").val());
         $.ajax({
             url: "/ajax/product/load-more/",
-            data : {"page": page, "slug": $("#slug_id").val()},
+            data : {"page": page, "slug": $("#slug_id").val(), "pk":("#pk_id").val()},
             success: function(data, textStatus, jqXHR)
             {
                 document.getElementById("page_id").value = Number(page)+1;

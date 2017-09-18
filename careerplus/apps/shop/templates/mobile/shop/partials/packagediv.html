@@ -1,0 +1,38 @@
+{% if prd_service == 'course' %}
+    <div class="detail-wrap">
+        <div class="provided-by">
+            <div class="media">         
+                <figure class="media-left">
+                  <span><img src="{{prd_vendor_img}}"></span>
+                </figure>
+                <div class="media-body rel">
+                    <p class="pb-0">Provided by</p>
+                    <a href="#">{{prd_vendor}}</a>
+                    <p class="pb-0">Starting at <strong>Rs. {{start_price}}/-</strong></p>
+                </div>  
+            </div>
+        </div>
+        {% if pop %}
+            <div class="select-provider">
+                <div class="form-control sidebar-secondary-trigger">
+                    Select other provider
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="detail-wrap">
+        <div class="provided-by">
+            <div class="media">
+                <div class="media-body rel">
+                  <p class="pb-0">Experience</p>
+                  <a>{{prd_exp}}</a>
+                  <p class="pb-0">Starting at <strong>{{start_price}}/-</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="select-provider">
+            <div class="form-control sidebar-secondary-trigger">Other packages</div>
+        </div>
+    </div>
+{% endif %}
