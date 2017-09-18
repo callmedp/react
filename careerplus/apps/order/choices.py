@@ -231,3 +231,65 @@ OI_EMAIL_STATUS = (
     (153, 'Sent Flow13 Second Draft Email'),
     (154, 'Sent Flow13 Final Draft Email'),   
 )
+
+OI_SMS_STATUS = (
+    # common status for sending sms 1-20
+    (0, 'default'),
+    (1, 'Sent Offline Payment Sms'),
+    (2, 'Sent Online Payment Sms'),
+    # this closer sms for flow1 and flow 8.
+    (3, 'Sent Resume Auto Closer Sms'),
+    # this closer sms for flow 2,6 and 10.
+    (4, 'Sent Closer Sms'),
+
+    # flow1 :21 - 40
+    (21, 'Sent Flow1 Pending Resume Sms'),
+    (22, 'Sent First Draft Sms'),
+    (23, 'Sent Second Draft Sms'),
+    (24, 'Sent Final Draft Sms'),
+    (25, 'Sent Reminder Draft1 Email'),
+    (26, 'Sent Reminder Draft2 Email'),
+
+    # flow3 :41 - 60
+    (41, 'Sent Resume Critique Pending Resume Sms'),
+    (42, 'Sent Resume Critique Closed Sms'),
+
+    # flow4 :61 - 70
+    (61, 'Sent International Profile Pending Resume Sms'),
+    
+    # flow5 :71 - 80
+    (71, 'Sent Feature Profile Pending Resume Sms'),
+
+    # flow7 :91 - 100
+    (91, 'Sent Resume Booster Pending Resume Sms'),
+    (92, 'Sent Resume Booster consultant/Recruiter Sms'),
+    (93, 'Sent Resume Booster Candidate Sms'),
+    
+    # linkedin flow 8:101-120
+    (101, 'Sent Allocated To Writer Sms For Linkedin'),
+    (102, 'Sent Linkedin First Draft Sms'),
+    (103, 'Sent Linkedin Second Draft Sms'),
+    (104, 'Sent Linkedin Final Draft Sms'),
+    # (105, 'Sent Linkedin Service Closed Email'),
+    (106, 'Sent Linkedin Draft1 Reminder Sms'),
+    (107, 'Sent Linkedin Draft2 Reminder Sms'),
+    (108, 'Sent Pending Counselling Form Email'),
+    
+    # flow9 :121 - 130
+    (121, 'Sent RoundOne Incomplete Profile Sms'),
+
+    # flow10 :131 - 140
+    (131, 'Sent Pending Studymate Test Sms'),
+
+    # flow12 :141 - 150
+    (141, 'Sent Flow12 Pending Resume Sms'),
+    (142, 'Sent Flow12 First Draft Sms'),
+    (143, 'Sent Flow12 Second Draft Sms'),
+    (144, 'Sent Flow12 Final Draft Sms'),
+
+    # flow13 :151 - 160
+    (151, 'Sent Flow13 Pending Resume Sms'),
+    (152, 'Sent Flow13 First Draft Sms'),
+    (153, 'Sent Flow13 Second Draft Sms'),
+    (154, 'Sent Flow13 Final Draft Sms'),   
+)

@@ -331,16 +331,22 @@ def payment_pending_mailer(order=None):
                 if 1 not in email_sets:
                     to_emails = [order.email]
                     mail_type = "PAYMENT_PENDING"
+                    sms_type = 'OFFLINE_PAYMENT'
                     data = {}
                     data.update({
                         "subject": 'Your Shine Payment Confirmation pending',
                         "first_name": order.first_name if order.first_name else order.candidate_id,
                         "txn": pymt_obj.txn,
-                        'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+                        'mobile': oi.order.mobile,
                     })
                     return_val = send_email_task.delay(to_emails, mail_type, data)
                     if return_val:
                         oi.emailorderitemoperation_set.create(email_oi_status=1)
+                try:
+                    SendSMS().send(sms_type=sms_type, data=data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
     except Exception as e:
         raise e
 

@@ -38,6 +38,11 @@ class SendSMS(object):
 
     def send(self, sms_type=None, data=None):
         send_dict = {}
+        if sms_type == "OFFLINE_PAYMENT":
+            template_name = data.get('template_name', 'offline_payment.html')
+            send_dict['template'] = 'sms/' + template_name
+            self.process(send_dict, data)
+
         if sms_type == "ASSIGNMENT_ACTION":
             template_name = data.get('template_name', 'assignment_action.html')
             send_dict['template'] = 'sms/' + template_name
