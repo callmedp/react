@@ -126,10 +126,11 @@ class LinkedinQueueView(ListView, PaginationMixin):
                                 return_val = send_email_task.delay(to_emails, mail_type, data)
                                 if return_val.result:
                                     obj.emailorderitemoperation_set.create(email_oi_status=101)
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=data)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            if obj.delivery_service.name == 'SuperExpress':
+                                try:
+                                    SendSMS().send(sms_type=mail_type, data=data)
+                                except Exception as e:
+                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                             obj.orderitemoperation_set.create(
                                 oi_status=1,
@@ -1018,7 +1019,7 @@ class InterNationalAssignmentOrderItemView(View):
                         "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         "writer_name": assign_to.name,
                         "subject": "Your developed document has been shared with our expert",
-                        "writer_email": writer.email,
+                        "writer_email": assign_to.email,
                         "subject": "Your developed document has been uploaded",
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'
@@ -1026,10 +1027,12 @@ class InterNationalAssignmentOrderItemView(View):
                         return_val = send_email_task.delay(to_emails, mail_type, data)
                         if return_val.result:
                             oi.emailorderitemoperation_set.create(email_oi_status=63)
-                    try:
-                        SendSMS().send(sms_type=mail_type, data=data)
-                    except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+
+                    if obj.delivery_service.name == 'SuperExpress':
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=data)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     obj.orderitemoperation_set.create(
                         oi_status=1,

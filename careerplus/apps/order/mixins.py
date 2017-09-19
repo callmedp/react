@@ -13,7 +13,8 @@ from wallet.models import Wallet
 
 from .models import Order, OrderItem
 from .functions import (
-    update_initiat_orderitem_sataus,)
+    update_initiat_orderitem_sataus, service_initiation,
+    )
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -125,6 +126,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
             # update initial operation status
             update_initiat_orderitem_sataus(order=order)
+            service_initiation(order=order)
 
             # for linkedin
             linkedin_product = order.orderitems.filter(product__type_flow=8)

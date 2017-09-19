@@ -442,6 +442,7 @@ class DashboardAcceptService(View):
 
                         to_emails = [oi.order.email]
                         email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                        sms_sets = list(oi.smsorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                         mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
@@ -450,15 +451,25 @@ class DashboardAcceptService(View):
                             'draft_added': oi.draft_added_on,
                         })
 
-                        if oi.product.type_flow == 1 and len(email_sets) == 0:
+                        if oi.product.type_flow == 1 and (len(email_sets) == 0 and len(sms_sets) == 0):
                             return_val = send_email_task.delay(to_emails, mail_type, email_dict)
                             if return_val.result:
                                 obj.emailorderitemoperation_set.create(email_oi_status=9)
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=data)
+                                oi.smsorderitemoperation_set.create(sms_oi_status=4)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                        elif oi.product.type_flow == 8 and len(email_sets) == 1:
+                        elif oi.product.type_flow == 8 and (len(email_sets) == 1 and len(sms_sets) == 1):
                             return_val = send_email_task.delay(to_emails, mail_type, email_dict)
                             if return_val.result:
                                 obj.emailorderitemoperation_set.create(email_oi_status=9)
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=data)
+                                oi.smsorderitemoperation_set.create(sms_oi_status=4)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
                         
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)

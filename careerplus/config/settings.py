@@ -11,7 +11,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = 'http://localhost:8000'
+SITE_DOMAIN = 'http://localhost:8000/'
 SITE_PROTOCOL = 'https'
 
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'

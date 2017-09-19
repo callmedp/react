@@ -34,7 +34,7 @@ def draft_reminder_mail():
             today_date = timezone.now().date()
             draft_level = oi.draft_counter
             if oi.product.type_flow == 1:
-                email_sets = oi.emailorderitemoperation_set.filter(email_oi_status=26) if draft_level == 1 else oi.emailorderitemoperation_set.filter(email_oi_status=27)            
+                email_sets = oi.emailorderitemoperation_set.filter(email_oi_status=26) if draft_level == 1 else oi.emailorderitemoperation_set.filter(email_oi_status=27)           
                 if draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=8) and len(email_sets) == 0:
                     to_emails = [oi.order.email]
                     mail_type = 'REMINDER'
@@ -100,14 +100,15 @@ def draft_reminder_mail():
                         "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                         'draft_added':oi.draft_added_on,
                     })
-                    if 25 not in email_sets:
+                    if len(email_sets) == 0 and len(sms_sets) == 0:
                         return_val = send_email_task.delay(to_emails, mail_type, email_dict)
                         if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=25)
-                    try:
-                        SendSMS().send(sms_type=mail_type, data=data)
-                    except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            oi.emailorderitemoperation_set.create(email_oi_status=9)
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=data)
+                            oi.smsorderitemoperation_set.create(sms_oi_status=4)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     last_oi_status = oi.oi_status
                     oi.oi_status = 4
