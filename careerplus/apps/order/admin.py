@@ -50,7 +50,7 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'order', 'parent', 'product', 'title', 'is_addon',
         'is_combo', 'no_process', 'is_variation', 'oi_status', 'draft_counter']
     inlines = [OrderItemOperationInline, ]
-    raw_id_fields = ('order', 'parent', 'product', 'partner')
+    raw_id_fields = ('order', 'parent', 'product', 'partner', 'oio_linkedin')
     
     list_filter = ('oi_status', 'partner')
     search_fields = ('order__number', 'id',

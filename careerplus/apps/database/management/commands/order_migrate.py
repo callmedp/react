@@ -148,31 +148,6 @@ class Command(BaseCommand):
         
         for i, row in order_df.iterrows():
             if row['C_ID'] and row['C_ID'] == row['C_ID']:
-                # data_dict = (
-                #         'created': row['added_on'],
-                #         'modified': row['modified_on'],
-                #         'number': row['transaction_id'],
-                #         'site': 0,
-                #         'candidate_id': row['C_ID'],
-                #         'status': row['status'],
-                #         'currency': row['currency'],
-                #         'total_incl_tax': row['amount_payable'],
-                #         'total_excl_tax': row['total'],
-                #         'date_placed': row['added_on'],
-                #         'closed_on': row['closed_on'],
-                #         'email': row['Email'],
-                #         'country_code': row['code2'],
-                #         'mobile': row['order_mobile'],
-                #         'country_id': row['country_obj'],
-                #         'invoice': row['invoice_file'],
-                #         'payment_date':row['payment_date'],
-                #         'archive_json': dict(row.to_dict()),
-                #         'co_id': row['id'],
-                #         'conv_charge': row['convenience_charges'],
-                #         'welcome_call_done': row['welcome_call'],
-                #         'paid_by_id': None,
-                #         'tax_config': None 
-                #     )
                 data_tup = (
                         str(row['added_on']) if row['added_on'] == row['added_on'] else None,
                         str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
