@@ -13,10 +13,10 @@ class SendSMS(object):
     def base_send_sms(self, mob, message):
         try:
             if settings.DEBUG:
-                mob = '9821116001' #9654947449
+                mob = '9654947449'
             payload = {
                 'api_key': settings.ACCESSKEY, 'to': mob, 'message': message,
-                "method": "sms", 'sender': ''}
+                "method": "sms", 'sender': 'SHINEM'}
             resp = requests.get(settings.HTMSL_URL, params=payload)
         except Exception as e:
             logging.getLogger('sms_log').error("%s - %s" % (str(mob), str(e)))

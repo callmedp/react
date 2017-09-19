@@ -225,7 +225,7 @@ TAX_RATE_PERCENTAGE = 18
 # HTMSL for SMS
 HTMSL_USER = 'sumo'
 HTMSL_PASS = 'Firefly@456'
-HTMSL_URL = 'https://alerts.solutionsinfini.com/'
+HTMSL_URL = 'https://alerts.solutionsinfini.com/api/v4/'
 ACCESSKEY = 'Af7fa4f7dacdc996393c18071b57d0a6f'
 
 
