@@ -9,9 +9,11 @@ from django.core.urlresolvers import reverse
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+
 from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
+
 from partner.models import Vendor
 from faq.models import (
     FAQuestion, ScreenFAQ)
@@ -48,7 +50,7 @@ from .choices import (
     convert_gbp)
 
 
-class ProductClass(AbstractAutoDate,AbstractSEO,):
+class ProductClass(AbstractAutoDate, AbstractSEO,):
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
@@ -979,6 +981,11 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return False
 
+    @property
+    def get_name(self):
+        # display name
+        return self.heading if self.heading else self.name
+
     def get_heading(self):
         if self.is_course:
             return '%s - Certification Course' % (
@@ -1216,7 +1223,7 @@ class Product(AbstractProduct, ModelMeta):
             id__in=delivery_obj_ids, active=True)
 
         flag = delivery_services.filter(
-            name="Normal", inr_price=0.0,
+            slug="normal", inr_price=0.0,
             usd_price=0.0, aed_price=0.0,
             gbp_price=0.0).exists()
         if flag and delivery_services.count() > 1:
@@ -1973,10 +1980,15 @@ class ScreenChapter(AbstractAutoDate):
         return self.chapter
 
 
-class DeliveryService(AbstractAutoDate):
+class DeliveryService(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
-        _('Delivery Type'),
-        max_length=255, unique=True, null=False, blank=False)
+        _('Delivery Service Name'), max_length=200,
+        help_text=_('Name will be unique to decide slug'))
+
+    slug = models.CharField(
+        _('Slug'), unique=True,
+        max_length=250, help_text=_('Unique slug'))
+
     inr_price = models.DecimalField(
         _('INR Price'),
         max_digits=12, decimal_places=2,

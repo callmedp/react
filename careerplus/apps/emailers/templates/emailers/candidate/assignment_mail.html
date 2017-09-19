@@ -32,7 +32,7 @@
 
 			<ul style="margin:0px;">
               {% if oi.product.type_flow == 8 or oi.product.type_flow == 1 %}
-                {% if oi.delivery_service and oi.delivery_service.name == 'Super Express' %}
+                {% if oi.delivery_service and oi.delivery_service.slug == 'super-express' %}
                     <li style="padding-bottom: 7px;">
                         You will get a call from me within 15 hours for Super Express delivery on your resume. Request you to be available for the call, so the resume can be processed as per timelines. The resume would then be prepared by me and delivered to you within the next 24 hours. 
                     </li>
@@ -43,7 +43,7 @@
                        You will have a maximum of 7 days after delivery of the initial resume to discuss the document with me and to incorporate changes in case you are not satisfied with the initial resume.
                     </li>
 
-                {% elif oi.delivery_service and oi.delivery_service.name == 'Express' %}
+                {% elif oi.delivery_service and oi.delivery_service.name == 'express' %}
                     <li style="padding-bottom: 7px;">
                         You will get a call from me within 48 hours for Express delivery on your resume. Request you to be available for the call, so the resume can be processed as per timelines. The resume would then be prepared by me and delivered to you within 4 working days.
                     </li>

@@ -196,7 +196,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -458,7 +458,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         try:
             if self.delivery_typ:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -562,7 +562,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.name == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -669,7 +669,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.name == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))

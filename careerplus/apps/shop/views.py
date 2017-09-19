@@ -60,6 +60,7 @@ class ProductInformationMixin(object):
         }
 
     def get_info(self, product):
+        info = {}
         info['prd_img'] = product.image.url
         info['prd_img_alt'] = product.image_alt
         info['prd_img_bg'] = product.get_bg
@@ -128,7 +129,7 @@ class ProductInformationMixin(object):
         if chapter_list:
             structure.update({
                 'prd_program_struct': True,
-                'chapter':True,
+                'chapter': True,
                 'chapter_list': chapter_list
             })
         return structure

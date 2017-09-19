@@ -30,9 +30,11 @@
                   <a title="{{course.heading}}" class="box-panel" href="{{course.get_absolute_url}}">
                     <div class="media">
                       <div class="media-left">
+                          {% if course.image %}
                           <figure class="color1" style="background-color:{{course.get_bg}};">
                             <img class="media-object" src="{{course.image.url}}" alt="{{course.image_alt}}" height="125" width="125">
                           </figure>
+                          {% endif %}
                       </div>
                       <div class="media-body">
 

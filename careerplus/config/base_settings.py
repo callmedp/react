@@ -442,7 +442,8 @@ CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
 
 ####### PRODUCT SETTINGS ####################
 # Do Not Change #
-COURSE_SLUG = ['course',]
+COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
-SERVICE_SLUG = ['service',]
+SERVICE_SLUG = ['service', ]
+DELIVERY_SLUG = ['normal', 'express', 'super-express']
 ############################################
