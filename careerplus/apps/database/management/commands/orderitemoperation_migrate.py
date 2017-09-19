@@ -34,10 +34,6 @@ class Command(BaseCommand):
         db2_user = db2_settings.get('USER')
         db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
 
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print( 'Fetching Migrated Order')
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        
         def flow_map(row):
             if row['addon_id'] and row['addon_id']== row['addon_id']:
                 return product_flow_dict.get(row['addon_id'], None)
@@ -46,7 +42,6 @@ class Command(BaseCommand):
             elif row['product_id'] and row['product_id'] == row['product_id']:
                 return product_flow_dict.get(row['product_id'], None)
             return None
-        
         def map_oi_status(flow, otype, new_status):
             new_status = not new_status
             oi_status, last_oi_status, counter, feedback = 0, 0, 1, False
@@ -308,30 +303,35 @@ class Command(BaseCommand):
             return oi_status, last_oi_status, counter, feedback
 
         sql = """
-                SELECT 
-                    cart_orderitem.id, cart_orderitem.order_id, cart_orderitem.name, cart_orderitem.price, cart_orderitem.product_id, 
-                    cart_orderitem.variation_id, cart_orderitem.parent_id, cart_orderitem.addon_id, cart_orderitem.combo_id, 
-                    cart_orderitem.units, cart_orderitem.waybill, cart_orderitem.vendor_coupon, cart_orderitem.service_provider, 
-                    cart_orderitem.added_on, cart_orderitem.modified_on, cart_orderitem.expires_on, cart_orderitem.has_discount_id, 
-                    cart_orderitem.oio_resume, cart_orderitem.oio_linkedin_id, cart_orderitem.oio_operation_type, 
-                    cart_orderitem.oio_rating, cart_orderitem.oio_assigned_by_id, cart_orderitem.oio_assigned_to_id, 
-                    cart_orderitem.oio_added_on, cart_orderitem.oio_modified_on, cart_orderitem.oio_lock, cart_orderitem.feedback_date, 
-                    cart_orderitem.closed_date, cart_orderitem.oi_flow_status, cart_orderitem.tat_date, cart_orderitem.new_status, 
-                    cart_orderitem.status_flag, cart_orderitem.midout_sent_on, cart_orderitem.complain_counter, cart_orderitem.deduct_slab_id, 
-                    cart_orderitem.net_payable_allocation, cart_orderitem.on_hold 
-                FROM cart_orderitem 
+                SELECT cart_orderitemoperation.id, cart_orderitemoperation.order_item_id, 
+                cart_orderitemoperation.resume, cart_orderitemoperation.linkedin_id, 
+                cart_orderitemoperation.operation_type, cart_orderitemoperation.rating, 
+                cart_orderitemoperation.assigned_by_id, cart_orderitemoperation.assigned_to_id, 
+                cart_orderitemoperation.added_on, cart_orderitemoperation.modified_on, 
+                cart_orderitemoperation.operation_changed_from 
+                FROM cart_orderitemoperation 
+                INNER JOIN cart_orderitem 
+                ON ( cart_orderitemoperation.order_item_id = cart_orderitem.id ) 
                 INNER JOIN cart_order 
-                ON ( cart_orderitem.order_id = cart_order.id ) WHERE cart_order.added_on >= '2014-04-01 00:00:00'  
-                ORDER BY cart_orderitem.added_on DESC
-                """
-        oi_df = pd.read_sql(sql,con=db)
-                
-        new_order_df = pd.read_sql('SELECT id AS order_obj, co_id as order_id  from order_order', con=db2)
-        
-        oi_df = pd.merge(oi_df, new_order_df, how='left', on='order_id')
-        oi_df = oi_df[~oi_df.order_obj.isnull()]    
+                ON ( cart_orderitem.order_id = cart_order.id ) 
+                WHERE cart_order.added_on >= '2014-04-01 00:00:00'  
+                ORDER BY cart_orderitemoperation.added_on DESC;
+            """
+        oio_df = pd.read_sql(sql,con=db)
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print( 'Merging Order')
+        print( 'Fetching Migrated OrderItem')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+           
+        new_order_item_df = pd.read_sql(
+            'SELECT order_orderitem.id as new_oi_id, order_orderitem.coi_id as order_item_id, order_orderitem.product_id, shop_product.type_flow FROM order_orderitem LEFT JOIN shop_product ON order_orderitem.product_id = shop_product.id;',con=db2)
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print( 'Merging OrderItem')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        
+        oio_df = pd.merge(oio_df, new_order_item_df, how='left', on='order_item_id')
+        oio_df = oio_df[~oio_df.new_oi_id.isnull()]    
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print( 'Merging Staff user OrderItem')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
         staff_user_df = pd.read_sql('SELECT id as staff_obj, cp_id as user_id FROM users_user', con=db2)
@@ -342,117 +342,45 @@ class Command(BaseCommand):
         staff_user_df = staff_user_df.set_index('user_id')['staff_obj'].to_dict()
         
 
-
-        product_df = pd.read_sql('SELECT id as product_obj, cp_id as pid, cpv_id as pvid, type_flow FROM shop_product', con=db2)
-        product_variation_df = product_df[~product_df.pvid.isnull()]
-        
-
-        product_dict = product_df.set_index('pid')['product_obj'].to_dict()
-        product_variation_dict = product_variation_df.set_index('pvid')['product_obj'].to_dict()
-        
-        product_flow_dict = product_df.set_index('product_obj')['type_flow'].to_dict()
-        product_flow_variation_dict = product_variation_df.set_index('product_obj')['type_flow'].to_dict()
-        
-
-        del product_variation_df
-        del product_df
+        del new_order_item_df
         
         
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print( 'Merging STAFF PRODUCT FLOW')
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
-        oi_df.oio_assigned_by_id = oi_df.oio_assigned_by_id.apply(lambda x : staff_user_df.get(x, None))
-        oi_df.oio_assigned_to_id = oi_df.oio_assigned_to_id.apply(lambda x : staff_user_df.get(x, None))
-        oi_df.product_id = oi_df.product_id.apply(lambda x : product_dict.get(x, None))
-        oi_df.addon_id = oi_df.addon_id.apply(lambda x : product_dict.get(x, None))
-        oi_df.variation_id = oi_df.variation_id.apply(lambda x : product_variation_dict.get(x, None))
-        oi_df.combo_id = oi_df.combo_id.apply(lambda x : product_variation_dict.get(x, None))
-        oi_df['type_flow'] = oi_df.apply(flow_map, axis=1)
+        oio_df.assigned_by_id = oio_df.assigned_by_id.apply(lambda x : staff_user_df.get(x, None))
+        oio_df.assigned_to_id = oio_df.assigned_to_id.apply(lambda x : staff_user_df.get(x, None))
         cursor = db2.cursor()
 
         update_values = []
         update_sql = """
-                INSERT INTO order_orderitem 
+                INSERT INTO order_orderitemoperation 
                 (
-                    partner_name, title, upc, quantity, oi_price_before_discounts_incl_tax, 
-                    oi_price_before_discounts_excl_tax, no_process, is_combo, is_variation,
-                    oi_status, last_oi_status, oi_resume, oi_draft, draft_counter, tat_date, waiting_for_input,
-                    closed_on, draft_added_on, approved_on, modified, assigned_by_id, assigned_to_id,
-                    oio_linkedin_id, order_id, parent_id, partner_id, product_id, user_feedback, created,
-                    is_addon, delivery_price_excl_tax, delivery_price_incl_tax, delivery_service_id,
-                    oi_flow_status, cost_price, discount_amount, selling_price,tax_amount,
-                    archive_json,coi_id, expiry_date
+                    created, modified, oi_resume, oi_draft, draft_counter,
+                    oi_status, last_oi_status, added_by_id, assigned_to_id,
+                    linkedin_id, oi_id, coio_id
                 ) VALUES
-                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s, %s, %s, %s,%s) 
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
                 """
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Bulk Insert Start')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
-        for i, row in oi_df.iterrows():
-            if row['order_obj'] and row['order_obj'] == row['order_obj']:
-                is_combo = False,
-                is_variation = False,
-                is_addon = False
-                product_id = row['product_id']
-                if row['combo_id'] and row['combo_id'] == row['combo_id']:
-                    is_combo = True
-
-                if row['addon_id'] and row['addon_id']== row['addon_id']:
-                    is_addon = True
-                    product_id = row['addon_id']
-                
-                elif row['variation_id'] and row['variation_id'] == row['variation_id']:
-                    is_variation = True
-                    product_id = row['variation_id']
-                
-                oi_status, last_oi_status, counter, feedback = map_oi_status(row['type_flow'], row['oio_operation_type'], row['new_status'])
+        for i, row in oio_df.iterrows():
+            if row['new_oi_id'] and row['new_oi_id'] == row['new_oi_id']:
+                oi_status, last_oi_status, counter, feedback = map_oi_status(row['type_flow'], row['operation_type'], True)
 
                 data_tup = (
-                        '',
-                        row['name'] if row['name'] and row['name'] == row['name'] else None,
-                        row['product_id'],
-                        row['units'],
-                        Decimal(0),
-                        Decimal(0),
-                        False,
-                        is_combo,
-                        is_variation,
+                        str(row['added_on']) if row['added_on'] == row['added_on'] else None,
+                        str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
+                        row['resume'] if row['resume'] and row['resume'] == row['resume'] else None,
+                        row['resume'] if row['resume'] and row['resume'] == row['resume'] else None,
+                        counter,
                         oi_status,
                         last_oi_status,
-                        row['oio_resume'] if row['oio_resume'] and row['oio_resume'] == row['oio_resume'] else None,
-                        row['oio_resume'] if row['oio_resume'] and row['oio_resume'] == row['oio_resume'] else None,
-                        counter,
+                        row['assigned_by_id'] if row['assigned_by_id'] and row['assigned_by_id'] == row['assigned_by_id'] else None,
+                        row['assigned_to_id'] if row['assigned_to_id'] and row['assigned_to_id'] == row['assigned_to_id'] else None,
                         None,
-                        False,
-                        str(row['closed_date']) if row['closed_date'] == row['closed_date'] else None,
-                        None,
-                        None,
-                        str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
-                        row['oio_assigned_by_id'] if row['oio_assigned_by_id'] and row['oio_assigned_by_id'] == row['oio_assigned_by_id'] else None,
-                        row['oio_assigned_to_id'] if row['oio_assigned_to_id'] and row['oio_assigned_to_id'] == row['oio_assigned_to_id'] else None,
-                        None,
-                        row['order_obj'],
-                        None,
-                        None,
-                        product_id,
-                        feedback,
-                        str(row['added_on']) if row['added_on'] == row['added_on'] else None,
-                        is_addon,
-                        Decimal(0),
-                        Decimal(0),
-                        None,
-                        row['oi_flow_status'] if row['oi_flow_status'] == row['oi_flow_status'] else 0,
-                        row['price'] if row['price'] and row['price'] == row['price'] else Decimal(0),
-                        Decimal(0),
-                        row['price'] if row['price'] and row['price'] == row['price'] else Decimal(0),
-                        Decimal(0),
-                        str(dict(row.to_dict())),
+                        row['new_oi_id'],
                         row['id'],
-                        str(row['expires_on']) if row['expires_on'] == row['expires_on'] else None,
                         )
                 
                 update_values.append(data_tup)    
@@ -461,57 +389,95 @@ class Command(BaseCommand):
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 print( 'Bulk Insert ' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                # cursor.executemany(update_sql, update_values)
+                cursor.executemany(update_sql, update_values)
                 update_values = []
                 
         if update_values:
-            # cursor.executemany(update_sql, update_values)
+            cursor.executemany(update_sql, update_values)
             update_values = []
         cursor.close()
         cursor = db2.cursor()
 
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print( 'Bulk Update Parent Order Items')
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        
-        new_order_item_df = pd.read_sql('SELECT id as new_parent_id, coi_id as parent_id FROM order_orderitem',con=db2)
-        
-        oi_df = pd.merge(oi_df, new_order_item_df, how='left', on='parent_id')
-        new_order_item_df = new_order_item_df.rename(columns={'new_parent_id': 'new_id', 'parent_id': 'id'})
-        oi_df = pd.merge(oi_df, new_order_item_df, how='left', on='id')
+        del oio_df
 
-        coi_list = []
-        parent_id_list = []
-        for i, row in oi_df[~oi_df.new_parent_id.isnull()].iterrows():
-            coi_list.append(' WHEN {0} THEN {1} '.format(row['new_id'], row['new_parent_id']))
-            parent_id_list.append(str(row['new_id']))
-            if len(parent_id_list) > 5000:
-                update_sql = '''
-                    UPDATE order_orderitem SET parent_id = (
-                    CASE id 
-                        {0}
-                    END) WHERE id IN ({1});
-                    '''.format(' '.join(coi_list), ', '.join(parent_id_list))
-                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                print( 'Bulk Update ' + str(i))
-                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        oio_df = pd.read_sql(
+            'SELECT id as new_oio_id, oi_id as new_oi_id, coio_id as oio_id FROM order_orderitemoperation;',con=db2)
+
+        sql = """
+                SELECT cart_message.id, cart_message.from_user_id, auth_user.email as 'Email', cart_message.to_user_id, 
+                cart_message.oio_id, cart_message.order_message, cart_message.message, 
+                cart_message.internal, cart_message.added_on, cart_message.modified_on 
+                FROM cart_message 
+                INNER JOIN cart_orderitemoperation 
+                ON ( cart_message.oio_id = cart_orderitemoperation.id ) 
+                INNER JOIN cart_orderitem 
+                ON ( cart_orderitemoperation.order_item_id = cart_orderitem.id ) 
+                INNER JOIN cart_order ON ( cart_orderitem.order_id = cart_order.id ) 
+                LEFT JOIN auth_user ON (cart_message.from_user_id = auth_user.id)
+                WHERE cart_order.added_on >= '2014-04-01 00:00:00' 
+                ORDER BY cart_message.added_on DESC;  
+            """
+        msg_df = pd.read_sql(sql,con=db)
+        msg_df = pd.merge(msg_df, oio_df, how='left', on='oio_id')
+        msg_df = msg_df[~msg_df.new_oio_id.isnull()]
+        msg_df.from_user_id = msg_df.from_user_id.apply(lambda x : staff_user_df.get(x, None))
+        user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
+        user_df = user_df[['Email', 'C_ID']]
+        user_df = user_df.drop_duplicates(subset=['Email'], keep='last')
+        
+        user_df = user_df.set_index('Email')['C_ID'].to_dict()
+        msg_df.Email = msg_df.Email.apply(lambda x : user_df.get(x, None))
+        
+        cursor = db2.cursor()
+
+        update_values = []
+        update_sql = """
+                INSERT INTO order_message 
+                (
+                    created, modified, added_by_id, candidate_id, is_internal,
+                    message, oio_id, oi_id
+                ) VALUES
+                (%s, %s, %s, %s, %s, %s, %s, %s) 
+                """
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print( 'Bulk Insert Start')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        for i, row in msg_df.iterrows():
+            if row['new_oio_id'] and row['new_oio_id'] == row['new_oio_id']:
+                added_by = None
+                candidate_id = None
+                if row['from_user_id'] and row['from_user_id'] == row['from_user_id']:
+                    added_by = row['from_user_id']
+                else:
+                    if row['Email'] and row['Email'] == row['Email']:
+                        candidate_id = row['Email']
+                    else:
+                        candidate_id = '' 
+                data_tup = (
+                        str(row['added_on']) if row['added_on'] == row['added_on'] else None,
+                        str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
+                        added_by,
+                        candidate_id,
+                        row['internal'],
+                        row['message'] if row['message'] and row['message'] == row['message'] else None,
+                        row['new_oio_id'],
+                        row['new_oi_id'],
+                        )
                 
-                db2.query(update_sql)
-                update_sql = ''
-                parent_id_list = []
-                coi_list = []
-        if len(parent_id_list):
-            update_sql = '''
-                    UPDATE order_orderitem SET parent_id = (
-                    CASE id 
-                        {0}
-                    END) WHERE id IN ({1});
-                    '''.format(' '.join(coi_list), ', '.join(parent_id_list))
-            db2.query(update_sql)
-            update_sql = ''
-            parent_id_list = []
-            coi_list = []
+                update_values.append(data_tup)    
+            if len(update_values) > 5000:
+                
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                cursor.executemany(update_sql, update_values)
+                update_values = []
+                
+        if update_values:
+            cursor.executemany(update_sql, update_values)
+            update_values = []
+        cursor.close()
+        cursor = db2.cursor()
 
-        print('Parent Order Items Migrated')
-        
+
         pass

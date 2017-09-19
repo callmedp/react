@@ -148,31 +148,6 @@ class Command(BaseCommand):
         
         for i, row in order_df.iterrows():
             if row['C_ID'] and row['C_ID'] == row['C_ID']:
-                # data_dict = (
-                #         'created': row['added_on'],
-                #         'modified': row['modified_on'],
-                #         'number': row['transaction_id'],
-                #         'site': 0,
-                #         'candidate_id': row['C_ID'],
-                #         'status': row['status'],
-                #         'currency': row['currency'],
-                #         'total_incl_tax': row['amount_payable'],
-                #         'total_excl_tax': row['total'],
-                #         'date_placed': row['added_on'],
-                #         'closed_on': row['closed_on'],
-                #         'email': row['Email'],
-                #         'country_code': row['code2'],
-                #         'mobile': row['order_mobile'],
-                #         'country_id': row['country_obj'],
-                #         'invoice': row['invoice_file'],
-                #         'payment_date':row['payment_date'],
-                #         'archive_json': dict(row.to_dict()),
-                #         'co_id': row['id'],
-                #         'conv_charge': row['convenience_charges'],
-                #         'welcome_call_done': row['welcome_call'],
-                #         'paid_by_id': None,
-                #         'tax_config': None 
-                #     )
                 data_tup = (
                         str(row['added_on']) if row['added_on'] == row['added_on'] else None,
                         str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
@@ -300,44 +275,6 @@ class Command(BaseCommand):
             cursor.executemany(update_sql2, update_values)
             update_values = []
         
-        # print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        # print( 'Migrating Wallet Transactions')
-        # print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        
-
-        # update_sql2 = """INSERT INTO payment_paymenttxn (created, modified, txn, status, payment_mode, payment_date,
-        #         currency, instrument_number, instrument_issuer, instrument_issue_date, cart_id, order_id, txn_amount) 
-        #         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-        # for i, row in migrated_df.iterrows():
-        #     if row['order_obj'] and row['order_obj'] == row['order_obj']:
-        #         data_tup = (
-        #                 str(row['added_on']) if row['added_on'] == row['added_on'] else None,
-        #                 str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
-        #                 str(row['transaction_id']) if row['transaction_id'] and row['transaction_id'] == row['transaction_id'] else str(row['id']),
-        #                 STATUS_MAP.get(row['status'], 0),
-        #                 PAYMENT_MAP.get(row['payment_mode'], 0),
-        #                 str(row['payment_date']) if row['payment_date'] and row['payment_date'] == row['payment_date'] else None,
-        #                 row['currency'] if row['currency'] else 0,
-        #                 str(row['instrument_number']) if row['instrument_number'] and row['instrument_number'] == row['instrument_number'] else None,
-        #                 str(row['instrument_issuer']) if row['instrument_issuer'] and row['instrument_issuer'] == row['instrument_issuer'] else None,
-        #                 str(row['instrument_issue_date']) if row['instrument_issue_date'] and row['instrument_issue_date'] == row['instrument_issue_date'] else None,
-        #                 None,
-        #                 int(row['order_obj']) if row['order_obj'] and row['order_obj'] == row['order_obj'] else None,
-        #                 row['amount_payable'] if row['amount_payable'] else Decimal(0),
-        #             )
-        #         update_values.append(data_tup)    
-        #     if len(update_values) > 5000:
-                
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #         print( 'Bulk Insert Txns' + str(i))
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                
-        #         cursor.executemany(update_sql2, update_values)
-        #         update_values = []
-                
-        # if update_values:
-        #     cursor.executemany(update_sql2, update_values)
-        #     update_values = []
         
         db.close()
         db2.close()

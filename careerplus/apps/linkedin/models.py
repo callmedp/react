@@ -1,6 +1,8 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from seo.models import AbstractAutoDate
+from django.utils.translation import ugettext_lazy as _
+
 LEVEL = (('NA', '---------'),(0, 'School'),(1,'College'),)
 
 
@@ -20,10 +22,16 @@ class Draft(AbstractAutoDate):
     public_url = models.CharField(max_length=2000,null=True,
         blank=True, verbose_name='Public Urls')
     key_skills = models.CharField(
-        max_length=500,
+        max_length=2000,
         null=True,
         blank=True,
         help_text='comma separated(,) separated skills, e.g. java, python, ...')
+
+    cd_id = models.IntegerField(
+        _('CP Draft'),
+        blank=True,
+        null=True,
+        editable=False)
 
     def __str__(self):
 

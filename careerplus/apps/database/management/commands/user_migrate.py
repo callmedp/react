@@ -61,13 +61,16 @@ class Command(BaseCommand):
                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
                     
         df_nomatch = pd.read_csv('new_absent_user.csv', sep=',')
+        df_nomatch['RError'] = 'No Error'
+        df_nomatch['LError'] = 'No Error'
+        
         from django.contrib.auth.models import BaseUserManager
         manager = BaseUserManager()
         try:        
             for i, row in df_nomatch.iterrows():
                 if not i%50:
                     print(i)
-                if i > 99000:    
+                if i >0:    
                     password = manager.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
                     email = manager.normalize_email(row['Email'])
                     email = email.lower()
@@ -89,6 +92,7 @@ class Command(BaseCommand):
                     shine_id = None
                     response = requests.post(
                         post_url, data=json.dumps(post_data), headers=headers)
+                    df_nomatch.loc[df_nomatch.Email == row['Email'], 'RError'] = str(response.json())
                     if response.status_code == 201:
                         response_json = response.json()
                         shine_id = response_json.get("id", None)
@@ -102,9 +106,11 @@ class Command(BaseCommand):
                             shine_id_json = shine_id_response.json()
                             if shine_id_json:
                                 shine_id = shine_id_json[0].get("id", None)
+                        df_nomatch.loc[df_nomatch.Email == row['Email'], 'LError'] = str(shine_id_response.json())
                     if shine_id:
                         df_nomatch.loc[df_nomatch.Email == row['Email'], 'C_ID'] = shine_id
-                if i == 104000:
+                    
+                if i == 4000:
                     break
         except:
             pass
