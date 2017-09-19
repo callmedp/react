@@ -21,6 +21,7 @@ from django.core.files.base import ContentFile
 from order.models import Order, OrderItem
 from review.models import Review
 from emailers.email import SendMail
+from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from wallet.models import Wallet
 from core.api_mixin import ShineCandidateDetail
@@ -440,6 +441,8 @@ class DashboardAcceptService(View):
                         data['display_message'] = "You Accept draft successfully"
 
                         to_emails = [oi.order.email]
+                        email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                        sms_sets = list(oi.smsorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                         mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
@@ -448,11 +451,26 @@ class DashboardAcceptService(View):
                             'draft_added': oi.draft_added_on,
                         })
 
-                        try:
-                            SendMail().send(to_emails, mail_type, email_dict)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                        if oi.product.type_flow == 1 and (len(email_sets) == 0 and len(sms_sets) == 0):
+                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
+                            if return_val.result:
+                                obj.emailorderitemoperation_set.create(email_oi_status=9)
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=data)
+                                oi.smsorderitemoperation_set.create(sms_oi_status=4)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
+                        elif oi.product.type_flow == 8 and (len(email_sets) == 1 and len(sms_sets) == 1):
+                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
+                            if return_val.result:
+                                obj.emailorderitemoperation_set.create(email_oi_status=9)
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=data)
+                                oi.smsorderitemoperation_set.create(sms_oi_status=4)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                        
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                         except Exception as e:

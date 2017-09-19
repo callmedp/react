@@ -4,10 +4,14 @@ from .celery import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 IS_LIVE = False
-
+CELERY_ALWAYS_EAGER = True
+CELERY_RESULT_BACKEND = 'redis'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = 'http://localhost:8000'
+SITE_DOMAIN = 'http://localhost:8000/'
 SITE_PROTOCOL = 'https'
 
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
@@ -186,6 +190,9 @@ FINANCE_GROUP_LIST = ['FINANCE']
 BUSINESS_APPROVAL_LIMIT = 25000  # refund
 REFUND_GROUP_LIST = OPS_GROUP_LIST + OPS_HEAD_GROUP_LIST + BUSINESS_HEAD_GROUP_LIST + DEPARTMENT_HEAD_GROUP_LIST + FINANCE_GROUP_LIST
 
+CELERY_IMPORTS = (
+    'emailers.tasks',
+)
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']

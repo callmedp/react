@@ -141,7 +141,7 @@ class Order(AbstractAutoDate):
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
-        _('CP Order'),
+        _('CP OrderItem'),
         blank=True,
         null=True,
         editable=False)
@@ -398,6 +398,12 @@ class OrderItem(AbstractAutoDate):
 
 
 class OrderItemOperation(AbstractAutoDate):
+    coio_id = models.IntegerField(
+        _('CP Order IO'),
+        blank=True,
+        null=True,
+        editable=False)
+    
     oi = models.ForeignKey(OrderItem)
     linkedin = models.ForeignKey(Draft, null=True, blank=True)
     oi_resume = models.FileField(
@@ -424,6 +430,9 @@ class OrderItemOperation(AbstractAutoDate):
     class Meta:
         ordering = ['created']
 
+    def __str__(self):
+        return '#'+str(self.pk)
+
     @property
     def get_oi_status(self):
         dict_status = dict(OI_OPS_STATUS)
@@ -436,8 +445,9 @@ class OrderItemOperation(AbstractAutoDate):
 
 
 class Message(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem)
-
+    oi = models.ForeignKey(OrderItem, null=True)
+    oio = models.ForeignKey(OrderItemOperation, null=True)
+    
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='message_added_by',
@@ -452,6 +462,8 @@ class Message(AbstractAutoDate):
     class Meta:
         ordering = ['created']
 
+    def __str__(self):
+        return '#'+str(self.pk)
 
 class InternationalProfileCredential(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
@@ -476,6 +488,15 @@ class EmailOrderItemOperation(AbstractAutoDate):
     class Meta:
         ordering = ['created']
 
+
+class SmsOrderItemOperation(AbstractAutoDate):
+    oi = models.ForeignKey(OrderItem)
+    sms_oi_status = models.PositiveIntegerField(
+        _("SMS Operation Status"), default=0, choices=OI_EMAIL_STATUS)
+    draft_counter = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['created']
 
 class CouponOrder(AbstractAutoDate):
     order = models.ForeignKey(Order)

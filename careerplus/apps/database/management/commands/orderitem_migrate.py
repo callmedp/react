@@ -46,6 +46,7 @@ class Command(BaseCommand):
             elif row['product_id'] and row['product_id'] == row['product_id']:
                 return product_flow_dict.get(row['product_id'], None)
             return None
+        
         def map_oi_status(flow, otype, new_status):
             new_status = not new_status
             oi_status, last_oi_status, counter, feedback = 0, 0, 1, False
@@ -53,255 +54,255 @@ class Command(BaseCommand):
                 if otype == 0:
                     oi_status = 2
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
                 elif otype == 1:
                     oi_status = 3
                     last_oi_status = 2
-                    counter = 0,
+                    counter = 0
                     feedback = False
                 elif otype == 2:
                     oi_status = 22
                     last_oi_status = 22
-                    counter = 1,
+                    counter = 1
                     feedback = False
                 elif otype == 3:
                     oi_status = 22
                     last_oi_status = 22
-                    counter = 2,
+                    counter = 2
                     feedback = False
                 elif otype == 4:
                     oi_status = 4
                     last_oi_status = 22
-                    counter = 3,
+                    counter = 2
                     feedback = False
                 elif otype == 5:
                     oi_status = 25
                     last_oi_status = 25
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype in [6,13]:
                     oi_status = 26
                     last_oi_status = 26
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 7:
                     oi_status = 23
                     last_oi_status = 23
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 8:
                     oi_status = 1
                     last_oi_status = 1
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 9:
                     oi_status = 62
                     last_oi_status = 62
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 10:
                     oi_status = 4
                     last_oi_status = 4
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 11:
                     oi_status = 28
                     last_oi_status = 28
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 12:
                     oi_status = 30
                     last_oi_status = 30
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 else:
                     oi_status = 4
                     last_oi_status = 4
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 2:
                 if otype == 4:
                     oi_status = 4
                     last_oi_status = 6
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 elif otype == 11:
                     oi_status = 6
                     last_oi_status = 5
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 else:
                     oi_status = 5
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 4:
                 if otype == 0:
                     oi_status = 2
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
                 elif otype == 1:
                     oi_status = 3
                     last_oi_status = 2
-                    counter = 0,
+                    counter = 0
                     feedback = False
                 elif otype == 5:
                     oi_status = 25
                     last_oi_status = 25
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype in [6,13]:
                     oi_status = 26
                     last_oi_status = 26
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 7:
                     oi_status = 23
                     last_oi_status = 23
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 8:
                     oi_status = 1
                     last_oi_status = 1
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 4:
                     oi_status = 4
                     last_oi_status = 24
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 elif otype in [11,12]:
                     oi_status = 24
                     last_oi_status = 24
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 else:
                     oi_status = 1
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 6:
                 if otype == 4:
                     oi_status = 4
                     last_oi_status = 4
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 else:
                     oi_status = 142
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 7:
                 if otype == 4:
                     oi_status = 4
                     last_oi_status = 62
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 elif otype == 9:
                     oi_status = 62
                     last_oi_status = 61
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 else:
                     oi_status = 61
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 8 and new_status:
                 if otype == 0:
                     oi_status = 2
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
                 elif otype == 1:
                     oi_status = 49
                     last_oi_status = 2
-                    counter = 0,
+                    counter = 0
                     feedback = False
                 elif otype == 2:
                     oi_status = 44
                     last_oi_status = 44
-                    counter = 1,
+                    counter = 1
                     feedback = False
                 elif otype == 3:
                     oi_status = 44
                     last_oi_status = 44
-                    counter = 2,
+                    counter = 2
                     feedback = False
                 elif otype == 4:
                     oi_status = 4
                     last_oi_status = 4
-                    counter = 3,
+                    counter = 3
                     feedback = False
                 elif otype == 5:
                     oi_status = 47
                     last_oi_status = 47
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype in [6,13]:
                     oi_status = 48
                     last_oi_status = 48
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 7:
                     oi_status = 45
                     last_oi_status = 45
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 8:
                     oi_status = 43
                     last_oi_status = 43
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 9:
                     oi_status = 62
                     last_oi_status = 62
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 elif otype == 10:
                     oi_status = 4
                     last_oi_status = 4
-                    counter = 1,
+                    counter = 1
                     feedback = True
                 else:
                     oi_status = 4
                     last_oi_status = 4
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 9:
                 if otype == 4:
                     oi_status = 143
                     last_oi_status = 142
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 else:
                     oi_status = 142
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 10:
                 if otype == 4:
                     oi_status = 6
                     last_oi_status = 5
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 else:
                     oi_status = 5
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
             elif flow == 11:
                 if otype == 4:
                     oi_status = 6
                     last_oi_status = 5
-                    counter = 0,
+                    counter = 0
                     feedback = True
                 else:
                     oi_status = 5
                     last_oi_status = 1
-                    counter = 0,
+                    counter = 0
                     feedback = False
             
             return oi_status, last_oi_status, counter, feedback
@@ -391,83 +392,83 @@ class Command(BaseCommand):
         print( 'Bulk Insert Start')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
-        # for i, row in oi_df.iterrows():
-        #     if row['order_obj'] and row['order_obj'] == row['order_obj']:
-        #         is_combo = False,
-        #         is_variation = False,
-        #         is_addon = False
-        #         product_id = row['product_id']
-        #         if row['combo_id'] and row['combo_id'] == row['combo_id']:
-        #             is_combo = True
+        for i, row in oi_df.iterrows():
+            if row['order_obj'] and row['order_obj'] == row['order_obj']:
+                is_combo = False,
+                is_variation = False,
+                is_addon = False
+                product_id = row['product_id']
+                if row['combo_id'] and row['combo_id'] == row['combo_id']:
+                    is_combo = True
 
-        #         if row['addon_id'] and row['addon_id']== row['addon_id']:
-        #             is_addon = True
-        #             product_id = row['addon_id']
+                if row['addon_id'] and row['addon_id']== row['addon_id']:
+                    is_addon = True
+                    product_id = row['addon_id']
                 
-        #         elif row['variation_id'] and row['variation_id'] == row['variation_id']:
-        #             is_variation = True
-        #             product_id = row['variation_id']
+                elif row['variation_id'] and row['variation_id'] == row['variation_id']:
+                    is_variation = True
+                    product_id = row['variation_id']
                 
-        #         oi_status, last_oi_status, counter, feedback = map_oi_status(row['type_flow'], row['oio_operation_type'], row['new_status'])
+                oi_status, last_oi_status, counter, feedback = map_oi_status(row['type_flow'], row['oio_operation_type'], row['new_status'])
 
-        #         data_tup = (
-        #                 '',
-        #                 row['name'] if row['name'] and row['name'] == row['name'] else None,
-        #                 row['product_id'],
-        #                 row['units'],
-        #                 Decimal(0),
-        #                 Decimal(0),
-        #                 False,
-        #                 is_combo,
-        #                 is_variation,
-        #                 oi_status,
-        #                 last_oi_status,
-        #                 row['oio_resume'] if row['oio_resume'] and row['oio_resume'] == row['oio_resume'] else None,
-        #                 row['oio_resume'] if row['oio_resume'] and row['oio_resume'] == row['oio_resume'] else None,
-        #                 counter,
-        #                 None,
-        #                 False,
-        #                 str(row['closed_date']) if row['closed_date'] == row['closed_date'] else None,
-        #                 None,
-        #                 None,
-        #                 str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
-        #                 row['oio_assigned_by_id'] if row['oio_assigned_by_id'] and row['oio_assigned_by_id'] == row['oio_assigned_by_id'] else None,
-        #                 row['oio_assigned_to_id'] if row['oio_assigned_to_id'] and row['oio_assigned_to_id'] == row['oio_assigned_to_id'] else None,
-        #                 None,
-        #                 row['order_obj'],
-        #                 None,
-        #                 None,
-        #                 product_id,
-        #                 feedback,
-        #                 str(row['added_on']) if row['added_on'] == row['added_on'] else None,
-        #                 is_addon,
-        #                 Decimal(0),
-        #                 Decimal(0),
-        #                 None,
-        #                 row['oi_flow_status'] if row['oi_flow_status'] == row['oi_flow_status'] else 0,
-        #                 row['price'] if row['price'] and row['price'] == row['price'] else Decimal(0),
-        #                 Decimal(0),
-        #                 row['price'] if row['price'] and row['price'] == row['price'] else Decimal(0),
-        #                 Decimal(0),
-        #                 str(dict(row.to_dict())),
-        #                 row['id'],
-        #                 str(row['expires_on']) if row['expires_on'] == row['expires_on'] else None,
-        #                 )
+                data_tup = (
+                        '',
+                        row['name'] if row['name'] and row['name'] == row['name'] else None,
+                        row['product_id'],
+                        row['units'],
+                        Decimal(0),
+                        Decimal(0),
+                        False,
+                        is_combo,
+                        is_variation,
+                        oi_status,
+                        last_oi_status,
+                        row['oio_resume'] if row['oio_resume'] and row['oio_resume'] == row['oio_resume'] else None,
+                        row['oio_resume'] if row['oio_resume'] and row['oio_resume'] == row['oio_resume'] else None,
+                        counter,
+                        None,
+                        False,
+                        str(row['closed_date']) if row['closed_date'] == row['closed_date'] else None,
+                        None,
+                        None,
+                        str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
+                        row['oio_assigned_by_id'] if row['oio_assigned_by_id'] and row['oio_assigned_by_id'] == row['oio_assigned_by_id'] else None,
+                        row['oio_assigned_to_id'] if row['oio_assigned_to_id'] and row['oio_assigned_to_id'] == row['oio_assigned_to_id'] else None,
+                        None,
+                        row['order_obj'],
+                        None,
+                        None,
+                        product_id,
+                        feedback,
+                        str(row['added_on']) if row['added_on'] == row['added_on'] else None,
+                        is_addon,
+                        Decimal(0),
+                        Decimal(0),
+                        None,
+                        row['oi_flow_status'] if row['oi_flow_status'] == row['oi_flow_status'] else 0,
+                        row['price'] if row['price'] and row['price'] == row['price'] else Decimal(0),
+                        Decimal(0),
+                        row['price'] if row['price'] and row['price'] == row['price'] else Decimal(0),
+                        Decimal(0),
+                        str(dict(row.to_dict())),
+                        row['id'],
+                        str(row['expires_on']) if row['expires_on'] == row['expires_on'] else None,
+                        )
                 
-        #         update_values.append(data_tup)    
-        #     if len(update_values) > 5000:
+                update_values.append(data_tup)    
+            if len(update_values) > 5000:
                 
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #         print( 'Bulk Insert ' + str(i))
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #         # cursor.executemany(update_sql, update_values)
-        #         update_values = []
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                # cursor.executemany(update_sql, update_values)
+                update_values = []
                 
-        # if update_values:
-        #     # cursor.executemany(update_sql, update_values)
-        #     update_values = []
-        # cursor.close()
-        # cursor = db2.cursor()
+        if update_values:
+            # cursor.executemany(update_sql, update_values)
+            update_values = []
+        cursor.close()
+        cursor = db2.cursor()
 
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Bulk Update Parent Order Items')

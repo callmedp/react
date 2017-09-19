@@ -26,6 +26,7 @@ from linkedin.models import Draft, Organization, Education
 from geolocation.models import Country
 from quizs.models import QuizResponse
 from shop.models import DeliveryService
+from emailers.tasks import send_email_task
 
 from .linkedin_form import (
     DraftForm,
@@ -104,6 +105,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                     try:
                         writer = User.objects.get(pk=writer_pk)
                         for obj in orderitem_objs:
+                            email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                             obj.assigned_to = writer
                             obj.assigned_by = request.user
                             obj.save()
@@ -120,21 +122,21 @@ class LinkedinQueueView(ListView, PaginationMixin):
                                 "oi": obj,
                             })
 
-                            try:
-                                SendMail().send(to_emails, mail_type, data)
-                            except Exception as e:
-                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=data)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            if 101 not in email_sets:
+                                return_val = send_email_task.delay(to_emails, mail_type, data)
+                                if return_val.result:
+                                    obj.emailorderitemoperation_set.create(email_oi_status=101)
+                            if obj.delivery_service.name == 'SuperExpress':
+                                try:
+                                    SendSMS().send(sms_type=mail_type, data=data)
+                                except Exception as e:
+                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                             obj.orderitemoperation_set.create(
                                 oi_status=1,
                                 last_oi_status=obj.oi_status,
                                 assigned_to=obj.assigned_to,
-                                added_by=request.user
+                                added_by=request.user,
                             )
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
@@ -326,12 +328,7 @@ class ChangeDraftView(DetailView):
                         form.instance.delete()
                     # for update oi status
                     last_status = ord_obj.oi_status  
-                    # if ord_obj.oi_status == 8:
-                    #     ord_obj.draft_counter += 1
-                    # elif not ord_obj.draft_counter:
-                    #     ord_obj.draft_counter += 1
                     ord_obj.oi_status = 45  # pending Approval
-                    ord_obj.oi_flow_status = 50
                     ord_obj.last_oi_status = last_status
                     ord_obj.draft_added_on = timezone.now()
                     ord_obj.save()
@@ -356,11 +353,11 @@ class ChangeDraftView(DetailView):
                 context['form'] = draft_form
                 context['org_formset'] = org_formset
                 context['edu_formset'] = edu_formset
-                messages.success(self.request, "Draft is not Saved successfully")
+                messages.success(self.request, "Draft is not Saved successfully", 'error')
                 return render(request, self.template_name, context)
 
             else:
-                messages.success(self.request, "Draft not exist with this order")
+                messages.success(self.request, "Draft not exist with this order" 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
             messages.add_message(request, messages.ERROR, str(e))
@@ -1013,28 +1010,29 @@ class InterNationalAssignmentOrderItemView(View):
                     obj.assigned_to = assign_to
                     obj.assigned_by = request.user
                     obj.save()
-
                     # mail to user about writer information
+                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     to_emails = [obj.order.email]
+
                     data = {}
                     data.update({
                         "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         "writer_name": assign_to.name,
-                        "writer_email": writer.email,
+                        "subject": "Your developed document has been shared with our expert",
+                        "writer_email": assign_to.email,
                         "subject": "Your developed document has been uploaded",
-
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'
+                    if 63 not in email_sets:
+                        return_val = send_email_task.delay(to_emails, mail_type, data)
+                        if return_val.result:
+                            oi.emailorderitemoperation_set.create(email_oi_status=63)
 
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                    try:
-                        SendSMS().send(sms_type=mail_type, data=data)
-                    except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    if obj.delivery_service.name == 'SuperExpress':
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=data)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     obj.orderitemoperation_set.create(
                         oi_status=1,

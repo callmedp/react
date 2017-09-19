@@ -3,6 +3,7 @@ import logging
 from django.utils import timezone
 
 from emailers.email import SendMail
+from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from order.models import OrderItem
 
@@ -28,16 +29,17 @@ class ActionUserMixin(object):
 
             })
             mail_type = 'ALLOCATED_TO_WRITER'
-
+            
             try:
                 SendMail().send(to_emails, mail_type, email_data)
             except Exception as e:
                 logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
-            try:
-                SendSMS().send(sms_type=mail_type, data=email_data)
-            except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+            if obj.delivery_service.name == 'SuperExpress':
+                try:
+                    SendSMS().send(sms_type=mail_type, data=email_data)
+                except Exception as e:
+                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
             obj.orderitemoperation_set.create(
                 oi_status=1,
@@ -63,6 +65,7 @@ class ActionUserMixin(object):
 
                 # mail to user about writer information
                 to_emails = [obj.order.email]
+                email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                 mail_type = 'ALLOCATED_TO_WRITER'
                 email_data = {}
                 email_data.update({
@@ -72,12 +75,7 @@ class ActionUserMixin(object):
                     "subject": "Your developed document has been shared with our expert",
                     "oi": obj,
                 })
-
-                try:
-                    SendMail().send(to_emails, mail_type, email_data)
-                except Exception as e:
-                    logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
+                self.product_flow_wise_mail(orderitem_obj=obj, to_emails=to_emails, mail_type=mail_type, data=email_dict)
                 try:
                     SendSMS().send(sms_type=mail_type, data=email_data)
                 except Exception as e:
@@ -149,16 +147,12 @@ class ActionUserMixin(object):
                             "subject": "Your developed document has been shared with our expert",
                             "oi": oi,
                         })
-
-                        try:
-                            SendMail().send(to_emails, mail_type, email_data)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_data)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_dict)
+                        if oi.delivery_service.name == 'SuperExpress':
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=email_data)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
 
@@ -186,16 +180,12 @@ class ActionUserMixin(object):
                             "subject": "Your developed document has been shared with our expert",
                             "oi": oi,
                         })
-
-                        try:
-                            SendMail().send(to_emails, mail_type, email_data)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_data)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_dict)
+                        if obj.delivery_service.name == 'SuperExpress':
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=email_data)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
 
@@ -214,7 +204,7 @@ class ActionUserMixin(object):
 
                         # mail to user about writer information
                         to_emails = [oi.order.email]
-                        mail_type = 'ASSIGNMENT_ACTION'
+                        mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
                             "username": obj.order.first_name + ' ' + obj.order.last_name,
@@ -223,16 +213,12 @@ class ActionUserMixin(object):
                             "subject": "Your developed document has been shared with our expert",
                             "oi": oi,
                         })
-
-                        try:
-                            SendMail().send(to_emails, mail_type, email_data)
-                        except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=email_data)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_dict)
+                        if obj.delivery_service.name == 'SuperExpress':
+                            try:
+                                SendSMS().send(sms_type=mail_type, data=email_data)
+                            except Exception as e:
+                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
 
@@ -371,3 +357,36 @@ class ActionUserMixin(object):
         else:
             message_dict['display_message'] = 'User is not active or draft or orderitem obj not found'
         return message_dict
+    
+    def product_flow_wise_mail(self, orderitem_obj=None, to_emails=[], mail_type=None, data={}):
+        if orderitem_obj.product.type_flow == 1 and 28 not in email_sets:             
+            return_val = send_email_task.delay(to_emails, mail_type, data)
+            if return_val.result:
+                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=28)
+
+        elif orderitem_obj.product.type_flow == 12 and 141 not in email_sets:             
+            return_val = send_email_task.delay(to_emails, mail_type, data)
+            if return_val.result:
+                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=141)
+
+        elif orderitem_obj.product.type_flow == 13 and 151 not in email_sets:             
+            return_val = send_email_task.delay(to_emails, mail_type, data)
+            if return_val.result:
+                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=151)
+
+        elif orderitem_obj.product.type_flow == 8 and 101 not in email_sets:             
+            return_val = send_email_task.delay(to_emails, mail_type, data)
+            if return_val.result:
+                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=101)
+
+        elif orderitem_obj.product.type_flow == 3 and 41 not in email_sets:             
+            return_val = send_email_task.delay(to_emails, mail_type, data)
+            if return_val.result:
+                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=41)
+
+        elif orderitem_obj.product.type_flow == 4 and 61 not in email_sets:             
+            return_val = send_email_task.delay(to_emails, mail_type, data)
+            if return_val.result:
+                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=61)
+        else:
+            pass

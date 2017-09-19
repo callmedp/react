@@ -6,6 +6,7 @@ from django.utils import timezone
 
 from order.models import OrderItem, Order
 from emailers.email import SendMail
+from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from users.tasks import user_register
 from core.api_mixin import FeatureProfileUpdate
@@ -65,13 +66,20 @@ def featured_updated():
 
                     # Send mail and sms with subject line as Your Profile updated
                     try:
-                        mail_type = "YOUR_RESUME_FEATURED_SERVICE_STARTED"
+                        mail_type = "FEATURED_PROFILE_UPDATED"
+                        email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                         to_emails = [obj.order.email]
                         data = {}
                         data.update({
-                            "subject": 'Your featured profile service has been started',
+                            "subject": 'Your Featured Profile Is Updated',
                             "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         })
+
+                        if 72 not in email_sets:
+                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
+                            if return_val.result:
+                                obj.emailorderitemoperation_set.create(email_oi_status=72)
+
                         SendMail().send(to_emails, mail_type, data)
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:

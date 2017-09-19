@@ -167,8 +167,8 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
-        elif mail_type == "YOUR_RESUME_FEATURED_SERVICE_STARTED":
-            send_dict['subject'] = data.get('subject', "Your featured profile service has been started")
+        elif mail_type == "FEATURED_PROFILE_UPDATED":
+            send_dict['subject'] = data.get('subject', "Your Featured Profile Is Updated")
             template_name = data.get('template_name', 'featured_profile.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
 
