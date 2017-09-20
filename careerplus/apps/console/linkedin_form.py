@@ -1,17 +1,18 @@
 from django import forms
 from django.conf import settings
-from ckeditor.widgets import CKEditorWidget
 from django.contrib.auth import get_user_model
-from cart.choices import DELIVERY_TYPE
+
 from order.choices import OI_OPS_STATUS
 from shop.models import DeliveryService
-
+from linkedin.models import Draft, Organization, Education
 
 User = get_user_model()
 
-from linkedin.models import Draft, Organization, Education
 
-LEVEL = (('', '---------'),(0, 'School'),(1,'College'),)
+LEVEL = (
+    ('', '---------'),
+    (0, 'School'),
+    (1, 'College'),)
 
 
 class DraftForm(forms.ModelForm):

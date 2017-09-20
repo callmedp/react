@@ -77,7 +77,7 @@ $().ready(function() {
                 minlength: "Please enter at least 6 digits"
             },
             term_conditions:{
-                required:"Please accept check terms & conditions"
+                required:"Please accept pterms & conditions"
             },
         },
         errorPlacement: function(error, element) {

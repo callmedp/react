@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	$(document).on('click', '#recent-loadmore', function(event) {
-		$('#recent-loadmore' + article_id).prop('disable', true);
+		// $('#recent-loadmore').addClass('disabled');
 		var formData = $('#loadmore-recent-form').serialize();
 		$.ajax({
 			url: "/article/lodemore-articlebycategory/",
@@ -18,7 +18,7 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '#popular-loadmore', function(event) {
-		$('#popular-loadmore' + article_id).prop('disable', true);
+		// $('#popular-loadmore').addClass('disabled');
 		var formData = $('#loadmore-pop-form').serialize();
 		$.ajax({
 			url: "/article/lodemore-articlebycategory/",

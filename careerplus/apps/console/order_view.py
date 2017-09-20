@@ -441,7 +441,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -657,7 +657,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -771,7 +771,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -890,7 +890,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -1008,7 +1008,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -1119,7 +1119,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))

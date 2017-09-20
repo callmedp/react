@@ -71,7 +71,7 @@
 
         {% for item in cart_items %}
 
-        {% with li=item.li addons=item.addons variations=item.variations %}
+        {% with addons=item.addons variations=item.variations %}
             <!-- prdduct 1 -->
             <ul>
               {% if forloop.counter == 1 %}
@@ -81,53 +81,57 @@
                 </li>
               {% endif %}
 
-              {% if li.product.is_course and variations %}
+              {% if item.product_class == 'course' and variations and item.is_available and variations.0.is_available %}
                     <li>
-                        <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
+                        <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience}}{% endif %}
                         </span>
-                        <strong class="col-sm-4 col-md-3">Rs. {{variations.first.product.get_price}}/-</strong>
+                        <strong class="col-sm-4 col-md-3">Rs. {{variations.0.price}}/-</strong>
                     </li>
-                    {% if variations.first.delivery_serivce and variations.first.delivery_serivce.get_price %}
+                    {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
                         <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{variations.first.delivery_serivce.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{variations.first.delivery_serivce.get_price|floatformat:0}}/-</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{variations.0.delivery_obj.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-</span>
                         </li>
                     {% endif %}
                   {% for addon in addons %}
+                       {% if addon.is_available %}
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.product.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{addon.price}}/-</span>
                         </li>
+                       {% endif %}
                   {% endfor %}
 
-              {% else %}
+              {% elif item.is_available %}
                   <li>
-                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{li.product.name}}</strong>{% if li.product.expexperience %}{{li.product.expexperience}}{% endif %}
+                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience}}{% endif %}
                     </span>
-                    <strong class="col-sm-4 col-md-3">Rs. {{li.product.get_price}}/-</strong>
+                    <strong class="col-sm-4 col-md-3">Rs. {{item.price}}/-</strong>
                   </li>
-                  {% if li.delivery_service and li.delivery_service.get_price %}
+                  {% if item.delivery_obj and item.delivery_obj.get_price %}
                         <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{li.delivery_service.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{li.delivery_service.get_price|floatformat:0}}/-</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{item.delivery_obj.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{item.delivery_obj.get_price|floatformat:0}}/-</span>
                         </li>
                   {% endif %}
                   {% for var in variations %}
+                       {% if var.is_available %}
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{var.product.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{var.product.get_price}}/-</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{var.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{var.price}}/-</span>
                         </li>
+                        {% endif %}
                   {% endfor %}
                   {% for addon in addons %}
+                       {% if addon.is_available %}
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.product.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{addon.product.get_price}}/-</span>
+                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.name}}</span>
+                            <span class="col-sm-4 col-md-3">Rs. {{addon.price}}/-</span>
                         </li>
+                        {% endif %}
                   {% endfor %}
 
               {% endif %}
-
-              
             </ul>
         {% endwith %}
         {% endfor %}
@@ -152,7 +156,7 @@
                     <button type="button" onclick="JSRemoveDiscount();">Remove</button>
                   </div>
                 </div>
-              {% elif cart_wallet%}
+              {% elif cart_wallet %}
                 <div id="shineCredit" >
                 <div class="form-group">
                   <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!">
