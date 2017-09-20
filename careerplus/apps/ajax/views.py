@@ -28,7 +28,7 @@ from haystack.query import SearchQuerySet
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
 from order.mixins import OrderMixin
-from . import *
+from .functions import draft_upload_mail
 
 
 class ArticleCommentView(View):
@@ -253,10 +253,7 @@ class ApproveByAdminDraft(View):
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
 
                     if 42 not in email_sets:
-                        return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                        if return_val.result:
-                            obj.emailorderitemoperation_set.create(email_oi_status=42)
-
+                        send_email_task.delay(to_emails, mail_type, email_dict, status=42, oi=obj.pk)
                         try:
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
@@ -292,7 +289,7 @@ class ApproveByAdminDraft(View):
                     # mail to candidate
                     email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct()) 
                     to_emails = [obj.order.email]
-                    token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, obj.order.id)
+                    token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
                     mail_type = 'DRAFT_UPLOAD'
                     data = {}
                     data.update({
@@ -303,7 +300,7 @@ class ApproveByAdminDraft(View):
                         "order_id": obj.order.id,
                         'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
                     })
-                    draft_upload_email(oi=obj, to_emails=to_emails, mail_type=mail_type, email_dict=data)
+                    draft_upload_mail(oi=obj, to_emails=to_emails, mail_type=mail_type, email_dict=data)
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
                             oi_status=24,
@@ -431,7 +428,7 @@ class ApproveDraftByLinkedinAdmin(View):
                     email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     sms_sets = list(obj.smsorderitemoperation_set.all().values_list('sms_oi_status',flat=True).distinct())
                     mail_type = 'DRAFT_UPLOAD'
-                    token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, obj.order.id)
+                    token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
@@ -444,10 +441,7 @@ class ApproveDraftByLinkedinAdmin(View):
 
                     if obj.draft_counter == 1:
                         if 102 not in email_sets and 102 not in sms_sets:
-                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                            if return_val.result:
-                                obj.emailorderitemoperation_set.create(email_oi_status=102)
-                        
+                            send_email_task.delay(to_emails, mail_type, email_dict, status=102, oi=obj.pk)
                             try:
                                 urlshortener = create_short_url(login_url=email_dict)
                                 email_dict.update({'url': urlshortener.get('url')})
@@ -457,9 +451,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
                     elif obj.draft_counter == 2:
                         if 103 not in email_sets and 103 not in sms_sets:
-                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                            if return_val.result:
-                                obj.emailorderitemoperation_set.create(email_oi_status=103)
+                            send_email_task.delay(to_emails, mail_type, email_dict, status=103, oi=obj.pk)
                             try:
                                 urlshortener = create_short_url(login_url=email_dict)
                                 email_dict.update({'url': urlshortener.get('url')})
@@ -470,10 +462,7 @@ class ApproveDraftByLinkedinAdmin(View):
 
                     elif obj.draft_counter == settings.DRAFT_MAX_LIMIT and 104 not in email_sets:
                         if 104 not in email_sets and 104 not in sms_sets:
-                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                            if return_val.result:
-                                obj.emailorderitemoperation_set.create(email_oi_status=104)
-                        
+                            send_email_task.delay(to_emails, mail_type, email_dict, status=104, oi=obj.pk)
                             try:
                                 urlshortener = create_short_url(login_url=email_dict)
                                 email_dict.update({'url': urlshortener.get('url')})

@@ -67,7 +67,7 @@ class RegistrationApiView(FormView):
                 'password': request.POST.get('raw_password'),
             })
             # task for email
-            send_email_task.delay([resp['email']], mail_type, email_dict)
+            send_email_task.delay([resp['email']], mail_type, email_dict, status=None, oi=None)
             resp_status = ShineCandidateDetail().get_status_detail(shine_id=resp['id'], token=resp['access_token'])
             request.session.update(resp_status)
             return HttpResponseRedirect(self.success_url)
@@ -281,11 +281,7 @@ class ForgotPasswordEmailView(View):
 
             if user_exist.get('exists', ''):
                 # task call for email
-                send_email_task.delay(to_emails, mail_type, email_dict)
-                # try:
-                #     SendMail().send(to_emails, mail_type, email_dict)
-                # except Exception as e:
-                #     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                send_email_task.delay(to_emails, mail_type, email_dict, status=None, oi=None)
                 return HttpResponse(json.dumps({'exist':True}), content_type="application/json")
 
             elif not user_exist.get('exists', ''):

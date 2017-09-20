@@ -30,6 +30,7 @@ $().ready(function() {
     $("#register_form").validate({
         submitHandler: function(form) {
             e.preventDefault();
+
             if($(this).val() != '')
                 {
                     $('button[type="submit"]').attr('disabled' , false); 
@@ -57,12 +58,9 @@ $().ready(function() {
                     minlength: 6,
                     maxlength: 15
                 },
-                hello: {
-                    required: true
-                },
                 term_conditions:{
                     required:true
-                }
+                },
         },
         messages:{
             email: { 
@@ -79,7 +77,25 @@ $().ready(function() {
                 minlength: "Please enter at least 6 digits"
             },
             term_conditions:{
-                required:"Please check terms & conditions"
+                required:"Please accept check terms & conditions"
+            },
+        },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "email")
+            {
+                error.appendTo("#user_email");
+            }
+            if (element.attr("name") == "raw_password")
+            {
+                error.appendTo("#raw_psd");
+            }
+            if (element.attr("name") == "cell_phone")
+            {
+                error.appendTo("#cell_phone");
+            }
+            if (element.attr("name") == "term_conditions")
+            {
+                error.appendTo("#terms");
             }
         }
     });

@@ -1749,16 +1749,11 @@ class ActionOrderItemView(View):
                             recruiters = settings.BOOSTER_RECRUITERS
                             if 92 not in email_sets:
                                 mail_type = 'BOOSTER_RECRUITER'
-                                return_val = send_email_task.delay(to_emails, mail_type, recruiter_data)
-                                if return_val.result:
-                                    oi.emailorderitemoperation_set.create(email_oi_status=92)
-
+                                send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
                             # send mail to candidate
                             if 93 not in email_sets:
                                 mail_type = 'BOOSTER_CANDIDATE'
-                                return_val = send_email_task.delay(to_emails, mail_type, recruiter_data)
-                                if return_val.result:
-                                    oi.emailorderitemoperation_set.create(email_oi_status=92)
+                                send_email_task.delay(to_emails, mail_type, recruiter_data, status=93, oi=oi.pk)
                             
                             # send sms to candidate
                             SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
@@ -1879,15 +1874,7 @@ class ActionOrderItemView(View):
                     })
                     mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
                     if 62 not in email_sets:
-                        return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                        if return_val.result:
-                            obj.emailorderitemoperation_set.create(email_oi_status=62)
-
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
+                        send_email_task.delay(to_emails, mail_type, data, status=62, oi=obj.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
@@ -1985,7 +1972,7 @@ class ActionOrderItemView(View):
                     # mail to user about writer information
                     to_emails = [order.email]
                     mail_type = "PENDING_ITEMS"
-                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
+                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, days=None)
                     data = {}
                     data.update({
                         'subject': 'To initiate your services fulfil these details',

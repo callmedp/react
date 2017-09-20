@@ -45,10 +45,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                     })
-                    return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                    if return_val.result:
-                        oi.emailorderitemoperation_set.create(email_oi_status=26)
-
+                    send_email_task.delay(to_emails, mail_type, data, status=26, oi=oi.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
@@ -65,9 +62,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                     })
-                    return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                    if return_val.result:
-                        oi.emailorderitemoperation_set.create(email_oi_status=26)
+                    send_email_task.delay(to_emails, mail_type, email_dict, status=26, oi=oi.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
@@ -83,9 +78,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                     })
-                    return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                    if return_val.result:
-                        oi.emailorderitemoperation_set.create(email_oi_status=26)              
+                    send_email_task.delay(to_emails, mail_type, email_dict, status=26, oi=oi.pk)             
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
@@ -101,9 +94,7 @@ def draft_reminder_mail():
                         'draft_added':oi.draft_added_on,
                     })
                     if len(email_sets) == 0 and len(sms_sets) == 0:
-                        return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=9)
+                        send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=oi.pk)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=4)
@@ -130,9 +121,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                     })
-                    return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                    if return_val.result:
-                        oi.emailorderitemoperation_set.create(email_oi_status=27)
+                    send_email_task.delay(to_emails, mail_type, email_dict, status=27, oi=oi.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
@@ -148,10 +137,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                     })
-                    return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                    if return_val.result:
-                        oi.emailorderitemoperation_set.create(email_oi_status=27)
-
+                    send_email_task.delay(to_emails, mail_type, email_dict, status=27, oi=oi.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:

@@ -136,7 +136,7 @@ def pending_item_email(order=None):
             data = {}
             mail_type = "PENDING_ITEMS"
             to_emails = [oi.order.email]
-            token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
+            token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, days=None)
             data.update({
                 'subject': 'To initiate your service(s) fulfil these pending requirements',
                 'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
@@ -321,7 +321,7 @@ def process_mailer(order=None):
             mail_type = "PROCESS_MAILERS"
             data['subject'] = 'Your service details related to order <'+str(oi.order.id)+'>'
             data['username'] = oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-            token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
+            token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, days=None)
             try:
                 email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                 sms_sets = list(oi.smsorderitemoperation_set.all().values_list('sms_oi_status',flat=True).distinct())
@@ -497,7 +497,7 @@ def payment_pending_mailer(order=None):
                 pymt_obj = oi.order.ordertxns.get(order=order)
                 email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                 sms_sets = list(oi.smsorderitemoperation_set.all().values_list('sms_oi_status',flat=True).distinct())
-                if 1 not in email_sets:
+                if 1 not in email_sets and 1 not in sms_sets:
                     to_emails = [order.email]
                     mail_type = "PAYMENT_PENDING"
                     sms_type = 'OFFLINE_PAYMENT'
@@ -508,11 +508,7 @@ def payment_pending_mailer(order=None):
                         "txn": pymt_obj.txn,
                         'mobile': oi.order.mobile,
                     })
-                    return_val = send_email_task.delay(to_emails, mail_type, data)
-                    if return_val.result:
-                        oi.emailorderitemoperation_set.create(email_oi_status=1)
-
-                if 1 not in sms_sets:
+                    send_email_task.delay(to_emails, mail_type, data, status=1, oi=oi.pk)
                     try:
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(sms_oi_status=1)
@@ -550,7 +546,7 @@ def service_initiation(order=None):
             orderitems = order.orderitems.filter(no_process=False).select_related('order', 'product', 'partner')
             for oi in orderitems:
                 data = {}
-                token = token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
+                token = token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, days=None)
                 sms_type = "SERVICE_INITIATION"
                 data.update({
                     'mobile': oi.order.mobile,

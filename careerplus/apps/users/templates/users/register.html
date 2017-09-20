@@ -55,11 +55,13 @@
                     {{ form.email }}
                     <span class="error-txt" style="bottom:-25px">{{ form.email.errors }}</span>
                 </div>
+                <div id="user_email"></div>
                 <div class="form-group {% if form.email.errors %}error{% endif %}">
                     {{ form.raw_password }}
                     <span class="error-txt" style="bottom:-25px">{{ form.raw_password.errors }}
                     </span>
                 </div>
+                <div id="raw_psd"></div>
                 <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
                     <div class="country-code">
                         <div class="custom-select">
@@ -70,11 +72,20 @@
                         </span>
                     </div>
                 </div>
+                <div id="cell_phone"></div>
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input"
-                            name="term_conditions" checked>
+                            name="term_conditions">
                             I agree to Terms & conditions
+                    </label>
+                </div>
+                <div id="terms"></div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" 
+                        name="is_jobseeker">
+                        Recieve jobs notifications
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary submit">Register</button>

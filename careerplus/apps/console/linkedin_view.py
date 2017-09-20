@@ -123,9 +123,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             })
 
                             if 101 not in email_sets:
-                                return_val = send_email_task.delay(to_emails, mail_type, data)
-                                if return_val.result:
-                                    obj.emailorderitemoperation_set.create(email_oi_status=101)
+                                send_email_task.delay(to_emails, mail_type, email_dict, status=101, oi=obj.pk)
                             if obj.delivery_service.name == 'SuperExpress':
                                 try:
                                     SendSMS().send(sms_type=mail_type, data=data)
@@ -1024,10 +1022,7 @@ class InterNationalAssignmentOrderItemView(View):
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'
                     if 63 not in email_sets:
-                        return_val = send_email_task.delay(to_emails, mail_type, data)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=63)
-
+                        send_email_task.delay(to_emails, mail_type, email_dict, status=63, oi=oi.pk)
                     if obj.delivery_service.name == 'SuperExpress':
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
