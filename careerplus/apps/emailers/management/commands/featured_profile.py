@@ -76,11 +76,7 @@ def featured_updated():
                         })
 
                         if 72 not in email_sets:
-                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                            if return_val.result:
-                                obj.emailorderitemoperation_set.create(email_oi_status=72)
-
-                        SendMail().send(to_emails, mail_type, data)
+                            send_email_task.delay(to_emails, mail_type, email_dict, status=72, oi=obj.pk)
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
                         print (str(e))

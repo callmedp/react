@@ -173,7 +173,7 @@ class ChangeCategoryView(DetailView):
                             Category.objects.filter(pk=obj.pk).update(url=url)
                             messages.success(
                                 self.request,
-                                "Category Object Changed Successfully")
+                                "Category Changed Successfully")
                             return HttpResponseRedirect(
                                 reverse('console:category-change',kwargs={'pk': obj.pk}))
                         else:

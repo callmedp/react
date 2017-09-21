@@ -45,17 +45,10 @@ def booster():
             })
 
             try:
-                # send mail to rectuter
-                #recruiters = settings.BOOSTER_RECRUITERS
-                #SendMail().send(
-                    #to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
-
                 # send mail to candidate
                 if 93 not in email_sets:
                     mail_type = 'BOOSTER_CANDIDATE'
-                    return_val = send_email_task.delay([candidate_data.get('email')], mail_type, candidate_data)
-                    if return_val.result:
-                        oi.emailorderitemoperation_set.create(email_oi_status=93)
+                    send_email_task.delay([candidate_data.get('email')], mail_type, candidate_data, status=93, oi=oi.pk)
                 # send sms to candidate
                 SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
                 last_oi_status = oi.oi_status
@@ -77,9 +70,7 @@ def booster():
         recruiters = settings.BOOSTER_RECRUITERS
         if 92 not in email_sets:
             mail_type = 'BOOSTER_RECRUITER'
-            return_val = send_email_task.delay(recruiters, mail_type, recruiter_data)
-            if return_val.result:
-                oi.emailorderitemoperation_set.create(email_oi_status=92)
+            send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
     except Exception as e:
         print (str(e))
     

@@ -360,33 +360,21 @@ class ActionUserMixin(object):
     
     def product_flow_wise_mail(self, orderitem_obj=None, to_emails=[], mail_type=None, data={}):
         if orderitem_obj.product.type_flow == 1 and 28 not in email_sets:             
-            return_val = send_email_task.delay(to_emails, mail_type, data)
-            if return_val.result:
-                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=28)
+            send_email_task.delay(to_emails, mail_type, email_dict, status=28, oi=orderitem_obj.pk)
 
         elif orderitem_obj.product.type_flow == 12 and 141 not in email_sets:             
-            return_val = send_email_task.delay(to_emails, mail_type, data)
-            if return_val.result:
-                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=141)
+            send_email_task.delay(to_emails, mail_type, email_dict, status=141, oi=orderitem_obj.pk)
 
         elif orderitem_obj.product.type_flow == 13 and 151 not in email_sets:             
-            return_val = send_email_task.delay(to_emails, mail_type, data)
-            if return_val.result:
-                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=151)
+            send_email_task.delay(to_emails, mail_type, email_dict, status=151, oi=orderitem_obj.pk)
 
         elif orderitem_obj.product.type_flow == 8 and 101 not in email_sets:             
-            return_val = send_email_task.delay(to_emails, mail_type, data)
-            if return_val.result:
-                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=101)
+            send_email_task.delay(to_emails, mail_type, email_dict, status=108, oi=orderitem_obj.pk)
 
         elif orderitem_obj.product.type_flow == 3 and 41 not in email_sets:             
-            return_val = send_email_task.delay(to_emails, mail_type, data)
-            if return_val.result:
-                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=41)
+            send_email_task.delay(to_emails, mail_type, email_dict, status=41, oi=orderitem_obj.pk)
 
         elif orderitem_obj.product.type_flow == 4 and 61 not in email_sets:             
-            return_val = send_email_task.delay(to_emails, mail_type, data)
-            if return_val.result:
-                orderitem_obj.emailorderitemoperation_set.create(email_oi_status=61)
+            send_email_task.delay(to_emails, mail_type, email_dict, status=61, oi=orderitem_obj.pk)
         else:
             pass

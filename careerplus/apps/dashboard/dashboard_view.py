@@ -452,9 +452,7 @@ class DashboardAcceptService(View):
                         })
 
                         if oi.product.type_flow == 1 and (len(email_sets) == 0 and len(sms_sets) == 0):
-                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                            if return_val.result:
-                                obj.emailorderitemoperation_set.create(email_oi_status=9)
+                            send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=obj.pk)
                             try:
                                 SendSMS().send(sms_type=mail_type, data=data)
                                 oi.smsorderitemoperation_set.create(sms_oi_status=4)
@@ -462,9 +460,7 @@ class DashboardAcceptService(View):
                                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                         elif oi.product.type_flow == 8 and (len(email_sets) == 1 and len(sms_sets) == 1):
-                            return_val = send_email_task.delay(to_emails, mail_type, email_dict)
-                            if return_val.result:
-                                obj.emailorderitemoperation_set.create(email_oi_status=9)
+                            send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=obj.pk)
                             try:
                                 SendSMS().send(sms_type=mail_type, data=data)
                                 oi.smsorderitemoperation_set.create(sms_oi_status=4)

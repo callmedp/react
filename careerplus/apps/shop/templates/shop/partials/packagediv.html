@@ -32,7 +32,9 @@
   <div class="main-package">
     <div class="main-package-content">
       <span>Experience</span>
-      <strong>{{prd_exp}}</strong>
+      {% if prd_exp %}
+        <strong>{{prd_exp}}</strong>
+      {% endif %}
       <p>Starting at <small>Rs. {{start_price}}/-</small></p>
     </div>
 
@@ -46,8 +48,10 @@
       <span>Other experiences</span>
     {% for package in pop_list|slice:"0:4"  %}
       <a href="{{package.url}}" class="other-package">
-        <p>Experience
-        <strong>{{package.experience}}</strong></p>
+        <p>
+          Experience
+          <strong>{{package.experience}}</strong>
+        </p>
       </a>
 
     {% endfor %}
