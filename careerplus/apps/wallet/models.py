@@ -85,6 +85,12 @@ class RewardPoint(AbstractAutoDate):
         null=True,
         blank=True,
         verbose_name=_("Transaction"))
+    cw_id = models.IntegerField(
+        _('CP Credits'),
+        blank=True,
+        null=True,
+        editable=False)
+    
 
     class Meta:
         verbose_name = _('Reward Point')

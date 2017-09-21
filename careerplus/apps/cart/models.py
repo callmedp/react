@@ -141,10 +141,20 @@ class LineItem(AbstractAutoDate):
                                  'product_id': self.product.pk,
                                  'line_id': self.pk}
 
+SUBSCRIPTION_STATUS = (
+    (-1, "Invalid"),
+    (0, "Failed"),
+    (1, "Processed"),
+    (2, "Expired"),
+    )
+
 
 class Subscription(AbstractAutoDate):
     candidateid = models.CharField(max_length=255, null=True, blank=True)
     order = models.ForeignKey(Order)
+    status = models.SmallIntegerField(
+        choices=SUBSCRIPTION_STATUS, default=-1)
+    remark = models.CharField(max_length=255, null=True, blank=True)
     expire_on = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

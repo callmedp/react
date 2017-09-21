@@ -34,33 +34,20 @@ class Command(BaseCommand):
         db2_user = db2_settings.get('USER')
         db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
         sql = """
-                SELECT cart_order.id, auth_user.email as Email,  
-                cart_order.transaction_id, cart_order.currency, cart_order.instrument_number, 
-                cart_order.instrument_issuer, cart_order.instrument_issue_date, cart_order.added_on, 
-                cart_order.modified_on, cart_order.closed_on, cart_order.status, 
-                cart_order.payment_mode, cart_order.payment_date, cart_order.vendor, 
-                cart_order.amount_payable, cart_order.total, 
-                cart_order.coupon_discount, cart_order.convenience_charges,
-                coupon_coupon.code as coupon,
-                cart_order.coupon_id,
-                cart_order.welcome_call, 
-                cart_order.extra_info, theme_country.country_code as code2,  
-                cart_order.order_mobile,  
-                cart_order.flat_discount, cart_order.invoice_file,
-                cart_order.wallettransaction_id,
-                cart_order.wallettransaction_redeem_id,
-                cart_order.wallet_cashback
-
-                FROM cart_order 
-                LEFT JOIN theme_country
-                ON cart_order.country_id = theme_country.id
-                LEFT JOIN coupon_coupon
-                ON cart_order.coupon_id = coupon_coupon.code
-                LEFT JOIN auth_user
-                ON cart_order.candidate_id = auth_user.id
-                WHERE (cart_order.added_on >= '2014-04-1 00:00:00' AND cart_order.candidate_id IS NOT NULL);
+                SELECT wallet.id, wallet.user_id, wallet.amount, 
+                wallet.created_on, wallet.expiring_on FROM wallet
+                """
+        sql2 = """
+                SELECT wallettransaction.id, wallettransaction.wallet_id, 
+                wallettransaction.type_cashback, wallettransaction.amount, 
+                wallettransaction.current_amount, wallettransaction.created_on, 
+                wallettransaction.status, wallettransaction.order_id, 
+                wallettransaction.txn_id, wallettransaction.description, 
+                wallettransaction.expiring_on 
+                FROM wallettransaction
             """
         wallet_df = pd.read_sql(sql, con=db)
+        wallettxn_df = pd.read_sql(sql2, con=db)
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Mysql order select done')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
