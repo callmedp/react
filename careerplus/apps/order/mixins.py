@@ -134,7 +134,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             return order
 
     def createOrderitems(self, order, cart_obj, payment_dict={}):
-        import ipdb; ipdb.set_trace()
         if order and cart_obj:
             if not payment_dict:
                 payment_dict = self.getPayableAmount(cart_obj=cart_obj)
