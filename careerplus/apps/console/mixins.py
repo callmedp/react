@@ -75,7 +75,7 @@ class ActionUserMixin(object):
                     "subject": "Your developed document has been shared with our expert",
                     "oi": obj,
                 })
-                self.product_flow_wise_mail(orderitem_obj=obj, to_emails=to_emails, mail_type=mail_type, data=email_dict)
+                self.product_flow_wise_mail(orderitem_obj=obj, to_emails=to_emails, mail_type=mail_type, data=email_data)
                 try:
                     SendSMS().send(sms_type=mail_type, data=email_data)
                 except Exception as e:
@@ -147,7 +147,7 @@ class ActionUserMixin(object):
                             "subject": "Your developed document has been shared with our expert",
                             "oi": oi,
                         })
-                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_dict)
+                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if oi.delivery_service.name == 'SuperExpress':
                             try:
                                 SendSMS().send(sms_type=mail_type, data=email_data)
@@ -180,7 +180,7 @@ class ActionUserMixin(object):
                             "subject": "Your developed document has been shared with our expert",
                             "oi": oi,
                         })
-                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_dict)
+                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if obj.delivery_service.name == 'SuperExpress':
                             try:
                                 SendSMS().send(sms_type=mail_type, data=email_data)
@@ -213,7 +213,7 @@ class ActionUserMixin(object):
                             "subject": "Your developed document has been shared with our expert",
                             "oi": oi,
                         })
-                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_dict)
+                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if obj.delivery_service.name == 'SuperExpress':
                             try:
                                 SendSMS().send(sms_type=mail_type, data=email_data)
