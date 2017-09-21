@@ -23,6 +23,7 @@ from order.models import Order, OrderItem
 from shop.models import DeliveryService
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
+from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
@@ -440,7 +441,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -656,7 +657,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -770,7 +771,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -889,7 +890,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -1007,7 +1008,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -1118,7 +1119,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -1723,6 +1724,7 @@ class ActionOrderItemView(View):
 
                 for oi in booster_ois:
                     token = TokenExpiry().encode(oi.order.email, oi.pk, days)
+                    email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     candidate_data.update({
                         "email": oi.order.email,
                         "mobile": oi.order.mobile,
@@ -1745,13 +1747,14 @@ class ActionOrderItemView(View):
                         try:
                             # send mail to rectuter
                             recruiters = settings.BOOSTER_RECRUITERS
-                            SendMail().send(
-                                to=recruiters, mail_type="BOOSTER_RECRUITER", data=recruiter_data)
-
+                            if 92 not in email_sets:
+                                mail_type = 'BOOSTER_RECRUITER'
+                                send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
                             # send mail to candidate
-                            SendMail().send(
-                                to=[candidate_data.get('email')], mail_type="BOOSTER_CANDIDATE", data=candidate_data)
-
+                            if 93 not in email_sets:
+                                mail_type = 'BOOSTER_CANDIDATE'
+                                send_email_task.delay(to_emails, mail_type, recruiter_data, status=93, oi=oi.pk)
+                            
                             # send sms to candidate
                             SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
                             last_oi_status = oi.oi_status
@@ -1861,6 +1864,7 @@ class ActionOrderItemView(View):
                     country_obj = Country.objects.get(pk=profile_obj.object_id)
                     profiles = InternationalProfileCredential.objects.filter(oi=obj.pk)
                     to_emails = [obj.order.email]
+                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     data = {}
                     data.update({
                         "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
@@ -1869,12 +1873,8 @@ class ActionOrderItemView(View):
                         "country_name": country_obj.name,
                     })
                     mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
-
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
+                    if 62 not in email_sets:
+                        send_email_task.delay(to_emails, mail_type, data, status=62, oi=obj.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
@@ -1972,7 +1972,7 @@ class ActionOrderItemView(View):
                     # mail to user about writer information
                     to_emails = [order.email]
                     mail_type = "PENDING_ITEMS"
-                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, oi.order.id)
+                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, days=None)
                     data = {}
                     data.update({
                         'subject': 'To initiate your services fulfil these details',

@@ -36,18 +36,7 @@ class SendMail():
     def send(self, to=None, mail_type=None, data={}):
         send_dict = {}
 
-        if str(mail_type) == "1":
-            send_dict['subject'] = "Your shine payment confirmation"
-            send_dict['template'] = 'emailers/payment_confirm.html'
-            send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
-            data['email'] = to[0]
-            data['token'] = AutoLogin().encode(
-                'upender.singh@hindustantimes.com', '592be7a753c034509597de71')
-            data['button_text'] = "click here to dashboard"
-
-            self.process(to, send_dict, data)
-
-        elif mail_type == "REGISTRATION":
+        if mail_type == "REGISTRATION":
             send_dict['template'] = 'emailers/candidate/register.html'
             send_dict['subject'] = "Welcome to Shine"
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
@@ -108,7 +97,7 @@ class SendMail():
             elif data.get('draft_level') == 3:
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
-            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('order_id', ''))
+            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('day', ''))
             data['autologin'] = "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
@@ -167,8 +156,8 @@ class SendMail():
 
             self.process(to, send_dict, data)
 
-        elif mail_type == "YOUR_RESUME_FEATURED_SERVICE_STARTED":
-            send_dict['subject'] = data.get('subject', "Your featured profile service has been started")
+        elif mail_type == "FEATURED_PROFILE_UPDATED":
+            send_dict['subject'] = data.get('subject', "Your Featured Profile Is Updated")
             template_name = data.get('template_name', 'featured_profile.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
 

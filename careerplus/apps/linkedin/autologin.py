@@ -1,5 +1,6 @@
 import logging
 import base64
+import datetime
 
 from Crypto.Cipher import XOR, AES
 from django.conf import settings
@@ -8,22 +9,12 @@ from shine.core import ShineCandidateDetail
 
 class AutoLogin(object):
 
-    def encode(self, email, candidateid, orderid):
+    def encode(self, email, candidateid, days=None):
+        key_expires = datetime.datetime.today() + datetime.timedelta(
+            settings.LOGIN_TOKEN_EXPIRY if not days else days)
         inp_str = ''
-        if not email and not candidateid:
-            pass
-        if email and candidateid:
-            inp_str = '{email}|{candidateid}|{orderid}|{salt}'.format(
-                **{'email': email, 'candidateid': candidateid, 'orderid': orderid, 'salt': settings.ENCODE_SALT})
-        if email and not candidateid:
-            resp_status = ShineCandidateDetail().get_status_detail(email=email, shine_id=None)
-            inp_str = '{email}|{candidateid}|{orderid}|{salt}'.format(
-                **{'email': email, 'candidateid': resp_status['candidate_id'], 'orderid': orderid, 'salt': settings.ENCODE_SALT})
-        if not email and candidateid:
-            resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=candidateid)
-            inp_str = '{email}|{candidateid}|{orderid}|{salt}'.format(
-                **{'email': resp_status['email'], 'candidateid': candidateid, 'orderid': orderid, 'salt': settings.ENCODE_SALT})
-
+        inp_str = '{email}|{candidateid}|{dt}|{salt}'.format(
+            **{'email': email, 'candidateid': candidateid, 'dt':key_expires.strftime(settings.TOKEN_DT_FORMAT), 'salt': settings.ENCODE_SALT})
         b = bytes(inp_str, 'utf-8')
         ciph = XOR.new(settings.ENCODE_SALT)
 
@@ -37,5 +28,5 @@ class AutoLogin(object):
         inp_list = str_inp.split('|')
         email = inp_list[0]
         candidateid = inp_list[1]
-        orderid = inp_list[2]
-        return email, candidateid, orderid
+        dt = datetime.datetime.strptime(inp_list[2], settings.TOKEN_DT_FORMAT)
+        return email, candidateid, (dt >= datetime.datetime.now())

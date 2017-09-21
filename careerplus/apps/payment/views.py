@@ -36,11 +36,17 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 return HttpResponsePermanentRedirect(reverse('homepage'))
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
+                cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
+                if not cart_dict.get('total_amount'):
+                    return HttpResponsePermanentRedirect(reverse('homepage'))
             except:
                 return HttpResponsePermanentRedirect(reverse('homepage'))
         if self.cart_obj and not (self.cart_obj.shipping_done):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
+
         elif not self.cart_obj:
+            return HttpResponsePermanentRedirect(reverse('homepage'))
+        elif self.cart_obj and not self.cart_obj.lineitems.filter(no_process=False).exists():
             return HttpResponsePermanentRedirect(reverse('homepage'))
         return None
 
@@ -165,9 +171,8 @@ class ThankYouView(TemplateView):
                     data = {}
                     data['oi'] = p_oi
                     data['addons'] = order.orderitems.filter(
-                        parent=p_oi, is_combo=False,
-                        is_variation=False,
-                        no_process=False).select_related('product', 'partner')
+                        parent=p_oi,
+                        is_addon=True).select_related('product', 'partner')
                     data['variations'] = order.orderitems.filter(
                         parent=p_oi,
                         is_variation=True).select_related('product', 'partner')

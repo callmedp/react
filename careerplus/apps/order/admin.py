@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import Order, OrderItem, OrderItemOperation, Message,\
-    RefundRequest, RefundItem, RefundOperation, CouponOrder
+    RefundRequest, RefundItem, RefundOperation, CouponOrder,\
+    EmailOrderItemOperation, SmsOrderItemOperation
 
 from wallet.models import WalletTransaction
 from payment.models import PaymentTxn
@@ -89,5 +90,8 @@ class RefundRequestAdmin(admin.ModelAdmin):
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(OrderItemOperation, OrderItemOperationAdmin)
-admin.site.register(Message, MessageAdmin)
 admin.site.register(RefundRequest, RefundRequestAdmin)
+admin.site.register(EmailOrderItemOperation)
+admin.site.register(SmsOrderItemOperation)
+admin.site.register(Message, MessageAdmin)
+

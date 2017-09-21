@@ -1,9 +1,12 @@
 import logging
+import json
+
+from decimal import Decimal
 
 from django.utils import timezone
 from django.conf import settings
 
-from decimal import Decimal
+from haystack.query import SearchQuerySet
 
 from shop.models import Product, ProductClass
 from core.mixins import InvoiceGenerate
@@ -60,7 +63,7 @@ class CartMixin(object):
                 self.getCartObject()
                 cart_pk = self.request.session.get('cart_pk')
                 session_id = self.request.session.session_key
-                
+
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                 elif candidate_id:
@@ -222,6 +225,141 @@ class CartMixin(object):
             logging.getLogger('error_log').error(str(e))
         return cart_items
 
+    def get_solr_cart_items(self, cart_obj=None):
+        cart_items = []
+        total_amount = Decimal(0)
+        if not cart_obj:
+            if not self.request.session.get('cart_pk'):
+                self.getCartObject()
+            cart_pk = self.request.session.get('cart_pk')
+            cart_obj = Cart.objects.get(pk=cart_pk)
+        if cart_obj:
+            main_products = cart_obj.lineitems.filter(parent=None)
+
+            main_product_pks = list(main_products.values_list('product__id', flat=True))
+            filtered_sqs = SearchQuerySet().filter(id__in=main_product_pks)
+
+            for m_prod in main_products:
+                addon_list = []
+                combo_list = []
+                var_list = []
+
+                try:
+                    sqs = filtered_sqs.filter(id=m_prod.product.pk)
+                    sqs = sqs[0]
+                    main_id = m_prod.id
+                    product_class = sqs.pPc
+                    name = sqs.pHd if sqs.pHd else sqs.pNm
+                    vendor_name = sqs.pPvn
+                    price = Decimal(sqs.pPinb)
+                    delivery_obj = m_prod.delivery_service
+                    is_available = True
+                    experience = sqs.pEX
+                    reference = m_prod.reference
+
+                    addons = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related('product')
+                    variations = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+
+                    if m_prod.no_process and product_class == 'course' and variations:
+                        pass
+                    elif is_available:
+                        total_amount += price
+
+                    sqs_vars = json.loads(sqs.pVrs).get('var_list', [])
+                    deleted = False
+                    for var in variations:
+                        found = False
+                        for sqs_var in sqs_vars:
+                            if sqs_var.get('id') == var.product.id:
+                                var_id = var.id
+                                var_name = sqs_var.get('label')
+                                var_price = Decimal(sqs_var.get('inr_price'))
+                                var_available = True if is_available else False
+                                var_exp = sqs_var.get('experience')
+                                var_delivery_obj = var.delivery_service
+                                var_reference = var.reference
+
+                                found = True
+                                if var_available:
+                                    total_amount += var_price
+
+                                var_data = {
+                                    "id": var_id,
+                                    "li": var,
+                                    "name": var_name,
+                                    "price": var_price,
+                                    "is_available": var_available,
+                                    "experience": var_exp,
+                                    "delivery_obj": var_delivery_obj,
+                                    "reference": var_reference,
+                                }
+
+                                var_list.append(var_data)
+                                break
+                        if not found:
+                            deleted = True
+                            var.delete()
+
+                    if deleted and not cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).exists():
+                        m_prod.delete()
+                        continue
+
+                    sqs_addons = json.loads(sqs.pFBT).get('fbt_list', [])
+                    for addon in addons:
+                        found = False
+                        for sqs_addon in sqs_addons:
+                            if sqs_addon.get('id') == addon.product.id:
+                                addon_id = addon.id
+                                addon_name = sqs_addon.get('label')
+                                addon_price = Decimal(sqs_addon.get('inr_price'))
+                                addon_available = True if is_available else False
+                                addon_exp = sqs_addon.get('experience')
+                                addon_reference = addon.reference
+                                found = True
+                                if addon_available:
+                                    total_amount += addon_price
+
+                                addon_data = {
+                                    "id": addon_id,
+                                    "li": addon,
+                                    "name": addon_name,
+                                    "price": addon_price,
+                                    "is_available": addon_available,
+                                    "experience": addon_exp,
+                                    "reference": addon_reference,
+                                }
+
+                                addon_list.append(addon_data)
+                                break
+                        if not found:
+                            addon.delete()
+
+                    combo_list = json.loads(sqs.pCmbs).get('combo_list', [])
+
+                    data = {
+                        "id": main_id,
+                        "li": m_prod,
+                        "product_class": product_class,
+                        "vendor": vendor_name,
+                        "name": name,
+                        "price": price,
+                        "experience": experience,
+                        "reference": reference,
+                        "delivery_obj": delivery_obj,
+                        "addons": addon_list,
+                        "variations": var_list,
+                        "combos": combo_list,
+                        "is_available": is_available,
+                        "delivery_types": m_prod.product.get_delivery_types(),
+                    }
+
+                    cart_items.append(data)
+
+                except:
+                    m_prod.delete()
+
+        return {"cart_items": cart_items, "total_amount": total_amount}
+
     def getTotalAmount(self, cart_obj=None):
         total = Decimal(0)
         try:
@@ -249,8 +387,8 @@ class CartMixin(object):
             logging.getLogger('error_log').error(str(e))
         return round(total, 0)
 
-    def getPayableAmount(self, cart_obj):
-        total_amount = Decimal(0)
+    def getPayableAmount(self, cart_obj, total_amount=Decimal(0)):
+        total_amount = total_amount
         total_payable_amount = Decimal(0)
         tax_amount = Decimal(0)
         coupon_amount = Decimal(0)
@@ -264,7 +402,10 @@ class CartMixin(object):
                 cart_pk = self.request.session.get('cart_pk')
                 cart_obj = Cart.objects.get(pk=cart_pk)
             if cart_obj:
-                total_amount = self.getTotalAmount(cart_obj=cart_obj)
+                if not total_amount:
+                    cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+                    total_amount = cart_dict.get('total_amount', Decimal(0))
+
                 total_amount = InvoiceGenerate().get_quantize(total_amount)
                 coupon_obj = cart_obj.coupon
                 wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
@@ -374,7 +515,7 @@ class CartMixin(object):
                 total_count -= cart_obj.lineitems.filter(
                     parent=None, product__product_class__in=course_classes,
                     no_process=True).count()
-                
+
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return total_count

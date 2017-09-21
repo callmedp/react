@@ -489,6 +489,15 @@ class EmailOrderItemOperation(AbstractAutoDate):
         ordering = ['created']
 
 
+class SmsOrderItemOperation(AbstractAutoDate):
+    oi = models.ForeignKey(OrderItem)
+    sms_oi_status = models.PositiveIntegerField(
+        _("SMS Operation Status"), default=0, choices=OI_EMAIL_STATUS)
+    draft_counter = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['created']
+
 class CouponOrder(AbstractAutoDate):
     order = models.ForeignKey(Order)
     coupon = models.ForeignKey(

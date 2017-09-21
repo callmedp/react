@@ -1,5 +1,9 @@
+import json
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from haystack.query import SearchQuerySet
 
 from seo.models import AbstractAutoDate
 from order.models import Order
@@ -140,6 +144,76 @@ class LineItem(AbstractAutoDate):
             u" %(line_id)d") % {'cart_id': self.cart.pk,
                                  'product_id': self.product.pk,
                                  'line_id': self.pk}
+
+    def available(self):
+        flag = False
+        if self.parent:
+            base_product = self.parent.product
+            product = self.product
+            sqs = SearchQuerySet().filter(id=base_product.pk)
+            try:
+                sqs = sqs[0]
+                if self.parent_deleted:
+                    variations = json.loads(sqs.pVrs)
+                    product_list = variations.get('var_list', [])
+                else:
+                    fbts = json.loads(sqs.pFBT)
+                    product_list = fbts.get('fbt_list', [])
+
+                for p_data in product_list:
+                    if p_data.get('id') == product.pk:
+                        flag = True
+                        break
+            except:
+                pass
+
+        else:
+            product = self.product
+            sqs = SearchQuerySet().filter(id=product.pk)
+            try:
+                sqs = sqs[0]
+                flag = True
+            except:
+                pass
+
+        return flag
+
+    def get_solr_price(self):
+        if self.parent:
+            base_product = self.parent.product
+            product = self.product
+            sqs = SearchQuerySet().filter(id=base_product.pk)
+            try:
+                sqs = sqs[0]
+                price = 0
+                if self.parent_deleted:
+                    variations = json.loads(sqs.pVrs)
+                    product_list = variations.get('var_list', [])
+                else:
+                    fbts = json.loads(sqs.pFBT)
+                    product_list = fbts.get('fbt_list', [])
+
+                for p_data in product_list:
+                    if p_data.get('id') == product.pk:
+                        price = p_data.get('inr_price')
+                        break
+
+                if not price:
+                    price = product.get_price()
+
+            except:
+                price = product.get_price()
+
+        else:
+            product = self.product
+            sqs = SearchQuerySet().filter(id=product.pk)
+            try:
+                sqs = sqs[0]
+                price = sqs.pPinb
+            except:
+                price = product.get_price()
+
+        return round(price, 0)
 
 SUBSCRIPTION_STATUS = (
     (-1, "Invalid"),
