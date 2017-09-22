@@ -377,30 +377,30 @@ class Command(BaseCommand):
         print( 'Bulk Wallet Insert Start')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
-        # for i, row in wallet_df.iterrows():
-        #     if row['C_ID'] and row['C_ID'] == row['C_ID']:
-        #         data_tup = (
-        #             str(row['created_on']) if row['created_on'] == row['created_on'] else None,
-        #             str(row['created_on']) if row['created_on'] == row['created_on'] else None,
-        #             row['C_ID'],
-        #             row['Email']
-        #         )
-        #         update_values.append(data_tup)    
-        #     if len(update_values) > 1000:
+        for i, row in wallet_df.iterrows():
+            if row['C_ID'] and row['C_ID'] == row['C_ID']:
+                data_tup = (
+                    str(row['created_on']) if row['created_on'] == row['created_on'] else None,
+                    str(row['created_on']) if row['created_on'] == row['created_on'] else None,
+                    row['C_ID'],
+                    row['Email']
+                )
+                update_values.append(data_tup)    
+            if len(update_values) > 1000:
                 
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #         print( 'Bulk Insert ' + str(i))
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #         # cursor.executemany(update_sql2, update_values)
-        #         update_values = []
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                cursor.executemany(update_sql2, update_values)
+                update_values = []
         
-        # if len(update_values):
+        if len(update_values):
                 
-        #     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #     print( 'Bulk Insert ' + str(i))
-        #     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #     # cursor.executemany(update_sql2, update_values)
-        #     update_values = []
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print( 'Bulk Insert ' + str(i))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            cursor.executemany(update_sql2, update_values)
+            update_values = []
         
         new_wallet_df = pd.read_sql('SELECT id as new_id, owner as C_ID, owner_email FROM wallet_wallet', con=db2)
         wallet_df = pd.merge(wallet_df, new_wallet_df, how='left', on='C_ID')
@@ -429,41 +429,41 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Bulk ADD Credit Insert Start')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        # for i, row in wallet_add_df.iterrows():
-        #     if row['new_wallet_id'] and row['new_wallet_id'] == row['new_wallet_id']:
+        for i, row in wallet_add_df.iterrows():
+            if row['new_wallet_id'] and row['new_wallet_id'] == row['new_wallet_id']:
                 
-        #         status = 3
-        #         if row['expiring_on'] and row['expiring_on'] == row['expiring_on']:
-        #             if row['expiring_on'].to_pydatetime() >= datetime.today():
-        #                 status = 1
-        #         data_tup = ( 
-        #             str(row['created_on'].to_pydatetime()),
-        #             str(row['created_on'].to_pydatetime()),
-        #             row['amount'],       
-        #             row['amount'],       
-        #             str(row['expiring_on'].to_pydatetime()),
-        #             None,
-        #             status,
-        #             row['txn_id'],
-        #             row['new_wallet_id'],
-        #             row['id']
-        #         )
-        #         update_values.append(data_tup)    
-        #     if len(update_values) > 5000:
+                # status = 3
+                # if row['expiring_on'] and row['expiring_on'] == row['expiring_on']:
+                #     if row['expiring_on'].to_pydatetime() >= datetime.today():
+                #         status = 1
+                data_tup = ( 
+                    str(row['created_on'].to_pydatetime()),
+                    str(row['created_on'].to_pydatetime()),
+                    row['amount'],       
+                    row['amount'],       
+                    str(row['expiring_on'].to_pydatetime()),
+                    None,
+                    1,
+                    row['txn_id'],
+                    row['new_wallet_id'],
+                    row['id']
+                )
+                update_values.append(data_tup)    
+            if len(update_values) > 5000:
                 
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #         print( 'Bulk Insert ' + str(i))
-        #         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #         # cursor.executemany(update_sql2, update_values)
-        #         update_values = []
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                cursor.executemany(update_sql2, update_values)
+                update_values = []
                 
-        # if len(update_values):
+        if len(update_values):
                 
-        #     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #     print( 'Bulk Insert ' + str(i))
-        #     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        #     # cursor.executemany(update_sql2, update_values)
-        #     update_values = []
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print( 'Bulk Insert ' + str(i))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            cursor.executemany(update_sql2, update_values)
+            update_values = []
         
         new_point_df = pd.read_sql('SELECT id as new_pt_id, cw_id as id, status as pt_status FROM wallet_rewardpoint', con=db2)
         wallet_add_df = pd.merge(wallet_add_df, new_point_df, how='left', on='id') 

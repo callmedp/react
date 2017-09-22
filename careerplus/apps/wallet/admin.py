@@ -36,13 +36,19 @@ class WalletTransactionAdmin(admin.ModelAdmin):
     readonly_fields = ['modified']
     inlines = [PointTxnInline]
     
+class WalletTransactionInline(admin.StackedInline):
+    model = WalletTransaction
+    raw_id_fields = ('order', 'cart',)
+    readonly_fields = ['modified']
+    fk_name = 'wallet'
+    extra = 0
 
 class WalletAdmin(admin.ModelAdmin):
     list_display = [
         'pk','owner', 'owner_email', 'current_balance']
     readonly_fields = ['owner', 'owner_email', 'current_balance']
     search_fields = ('owner', 'owner_email')
-    inlines = (RewardPointInline,)
+    inlines = (RewardPointInline, WalletTransactionInline)
     
     def current_balance(self, obj):
         return obj.get_current_amount()
