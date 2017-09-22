@@ -9,8 +9,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError, transaction
 from django.contrib.contenttypes.models import ContentType
-from database.models import CPUser
-from shop.models import Product
+from wallet.models import *
 
 class Command(BaseCommand):
     help = ('Get User Database from old Careerplus')
@@ -33,22 +32,25 @@ class Command(BaseCommand):
         db2_pwd = db2_settings.get('PASSWORD')
         db2_user = db2_settings.get('USER')
         db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
-        sql = """
-                SELECT wallet.id, wallet.user_id, wallet.amount, 
-                wallet.created_on, wallet.expiring_on FROM wallet
-                """
-        sql2 = """
-                SELECT wallettransaction.id, wallettransaction.wallet_id, 
-                wallettransaction.type_cashback, wallettransaction.amount, 
-                wallettransaction.current_amount, wallettransaction.created_on, 
-                wallettransaction.status, wallettransaction.order_id, 
-                wallettransaction.txn_id, wallettransaction.description, 
-                wallettransaction.expiring_on 
-                FROM wallettransaction
-            """
-        wallet_df = pd.read_sql(sql, con=db)
-        wallettxn_df = pd.read_sql(sql2, con=db)
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print( 'Mysql order select done')
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        
+        ww_list = Wallet.objects.all()
+        i = 0
+        for wal in ww_list:
+            reward = wal.point.all().order_by('created')
+            txn_list = wal.wallettxn.all().order_by('created')
+            total = Decimal(0)
+            for txn in txn_list:
+                # print(txn.point_value, txn.txn_type)
+                if txn.txn_type == 1:
+                    total += txn.point_value
+                elif txn.txn_type == 2:
+                    total -= txn.point_value
+                elif txn.txn_type == 4:
+                    total -= txn.point_value
+            if total < 0:
+                i += 1
+                print('Wallet ', wal.owner_email)
+                print('Total = ', total)
+                print('')
+                print('')
+                if i == 1000:
+                    break

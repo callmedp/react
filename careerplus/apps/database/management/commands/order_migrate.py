@@ -408,10 +408,10 @@ class Command(BaseCommand):
         wallettxn_df = wallettxn_df[wallettxn_df.wallet_id.isin(wallet_df.id)]
         order_df = order_df.rename(columns={'id': 'order_id'})
         del new_wallet_df
-        
-        wallet_add_df = wallettxn_df[wallettxn_df.type_cashback == 2]
-        wallet_red_df = wallettxn_df[wallettxn_df.type_cashback == 1]
-        wallet_exp_df = wallettxn_df[wallettxn_df.type_cashback == 3]
+        wallettxn_df = wallettxn_df[wallettxn_df.status == 2]
+        wallet_add_df = wallettxn_df[(wallettxn_df.type_cashback == 2)]
+        wallet_red_df = wallettxn_df[(wallettxn_df.type_cashback == 1)]
+        wallet_exp_df = wallettxn_df[(wallettxn_df.type_cashback == 3)]
         del wallettxn_df
         wallet_df = wallet_df.rename(columns={'id': 'wallet_id', 'new_id': 'new_wallet_id'})
         
@@ -464,8 +464,166 @@ class Command(BaseCommand):
         #     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         #     # cursor.executemany(update_sql2, update_values)
         #     update_values = []
-        new_point_df = pd.read_sql('SELECT id as new_pt_id, cw_id as id FROM wallet_rewardpoint', con=db2)
+        
+        new_point_df = pd.read_sql('SELECT id as new_pt_id, cw_id as id, status as pt_status FROM wallet_rewardpoint', con=db2)
         wallet_add_df = pd.merge(wallet_add_df, new_point_df, how='left', on='id') 
-        import ipdb;ipdb.set_trace()
+        
+        update_values = []
+        update_sql2 = """
+                INSERT INTO wallet_wallettransaction
+                (created, modified, txn_type, status, notes, txn, point_value, ecash_value, 
+                cart_id, order_id, wallet_id, current_value) VALUES
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
+                """
+        
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print( 'Bulk ADD Credit TXN Insert Start')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        for i, row in wallet_add_df.iterrows():
+            if row['new_pt_id'] and row['new_pt_id'] == row['new_pt_id']:
+                data_tup = ( 
+                    str(row['created_on'].to_pydatetime()),
+                    str(row['created_on'].to_pydatetime()),
+                    1,       
+                    1,       
+                    'Migrated from CP',
+                    row['new_pt_id'],
+                    row['amount'],
+                    0,
+                    None,
+                    None,
+                    row['new_wallet_id'],
+                    0
+                )
+                update_values.append(data_tup)    
+            if len(update_values) > 5000:
+                
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                cursor.executemany(update_sql2, update_values)
+                update_values = []
+                
+        if len(update_values):
+                
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print( 'Bulk Insert ' + str(i))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            cursor.executemany(update_sql2, update_values)
+            update_values = []
+        
+        new_point_df = pd.read_sql('SELECT id as new_txn_id, txn as new_pt_id FROM wallet_wallettransaction', con=db2)
+        new_point_df.new_pt_id = pd.to_numeric(new_point_df.new_pt_id)  
+        wallet_add_df = pd.merge(wallet_add_df, new_point_df, how='left', on='new_pt_id') 
+        
+        update_values = []
+        update_sql3 = """
+                INSERT INTO wallet_pointtransaction
+                (created, modified, txn_type, point_value, point_id, transaction_id) VALUES
+                (%s, %s, %s, %s, %s, %s) 
+                """
+        
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print( 'Bulk Add pt TXN Insert Start')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        for i, row in wallet_add_df.iterrows():
+            if row['new_pt_id'] and row['new_pt_id'] == row['new_pt_id']:
+                data_tup = ( 
+                    str(row['created_on'].to_pydatetime()),
+                    str(row['created_on'].to_pydatetime()),
+                    1,
+                    row['amount'],
+                    row['new_pt_id'],
+                    row['new_txn_id'],
+                )
+                update_values.append(data_tup)    
+            if len(update_values) > 5000:
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                cursor.executemany(update_sql3, update_values)
+                update_values = []
+                
+        if len(update_values):
+                
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print( 'Bulk Insert ' + str(i))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            cursor.executemany(update_sql3, update_values)
+            update_values = []
+        
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print( 'Bulk REDEEM Credit TXN Insert Start')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        for i, row in wallet_red_df.iterrows():
+            if row['new_wallet_id'] and row['new_wallet_id'] == row['new_wallet_id']:
+                data_tup = ( 
+                    str(row['created_on'].to_pydatetime()),
+                    str(row['created_on'].to_pydatetime()),
+                    2,       
+                    1,       
+                    'Migrated from CP',
+                    row['id'],
+                    row['amount'],
+                    0,
+                    None,
+                    None,
+                    row['new_wallet_id'],
+                    0
+                )
+                update_values.append(data_tup)    
+            if len(update_values) > 5000:
+                
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                cursor.executemany(update_sql2, update_values)
+                update_values = []
+                
+        if len(update_values):
+                
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print( 'Bulk Insert ' + str(i))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            cursor.executemany(update_sql2, update_values)
+            update_values = []
+        
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print( 'Bulk EXP Credit TXN Insert Start')
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        for i, row in wallet_exp_df.iterrows():
+            if row['new_wallet_id'] and row['new_wallet_id'] == row['new_wallet_id']:
+                data_tup = ( 
+                    str(row['created_on'].to_pydatetime()),
+                    str(row['created_on'].to_pydatetime()),
+                    4,       
+                    1,       
+                    'Migrated from CP',
+                    row['id'],
+                    row['amount'],
+                    0,
+                    None,
+                    None,
+                    row['new_wallet_id'],
+                    0
+                )
+                update_values.append(data_tup)    
+            if len(update_values) > 5000:
+                
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                print( 'Bulk Insert ' + str(i))
+                print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+                cursor.executemany(update_sql2, update_values)
+                update_values = []
+                
+        if len(update_values):
+                
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print( 'Bulk Insert ' + str(i))
+            print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            cursor.executemany(update_sql2, update_values)
+            update_values = []
+                
+
         db.close()
         db2.close()
