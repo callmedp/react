@@ -198,7 +198,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     if type_of == "edit":
                         if shine_id is None:
                             raise "Candidate id does not exist."
-                        personal_url = settings.SHINE_API_URL + "/api/v2/candidate-personal-details/" +\
+                        personal_url = settings.SHINE_SITE + "/api/v2/candidate-personal-details/" +\
                             shine_id + "/?format=json"
                         personal_response = requests.put(
                             personal_url, data=personal_data, headers=request_header)
@@ -291,7 +291,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                         if not id_list[job]:
                             return False, "Job id doesnot exists."
 
-                        jobs_url = settings.SHINE_API_URL + "/api/v2/candidate/" +\
+                        jobs_url = settings.SHINE_SITE + "/api/v2/candidate/" +\
                             shine_id + "/jobs/" + id_list[job] + "/?format=json"
 
                         jobs_response = requests.put(
@@ -357,7 +357,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     if type_of == "edit":
                         if not id_list[education]:
                             return False, "The education id doesnot exists."
-                        educations_url = settings.SHINE_API_URL + \
+                        educations_url = settings.SHINE_SITE + \
                             "/api/v2/candidate/" + shine_id + "/educations/" + \
                             id_list[education] + "/?format=json"
 
@@ -415,7 +415,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     }
 
                     if type_of == "edit":
-                        skills_url = settings.SHINE_API_URL + "/api/v2/candidate/" +\
+                        skills_url = settings.SHINE_SITE + "/api/v2/candidate/" +\
                             shine_id + "/bulk-skills/"
 
                         skills_response = requests.post(
@@ -453,7 +453,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                 files = {'resume_file': file}
                 request_header = self.get_api_headers()
                 if type_of == "edit":
-                    resume_url = settings.SHINE_API_URL + "/api/v2/candidate/" +\
+                    resume_url = settings.SHINE_SITE + "/api/v2/candidate/" +\
                         shine_id + "/resumefiles/?format=json"
 
                     resume_response = requests.post(

@@ -9,9 +9,9 @@ class PaymentTxn(AbstractAutoDate):
     txn = models.CharField(max_length=255, null=True, blank=True, unique=True)
     order = models.ForeignKey(
         'order.Order', related_name='ordertxns',
-        verbose_name=("Order"))
+        verbose_name="Order")
     cart = models.ForeignKey(
-        'cart.Cart', verbose_name=("Cart"),
+        'cart.Cart', verbose_name="Cart",
         null=True, blank=True,
         related_name='carttxns', on_delete=models.SET_NULL)
     status = models.PositiveSmallIntegerField(
@@ -23,10 +23,10 @@ class PaymentTxn(AbstractAutoDate):
     payment_date = models.DateTimeField(null=True, blank=True)
 
     currency = models.CharField(
-        ("Currency"), max_length=12, null=True, blank=True)
+        "Currency", max_length=12, null=True, blank=True)
 
     txn_amount = models.DecimalField(
-        ("Txn Amount"), decimal_places=2, max_digits=12, default=0)
+        "Txn Amount", decimal_places=2, max_digits=12, default=0)
 
     # pay by cheque/Draft
     instrument_number = models.CharField(max_length=255, null=True, blank=True)

@@ -1,4 +1,5 @@
 from django.utils import timezone
+from datetime import datetime, date
 
 from decimal import Decimal
 from django.db import models
@@ -6,6 +7,7 @@ from django.utils.html import strip_tags
 from django.utils import six        
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -2004,3 +2006,96 @@ class DeliveryService(AbstractAutoDate):
         if self.inr_price:
             return round(self.inr_price, 0)
         return Decimal(0)
+
+
+class FunctionalArea(AbstractAutoDate, ModelMeta):
+    name = models.CharField(
+        _('Name'), max_length=100, unique=True)
+    faproducts = models.ManyToManyField(
+        'shop.Product',
+        verbose_name=_('FA Product'),
+        through='ProductFA',
+        through_fields=('fa', 'product'),
+        blank=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _('FA')
+        verbose_name_plural = _('FAs')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+
+    def __str__(self):
+        return self.name
+
+    def get_products(self):
+        products = self.faproducts.filter(
+            active=True,
+            productfas__active=True)
+        return products
+
+
+class ProductFA(AbstractAutoDate):
+    fa = models.ForeignKey(
+        FunctionalArea,
+        verbose_name=_('FA'),
+        related_name='productfas',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        verbose_name=_('Product'),
+        related_name='productfas',
+        on_delete=models.CASCADE)
+    priority = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('product', 'fa')
+        verbose_name = _('Product FA')
+        verbose_name_plural = _('Product FAs')
+
+
+class Skill(AbstractAutoDate, ModelMeta):
+    name = models.CharField(
+        _('Name'), max_length=100, unique=True)
+    skillproducts = models.ManyToManyField(
+        'shop.Product',
+        verbose_name=_('Skill Product'),
+        through='ProductSkill',
+        through_fields=('skill', 'product'),
+        blank=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _('Skill')
+        verbose_name_plural = _('Skills')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+
+    def get_products(self):
+        products = self.skillproducts.filter(
+            active=True,
+            productskills__active=True)
+        return products
+
+
+class ProductSkill(AbstractAutoDate):
+    skill = models.ForeignKey(
+        Skill,
+        verbose_name=_('Skill'),
+        related_name='productskills',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        verbose_name=_('Product'),
+        related_name='productskills',
+        on_delete=models.CASCADE)
+    priority = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('product', 'skill')
+        verbose_name = _('Product Skill')
+        verbose_name_plural = _('Product Skills')
+
+

@@ -233,8 +233,6 @@ MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
 CART_MAX_LIMIT = 5
 
-SHINE_API_URL = 'https://sumosc.shine.com'
-
 ############ SOLR SETTINGS #######################
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20

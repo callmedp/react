@@ -219,7 +219,7 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
                 shine_profile = self.get_candidate_detail(email=email)
                 f_area = self.get_functional_area(email=email)
                 request.session.update({
-                    'candidate_profile': shine_profile, 'f_area':f_area,
+                    'candidate_profile': shine_profile, 'f_area': f_area,
                 })
             personal_detail = self.get_shine_user_profile_detail(request)
             education_detail = shine_profile.get('education', '')

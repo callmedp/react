@@ -4,9 +4,9 @@
 {% block css_section %}
     {{block.super}}
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
-    <link href="{% static '/shinelearn/css/common/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static '/shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static '/shinelearn/css/search/listing.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endblock css_section %}
 {% block title %}Search Result Page - Shine Learning{% endblock title %}
 
@@ -29,7 +29,10 @@
                                     {{field}}
                                 </div>
                                 {% endfor %}
-                                <button type="submit" class="find-jobs-btn btn">Find</button>
+{#                                <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">#}
+
+{#                                  </div>#}
+                                <button type="submit"  class="find-jobs-btn btn"></button>
                             </form>
                         </div>
                     </div>
@@ -89,6 +92,7 @@
     <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
 
     <script type="text/javascript">

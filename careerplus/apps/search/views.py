@@ -6,7 +6,7 @@ import json
 # django imports
 from django.shortcuts import render, HttpResponsePermanentRedirect
 from django.template.loader import render_to_string
-from django.views.generic import ListView, TemplateView
+from django.views.generic import TemplateView, FormView
 from django.http import QueryDict, Http404
 from django.core.paginator import Paginator, InvalidPage
 from django.core.exceptions import ImproperlyConfigured
@@ -20,8 +20,8 @@ from haystack.query import EmptySearchQuerySet
 
 # local imports
 from .forms import SearchForm, SearchRecommendedForm
-from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams #,RecommendedSearch
-
+from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
+from shop.models import FunctionalArea, Skill
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 
@@ -29,9 +29,7 @@ class SearchBaseView(TemplateView):
     template_name = 'search/search.html'
     ajax_template_name = 'search/ajax/search_listing.html'
     allow_empty_query = False
-    clean_query = True
     extra_context = {}
-    query_param_name = "q"
 
     # Conditional Form Validation required variables
     query = ''
@@ -44,24 +42,6 @@ class SearchBaseView(TemplateView):
     session_key = "searchquery"
     search_type = ""
     none_query = False
-
-    def prepare_response(self):
-        """
-        Handle both GET and POST requests in the same way.
-        """
-        if not self.search_class:
-            self.search_class = self.get_search_class()
-        self.get_search_params()
-        response = self.pre_processor()
-        if response:
-            return response
-        self.get_search_query()
-        self.empty_query_handler()
-        self.get_results()
-        response = self.post_processor()    # Handle relaxation.
-        if response:
-            return response
-        return self.create_response()
 
     def get_search_class(self):
         """
@@ -95,7 +75,16 @@ class SearchBaseView(TemplateView):
         """
         Called before any other processing
         """
-        pass
+
+        if self.search_params.get("none_query"):
+            self.none_query = True
+
+        # Analytics Relevance Tracking
+        if hasattr(self, 'request'):
+            if not self.request.is_ajax():
+                self.search_sid = uuid.uuid4().hex
+            else:
+                self.search_sid = self.search_params.get('sid')
 
     def empty_query_handler(self):
         """
@@ -292,6 +281,24 @@ class SearchBaseView(TemplateView):
                 context[value] = self.search_params.getlist(param)
         return context
 
+    def prepare_response(self):
+        """
+        Handle both GET and POST requests in the same way.
+        """
+        if not self.search_class:
+            self.search_class = self.get_search_class()
+        self.get_search_params()
+        response = self.pre_processor()
+        if response:
+            return response
+        self.get_search_query()
+        self.empty_query_handler()
+        self.get_results()
+        response = self.post_processor()  # Handle relaxation.
+        if response:
+            return response
+        return self.create_response()
+
     def get(self, request, *args, **kwargs):
         return self.prepare_response()
 
@@ -319,21 +326,6 @@ class SearchListView(SearchBaseView):
                                                          kwargs={'f_area': 'it-software',
                                                                  'skill': 'development'}))
         return super(SearchListView, self).prepare_response()
-
-    def pre_processor(self):
-        """
-        Called before any other processing
-        """
-
-        if self.search_params.get("none_query"):
-            self.none_query = True
-
-        # Analytics Relevance Tracking
-        if hasattr(self, 'request'):
-            if not self.request.is_ajax():
-                self.search_sid = uuid.uuid4().hex
-            else:
-                self.search_sid = self.search_params.get('sid')
 
     def get_extra_context(self):
         request_get = self.search_params.copy()
@@ -366,32 +358,15 @@ class RecommendedSearchView(SearchBaseView):
     search_type = "recommended"
     extra_context = {'type': 'search'}
     track_query_dict = QueryDict('').copy()
-    # search_class = RecommendedSearch
-    params_class = SimpleParams
+    search_class = RecommendedSearch
+    params_class = RecommendedParams
+    allow_empty_query = True
 
-    def prepare_response(self):
-        self.keywords = self.args
-        current_url = resolve(self.request.path_info).url_name
-        if current_url == 'search_listing' and not self.request.GET:
-            return HttpResponsePermanentRedirect(reverse('search:recommended_listing',
-                                                         kwargs={'f_area':'it-software',
-                                                                 'skill':'development'}))
-        return super(RecommendedSearchView, self).prepare_response()
-
-    def pre_processor(self):
+    def empty_query_handler(self):
         """
-        Called before any other processing
+        Override for allowing no query search
         """
-
-        if self.search_params.get("none_query"):
-            self.none_query = True
-
-        # Analytics Relevance Tracking
-        if hasattr(self, 'request'):
-            if not self.request.is_ajax():
-                self.search_sid = uuid.uuid4().hex
-            else:
-                self.search_sid = self.search_params.get('sid')
+        pass  # Do nothing
 
     def get_extra_context(self):
         request_get = self.search_params.copy()
@@ -425,18 +400,7 @@ class FuncAreaPageView(SearchBaseView):
     track_query_dict = QueryDict('').copy()
     search_class = FuncAreaSearch
     params_class = FuncAreaParams
-    allow_empty_query = False
-
-    def pre_processor(self):
-        """
-        Called before any other processing
-        """
-        # Analytics Relevance Tracking
-        if hasattr(self, 'request'):
-            if not self.request.is_ajax():
-                self.search_sid = uuid.uuid4().hex
-            else:
-                self.search_sid = self.search_params.get('sid')
+    allow_empty_query = True
 
     def empty_query_handler(self):
         """
@@ -463,3 +427,26 @@ class FuncAreaPageView(SearchBaseView):
         (paginator, page) = super(FuncAreaPageView, self).build_page()
         self.prepare_track(page)
         return paginator, page
+
+
+class RedirectToRecommendationsView(FormView):
+    form_class = SearchRecommendedForm
+
+    def get_initial(self):
+        if self.request.session.get('candidate_id'):
+            func_area = self.request.session.get('func_area')
+            func_area = FunctionalArea.objects.filter(name__iexact=func_area)
+            func_area = func_area[0].name if func_area else ''
+            skills = self.request.session.get('skills').split(",")
+            skills_found = []
+            for skill in skills:
+                skill_obj = Skill.objects.filter(name__iexact=skill)
+                if skill_obj:
+                    skills_found.append(skill_obj[0].name)
+        else:
+            func_area = 'Real Estate'
+            skills_found = ['Delphi Certified', 'Certified Green Belt']
+        return {'area': func_area, 'skills': ",".join(skills_found)}
+
+    # def get_success_url(self):
+
