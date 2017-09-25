@@ -9,8 +9,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError, transaction
 from django.contrib.contenttypes.models import ContentType
-from database.models import CPUser
-from shop.models import Product
+from wallet.models import *
 
 class Command(BaseCommand):
     help = ('Get User Database from old Careerplus')
@@ -33,35 +32,81 @@ class Command(BaseCommand):
         db2_pwd = db2_settings.get('PASSWORD')
         db2_user = db2_settings.get('USER')
         db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
-        sql = """
-                SELECT cart_order.id, auth_user.email as Email,  
-                cart_order.transaction_id, cart_order.currency, cart_order.instrument_number, 
-                cart_order.instrument_issuer, cart_order.instrument_issue_date, cart_order.added_on, 
-                cart_order.modified_on, cart_order.closed_on, cart_order.status, 
-                cart_order.payment_mode, cart_order.payment_date, cart_order.vendor, 
-                cart_order.amount_payable, cart_order.total, 
-                cart_order.coupon_discount, cart_order.convenience_charges,
-                coupon_coupon.code as coupon,
-                cart_order.coupon_id,
-                cart_order.welcome_call, 
-                cart_order.extra_info, theme_country.country_code as code2,  
-                cart_order.order_mobile,  
-                cart_order.flat_discount, cart_order.invoice_file,
-                cart_order.wallettransaction_id,
-                cart_order.wallettransaction_redeem_id,
-                cart_order.wallet_cashback
-
-                FROM cart_order 
-                LEFT JOIN theme_country
-                ON cart_order.country_id = theme_country.id
-                LEFT JOIN coupon_coupon
-                ON cart_order.coupon_id = coupon_coupon.code
-                LEFT JOIN auth_user
-                ON cart_order.candidate_id = auth_user.id
-                WHERE (cart_order.added_on >= '2014-04-1 00:00:00' AND cart_order.candidate_id IS NOT NULL);
-            """
-        wallet_df = pd.read_sql(sql, con=db)
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print( 'Mysql order select done')
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        
+        ww_list = Wallet.objects.all()
+        i = 0
+        for wal in ww_list:
+            txn_list = wal.wallettxn.all().order_by('created')
+            total = Decimal(0)
+            print('Wallet ', wal.owner_email)
+            for txn in txn_list:
+                reward = wal.point.filter(status=1).order_by('created')
+                if txn.txn_type == 1:
+                    total += txn.point_value
+                    txn.current_value = total
+                    txn.notes = 'Migrated from CP'
+                    txn.save()
+                elif txn.txn_type == 2:
+                    total -= txn.point_value
+                    if total < Decimal(0):
+                        total = Decimal(0)
+                    point = txn.point_value
+                    txn.current_value = total
+                    txn.notes = 'Migrated from CP'
+                    for pts in reward:
+                        if point > Decimal(0):    
+                            if pts.current >= point:
+                                pts.current -= point
+                                if pts.current == Decimal(0):
+                                    pts.status = 1
+                                pts.save()
+                                PointTransaction.objects.create(
+                                    transaction=txn,
+                                    point=pts,
+                                    point_value=point,
+                                    txn_type=2)
+                                point = Decimal(0)
+                                
+                            else:
+                                point -= pts.current
+                                pts.status = 2
+                                PointTransaction.objects.create(
+                                    transaction=txn,
+                                    point=pts,
+                                    point_value=pts.current,
+                                    txn_type=2)
+                                pts.current = Decimal(0)
+                                pts.save()
+                    txn.save()
+                elif txn.txn_type == 4:
+                    total -= txn.point_value
+                    if total < Decimal(0):
+                        total = Decimal(0)
+                    point = txn.point_value
+                    txn.current_value = total
+                    txn.notes = 'Migrated from CP'
+                    for pts in reward:
+                        if point > Decimal(0):    
+                            if pts.current >= point:
+                                pts.current -= point
+                                if pts.current == Decimal(0):
+                                    pts.status = 1
+                                pts.save()
+                                PointTransaction.objects.create(
+                                    transaction=txn,
+                                    point=pts,
+                                    point_value=point,
+                                    txn_type=4)
+                                point = Decimal(0)
+                                
+                            else:
+                                point -= pts.current
+                                pts.status = 3
+                                PointTransaction.objects.create(
+                                    transaction=txn,
+                                    point=pts,
+                                    point_value=pts.current,
+                                    txn_type=4)
+                                pts.current = Decimal(0)
+                                pts.save()
+                    txn.save()
+                        
