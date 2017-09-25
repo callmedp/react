@@ -46,17 +46,24 @@ class ShineUserDetail(object):
         return user_detail_dict
 
     def get_skills(self, request):
-        candidate_profile = request.session.get('candidate_profile', '')
-        skills = candidate_profile.get('skills', '')
+        skills = ""
+        if request.session.get('candidate_profile', ''):
+            candidate_profile = request.session.get('candidate_profile', '')
+            skills = candidate_profile.get('skills', '')
+        else:
+            skills = {}
         return skills
 
     def get_resume_file(self, request):
         resume_file = ""
-        candidate_profile = request.session.get('candidate_profile', '')
-        resume_data = candidate_profile.get('resumes', '')
-        for data in resume_data:
-            if data.get('is_default') == 1:
-                resume_file = data.get('resume_name') + data.get('extension')
+        if request.session.get('candidate_profile'):
+            candidate_profile = request.session.get('candidate_profile', '')
+            resume_data = candidate_profile.get('resumes', '')
+            for data in resume_data:
+                if data.get('is_default') == 1:
+                    resume_file = data.get('resume_name') + data.get('extension')
+        else:
+            resume_file = {}
         return resume_file
 
 

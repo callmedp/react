@@ -216,11 +216,14 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
             shine_profile = request.session.get('candidate_profile', '')
             if not shine_profile:
                 email = request.session.get('email', '')
-                shine_profile = self.get_candidate_detail(email=email)
-                f_area = self.get_functional_area(email=email)
-                request.session.update({
-                    'candidate_profile': shine_profile, 'f_area':f_area,
-                })
+                if email:
+                    shine_profile = self.get_candidate_detail(email=email)
+                    f_area = self.get_functional_area(email=email)
+                    request.session.update({
+                        'candidate_profile': shine_profile, 'f_area':f_area,
+                    })
+                else:
+                    shine_profile = {}
             personal_detail = self.get_shine_user_profile_detail(request)
             education_detail = shine_profile.get('education', '')
             experience_detail = shine_profile.get('jobs', '')
@@ -275,14 +278,14 @@ class UpdateShineProfileView(UpdateShineProfileMixin, View):
                                     shine_id=shine_id,
                                     user_access_token=user_access_token,
                                     client_token=client_token, data=request.POST,
-                                    type_of='edit')
+                                    type_of='edit', token=None)
                         else:
                             update_status, update_msg =\
                                 self.update_candidate_personal(
                                     shine_id=shine_id,
                                     user_access_token=user_access_token,
                                     client_token=client_token, data=request.POST,
-                                    type_of='edit')
+                                    type_of='edit', token=None)
                             
                     elif edit_for == "editeducation":
                         update_status, update_msg =\
@@ -290,21 +293,21 @@ class UpdateShineProfileView(UpdateShineProfileMixin, View):
                                 shine_id=shine_id,
                                 user_access_token=user_access_token,
                                 client_token=client_token, data=request.POST,
-                                type_of='edit')
+                                type_of='edit', token=None)
 
                     elif edit_for == "editworkexp":
                         update_status, update_msg = self.update_candidate_jobs(
                             shine_id=shine_id,
                             user_access_token=user_access_token,
                             client_token=client_token, data=request.POST,
-                            type_of='edit')
+                            type_of='edit', token=None)
 
                     elif edit_for == "uploadresume":
                         update_status, update_msg = self.upload_resume(
                             shine_id=shine_id, 
                             user_access_token=user_access_token,
                             client_token=client_token, data=request.FILES,
-                            type_of='edit')
+                            type_of='edit', token=None)
 
                     if update_status:
                         return HttpResponse(json.dumps({'status': True, "msg": update_msg}))
