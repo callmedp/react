@@ -28,10 +28,13 @@ class HomePageView(TemplateView):
         return {"job_asst_services": list(job_services), "job_asst_view_all": job_asst_view_all}
 
     def get_courses(self):
-
-        tcourses = TopTrending.objects.filter(
+        tcourses = []
+        pcourses = []
+        rcourses = []
+        t_objects = TopTrending.objects.filter(
             is_active=True, is_jobassistance=False)
-        tcourses = tcourses[:4]
+        t_objects = t_objects[:4]
+        show_pcourses = False
         # recommended
         if self.request.session.get('candidate_id'):
             rcourses = get_recommendations(self.request.session.get('func_area', None),
@@ -40,15 +43,15 @@ class HomePageView(TemplateView):
             if rcourses:
                 rcourses = rcourses[:9]
             else:
-                pcourses = True
+                show_pcourses = True
         else:
-            pcourses = True
-        if pcourses:
+            show_pcourses = True
+        if show_pcourses:
             pcourses = SQS().only('pTt pURL pHd pAR pNJ pImA pImg').order_by('-pBC')[:9]
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']
-        for tcourse in tcourses:
+        for tcourse in t_objects:
             tprds = tcourse.get_trending_products()
             course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
             tprds = tprds.filter(product__product_class__in=course_classes)[:9]
