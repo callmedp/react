@@ -161,8 +161,8 @@
                 </div>
               </div>
               <div class="row mt-10">
-                {% if personal_detail.gender == 1 %}
                 <div class="col-sm-3 col-md-3">Gender</div>
+                {% if personal_detail.gender == 1 %}
                 <div class="col-sm-9 col-md-9" data-role="input" data-editable>
                   <input class="pro-input" type="text" name="gender" 
                   value="Mail">
@@ -171,7 +171,7 @@
                 <div class="col-sm-9 col-md-9" data-role="input" data-editable>
                   <input class="pro-input" type="text" name="gender" 
                   value="Femail">
-                </div>
+                </div> 
                 {% endif %}
               </div>
               <div class="row mt-10">
@@ -222,43 +222,45 @@
         <li>
           <div class="col-sm-12 bdr-bottom" id="div_workex">
             <h2 class="profile-head" data-id="work">Work Experience</h2> 
-            <button class="btn btn-profile js_edit_workex_btn" data-role="button">
-            Edit</button>
-              <div class="row mt-10 save-event" style="display: none;">
-                  <div class="col-sm-3 col-md-3">Are You</div>
-                  {% for fresh_exp in total_exp %}
-                  <div class="col-sm-9 col-md-9">
-                      <label class="block-inline mright20">
-                          <input type="radio" name="freshexp"
-                          {% if fresh_exp.experience_in_months < 0 %} checked {% endif %}>
-                          Fresher
-                      </label>
-                      <label class="block-inline">
-                          <input type="radio" name="freshexp"
-                          {% if fresh_exp.experience_in_months > 0 %} checked {% endif %}>
-                          Experience
-                      </label>
-                  </div>
-                  {% endfor %}
-              </div>
-            {% for exp in experience_detail %}
-              <div class="row mt-10">
-                  <div class="col-sm-3 col-md-3">Company</div>
-                  <div class="col-sm-9 col-md-9" data-role="input" data-editable>
-                    {{exp.company_name}}
-                  </div>
-              </div>
-              <div class="row mt-10">
-                  <div class="col-sm-3 col-md-3">Job Title</div>
-                  <div class="col-sm-9 col-md-9" data-role="input" data-editable>
-                    {{exp.job_title}}
-                  </div>
-              </div>
-              <div class="row mt-10">
-                  <div class="col-sm-3 col-md-3">Duration</div>
-                  <div class="col-sm-9 col-md-9" data-role="input2" data-editable>{{exp.start_month}},{{exp.start_year}} to {% if exp.is_current %}Present{% else %} {{exp.end_month}}, {{exp.end_year}} {% endif %}</div>
-              </div>
-            {% endfor %}
+            <button class="btn btn-profile" data-role="button" 
+              id="js_edit_workex">Edit</button>
+            {% if experience_detail %}  
+              {% for exp in experience_detail %}
+                <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Company</div>
+                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                      {{exp.company_name}}
+                    </div>
+                </div>
+                <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Job Title</div>
+                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                      {{exp.job_title}}
+                    </div>
+                </div>
+                <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Duration</div>
+                    <div class="col-sm-9 col-md-9" data-role="input2" data-editable>{{exp.start_month}},{{exp.start_year}} to {% if exp.is_current %}Present{% else %} {{exp.end_month}}, {{exp.end_year}} {% endif %}</div>
+                </div>
+              {% endfor %}
+            {% else %}
+                <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Company</div>
+                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                    </div>
+                </div>
+                <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Job Title</div>
+                    <div class="col-sm-9 col-md-9" data-role="input" data-editable>
+                    </div>
+                </div>
+                <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Duration</div>
+                    <div class="col-sm-9 col-md-9" data-role="input2" 
+                    data-editable>
+                    </div>
+                </div>
+            {% endif %}
               <div class="row mt-10 save-event" style="display: none;">
                   <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
                       <label for="current" class="current-comp"><input type="checkbox" name="current"> I work here</label>
@@ -276,6 +278,7 @@
               <h2 class="profile-head" data-id="work">Work Experience</h2>
               <div class="row mt-10 save-event">
                 <div class="col-sm-3 col-md-3">Are You</div>
+              {% if total_exp %}
                 {% for fresh_exp in total_exp %}
                 <div class="col-sm-9 col-md-9">
                     <label class="block-inline mright20">
@@ -290,7 +293,20 @@
                     </label>
                 </div>
                 {% endfor %}
+              {% else %}
+                <div class="col-sm-9 col-md-9">
+                    <label class="block-inline mright20">
+                        <input type="radio" name="freshexp">
+                        Fresher
+                    </label>
+                    <label class="block-inline">
+                        <input type="radio" name="freshexp">
+                        Experience
+                    </label>
+                </div>
+              {% endif %}
               </div>
+              {% if experience_detail %}
                 {% for exp in experience_detail %}
                   <div class="row mt-10">
                       <div class="col-sm-3 col-md-3">Company</div>
@@ -411,6 +427,80 @@
                   <input type="hidden" name="sub_field" value="{{exp.sub_field}}">
                   <input type="hidden" name="id" value="{{exp.id}}">
                 {% endfor %}
+              {% else %}
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Company</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                        <input class="pro-input js_company" type="text" 
+                        name="company" value="">
+                      </div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Job Title</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" 
+                      data-editable="">
+                        <input class="pro-input js_position" type="text" 
+                        name="position" value="">
+                      </div>
+                  </div>
+                  <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3">Duration</div>
+                      <div class="col-sm-9 col-md-9">
+                        <span>From</span>
+                        <div class="pro-select22" data-role="select" 
+                        data-editable="" data-type="year">
+                        <select class="pro-select" name="start_year">
+                        {% for st_year in st_years %}
+                            <option>{{st_year}}</option>
+                        {% endfor %}
+                        </select>
+                      </div>
+                      <div class="pro-select22" data-role="select" 
+                      data-editable="" data-type="months">
+                      <select class="pro-select" name="start_month">
+                        {% for key, val in month_dict.items %}
+                            <option value="{{val}}">{{key}}</option>
+                        {% endfor %}
+                      </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-10">
+                    <div class="col-sm-3 col-md-3"></div>
+                      <div class="col-sm-9 col-md-9">
+                        <span>To</span>
+                        <div class="pro-select22" data-role="select" 
+                        data-editable="" data-type="year">
+                        <select class="pro-select endyear" name="end_year">
+                        {% for st_year in st_years %}
+                            <option>{{st_year}}</option>
+                        {% endfor %}
+                        </select>
+                      </div>
+                      <div class="pro-select22" data-role="select" 
+                      data-editable="" data-type="months">
+                      <select class="pro-select endmonth" name="end_month">
+                       {% for key, val in month_dict.items %}
+                            <option value="{{val}}">{{key}}</option>
+                        {% endfor %}
+                      </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Is current Job?</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" 
+                      data-editable="">
+                        <label for="current" class="current-comp">
+                          <input type="checkbox" name="current"> 
+                          I work here
+                        </label>
+                      </div>
+                  </div>
+                  <input type="hidden" name="industry_id" value="">
+                  <input type="hidden" name="sub_field" value="">
+                  <input type="hidden" name="id" value="">
+              {% endif %}
                 <div class="row mt-10 save-event">
                   <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
                       <button class="btn btn-primary" type="submit">Save</button>
@@ -426,27 +516,49 @@
             <div class="col-sm-12 bdr-bottom" id="div_education">
                 <h2 class="profile-head" data-id="education">Education Details</h2>
                 <button class="btn btn-profile js_edit_education_btn" data-role="button">Edit</button>
-              {% for education in education_detail %}
+              {% if education_detail %}
+                {% for education in education_detail %}
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Qualification level</div>
+                      <div class="col-sm-9 col-md-9" data-role="select" data-editable data-type="qualification">{{education.education_level}}</div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Education Stream</div>
+                      <div class="col-sm-9 col-md-9" data-role="input"
+                      data-editable>{{education.education_specialization}}</div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Institute Name</div>
+                      <div class="col-sm-9 col-md-9" data-role="input"
+                      data-editable>{{education.institute_name}}</div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Year of Passing</div>
+                      <div class="col-sm-9 col-md-9" data-role="select"
+                      data-editable data-type="year">{{education.year_of_passout}}</div>
+                  </div>
+                {% endfor %}
+              {% else %}
                 <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Qualification level</div>
-                    <div class="col-sm-9 col-md-9" data-role="select" data-editable data-type="qualification">{{education.education_level}}</div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Education Stream</div>
-                    <div class="col-sm-9 col-md-9" data-role="input"
-                    data-editable>{{education.education_specialization}}</div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Institute Name</div>
-                    <div class="col-sm-9 col-md-9" data-role="input"
-                    data-editable>{{education.institute_name}}</div>
-                </div>
-                <div class="row mt-10">
-                    <div class="col-sm-3 col-md-3">Year of Passing</div>
-                    <div class="col-sm-9 col-md-9" data-role="select"
-                    data-editable data-type="year">{{education.year_of_passout}}</div>
-                </div>
-              {% endfor %}
+                      <div class="col-sm-3 col-md-3">Qualification level</div>
+                      <div class="col-sm-9 col-md-9" data-role="select" data-editable data-type="qualification"></div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Education Stream</div>
+                      <div class="col-sm-9 col-md-9" data-role="input"
+                      data-editable></div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Institute Name</div>
+                      <div class="col-sm-9 col-md-9" data-role="input"
+                      data-editable></div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Year of Passing</div>
+                      <div class="col-sm-9 col-md-9" data-role="select"
+                      data-editable data-type="year"></div>
+                  </div>
+              {% endif %}
               <div class="row mt-10 save-event" style="display: none;">
                   <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
                       <label for="current" class="current-comp"><input type="checkbox" name="current"> I work here</label>
@@ -462,6 +574,7 @@
                     value="{{csrf_token_value}}">
                   </div>
                   <h2 class="profile-head" data-id="education">Education Details</h2>
+                {% if education_detail %}
                   {% for education in education_detail %}
                   <div class="row mt-10">
                       <div class="col-sm-3 col-md-3">Qualification level</div>
@@ -505,6 +618,49 @@
                   <input type="hidden" name="id" value="{{education.id}}">
                   <input type="hidden" name="course_type" value="{{education.course_type}}">
                   {% endfor %}
+                {% else %}
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Qualification level</div>
+                      <div class="col-sm-9 col-md-9" data-role="mobile" data-editable="">
+                        <input class="pro-input js_degree" type="text" 
+                        name="level" value="">
+                      </div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Education Stream</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" 
+                      data-editable="">
+                      <input class="pro-input js_major" type="text" 
+                      name="specialization" value="">
+                      </div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Institute</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" 
+                      data-editable="">
+                      <input class="pro-input js_institute" type="text" 
+                      name="institute" value=""></div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Marks</div>
+                      <div class="col-sm-9 col-md-9" data-role="input" data-editable="">
+                        <input class="pro-input" type="text" name="marks" value="">
+                      </div>
+                  </div>
+                  <div class="row mt-10">
+                      <div class="col-sm-3 col-md-3">Year of Passing</div>
+                      <div class="col-sm-9 col-md-9" data-role="select" 
+                      data-editable="" data-type="year">
+                        <select class="pro-select" name="passout_year">
+                          {% for year in passout_yr %}
+                              <option>{{year}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                  </div>
+                  <input type="hidden" name="id" value="">
+                  <input type="hidden" name="course_type" value="">
+                {% endif %}
                   <input type="hidden" name="edit_type" value="editeducation">
                   <div class="row mt-10 save-event">
                       <div class="col-sm-9 col-md-9 col-sm-push-3 col-md-push-3">
@@ -522,8 +678,13 @@
                 <h2 class="profile-head" data-id="resume">Resume</h2> 
                 <div class="row mt-10">
                     <div class="col-sm-12">
-                        <div class="alert alert-resume"><a href="#">{{resumes}}</a> 
+                      {% if resume %}
+                        <div class="alert alert-resume"><a href="#">{{resumes}}</a>
                         <div class="pull-right resume-close"><a href="#">X</a></div></div>
+                      {% else %}
+                        <div class="alert alert-resume"><a href="#"></a>
+                        <div class="pull-right resume-close"><a href="#">X</a></div>
+                      {% endif %} 
                     </div>
                 </div>
                 <form id="resume_form" method="post" data-url='{% url "dashboard:post_shine_detail" %}' enctype="multipart/form-data">

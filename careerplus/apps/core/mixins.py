@@ -203,24 +203,6 @@ class InvoiceGenerate(object):
 
             order_items = self.get_order_item_list(order=order)
 
-            # order_items = []
-            # parent_ois = order.orderitems.filter(
-            #     parent=None).select_related('product', 'partner')
-            # for p_oi in parent_ois:
-            #     data = {}
-            #     data['oi'] = p_oi
-            #     data['addons'] = order.orderitems.filter(
-            #         parent=p_oi,
-            #         is_addon=True,
-            #         no_process=False).select_related('product', 'partner')
-            #     data['variations'] = order.orderitems.filter(
-            #         parent=p_oi, no_process=False,
-            #         is_variation=True).select_related('product', 'partner')
-            #     data['combos'] = order.orderitems.filter(
-            #         parent=p_oi, no_process=False,
-            #         is_combo=True).select_related('product', 'partner')
-            #     order_items.append(data)
-
             invoice_data.update({
                 "invoice_no": invoice_no,
                 "email": email,

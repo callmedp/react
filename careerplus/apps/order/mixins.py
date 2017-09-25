@@ -176,9 +176,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             no_process=True,
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-                        p_oi.oi_price_before_discounts_excl_tax = item.get('price')
-                        price_incl_tax = item.get('price') + ((item.get('price') * tax_rate_per) / 100)
-                        p_oi.oi_price_before_discounts_incl_tax = price_incl_tax
+                        # p_oi.oi_price_before_discounts_excl_tax = item.get('price')
+                        # price_incl_tax = item.get('price') + ((item.get('price') * tax_rate_per) / 100)
+                        # p_oi.oi_price_before_discounts_incl_tax = price_incl_tax
 
                         cost_price = item.get('price')
                         p_oi.cost_price = cost_price
@@ -233,9 +233,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                 )
                                 oi.upc = str(order.pk) + "_" + str(oi.pk)
                                 oi.parent = p_oi
-                                oi.oi_price_before_discounts_excl_tax = addon.get('price')
-                                price_incl_tax = addon.get('price') + ((addon.get('price') * tax_rate_per) / 100)
-                                oi.oi_price_before_discounts_incl_tax = price_incl_tax
+                                # oi.oi_price_before_discounts_excl_tax = addon.get('price')
+                                # price_incl_tax = addon.get('price') + ((addon.get('price') * tax_rate_per) / 100)
+                                # oi.oi_price_before_discounts_incl_tax = price_incl_tax
 
                                 cost_price = addon.get('price')
                                 oi.cost_price = cost_price
@@ -261,9 +261,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
 
-                        p_oi.oi_price_before_discounts_excl_tax = item.get('price')
-                        price_incl_tax = item.get('price') + ((item.get('price') * tax_rate_per) / 100)
-                        p_oi.oi_price_before_discounts_incl_tax = price_incl_tax
+                        # p_oi.oi_price_before_discounts_excl_tax = item.get('price')
+                        # price_incl_tax = item.get('price') + ((item.get('price') * tax_rate_per) / 100)
+                        # p_oi.oi_price_before_discounts_incl_tax = price_incl_tax
 
                         cost_price = item.get('price')
                         p_oi.cost_price = cost_price
@@ -303,9 +303,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                 )
                                 oi.upc = str(order.pk) + "_" + str(oi.pk)
                                 oi.parent = p_oi
-                                oi.oi_price_before_discounts_excl_tax = var.get('price')
-                                price_incl_tax = var.get('price') + ((var.get('price') * tax_rate_per) / 100)
-                                oi.oi_price_before_discounts_incl_tax = price_incl_tax
+                                # oi.oi_price_before_discounts_excl_tax = var.get('price')
+                                # price_incl_tax = var.get('price') + ((var.get('price') * tax_rate_per) / 100)
+                                # oi.oi_price_before_discounts_incl_tax = price_incl_tax
 
                                 cost_price = var.get('price')
                                 oi.cost_price = cost_price
@@ -346,9 +346,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                 )
                                 oi.upc = str(order.pk) + "_" + str(oi.pk)
                                 oi.parent = p_oi
-                                oi.oi_price_before_discounts_excl_tax = addon.get('price')
-                                price_incl_tax = addon.get('price') + ((addon.get('price') * tax_rate_per) / 100)
-                                oi.oi_price_before_discounts_incl_tax = price_incl_tax
+                                # oi.oi_price_before_discounts_excl_tax = addon.get('price')
+                                # price_incl_tax = addon.get('price') + ((addon.get('price') * tax_rate_per) / 100)
+                                # oi.oi_price_before_discounts_incl_tax = price_incl_tax
 
                                 cost_price = addon.get('price')
                                 oi.cost_price = cost_price

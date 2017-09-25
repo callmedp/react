@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.conf import settings
 
-from shop.models import Product, ProductClass
+from shop.models import Product, ProductClass, FunctionalArea, Skill
 from search.helpers import get_recommendations
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
@@ -28,21 +28,30 @@ class HomePageView(TemplateView):
         return {"job_asst_services": list(job_services), "job_asst_view_all": job_asst_view_all}
 
     def get_courses(self):
-
-        tcourses = TopTrending.objects.filter(
+        tcourses = []
+        pcourses = []
+        rcourses = []
+        t_objects = TopTrending.objects.filter(
             is_active=True, is_jobassistance=False)
-        tcourses = tcourses[:4]
+        t_objects = t_objects[:4]
+        show_pcourses = False
+        # recommended
         if self.request.session.get('candidate_id'):
-            pcourses = get_recommendations(self.request.session.get('func_area', None),
+            rcourses = get_recommendations(self.request.session.get('func_area', None),
                                            self.request.session.get('skills', None),
                                            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
-            pcourses = pcourses[:9]
+            if rcourses:
+                rcourses = rcourses[:9]
+            else:
+                show_pcourses = True
         else:
+            show_pcourses = True
+        if show_pcourses:
             pcourses = SQS().only('pTt pURL pHd pAR pNJ pImA pImg').order_by('-pBC')[:9]
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']
-        for tcourse in tcourses:
+        for tcourse in t_objects:
             tprds = tcourse.get_trending_products()
             course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
             tprds = tprds.filter(product__product_class__in=course_classes)[:9]
@@ -55,7 +64,7 @@ class HomePageView(TemplateView):
             tcourses.append(data)
             i += 1
 
-        return {'tcourses': tcourses, 'pcourses': pcourses}
+        return {'tcourses': tcourses, 'pcourses': pcourses, 'rcourses': rcourses}
 
     def get_recommend_courses(self):
         course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
@@ -78,11 +87,16 @@ class HomePageView(TemplateView):
                 func_area = candidate_detail.get('functional_area')[0] if len(candidate_detail.get('functional_area', [])) else 'Real Estate'
                 skills = [skill['value'] for skill in candidate_detail['skills']]
                 context.update({'recmd_func_area': func_area, 'recmd_skills': skills})
-                func_area = FunctionalArea.
-                self.request.session.update({
-                    'func_area': func_area,
-                    'skills': ','.join(skills)
-                })
+                func_area = FunctionalArea.objects.filter(name__iexact=func_area)
+                if func_area:
+                    self.request.session.update({
+                        'func_area': func_area[0].id
+                    })
+                skills = [s.id for s in Skill.objects.filter(name__iregex=r'(' + '|'.join(skills) + ')')]
+                if skills:
+                    self.request.session.update({
+                        'skills': skills
+                    })
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         if self.request.session.get('candidate_id'):

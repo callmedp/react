@@ -166,7 +166,7 @@ class RoundOneMixin(RoundOneAPI):
 class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
 
     def update_candidate_personal(self, shine_id=None, user_access_token=None,
-                              client_token=None, data={}, type_of=None):
+                              client_token=None, data={}, type_of=None, token=None):
         error_msg = "Personal Details can not be updated"
         personal_response = None
         try:
@@ -193,7 +193,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                         'resume_title':resume_title
                     }
 
-                    request_header = self.get_api_headers()
+                    request_header = self.get_api_headers(token=token)
 
                     if type_of == "edit":
                         if shine_id is None:
@@ -214,7 +214,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
         return False, error_msg
 
     def update_candidate_jobs(self, shine_id=None, user_access_token=None,
-                              client_token=None, data={}, type_of=None):
+                              client_token=None, data={}, type_of=None, token=None):
         error_msg = "Jobs Update Failed"
         jobs_response = None
         returnlist = []
@@ -285,7 +285,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                             "end_year": end_year,
                             "end_month": end_month
                         }
-                    request_header = self.get_api_headers()
+                    request_header = self.get_api_headers(token=token)
 
                     if type_of == "edit":
                         if not id_list[job]:
@@ -313,7 +313,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
         return False, error_msg
 
     def update_candidate_education(self, shine_id=None, user_access_token=None,
-                                   client_token=None, data={}, type_of=None):
+                                   client_token=None, data={}, type_of=None, token=None):
         error_msg = "Education Update Failed"
         educations_response = None
         returnlist = []
@@ -352,7 +352,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                         "course_type": course_type
                     }
 
-                    request_header = self.get_api_headers()
+                    request_header = self.get_api_headers(token=token)
 
                     if type_of == "edit":
                         if not id_list[education]:
@@ -381,7 +381,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
         return False, error_msg
 
     def update_candidate_skills(self, shine_id=None, user_access_token=None,
-                                client_token=None, data={}, type_of=None):
+                                client_token=None, data={}, type_of=None, token=None):
         error_msg = "Skill Update Failed"
         skills_response = None
 
@@ -397,7 +397,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
 
                 skill_level_dict = dict(zip(skill_list, years_list))
 
-                request_header = self.get_api_headers()
+                request_header = self.get_api_headers(token=token)
                 request_header.update({'Content-Type':'application/json', 'Accept':'application/json'})
 
                 for skill, level_id in skill_level_dict.items():
@@ -436,7 +436,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
             error_msg = skills_response_json.get("non_field_errors", error_msg)
         return False, error_msg
 
-    def upload_resume(self, shine_id=None, user_access_token=None, client_token=None, data={}, type_of=None):
+    def upload_resume(self, shine_id=None, user_access_token=None, client_token=None, data={}, type_of=None, token=None):
         try:
             if not client_token:
                 client_token = self.get_client_token()
@@ -451,7 +451,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     "upload_medium": upload_medium,
                 }
                 files = {'resume_file': file}
-                request_header = self.get_api_headers()
+                request_header = self.get_api_headers(token=token)
                 if type_of == "edit":
                     resume_url = settings.SHINE_SITE + "/api/v2/candidate/" +\
                         shine_id + "/resumefiles/?format=json"

@@ -18,13 +18,15 @@ pip install geoip
 pip3 install -r requirements/common.txt
 sudo apt-get install mysql-server
 mkdir /etc/uwsgi/
+mkdir /etc/uwsgi/apps-available/
+create uwsgi files
 mkdir /etc/uwsgi/vassals
-sudo ln -s /path/to/your/mysite/mysite_uwsgi.ini /etc/uwsgi/vassals/
+sudo ln -s /etc/uwsgi/apps-available/careerplus.ini /etc/uwsgi/vassals/
 uwsgi --emperor /etc/uwsgi/vassals --uid www-data --gid www-data
 
 # Data Setup
-python manage.py makemigrations
-python manage,py makemigrations thumbnails
+#python manage.py makemigrations
+#python manage,py makemigrations thumbnails
 python manage.py migrate
 
 
@@ -52,8 +54,21 @@ make entry in hosts files
 Add access to Mysql
 https://stackoverflow.com/questions/19101243/error-1130-hy000-host-is-not-allowed-to-connect-to-this-mysql-server
 
-Run migrations
 
+# Install redis
 apt-get install redis-server
-
 https://www.rosehosting.com/blog/how-to-install-configure-and-use-redis-on-ubuntu-16-04/
+
+# Setup crons
+apt-get install cron
+cd /opt/
+mkdir crons
+cd crons
+mkdir logs
+# create cron scripts daily/weekly/etc
+crontab -e
+
+#start a screen for celery
+cd /code/careerplus
+workon careerplus
+celery multi restart w1 -A careerplus -l debug --logfile=/var/log/celery/w1.log --pidfile=/var/log/celery/w1.pid

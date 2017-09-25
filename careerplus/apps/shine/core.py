@@ -96,10 +96,10 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error(str(e))
         return None
 
-    def get_candidate_detail(self, email=None, shine_id=None):
+    def get_candidate_detail(self, email=None, shine_id=None, token=None):
         try:
             if shine_id:
-                headers = self.get_api_headers()
+                headers = self.get_api_headers(token=token)
                 detail_url = settings.SHINE_SITE +\
                         "/api/v2/candidate-profiles/" +\
                         shine_id + "/?format=json"
@@ -107,7 +107,7 @@ class ShineCandidateDetail(ShineToken):
                 if detail_response.status_code == 200 and detail_response.json():
                     return detail_response.json()
             elif email:
-                headers = self.get_api_headers()
+                headers = self.get_api_headers(token=token)
                 shine_id = self.get_shine_id(email=email, headers=headers)
                 if shine_id:
                     detail_url = settings.SHINE_SITE +\

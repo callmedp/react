@@ -161,7 +161,7 @@ class WalletTransaction(AbstractAutoDate):
     class Meta:
         verbose_name = _('Wallet Transaction')
         verbose_name_plural = _('Wallet Transactions')
-        ordering = ("-modified", "-created")
+        ordering = ("-created",)
 
     def __str__(self):
         return self.wallet.owner + ' - ' + str(self.pk)
