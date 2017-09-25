@@ -172,10 +172,7 @@ class WalletRemoveView(APIView, CartMixin):
                 if point.expiry <= timezone.now():
                     point.status = 3
                 else:
-                    if point.current > Decimal(0):
-                        point.status = 1
-                    else:
-                        point.status = 2
+                    point.status = 1
                 point.save()
                 pts.save()
             wal_txn.txn_type = 5
