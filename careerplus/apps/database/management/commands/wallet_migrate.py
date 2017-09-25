@@ -54,7 +54,7 @@ class Command(BaseCommand):
                     txn.notes = 'Migrated from CP'
                     for pts in reward:
                         if point > Decimal(0):    
-                            if pts.current >= point:
+                            if pts.current > point:
                                 pts.current -= point
                                 if pts.current == Decimal(0):
                                     pts.status = 1
@@ -65,7 +65,6 @@ class Command(BaseCommand):
                                     point_value=point,
                                     txn_type=2)
                                 point = Decimal(0)
-                                
                             else:
                                 point -= pts.current
                                 pts.status = 2
@@ -86,7 +85,7 @@ class Command(BaseCommand):
                     txn.notes = 'Migrated from CP'
                     for pts in reward:
                         if point > Decimal(0):    
-                            if pts.current >= point:
+                            if pts.current > point:
                                 pts.current -= point
                                 if pts.current == Decimal(0):
                                     pts.status = 1
@@ -97,7 +96,6 @@ class Command(BaseCommand):
                                     point_value=point,
                                     txn_type=4)
                                 point = Decimal(0)
-                                
                             else:
                                 point -= pts.current
                                 pts.status = 3
@@ -106,7 +104,6 @@ class Command(BaseCommand):
                                     point=pts,
                                     point_value=pts.current,
                                     txn_type=4)
-                                pts.current = Decimal(0)
                                 pts.save()
                     txn.save()
                         
