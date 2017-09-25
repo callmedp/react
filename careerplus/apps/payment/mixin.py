@@ -3,6 +3,7 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 
 from users.tasks import user_register
+from core.mixins import InvoiceGenerate
 from order.mixins import OrderMixin
 from order.functions import (
     payment_pending_mailer,
@@ -67,6 +68,9 @@ class PaymentMixin(object):
             request.session['order_pk'] = order.pk
             if not order.candidate_id:
                 user_register(data={}, order=order.pk)
+
+            if order.status == 1:
+                order = InvoiceGenerate().save_order_invoice_pdf(order=order)
 
             # add reward_point in wallet
             OrderMixin().addRewardPointInWallet(order=order)

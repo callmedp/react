@@ -406,7 +406,9 @@ class Command(BaseCommand):
         wallet_df = pd.merge(wallet_df, new_wallet_df, how='left', on='C_ID')
         wallet_df =  wallet_df[wallet_df.new_id.notnull()]
         wallettxn_df = wallettxn_df[wallettxn_df.wallet_id.isin(wallet_df.id)]
-        order_df = order_df.rename(columns={'id': 'order_id'})
+        order_df = order_df.rename(columns={'id': 'old_order_id', 'wallettransaction_redeem_id': 'id'})
+        wallettxn_df = pd.merge(wallettxn_df, order_df, how='left', on='id')
+        
         del new_wallet_df
         wallettxn_df = wallettxn_df[wallettxn_df.status == 2]
         wallet_add_df = wallettxn_df[(wallettxn_df.type_cashback == 2)]
@@ -567,7 +569,7 @@ class Command(BaseCommand):
                     row['amount'],
                     0,
                     None,
-                    None,
+                    row['order_obj'] if row['order_obj'] and row['order_obj'] == row['order_obj'] else None,
                     row['new_wallet_id'],
                     0
                 )

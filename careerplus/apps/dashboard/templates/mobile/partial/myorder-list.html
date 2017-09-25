@@ -22,7 +22,20 @@
                     {% for obj in orderitems %}
                         <tr>
                             <td>
-                                <a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.name}}{% if obj.product.get_exp %} - {{obj.product.get_exp}}{% endif %}</a>
+                                <a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.name}}
+                                    {% if obj.product.get_exp %}
+                                     - {{obj.product.get_exp}}
+                                    {% endif %}
+                                    {% if obj.product.get_studymode %}
+                                     - {{obj.product.get_studymode}}
+                                    {% endif %}
+                                    {% if obj.product.get_coursetype %}
+                                     - {{obj.product.get_coursetype}}
+                                    {% endif %}
+                                    {% if obj.product.get_duration %}
+                                     - {{obj.product.get_duration}}
+                                    {% endif %}
+                                </a>
                                 <!--p class="c6 fs-12 pb-0">SRI3284683246</p-->
                             </td>
                             <td class="text-right">
