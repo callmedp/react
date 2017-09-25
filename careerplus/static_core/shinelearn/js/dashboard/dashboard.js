@@ -684,19 +684,25 @@ function onClickDeleteJob(idx){
     });
 
     // Edit Education
-    $(".js_edit_education_btn").on("click", function(){
-        $("#div_education").hide();
-        $("#form_edit_education").show();
+    // $("#edit_work_ex").on("click", function(){
+    //     $("#form_edit_education").show();
+    //     $("#div_education").hide();
+    // });
+    
+    // Edit Workex
+    $("#js_edit_workex").on("click", function(){
+        $("#form_edit_workex").show();
+        $('#div_workex').hide();
     });
 
-    // Add Workexp
-    $("#add_roundone_workex").on("click", function(){
-        $("#form_add_workex").show();
-    });
+    // // Add Workexp
+    // $("#add_roundone_workex").on("click", function(){
+    //     $("#form_add_workex").show();
+    // });
 
-    $("#cancel_add_workex").on("click", function(){
-        $("#form_add_workex").hide();
-    });
+    // $("#cancel_add_workex").on("click", function(){
+    //     $("#form_add_workex").hide();
+    // });
 
 
     $("#form_edit_workex").validate({
@@ -759,14 +765,6 @@ function onClickDeleteJob(idx){
 
     });
 
-    // Edit Workex
-    $(".js_edit_workex_btn").on("click", function(){
-        $('#div_workex').hide();
-        $("#form_edit_workex").show();
-    });
-
-
-    
     // Upload Resume
     $("#resume_form").validate({
         errorClass: "roundone-error",
