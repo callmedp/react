@@ -3,14 +3,23 @@ function redirectToSearch(e) {
 }
 
 jQuery(document).ready(function($) {
-  $('#tags1').inputTags({
-    // tags: ['jQuery'],
-    autocomplete: {
-      values: ['Pellentesque', 'habitant', 'morbi', 'tristique', 'senectus', 'netus', 'malesuada', 'fames', 'turpis', 'egestas', 'Vestibulum'],
-      only: true
-    },
-    max: 1,
-    errors: {
+    $('#tags1').inputTags({
+        placeholder: "Select Functional Area",
+        autocomplete: {
+            values: funcAreaSet,
+            only: true
+        },
+        max: 1,
+        maxLength: 100,
+        create: function(e) {
+            var $field = e.$input[0];
+            $field.placeholder = '';
+        },
+        destroy: function(e) {
+            var $field = e.$input[0];
+            $field.placeholder = 'Select Functional Area';
+        },
+        errors: {
             empty: "Be careful, you can't add an empty tag.",
             minLength: 'Your tag must have at least %s characters.',
             maxLength: 'Your tag must not exceed %s characters.',
@@ -20,16 +29,25 @@ jQuery(document).ready(function($) {
             autocomplete_only: 'You must select a value from the list.',
             timeout: 8000
         }
-  });
+    });
 
-  $('#tags2').inputTags({
-    // tags: ['jQuery', 'Python', 'Nass'],
-    autocomplete: {
-      values: ['Pellentesque', 'habitant', 'morbi', 'tristique', 'senectus', 'netus', 'malesuada', 'fames', 'turpis', 'egestas', 'Vestibulum'],
-      only: true
-    },
-    max: 3,
-    errors: {
+    $('#tags2').inputTags({
+        placeholder: "Choose upto 3 Skills",
+        autocomplete: {
+            values: skillsSet,
+            only: true
+        },
+        max: 3,
+        create: function(e) {
+            var $field = e.$input[0];
+            $field.placeholder = '';
+        },
+        destroy: function(e) {
+            var $field = e.$input[0];
+            if (e.tags.length == 0)
+            $field.placeholder = 'Choose upto 3 Skills';
+        },
+        errors: {
             empty: "Be careful, you can't add an empty tag.",
             minLength: 'Your tag must have at least %s characters.',
             maxLength: 'Your tag must not exceed %s characters.',
@@ -39,23 +57,5 @@ jQuery(document).ready(function($) {
             autocomplete_only: 'You must select a value from the list.',
             timeout: 8000
         }
-  });
-    // $('#myCarousel1').carousel({
-    //     interval: 10000
-    //   });
-    //
-    //   $('.product-carousel .carousel .item').each(function(){
-    //     var next = $(this).next();
-    //     if (!next.length) {
-    //       next = $(this).siblings(':first');
-    //     }
-    //     next.children(':first-child').clone().appendTo($(this));
-    //
-    //     if (next.next().length>0) {
-    //       next.next().children(':first-child').clone().appendTo($(this));
-    //     }
-    //     else {
-    //       $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-    //     }
-    //   });
+    });
 });

@@ -211,8 +211,7 @@ CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.67.80:6379/10",
-            "redis://172.22.67.80:6379/11",
+            "redis://127.0.0.1:6379/1",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -223,8 +222,7 @@ CACHES = {
     'session': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.67.80:6379/12",
-            "redis://172.22.67.80:6379/13",
+            "redis://172.22.67.80:6379/2",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -234,7 +232,7 @@ CACHES = {
     },
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://172.22.67.80:6379/7",
+        "LOCATION": "redis://127.0.0.1:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},

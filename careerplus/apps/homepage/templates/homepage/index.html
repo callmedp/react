@@ -7,7 +7,7 @@
 {% block css_section %}
   {{block.super}}
     {% if request.session.candidate_id %}
-    <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/homepage/home1.css' %}" rel="stylesheet">
     {% else %}
     <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
     {% endif %}
@@ -25,9 +25,9 @@
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     <div class="item active">
-                        <img src="{% if request.session.candidate.id %}{% static 'shinelearn/images/home-header-loggedin-pic1.jpg' %}{% else %}{% static 'shinelearn/images/home-header-pic1.jpg' %}{% endif %}" alt="Shine Learning">
+                        <img src="{% if request.session.candidate_id %}{% static 'shinelearn/images/home-header-loggedin-pic1.jpg' %}{% else %}{% static 'shinelearn/images/home-header-pic1.jpg' %}{% endif %}" alt="Shine Learning">
                         <div class="carousel-caption">
-                            {% if request.session.candidate.id %}
+                            {% if request.session.candidate_id %}
                             <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
                             <strong>Want to make your career future ready? <br>Discover courses matched for your profile</strong>
                             {% else %}
@@ -293,6 +293,8 @@
     <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
 
     <script type="text/javascript">
+        var funcAreaSet = {{ func_area_set|safe }},
+                skillsSet = {{ skills_set|safe }};
       $('#myCarousel1').carousel({
         interval: false
       });
