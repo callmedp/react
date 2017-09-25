@@ -588,7 +588,7 @@ class DashboardInvoiceDownload(View):
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
                 return response
         except:
-            pass
+            raise Exception("Invoice not found.")
         return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
