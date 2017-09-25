@@ -66,9 +66,37 @@
         <!-- product carousel -->
         <section class="container product-carousel-box">
             <div class="product-carousel">
-                <h2>{% if request.session.candidate_id %}Recommended{% else %}Most popular{% endif %} courses</h2>
+                <h2>{% if request.session.candidate_id and rcourses %}Recommended{% else %}Most popular{% endif %} courses</h2>
                 <div class="carousel slide row" id="myCarousel1">
                     <div class="carousel-inner">
+                    {% if request.session.candidate_id and rcourses %}
+                    {% for product in rcourses %}
+                        <div class="item {% if forloop.first %}active{% endif %}">
+                      <ul class="listing col-sm-4">
+                        <li>
+                          <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
+                            <div class="media">
+                              <div class="media-body">
+                                <h3 class="listing-heading">{{ product.pHd }}</h3>
+                                <div class="rating-review-box">
+                                    <figure class="full-star"></figure>
+                                    <strong>{{product.pAR}}<small>/5</small></strong>
+                                    <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
+                                </div>
+
+                              </div>
+                              <div class="media-left">
+                                  <figure>
+                                    <img class="img-responsive" src="{{product.pImg}}" alt="{{product.pImA}}">
+                                  </figure>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    {% endfor %}
+                    {% else %}
                     {% for product in pcourses %}
                         <div class="item {% if forloop.first %}active{% endif %}">
                       <ul class="listing col-sm-4">
@@ -95,6 +123,7 @@
                       </ul>
                     </div>
                     {% endfor %}
+                    {% endif %}
                     </div>
                 </div>
             </div>
