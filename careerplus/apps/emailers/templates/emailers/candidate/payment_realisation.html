@@ -60,24 +60,24 @@
               <tr valign="top">
                 <td>{{oi.product.name}}<br>
                 {% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</td>
-                <td>{{oi.oi_price_before_discounts_excl_tax}}</td>
+                <td>{{oi.cost_price}}</td>
               </tr>
               {% for combo in combos %}
                 <tr valign="top">
                   <td>{{combo.product.name}}</td>
-                  <td>{{combo.oi_price_before_discounts_excl_tax}}</td>
+                  <td>{{combo.cost_price}}</td>
                 </tr>
               {% endfor %}
               {% for addon in addons %}
                 <tr valign="top">
                   <td>{{addon.product.name}}</td>
-                  <td>{{addon.oi_price_before_discounts_excl_tax}}</td>
+                  <td>{{addon.cost_price}}</td>
                 </tr>
               {% endfor %}
               {% for var in variations %}
                 <tr valign="top">
                   <td>{{var.product.name}}</td>
-                  <td>{{var.oi_price_before_discounts_excl_tax}}</td>
+                  <td>{{var.cost_price}}</td>
                 </tr>
               {% endfor %}
               {% endwith %}
