@@ -1,0 +1,32 @@
+<section class="home-search-box {% if not request.session.candidate_id %}search-mg{% endif %}">
+    <ul class="nav search-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#home-search" aria-controls="home-search" role="tab" data-toggle="tab">Search</a>
+        </li>
+        <li role="presentation">
+            <a href="#home-advanced-search" aria-controls="home-advanced-search" role="tab" data-toggle="tab">Advanced search</a>
+        </li>
+    </ul>
+
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane home-search active" id="home-search">
+                <div class="form-group">
+                    <input placeholder="Search for courses, services" type="text" value="" id="id_q" />
+                </div>
+                <button type="submit" onclick="redirectToSearch()" class="find-jobs-btn btn"></button>
+            </div>
+            <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">
+                <form class="form-inline" method="post" action="{% url 'search:recommend' %}">
+                <div class="form-group">
+                    <input class="" name="area" placeholder="Functional area" type="text" value="{{ recmnd_func_area }}" id="tags1">
+                </div>
+                <div class="form-group">
+                    <input class="" name="skills" placeholder="Skills" type="text" value="{{ recmnd_skills }}" id="tags2">
+                </div>
+                <button type="submit" class="find-jobs-btn btn"></button>
+                </form>
+            </div>
+        </div>
+
+</section>

@@ -26,7 +26,7 @@ class SearchRecommendedForm(forms.Form):
     """
     Product Recommendation Form
     """
-    area = forms.ChoiceField(
+    area = forms.CharField(
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -36,11 +36,11 @@ class SearchRecommendedForm(forms.Form):
                 'maxlength': '150',
                 'placeholder': 'Functional Area',
                 'holder': 'Functional Area'}),
-        initial='',
-        choices=AREA_WITH_LABEL)
-    skills = forms.MultipleChoiceField(
+        initial=''
+    )
+    skills = forms.CharField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
+        widget=forms.TextInput(
             attrs={
                 'class': 'form-control js_skill',
                 'maxlength':'150',
@@ -48,5 +48,5 @@ class SearchRecommendedForm(forms.Form):
                 'holder': 'Key Skills'
             }
         ),
-        initial='',
-        choices=SKILL_WITH_LABEL)
+        initial=''
+    )

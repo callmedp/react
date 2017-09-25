@@ -72,4 +72,41 @@ function SearchFilter() {
 $(document).ready(function () {
     paginate();
     SearchFilter();
+    $('#id_area').inputTags({
+    tags: ['jQuery'],
+    autocomplete: {
+      values: ['Pellentesque', 'habitant', 'morbi', 'tristique', 'senectus', 'netus', 'malesuada', 'fames', 'turpis', 'egestas', 'Vestibulum'],
+      only: true
+    },
+    max: 1,
+    errors: {
+            empty: "Be careful, you can't add an empty tag.",
+            minLength: 'Your tag must have at least %s characters.',
+            maxLength: 'Your tag must not exceed %s characters.',
+            max: 'Please note that the number of tags must not exceed %s.',
+            email: 'The email address you entered is not valid',
+            exists: 'This tag already exists',
+            autocomplete_only: 'You must select a value from the list.',
+            timeout: 8000
+        }
+  });
+
+  $('#id_skills').inputTags({
+    tags: ['jQuery', 'Python', 'Nass'],
+    autocomplete: {
+      values: ['Pellentesque', 'habitant', 'morbi', 'tristique', 'senectus', 'netus', 'malesuada', 'fames', 'turpis', 'egestas', 'Vestibulum'],
+      only: true
+    },
+    max: 3,
+    errors: {
+            empty: "Be careful, you can't add an empty tag.",
+            minLength: 'Your tag must have at least %s characters.',
+            maxLength: 'Your tag must not exceed %s characters.',
+            max: 'Please note that the number of tags must not exceed %s.',
+            email: 'The email address you entered is not valid',
+            exists: 'This tag already exists',
+            autocomplete_only: 'You must select a value from the list.',
+            timeout: 8000
+        }
+  });
 });

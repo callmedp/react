@@ -3,7 +3,7 @@ import time
 from django.core.exceptions import ValidationError
 from random import random
 from django.utils.translation import ugettext_lazy as _
-
+import csv
 
 def get_file_name(f_obj):
     file_name_tuple = os.path.splitext(f_obj)
@@ -44,5 +44,48 @@ def get_upload_path_vendor(instance, filename):
         ven_id=instance.id, filename=get_file_name(filename))
 
 
+def upload_FA(filename):
+    from .models import FunctionalArea, Product, ProductFA
+    csvfile = open(filename)
+    mapping_dict = csv.DictReader(csvfile)
+    for d in mapping_dict:
+        product = Product.objects.filter(name__iexact=d['PRODUCT NAME(OLD)'])
+        if product:
+            product = product[0]
+            for i in range(1, 4):
+                faname = d['Shine FA{}'.format(i)]
+                if faname not in ['', 'ALL']:
+                    try:
+                        int(faname)
+                    except:
+                        try:
+                            faobj = FunctionalArea.objects.get_or_create(name=faname)
+                            ProductFA.objects.get_or_create(product=product, fa=faobj[0])
+                        except Exception as e:
+                            print("Failed @ {},{},{},{}".format(product.id, faname, product.name, e))
+        else:
+            print('Failed. Product not found @ {}'.format(d['PRODUCT NAME(OLD)']))
 
-    
+def upload_Skill(filename):
+    from .models import Skill, Product, ProductSkill
+    csvfile = open(filename)
+    mapping_dict = csv.DictReader(csvfile)
+    for d in mapping_dict:
+        product = Product.objects.filter(name__iexact=d['Product name'])
+        if product:
+            product = product[0]
+            for i in range(1, 253):
+                skill = d['Skill{}'.format(i)]
+                if skill not in ['', 'ALL']:
+                    try:
+                        int(skill)
+                    except:
+                        try:
+                            faobj = Skill.objects.get_or_create(name=skill)
+                            ProductSkill.objects.get_or_create(product=product, skill=faobj[0])
+                        except Exception as e:
+                            print("Failed @ {},{},{},{}".format(product.id, skill, product.name, e))
+        else:
+            print('Failed. Product not found @ {}'.format(d['Product name']))
+
+

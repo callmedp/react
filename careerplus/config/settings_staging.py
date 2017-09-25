@@ -1,5 +1,5 @@
 from .settings import *
-
+from .settings_local import *
 
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning1.shine.com'
@@ -16,3 +16,8 @@ HAYSTACK_CONNECTIONS = {
         'INCLUDE_SPELLING': False,
     },
 }
+
+SHINE_SITE = 'https://sumosc.shine.com'
+SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
+
+CELERY_ALWAYS_EAGER = False
