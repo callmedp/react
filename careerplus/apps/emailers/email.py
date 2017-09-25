@@ -61,11 +61,11 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/process_mailers.html'
             if data.get('oi').product.type_flow == [1, 3]:
                 token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('pk', ''))
-                send_dict['upload_url'] = "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())
+                send_dict['upload_url'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             elif data.get('oi').product.type_flow == 8:
-                send_dict['counselling_form'] = "http://%s/linkedin/counsellingform/%s" % (settings.SITE_DOMAIN, data.get('pk'))
+                send_dict['counselling_form'] = "%s://%s/linkedin/counsellingform/%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, data.get('pk'))
             elif data.get('oi').product.type_flow == 9:
-                send_dict['complete_profile'] = "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN)
+                send_dict['complete_profile'] = "%s://%s/dashboard/roundone/profile/" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
             elif data.get('oi').product.type_flow == 10:
                 pass
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
@@ -98,7 +98,7 @@ class SendMail():
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('day', ''))
-            data['autologin'] = "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())
+            data['autologin'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
@@ -130,7 +130,7 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Your developed document has been uploaded")
             send_dict['template'] = 'emailers/candidate/resume_critique_closed.html'
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
-            data['autologin'] = "http://%s/autologin/%s/" % (settings.SITE_DOMAIN, token)
+            data['autologin'] = "%s://%s/autologin/%s/" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
@@ -204,7 +204,7 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)
-            data['reset_url'] = "http://%s/user/update/password/?token=%s" % (settings.SITE_DOMAIN, token)
+            data['reset_url'] = "%s://%s/user/update/password/?token=%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             self.process(to, send_dict, data)
 
         elif mail_type == "CART_DROP_OUT":
