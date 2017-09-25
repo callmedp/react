@@ -19,3 +19,5 @@ HAYSTACK_CONNECTIONS = {
 
 SHINE_SITE = 'https://sumosc.shine.com'
 SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
+
+CELERY_ALWAYS_EAGER = False

@@ -42,7 +42,7 @@
                 {% if pending_resume_items %}
                     <!-- resume upload box -->
                     <div class="notification-resume" id="notification-box-id">
-                      To initiate your services. <a role="button" id="upload_resume">Upload resume</a>
+                      To initiate your services. <a role="button" id="upload_resume" class="upload-resume">Upload resume</a>
                     </div>
                 {% endif %}
             {% endblock upload_box %}
@@ -52,7 +52,7 @@
               <div class="col-sm-3 dashboard-tab">
                 <a class="active" href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
                 <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
-                <a href="dashboard-wallet.html"><span class="wallet-icon"></span> My wallet</a>
+                <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
                 <!-- <a href="dashboard-recommended.html"><span class="recommended-icon"></span> Recommended courses</a> -->
                 <a href="dashboard-roundone.html"><span class="referal-icon"></span> Referral</a>
                 <div class="please-call">
@@ -88,8 +88,8 @@
                             <div class="form-group custom-select">
                                 <select class="form-control" name="select_type" id="select-type-id">
                                   <option value="0">All Items</option>
-                                  <option value="1">Active Items</option>
-                                  <option value="2">Inactive Items</option>
+                                  <option value="1">In Process</option>
+                                  <option value="2">Closed</option>
                                 </select>
                             </div>
                         </form>

@@ -5,7 +5,7 @@
 <ul class="products-inbox">
     
     <li class="col-sm-12">
-        <h2>{{oi.product.heading}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
+        <h2>{{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
         <span class="transaction">Order ID : {{oi.order.number}}</span>
         <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
@@ -118,8 +118,8 @@
                             {% endif %}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
-                          {% if op.oi_status == 2 and not oi.oi_resume %}
-                          <a href="#">Upload Resume</a>
+                          {% if oi.oi_status == 2 %}
+                          <a role="button" class="upload-resume">Upload Resume</a>
                           {% elif op.oi_status == 24 %}
                               <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
                           {% elif op.oi_status == 27 %}
@@ -153,7 +153,7 @@
                           {% elif op.oi_status == 46 %}
                               <a href="#" target="_blank">Download</a>
                           {% elif op.oi_status == 27 %}
-                              <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                              <a href="" target="_blank">Download</a>
                           {% endif %}
                         </datalist>
                     </li>
@@ -172,8 +172,8 @@
 
                           {% if op.oi_draft %}
                               <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
-                          {% elif op.oi_status and not oi.oi_resume %}
-                              <a href="#" >Upload Resume</a>
+                          {% elif oi.oi_status == 2 %}
+                              <a role="button" class="upload-resume">Upload Resume</a>
                           {% endif %}
                         </datalist>
                     </li>
@@ -206,8 +206,8 @@
                             {{op.get_user_oi_status}}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
-                          {% if op.oi_status == 2 and not oi.oi_resume %}
-                              <a href="#">Upload Resume</a>
+                          {% if oi.oi_status == 2 and not oi.oi_resume %}
+                              <a role="button" class="upload-resume">Upload Resume</a>
                           {% elif op.oi_status == 6 %}
                               <a href="#">Download Credential</a>
                           {% endif %}
@@ -225,8 +225,8 @@
                             {{op.get_user_oi_status}}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
-                          {% if op.oi_status == 2 and not oi.oi_resume %}
-                              <a href="#">Upload Resume</a>
+                          {% if oi.oi_status == 2 and not oi.oi_resume %}
+                              <a role="button" class="upload-resume">Upload Resume</a>
                           {% endif %}
                         </datalist>
                     </li>

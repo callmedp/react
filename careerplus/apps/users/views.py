@@ -17,6 +17,7 @@ from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from order.models import OrderItem
 from emailers.email import SendMail
+from emailers.tasks import send_email_task
 
 from .forms import (
     RegistrationForm,
@@ -53,33 +54,29 @@ class RegistrationApiView(FormView):
             "raw_password": request.POST.get('raw_password'),
             "cell_phone": request.POST.get('cell_phone'),
             "country_code": request.POST.get('country_code'),
-            "vendor_id": request.POST.get('vendor_id'),
+            "vendor_id": settings.CP_VENDOR_ID,
             "is_job_seeker": request.POST.get('is_job_seeker') == 'on'
         })
-        user_resp = RegistrationLoginApi.user_registration(post_data)
+        resp = RegistrationLoginApi.user_registration(post_data)
 
-        if user_resp['response'] == 'new_user':
-            login_dict.update({
-                "email": request.POST.get('email'),
-                "password": request.POST.get('password') if request.POST.get('password')
-                            else request.POST.get('raw_password'),
+        if resp['response'] == 'new_user' and resp['id']:
+            mail_type = "REGISTRATION"
+            email_dict = {}
+            email_dict.update({
+                'email':resp['email'],
+                'password': request.POST.get('raw_password'),
             })
-            resp = RegistrationLoginApi.user_login(login_dict)
+            # task for email
+            send_email_task.delay([resp['email']], mail_type, email_dict, status=None, oi=None)
+            resp_status = ShineCandidateDetail().get_status_detail(shine_id=resp['id'], token=resp['access_token'])
+            request.session.update(resp_status)
+            return HttpResponseRedirect(self.success_url)
             
-            if resp['response'] == 'login_user':
-                resp_status = ShineCandidateDetail().get_status_detail(shine_id=resp['candidate_id'])
-                request.session.update(resp_status)
-                return HttpResponseRedirect(self.success_url)
-
-            elif resp['response'] == False:
-                return render(self.request, self.template_name, {'form': form})    
-
-
-        elif user_resp['response'] == 'exist_user':
+        elif resp['response'] == 'exist_user':
             messages.add_message(self.request, messages.ERROR, "This user already exists", 'danger')
             return HttpResponseRedirect(reverse('login'))
 
-        elif not user_resp['response']:
+        elif not resp['response']:
             messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
         return render(self.request, self.template_name, {'form': form})
 
@@ -276,13 +273,15 @@ class ForgotPasswordEmailView(View):
             user_exist = RegistrationLoginApi.check_email_exist(email)
             mail_type = 'FORGOT_PASSWORD'
             to_emails = [email]
-            email_dict = {"email": email}
+            email_dict = {}
+            email_dict.update({
+                'email': email,
+                'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
+            })
 
             if user_exist.get('exists', ''):
-                try:
-                    SendMail().send(to_emails, mail_type, email_dict)
-                except Exception as e:
-                    logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                # task call for email
+                send_email_task.delay(to_emails, mail_type, email_dict, status=None, oi=None)
                 return HttpResponse(json.dumps({'exist':True}), content_type="application/json")
 
             elif not user_exist.get('exists', ''):

@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
 from .models import (
-    Wallet, RewardPoint, ECash, 
+    Wallet, RewardPoint, ECash,
     WalletTransaction, ECashTransaction, PointTransaction)
 from cart.mixins import CartMixin
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
@@ -91,34 +91,35 @@ class WalletRedeemView(APIView, CartMixin):
                 wallet=wal_obj, cart=cart_obj, txn_type=2, point_value=point)
             for pts in points:
                 if pts.expiry >= timezone.now():
-                    if pts.current >= point:
-                        pts.current -= point
-                        pts.last_used = timezone.now()
-                        if pts.current == Decimal(0):
+                    if point > Decimal(0):    
+                        if pts.current >= point:
+                            pts.current -= point
+                            pts.last_used = timezone.now()
+                            if pts.current == Decimal(0):
+                                pts.status = 1
+                            pts.save()
+                            PointTransaction.objects.create(
+                                transaction=wallettxn,
+                                point=pts,
+                                point_value=point,
+                                txn_type=2)
+                            point = Decimal(0)
+                            
+                        else:
+                            point -= pts.current
+                            pts.last_used = timezone.now()
                             pts.status = 2
-                        pts.save()
-                        PointTransaction.objects.create(
-                            transaction=wallettxn,
-                            point=pts,
-                            point_value=point,
-                            txn_type=2)
-                        point = Decimal(0)
-                        
-                    else:
-                        point -= pts.current
-                        pts.last_used = timezone.now()
-                        pts.status = 2
-                        PointTransaction.objects.create(
-                            transaction=wallettxn,
-                            point=pts,
-                            point_value=pts.current,
-                            txn_type=2)
-                        pts.current = Decimal(0)
-                        pts.save()
-                if point == Decimal(0):
-                    break
+                            PointTransaction.objects.create(
+                                transaction=wallettxn,
+                                point=pts,
+                                point_value=pts.current,
+                                txn_type=2)
+                            pts.current = Decimal(0)
+                            pts.save()
+                
             wallettxn.status = 1
             wallettxn.notes = 'Redeemed from cart'
+            wallettxn.current_value = wal_obj.get_current_amount()
             wallettxn.save()
             return Response(
                 {'success': True,'msg': 'Successfully Redeemed'
@@ -180,6 +181,7 @@ class WalletRemoveView(APIView, CartMixin):
             wal_txn.txn_type = 5
             wal_txn.notes = 'Reverted From Cart'
             wal_txn.status = 1
+            wal_txn.current_value = wal_txn.wallet.get_current_amount()
             wal_txn.save()
             return Response(
                 {'success': True,'msg': 'Successfully Removed'

@@ -80,45 +80,42 @@ class Command(BaseCommand):
         except IntegrityError:
             print(row)
             print('Fail')
+        
         sql = """
-                SELECT auth_user.username, auth_user.id,auth_user.email, cart_userprofile.shine_id, cart_userprofile.mobile, theme_country.isd_code 
+                SELECT auth_user.email as Email, cart_userprofile.shine_id as ShineID, cart_userprofile.mobile as Mobile, theme_country.isd_code as Country_Code 
                 FROM auth_user 
                 LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
                 LEFT OUTER JOIN theme_country ON ( cart_userprofile.country_id = theme_country.id ) 
                 WHERE (auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
+                ORDER BY auth_user.date_joined DESC
                 """
         df = pd.read_sql(sql, con=db)
-        # sql = """
-        #     SELECT auth_user.email, auth_user.username, cart_userprofile.shine_id 
-        #     FROM auth_user LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
-        #     WHERE auth_user.id IN (SELECT DISTINCT U0.candidate_id FROM cart_order U0 LEFT OUTER JOIN auth_user U1 ON ( U0.candidate_id = U1.id ) WHERE (U0.added_on >= '2014-04-01 00:00:00'  AND U0.candidate_id IS NOT NULL AND NOT (U1.email = ''  AND U1.email IS NOT NULL)))
-        # """
+        df = df.drop_duplicates(subset=['Email'], keep='last')
+        user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
+        user_df = user_df[['Email', 'C_ID']]
+        user_df = user_df.drop_duplicates(subset=['Email'], keep='last')
+        df = pd.merge(df, user_df, how='left', on='Email')
+        df = df[df.C_ID.isnull()]
+        df.to_csv('new_absent_user.csv', index=False, encoding='utf-8')
 
-        # sql = """
-        #         SELECT auth_user.email, auth_user.username, cart_userprofile.shine_id 
-        #         FROM auth_user LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
-        #         WHERE (auth_user.email IS NOT NULL AND NOT (auth_user.email = ''))    
-        #     """
-        # cursor.execute(sql,{})
-        # result = cursor.fetchall()
-        try:
-            with transaction.atomic():
-                for i,row in df.iterrows():
-                    CPUser.objects.create(
-                        username=row['username'] if row['username'] else '',
-                        email=row['email'] if row['email'] else '',
-                        shine_id=row['shine_id'] if row['shine_id'] else '',
-                        cp_id=row['id'] if row['id'] else '',
-                        mobile=row['mobile'] if row['mobile'] else '',
-                        country=row['isd_code'] if row['isd_code'] else '')
-        except IntegrityError:
-            print(i, row)
-            print('Fail')
-        except:
-            print(i, row)
-            print('Wut')
-        cursor.close()
-        db.close()
+        # try:
+        #     with transaction.atomic():
+        #         for i,row in df.iterrows():
+        #             CPUser.objects.create(
+        #                 username=row['username'] if row['username'] else '',
+        #                 email=row['email'] if row['email'] else '',
+        #                 shine_id=row['shine_id'] if row['shine_id'] else '',
+        #                 cp_id=row['id'] if row['id'] else '',
+        #                 mobile=row['mobile'] if row['mobile'] else '',
+        #                 country=row['isd_code'] if row['isd_code'] else '')
+        # except IntegrityError:
+        #     print(i, row)
+        #     print('Fail')
+        # except:
+        #     print(i, row)
+        #     print('Wut')
+        # cursor.close()
+        # db.close()
         
         # generated_file = open('check_user.csv', 'w')
         # with open('CP_Data.csv', 'r', encoding='utf-8', errors='ignore') as upload:
@@ -167,8 +164,8 @@ class Command(BaseCommand):
         #     except:
         #         continue
 
-        
+        # df = pd.read_csv('cleaned_present_user.csv', sep=',')
+        # df2 = pd.read_csv('new_absent_user.csv',sep=',')
 
 
-                    
         pass

@@ -1,6 +1,7 @@
 from django.conf import settings
 from cart.mixins import CartMixin
 
+
 def js_settings(request):
     js_vars = {}
     js_vars.update(
@@ -25,11 +26,16 @@ def common_context_processor(request):
     cart_count = CartMixin().get_cart_count(request)
     context.update({
         "cart_count": cart_count,
-    	"PRODUCT_GROUP_LIST": settings.PRODUCT_GROUP_LIST,
-    	"VENDOR_GROUP_LIST": settings.VENDOR_GROUP_LIST,
-    	"OPERATION_GROUP_LIST": settings.OPERATION_GROUP_LIST,
-    	"SEO_GROUP_LIST": settings.SEO_GROUP_LIST,
-    	"WRITING_GROUP_LIST": settings.WRITING_GROUP_LIST
+        "PRODUCT_GROUP_LIST": settings.PRODUCT_GROUP_LIST,
+        "VENDOR_GROUP_LIST": settings.VENDOR_GROUP_LIST,
+        "OPERATION_GROUP_LIST": settings.OPERATION_GROUP_LIST,
+        "SEO_GROUP_LIST": settings.SEO_GROUP_LIST,
+        "WRITING_GROUP_LIST": settings.WRITING_GROUP_LIST,
+        "REFUND_GROUP_LIST": settings.REFUND_GROUP_LIST,
+        "OPS_GROUP_LIST": settings.OPS_GROUP_LIST,
+        "OPS_HEAD_GROUP_LIST": settings.OPS_HEAD_GROUP_LIST,
+        "BUSINESS_HEAD_GROUP_LIST": settings.BUSINESS_HEAD_GROUP_LIST,
+        "DEPARTMENT_HEAD_GROUP_LIST": settings.DEPARTMENT_HEAD_GROUP_LIST,
+        "FINANCE_GROUP_LIST": settings.FINANCE_GROUP_LIST,
     })
     return context
-

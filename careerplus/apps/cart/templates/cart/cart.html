@@ -55,51 +55,52 @@
 
             {% for item in cart_items %}
                 <!-- item 1 -->
-                {% with li=item.li addons=item.addons variations=item.variations %}
-                    {% if li.product.is_course and variations %}
+                {% with addons=item.addons variations=item.variations %}
+                    {% if item.product_class == 'course' and variations %}
 
                         <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
-                            <li class="col-sm-5 col-md-6">
-                                <span class="cart-sub-heading">{{li.product.name}}</span>
-                                <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
+                            <li class="col-sm-5 col-md-6{% if not item.is_available %} disabled{% endif %}">
+                                <span class="cart-sub-heading">{{item.name}}</span>
+                                <span class="provided-by">Provided by <a href="">{{item.vendor}}</a></span>
                             </li>
-                            {% with li.product.get_delivery_types as delivery_types %}
-                                {% if delivery_types %}
-                                    <li class="col-sm-3">
-                                        <span class="custom-select">
-                                          <form id="delivery-option-form{{variations.first.id}}">{% csrf_token %}
-                                            <select class="form-control" id="delivery-option{{variations.first.id}}" name="delivery_type" onchange="deliveryOptionUpdate('{{variations.first.id}}')">
-                                                {% for d_obj in delivery_types %}
-                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.first.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <input type="hidden" name="lineid" value="{{variations.first.pk}}" />
-                                          </form>
-                                        </span>
-                                    </li>
+                            {% if delivery_types %}
+                                <li class="col-sm-3 {% if not item.is_available %} disabled{% endif %}">
+                                    <span class="custom-select">
+                                      <form id="delivery-option-form{{variations.0.id}}">{% csrf_token %}
+                                        <select class="form-control" id="delivery-option{{variations.0.id}}" name="delivery_type" onchange="deliveryOptionUpdate('{{variations.0.id}}')">
+                                            {% for d_obj in delivery_types %}
+                                                <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.0.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="hidden" name="lineid" value="{{variations.first.pk}}" />
+                                      </form>
+                                    </span>
+                                </li>
+                            {% else %}
+                                <li class="col-sm-3">
+                                    <!--span class="custom-select">
+                                      <select class="form-control">
+                                        <option>Normal</option>
+                                      </select>
+                                    </span-->
+                                </li>
+                            {% endif %}
+                            <li class="col-sm-2 {% if not item.is_available %} disabled{% endif %}">
+                                <strong>Rs. {{variations.0.price}}/-</strong>
+                                {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{variations.0.id}}">+ Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-</span>
                                 {% else %}
-                                    <li class="col-sm-3">
-                                        <!--span class="custom-select">
-                                          <select class="form-control">
-                                            <option>Normal</option>
-                                          </select>
-                                        </span-->
-                                    </li>
+                                    <span class="delivery-charges" id="delivery-charge{{variations.0.id}}"></span>
                                 {% endif %}
-                            {% endwith %}
-                            <li class="col-sm-2">
-                                <strong>Rs. {{variations.first.product.get_price}}/-</strong>
-                                {% if variations.first.delivery_service and variations.first.delivery_service.get_price %}
-                                    <span class="delivery-charges" id="delivery-charge{{variations.first.id}}">+ Rs. {{variations.first.delivery_service.get_price|floatformat:0}}/-</span>
-                                {% else %}
-                                    <span class="delivery-charges" id="delivery-charge{{variations.first.id}}"></span>
+                                {% if not item.is_available %}
+                                    <span class="not-available">Not available</span>
                                 {% endif %}
                             </li>
 
-                            <form role="form" id="cart_remove_form{{li.id}}">{% csrf_token %}
-                                <input type="hidden" name="reference_id" value="{{variations.first.reference}}">
+                            <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{variations.0.reference}}">
                                 <li class="col-sm-2 col-md-1">
-                                    <a role="button" onclick="removeFromCart('{{li.id}}')">Remove</a>
+                                    <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
                                 </li>
                             </form>
                         </ul>
@@ -107,11 +108,11 @@
                             <span class="addons-heading"></span>
                             {% for addon in addons %}
                             <ul class="ml-15 addons">
-                              <li class="col-sm-8 col-md-9">
-                                {{addon.product.name}}
+                              <li class="col-sm-8 col-md-9{% if not addon.is_available %} disabled{% endif %}">
+                                {{addon.name}}
                               </li>
-                              <li class="col-sm-2">
-                                <strong>Rs. {{addon.product.get_price}}/-</strong>
+                              <li class="col-sm-2{% if not addon.is_available %} disabled{% endif %}">
+                                <strong>Rs. {{addon.price}}/-</strong>
                               </li>
                               <!--li class="col-sm-2 col-md-1">
                                 <a href="#">Remove</a>
@@ -129,55 +130,50 @@
                     {% else %}
 
                         <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
-                            <li class="col-sm-5 col-md-6">
-                                <span class="cart-sub-heading">{{li.product.name}}</span>
-                                <span class="provided-by">Provided by <a href="#">{{li.product.vendor}}</a></span>
+                            <li class="col-sm-5 col-md-6{% if not item.is_available %} disabled{% endif %}">
+                                <span class="cart-sub-heading">{{item.name}}</span>
+                                <span class="provided-by">Provided by <a href="#">{{item.vendor}}</a></span>
                             </li>
-                            {% with li.product.get_delivery_types as delivery_types %}
-                                {% if delivery_types %}
-                                    <li class="col-sm-3">
-                                        <span class="custom-select">
-                                            <form id="delivery-option-form{{li.pk}}">{% csrf_token %}
-                                                <select class="form-control" id="delivery-option{{li.id}}" onchange="deliveryOptionUpdate('{{li.id}}')" name="delivery_type">
-                                                    {% for d_obj in delivery_types %}
-                                                        <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == li.delivery_service %}selected{% endif %}>{{d_obj.name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <input type="hidden" name="lineid" value="{{li.pk}}" />
-                                            </form>
-                                        </span>
-                                    </li>
-                                {% else %}
-                                    <li class="col-sm-3">
-                                        <!--span class="custom-select">
-                                          <select class="form-control">
-                                            <option>Normal</option>
-                                          </select>
-                                        </span-->
-                                    </li>
-                                {% endif %}
-                            {% endwith %}
-                            <!--li class="col-sm-3">
-                                <span class="custom-select">
-                                    <select class="form-control">
+                            {% if delivery_types %}
+                                <li class="col-sm-3{% if not item.is_available %} disabled{% endif %}">
+                                    <span class="custom-select">
+                                        <form id="delivery-option-form{{item.id}}">{% csrf_token %}
+                                            <select class="form-control" id="delivery-option{{item.id}}" onchange="deliveryOptionUpdate('{{item.id}}')" name="delivery_type">
+                                                {% for d_obj in delivery_types %}
+                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == item.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <input type="hidden" name="lineid" value="{{item.id}}" />
+                                        </form>
+                                    </span>
+                                </li>
+                            {% else %}
+                                <li class="col-sm-3">
+                                    <!--span class="custom-select">
+                                      <select class="form-control">
                                         <option>Normal</option>
-                                    </select>
-                                </span>
-                            </li-->
-                            <li class="col-sm-2">
-                                <strong>Rs. {{li.product.get_price}}/-</strong>
-                                {% if li.delivery_service and li.delivery_service.get_price %}
-                                    <span class="delivery-charges" id="delivery-charge{{li.id}}">+ Rs. {{li.delivery_service.get_price|floatformat:0}}/-</span>
+                                      </select>
+                                    </span-->
+                                </li>
+                            {% endif %}
+                            
+                            <li class="col-sm-2{% if not item.is_available %} disabled{% endif %}">
+                                <strong>Rs. {{item.price}}/-</strong>
+                                {% if item.delivery_obj and item.delivery_obj.get_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{item.id}}">+ Rs. {{item.delivery_obj.get_price|floatformat:0}}/-</span>
                                 {% else %}
-                                    <span class="delivery-charges" id="delivery-charge{{li.id}}"></span>
+                                    <span class="delivery-charges" id="delivery-charge{{item.id}}"></span>
+                                {% endif %}
+                                {% if not item.is_available %}
+                                    <span class="not-available">Not available</span>
                                 {% endif %}
                             </li>
 
 
-                            <form role="form" id="cart_remove_form{{li.id}}">{% csrf_token %}
-                                <input type="hidden" name="reference_id" value="{{li.reference}}">
+                            <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{item.reference}}">
                                 <li class="col-sm-2 col-md-1">
-                                    <a role="button" onclick="removeFromCart('{{li.id}}')">Remove</a>
+                                    <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
                                 </li>
                             </form>
                         </ul>
@@ -185,11 +181,11 @@
                             <span class="addons-heading"></span>
                             {% for var in variations %}
                                 <ul class="ml-15 addons">
-                                  <li class="col-sm-8 col-md-9">
-                                    {{var.product.name}}
+                                  <li class="col-sm-8 col-md-9{% if not var.is_available %} disabled{% endif %}">
+                                    {{var.name}}
                                   </li>
-                                  <li class="col-sm-2">
-                                    <strong>Rs. {{var.product.get_price}}/-</strong>
+                                  <li class="col-sm-2{% if not var.is_available %} disabled{% endif %}">
+                                    <strong>Rs. {{var.price}}/-</strong>
                                   </li>
                                   
                                   <form role="form" id="cart_remove_form{{var.id}}">{% csrf_token %}
@@ -203,11 +199,11 @@
 
                             {% for addon in addons %}
                                 <ul class="ml-15 addons">
-                                  <li class="col-sm-8 col-md-9">
-                                    {{addon.product.name}}
+                                  <li class="col-sm-8 col-md-9{% if not addon.is_available %} disabled{% endif %}">
+                                    {{addon.name}}
                                   </li>
-                                  <li class="col-sm-2">
-                                    <strong>Rs. {{addon.product.get_price}}/-</strong>
+                                  <li class="col-sm-2{% if not addon.is_available %} disabled{% endif %}">
+                                    <strong>Rs. {{addon.price}}/-</strong>
                                   </li>
                                   <!--li class="col-sm-2 col-md-1">
                                     <a href="#">Remove</a>

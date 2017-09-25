@@ -198,13 +198,6 @@ class OIFilterForm(forms.Form):
             'placeholder': "from date - to date",
             "readonly": True, }))
 
-    # delivery_type = forms.ChoiceField(
-    #     label=("Delivery Type:"), choices=[],
-    #     required=False,
-    #     initial=-1,
-    #     widget=forms.Select(
-    #         attrs={'class': 'form-control'}))
-
     delivery_type = forms.ModelChoiceField(
         label=("Delivery Type:"), required=False,
         queryset=DeliveryService.objects.none(),

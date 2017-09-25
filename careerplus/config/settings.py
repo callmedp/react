@@ -4,10 +4,14 @@ from .celery import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 IS_LIVE = False
-
+CELERY_ALWAYS_EAGER = True
+CELERY_RESULT_BACKEND = 'redis'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = 'localhost:8000'
+SITE_DOMAIN = 'http://localhost:8000'
 SITE_PROTOCOL = 'https'
 
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
@@ -159,11 +163,8 @@ EMAIL_SERVER = 'http://localhost:8000'
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
-# Booster Recruiters
-BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
-
 # Linkedin Cridential
-CLIENT_ID  = "757gbstpwa6dqp"
+CLIENT_ID = "757gbstpwa6dqp"
 CLIENT_SECRET = "creqezZ0kPJnJWRk"
 REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
 STATE = "9899002507upender"
@@ -175,8 +176,20 @@ VENDOR_GROUP_LIST = ['VENDOR']
 PRODUCT_GROUP_LIST = ['PRODUCT']
 OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
 SEO_GROUP_LIST = ['SEO']
-WRITING_GROUP_LIST = ['WRITERS']
+WRITING_GROUP_LIST = ['WRITER']
 
+# Refund Application level
+OPS_GROUP_LIST = ['OPERATION']
+OPS_HEAD_GROUP_LIST = ['OPS_HEAD']
+BUSINESS_HEAD_GROUP_LIST = ['BUSINESS_HEAD']
+DEPARTMENT_HEAD_GROUP_LIST = ['DEPARTMENT_HEAD']
+FINANCE_GROUP_LIST = ['FINANCE']
+BUSINESS_APPROVAL_LIMIT = 25000  # refund
+REFUND_GROUP_LIST = OPS_GROUP_LIST + OPS_HEAD_GROUP_LIST + BUSINESS_HEAD_GROUP_LIST + DEPARTMENT_HEAD_GROUP_LIST + FINANCE_GROUP_LIST
+
+CELERY_IMPORTS = (
+    'emailers.tasks',
+)
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']

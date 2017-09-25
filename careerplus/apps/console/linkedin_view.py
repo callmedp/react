@@ -26,6 +26,7 @@ from linkedin.models import Draft, Organization, Education
 from geolocation.models import Country
 from quizs.models import QuizResponse
 from shop.models import DeliveryService
+from emailers.tasks import send_email_task
 
 from .linkedin_form import (
     DraftForm,
@@ -104,6 +105,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                     try:
                         writer = User.objects.get(pk=writer_pk)
                         for obj in orderitem_objs:
+                            email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                             obj.assigned_to = writer
                             obj.assigned_by = request.user
                             obj.save()
@@ -113,28 +115,26 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             mail_type = 'ALLOCATED_TO_WRITER'
                             data = {}
                             data.update({
-                                "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                                "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                                 "writer_name": writer.name,
                                 "writer_email": writer.email,
                                 "subject": "Your developed document has been shared with our expert",
                                 "oi": obj,
                             })
 
-                            try:
-                                SendMail().send(to_emails, mail_type, data)
-                            except Exception as e:
-                                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=data)
-                            except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            if 101 not in email_sets:
+                                send_email_task.delay(to_emails, mail_type, email_dict, status=101, oi=obj.pk)
+                            if obj.delivery_service.name == 'SuperExpress':
+                                try:
+                                    SendSMS().send(sms_type=mail_type, data=data)
+                                except Exception as e:
+                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                             obj.orderitemoperation_set.create(
                                 oi_status=1,
                                 last_oi_status=obj.oi_status,
                                 assigned_to=obj.assigned_to,
-                                added_by=request.user
+                                added_by=request.user,
                             )
                         data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                     except Exception as e:
@@ -146,7 +146,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48])
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48, 161, 162, 163])
 
         user = self.request.user
         if user.is_superuser:
@@ -196,7 +196,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -326,18 +326,13 @@ class ChangeDraftView(DetailView):
                         form.instance.delete()
                     # for update oi status
                     last_status = ord_obj.oi_status  
-                    if ord_obj.oi_status == 8:
-                        ord_obj.draft_counter += 1
-                    elif not ord_obj.draft_counter:
-                        ord_obj.draft_counter += 1
                     ord_obj.oi_status = 45  # pending Approval
-                    ord_obj.oi_flow_status = 50
                     ord_obj.last_oi_status = last_status
                     ord_obj.draft_added_on = timezone.now()
                     ord_obj.save()
                     ord_obj.orderitemoperation_set.create(
                         linkedin = draft_obj,
-                        draft_counter=ord_obj.draft_counter,
+                        draft_counter=ord_obj.draft_counter + 1,
                         oi_status=44,
                         last_oi_status=last_status,
                         assigned_to=ord_obj.assigned_to,
@@ -348,19 +343,19 @@ class ChangeDraftView(DetailView):
                         assigned_to=ord_obj.assigned_to,
                         added_by=request.user)
 
-                    messages.success(self.request, "Draft updated Successfully")
-                    return HttpResponseRedirect(reverse('console:change-draft', kwargs={'pk': self.get_object().pk}))
+                    messages.success(self.request, "Draft Saved Successfully")
+                    return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
                 self.object = self.get_object()
                 context = super(ChangeDraftView, self).get_context_data(**kwargs)
                 context['form'] = draft_form
                 context['org_formset'] = org_formset
                 context['edu_formset'] = edu_formset
-                messages.success(self.request, "Draft is not updated successfully")
+                messages.success(self.request, "Draft is not Saved successfully", 'error')
                 return render(request, self.template_name, context)
 
             else:
-                messages.success(self.request, "Draft not exist with this order")
+                messages.success(self.request, "Draft not exist with this order" 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
             messages.add_message(request, messages.ERROR, str(e))
@@ -458,7 +453,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         try:
             if self.delivery_typ:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -562,7 +557,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.name == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -669,7 +664,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
-                if delivery_obj.name == 'Normal':
+                if delivery_obj.name == 'normal':
                     queryset = queryset.filter(
                         Q(delivery_service=self.delivery_type) |
                         Q(delivery_service__isnull=True))
@@ -935,10 +930,12 @@ class ProfileUpdationView(DetailView):
         flag=request.POST.get('flag'+str(count)+'', None)
         
         if action == -9 and queue_name == "internationalprofileupdate":
+            count = 0
             counts = request.POST.getlist('count', None)
+            print(counts)
             for count in counts:
-                username=request.POST.get('username'+str(count)+'', None)
-                password=request.POST.get('password'+str(count)+'', None)
+                username=request.POST.get('username'+count+'', None)
+                password=request.POST.get('password'+count+'', None)
                 if not username and not password:
                     msg = 'Please update all the profiles first'
                     messages.add_message(request, messages.SUCCESS, msg)
@@ -968,10 +965,12 @@ class ProfileUpdationView(DetailView):
         elif update_sub == "1":
             try:
                 orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=kwargs.get('pk'))
+                profile_obj = orderitem.product.productextrainfo_set.get(info_type='profile_update')
+                country_obj = Country.objects.get(pk=profile_obj.object_id)
                 if username and password and flag:
                     profile_obj = InternationalProfileCredential()
                     profile_obj.oi = orderitem
-                    profile_obj.country = orderitem.product.profile_country
+                    profile_obj.country = country_obj
                     profile_obj.username = username
                     profile_obj.password = password
                     profile_obj.candidateid = orderitem.order.candidate_id
@@ -1009,27 +1008,26 @@ class InterNationalAssignmentOrderItemView(View):
                     obj.assigned_to = assign_to
                     obj.assigned_by = request.user
                     obj.save()
-
                     # mail to user about writer information
+                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     to_emails = [obj.order.email]
+
                     data = {}
                     data.update({
                         "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         "writer_name": assign_to.name,
+                        "subject": "Your developed document has been shared with our expert",
+                        "writer_email": assign_to.email,
                         "subject": "Your developed document has been uploaded",
-
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'
-
-                    try:
-                        SendMail().send(to_emails, mail_type, data)
-                    except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
-                    try:
-                        SendSMS().send(sms_type=mail_type, data=data)
-                    except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    if 63 not in email_sets:
+                        send_email_task.delay(to_emails, mail_type, email_dict, status=63, oi=oi.pk)
+                    if obj.delivery_service.name == 'SuperExpress':
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=data)
+                        except Exception as e:
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                     obj.orderitemoperation_set.create(
                         oi_status=1,

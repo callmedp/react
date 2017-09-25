@@ -158,7 +158,7 @@
           <ul class="dropdown-menu">
             <li><a href="{% url "dashboard:dashboard" %}">My inbox</a></li>
             <li><a href="{% url "dashboard:dashboard-myorder" %}">My orders</a></li>
-            <li><a href="#">My Wallet</a></li>
+            <li><a href="{% url "dashboard:dashboard-mywallet" %}">My Wallet</a></li>
             <li><a href="#">Referrals</a></li>
             <li><a href="#">{{request.session.email}}</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>

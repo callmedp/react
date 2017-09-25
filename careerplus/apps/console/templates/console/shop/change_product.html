@@ -574,15 +574,6 @@
                     <div class="alert">{{seo_form.buy_shine.errors}}</div>
                   </div>
                   
-                  <div class="item form-group {% if seo_form.prg_structure.errors %}bad{% endif %}">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ seo_form.prg_structure.id_for_label }}">Program Structure <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      {{seo_form.prg_structure}}
-                    </div>
-                    <div class="alert">{{seo_form.prg_structure.errors}}</div>
-                  </div>
-                  
                   <input type="hidden" name="product" value="{{object.pk}}">
                   <input type="hidden" name="slug" value="seo">
                   <div class="ln_solid"></div>

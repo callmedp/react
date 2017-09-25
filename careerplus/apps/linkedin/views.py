@@ -28,20 +28,21 @@ class AutoLoginView(View):
         context = self.get_context_data(**kwargs)
         if token:
             next1 = request.GET.get('next') or '/'
-            email, candidateid, orderid = AutoLogin().decode(token)
-            if candidateid and next1 == 'dashboard':
-                try:
-                    resp_status = ShineCandidateDetail().get_status_detail(
-                        email=None, shine_id=candidateid)
-                    request.session.update(resp_status)
-                    if resp_status:
-                        return HttpResponseRedirect('/dashboard/')
-                    else:
-                        return HttpResponseRedirect('/?login_attempt=fail')
-                except Exception as e:
-                    logging.getLogger('error_log').error(
-                        "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
-            return HttpResponseRedirect('/?login_attempt=fail')
+            email, candidateid, valid = AutoLogin().decode(token)
+            if valid:
+                if candidateid and next1 == 'dashboard':
+                    try:
+                        resp_status = ShineCandidateDetail().get_status_detail(
+                            email=None, shine_id=candidateid)
+                        request.session.update(resp_status)
+                        if resp_status:
+                            return HttpResponseRedirect('/dashboard/')
+                        else:
+                            return HttpResponseRedirect('/?login_attempt=fail')
+                    except Exception as e:
+                        logging.getLogger('error_log').error(
+                            "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
+                return HttpResponseRedirect('/?login_attempt=fail')
         return HttpResponseRedirect('/?login_attempt=fail')
 
 
@@ -105,9 +106,14 @@ class CounsellingSubmit(TemplateView):
                 quiz_obj.submitted = True
                 quiz_obj.save()
                 if not orderitem.tat_date:
+                    last_oi_status = orderitem.oi_status
                     orderitem.tat_date = datetime.now()
-                    orderitem.oi_flow_status = 42
+                    orderitem.oi_status = 42
                     orderitem.save()
+                    orderitem.orderitemoperation_set.create(
+                        oi_status=orderitem.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=orderitem.assigned_to)
                 return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
 

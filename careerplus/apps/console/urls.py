@@ -1,5 +1,10 @@
 from django.conf.urls import url, include
 
+from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
+from . import shop_view, vendor_view, blog_view, order_view, refund_view
+from geolocation import adminviews
+
+
 urlpatterns = [
     url(r'^cms/', include('console.cms.urls', namespace='cms')),
     url(r'^order/', include('console.order.urls', namespace='order')),
@@ -7,10 +12,6 @@ urlpatterns = [
     url(r'^operations/', include('console.operations.urls', namespace='operations')),
 ]
 
-from django.conf.urls import url
-from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView
-from . import shop_view, vendor_view, blog_view, order_view
-from geolocation import adminviews
 
 urlpatterns += [
     url(r'^$', ConsoleDashboardView.as_view(), name='dashboard'),
@@ -41,7 +42,6 @@ urlpatterns += [
     url(r'^screenproduct/action/(?P<action>[\w-]+)/$',
         vendor_view.ActionScreenProductView.as_view(),
         name='screenproduct-action'),
-    
     
     url(r'^screenfaq/list/$',
         vendor_view.ListScreenFaqView.as_view(),
@@ -225,6 +225,50 @@ urlpatterns += [
     url(r'^queue/orderitem/assignment/$',
         order_view.AssignmentOrderItemView.as_view(),
         name='assignment-orderitem-view'),
+]
+
+# refunf flow
+urlpatterns += [
+    url(r'^refund/refundrequest/$',
+        refund_view.RefundOrderRequestView.as_view(),
+        name='refund-request'),
+
+    url(r'^refund/refundrequestapproval/$',
+        refund_view.RefundRequestApprovalView.as_view(),
+        name='refund-request-approval'),
+
+    url(r'^refund/refundraise/$',
+        refund_view.RefundRaiseRequestView.as_view(),
+        name='refund-raiserequest'),
+
+    url(r'^refund/validatecheckeditems/$',
+        refund_view.ValidateCheckedItems.as_view(),
+        name='refund-validateitems'),
+
+    url(r'^refund/validateuncheckeditems/$',
+        refund_view.ValidateUnCheckedItems.as_view(),
+        name='refund-validateitems'),
+
+    url(r'^refund/refundrequest-detail/(?P<pk>\d+)/$',
+        refund_view.RefundRequestDetail.as_view(),
+        name='refundrequest-detail'),
+
+    url(r'^refund/refundrequest/(?P<pk>\d+)/edit/$',
+        refund_view.RefundRequestEditView.as_view(),
+        name='refundrequest-edit'),
+
+    # url(r'^refund/sendforapproval-refundrequest/',
+    #     refund_view.SendForApprovalRefundRequest.as_view(),
+    #     name='sendforapproval-refundrequest'),
+
+    url(r'^refund/reject-refundrequest/',
+        refund_view.RejectRefundRequestView.as_view(),
+        name='refundrequest-reject'),
+
+    url(r'^refund/approve-refundrequest/',
+        refund_view.ApproveRefundRequestView.as_view(),
+        name='refundrequest-approve'),
+
 ]
 
 from . import linkedin_view

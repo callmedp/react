@@ -1,0 +1,245 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>Edit Refund Request- Shinelearning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <style>
+        ul.parsley-errors-list {
+            list-style: none;
+            color: #E74C3C !important;
+            padding-left: 0;
+        }
+        ul.parsley-errors-list {
+            list-style: none;
+            color: #E74C3C;
+            padding-left: 0;
+        }
+        .error{
+            color: #E74C3C;
+        }
+    </style>
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Edit Refund Request</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+    {% if order %}
+    <div class="row">
+       <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Order Details</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">#OrderNumber</th>
+                    <th class="column-title">Refund Status</th>
+                    <th class="column-title">Email</th>
+                    <th class="column-title">Mobile</th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Order Status</th>
+                    <th class="column-title">Currency</th>
+                    <th class="column-title">Payment Date</th>
+                    <th class="column-title">Order Details</th>
+                    <th class="column-title">Agent Name</th>
+                    <th class="column-title">TL Name</th>
+                    <th class="column-title">BH Name</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="even pointer">
+                      <td>{{order.number}}</td>
+                      <td>{{refund_obj.get_status}}</td>
+                      <td>{{order.email}}</td>
+                      <td>{{order.mobile}}</td>
+                      <td>{{order.first_name}} {{order.last_name}}</td>
+                      <td>{{order.get_status}}</td>
+                      <td>{{order.currency}}</td>
+                      <td>{{order.payment_date}}</td>
+                      <td><a target="_blank" href="{% url "console:order-detail" order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Change Refund Request</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+           <form id="refund-request-form" method="post" action="." enctype="multipart/form-data" data-parsley-validate>{% csrf_token %}
+           <div style="display:none">
+               <input type="hidden" name="order_pk" value="{{order.pk}}" >
+           </div>
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">#</th>
+                    <th class="column-title">Item Name</th>
+                    <th class="column-title">Refund Type</th>
+                    <th class="column-title">Refund Amount</th>
+                    <th class="column-title">Actual Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for data in refundedit_items %}
+                    {% with oi=data.oi combos=data.combos refund_item=data.refund_item %}
+                        <tr class="even pointer">
+                          <td>
+                              <input {% if refund_item %}checked{% endif %} type="checkbox" class="item-checked" onclick="clickItemAction('{{oi.pk}}')" data-id="{{oi.pk}}" id="item-{{oi.pk}}" name="item_name" value="{{oi.pk}}" data-price="{{oi.get_refund_amount}}">
+                          </td>
+                          <td>
+                              {{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}
+                              {% if combo %}
+                                   <br>
+                                   <h3>This Package includes:</h3>
+                                  {% for combo in combos %}
+                                      {{combo.product.name}}<br/>
+                                  {% endfor %}
+                              {% endif %}
+                          </td>
+                          <td>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <select class="form-control" onchange="changePaymentType('{{oi.pk}}')" id="payment-type-id{{oi.pk}}" name="type-payment{{oi.pk}}">
+                                {% for key, value in type_refund_dict.items %}
+                                    {% if refund_item %}
+                                        <option value="{{key}}" {% if key == refund_item.type_refund %}selected{% endif %}>{{value}}</option>
+                                    {% else %}
+                                        <option value="{{key}}" {% if key == 'select'%}selected{% endif %}>{{value}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                              </select>
+                              <span class="error"></span>
+                            </div>
+                          </td>
+                          <td>
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                 {% if refund_item %}
+                                    <input class="form-control" onchange="changeRefundAmount('{{oi.pk}}')" id="refund-amount-id{{oi.pk}}" data-id="{{oi.pk}}" name="refund-amount-{{oi.pk}}" value="{{refund_item.amount}}" {% if refund_item.type_refund == 'full' %}disabled="disabled"{% endif %}>
+                                 {% else %}
+                                    <input class="form-control" onchange="changeRefundAmount('{{oi.pk}}')" id="refund-amount-id{{oi.pk}}" data-id="{{oi.pk}}" name="refund-amount-{{oi.pk}}" value="" disabled="disabled">
+                                  {% endif %}
+                                  <span class="error"></span>
+                              </div>
+                          </td>
+                          <td>{{oi.get_refund_amount}}</td>
+                          
+                        </tr>    
+                    {% endwith %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <label for="message">Message:</label>
+            <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-maxlength="300" data-parsley-minlength-message="Come on! You need to enter at least a 10 caracters long comment.."
+            data-parsley-validation-threshold="10">{{refund_obj.message}}</textarea>
+            <br/>
+
+            <label>Attach File:</label>
+            {% if refund_obj.document %}
+               <p>Currently:<a href="{{refund_obj.document.url}}">{{refund_obj.document.url}}</a></p>
+               <p>Change:</p>
+            {% endif %}
+            <input type="file" name="attach_file"><br/>
+            <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}}</span><br/><br/>
+            <button type="button" id="raise-request-submit-id" class="btn btn-success">Save Refund Request</button><br/>
+            <span class="error"></span>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="confirmModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Edit Refund Request</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are you sure to change the raised refund request on order number {{order.number}} and send for approval?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                      <button type="button" class="btn btn-primary" id="action_confirm">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
+  <script type="text/javascript" src="{% static "console/js/refund/refund.js" %}"></script>
+
+{% endblock js_block %}

@@ -329,7 +329,7 @@ class ProductModeration(object):
                 product.about = screen.about
                 product.description = screen.description
                 product.buy_shine = screen.buy_shine
-                product.prg_structure = screen.prg_structure
+                # product.prg_structure = screen.prg_structure
                 
                 product.inr_price = screen.inr_price
                 product.fake_inr_price = screen.fake_inr_price
@@ -467,7 +467,7 @@ class ProductModeration(object):
                 screen.about = product.about
                 screen.description = product.description
                 screen.buy_shine = product.buy_shine
-                screen.prg_structure = product.prg_structure
+                # screen.prg_structure = product.prg_structure
                 
                 screen.inr_price = product.inr_price
                 screen.fake_inr_price = product.fake_inr_price

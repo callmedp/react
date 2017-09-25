@@ -2,7 +2,6 @@ import json
 import logging
 from decimal import Decimal
 from django.utils import timezone
-from django.shortcuts import render, render_to_response
 from django.views.generic import TemplateView, View, UpdateView
 from django.forms.forms import NON_FIELD_ERRORS
 from django.http import HttpResponseForbidden, HttpResponse,\
@@ -18,11 +17,12 @@ from shine.core import ShineCandidateDetail
 from shop.models import Product, ProductClass
 from users.mixins import RegistrationLoginApi, UserMixin
 from console.decorators import Decorate, stop_browser_cache
+from wallet.models import Wallet
+from geolocation.models import Country
 
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
-from wallet.models import Wallet
 
 
 @Decorate(stop_browser_cache())
@@ -31,7 +31,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
 
     def get_recommended_products(self):
         recommended_products = []
-        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
+        # course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         # recommended_products = Product.objects.filter(
         #     product_class__in=course_classes, active=True)
         return {'recommended_products': list(recommended_products)}
@@ -42,10 +42,12 @@ class CartView(TemplateView, CartMixin, UserMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj = self.getCartObject()
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        cart_items = cart_dict.get('cart_items', [])
+        total_amount = cart_dict.get('total_amount')
         context.update({
-            "cart_items": self.get_cart_items(cart_obj=cart_obj),
-            "total_amount": self.getTotalAmount(cart_obj=cart_obj),
-            "country_obj": self.get_client_country(self.request),
+            "cart_items": cart_items,
+            "total_amount": total_amount,
         })
         if not context['cart_items']:
             context.update(self.get_recommended_products())
@@ -277,8 +279,12 @@ class PaymentShippingView(UpdateView, CartMixin):
                 'country_code': '91'})
 
         if not form.initial.get('country'):
+            try:
+                initial_country = Country.objects.get(phone='91', active=True)
+            except:
+                initial_country = None
             form.initial.update({
-                'country': 'India'})
+                'country': initial_country})
 
         return context
 
@@ -314,8 +320,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
             cart_pk = self.request.session.get('cart_pk')
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
+                cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
                 if not self.cart_obj.shipping_done:
                     return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
+
+                elif not self.cart_obj.lineitems.all().exists() or not cart_dict.get('total_amount'):
+                    return HttpResponsePermanentRedirect(reverse('homepage'))
+
             except:
                 return HttpResponsePermanentRedirect(reverse('homepage'))
 
@@ -335,7 +346,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
         wal_txn, wal_total, wal_point = None, None, None
-        
+
         if cart_obj:
             wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
             cart_coupon = cart_obj.coupon
@@ -385,11 +396,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
 
-        payment_dict = self.getPayableAmount(cart_obj=cart_obj)
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        cart_items = cart_dict.get('cart_items', [])
+        payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
         context.update(payment_dict)
 
         context.update({
-            "cart_items": self.get_cart_items(cart_obj=self.cart_obj),
+            "cart_items": cart_items,
         })
         return context
 

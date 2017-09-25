@@ -12,7 +12,7 @@
   <tbody>
     <tr>
       <td bgcolor="#ffb48f">
-      	<img src="{% static 'shinelearn/images/emailers/banner_process.jpg' %}" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
+      	<img src="https://static1.shine.com/shinecp/shinelearn/images/emailers/banner_process.jpg" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
       	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #18549e; padding: 5px 10px 15px 10px;">
       		{{subject}}
       	</strong>
@@ -25,14 +25,14 @@
       	<strong>You can avail your services as below:</strong>
       </td>
     </tr>
-  {% if type_flow == 2 or type_flow == 6%}
+  {% if oi.product.type_flow == 2 or oi.product.type_flow == 6 %}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
           <tbody>
             <tr>
               <td style="font-size:14px; color:#333; padding-bottom:10px;">
-                <span>We bring  <a href="#" style="text-decoration: none; color: #2196f3">{{product_name}}</a> course(s) in collaboration with partner(s) <strong>{{partner}}</strong> respectively.</span>
+                <span>We bring <a href="{{oi.product.get_absolute_url}}" style="text-decoration: none; color: #2196f3">{{oi.product.name}}</a> course(s) in collaboration with partner(s)<strong>{{oi.product.vendor.name}}</strong> respectively.</span>
                 <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
               </td>
             </tr>
@@ -43,7 +43,8 @@
                   <li style="padding-bottom: 10px;"> You will receive an acknowledgment email, along with a login credentials and course link from our associate partner(s). </li>
                   <li style="padding-bottom: 5px;">  Use these login credentials on following respective site(s) to get free access to your chosen courses: </li>
                   <ul style="margin: 0px; padding:0px 15px; list-style-type: lower-alpha; line-height: 20px;">
-                    <li>For Six Sigma Black Belt: <a href="#" style="text-decoration: none; color: #2196f3">Skillsoft</a></li>
+                    <li>For {{oi.product.name}}: <a href="{{oi.product.get_absolute_url}}" style="text-decoration: none; color: #2196f3">
+                    {{oi.product.vendor.name}}</a></li>
                     <li>For Prince2: <a href="#" style="text-decoration: none; color: #2196f3">Owner 2 site</a> </li>
                     <li>For PMI Agile: <a href="#" style="text-decoration: none; color: #2196f3">Owner 3 site</a> </li>
                   </ul>
@@ -55,7 +56,7 @@
       </td>
     </tr>
   {% endif %}
-  {% if type_flow == 1 or type_flow == 3 %}
+  {% if oi.product.type_flow == 1 or oi.product.type_flow == 3 %}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
@@ -81,7 +82,7 @@
       </td>
     </tr>
   {% endif %}
-  {% if type_flow == 8 %}
+  {% if oi.product.type_flow == 8 %}
    <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
@@ -94,8 +95,8 @@
             <tr>
              <td style=" padding:10px 0;">
               	<ol style="margin: 0px; padding: 0px 15px;">
-              		<li style="padding-bottom: 10px;">  In order to start your services, we require your current resume.</li>
-        			<a href="{{counselling_form}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Upload your details</a>
+              		<li style="padding-bottom: 10px;">  In order to start your services, we need you to fill in your details.</li>
+        			<a href="{{counselling_form}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Complete Counselling Form</a>
               		<li style="padding-bottom: 5px; padding-top:20px;">Our professional experts will contact you for detailed discussion. </li>
               		<li> Post discussion you will get your professional document from our experts.</li>
               		
@@ -107,7 +108,7 @@
       </td>
     </tr>
   {% endif %}
-  {% if type_flow == 9 %}
+  {% if oi.product.type_flow == 9 %}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
@@ -132,7 +133,7 @@
       </td>
     </tr>
   {% endif %}
-  {% if type_flow == 10 %}
+  {% if oi.product.type_flow == 10 %}
     <tr>
       <td style="padding:10px;background-color: #f8f8f8;">
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">

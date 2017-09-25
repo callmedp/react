@@ -26,7 +26,7 @@ To initiate your services, upload resume or download this <a href="{% url "dashb
           <div class="checkbox">
             <label>
               <input type="checkbox" name="resume_pending" value="{{oi.pk}}">
-              {{oi.product.name}} - {{oi.product.get_exp}}
+              {{oi.product.name}} {% if oi.product.get_exp %}- {{oi.product.get_exp}}{% endif %}
             </label>
           </div>
       {% endfor %}

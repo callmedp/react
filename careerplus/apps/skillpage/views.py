@@ -4,7 +4,11 @@ from django.views.generic import View, TemplateView, DetailView
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.http import urlquote
+from haystack.query import SearchQuerySet
+from django.conf import settings
 
+from geolocation.models import Country
+from django.db.models import Q
 from shop.models import Category
 from cms.mixins import UploadInFile
 from review.models import Review
@@ -43,15 +47,9 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get(self, request, *args, **kwargs):
         slug = self.kwargs.get('slug', None)
-        pk = self.kwargs.get('pk', None)
+        self.pk = self.kwargs.get('pk', None)
         self.object = self.get_object()
         redirect = self.redirect_if_necessary(request.path, self.object)
-
-        # try:
-        #     self.category_obj = Category.objects.prefetch_related('categoryproducts').get(
-        #         pk=pk, active=True, is_skill=True, slug=slug)
-        # except Exception:
-        #     raise Http404
         if redirect:
             return redirect
         context = super(self.__class__, self).get(request, args, **kwargs)
@@ -65,26 +63,32 @@ class SkillPageView(DetailView, SkillPageMixin):
 
         api_data = self.get_job_count_and_fuctionan_area(slug)
         career_outcomes = self.object.split_career_outcomes()
+        country_choices = [(m.phone, m.phone) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
         prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
 
         try:    
-            top_3_prod = self.object.categoryproducts.all().order_by('-productcategories__prd_order')[0:3]
-            top_4_vendors = Vendor.objects.all()[0:4]
+            # top_3_prod = self.object.categoryproducts.all().order_by('-productcategories__prd_order')[0:3]
+            top_3_prod = SearchQuerySet().filter(pCtg=self.pk)[0:3]
+            top_4_vendors = SearchQuerySet().filter(pCtg=self.pk)[0:4]
         except:
             pass
-        
         prd_obj = ContentType.objects.get_for_model(Product)
+        all_results = SearchQuerySet().filter(pCtg=self.pk)
         prod_id_list = self.object.categoryproducts.values_list('id', flat=True)
         prod_reviews = Review.objects.filter(
             object_id__in=prod_id_list, content_type=prd_obj)
 
         try:
-            prod_lists[0]
+            # prod_lists[0]
+            all_results[0]
         except Exception:
             raise Http404
 
-        prod_page = Paginator(prod_lists, 1)
+        # prod_page = Paginator(prod_lists, 1)
+        prod_page = Paginator(all_results, 1)
 
         try:
             products = prod_page.page(self.page)
@@ -112,8 +116,11 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
             "products": products,
+            'site': settings.SITE_DOMAIN,
             "page_reviews":prod_reviews[0:4] if self.request.flavour else page_reviews,
-            'url': 'https://' + self.object.video_link
+            'url': 'https://' + self.object.video_link,
+            'country_choices': country_choices,
+            'initial_country': initial_country,
         })
         context.update(self.get_breadcrumb_data())
         return context

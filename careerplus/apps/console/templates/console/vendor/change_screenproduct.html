@@ -235,15 +235,6 @@
                       <div class="alert">{{form.buy_shine.errors}}</div>
                     </div>
 
-                    <div class="item form-group {% if form.prg_structure.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.prg_structure.id_for_label }}">Program Structure <span class="required">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{form.prg_structure}}
-                      </div>
-                      <div class="alert">{{form.prg_structure.errors}}</div>
-                    </div>
-
                     <input type="hidden" name="product" value="{{object.pk}}">
                     <input type="hidden" name="slug" value="main">
                     

@@ -54,6 +54,7 @@ THIRD_PARTY_APPS = [
     'sorl.thumbnail',
     'rest_framework',
     'haystack',
+    'celery',
 ]
 
 # Apps specific for this project go here.
@@ -222,9 +223,9 @@ TAX_RATE_PERCENTAGE = 18
 
 # HTMSL for SMS
 HTMSL_USER = 'sumo'
-HTMSL_PASS = 'w1XN75L'
-HTMSL_URL = 'http://172.22.65.226/smspush-enterprise/api/push'
-ACCESSKEY = 'PCQwpGAFOHh3KxUj89nKYc4TtSKq9V'
+HTMSL_PASS = 'Firefly@456'
+HTMSL_URL = 'https://alerts.solutionsinfini.com/api/v4/'
+ACCESSKEY = 'Af7fa4f7dacdc996393c18071b57d0a6f'
 
 
 ########## DOMAIN SETTINGS ######################
@@ -244,16 +245,16 @@ CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
 CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
 CITIES_LIGHT_APP_NAME = 'geolocation'
 
-# encode decode settings
-EMAIL_SMS_TOKEN_EXPIRY = 7
-ENCODE_SALT = 'xfxa'
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 # encode decode constants
 TOKEN_DT_FORMAT = '%Y%m%d%H%M%S'
 LOGIN_TOKEN_EXPIRY = 30
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
+
+# Url Shortner
+URL_SHORTENER_API = 'https://www.googleapis.com/urlshortener/v1/url'
+URL_SHORTENER_ACCESS_KEY='AIzaSyBtmK_SIBfhb_hXkgLlfk7IwVlnKZxTb2I'
 
 # resume writing India product List
 RESUME_WRITING_INDIA = [2]
@@ -440,7 +441,8 @@ CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
 
 ####### PRODUCT SETTINGS ####################
 # Do Not Change #
-COURSE_SLUG = ['course',]
+COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
-SERVICE_SLUG = ['service',]
+SERVICE_SLUG = ['service', ]
+DELIVERY_SLUG = ['normal', 'express', 'super-express']
 ############################################

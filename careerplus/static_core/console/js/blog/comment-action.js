@@ -9,11 +9,12 @@ $(function(){
         }
         else{
         	var selected = new Array();
-            $('#commant-table input:checked').each(function() {
+            $('#body-table-comment input[name="table_records"]:checked').each(function() {
                 selected.push($(this).prop('name'));
             });
-            if ((selected.length - 1) > 0){
-            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected  '+ 'comments' +' to do action' + ' ?</div>');
+            console.log(selected.length);
+            if (selected.length > 0){
+            	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected '+ selected.length + ' comments' +' to do action' + ' ?</div>');
                 $('#action_comment').show();
                 $('#actionModal').modal("show");
             }
@@ -42,11 +43,11 @@ $(function(){
         }
         else{
         	var selected = new Array();
-            $('#commant-table input:checked').each(function() {
+            $('#body-table-comment input[name="table_records"]:checked').each(function() {
                 selected.push($(this).prop('name'));
             });
 
-            if ((selected.length - 1) > 0){
+            if (selected.length > 0){
             	$("#comment_table_form").submit();
             	$('#actionModal').modal("hide");
             }

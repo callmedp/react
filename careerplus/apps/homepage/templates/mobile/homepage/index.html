@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="media-body">
                                     <p class="fs-15 bold pb-10">
-                                        <a href="#">{{course.heading}}</a>
+                                        <a href="{{course.get_absolute_url}}">{{course.heading}}</a>
                                     </p>
                                     <div class="rating block ml-0 fs-12 pull-left">    
                                         <sup class="fill-star"></sup>
@@ -78,16 +78,14 @@
             <p class="c6">Browse the most popular and new courses!</p>
             <ul class="trending-slide mt-10">
             {% for course in tcourses %} 
-                {% for tprd in course.tprds %}
                     <li>
                         <a href="{{course.view_all}}">
                             <div class="img-box color1">
-                                <img src="{{tprd.product.image.url}}" class="img-responsive">
+                                <img src="" class="img-responsive">
                             </div>
                             <p class="title">{{course.name}}</p>
                         </a>
                     </li>
-                {% endfor %}
             {% endfor %}  
             </ul>
         </div><!-- Trending Course Ends here -->
