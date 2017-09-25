@@ -70,8 +70,8 @@ class Command(BaseCommand):
             for i, row in df_nomatch.iterrows():
                 if not i%50:
                     print(i)
-                if i >0:    
-                    password = manager.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
+                if i > 0:    
+                    password = manager.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
                     email = manager.normalize_email(row['Email'])
                     email = email.lower()
                     try:
@@ -110,9 +110,21 @@ class Command(BaseCommand):
                     if shine_id:
                         df_nomatch.loc[df_nomatch.Email == row['Email'], 'C_ID'] = shine_id
                     
-                if i == 4000:
+                if i > 5000:
                     break
         except:
             pass
         finally:
+            user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
+            user_df = user_df[['Email', 'C_ID']]
+            user_df = user_df.drop_duplicates(subset=['Email'], keep='last')
+            df2 = df_nomatch[~df_nomatch.C_ID.isnull()]
+            df2 = df2[['Email', 'C_ID']]
+            df2 = df2.drop_duplicates(subset=['Email'], keep='last')
+
+            user_df = user_df.append(df2, ignore_index=True)
+            user_df = user_df.drop_duplicates(subset=['Email'], keep='last')
+            user_df.to_csv('cleaned_present_user.csv', index=False, encoding='utf-8')
+            df_nomatch = df_nomatch[df_nomatch.C_ID.isnull()]
             df_nomatch.to_csv('new_absent_user.csv', index=False, encoding='utf-8')
+            

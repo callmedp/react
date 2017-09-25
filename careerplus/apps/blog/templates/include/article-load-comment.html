@@ -1,5 +1,7 @@
 {% load static %}
 {% load humanize %}
+{% load humanize_tags %}
+
 {% for comment in comments %}
      <div class="media mb-40">
         <div class="media-left">
@@ -9,7 +11,9 @@
         </div>
         <div class="media-body">
           {{comment.message}}
-        <span class="time">{{ comment.created_on|naturaltime }}</span>
+        <span class="time">
+          {% get_humanize_date comment.created_on %}
+        </span>
         </div>
       </div>
 {% endfor %}

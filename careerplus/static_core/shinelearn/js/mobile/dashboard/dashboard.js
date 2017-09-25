@@ -19,7 +19,6 @@ $.validator.addMethod("custom_comment",
 
 
 function mobileRejectService(oi_pk) {
-    console.log("hello");
     $("#reject-form-id" + oi_pk).validate({
         rules: {
             comment:{

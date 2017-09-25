@@ -10,12 +10,12 @@ class AddCategoryForm(forms.ModelForm):
         super(AddCategoryForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['name'].widget.attrs['class'] = form_class
-        self.fields['name'].widget.attrs['maxlength'] = 80
+        self.fields['name'].widget.attrs['maxlength'] = 100
         self.fields['name'].widget.attrs['placeholder'] = 'Add unique category name'
         self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 100]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
 
 
         self.fields['type_level'].widget.attrs['class'] = form_class
@@ -37,9 +37,9 @@ class AddCategoryForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
-            if len(name) < 4 or len(name) > 60:
+            if len(name) < 4 or len(name) > 100:
                 raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
+                    "Name should be between 4-100 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -104,12 +104,12 @@ class ChangeCategoryForm(forms.ModelForm):
         super(ChangeCategoryForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['name'].widget.attrs['class'] = form_class
-        self.fields['name'].widget.attrs['maxlength'] = 80
+        self.fields['name'].widget.attrs['maxlength'] = 100
         self.fields['name'].widget.attrs['placeholder'] = 'Add unique category name'
         self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[4, 100]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
 
 
         self.fields['type_level'].widget.attrs['class'] = form_class
@@ -144,9 +144,9 @@ class ChangeCategoryForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
-            if len(name) < 4 or len(name) > 60:
+            if len(name) < 4 or len(name) > 100:
                 raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
+                    "Name should be between 4-100 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -230,31 +230,31 @@ class ChangeCategorySEOForm(forms.ModelForm):
         super(ChangeCategorySEOForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['image_alt'].widget.attrs['class'] = form_class
-        self.fields['image_alt'].widget.attrs['maxlength'] = 80
+        self.fields['image_alt'].widget.attrs['maxlength'] = 100
         self.fields['image_alt'].widget.attrs['placeholder'] = 'Add Alt'
         self.fields['image_alt'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['image_alt'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['image_alt'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['image_alt'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['image_alt'].widget.attrs['data-parsley-length'] = "[4, 100]"
+        self.fields['image_alt'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
 
         self.fields['title'].widget.attrs['class'] = form_class
-        self.fields['title'].widget.attrs['maxlength'] = 80
+        self.fields['title'].widget.attrs['maxlength'] = 100
         self.fields['title'].widget.attrs['placeholder'] = 'Add unique title'
         self.fields['title'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['title'].widget.attrs['required'] = "required"
         
         self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['title'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['title'].widget.attrs['data-parsley-length'] = "[4, 100]"
+        self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
 
         self.fields['heading'].widget.attrs['class'] = form_class
-        self.fields['heading'].widget.attrs['maxlength'] = 80
+        self.fields['heading'].widget.attrs['maxlength'] = 100
         self.fields['heading'].widget.attrs['required'] = "required"
         self.fields['heading'].widget.attrs['placeholder'] = 'Add H1'
         self.fields['heading'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['heading'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['heading'].widget.attrs['data-parsley-length'] = "[4, 60]"
-        self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-60 characters.'
+        self.fields['heading'].widget.attrs['data-parsley-length'] = "[4, 100]"
+        self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
 
 
         self.fields['meta_desc'].widget.attrs['class'] = form_class
@@ -268,9 +268,9 @@ class ChangeCategorySEOForm(forms.ModelForm):
     def clean_title(self):
         title = self.cleaned_data.get('title', '')
         if title:
-            if len(title) < 4 or len(title) > 60:
+            if len(title) < 4 or len(title) > 100:
                 raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
+                    "Name should be between 4-100 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -279,9 +279,9 @@ class ChangeCategorySEOForm(forms.ModelForm):
     def clean_heading(self):
         heading = self.cleaned_data.get('heading', '')
         if heading:
-            if len(heading) < 4 or len(heading) > 60:
+            if len(heading) < 4 or len(heading) > 100:
                 raise forms.ValidationError(
-                    "Name should be between 4-60 characters.")
+                    "Name should be between 4-100 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -309,14 +309,14 @@ class ChangeCategorySkillForm(forms.ModelForm):
 
         self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
         self.fields['video_link'].widget.attrs['class'] = form_class
-        self.fields['video_link'].widget.attrs['maxlength'] = 80
+        self.fields['video_link'].widget.attrs['maxlength'] = 128
         self.fields['video_link'].widget.attrs['placeholder'] = 'Add video url'
         self.fields['video_link'].widget.attrs['data-parsley-type'] = 'url'
         self.fields['video_link'].help_text = "Please add Video url without https/http"
         
         # self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 100]"
-        self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-100 characters.'
+        self.fields['video_link'].widget.attrs['data-parsley-length'] = "[4, 128]"
+        self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 4-128 characters.'
         
     class Meta:
         model = Category

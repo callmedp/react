@@ -1,10 +1,12 @@
 {% load static humanize %}
+{% load humanize_tags %}
+
 {% static 'shinelearn/images/mobile/common/default-user.jpg' as default_user_pic %}
 {% for comment in comments %}
     <li>
         <sup><img src="{{ default_user_pic }}"></sup>
         <p class="pb-0">{{comment.message}}</p>
-        <span class="editor fs-12 c9">{{ comment.created_by|title }}, {{ comment.created_on|naturaltime }}</span>
+        <span class="editor fs-12 c9">{{ comment.name|title }}, {% get_humanize_date comment.created_on %}</span>
     </li>
 {% endfor %}
 

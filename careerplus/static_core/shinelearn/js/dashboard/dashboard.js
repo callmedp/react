@@ -152,7 +152,7 @@ $(document).ready(function(){
     // });
 
     $(document).on('click', '#load-more-orderitem', function(event) {
-        $('#load-more-orderitem').prop('disable', true);
+        this.disabled = true;
         var formData = $("#load-orderitem-form").serialize();
         $.ajax({
             url : "/dashboard/loadmore/orderitem/",
