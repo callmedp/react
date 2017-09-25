@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
 from django.conf import settings
+from django_redis import get_redis_connection
 
 from shop.models import Product, ProductClass, FunctionalArea, Skill
 from search.helpers import get_recommendations
@@ -8,6 +9,7 @@ from core.api_mixin import ShineCandidateDetail
 
 from .models import TopTrending, Testimonial
 
+redis_conn = get_redis_connection("search_lookup")
 
 class HomePageView(TemplateView):
     template_name = 'homepage/index.html'
@@ -86,17 +88,20 @@ class HomePageView(TemplateView):
             if candidate_detail:
                 func_area = candidate_detail.get('functional_area')[0] if len(candidate_detail.get('functional_area', [])) else 'Real Estate'
                 skills = [skill['value'] for skill in candidate_detail['skills']]
-                context.update({'recmd_func_area': func_area, 'recmd_skills': skills})
+                context.update({'recmnd_func_area': func_area, 'recmnd_skills': skills})
                 func_area = FunctionalArea.objects.filter(name__iexact=func_area)
                 if func_area:
                     self.request.session.update({
                         'func_area': func_area[0].id
                     })
-                skills = [s.id for s in Skill.objects.filter(name__iregex=r'(' + '|'.join(skills) + ')')]
+                skills = [s.id for s in Skill.objects.filter(name__in=skills)]
                 if skills:
                     self.request.session.update({
                         'skills': skills
                     })
+        func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
+        skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
+        context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         if self.request.session.get('candidate_id'):

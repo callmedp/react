@@ -17,11 +17,12 @@
             <div class="container">
                 <!-- breadcrums -->
                 {% block breadcrumbs %}
-                  {% include "product/partials/breadcrumb.html" %}
+                  {% include "shop/partials/breadcrumb.html" %}
                 {% endblock breadcrumbs %}
 
                 {% block product_header %}
                     <div class="search-caption">
+                        {% if form %}
                         <div class="search-box">
                             <form class="form-inline" id="search_form" data-role="form">
                                 {% for field in form %}
@@ -29,12 +30,12 @@
                                     {{field}}
                                 </div>
                                 {% endfor %}
-{#                                <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">#}
-
-{#                                  </div>#}
                                 <button type="submit"  class="find-jobs-btn btn"></button>
                             </form>
                         </div>
+                        {% else %}
+                        <h1>Search Results Page</h1>
+                        {% endif %}
                     </div>
                 {% endblock product_header %}
             </div>

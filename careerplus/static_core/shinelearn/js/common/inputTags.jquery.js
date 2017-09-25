@@ -121,7 +121,7 @@
                 self.ELEMENT_CLASS = self.DEFAULT_CLASS + '-' + self.UNIQID;
                 self.LIST_CLASS = self.DEFAULT_CLASS + '-list';
                 self.ITEM_CLASS = self.DEFAULT_CLASS + '-item';
-                self.ITEM_CONTENT = '<span class="value" title="Cliquez pour éditer">%s</span><i class="close-item">&times</i>';
+                self.ITEM_CONTENT = '<span class="value" title="Click to delete">%s</span><i class="close-item">&times</i>';
                 self.FIELD_CLASS = self.DEFAULT_CLASS + '-field';
                 self.ERROR_CLASS = self.DEFAULT_CLASS + '-error';
                 self.ERROR_CONTENT = '<p class="' + self.ERROR_CLASS + '">%s</p>';
@@ -160,9 +160,11 @@
                  */
                 self.build = function () {
                     self.$html = $('<div>').addClass(self.LIST_CLASS);
+                    console.log(self.options.placeholder)
                     self.$input = $('<input>').attr({
                         'type': 'text',
-                        'class': self.FIELD_CLASS
+                        'class': self.FIELD_CLASS,
+                        'placeholder': self.options.placeholder
                     });
 
                     self.$html.insertAfter(self.$element).prepend(self.$input);
@@ -613,26 +615,26 @@
                  * Affiche la/les erreur(s) s'il y en a
                  */
                 self._displayErrors = function (error, type) {
-                    var $error = $(self.ERROR_CONTENT.replace('%s', error)).attr('data-error', type);
-                    var timeout = self.options.errors.timeout;
-
-                    if ($('.' + self.ERROR_CLASS + '[data-error="' + type + '"]').length) {
-                        return false;
-                    }
-
-                    $error.hide().insertAfter(self.$list).slideDown();
-
-                    if (!timeout || timeout <= 0) {
-                        return false;
-                    }
-
-                    $('.' + self.ERROR_CLASS).on('click', function () {
-                        self._collapseErrors($(this));
-                    });
-
-                    setTimeout(function () {
-                        self._collapseErrors();
-                    }, timeout);
+                    // var $error = $(self.ERROR_CONTENT.replace('%s', error)).attr('data-error', type);
+                    // var timeout = self.options.errors.timeout;
+                    //
+                    // if ($('.' + self.ERROR_CLASS + '[data-error="' + type + '"]').length) {
+                    //     return false;
+                    // }
+                    //
+                    // $error.hide().insertAfter(self.$list).slideDown();
+                    //
+                    // if (!timeout || timeout <= 0) {
+                    //     return false;
+                    // }
+                    //
+                    // $('.' + self.ERROR_CLASS).on('click', function () {
+                    //     self._collapseErrors($(this));
+                    // });
+                    //
+                    // setTimeout(function () {
+                    //     self._collapseErrors();
+                    // }, timeout);
                 };
 
                 /*
