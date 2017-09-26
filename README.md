@@ -72,3 +72,13 @@ crontab -e
 cd /code/careerplus
 workon careerplus
 celery multi restart w1 -A careerplus -l debug --logfile=/var/log/celery/w1.log --pidfile=/var/log/celery/w1.pid
+#upload skills and FA
+scp '/path-to/Courses-FA.csv' vijay1@172.22.65.33:/tmp/
+scp '/path-to/Courses-Skill.csv' vijay1@172.22.65.33:/tmp/
+
+#in shell
+upload_Skill('/tmp/Courses-Skill.csv')
+upload_FA('/tmp/Courses-FA.csv')
+
+CREATE USER 'root'@'10.24.8.130';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'10.24.8.130' IDENTIFIED BY 'root';

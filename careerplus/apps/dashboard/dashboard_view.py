@@ -27,7 +27,8 @@ from wallet.models import Wallet
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
-
+from search.helpers import get_recommendations
+from core.library.haystack.query import SQS
 from .dashboard_mixin import DashboardInfo
 
 
@@ -67,6 +68,15 @@ class DashboardView(TemplateView):
         context.update({
             "empty_inbox": empty_inbox,
         })
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+
+        if rcourses:
+            rcourses = rcourses[:6]
+            context['recommended_products'] = rcourses
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -157,6 +167,14 @@ class DashboardMyorderView(TemplateView):
         context.update({
             "order_list": order_list,
         })
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+
+        if rcourses:
+            rcourses = rcourses[:6]
+            context['recommended_products'] = rcourses
 
         return context
 
@@ -628,4 +646,12 @@ class DashboardMyWalletView(TemplateView):
             "wal_total": wal_total,
             "wal_txns": wal_txns,
         })
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+
+        if rcourses:
+            rcourses = rcourses[:6]
+            context['recommended_products'] = rcourses
         return context

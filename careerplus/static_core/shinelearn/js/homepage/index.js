@@ -4,7 +4,7 @@ function redirectToSearch(e) {
 
 jQuery(document).ready(function($) {
     $('#tags1').inputTags({
-        placeholder: "Select Functional Area",
+        placeholder: prefetchedFuncArea ? '': "Select Functional Area",
         autocomplete: {
             values: funcAreaSet,
             only: true
@@ -32,7 +32,7 @@ jQuery(document).ready(function($) {
     });
 
     $('#tags2').inputTags({
-        placeholder: "Choose upto 3 Skills",
+        placeholder: prefetchedSkills ? '': "Choose upto 3 Skills",
         autocomplete: {
             values: skillsSet,
             only: true

@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
     <link type="text/css" href="{% static '/shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static '/shinelearn/css/search/listing.css' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endblock css_section %}
 {% block title %}Search Result Page - Shine Learning{% endblock title %}
 
@@ -30,7 +30,7 @@
                                     {{field}}
                                 </div>
                                 {% endfor %}
-                                <button type="submit"  class="find-jobs-btn btn"></button>
+                                <button type="submit" class="find-jobs-btn btn"></button>
                             </form>
                         </div>
                         {% else %}
@@ -112,8 +112,11 @@
                   setHeight:140,
                   theme:"dark-3"
                 });
+
             });
         })(jQuery);
+                        var funcAreaSet = {{ func_area_set|safe }},
+                skillsSet = {{ skills_set|safe }};
     </script>
 
     <script type="text/javascript">
