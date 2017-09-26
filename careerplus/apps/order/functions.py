@@ -2,7 +2,6 @@ import logging
 import json
 import requests
 
-from django.utils import timezone
 from django.conf import settings
 
 from emailers.email import SendMail

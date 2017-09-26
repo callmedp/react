@@ -258,7 +258,7 @@ class ApproveByAdminDraft(View):
                         try:
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(sms_type), str(e)))
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
                     
                     obj.orderitemoperation_set.create(
                         oi_draft=obj.oi_draft,
@@ -473,7 +473,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(sms_oi_status=104)
                             except Exception as e:
                                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-                                 
+
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
                             linkedin=obj.oio_linkedin,

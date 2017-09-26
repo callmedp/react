@@ -5,8 +5,6 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from order.models import OrderItem
-from emailers.email import SendMail
-from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 
 
@@ -33,8 +31,8 @@ def draft_reminder_sms():
             approved_date = oi.approved_on.date()
             today_date = timezone.now().date()
             mail_type = 'REMINDER'
-            data = {}           
-            if today_date >= approved_date + datetime.timedelta(days=2):        
+            data = {}
+            if today_date >= approved_date + datetime.timedelta(days=2):
                 data.update({
                     "first_name": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                 })

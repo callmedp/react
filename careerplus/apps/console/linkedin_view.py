@@ -1,8 +1,6 @@
 import json
 import logging
-import csv
 import datetime
-import logging
 
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -15,11 +13,9 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from .decorators import Decorate, check_permission
 from django.forms.models import inlineformset_factory
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import permission_required, login_required
 from django.utils.decorators import method_decorator
 
 from linkedin.models import Draft, Organization, Education
@@ -42,7 +38,6 @@ from .order_form import MessageForm, OIActionForm
 from blog.mixins import PaginationMixin
 from order.models import OrderItem, Order, InternationalProfileCredential
 
-from emailers.email import SendMail
 from emailers.sms import SendSMS
 from django.conf import settings
 
@@ -123,7 +118,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             })
 
                             if 101 not in email_sets:
-                                send_email_task.delay(to_emails, mail_type, email_dict, status=101, oi=obj.pk)
+                                send_email_task.delay(to_emails, mail_type, data, status=101, oi=obj.pk)
                             if obj.delivery_service.name == 'SuperExpress':
                                 try:
                                     SendSMS().send(sms_type=mail_type, data=data)

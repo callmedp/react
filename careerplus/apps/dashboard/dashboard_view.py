@@ -452,7 +452,7 @@ class DashboardAcceptService(View):
                         })
 
                         if oi.product.type_flow == 1 and (9 not in email_sets and 9 not in sms_sets):
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=obj.pk)
+                            send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=oi.pk)
                             try:
                                 SendSMS().send(sms_type=mail_type, data=data)
                                 oi.smsorderitemoperation_set.create(sms_oi_status=4)
