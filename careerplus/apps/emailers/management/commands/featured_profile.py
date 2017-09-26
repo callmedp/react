@@ -10,6 +10,7 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from users.tasks import user_register
 from core.api_mixin import FeatureProfileUpdate
+from shop.choices import S_ATTR_DICT
 
 
 class Command(BaseCommand):
@@ -76,7 +77,7 @@ def featured_updated():
                         })
 
                         if 72 not in email_sets:
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=72, oi=obj.pk)
+                            send_email_task.delay(to_emails, mail_type, data, status=72, oi=obj.pk)
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
                         print (str(e))
@@ -115,8 +116,8 @@ def unfeature():
             logging.getLogger('cron_log').error("%s" % (str(e)))
             continue
 
-        if getattr(obj.product.attr, 'feature_duration', None):
-            duration_days = getattr(obj.product.attr, 'feature_duration')
+        if getattr(obj.product.attr, S_ATTR_DICT.get('FD'), None):
+            duration_days = getattr(obj.product.attr, S_ATTR_DICT.get('FD'))
         else:
             duration_days = 180  # 6 months
 

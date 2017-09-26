@@ -1,5 +1,5 @@
-from django.utils.translation import ugettext_lazy as _
 from decimal import Decimal
+
 RELATION_CHOICES = (
     (0, 'Default'),
     (1, 'UpSell'),
@@ -69,7 +69,7 @@ MODE_CHOICES = (
     (3, 'Online + Classroom'),)
 
 
-BG_COLOR = { 0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
+BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
     4: "#a69cba", 5: "#8cb3f6", 6: "#9ac7e5", 7: "#ad9c7f",
     8: "#80d7ff", 9: "#a48e96", 10: "#b4e4fc", 11: "#d7ccc8",
     12: "#a3e77d", 13: "#ebdcc9", 14: "#9fdbd6", 15: "#a19f9c",
@@ -90,6 +90,7 @@ DURATION_DICT = {
     'D6': '2 -3 years',
     'D7': '3+ years',
 }
+
 
 def convert_to_month(days=0):
     if days:
@@ -120,7 +121,7 @@ C_ATTR_DICT = {
     'CL': 'course_level',
     'CT': 'course_type',
     'CD': 'course_doc',
-    'CI': 'course_im'
+    'CI': 'course_im',
 }
 
 R_ATTR_DICT = {
@@ -144,6 +145,17 @@ STUDY_MODE = dict((
     ('DL', 'Distance Learning'),
     ))
 
+EXP_DICT = dict((
+    ('FR', '0-1 years'),
+    ('ME', '1-4 years'),
+    ('EX', '4-8 years'),
+    ('SU', '8-15 years'),))
+
+
+COURSE_TYPE_DICT = dict((
+    ('BS', 'Basic'),
+    ('BD', 'Basic + More Deliverable'),))
+
 
 def convert_inr(price=Decimal(0)):
     if price:
@@ -159,6 +171,7 @@ def convert_inr(price=Decimal(0)):
             return '5'
     return '0'
 
+
 def convert_usd(price=Decimal(0)):
     if price:
         if Decimal(0) <= price <= Decimal(20):
@@ -173,6 +186,7 @@ def convert_usd(price=Decimal(0)):
             return '5'
     return '0'
 
+
 def convert_aed(price=Decimal(0)):
     if price:
         if Decimal(0) <= price <= Decimal(50):
@@ -186,6 +200,7 @@ def convert_aed(price=Decimal(0)):
         elif Decimal(500) < price:
             return '5'
     return '0'
+
 
 def convert_gbp(price=Decimal(0)):
     if price:
