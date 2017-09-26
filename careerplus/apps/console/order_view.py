@@ -16,10 +16,11 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
+from geolocation.models import Country
 
 from io import StringIO
 
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem, InternationalProfileCredential
 from shop.models import DeliveryService
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
@@ -1724,6 +1725,7 @@ class ActionOrderItemView(View):
 
                 for oi in booster_ois:
                     token = TokenExpiry().encode(oi.order.email, oi.pk, days)
+                    to_emails = [oi.order.email]
                     email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     candidate_data.update({
                         "email": oi.order.email,
@@ -1746,14 +1748,13 @@ class ActionOrderItemView(View):
 
                         try:
                             # send mail to rectuter
-                            recruiters = settings.BOOSTER_RECRUITERS
                             if 92 not in email_sets:
                                 mail_type = 'BOOSTER_RECRUITER'
                                 send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
                             # send mail to candidate
                             if 93 not in email_sets:
                                 mail_type = 'BOOSTER_CANDIDATE'
-                                send_email_task.delay(to_emails, mail_type, recruiter_data, status=93, oi=oi.pk)
+                                send_email_task.delay(to_emails, mail_type, candidate_data, status=93, oi=oi.pk)
                             
                             # send sms to candidate
                             SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)

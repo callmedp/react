@@ -98,7 +98,7 @@ class SendMail():
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('day', ''))
-            data['autologin'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+            data['upload_url'] = "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
