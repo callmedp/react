@@ -1179,8 +1179,7 @@ class ActionScreenProductView(View, ProductModeration):
                     if not product:
                         product = productscreen.create_product()
                     if action == "approval":
-                        if self.validate_screenproduct(
-                            request=self.request,productscreen=productscreen): 
+                        if True: #self.validate_screenproduct(request=self.request,productscreen=productscreen): 
                             productscreen.status = 2
                             productscreen.save()
                             messages.success(
@@ -1199,8 +1198,7 @@ class ActionScreenProductView(View, ProductModeration):
                         data = {'success': 'True',
                             'next_url': reverse('console:screenproduct-moderationlist') }
                     elif action == "live":
-                        if self.validate_screenproduct(
-                            request=self.request,productscreen=productscreen): 
+                        if True: #self.validate_screenproduct(request=self.request,productscreen=productscreen): 
                             product, productscreen, copied = self.copy_to_product(
                                 request=self.request,
                                 product=product,

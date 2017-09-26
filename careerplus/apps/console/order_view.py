@@ -189,7 +189,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(WelcomeCallVeiw, self).get_queryset()
-        queryset = queryset.filter(status=1, welcome_call_done=False).order_by('payment_date')
+        queryset = queryset.filter(status=1, welcome_call_done=False)
 
         try:
             if self.query:
@@ -228,7 +228,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.order_by('modified')
+        return queryset.order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_midout_queue', login_url='/console/login/', raise_exception=True), name='dispatch')

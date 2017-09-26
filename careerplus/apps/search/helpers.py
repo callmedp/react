@@ -5,9 +5,9 @@ import time
 import logging
 import ast
 
-
 # django imports
 from django.utils.text import slugify
+from core.library.haystack.query import SQS
 
 # third party imports
 from django_redis import get_redis_connection
@@ -17,7 +17,7 @@ from .lookups import SEARCH_STOPWORDS_LOOKUP #SEARCH_LOCATION_LOOKUP, ,\
 # SKILL_SLUG, CITY_SLUG, EXPERIENCE_SLUG, FA_SLUG, INDUSTRY_SLUG, \
 # JOBTITLE_SLUG, COMPANY_SLUG, SPECIAL_CHARACTERS_LOOKUP
 from search import inputs
-
+from shop.models import ProductFA, ProductSkill
 redis_server = get_redis_connection("search_lookup")
 logger = logging.getLogger('info_log')
 
@@ -348,3 +348,20 @@ def remove_quote_in_q(q):
     if 0 != q.count('"') % 2:
         q = q.replace('"',"")
     return q
+
+
+def get_recommendations(func_area, skills, results=None):
+    if not func_area:
+        func_area = 23
+    if not skills:
+        skills = [777, 795, 2064]
+    func_area_prods = set(ProductFA.objects.filter(fa=func_area).values_list('product', flat=True))
+    skill_prods = set(ProductSkill.objects.filter(skill__in=skills).values_list('product', flat=True))
+    products_fa_and_skill = func_area_prods.intersection(skill_prods)
+    ids = list(products_fa_and_skill)
+    ids += list(skill_prods.difference(products_fa_and_skill))
+    ids += list(func_area_prods.difference(products_fa_and_skill))
+    if not results:
+        results = SQS()
+    results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
+    return results

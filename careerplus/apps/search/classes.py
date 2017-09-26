@@ -14,12 +14,12 @@ from haystack.query import EmptySearchQuerySet
 #local imports
 from search import inputs
 from .helpers import clean_all_fields, clean_id_fields, clean_list_fields, \
-    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys, search_clean_fields
+    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys, search_clean_fields, get_recommendations
 from .lookups import FILLERS
 
 #inter app imports
 from core.library.haystack.query import SQS
-
+from shop.models import ProductFA, ProductSkill
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
@@ -28,7 +28,6 @@ class BaseSearch(object):
 
     results = SQS()
     results_per_page = RESULTS_PER_PAGE
-    clean_query = True
     search_params = {}
     allow_empty_query = True
 
@@ -36,7 +35,7 @@ class BaseSearch(object):
               "pPvn", "pCmbs", "pVrs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
               "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb",
               "pPinb", "pPfinb", "pPusb", "pPfusb", "pPaeb", "pPfaeb", "pPgbb", "pPfgbb",
-              "pPc"]
+              "pPc", "pFA"]
 
     similar_fields = []
 
@@ -359,6 +358,7 @@ class BaseSearch(object):
                 else:
                     if self.params.get(param[0]):
                         results = results.boost('%s:(%s)' % (field, ' '.join(self.params.getlist(param[0]))), param[1])
+        results = self.add_custom_boost()
         return results
 
     def get_load_range(self):
@@ -369,7 +369,7 @@ class BaseSearch(object):
         """
 
         page_no = str(self.params.get('page','1'))
-        if not page_no.isdigit() or not int(page_no)>0:
+        if not page_no.isdigit() or not int(page_no) > 0:
             page_no = 1
         page_no = int(page_no)
         start_offset = (page_no-1)*self.results_per_page
@@ -392,7 +392,6 @@ class BaseSearch(object):
         self.results = self.results.extra(self.get_extra_params())
         self.results = self.results.filter(content=Raw(self.get_query()))
         self.results  = self.add_facets()
-        self.results = self.results.highlight()
         if self.fields and not self.params.getlist('fl'):
             self.results = self.results.only(*self.fields)
         else:
@@ -424,6 +423,7 @@ class BaseParams(object):
     args = ''
     keywords = ''
     clean_query = True
+    query_param_name = 'q'
 
     def query_builder(self):
         return self.search_params.get(self.query_param_name, "")
@@ -479,9 +479,7 @@ class BaseParams(object):
 
 class SimpleSearch(BaseSearch):
 
-    needed_params_options = {'q', 'fclevel', 'fcert', 'area', 'farea', 'frating', 'fduration', 'fmode' 'skills'}
-
-
+    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
 
     def get_extra_params(self):
         """
@@ -492,17 +490,6 @@ class SimpleSearch(BaseSearch):
         extra_params.update({'search_type': 'simple'})
 
         return extra_params
-
-
-    def add_boost(self):
-        """
-        Perform basic boosts by calling the Parent class.
-        Also, perform custom_boost defined for Simple/Similar search.
-        """
-        self.results = super(SimpleSearch,self).add_boost()
-        results = self.add_custom_boost()
-
-        return results
 
 
 class SimpleParams(BaseParams):
@@ -523,7 +510,7 @@ class SimpleParams(BaseParams):
         """
 
         params_filtered = False
-        params = super(SimpleParams,self).get_request_params()
+        params = super(SimpleParams, self).get_request_params()
 
         # resolve single quote and double quote issue
         if params.get("q"):
@@ -573,18 +560,18 @@ class SimpleParams(BaseParams):
 
         quoted_string = quoted_string.strip()
         unquoted_string = (" ".join(q.split("\"")[0::2])).lower()
-        classifiers_to_process = ["area", "skills"]
-        words_to_and = []
-        for classifier in classifiers_to_process:
-            words_to_and = words_to_and + self.search_params.get(classifier, [])
+        # classifiers_to_process = ["area", "skills"]
+        # words_to_and = []
+        # for classifier in classifiers_to_process:
+        #     words_to_and = words_to_and + self.search_params.get(classifier, [])
 
-        for word in words_to_and:
-            unquoted_string = re.sub('(^{0}(?=\s))|((?<=\s){0}(?=\s))|((?<=\s){0}$)|(^{0}$)'.format(
-                re.escape(word.lower())),"", unquoted_string)
+        # for word in words_to_and:
+        #     unquoted_string = re.sub('(^{0}(?=\s))|((?<=\s){0}(?=\s))|((?<=\s){0}$)|(^{0}$)'.format(
+        #         re.escape(word.lower())),"", unquoted_string)
 
         classified_words = quoted_string
-        for word in words_to_and:
-            classified_words = classified_words+" ("+" AND ".join(word.split(" "))+")"
+        # for word in words_to_and:
+        #     classified_words = classified_words+" ("+" AND ".join(word.split(" "))+")"
 
         split_query = unquoted_string.split(" ")
         filler_words = ""
@@ -618,7 +605,6 @@ class FuncAreaSearch(BaseSearch):
 
     def add_filters(self):
         results = super(FuncAreaSearch, self).add_filters()
-        loc = ''
 
         # Functional Area Filter
         if self.params.get('pk') and search_clean_fields(self.params.get('pk')):
@@ -629,6 +615,7 @@ class FuncAreaSearch(BaseSearch):
 
 class FuncAreaParams(BaseParams):
     query_param_name = None
+    clean_query = False
 
     def get_search_params(self):
         self.search_params = self.get_request_params()
@@ -636,3 +623,24 @@ class FuncAreaParams(BaseParams):
         self.search_params['pk'] = self.kwargs.get('pk')
         return self.search_params
 
+
+class RecommendedSearch(BaseSearch):
+
+    needed_params_options = {'area', 'skills'}  # , 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
+
+    def add_filters(self):
+        results = super(RecommendedSearch, self).add_filters()
+        results = get_recommendations(self.params['area'], self.params['skills'], results)
+        return results
+
+
+class RecommendedParams(BaseParams):
+    query_param_name = None
+    clean_query = False
+
+    def get_search_params(self):
+        self.search_params = super(RecommendedParams, self).get_search_params()
+        if self.request.method == 'GET':
+            self.search_params['area'] = self.kwargs.get('area')
+            self.search_params['skills'] = self.kwargs.get('skills').split('-')
+        return self.search_params

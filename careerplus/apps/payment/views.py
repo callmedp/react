@@ -39,6 +39,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
                 if not cart_dict.get('total_amount'):
                     return HttpResponsePermanentRedirect(reverse('homepage'))
+                elif not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
+                    return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
             except:
                 return HttpResponsePermanentRedirect(reverse('homepage'))
         if self.cart_obj and not (self.cart_obj.shipping_done):

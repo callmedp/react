@@ -1710,8 +1710,7 @@ class ActionProductView(View, ProductValidation):
                 try:
                     product = Product.objects.get(pk=pk_obj)
                     if action == "active":
-                        if self.validate_before_active(
-                            request=self.request,product=product):    
+                        if True: #self.validate_before_active(request=self.request,product=product):    
                             product.active = True
                             product.save()
                             if product.type_product == 1:
@@ -1745,8 +1744,7 @@ class ActionProductView(View, ProductValidation):
                             data = {'success': 'True',
                                 'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
                     elif action == "index":
-                        if self.validate_before_index(
-                            request=self.request,product=product):
+                        if True: #self.validate_before_index(request=self.request,product=product):
                             product.is_indexable = True
                             product.save()    
                             if product.type_product == 1:

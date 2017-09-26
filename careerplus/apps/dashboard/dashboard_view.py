@@ -588,7 +588,7 @@ class DashboardInvoiceDownload(View):
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
                 return response
         except:
-            pass
+            raise Exception("Invoice not found.")
         return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
@@ -621,7 +621,7 @@ class DashboardMyWalletView(TemplateView):
         candidate_id = self.request.session.get('candidate_id', None)
         wal_obj, created = Wallet.objects.get_or_create(owner=candidate_id)
         wal_total = wal_obj.get_current_amount()
-        wal_txns = wal_obj.wallettxn.filter(txn_type__in=[1, 2, 3, 4, 5]).order_by('-created')
+        wal_txns = wal_obj.wallettxn.filter(txn_type__in=[1, 2, 3, 4, 5], point_value__gt=0).order_by('-created')
         wal_txns = wal_txns.order_by('-created').select_related('order', 'cart')[:10]
         context.update({
             "wal_obj": wal_obj,

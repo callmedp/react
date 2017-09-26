@@ -51,7 +51,7 @@
                             <tr>
                                 <td width="23%" style=" color: #000000; font: 14px Arial; text-align: left; line-height: 18px; padding: 6px 0 0 10px; margin: 0px;">Email</td>
                                 <td width="4%"></td>
-                                <td width="73%" style=" color: #000000; font: 13px Arial; text-align: left; line-height: 18px; padding: 6px 0 0 0px; margin: 0px;">tarun.razdan@hindustantimes.com</td>
+                                <td width="73%" style=" color: #000000; font: 13px Arial; text-align: left; line-height: 18px; padding: 6px 0 0 0px; margin: 0px;">{{email}}</td>
                             </tr>
                             <tr>
                                 <td style=" color: #000000; font: 13px Arial; text-align: left;line-height: 18px; padding: 6px 0 0 10px; margin: 0px;">Mobile Number</td>
@@ -78,7 +78,7 @@
                             <tr>
                                 <td width="80%" style="background:#383838; border: 1px solid #383838; padding: 0 0 0 6px; color: #FFFFFF; font: bold 14px Arial; height: 22px; padding: 6px 15px 0 15px; text-align: left; width:80%" valign="top">Subscription</td>
                                 
-                                <td width="20%" style="background:#383838; border: 1px solid #383838; padding: 0 0 0 6px; color: #FFFFFF; font: bold 14px Arial; height: 22px; padding: 6px 15px 0 15px; text-align:center; width:20%" valign="top">Amount (in {{order.currency}})</td>
+                                <td width="20%" style="background:#383838; border: 1px solid #383838; padding: 0 0 0 6px; color: #FFFFFF; font: bold 14px Arial; height: 22px; padding: 6px 15px 0 15px; text-align:center; width:20%" valign="top">Amount (in {{order.get_currency}})</td>
                             </tr>
                             
                             {% for data in order_items %}
@@ -99,16 +99,16 @@
                                                 {% endif %}
                                             </table>
                                             </td>
-                                            <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 10px 0 13px; text-align:center;" valign="top">{{variations.first.oi_price_before_discounts_excl_tax|floatformat:2}}
+                                            <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 10px 0 13px; text-align:center;" valign="top">{{variations.first.cost_price|floatformat:2}}
                                                 <table width="100%" cellpadding="0" cellspacing="0" style="padding:10px 10px 0 28px;">
                                                     {% for addon in addons %}
                                                         <tr>
-                                                            <td>{{addon.oi_price_before_discounts_excl_tax}}</td>
+                                                            <td>{{addon.cost_price|floatformat:2}}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     {% if oi.delivery_service %}
                                                         <tr>
-                                                            <td>{{oi.delivery_price_excl_tax}}</td>
+                                                            <td>{{oi.delivery_price_excl_tax|floatformat:2}}</td>
                                                         </tr>
                                                     {% endif %}
                                                 </table>
@@ -140,7 +140,7 @@
                                                 {% endif %}
                                             </table>
                                             </td>
-                                            <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 10px 0 13px; text-align:center;" valign="top">{{oi.oi_price_before_discounts_excl_tax|floatformat:2}}
+                                            <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 10px 0 13px; text-align:center;" valign="top">{{oi.cost_price|floatformat:2}}
                                                 <table width="100%" cellpadding="0" cellspacing="0" style="padding:10px 10px 0 28px;">
                                                     {% for combo in combos %}
                                                         <tr>
@@ -149,17 +149,17 @@
                                                     {% endfor %}
                                                     {% for var in variations %}
                                                         <tr>
-                                                            <td>{{var.oi_price_before_discounts_excl_tax}}</td>
+                                                            <td>{{var.cost_price|floatformat:2}}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     {% for addon in addons %}
                                                         <tr>
-                                                            <td>{{addon.oi_price_before_discounts_excl_tax}}</td>
+                                                            <td>{{addon.cost_price|floatformat:2}}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     {% if oi.delivery_service %}
                                                         <tr>
-                                                            <td>{{oi.delivery_price_excl_tax}}</td>
+                                                            <td>{{oi.delivery_price_excl_tax|floatformat:2}}</td>
                                                         </tr>
                                                     {% endif %}
                                                 </table>

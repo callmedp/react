@@ -4,14 +4,17 @@ import re
 import logging
 import hmac
 import hashlib
+import urllib
 import requests
 from datetime import datetime, timedelta
 from collections import OrderedDict
 from itertools import islice
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
-from cart.models import Subscription
 
+from cart.models import Subscription
+from .tasks import post_roundone_order
 
 class RoundOneAPI(object):
 

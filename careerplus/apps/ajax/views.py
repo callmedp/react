@@ -138,7 +138,8 @@ class AjaxProductLoadMoreView(TemplateView):
                 products = 0
             context.update({
                 'products': products, 'page': page,
-                'slug': slug, 'site': settings.SITE_DOMAIN,
+                'slug': slug,
+                'site': settings.SITE_PROTOCOL + "://" + settings.SITE_DOMAIN,
             })
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -299,7 +300,7 @@ class ApproveByAdminDraft(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
 
                     draft_upload_mail(oi=obj, to_emails=to_emails, mail_type=mail_type, email_dict=data)

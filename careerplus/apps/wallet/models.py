@@ -47,7 +47,7 @@ class Wallet(AbstractAutoDate):
     class Meta:
         verbose_name = _('Wallet')
         verbose_name_plural = _('Wallets')
-        ordering = ("-modified", "-created")
+        ordering = ["-created"]
 
     def __str__(self):
         return self.owner
@@ -85,42 +85,16 @@ class RewardPoint(AbstractAutoDate):
         null=True,
         blank=True,
         verbose_name=_("Transaction"))
+    cw_id = models.IntegerField(
+        _('CP Credits'),
+        blank=True,
+        null=True,
+        editable=False)
+    
 
     class Meta:
         verbose_name = _('Reward Point')
         verbose_name_plural = _('Reward Points')
-        ordering = ("-modified", "-created")
-
-    def __str__(self):
-        return self.wallet.owner + ' - ' + str(self.pk)
-
-
-class ECash(AbstractAutoDate):
-    wallet = models.ForeignKey(
-        Wallet,
-        verbose_name=_('wallet'),
-        related_name='ecash',
-        on_delete=models.CASCADE)
-    original = models.DecimalField(
-        _('Original'), decimal_places=2, max_digits=12,
-        null=True)
-    current = models.DecimalField(
-        _('Current'), decimal_places=2, max_digits=12,
-        null=True)
-    last_used = models.DateTimeField(
-        _("Last Used"), null=True, blank=True)
-    status = models.PositiveSmallIntegerField(
-        _("Status"),
-        default=0, choices=STATUS_CASH)
-    txn = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        verbose_name=_("Transaction"))
-
-    class Meta:
-        verbose_name = _('E-Cash')
-        verbose_name_plural = _('E-Cashs')
         ordering = ("-modified", "-created")
 
     def __str__(self):
@@ -168,7 +142,7 @@ class WalletTransaction(AbstractAutoDate):
         through_fields=('transaction', 'point'),
         blank=True)
     ecash_txn = models.ManyToManyField(
-        ECash,
+        'wallet.ECash',
         verbose_name=_('ECash'),
         through='ECashTransaction',
         through_fields=('transaction', 'ecash'),
@@ -187,7 +161,7 @@ class WalletTransaction(AbstractAutoDate):
     class Meta:
         verbose_name = _('Wallet Transaction')
         verbose_name_plural = _('Wallet Transactions')
-        ordering = ("-modified", "-created")
+        ordering = ("-created",)
 
     def __str__(self):
         return self.wallet.owner + ' - ' + str(self.pk)
@@ -228,6 +202,39 @@ class PointTransaction(AbstractAutoDate):
         unique_together = ('point', 'transaction')
         verbose_name = _('Point Transaction')
         verbose_name_plural = _('Point Transactions')
+
+
+
+class ECash(AbstractAutoDate):
+    wallet = models.ForeignKey(
+        Wallet,
+        verbose_name=_('wallet'),
+        related_name='ecash',
+        on_delete=models.CASCADE)
+    original = models.DecimalField(
+        _('Original'), decimal_places=2, max_digits=12,
+        null=True)
+    current = models.DecimalField(
+        _('Current'), decimal_places=2, max_digits=12,
+        null=True)
+    last_used = models.DateTimeField(
+        _("Last Used"), null=True, blank=True)
+    status = models.PositiveSmallIntegerField(
+        _("Status"),
+        default=0, choices=STATUS_CASH)
+    txn = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_("Transaction"))
+
+    class Meta:
+        verbose_name = _('E-Cash')
+        verbose_name_plural = _('E-Cashs')
+        ordering = ("-modified", "-created")
+
+    def __str__(self):
+        return self.wallet.owner + ' - ' + str(self.pk)
 
 
 class ECashTransaction(AbstractAutoDate):
