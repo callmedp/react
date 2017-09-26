@@ -274,6 +274,7 @@ class ApproveByAdminDraft(View):
                         added_by=request.user)
 
                 elif product_flow in [1, 12, 13]:
+
                     last_oi_status = obj.last_oi_status
                     if (obj.draft_counter + 1) == settings.DRAFT_MAX_LIMIT:
                         obj.oi_status = 4
@@ -300,6 +301,7 @@ class ApproveByAdminDraft(View):
                         "order_id": obj.order.id,
                         'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
                     })
+
                     draft_upload_mail(oi=obj, to_emails=to_emails, mail_type=mail_type, email_dict=data)
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
