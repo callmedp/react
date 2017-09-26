@@ -108,13 +108,20 @@ body {
 }
 
 .search-carousel-box {
-  margin-top: -17%;
+  margin-top: 0;
 }
 
 .home-search-box {
   display: block;
   margin: 0 auto;
   text-align: center;
+  background: #dae0e3;
+  padding: 20px 20px 40px 20px;
+}
+@media (max-width: 991px) {
+  .home-search-box {
+    margin-top: -20px;
+  }
 }
 .home-search-box .search-tabs {
   display: table;
@@ -139,7 +146,7 @@ body {
 }
 .home-search-box .search-tabs li a, .home-search-box .search-tabs li a:hover, .home-search-box .search-tabs li a:focus {
   border-radius: 0;
-  color: #fff;
+  color: #333;
   padding: 5px 10px;
   cursor: pointer;
   background: transparent;
@@ -219,7 +226,7 @@ body {
 }
 
 .search-mg {
-  margin-bottom: 8.5%;
+  margin-bottom: 0;
 }
 
 .search-bg {
@@ -589,19 +596,14 @@ body {
 .product-carousel-box h2 {
   display: block;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 400;
   margin: 0 0 15px 0;
+  color: #fff;
 }
 .product-carousel-box .product-carousel {
-  background: #f3f8fa;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-  margin-top: -70px;
+  background: transparent;
+  margin-top: -22%;
   padding: 25px;
-}
-@media (max-width: 991px) {
-  .product-carousel-box .product-carousel {
-    margin-top: -45px;
-  }
 }
 .product-carousel-box .product-carousel .listing {
   clear: none;
@@ -612,30 +614,57 @@ body {
 .product-carousel-box .product-carousel .listing li a:hover {
   box-shadow: none;
 }
+.product-carousel-box .product-carousel .listing .media .media-body .listing-heading {
+  height: auto;
+}
 @media (max-width: 991px) {
+  .product-carousel-box .product-carousel .listing .media .media-body .listing-heading {
+    height: 32px;
+    overflow: hidden;
+  }
+}
+@media (max-width: 1190px) {
   .product-carousel-box .product-carousel .listing .media .media-left figure {
     width: 90px;
     height: 90px;
   }
 }
+@media (max-width: 991px) {
+  .product-carousel-box .product-carousel .listing .media .media-left figure {
+    width: 70px;
+    height: 70px;
+  }
+}
 .product-carousel-box .carousel-control {
   width: 6%;
+  margin-top: -12%;
+  opacity: 1;
+}
+@media (max-width: 1190px) {
+  .product-carousel-box .carousel-control {
+    margin-top: -9.5%;
+  }
+}
+@media (max-width: 991px) {
+  .product-carousel-box .carousel-control {
+    margin-top: -8.5%;
+  }
 }
 .product-carousel-box .left-arrow {
-  width: 35px;
-  height: 35px;
-  background: url(../../images/sprite.png) no-repeat -548px -247px;
+  width: 10px;
+  height: 18px;
+  background: url(../../images/sprite.png) no-repeat -271px -248px;
   position: absolute;
   left: 5px;
-  top: 15%;
+  top: 0;
 }
 .product-carousel-box .right-arrow {
-  width: 35px;
-  height: 35px;
-  background: url(../../images/sprite.png) no-repeat -585px -247px;
+  width: 10px;
+  height: 18px;
+  background: url(../../images/sprite.png) no-repeat -286px -248px;
   position: absolute;
   right: 5px;
-  top: 15%;
+  top: 0%;
 }
 
 .carousel-inner .active.left {
@@ -668,4 +697,4 @@ body {
 
 /*product carousel css end*/
 
-/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home1.css.map */

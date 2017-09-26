@@ -1441,23 +1441,23 @@ footer .footer-links span {
 }
 
 .discover-home-icon {
-  width: 59px;
-  height: 65px;
-  background: url(../../images/sprite.png) no-repeat -545px -177px;
+  width: 58px;
+  height: 59px;
+  background: url(../../images/sprite.png) no-repeat -624px -242px;
   display: block;
 }
 
 .evaluate-home-icon {
   width: 58px;
-  height: 65px;
-  background: url(../../images/sprite.png) no-repeat -606px -177px;
+  height: 59px;
+  background: url(../../images/sprite.png) no-repeat -683px -242px;
   display: block;
 }
 
 .buy-home-icon {
-  width: 64px;
-  height: 65px;
-  background: url(../../images/sprite.png) no-repeat -667px -177px;
+  width: 58px;
+  height: 59px;
+  background: url(../../images/sprite.png) no-repeat -742px -242px;
   display: block;
 }
 
