@@ -445,4 +445,5 @@ COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service', ]
 DELIVERY_SLUG = ['normal', 'express', 'super-express']
+CHARS_TO_REMOVE = ['/', "'"]
 ############################################
