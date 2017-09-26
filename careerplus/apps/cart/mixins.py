@@ -187,6 +187,10 @@ class CartMixin(object):
                 cart_obj = cart_session
             elif cart_session:
                 cart_obj = cart_session
+            elif candidate_id:
+                cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2)
+            elif sessionid:
+                    cart_obj = Cart.objects.create(session_id=sessionid, status=0)
 
             # update cart_obj in session
             if cart_obj:

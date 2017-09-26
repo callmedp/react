@@ -19,6 +19,7 @@ from users.mixins import RegistrationLoginApi, UserMixin
 from console.decorators import Decorate, stop_browser_cache
 from wallet.models import Wallet
 from geolocation.models import Country
+from users.tasks import user_register
 
 from .models import Cart
 from .mixins import CartMixin
@@ -297,6 +298,26 @@ class PaymentShippingView(UpdateView, CartMixin):
                 # form.data['email]' = form.initial.get('email')  # readonly
                 obj = form.save(commit=False)
                 obj.shipping_done = True
+                if not request.session.get('candidate_id'):
+                    obj.owner_id = ''
+                    data = {}
+                    data.update({
+                        "email": obj.email,
+                        "country_code": obj.country_code,
+                        "cell_phone": obj.mobile,
+                        "name": obj.first_name + ' ' + obj.last_name,
+                    })
+                    candidate_id = user_register(data=data)
+                    obj.owner_id = candidate_id
+
+                elif request.session.get('candidate_id'):
+                    obj.owner_id = request.session.get('candidate_id')
+
+                if not obj.owner_id:
+                    non_field_error = 'Internal error on shinelearning, please try again after sometimes.'
+                    form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
+                    return self.form_invalid(form)
+
                 valid_form = self.form_valid(form)
                 return valid_form
             except Exception as e:
@@ -321,7 +342,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
                 cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
-                if not self.cart_obj.shipping_done:
+                if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
                     return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
 
                 elif not self.cart_obj.lineitems.all().exists() or not cart_dict.get('total_amount'):
@@ -358,7 +379,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 points = wal_txn.point_txn.all()
                 points_active = points.filter(expiry__gte=timezone.now())
                 points_used = wal_txn.usedpoint.all()
-                
+
                 if len(points_active) == len(points):
                     cart_wallet = wal_txn
                     wal_point = wal_txn.point_value

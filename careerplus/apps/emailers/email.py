@@ -191,12 +191,14 @@ class SendMail():
 
         elif mail_type == "AUTO_REGISTER":
             send_dict['subject'] = data.get('subject', "Your login credential on shine.com")
-            template_name = data.get('template_name', 'auto-register.html')
-            send_dict['template'] = 'emailers/' + template_name
+            template_name = data.get('template_name', 'register.html')
+            send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+
+            self.process(to, send_dict, data)
 
         elif mail_type == "FORGOT_PASSWORD":
             send_dict['subject'] = "Your Shine.com password"

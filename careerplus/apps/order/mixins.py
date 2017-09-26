@@ -61,6 +61,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             order.number = 'CP' + str(order.pk)
             if candidate_id:
                 order.candidate_id = candidate_id
+            else:
+                order.candidate_id = cart_obj.owner_id
 
             order.email = cart_obj.email
             order.first_name = cart_obj.first_name
