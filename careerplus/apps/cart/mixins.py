@@ -98,9 +98,8 @@ class CartMixin(object):
 
                         # for addons
                         child_products = product.related.filter(
-                            secondaryproduct__active=True,
-                            secondaryproduct__type_relation=1)
-                        addons = Product.objects.filter(id__in=addons, active=True)
+                            secondaryproduct__active=True)
+                        addons = Product.objects.filter(id__in=addons)
                         for child in addons:
                             if child in child_products:
                                 li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
@@ -116,9 +115,8 @@ class CartMixin(object):
                     parent.price_excl_tax = product.get_price()
                     parent.save()
                     child_products = product.related.filter(
-                        secondaryproduct__active=True,
-                        secondaryproduct__type_relation=1)
-                    addons = Product.objects.filter(id__in=addons, active=True)
+                        secondaryproduct__active=True)
+                    addons = Product.objects.filter(id__in=addons)
                     for child in addons:
                         if child in child_products:
                             li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
@@ -126,7 +124,7 @@ class CartMixin(object):
                             li.price_excl_tax = child.get_price()
                             li.save()
 
-                    req_products = Product.objects.filter(id__in=req_options, active=True)
+                    req_products = Product.objects.filter(id__in=req_options)
                     if req_products.exists():
                         parent.no_process = True
                         parent.save()

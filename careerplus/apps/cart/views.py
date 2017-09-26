@@ -68,7 +68,7 @@ class AddToCartView(View, CartMixin):
             prod_id = request.POST.get('prod_id')
 
             try:
-                product = Product.objects.get(id=prod_id, active=True)
+                product = Product.objects.get(id=prod_id)  # not filter on active because product is coming from solr 
                 addons = request.POST.getlist('addons[]')
                 req_options = request.POST.getlist('req_options[]')
                 cv_id = request.POST.get('cv_id')
