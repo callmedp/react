@@ -157,7 +157,7 @@ class CounsellingForm(TemplateView):
                 quiz_obj.anser4 = request.POST.get('q4', '')
                 quiz_obj.anser5 = request.POST.get('q5', '')
                 quiz_obj.save()
-                return HttpResponseRedirect(reverse('console:linkedin-inbox'))
+                return HttpResponseRedirect(reverse('dashboard:dashboard'))
         elif request.POST.get('submit') == 'submit':
             if orderitem:
                 quiz_obj = orderitem.quizresponse
@@ -182,7 +182,7 @@ class CounsellingForm(TemplateView):
                         oi_status=orderitem.oi_status,
                         last_oi_status=last_oi_status,
                         assigned_to=orderitem.assigned_to)
-                return HttpResponseRedirect(reverse('console:linkedin-inbox'))
+                return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
 class LinkedinDraftView(TemplateView):

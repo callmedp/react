@@ -135,12 +135,21 @@ ROUNDONE_API_DICT = {
 
 
 # Shine settings
-SHINE_SITE = 'https://sumosc.shine.com'
-SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
-CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
-CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
+
+# SHINE_SITE = 'https://sumosc.shine.com'
+# SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
+# CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
+# CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
+# SHINE_API_USER = 'scpapiuser@gmail.com'
+# SHINE_API_USER_PWD = 'tarun@123'
+
+SHINE_SITE = 'https://mapi.shine.com'
+SHINE_API_URL = 'https://mapi.shine.com/api/v2'
+CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
+CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
+SHINE_API_TIMEOUT = 60
 
 
 # Email settings
