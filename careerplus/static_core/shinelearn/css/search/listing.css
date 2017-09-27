@@ -214,75 +214,75 @@
   font-weight: 600;
 }
 
-.listing {
+.listing1 {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
-.listing li {
+.listing1 li {
   display: block;
   padding: 10px 0 10px 10px;
   margin: 0 0 25px 0;
 }
-.listing li:hover {
+.listing1 li:hover {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
-.listing .media {
+.listing1 .media {
   margin-top: 0;
 }
-.listing .media figure .media-object {
+.listing1 .media figure .media-object {
   width: 130px;
   height: 130px;
 }
-.listing .listing-heading {
+.listing1 .listing-heading {
   margin: 0 0 5px 0;
   display: block;
   color: #3f5f94;
   font-size: 20px;
   font-weight: 600;
 }
-.listing .certification-jobs-box {
+.listing1 .certification-jobs-box {
   float: right;
   font-size: 14px;
   color: #666;
   margin: 0 0 10px 20px;
   min-width: 180px;
 }
-.listing .certification-jobs-box .certification-jobs {
+.listing1 .certification-jobs-box .certification-jobs {
   border-top: 1px solid #f6f6f6;
   padding: 10px;
   display: block;
 }
-.listing .certification-jobs-box .certification-jobs:first-child {
+.listing1 .certification-jobs-box .certification-jobs:first-child {
   border-top: none;
 }
-.listing .certification-jobs-box .certification-jobs .jobs-number {
+.listing1 .certification-jobs-box .certification-jobs .jobs-number {
   color: #3f5f94;
   font-weight: 600;
 }
-.listing .certification-jobs-box .certification-jobs figure {
+.listing1 .certification-jobs-box .certification-jobs figure {
   margin-right: 5px;
 }
-.listing .rating-review-box {
+.listing1 .rating-review-box {
   display: block;
   color: #999;
 }
-.listing .rating-review-box strong {
+.listing1 .rating-review-box strong {
   font-weight: 600;
   margin-left: 5px;
 }
-.listing .rating-review-box b {
+.listing1 .rating-review-box b {
   font-weight: 600;
   margin-left: 10px;
   font-size: 14px;
   color: #3f5f94;
 }
-.listing .providers {
+.listing1 .providers {
   color: #666;
   display: block;
   margin: 10px 0 0 0;
 }
-.listing .providers span {
+.listing1 .providers span {
   display: inline-block;
   background-color: #ededed;
   font-size: 13px;
@@ -292,10 +292,10 @@
   border-radius: 3px;
   margin: 0 5px 0 0;
 }
-.listing .providers span:first-child {
+.listing1 .providers span:first-child {
   margin-left: 10px;
 }
-.listing .pricing-box {
+.listing1 .pricing-box {
   border-top: 1px solid #f6f6f6;
   display: block;
   font-size: 12px;
@@ -304,15 +304,15 @@
   padding-top: 5px;
   clear: both;
 }
-.listing .pricing-box strong {
+.listing1 .pricing-box strong {
   font-size: 20px;
   color: #333;
   font-weight: 600;
 }
-.listing .pricing-box strike {
+.listing1 .pricing-box strike {
   color: #7f7f7f;
 }
-.listing .pricing-box .discount {
+.listing1 .pricing-box .discount {
   color: #45b34e;
 }
 

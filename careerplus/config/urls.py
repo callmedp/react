@@ -25,6 +25,7 @@ from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 from users.views import LinkedinCallbackView
 from search.views import FuncAreaPageView
+from users.views import Custom500, Custom404
 
 urlpatterns = []
 
@@ -87,3 +88,6 @@ if settings.DEBUG:
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+
+handler500 = Custom500.as_view()
+handler404 = Custom404.as_view()

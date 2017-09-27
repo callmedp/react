@@ -64,6 +64,8 @@ datalist {
 
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
   color: #fff;
+  visibility: visible;
+  display: block;
 }
 
 .navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav > li > a:hover {
@@ -83,6 +85,12 @@ datalist {
 .dropdown-menu > li > a:hover {
   font-size: 13px;
   color: #666;
+  visibility: visible;
+  display: block;
+}
+.dropdown-menu > li > a:hover:focus {
+  visibility: visible;
+  display: block;
 }
 
 .navbar-right > li > a {
@@ -1818,6 +1826,77 @@ footer .footer-links span {
   width: 100%;
   height: auto;
   background-size: cover;
+}
+
+/*---------listing widget css---------*/
+.listing {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.listing li {
+  display: block;
+  padding: 0 15px;
+  margin: 0 0 25px 0;
+}
+.listing li a {
+  display: block;
+  overflow: hidden;
+}
+.listing li a:hover {
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+.listing .media {
+  margin-top: 0;
+  margin-left: 12px;
+}
+.listing .media .media-body {
+  position: relative;
+  padding-bottom: 15px;
+}
+@media (max-width: 1190px) {
+  .listing .media .media-body {
+    padding-bottom: 30px;
+  }
+}
+.listing .media .media-left {
+  border-spacing: 0 12px 0 0;
+}
+.listing .media .media-left figure {
+  width: 125px;
+  height: 125px;
+}
+.listing .listing-heading {
+  margin: 10px 10px 5px 0;
+  display: block;
+  color: #3f5f94;
+  font-size: 18px;
+  font-weight: 600;
+}
+.listing .rating-review-box {
+  display: block;
+  color: #666;
+  font-size: 13px;
+}
+.listing .rating-review-box strong {
+  font-weight: 600;
+  margin-left: 5px;
+}
+@media (max-width: 991px) {
+  .listing .rating-review-box strong {
+    margin-left: 0;
+  }
+}
+.listing .rating-review-box .jobs-available {
+  font-size: 13px;
+  color: #666;
+  display: block;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+}
+.listing .rating-review-box .jobs-available strong {
+  font-weight: 600;
 }
 
 /*---------margin padding css---------*/

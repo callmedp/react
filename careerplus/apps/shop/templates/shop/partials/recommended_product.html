@@ -10,13 +10,7 @@
       <li class="col-sm-6 col-md-4">
         <a title="{{ prd.pTt }}" class="box-panel" href="{{prd.pURL}}">
           <div class="media">
-            <div class="media-left">
-                <figure style="background-color:{{prd.get_bg}};">
-                    <img class="media-object" src="{{prd.pImg}}" alt="{{prd.pImA}}" height="134" width="131">
-                </figure>
-            </div>
             <div class="media-body">
-
               <h3 class="listing-heading">{{ product.pHd|truncatechars:55 }}</h3>
               <div class="rating-review-box">
                     {% for star in prd.pStar %}
@@ -32,6 +26,11 @@
                     <strong>{{prd.pAR}}<small>/5</small></strong>
                     <span class="jobs-available"><strong>{{prd.pNJ}}</strong> jobs available</span>
                 </div>
+            </div>
+            <div class="media-left">
+                <figure>
+                    <img class="img-responsive" src="{{prd.pImg}}" alt="{{prd.pImA}}">
+                </figure>
             </div>
           </div>
         </a>

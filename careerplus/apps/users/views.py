@@ -372,3 +372,19 @@ class LinkedinCallbackView(View):
 
         except Exception as e:
             return HttpResponseRedirect('/login/')
+
+
+class Custom404(TemplateView):
+    template_name = "error_pages/404.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context, status=404)
+
+
+class Custom500(TemplateView):
+    template_name = "error_pages/500.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context, status=500)
