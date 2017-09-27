@@ -24,8 +24,8 @@ DATABASES = {
         'NAME': 'careerplus1',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '172.22.65.33',
-        'PORT': '3306',
+        'HOST': '',
+        'PORT': '',
     },
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
