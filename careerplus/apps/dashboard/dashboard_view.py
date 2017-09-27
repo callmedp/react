@@ -622,7 +622,7 @@ class DashboardMyWalletView(TemplateView):
         wal_obj, created = Wallet.objects.get_or_create(owner=candidate_id)
         wal_total = wal_obj.get_current_amount()
         wal_txns = wal_obj.wallettxn.filter(txn_type__in=[1, 2, 3, 4, 5], point_value__gt=0).order_by('-created')
-        wal_txns = wal_txns.order_by('-created').select_related('order', 'cart')[:10]
+        wal_txns = wal_txns.order_by('-created').select_related('order', 'cart')
         context.update({
             "wal_obj": wal_obj,
             "wal_total": wal_total,

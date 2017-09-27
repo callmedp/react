@@ -108,11 +108,11 @@ class Command(BaseCommand):
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 print( 'Bulk Insert ' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                # cursor.executemany(update_sql, update_values)
+                #cursor.executemany(update_sql, update_values)
                 update_values = []
                 
         if update_values:
-            # cursor.executemany(update_sql, update_values)
+            #cursor.executemany(update_sql, update_values)
             update_values = []
         
         del quiz_df
@@ -144,7 +144,6 @@ class Command(BaseCommand):
         
         
         linkedin_df = pd.read_sql(sql2, con=db)
-        
         keyskill_df = pd.read_sql(sql3, con=db)
         keyskill_df = keyskill_df.groupby(
             'draft_id')['name'].apply(list).reset_index().rename(
@@ -204,11 +203,11 @@ class Command(BaseCommand):
                 print( 'Bulk Insert ' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 
-                # cursor.executemany(update_sql, update_values)
+                cursor.executemany(update_sql, update_values)
                 update_values = []
                 
         if update_values:
-            # cursor.executemany(update_sql, update_values)
+            cursor.executemany(update_sql, update_values)
             update_values = []
         
         new_draft_df = pd.read_sql(
@@ -252,11 +251,11 @@ class Command(BaseCommand):
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 print( 'Bulk Insert ' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                # cursor.executemany(update_sql2, update_values)
+                cursor.executemany(update_sql2, update_values)
                 update_values = []
                 
         if update_values:
-            # cursor.executemany(update_sql2, update_values)
+            cursor.executemany(update_sql2, update_values)
             update_values = []
         
         update_sql3 = """
@@ -294,11 +293,11 @@ class Command(BaseCommand):
                 print( 'Bulk Insert ' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 
-                # cursor.executemany(update_sql3, update_values)
+                cursor.executemany(update_sql3, update_values)
                 update_values = []
                 
         if update_values:
-            # cursor.executemany(update_sql3, update_values)
+            cursor.executemany(update_sql3, update_values)
             update_values = []
         
         sql5 = """
@@ -335,7 +334,7 @@ class Command(BaseCommand):
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 print( 'Bulk Update ' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                # db2.query(update_sql)
+                db2.query(update_sql)
                 update_sql = ''
                 linked_id_list = []
                 coi_list = []
@@ -349,7 +348,7 @@ class Command(BaseCommand):
             print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
             print( 'Bulk Update ' + str(i))
             print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-            # db2.query(update_sql)
+            db2.query(update_sql)
             update_sql = ''
             linked_id_list = []
             coi_list = []
