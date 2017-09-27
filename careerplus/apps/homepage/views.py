@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django_redis import get_redis_connection
 
-from shop.models import Product, ProductClass, FunctionalArea, Skill
+from shop.models import ProductClass, FunctionalArea, Skill
 from search.helpers import get_recommendations
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
@@ -68,13 +68,6 @@ class HomePageView(TemplateView):
 
         return {'tcourses': tcourses, 'pcourses': pcourses, 'rcourses': rcourses}
 
-    def get_recommend_courses(self):
-        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
-        recommended_courses = Product.objects.filter(
-            product_class__in=course_classes, type_product__in=[0, 1, 3],
-            active=True)[: 6]
-        return {"recommended_courses": recommended_courses, }
-
     def get_testimonials(self):
         testimonials = Testimonial.objects.filter(page=1, is_active=True)
         testimonials = testimonials[: 5]
@@ -86,9 +79,10 @@ class HomePageView(TemplateView):
         if candidate_id:
             candidate_detail = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
             if candidate_detail:
-                func_area = candidate_detail.get('functional_area')[0] if len(candidate_detail.get('functional_area', [])) else 'Real Estate'
+                func_area = candidate_detail.get('functional_area')[0] \
+                    if len(candidate_detail.get('functional_area', [])) else ''
                 skills = [skill['value'] for skill in candidate_detail['skills']]
-                context.update({'recmnd_func_area': func_area, 'recmnd_skills': skills})
+                context.update({'recmnd_func_area': func_area, 'recmnd_skills': ','.join(skills)})
                 func_area = FunctionalArea.objects.filter(name__iexact=func_area)
                 if func_area:
                     self.request.session.update({
@@ -104,7 +98,5 @@ class HomePageView(TemplateView):
         context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
-        if self.request.session.get('candidate_id'):
-            context.update(self.get_recommend_courses())
         context.update(self.get_testimonials())
         return context

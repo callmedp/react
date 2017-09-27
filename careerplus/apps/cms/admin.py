@@ -7,13 +7,15 @@ from .models import IndexerWidget, ColumnHeading,\
 class ColumnHeadingAdmin(admin.TabularInline):
     model = ColumnHeading
     raw_id_fields = ('indexer',)
-    extra = 1
+    extra = 2
+    max_num = 2
 
 
 class IndexColumnAdmin(admin.TabularInline):
     model = IndexColumn
     raw_id_fields = ('indexer',)
     extra = 1
+
 
 class IndexerWidgetAdmin(admin.ModelAdmin):
     list_display = ('id', 'heading')

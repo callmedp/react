@@ -20,6 +20,8 @@ from console.decorators import Decorate, stop_browser_cache
 from wallet.models import Wallet
 from geolocation.models import Country
 from users.tasks import user_register
+from core.library.haystack.query import SQS
+from search.helpers import get_recommendations
 
 from .models import Cart
 from .mixins import CartMixin
@@ -31,11 +33,12 @@ class CartView(TemplateView, CartMixin, UserMixin):
     template_name = "cart/cart.html"
 
     def get_recommended_products(self):
-        recommended_products = []
-        # course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
-        # recommended_products = Product.objects.filter(
-        #     product_class__in=course_classes, active=True)
-        return {'recommended_products': list(recommended_products)}
+        rcourses = get_recommendations(self.request.session.get('func_area', None),
+                                       self.request.session.get('skills', None),
+                                       SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+        if rcourses:
+            rcourses = rcourses[:6]
+        return {'recommended_products': rcourses}
 
     def get(self, request, *args, **kwargs):
         return super(self.__class__, self).get(request, *args, **kwargs)
@@ -68,7 +71,7 @@ class AddToCartView(View, CartMixin):
             prod_id = request.POST.get('prod_id')
 
             try:
-                product = Product.objects.get(id=prod_id, active=True)
+                product = Product.objects.get(id=prod_id)  # not filter on active because product is coming from solr 
                 addons = request.POST.getlist('addons[]')
                 req_options = request.POST.getlist('req_options[]')
                 cv_id = request.POST.get('cv_id')

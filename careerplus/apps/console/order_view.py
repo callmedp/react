@@ -397,7 +397,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status=5)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status__in=[5, 3])
 
         user = self.request.user
         if user.is_superuser:
@@ -1860,6 +1860,18 @@ class ActionOrderItemView(View):
                     obj.save()
                     approval += 1
 
+                    obj.orderitemoperation_set.create(
+                        oi_status=6,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=obj.last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                    
                     # mail to user about writer information
                     profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
                     country_obj = Country.objects.get(pk=profile_obj.object_id)
@@ -1881,17 +1893,6 @@ class ActionOrderItemView(View):
                     except Exception as e:
                         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    obj.orderitemoperation_set.create(
-                        oi_status=6,
-                        last_oi_status=last_oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
-                        last_oi_status=obj.last_oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
                 msg = str(approval) + ' orderitems approved.'
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:

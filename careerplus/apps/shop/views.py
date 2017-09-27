@@ -14,8 +14,10 @@ from console.decorators import (
     Decorate,
     stop_browser_cache,)
 from cart.mixins import CartMixin
+from core.library.haystack.query import SQS
+from search.helpers import get_recommendations
 
-from .models import Product, Category, Attribute
+from .models import Product
 from review.models import Review
 
 
@@ -159,14 +161,17 @@ class ProductInformationMixin(object):
         recommendation = {
             'prd_recommend': False,
         }
-        recommended_list = product.related.filter(
-            secondaryproduct__active=True,
-            active=True,
-            secondaryproduct__type_relation=2)
-        if recommended_list:
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+
+        if rcourses:
+            rcourses = rcourses[:6]
+        if rcourses:
             recommendation.update({
                 'prd_recommend': True,
-                'recommended_list': recommended_list
+                'recommended_products': rcourses
             })
         return recommendation
 
@@ -312,7 +317,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update(self.solar_info(self.sqs))
         ctx.update(self.solar_program_structure(self.sqs))
         ctx.update(self.solar_faq(self.sqs))
-        # ctx.update(self.get_recommendation(product))
+        ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
         if self.sqs.pPc == 'course':
             ctx.update(json.loads(self.sqs.pPOP))

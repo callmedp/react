@@ -15,6 +15,8 @@ from .mixins import UpdateShineProfileMixin
 
 from microsite.roundoneapi import RoundOneAPI
 from microsite.common import ShineUserDetail
+from search.helpers import get_recommendations
+from core.library.haystack.query import SQS
 from django.conf import settings
 
 month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
@@ -58,6 +60,14 @@ class RoundoneDashboardView(RoundOneAPI, TemplateView):
                         pass
         context['accepted'] = accepted
         context['pending'] = pending
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+
+        if rcourses:
+            rcourses = rcourses[:6]
+            context['recommended_products'] = rcourses
         return context
 
     def get(self, request, *args, **kwargs):
