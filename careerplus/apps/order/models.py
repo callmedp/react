@@ -384,8 +384,7 @@ class OrderItem(AbstractAutoDate):
             pass
         elif self.oi_status not in [141, 142, 143]:
             pass
-        dict_status = dict(OI_USER_STATUS)
-        return dict_status.get(self.oi_status)
+        return self.oi_status
 
     def get_test_obj(self):
         return self

@@ -1,9 +1,13 @@
 from decimal import Decimal
+
 from django.utils import timezone
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from cart.models import Cart
+
 from order.models import Order
+
 from seo.models import AbstractAutoDate
 
 STATUS_REWARD = (
@@ -90,7 +94,7 @@ class RewardPoint(AbstractAutoDate):
         blank=True,
         null=True,
         editable=False)
-    
+
 
     class Meta:
         verbose_name = _('Reward Point')
@@ -175,7 +179,25 @@ class WalletTransaction(AbstractAutoDate):
     def get_txn_type(self):
         txn_type_dict = dict(TXN_TYPE)
         return txn_type_dict.get(self.txn_type)
-   
+
+    def get_cashback_details(self):
+        response = {}
+        response['name'] = self.wallet.owner if self.wallet.owner else self.wallet.owner_email
+        response['credits_added'] = self.point_value
+        response['order_id'] = self.wallet.order.id
+        response['total_credits'] = self.point_value
+        response['cash_back_date'] = self.created_on
+        # response['validity'] = 
+
+        # try:
+        #     from core.common import PersonalRecommendation
+        #     recommended_pv = PersonalRecommendation().get_variation_qs(
+        #         email=self.wallet.user.email)
+        #     response['recommended_pv'] = recommended_pv
+        # except Exception as e:
+        #     logging.getLogger('error_log').error(str(e))
+        return response
+
 
 class PointTransaction(AbstractAutoDate):
     point = models.ForeignKey(
@@ -192,12 +214,12 @@ class PointTransaction(AbstractAutoDate):
     txn_type = models.PositiveSmallIntegerField(
         _("Type"),
         default=0, choices=TXN_TYPE)
-    
+
     def __str__(self):
         return _("%(pt)s to '%(txn)s'") % {
             'pt': self.point,
             'txn': self.transaction}
-    
+
     class Meta:
         unique_together = ('point', 'transaction')
         verbose_name = _('Point Transaction')
@@ -252,12 +274,12 @@ class ECashTransaction(AbstractAutoDate):
     txn_type = models.PositiveSmallIntegerField(
         _("Type"),
         default=0, choices=TXN_TYPE)
-    
+
     def __str__(self):
         return _("%(cash)s to '%(txn)s'") % {
             'cash': self.ecash,
             'txn': self.transaction}
-    
+
     class Meta:
         unique_together = ('ecash', 'transaction')
         verbose_name = _('ECash Transaction')
