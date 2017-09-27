@@ -53,7 +53,7 @@
             {% elif obj.product.type_flow == 8 %}
 
                 {% if obj.oi_status == 49 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#">Complete form</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="{% url 'counselling_form' obj.pk %}">Complete form</a></p>
                 {% elif obj.oi_status == 45 and obj.draft_counter %}
                     <p><strong>Status:</strong> Modifications requested</p>
 

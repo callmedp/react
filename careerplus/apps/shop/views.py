@@ -323,7 +323,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             ctx.update(json.loads(self.sqs.pPOP))
         else:
             ctx.update(json.loads(self.sqs.pPOP))
-        if self.sqs.pTP == 1:
+        if self.sqs.pPc == 'course':
             pvrs_data = json.loads(self.sqs.pVrs)
             try:
                 selected_var = pvrs_data['var_list'][0]

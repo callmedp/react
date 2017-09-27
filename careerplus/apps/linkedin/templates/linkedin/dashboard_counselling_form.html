@@ -1,0 +1,138 @@
+{% extends "basic/base.html" %}
+{% load static %}
+
+{% block title %}
+  Counselling form - Shine Learning
+{% endblock title %}
+{% block css_section %}
+        {{block.super}}  
+  <link type="text/css" href="{% static 'shinelearn/css/dashboard/dashboard.css' %}" 
+  rel="stylesheet">    
+{% endblock css_section %}
+
+{% block pageheading %}
+    
+{% endblock pageheading %}
+{% block container %}
+<section class="container mt-10">
+
+  <!-- header -->
+<header>
+  <div class="feedback-header">
+    <div class="container">
+      <!-- breadcrums -->
+      <ol class="breadcrumb mt-30">
+        <li><a href="#">Home</a></li>
+        <li class="active">Counselling form</li>
+      </ol>
+      <div class="listing-heading">
+        <h1>Counselling form</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- main section start -->
+<section class="container mt-10">
+  <!-- page content body start -->
+  <div class="row">
+
+    <!-- mid content start here -->
+    <div class="col-sm-12 col-md-9 counselling-form">
+    <h2 class="mb20">Linkedin counselling form update</h2>
+    <ol>
+    <li><h3>According to you what does it take for a business to survive and find success?</h3>
+    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
+    <p class='submit-error' style="color:red;"></p>
+    </li>
+    <li><h3>What kind of results can a person expect from working with you?</h3>
+    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
+    <p class='submit-error' style="color:red;"></p>
+    </li>
+    <li><h3>What sets you apart from others? Which of your personal attributes have been most beneficial to you in your career? Explain why.</h3>
+    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
+    <p class='submit-error' style="color:red;"></p>
+    </li>
+    <li><h3>Name 1 or 2 defining accomplishments. Think of events or projects that shaped your career path and make you proud. What was the impact of these accomplishments on you, your business, and your customers?</h3>
+    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
+    <p class='submit-error' style="color:red;"></p>
+    </li>
+    <li><h3>What is your goal moving forward? What do you hope to achieve?</h3>
+    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
+    <p class='submit-error' style="color:red;"></p>
+    </li>
+    </ol> 
+    <button type="button" class="submit-button pull-right mt-20 js-click">
+    Submit</button>  
+    <a href="#" class="view-job pull-right mt-20 js-click">Save</a>
+    </div>
+    <!-- mid content ends here --> 
+
+  </div>
+  <!-- page content body end -->
+</section>
+<!-- main section end -->
+  
+  <!-- page content body end -->
+</section>
+<!-- main section end -->
+{% endblock container %}
+{% block js_section %}
+   {{ block.super }}
+<script type="text/javascript">
+  $( document ).ready(function() {
+  $('.js-answer').focus(function() {
+     $(this).parent().removeClass('error');
+     $(this).siblings('.submit-error').text('');
+  });
+    $('.js-click').click(function(){
+      var submit = validateForm();
+      if (submit)
+      {
+        submitCounsellingForm();
+      }
+  });
+});
+
+function validateForm() {
+    var answers = $('.js-answer');
+    flag = true;
+    $.each(answers, function(key,answer){
+     $this=$(this);    
+     var value = answer.value;
+      if ( value == null || value == "") {
+          $this.parent().addClass('error');
+          $this.siblings('.submit-error').text('This answer is required');
+          flag = false;
+      }
+    });
+    return flag;
+}
+
+function submitCounsellingForm(){
+    form = $('#counselling_form');
+    post_url = window.location.pathname;
+    $('.js-click').attr('disabled','disabled');
+    $.ajax({
+        url: post_url,
+        type: "post",
+        data: form.serialize(),
+        dataType: 'json',
+        success: function(result){
+            
+            if (result.success){
+                window.location.href = "/dashboard/";
+            }
+            else{
+                window.location.href = "/dashboard/";
+                
+            }
+        },
+        failure: function(){
+            $('#file-button').removeAttr('disabled');
+            alert("Something went wrong, Please Try Again.");
+        }
+    });
+}
+</script>
+{% endblock js_section %}
