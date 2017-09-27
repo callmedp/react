@@ -397,7 +397,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status=5)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status__in=[5, 3])
 
         user = self.request.user
         if user.is_superuser:

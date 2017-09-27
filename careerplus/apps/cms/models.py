@@ -33,7 +33,7 @@ class ColumnHeading(models.Model):
 class IndexColumn(models.Model):
     indexer = models.ForeignKey(IndexerWidget)
     column = models.PositiveIntegerField(choices=COLUMN_TYPE)
-    url = models.CharField(max_length=2048, null=True, blank=True, help_text='provide full url including https://')
+    url = models.CharField(max_length=2048, null=True, blank=True, help_text='provide full url with valid protocol https:// or http://')
     name = models.CharField(max_length=255)
 
     def __str__(self):
