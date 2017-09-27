@@ -39,32 +39,52 @@
 
     <!-- mid content start here -->
     <div class="col-sm-12 col-md-9 counselling-form">
-    <h2 class="mb20">Linkedin counselling form update</h2>
-    <ol>
-    <li><h3>According to you what does it take for a business to survive and find success?</h3>
-    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
-    <p class='submit-error' style="color:red;"></p>
-    </li>
-    <li><h3>What kind of results can a person expect from working with you?</h3>
-    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
-    <p class='submit-error' style="color:red;"></p>
-    </li>
-    <li><h3>What sets you apart from others? Which of your personal attributes have been most beneficial to you in your career? Explain why.</h3>
-    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
-    <p class='submit-error' style="color:red;"></p>
-    </li>
-    <li><h3>Name 1 or 2 defining accomplishments. Think of events or projects that shaped your career path and make you proud. What was the impact of these accomplishments on you, your business, and your customers?</h3>
-    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
-    <p class='submit-error' style="color:red;"></p>
-    </li>
-    <li><h3>What is your goal moving forward? What do you hope to achieve?</h3>
-    <textarea class="form-control js-answer" id="exampleTextarea" placeholder="" rows="2"></textarea>
-    <p class='submit-error' style="color:red;"></p>
-    </li>
-    </ol> 
-    <button type="button" class="submit-button pull-right mt-20 js-click">
-    Submit</button>  
-    <a href="#" class="view-job pull-right mt-20 js-click">Save</a>
+      <h2 class="mb20">Linkedin counselling form update</h2>
+      <form method="post" id="dashboard_counselling_form" 
+        action="{% url "counselling_form" orderitem.pk %}">
+        {% csrf_token %}
+        <ol>
+          <li>
+            <h3>{{ques_dict.q1}}</h3>
+            <textarea class="form-control" rows="2" name="q1">
+              {{quiz_resp.anser1}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li><h3>{{ques_dict.q2}}</h3>
+            <textarea class="form-control" rows="2" name="q2">
+              {{quiz_resp.anser2}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li>
+            <h3>{{ques_dict.q3}}</h3>
+            <textarea class="form-control" rows="2" name="q3">
+              {{quiz_resp.anser3}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li>
+            <h3>{{ques_dict.q4}}</h3>
+            <textarea class="form-control" rows="2" name="q4">
+              {{quiz_resp.anser4}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li>
+            <h3>{{ques_dict.q5}}</h3>
+            <textarea class="form-control" rows="2" name="q5">
+              {{quiz_resp.anser5}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+        </ol> 
+          <button type="submit" name="submit" class="submit-button pull-right mt-20"
+          value="submit">
+          Submit</button>
+          <button type="submit" name="save" class="view-job pull-right mt-20" 
+          value="save">Save</button> 
+    </form>
     </div>
     <!-- mid content ends here --> 
 
@@ -79,60 +99,32 @@
 {% endblock container %}
 {% block js_section %}
    {{ block.super }}
-<script type="text/javascript">
-  $( document ).ready(function() {
-  $('.js-answer').focus(function() {
-     $(this).parent().removeClass('error');
-     $(this).siblings('.submit-error').text('');
-  });
-    $('.js-click').click(function(){
-      var submit = validateForm();
-      if (submit)
-      {
-        submitCounsellingForm();
-      }
-  });
-});
-
-function validateForm() {
-    var answers = $('.js-answer');
-    flag = true;
-    $.each(answers, function(key,answer){
-     $this=$(this);    
-     var value = answer.value;
-      if ( value == null || value == "") {
-          $this.parent().addClass('error');
-          $this.siblings('.submit-error').text('This answer is required');
-          flag = false;
-      }
+   <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+  <script type="text/javascript">
+      $().ready(function() {
+        var element = 'submit-error';
+        $("#dashboard_counselling_form").validate({
+            submitHandler: function(form) {
+              form.submit();
+          },
+          rules: {
+              q1:{ required:true,},
+              q2: { required:true,},
+              q3:{ required:true,},
+              q4: { required:true,},
+              q5:{ required:true,},        
+          },
+          messages:{
+              q1:{ required:"This field is required",},
+              q2:{ required:"This field is required",},
+              q3:{ required:"This field is required",},
+              q4:{ required:"This field is required",},
+              q5:{ required:"This field is required",},   
+          },
+          errorPlacement: function(error, element) {
+              element.siblings(".submit-error").text('This field is required');
+          }
+      });
     });
-    return flag;
-}
-
-function submitCounsellingForm(){
-    form = $('#counselling_form');
-    post_url = window.location.pathname;
-    $('.js-click').attr('disabled','disabled');
-    $.ajax({
-        url: post_url,
-        type: "post",
-        data: form.serialize(),
-        dataType: 'json',
-        success: function(result){
-            
-            if (result.success){
-                window.location.href = "/dashboard/";
-            }
-            else{
-                window.location.href = "/dashboard/";
-                
-            }
-        },
-        failure: function(){
-            $('#file-button').removeAttr('disabled');
-            alert("Something went wrong, Please Try Again.");
-        }
-    });
-}
-</script>
+  </script>
 {% endblock js_section %}
