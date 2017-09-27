@@ -47,7 +47,7 @@ header {
   width: 24px;
   height: 12px;
   display: inline-block;
-  background: url(../../images/sprite.png) no-repeat -770px -71px;
+  background: url(../images/sprite.png) no-repeat -770px -71px;
   margin: 0 auto;
   z-index: 999;
 }
@@ -791,6 +791,21 @@ header {
   margin: 0 auto;
   position: relative;
 }
+
+
+.delivery-flow ul li .blue-circle .df-verification {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  content: '';
+  background: url(../../images/sprite.png) no-repeat -48px -440px;
+  width: 32px;
+  height: 34px;
+  margin: auto;
+}
+
 .delivery-flow ul li .blue-circle .df-cart {
   position: absolute;
   left: 0;
@@ -846,7 +861,7 @@ header {
   right: 0;
   bottom: 0;
   content: '';
-  background: url(../images/sprite.png) no-repeat -147px -327px;
+  background: url(../../images/sprite.png) no-repeat -147px -327px;
   width: 32px;
   height: 27px;
   margin: auto;
@@ -942,7 +957,7 @@ header {
   right: 0;
   bottom: 0;
   content: '';
-  background: url(../images/sprite.png) no-repeat -74px -408px;
+  background: url(../../images/sprite.png) no-repeat -74px -408px;
   width: 29px;
   height: 29px;
   margin: auto;
@@ -966,7 +981,7 @@ header {
   right: 0;
   bottom: 0;
   content: '';
-  background: url(../images/sprite.png) no-repeat 0 -452px;
+  background: url(../../images/sprite.png) no-repeat 0 -452px;
   width: 44px;
   height: 21px;
   margin: auto;
@@ -990,7 +1005,7 @@ header {
   right: 0;
   bottom: 0;
   content: '';
-  background: url(../images/sprite.png) no-repeat 0 -478px;
+  background: url(../../images/sprite.png) no-repeat 0 -478px;
   width: 56px;
   height: 14px;
   margin: auto;
@@ -1014,7 +1029,7 @@ header {
   right: 0;
   bottom: 0;
   content: '';
-  background: url(../images/sprite.png) no-repeat -119px -432px;
+  background: url(../../images/sprite.png) no-repeat -119px -432px;
   width: 43px;
   height: 41px;
   margin: auto;
@@ -1039,57 +1054,9 @@ header {
   width: 4%;
 }
 
-.listing {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
 .listing li {
-  display: block;
-  padding: 0 15px;
-  margin: 0 0 25px 0;
-}
-.listing li a {
-  display: block;
-  overflow: hidden;
-}
-.listing li a:hover {
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-}
-.listing .media {
-  margin-top: 0;
-}
-.listing .media .media-left {
-  border-spacing: 0 12px 0 0;
-}
-.listing .media .media-left figure {
-  width: 125px;
-  height: 125px;
-}
-.listing .listing-heading {
-  margin: 10px 10px 5px 0;
-  display: block;
-  color: #3f5f94;
-  font-size: 18px;
-  font-weight: 600;
-}
-.listing .rating-review-box {
-  display: block;
-  color: #666;
-  font-size: 13px;
-}
-.listing .rating-review-box strong {
-  font-weight: 600;
-  margin-left: 5px;
-}
-.listing .rating-review-box .jobs-available {
-  font-size: 13px;
-  color: #666;
-  display: block;
-  margin-top: 10px;
-}
-.listing .rating-review-box .jobs-available strong {
-  font-weight: 600;
+  display: block !important;
+  padding: 0 15px !important;
 }
 
 .detail-course-links {
