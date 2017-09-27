@@ -5,33 +5,21 @@
     	<a title="{{product.name}}" href="{{site}}{{product.pURL}}">
             <div class="media">
             	<div class="media-left">
-                	<img class="media-object" src="{% static 'console/images/skillpage/listing-logo1.jpg' %}" alt="{{product.pNm}}">
+                	<img class="media-object" src="{{product.pImg}}" alt="{{product.pNm}}">
             	</div>
             	<div class="media-body">
-                	<div class="certification-jobs-box">
-                  		<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>
-                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{product.pNJ}}</span> jobs available</span>
-                	</div>
-                	<h3 class="listing-heading">{{product.pNm}}</h3>
+                  <div class="certification-jobs-box">
+                    {% if "true" in product.pCert %}<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>{% endif %}
+                    {% if product.pNJ %}<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ product.pNJ }}</span> jobs available</span>{% endif %}
+                  </div>
+                	<h3 class="listing-heading">{{ product.pHd }}</h3>
 
-	                <div class="rating-review-box">
-	                    {% for rating in product.pStar %}
-                          {% if rating == "*" %}
-                            <figure class="full-star">
-                            </figure>
-                          {% endif %}
-                          {% if rating == "+" %}
-                            <figure class="half-star">  
-                            </figure>
-                          {% endif %}
-                          {% if rating == "-" %}
-                            <figure class="blank-star"> 
-                            </figure>
-                          {% endif %}
-                      {% endfor %}
-	                    <strong>{{product.pARx |floatformat:1}}/5</strong> | 21 ratings <b>{{product.pRC}} reviews</b>
-	                </div> 
-
+                  <div class="rating-review-box">
+                    {% for star in product.pStar %}
+                    <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
+                    {% endfor %}
+                    <strong>{{ product.pARx|floatformat:1 }}/5</strong> {% if product.pRC %} | {{ product.pRC }} ratings{% endif %}<b>{{product.pRC}} reviews</b>
+                  </div>
 	                <div class="providers">
 	                   Providers
 	                   <span>{{product.pPvn}}</span>
@@ -40,7 +28,9 @@
 	                <div class="pricing-box">
 	                   Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
 	                </div>
-
+                  <div class="pricing-box">
+                    Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
+                  </div>
               	</div>
             </div>
       	</a>

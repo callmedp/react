@@ -239,7 +239,7 @@ class ProductInformationMixin(object):
             return {'country_variation_list': service_list}
 
     def solar_product_variation(self, product):
-        course_variation_list = json.loads(sqs.pVrs)
+        course_variation_list = json.loads(product.pVrs)
         return course_variation_list
 
     def get_frequentlybought(self, product, category):

@@ -97,6 +97,10 @@ class SkillPageView(DetailView, SkillPageMixin):
         except EmptyPage:
             products = prod_page.page(prod_page.num_pages)
 
+        for product in products:
+            if float(product.pPfin):
+                product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+
         prod_review = Paginator(prod_reviews, 1)
 
         try:
@@ -116,7 +120,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
             "products": products,
-            'site': settings.SITE_DOMAIN,
+            'site': "http://" + settings.SITE_DOMAIN,
             "page_reviews":prod_reviews[0:4] if self.request.flavour else page_reviews,
             'url': 'https://' + self.object.video_link,
             'country_choices': country_choices,

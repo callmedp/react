@@ -65,7 +65,6 @@ class ActionUserMixin(object):
 
                 # mail to user about writer information
                 to_emails = [obj.order.email]
-                email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                 mail_type = 'ALLOCATED_TO_WRITER'
                 email_data = {}
                 email_data.update({
