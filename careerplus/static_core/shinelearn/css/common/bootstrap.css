@@ -5176,6 +5176,29 @@ tbody.collapse.in {
   color: #444;
 }
 
+header .breadcrumb {
+  padding: 2px 5px;
+  list-style: none;
+  font-size: 12px;
+  margin-top: 35px;
+  display: table;
+  border-radius: 2px;
+}
+header .breadcrumb > li {
+  display: inline-block;
+}
+header .breadcrumb > li + li:before {
+  content: "-";
+  padding: 0 5px;
+  color: #cbcbcb;
+}
+header .breadcrumb a, header .breadcrumb a:hover {
+  color: #cbcbcb;
+}
+header .breadcrumb > .active {
+  color: #cbcbcb;
+}
+
 .breadcrumb {
   padding: 2px 5px;
   list-style: none;
