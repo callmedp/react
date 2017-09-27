@@ -604,24 +604,23 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'variation': True
                 })
                 for pv in var:
-                    for pv in var:
-                        var_list.append({
-                            'id': pv.id,
-                            'label': pv.name,
-                            'country': pv.get_profile_country(),
-                            'experience': pv.get_exp(),
-                            'inrp': pv.get_inr_price(),
-                            'aedp': pv.get_aed_price(),
-                            'usdp': pv.get_usd_price(),
-                            'gbpp': pv.get_gbp_price(),
-                            'inr_price': float(pv.inr_price),
-                            'fake_inr_price': float(pv.fake_inr_price),
-                            'usd_price': float(pv.usd_price),
-                            'fake_usd_price': float(pv.fake_usd_price),
-                            'aed_price': float(pv.aed_price),
-                            'fake_aed_price': float(pv.fake_aed_price),
-                            'gbp_price': float(pv.gbp_price),
-                            'fake_gbp_price': float(pv.fake_gbp_price)})
+                    var_list.append({
+                        'id': pv.id,
+                        'label': pv.name,
+                        'country': pv.get_profile_country(),
+                        'experience': pv.get_exp(),
+                        'inrp': pv.get_inr_price(),
+                        'aedp': pv.get_aed_price(),
+                        'usdp': pv.get_usd_price(),
+                        'gbpp': pv.get_gbp_price(),
+                        'inr_price': float(pv.inr_price),
+                        'fake_inr_price': float(pv.fake_inr_price),
+                        'usd_price': float(pv.usd_price),
+                        'fake_usd_price': float(pv.fake_usd_price),
+                        'aed_price': float(pv.aed_price),
+                        'fake_aed_price': float(pv.fake_aed_price),
+                        'gbp_price': float(pv.gbp_price),
+                        'fake_gbp_price': float(pv.fake_gbp_price)})
                 var_dict.update({
                     'var_list': var_list
                 })
