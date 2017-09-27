@@ -3,6 +3,7 @@ import re
 import uuid
 from collections import OrderedDict
 import json
+import logging
 
 # django imports
 from django.shortcuts import render, HttpResponsePermanentRedirect
@@ -19,6 +20,7 @@ from django.utils.http import urlencode, urlquote_plus
 # third party imports
 # from haystack.views import SearchView
 from haystack.query import EmptySearchQuerySet
+from django_redis import get_redis_connection
 
 # local imports
 from .forms import SearchForm, SearchRecommendedForm
@@ -26,6 +28,8 @@ from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams,
 from shop.models import FunctionalArea, Skill
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
+error_log = logging.getLogger('error_log')
+redis_conn = get_redis_connection("search_lookup")
 
 class SearchBaseView(TemplateView):
     template_name = 'search/search.html'
@@ -370,7 +374,7 @@ class SearchListView(SearchBaseView):
         return paginator, page
 
 
-class RecommendedSearchView(SearchBaseView):
+class RecommendedSearchView(SearchBaseView, FormView):
     """
     Simple text search
     """
@@ -389,6 +393,19 @@ class RecommendedSearchView(SearchBaseView):
         """
         pass  # Do nothing
 
+    def get_initial(self):
+        super(RecommendedSearchView, self).get_initial()
+        if self.request.session.get('candidate_id'):
+            func_area = self.request.session.get('func_area')
+            func_area = FunctionalArea.objects.filter(pk=func_area)
+            func_area = func_area[0].name if func_area else ''
+            skills = self.request.session.get('skills').split(",")
+            skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
+        else:
+            func_area = ''
+            skills_found = []
+        return {'area': func_area, 'skills': ",".join(skills_found)}
+
     def get_breadcrumbs(self):
         breadcrumbs = super(RecommendedSearchView, self).get_breadcrumbs()
         breadcrumbs.append(
@@ -404,7 +421,9 @@ class RecommendedSearchView(SearchBaseView):
         request_get.update(self.request.POST)
         self.request_get = request_get
         context = super(RecommendedSearchView, self).get_extra_context()
-
+        func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
+        skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
+        context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "recommended"})
         return context
@@ -475,20 +494,26 @@ class RedirectToRecommendationsView(FormView):
 
     def get_success_url(self):
         form_data = self.get_form().data
-        func_area = form_data['area'][1]
+        func_area = form_data['area']
+        func_area_obj = None
         try:
-            func_area = FunctionalArea.objects.get(name__iexact=func_area)
+            func_area_obj = FunctionalArea.objects.get(name__iexact=func_area)
+            self.request.session.update({'func_area': func_area_obj.id})
         except:
-            func_area = FunctionalArea.objects.first()
+            error_log.error('Func Area not found in DB:', func_area)
         skills = form_data['skills'].split(",")
         skills = Skill.objects.filter(name__in=skills)
-        if not skills:
-            skills = Skill.objects.all()[:2]
+        self.request.session.update({'skills': [skill.id for skill in skills]})
+        func_area_slug = func_area_obj.name if func_area_obj else func_area
+        rx = '[' + re.escape(''.join(settings.CHARS_TO_REMOVE)) + ']'
+        func_area_slug = urlquote_plus(re.sub(rx, '', func_area_slug))
+        skills_slug = '-'.join([skill.name for skill in skills])
+        skills_slug = urlquote_plus(re.sub(rx, '', skills_slug))
         self.success_url = reverse_lazy('search:recommended_listing',
                                         kwargs={
-                                            'area_slug': urlquote_plus(func_area.name),
-                                            'area': func_area.id,
-                                            'skills_slug': urlquote_plus('-'.join([skill.name for skill in skills])),
+                                            'area_slug': func_area_slug,
+                                            'area': func_area_obj.id if func_area_obj else 0,
+                                            'skills_slug': skills_slug,
                                             'skills': '-'.join([str(skill.id) for skill in skills])
                                         })
         return self.success_url

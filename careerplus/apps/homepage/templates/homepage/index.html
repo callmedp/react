@@ -77,7 +77,7 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|truncatechars:55 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
                                     <strong>{{product.pAR}}<small>/5</small></strong>
@@ -104,7 +104,7 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|truncatechars:55 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
                                     <strong>{{product.pAR}}<small>/5</small></strong>
@@ -183,7 +183,7 @@
                                     <a title="{{tprd.product.title}}" class="box-panel" href="{{tprd.product.get_absolute_url}}">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h3 class="listing-heading">{{tprd.product.heading}}</h3>
+                                                <h3 class="listing-heading">{{tprd.product.heading|truncatechars:55}}</h3>
                                                 <div class="rating-review-box">
                                                     <figure class="full-star"></figure>
                                                     <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
@@ -226,7 +226,7 @@
                                     <img class="img-responsive" src="{{ tprd.product.image.url }}" width="200" height="125" alt="{{tprd.product.image_alt}}">
                                 </figure>
                                 <div class="caption">
-                                    <h3 class="listing-heading">{{tprd.product.heading}}</h3>
+                                    <h3 class="listing-heading">{{tprd.product.heading|truncatechars:55}}</h3>
                                     <div class="rating-review-box">
                                         <figure class="full-star"></figure>
                                         <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
@@ -294,7 +294,9 @@
 
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},
-                skillsSet = {{ skills_set|safe }};
+                skillsSet = {{ skills_set|safe }},
+                prefetchedFuncArea = '{{ recmnd_func_area }}',
+                prefetchedSkills = '{{ recmnd_skills }}';
       $('#myCarousel1').carousel({
         interval: false
       });

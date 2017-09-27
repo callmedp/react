@@ -20,10 +20,10 @@
                 <form class="form-inline" method="post" action="{% url 'search:recommend' %}">
                     {% csrf_token %}
                 <div class="form-group">
-                    <input class="" name="area" placeholder="Functional area" type="text" value="{{ recmnd_func_area }}" id="tags1">
+                    <input class="" name="area" type="text" value="{{ recmnd_func_area }}" id="tags1">
                 </div>
                 <div class="form-group">
-                    <input class="" name="skills" placeholder="Skills" type="text" value="{{ recmnd_skills }}" id="tags2">
+                    <input class="" name="skills" type="text" value="{{ recmnd_skills }}" id="tags2">
                 </div>
                 <button type="submit" class="find-jobs-btn btn"></button>
                 </form>
