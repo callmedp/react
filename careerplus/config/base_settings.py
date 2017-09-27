@@ -86,7 +86,6 @@ LOCAL_APPS = [
     'emailers',
     'quizs',
     'database',
-    # 'celery',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -235,8 +234,6 @@ MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
 CART_MAX_LIMIT = 5
 
-SHINE_API_URL = 'https://sumosc.shine.com'
-
 ############ SOLR SETTINGS #######################
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
@@ -248,10 +245,6 @@ CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
 CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
 CITIES_LIGHT_APP_NAME = 'geolocation'
 
-# encode decode settings
-EMAIL_SMS_TOKEN_EXPIRY = 7
-ENCODE_SALT = 'xfxa'
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 # encode decode constants
 TOKEN_DT_FORMAT = '%Y%m%d%H%M%S'
@@ -259,7 +252,7 @@ LOGIN_TOKEN_EXPIRY = 30
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
-# Url Sorter 
+# Url Shortner
 URL_SHORTENER_API = 'https://www.googleapis.com/urlshortener/v1/url'
 URL_SHORTENER_ACCESS_KEY='AIzaSyBtmK_SIBfhb_hXkgLlfk7IwVlnKZxTb2I'
 
@@ -452,4 +445,5 @@ COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service', ]
 DELIVERY_SLUG = ['normal', 'express', 'super-express']
+CHARS_TO_REMOVE = ['/', "'"]
 ############################################

@@ -10,137 +10,129 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="dropdown courses-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hamburber-icon"></span>All Courses</a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hamburber-icon"></span>All Courses</a>
           <div class="dropdown-menu courses-tabs">
             <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="courses1" aria-controls="courses1" role="tab" data-toggle="tab">Operations</a></li>
-              <li role="presentation"><a href="#courses2" aria-controls="courses2" role="tab" data-toggle="tab">Finance</a></li>
-              <li role="presentation"><a href="#courses3" aria-controls="courses3" role="tab" data-toggle="tab">Human Resources</a></li>
-              <li role="presentation"><a href="#courses4" aria-controls="courses4" role="tab" data-toggle="tab">Personal Development</a></li>
-              <li role="presentation"><a href="#courses5" aria-controls="courses5" role="tab" data-toggle="tab">Sales And Marketing</a></li>
-              <li role="presentation"><a href="#courses6" aria-controls="courses6" role="tab" data-toggle="tab">IT Software & Certifications</a></li>
-              <li role="presentation"><a href="#courses7" aria-controls="courses7" role="tab" data-toggle="tab">Development</a></li>
-              <li role="presentation"><a href="#courses8" aria-controls="courses8" role="tab" data-toggle="tab">Other Online Courses</a></li>
+              <li role="presentation" class="active"><a href="{% url 'func_area_results' 'operations' 5 %}#courses1" aria-controls="courses1" role="tab">Operations</a></li>
+              <li role="presentation"><a href="{% url 'func_area_results' 'finance' 5 %}#courses2" aria-controls="courses2" role="tab">Finance</a></li>
+              <li role="presentation"><a href="{% url 'func_area_results' 'human-resource' 5 %}#courses3" aria-controls="courses3" role="tab">Human Resources</a></li>
+              <li role="presentation"><a href="{% url 'func_area_results' 'personal-development' 5 %}#courses4" aria-controls="courses4" role="tab">Personal Development</a></li>
+              <li role="presentation"><a href="{% url 'func_area_results' 'sales-marketing' 5 %}#courses5" aria-controls="courses5" role="tab">Sales And Marketing</a></li>
+              <li role="presentation"><a href="{% url 'func_area_results' 'it-software-certification' 5 %}#courses6" aria-controls="courses6" role="tab">IT Software & Certifications</a></li>
+              <li role="presentation"><a href="{% url 'func_area_results' 'development' 5 %}#courses7" aria-controls="courses7" role="tab">Development</a></li>
+              <li role="presentation"><a href="{% url 'func_area_results' 'other-online' 5 %}#courses8" aria-controls="courses8" role="tab">Other Online Courses</a></li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="courses1">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a href="{% url 'func_area_results' 'operations' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses2">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a href="{% url 'func_area_results' 'finance' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses3">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a href="{% url 'func_area_results' 'human-resource' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses4">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a href="{% url 'func_area_results' 'personal-development' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses5">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a href="{% url 'func_area_results' 'sales-marketing' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses6">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a href="{% url 'func_area_results' 'it-software-certification' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses7">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'func_area_results' 'development' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses8">
                 <ul>
-                <li><a href="#">GetCertGo Certification(164)</a></li>
-                <li><a href="#">Government of India - Vskills Certification(283)</a></li>
-                <li><a href="#">ACCA IFRS Certifications(4)</a></li>
-                <li><a href="#">Aon Hewitt HR Certifications(5)</a></li>
-                <li><a href="#">ICFL Training Programs(5)</a></li>
-                <li><a href="#">Analytics and Big Data(3)</a></li>
-                <li><a tabindex="-1" href="#">View all products</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
+                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
+                <li><a tabindex="-1" href="{% url 'func_area_results' 'other-online' 5 %}">View all products</a></li>
               </ul>
               </div>
             </div>
           </div>
         </li>
         <li class="dropdown jobs-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Job Assistance Services</a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Job Assistance Services</a>
           <ul class="dropdown-menu">
-            <li><a href="#">Interview Preparation</a></li>
-            <li><a href="#">Job Search Guidance</a></li>
-            <li><a href="#">Competitive Exams</a></li>
-            <li><a href="#">Government Jobs</a></li>
-            <li><a href="#">Government News</a></li>
+            <li><a href="{% url 'search:search_listing' %}?q=interview+preparation">Interview Preparation</a></li>
+            <li><a href="{% url 'search:search_listing' %}?q=job+search+guidance">Job Search Guidance</a></li>
+            <li><a href="{% url 'search:search_listing' %}?q=competitive+exams">Competitive Exams</a></li>
+            <li><a href="{% url 'search:search_listing' %}?q=government+jobs">Government Jobs</a></li>
+            <li><a href="{% url 'search:search_listing' %}?q=government+news">Government News</a></li>
           </ul>
         </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="#">
-          <form action="" class="search">
-            <input type="text" class="form-control input-sm" maxlength="64" placeholder="Search" />
-            <button type="submit" class="search-icon"></button>
-          </form>
-          </a>
-        </li>
         <li class="dropdown call-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="call-icon"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="call-icon"></span></a>
           <ul class="dropdown-menu">
-            <li><a class="text-center" href="#"><strong>Call us:</strong> 0124 - 3955001 / 02</a></li>
+            <li><a class="text-center" href="tel:0124-3955001"><strong>Call us:</strong>0124 - 3955001 / 02</a></li>
           </ul>
         </li>
         <li class="dropdown cart-dropdown">
@@ -152,15 +144,15 @@
         </li>
         {% if request.session.candidate_id %}
         <li class="dropdown login-dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="loggedin-user"><img src="{% static "shinelearn/images/user-loggedin.jpg" %}" align="user name"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="loggedin-user"><img src="{% static "shinelearn/images/user-loggedin.jpg" %}" align="user name"></span></a>
 
           <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">
             <li><a href="{% url "dashboard:dashboard" %}">My inbox</a></li>
             <li><a href="{% url "dashboard:dashboard-myorder" %}">My orders</a></li>
             <li><a href="{% url "dashboard:dashboard-mywallet" %}">My Wallet</a></li>
-            <li><a href="#">Referrals</a></li>
-            <li><a href="#">{{request.session.email}}</a></li>
+            <li><a href="{% url "dashboard:roundone-dashboard" %}">Referrals</a></li>
+            <li><a>{{request.session.email}}</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
           </ul>
         </li>

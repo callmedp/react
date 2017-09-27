@@ -76,7 +76,23 @@
                     {% if obj.product.type_flow == 12 and obj.parent %}
                         <strong><a>{{obj.parent.product.name}}: {{obj.product.name}}</a></strong>
                     {% else %}
-                        <strong><a>{{obj.product.name}}</a></strong>
+                        <strong>
+                          <a>
+                            {{obj.product.name}}
+                            {% if obj.product.get_exp_db %}
+                             - {{obj.product.get_exp_db}}
+                            {% endif %}
+                            {% if obj.product.get_studymode_db %}
+                             - {{obj.product.get_studymode_db}}
+                            {% endif %}
+                            {% if obj.product.get_coursetype_db %}
+                             - {{obj.product.get_coursetype_db}}
+                            {% endif %}
+                            {% if obj.product.get_duration_db %}
+                             - {{obj.product.get_duration_db}}
+                            {% endif %}
+                          </a>
+                      </strong>
                     {% endif %}
                   </datalist>
                   <datalist class="col-sm-3">

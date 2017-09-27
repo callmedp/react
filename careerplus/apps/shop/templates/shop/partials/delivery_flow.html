@@ -1,34 +1,400 @@
-<!-- Delivery flow container -->
-<section class="container-fluid detail-box">
-  <div class="container">
-    <div class="row">
-      <div id="delivery" class="col-sm-12 col-md-8 delivery-flow scroll">
-        <h2>Delivery flow</h2>
-        <ul>
-          <li class="wd8">
-            <figure class="dot-icon"></figure>
-          </li>
-          <li>
-            <figure class="submit-order"></figure>
-            <article>Submit your <br>Order</article>
-          </li>
-          <li>
-            <figure class="coupon-code"></figure>
-            <article>Receive a coupon code for the course</article>
-          </li>
-          <li>
-            <figure class="partner-site"></figure>
-            <article>Apply coupon code on partner site</article>
-          </li>
-          <li>
-            <figure class="start-course"></figure>
-            <article>Start the course on partner site</article>
-          </li>
-          <li class="wd8">
-            <figure class="dot-icon"></figure>
-          </li>
-        </ul>
+<!-- main parent2 section start -->
+<section class="container-fluid cls_scroller_parent pr">
+  <div class="row">
+  {% if sqs.pTF == 1 %}
+    <section class="container-fluid detail-box">
+    <div class="container">
+      <div class="row">
+        <div id="delivery" title="resume-writing" class="col-sm-12 col-md-8 delivery-flow scroll">
+          <h2>Delivery flow</h2>
+          <ul>
+            <li class="wd8">
+              <figure class="dot-icon"></figure>
+            </li>
+            <li>
+              <figure class="blue-circle">
+                <figure class="df-cart"></figure>
+              </figure>
+              <article>Place order and upload your initial resume</article>
+            </li>
+            <li>
+              <figure class="blue-circle">
+                <figure class="df-contact"></figure>
+              </figure>
+              <article>Our resume expert will contact you for discussion</article>
+            </li>
+            <li>
+              <figure class="blue-circle">
+                <figure class="df-give-feedback"></figure>
+              </figure>
+              <article>Receive 1st draft and give feedback to the expert</article>
+            </li>
+            <li>
+              <figure class="blue-circle">
+                <figure class="df-download"></figure>
+              </figure>
+              <article>Download your finalized professional resume</article>
+            </li>
+            <li class="wd8">
+              <figure class="dot-icon"></figure>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </div>      
+    </div>      
+    </section>
+
+    <!-- Courses -->
+  {% elif sqs.pTF == 2 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="Courses" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-study-material"></figure>
+                </figure>
+                <article>Receive online access/study material from course provider</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-start-learn"></figure>
+                </figure>
+                <article>Access the material and start learning</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-get-certified"></figure>
+                </figure>
+                <article>Appear for exam – Get Certified (only if there is certificate available)</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+
+    <!-- Resume Critique -->
+  {% elif sqs.pTF == 3 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="Resume-Critique" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order and upload your resume</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-resume-expert"></figure>
+                </figure>
+                <article>Our resume expert will evaluate your resume</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-recieve-feedback"></figure>
+                </figure>
+                <article>Receive feedback from resume expert</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-apply-feedback"></figure>
+                </figure>
+                <article>Apply feedback to develop the best resume yourself</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+
+    <!-- International Profile update -->
+  {% elif sqs.pTF == 4 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="International-Profile-update" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order and upload your resume</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-update-profile"></figure>
+                </figure>
+                <article>Our expert will update your profile</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-access-profile"></figure>
+                </figure>
+                <article>Start accessing your profile</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-get-job"></figure>
+                </figure>
+                <article>Increase your chances of getting relevant job matches</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+
+    <!-- Featured profile -->
+  {% elif sqs.pTF == 5 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="Featured-profile" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order and upload your resume</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-update-profile"></figure>
+                </figure>
+                <article>Our expert will update your profile</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-featured-shine"></figure>
+                </figure>
+                <article>Get featured on shine</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-get-views"></figure>
+                </figure>
+                <article>Get 10x recruiter views</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+
+    <!-- IDFY/Assessment reports -->
+  {% elif sqs.pTF == 6 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="IDFY/Assessment-reports" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-update-profile"></figure>
+                </figure>
+                <article>Upload your details on partner site</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-verification"></figure>
+                </figure>
+                <article>Verification process by the team</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-download"></figure>
+                </figure>
+                <article>Download Assessment report</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+
+    <!-- Resume booster -->
+  {% elif sqs.pTF == 7 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="Resume-booster" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-give-feedback"></figure>
+                </figure>
+                <article>Upload resume</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-sahred-recruiters"></figure>
+                </figure>
+                <article>Resume shared with 1000+ Recruiters</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-contact"></figure>
+                </figure>
+                <article>Increase chances of getting Interview Calls</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+
+    <!-- Roundone -->
+  {% elif sqs.pTF == 9 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="Roundone" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-give-feedback"></figure>
+                </figure>
+                <article>Apply on relative jobs</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-talk-referrals"></figure>
+                </figure>
+                <article>Talk to referrals</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-contact"></figure>
+                </figure>
+                <article>Get an interview call</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+
+    <!-- Courses study Mate -->
+  {% elif sqs.pTF == 10 %}
+    <section class="container-fluid detail-box">
+      <div class="container">
+        <div class="row">
+          <div id="delivery" title="Courses-study-Mate" class="col-sm-12 col-md-8 delivery-flow scroll">
+            <h2>Delivery flow</h2>
+            <ul>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-cart"></figure>
+                </figure>
+                <article>Place order</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-start-course"></figure>
+                </figure>
+                <article>Give assessment to start your course</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-best-educators"></figure>
+                </figure>
+                <article>Learn from best educators in the industry</article>
+              </li>
+              <li>
+                <figure class="blue-circle">
+                  <figure class="df-get-certified"></figure>
+                </figure>
+                <article>Get Certified</article>
+              </li>
+              <li class="wd8">
+                <figure class="dot-icon"></figure>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>      
+    </section>
+  {% endif %}
+</div>
 </section>

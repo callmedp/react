@@ -16,10 +16,11 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
+from geolocation.models import Country
 
 from io import StringIO
 
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem, InternationalProfileCredential
 from shop.models import DeliveryService
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
@@ -189,7 +190,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(WelcomeCallVeiw, self).get_queryset()
-        queryset = queryset.filter(status=1, welcome_call_done=False).order_by('payment_date')
+        queryset = queryset.filter(status=1, welcome_call_done=False)
 
         try:
             if self.query:
@@ -228,7 +229,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
         except:
             pass
 
-        return queryset.order_by('modified')
+        return queryset.order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_midout_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -396,7 +397,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status=5)
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status__in=[5, 3])
 
         user = self.request.user
         if user.is_superuser:
@@ -1724,6 +1725,7 @@ class ActionOrderItemView(View):
 
                 for oi in booster_ois:
                     token = TokenExpiry().encode(oi.order.email, oi.pk, days)
+                    to_emails = [oi.order.email]
                     email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     candidate_data.update({
                         "email": oi.order.email,
@@ -1746,14 +1748,13 @@ class ActionOrderItemView(View):
 
                         try:
                             # send mail to rectuter
-                            recruiters = settings.BOOSTER_RECRUITERS
                             if 92 not in email_sets:
                                 mail_type = 'BOOSTER_RECRUITER'
                                 send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
                             # send mail to candidate
                             if 93 not in email_sets:
                                 mail_type = 'BOOSTER_CANDIDATE'
-                                send_email_task.delay(to_emails, mail_type, recruiter_data, status=93, oi=oi.pk)
+                                send_email_task.delay(to_emails, mail_type, candidate_data, status=93, oi=oi.pk)
                             
                             # send sms to candidate
                             SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
@@ -1859,6 +1860,18 @@ class ActionOrderItemView(View):
                     obj.save()
                     approval += 1
 
+                    obj.orderitemoperation_set.create(
+                        oi_status=6,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=obj.last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                    
                     # mail to user about writer information
                     profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
                     country_obj = Country.objects.get(pk=profile_obj.object_id)
@@ -1880,17 +1893,6 @@ class ActionOrderItemView(View):
                     except Exception as e:
                         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                    obj.orderitemoperation_set.create(
-                        oi_status=6,
-                        last_oi_status=last_oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
-                        last_oi_status=obj.last_oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
                 msg = str(approval) + ' orderitems approved.'
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:

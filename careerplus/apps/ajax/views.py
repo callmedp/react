@@ -17,7 +17,6 @@ from review.models import Review
 from users.mixins import RegistrationLoginApi
 from order.models import Order, OrderItem
 from console.order_form import FileUploadForm, VendorFileUploadForm
-from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
@@ -136,9 +135,13 @@ class AjaxProductLoadMoreView(TemplateView):
             except EmptyPage:
                 # products=paginator.page(paginator.num_pages)
                 products = 0
+            for product in products:
+                if float(product.pPfin):
+                    product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
             context.update({
                 'products': products, 'page': page,
-                'slug': slug, 'site': settings.SITE_DOMAIN,
+                'slug': slug,
+                'site': settings.SITE_PROTOCOL + "://" + settings.SITE_DOMAIN,
             })
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -257,7 +260,7 @@ class ApproveByAdminDraft(View):
                         try:
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(sms_type), str(e)))
+                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
                     
                     obj.orderitemoperation_set.create(
                         oi_draft=obj.oi_draft,
@@ -298,8 +301,9 @@ class ApproveByAdminDraft(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
+
                     draft_upload_mail(oi=obj, to_emails=to_emails, mail_type=mail_type, email_dict=data)
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
@@ -470,7 +474,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(sms_oi_status=104)
                             except Exception as e:
                                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-                                 
+
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
                             linkedin=obj.oio_linkedin,

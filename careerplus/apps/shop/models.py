@@ -1,4 +1,5 @@
 from django.utils import timezone
+from datetime import datetime, date
 
 from decimal import Decimal
 from django.db import models
@@ -6,6 +7,7 @@ from django.utils.html import strip_tags
 from django.utils import six        
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -24,6 +26,7 @@ from .managers import (
     BrowsableProductManager,
     SaleableProductManager)
 from .utils import ProductAttributesContainer
+from . import choices
 from .functions import (
     get_upload_path_category,
     get_upload_path_product_banner,
@@ -1232,55 +1235,108 @@ class Product(AbstractProduct, ModelMeta):
             return delivery_services.none()
 
     def get_exp(self):
+        # for code return
         if self.is_writing:
-            return getattr( self.attr, R_ATTR_DICT.get('EXP')).code \
-                        if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
-                        else '' 
+            return getattr(self.attr, R_ATTR_DICT.get('EXP')).code \
+                if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
+                else ''
         elif self.is_service:
-            return getattr( self.attr, R_ATTR_DICT.get('EXP')).code \
-                        if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
-                        else ''
+            return getattr(self.attr, S_ATTR_DICT.get('EXP')).code \
+                if getattr(self.attr, S_ATTR_DICT.get('EXP'), None) \
+                else ''
         else:
             return ''
-    
+
+    def get_exp_db(self):
+        # return display value
+        if self.is_writing:
+            return choices.EXP_DICT.get(getattr(self.attr, R_ATTR_DICT.get('EXP')).code) \
+                if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
+                else ''
+        elif self.is_service:
+            return choices.EXP_DICT.get(getattr(self.attr, S_ATTR_DICT.get('EXP')).code) \
+                if getattr(self.attr, S_ATTR_DICT.get('EXP'), None) \
+                else ''
+        else:
+            return ''
+
     def get_studymode(self):
+        # for Solr
         if self.is_course:
-            return getattr( self.attr, C_ATTR_DICT.get('SM')).code \
-                        if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
-                        else '' 
+            return getattr(self.attr, C_ATTR_DICT.get('SM')).code \
+                if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
+                else ''
+        else:
+            return ''
+
+    def get_studymode_db(self):
+        # return display value
+        if self.is_course:
+            return choices.STUDY_MODE.get(getattr(self.attr, C_ATTR_DICT.get('SM')).code)\
+                if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
+                else ''
         else:
             return ''
 
     def get_courselevel(self):
+        # return code
         if self.is_course:
-            return getattr( self.attr, C_ATTR_DICT.get('CL')).code \
-                        if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
-                        else '' 
+            return getattr(self.attr, C_ATTR_DICT.get('CL')).code \
+                if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
+                else ''
+        else:
+            return ''
+
+    def get_courselevel_db(self):
+        # for db return display value
+        if self.is_course:
+            return getattr(self.attr, C_ATTR_DICT.get('CL')) \
+                if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
+                else ''
         else:
             return ''
     
     def get_coursetype(self):
         if self.is_course:
-            return getattr( self.attr, C_ATTR_DICT.get('CT')).code \
-                        if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
-                        else '' 
+            return getattr(self.attr, C_ATTR_DICT.get('CT')).code \
+                if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
+                else ''
+        else:
+            return ''
+
+    def get_coursetype_db(self):
+        # return dispaly value
+        if self.is_course:
+            return choices.COURSE_TYPE_DICT.get(getattr(self.attr, C_ATTR_DICT.get('CT')).code) \
+                if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
+                else ''
         else:
             return ''
 
     def get_cert(self):
         if self.is_course:
-            return getattr( self.attr, C_ATTR_DICT.get('CERT')) \
-                        if getattr(self.attr, C_ATTR_DICT.get('CERT'), None) \
-                        else 0 
+            return getattr(self.attr, C_ATTR_DICT.get('CERT')) \
+                if getattr(self.attr, C_ATTR_DICT.get('CERT'), None) \
+                else 0
         else:
             return 0
 
     def get_duration(self):
         if self.is_course:
-            dd = getattr( self.attr, C_ATTR_DICT.get('DD')) \
-                        if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
-                        else 0
-            return convert_to_month(dd) 
+            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                else 0
+            return convert_to_month(dd)
+        else:
+            return ''
+
+    def get_duration_db(self):
+        # return display value
+        if self.is_course:
+            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                else 0
+            return choices.DURATION_DICT.get(convert_to_month(dd))
         else:
             return ''
 
@@ -2016,3 +2072,96 @@ class DeliveryService(AbstractAutoDate, AbstractSEO):
         if self.inr_price:
             return round(self.inr_price, 0)
         return Decimal(0)
+
+
+class FunctionalArea(AbstractAutoDate, ModelMeta):
+    name = models.CharField(
+        _('Name'), max_length=100, unique=True)
+    faproducts = models.ManyToManyField(
+        'shop.Product',
+        verbose_name=_('FA Product'),
+        through='ProductFA',
+        through_fields=('fa', 'product'),
+        blank=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _('FA')
+        verbose_name_plural = _('FAs')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+
+    def __str__(self):
+        return self.name
+
+    def get_products(self):
+        products = self.faproducts.filter(
+            active=True,
+            productfas__active=True)
+        return products
+
+
+class ProductFA(AbstractAutoDate):
+    fa = models.ForeignKey(
+        FunctionalArea,
+        verbose_name=_('FA'),
+        related_name='productfas',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        verbose_name=_('Product'),
+        related_name='productfas',
+        on_delete=models.CASCADE)
+    priority = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('product', 'fa')
+        verbose_name = _('Product FA')
+        verbose_name_plural = _('Product FAs')
+
+
+class Skill(AbstractAutoDate, ModelMeta):
+    name = models.CharField(
+        _('Name'), max_length=100, unique=True)
+    skillproducts = models.ManyToManyField(
+        'shop.Product',
+        verbose_name=_('Skill Product'),
+        through='ProductSkill',
+        through_fields=('skill', 'product'),
+        blank=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _('Skill')
+        verbose_name_plural = _('Skills')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+
+    def get_products(self):
+        products = self.skillproducts.filter(
+            active=True,
+            productskills__active=True)
+        return products
+
+
+class ProductSkill(AbstractAutoDate):
+    skill = models.ForeignKey(
+        Skill,
+        verbose_name=_('Skill'),
+        related_name='productskills',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        verbose_name=_('Product'),
+        related_name='productskills',
+        on_delete=models.CASCADE)
+    priority = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('product', 'skill')
+        verbose_name = _('Product Skill')
+        verbose_name_plural = _('Product Skills')
+
+

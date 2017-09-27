@@ -4,9 +4,9 @@
 {% block css_section %}
     {{block.super}}
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
-    <link href="{% static '/shinelearn/css/common/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static '/shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static '/shinelearn/css/search/listing.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endblock css_section %}
 {% block title %}Search Result Page - Shine Learning{% endblock title %}
 
@@ -17,11 +17,12 @@
             <div class="container">
                 <!-- breadcrums -->
                 {% block breadcrumbs %}
-                  {% include "product/partials/breadcrumb.html" %}
+                  {% include "shop/partials/breadcrumb.html" %}
                 {% endblock breadcrumbs %}
 
                 {% block product_header %}
                     <div class="search-caption">
+                        {% if form %}
                         <div class="search-box">
                             <form class="form-inline" id="search_form" data-role="form">
                                 {% for field in form %}
@@ -29,9 +30,12 @@
                                     {{field}}
                                 </div>
                                 {% endfor %}
-                                <button type="submit" class="find-jobs-btn btn">Find</button>
+                                <button type="submit" class="find-jobs-btn btn"></button>
                             </form>
                         </div>
+                        {% else %}
+                        <h1>Search Results Page</h1>
+                        {% endif %}
                     </div>
                 {% endblock product_header %}
             </div>
@@ -89,6 +93,7 @@
     <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
 
     <script type="text/javascript">
@@ -107,8 +112,11 @@
                   setHeight:140,
                   theme:"dark-3"
                 });
+
             });
         })(jQuery);
+                        var funcAreaSet = {{ func_area_set|safe }},
+                skillsSet = {{ skills_set|safe }};
     </script>
 
     <script type="text/javascript">

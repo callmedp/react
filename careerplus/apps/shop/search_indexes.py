@@ -79,7 +79,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pBS = indexes.CharField(model_attr='buy_shine', indexed=False) 
     pStar = indexes.MultiValueField(null=True, indexed=False)
     pRC = indexes.IntegerField(model_attr='no_review', default=0, indexed=False) 
-    pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=False) 
+    pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=True)
     pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
 
     pVi = indexes.CharField(null=True, indexed=False)

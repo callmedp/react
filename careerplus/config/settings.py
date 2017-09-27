@@ -11,7 +11,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = 'http://localhost:8000'
+SITE_DOMAIN = 'localhost:8000'
 SITE_PROTOCOL = 'https'
 
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
@@ -136,7 +136,7 @@ ROUNDONE_API_DICT = {
 
 # Shine settings
 SHINE_SITE = 'https://sumosc.shine.com'
-SHINE_API_URL = 'https://sumosc.shine.com'
+SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
 CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
 CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
 SHINE_API_USER = 'scpapiuser@gmail.com'
@@ -162,9 +162,6 @@ EMAIL_SERVER = 'http://localhost:8000'
 # encode decode settings
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
-
-# Booster Recruiters
-BOOSTER_RECRUITERS = ['akamarnath2@gmail.com']
 
 # Linkedin Cridential
 CLIENT_ID = "757gbstpwa6dqp"
@@ -214,8 +211,7 @@ CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.67.80:6379/10",
-            "redis://172.22.67.80:6379/11",
+            "redis://127.0.0.1:6379/1",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -226,8 +222,7 @@ CACHES = {
     'session': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.67.80:6379/12",
-            "redis://172.22.67.80:6379/13",
+            "redis://172.22.67.80:6379/2",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -237,14 +232,10 @@ CACHES = {
     },
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://172.22.67.80:6379/7",
+        "LOCATION": "redis://127.0.0.1:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
         }
     },
 }
-
-
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False

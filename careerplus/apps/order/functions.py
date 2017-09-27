@@ -2,7 +2,6 @@ import logging
 import json
 import requests
 
-from django.utils import timezone
 from django.conf import settings
 
 from emailers.email import SendMail
@@ -148,14 +147,11 @@ def pending_item_email(order=None):
             sms_sets = list(oi.smsorderitemoperation_set.all().values_list('sms_oi_status',flat=True).distinct())
             try:
                 if oi.product.type_flow == 1:
-                    if  21 not in email_sets and 21 not in sms_sets:
+                    if 21 not in email_sets and 21 not in sms_sets:
                         data.update({
-                            'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
+                            'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())     
                         })
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=21)
+                        send_email_task.apply_async((to_emails, mail_type, data, 21, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -166,12 +162,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 3:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())     
                     })
                     if 41 not in email_sets and 41 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=41)
+                        send_email_task.apply_async((to_emails, mail_type, data, 41, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -182,12 +176,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 4:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())     
                     })
                     if 61 not in email_sets and 61 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=61)
+                        send_email_task.apply_async((to_emails, mail_type, data, 61, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -198,12 +190,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 5:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())     
                     })
-                    if  71 not in email_sets and  71 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=71)
+                    if 71 not in email_sets and 71 not in sms_sets:
+                        send_email_task.apply_async((to_emails, mail_type, data, 71, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -214,12 +204,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 7:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())     
                     })
-                    if 91 not in email_sets  and 91 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=91)
+                    if 91 not in email_sets and 91 not in sms_sets:
+                        send_email_task.apply_async((to_emails, mail_type, data, 91, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -230,12 +218,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 12:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())     
                     })
                     if 141 not in email_sets and 141 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=141)
+                        send_email_task.apply_async((to_emails, mail_type, data, 141, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -246,12 +232,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 13:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode())     
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())     
                     })
-                    if 151 not in email_sets and  151 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=151)
+                    if 151 not in email_sets and 151 not in sms_sets:
+                        send_email_task.apply_async((to_emails, mail_type, data, 151, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -262,12 +246,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 8:
                     data.update({
-                        'counselling_form': "%s/linkdin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk),
+                        'counselling_form': "%s://%s/linkdin/counsellingform/%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, oi.pk),
                     })
                     if 108 not in email_sets and 108 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=151)
+                        send_email_task.apply_async((to_emails, mail_type, data, 108, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -278,12 +260,10 @@ def pending_item_email(order=None):
 
                 elif oi.product.type_flow == 9:
                     data.update({
-                        'complete_profile': "%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN) 
+                        'complete_profile': "%s://%s/dashboard/roundone/profile/" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN) 
                     })
                     if 121 not in email_sets and 121 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=151)
+                        send_email_task.apply_async((to_emails, mail_type, data, 121, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -297,9 +277,7 @@ def pending_item_email(order=None):
                         'test_url': "%s/dashboard" % (settings.SITE_DOMAIN) 
                     })
                     if 131 not in email_sets and 131 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=900)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=151)
+                        send_email_task.apply_async((to_emails, mail_type, data, 131, oi.pk), countdown=900)
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -331,19 +309,17 @@ def process_mailer(order=None):
                 data.update({
                     'subject': 'Your service details related to order <'+str(oi.order.id)+'>',
                     'username': oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
-                    'oi': oi,
+                    'type_flow': oi.product.type_flow,
                     'pk': oi.pk,
                     'email': oi.order.email,
                     'candidateid': oi.order.email,
                 })
                 if oi.product.type_flow == 1:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     if 25 not in email_sets and 25 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=25)
+                        send_email_task.apply_async((to_emails, mail_type, data, 25, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=25)
@@ -352,12 +328,10 @@ def process_mailer(order=None):
 
                 elif oi.product.type_flow == 3:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     if 44 not in email_sets and 44 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=44)
+                        send_email_task.apply_async((to_emails, mail_type, data, 44, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=44)
@@ -366,12 +340,10 @@ def process_mailer(order=None):
 
                 elif oi.product.type_flow == 4:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     if 64 not in email_sets and 64 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=64)
+                        send_email_task.apply_async((to_emails, mail_type, data, 64, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=64)
@@ -380,12 +352,10 @@ def process_mailer(order=None):
 
                 elif oi.product.type_flow == 5:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     if 74 not in email_sets and 74 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=74)
+                        send_email_task.apply_async((to_emails, mail_type, data, 74, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=74)
@@ -394,12 +364,10 @@ def process_mailer(order=None):
 
                 elif oi.product.type_flow == 12:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
                     })
                     if 145 not in email_sets and 145 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=145)
+                        send_email_task.apply_async((to_emails, mail_type, data, 145, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=145)
@@ -408,12 +376,10 @@ def process_mailer(order=None):
 
                 elif oi.product.type_flow == 13:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     if 155 not in email_sets and 155 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=155)
+                        send_email_task.apply_async((to_emails, mail_type, data, 155, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=155)
@@ -422,12 +388,10 @@ def process_mailer(order=None):
                 
                 elif oi.product.type_flow == 7:
                     data.update({
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     if 94 not in email_sets and 94 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=94)
+                        send_email_task.apply_async((to_emails, mail_type, data, 94, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=94)
@@ -436,9 +400,7 @@ def process_mailer(order=None):
 
                 elif oi.product.type_flow == 2:
                     if 161 not in email_sets and 161 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=161)
+                        send_email_task.apply_async((to_emails, mail_type, data, 161, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=161)
@@ -447,9 +409,7 @@ def process_mailer(order=None):
 
                 elif oi.product.type_flow == 6:
                     if 171 not in email_sets and 171 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=171)
+                        send_email_task.apply_async((to_emails, mail_type, data, 171, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=171)
@@ -458,12 +418,10 @@ def process_mailer(order=None):
                     
                 elif oi.product.type_flow == 8:
                     data.update({
-                        'counselling_form': "http://%s/linkdin/counsellingform/%s" % (settings.SITE_DOMAIN, oi.pk),
+                        'counselling_form': "%s://%s/linkdin/counsellingform/%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, oi.pk),
                     })
                     if 105 not in email_sets and 105 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=105)
+                        send_email_task.apply_async((to_emails, mail_type, data, 105, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=105)
@@ -472,12 +430,10 @@ def process_mailer(order=None):
                     
                 elif oi.product.type_flow == 9:
                     data.update({
-                        'complete_profile': "http://%s/dashboard/roundone/profile/" % (settings.SITE_DOMAIN),
+                        'complete_profile': "%s://%s/dashboard/roundone/profile/" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN),
                     })
                     if 122 not in email_sets and 122 not in sms_sets:
-                        return_val = send_email_task.apply_async((to_emails, mail_type, data), countdown=600)
-                        if return_val.result:
-                            oi.emailorderitemoperation_set.create(email_oi_status=122)
+                        send_email_task.apply_async((to_emails, mail_type, data, 122, oi.pk), countdown=600)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(sms_oi_status=122)
@@ -531,7 +487,7 @@ def payment_realisation_mailer(order=None):
                     "first_name": order.first_name if order.first_name else order.candidate_id,
                     "txn": pymt_obj.txn,
                     "order_id": order.id,
-                    'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL,
+                    'site': 'https://' + settings.SITE_DOMAIN + settings.STATIC_URL,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, invoice_data)
@@ -550,7 +506,7 @@ def service_initiation(order=None):
                 sms_type = "SERVICE_INITIATION"
                 data.update({
                     'mobile': oi.order.mobile,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                    'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                 })
                 sms_sets = list(oi.smsorderitemoperation_set.all().values_list('sms_oi_status',flat=True).distinct())
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
@@ -583,7 +539,7 @@ def service_initiation(order=None):
 def create_short_url(login_url={}):
     short_url = {}
     data = {}
-    data['login_url'] = login_url.get('upload_url')
+    data['longUrl'] = login_url.get('upload_url')
     google_api = "%s?key=%s" % (settings.URL_SHORTENER_API, settings.URL_SHORTENER_ACCESS_KEY)
     response = requests.post(url=google_api, data=json.dumps(data), headers={'Content-Type': 'application/json'})
     if response.ok:
