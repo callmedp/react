@@ -6,7 +6,6 @@
                 instances: []
             };
         }
-        ;
 
         window.inputTags.methods = {
             tags: function (element, callback) {
@@ -153,6 +152,7 @@
                     self.destroy();
                     self._autocomplete()._init();
                     self._focus();
+                    self._blur();
                 };
 
                 /*
@@ -160,7 +160,6 @@
                  */
                 self.build = function () {
                     self.$html = $('<div>').addClass(self.LIST_CLASS);
-                    console.log(self.options.placeholder)
                     self.$input = $('<input>').attr({
                         'type': 'text',
                         'class': self.FIELD_CLASS,
@@ -175,7 +174,9 @@
                         if ($(e.target).hasClass('inputTags-field')) {
                             return false;
                         }
-                        self.$input.focus();
+                        if (self.tags.length < self.options.max) {
+                             self.$input.focus();
+                        }
                     });
                 };
 
@@ -226,7 +227,17 @@
                         var value = self.$input.val().trim();
 
                         if ($.inArray(key, self.keys) < 0) {
-                            return false;
+                            if (self._autocomplete()._isSet()) {
+                                self.options.autocomplete['values'] = $.grep(self.options.autocomplete['actualValues'], function(v) {
+                                    return v.toLowerCase().indexOf(value.toLowerCase()) >= 0;
+                                });
+                                self._autocomplete()._build();
+                                if (self.options.autocomplete['values'].length){
+                                    self._autocomplete()._show();
+                                }
+
+                            }
+                            return
                         }
 
                         if (27 === key) {
@@ -284,16 +295,17 @@
                             self._buildItem(value);
                             self._insert(value);
                         }
-
                         self._cancel();
                         self._updateValue();
                         self.destroy();
                         self._autocomplete()._build();
-
                         self._setInstance(self);
-
-                        self.$input.focus();
-
+                        if (self._autocomplete()._isSet()) {
+                            self.options.autocomplete['values'] = self.options.autocomplete['actualValues'];
+                        }
+                        if (self.tags.length < self.options.max) {
+                             self.$input.focus();
+                        }
                         return false;
                     });
                 };
@@ -443,7 +455,7 @@
 
                     return {
                         _isSet: function () {
-                            return values.length > 0;
+                            return self.options.autocomplete.actualValues.length > 0;
                         },
                         _init: function () {
                             if (!self._autocomplete()._isSet()) {
@@ -466,12 +478,12 @@
                             });
 
                             self._autocomplete()._bindClick();
-
-                            $(document)
-                                .not(self.$autocomplete)
-                                .on('click', function () {
-                                    self._autocomplete()._hide();
-                                });
+                            // $(document)
+                            //     .not(self.$autocomplete)
+                            //     .on('click', function () {
+                            //         debugger;
+                            //         self._autocomplete()._hide();
+                            //     });
                         },
                         _bindClick: function () {
                             $(self.$autocomplete).off('click').on('click', '.' + self.AUTOCOMPLETE_ITEM_CLASS, function (e) {
@@ -533,6 +545,15 @@
 
                         if (self._autocomplete()._isSet() && !self.$input.hasClass('is-autocomplete') && !self.$input.hasClass('is-edit')) {
                             self._autocomplete()._show();
+                        }
+                    });
+                };
+                self._blur = function () {
+                    self.$input.on('blur', function () {
+                        self._bindEvent('blur');
+
+                        if (self._autocomplete()._isSet()) {
+                            self._autocomplete()._hide();
                         }
                     });
                 };
