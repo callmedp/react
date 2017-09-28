@@ -83,6 +83,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
 
     pVi = indexes.CharField(null=True, indexed=False)
+    pViA = indexes.CharField(null=True, indexed=False)
     pCT = indexes.CharField(null=True, indexed=False)
     pDD = indexes.IntegerField(default=0, indexed=False)
     pRD = indexes.BooleanField(default=True, indexed=False)
@@ -504,6 +505,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_pVi(self, obj):
         if obj.vendor:
             return obj.vendor.image.url if obj.vendor.image else ''
+        return ''
+
+    def prepare_pViA(self, obj):
+        if obj.vendor:
+            return obj.vendor.image_alt
         return ''
     
     def prepare_pRD(self, obj):
