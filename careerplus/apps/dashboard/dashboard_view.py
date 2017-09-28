@@ -24,6 +24,7 @@ from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from wallet.models import Wallet
+from cart.models import Subscription
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
@@ -76,6 +77,13 @@ class DashboardView(TemplateView):
         if rcourses:
             rcourses = rcourses[:6]
             context['recommended_products'] = rcourses
+        try:
+            roundone_user = Subscription.objects.filter(candidateid=candidate_id)
+            context.update({
+                'roundone_user': roundone_user
+            })
+        except Exception as e:
+            raise e
 
         return context
 
@@ -170,7 +178,7 @@ class DashboardMyorderView(TemplateView):
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
 
         if rcourses:
             rcourses = rcourses[:6]
@@ -640,7 +648,7 @@ class DashboardMyWalletView(TemplateView):
         wal_obj, created = Wallet.objects.get_or_create(owner=candidate_id)
         wal_total = wal_obj.get_current_amount()
         wal_txns = wal_obj.wallettxn.filter(txn_type__in=[1, 2, 3, 4, 5], point_value__gt=0).order_by('-created')
-        wal_txns = wal_txns.order_by('-created').select_related('order', 'cart')[:10]
+        wal_txns = wal_txns.order_by('-created').select_related('order', 'cart')
         context.update({
             "wal_obj": wal_obj,
             "wal_total": wal_total,
@@ -649,7 +657,7 @@ class DashboardMyWalletView(TemplateView):
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
 
         if rcourses:
             rcourses = rcourses[:6]

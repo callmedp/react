@@ -7,7 +7,7 @@ IS_LIVE = True
 MAIN_DOMAIN_PREFIX = 'http://learning1.shine.com'
 SITE_DOMAIN = 'learning1.shine.com'
 SITE_PROTOCOL = 'http'
-SHINE_SITE = 'https://shine.com'
+SHINE_SITE = 'https://www.shine.com'
 SHINE_API_URL = 'https://shine.com/api/v2'
 
 

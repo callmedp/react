@@ -1,0 +1,225 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+{% spaceless %}
+
+    
+    {% block title %}User Inbox|Shinelearning{% endblock title %} 
+    
+    {% block css_section %}
+        {{block.super}}
+        <link type="text/css" href="{% static "/shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
+        <style type="text/css">
+            .error{
+                color: red;
+            }
+        </style>
+    {% endblock css_section %}
+    
+    <!-- main section start -->
+    {% block main_container %}
+
+      {% block page_heading %}
+
+       {% block breadcrumb %}
+           <!-- breadcrums -->
+            <section class="container">
+              <div class="overlay"></div>
+                <div id="id_overlay" style="background-color: rgba(255, 255, 255,1); height: 100%; left: 0; position: fixed; top: 0px; width: 100%; z-index: 100; min-height: 100%; display:none;">
+                </div>
+                <div id="id_load" style='position: fixed; width: 100%; background: url("{% static "/shinelearn/images/loader.gif" %}") no-repeat; height: 100%; top: 50%; left: 50%; z-index: 101; display:none;'>
+                </div>
+                <div class="queries">
+                    Queries? <a href="mailto:support@roundone.in">support@roundone.in</a>
+                </div>
+              <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li class="active">Dashboard</li>
+              </ol>  
+            </section>
+       {% endblock breadcrumb %}
+      
+      {% endblock page_heading %}
+
+      {% block main_section %}
+          <section class="container mt-10">
+
+            <!-- page content body start -->
+            <div class="row">
+            {% block left_content %}
+            <!-- left content start -->
+              <div class="col-sm-3 dashboard-tab">
+                <a href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
+                <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
+                <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
+                
+                <a class="active" href="{% url "dashboard:roundone-dashboard" %}"><span class="referal-icon"></span> Referral</a>
+                <div class="please-call">
+                  Please call us at <strong>0120-4959420/32</strong> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.
+                </div>
+              </div>  
+            <!-- left content end -->
+            {% endblock left_content %}
+
+            {% block right_content %}
+                <!-- right content start -->
+                <div class="col-sm-9 bdr dashboard-tab-content">
+                    <ul role="tablist" class="roundone-tab" id="id_roundone_tab">
+                      <li role="presentation" class="active">
+                        <a href="#referral" aria-controls="referral" role="tab" 
+                        data-toggle="tab">Referral Request</a>
+                      </li>
+                      <li role="presentation" class="" id="tab_upcoming">
+                        <a href="#upcoming" aria-controls="upcoming" role="tab" 
+                        data-toggle="tab">Upcoming Interactions</a>
+                      </li>
+                      <li role="presentation" class="" id="tab_past_interaction">
+                        <a href="#past" aria-controls="past" role="tab" 
+                        data-toggle="tab">Past Interactions</a>
+                      </li>
+                      <li role="presentation" class="" id="tab_saved">
+                        <a href="#Saved" aria-controls="Saved" role="tab" 
+                        data-toggle="tab">Saved</a>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content">
+                      <!-- Referral Request tab -->
+                      <div role="tabpanel" class="tab-pane active" id="referral">
+                        {% if accepted %}
+                          <div class="col-sm-12 notification">
+                            Congratulations, Your Job Application has been accepted
+                          </div>
+                          <ul class="table-data">
+                          {% for accepted_data in accepted %}
+                            <li>
+                              <datalist class="col-sm-3">
+                                <a href="#">{{accepted_data.jobTitle}}</a>
+                                  <p>{{accepted_data.company}}</p>
+                              </datalist>
+                              <datalist class="col-sm-4">
+                                Referrer : {{accepted_data.referrerDetails.position}}, {{accepted_data.referrerDetails.department}}
+                              </datalist>
+                              <datalist class="col-sm-3">
+                                <p>Date Applied: {{accepted_data.requestedDate}}</p> <p>Date Accepted: {{accepted_data.acceptedDate}}</p> <p>Expires on: {{accepted_data.expiryDate}}}</p>
+                                </datalist>
+                              <datalist class="col-sm-2"><a class="bdr-button" 
+                              href="{{accepted_data.requestId}}">Confirm now</a></datalist>
+                            </li>
+                          {% endfor %}
+                          </ul>
+                          {% endif %}
+
+                          {% if pending %}
+                          <ul class="table-data">
+                            <li class="data-heading">
+                              <datalist class="col-sm-3">
+                                Job Applied
+                              </datalist>
+                              <datalist class="col-sm-4">
+                                Referrer
+                              </datalist>
+                              <datalist class="col-sm-3">
+                                Status
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                Date Requested
+                              </datalist>
+                            </li>
+                            {% for pending_data in pending %}
+                            <li>
+                              <datalist class="col-sm-3">
+                                <a href="#">{{pending_data.jobTitle}}</a>
+                                  <p>{{pending_data.company}}</p>
+                              </datalist>
+                              <datalist class="col-sm-4">
+                                {{pending_data.referrerDetails.position}}, {{pending_data.referrerDetails.department}}
+                              </datalist>
+                              <datalist class="col-sm-3">
+                                {{pending_data.status}}
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                {{pending_data.requestedDate}}
+                              </datalist>
+                            </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}           
+                      </div>
+
+                      <!-- Upcoming Interactions tab -->
+                      <div role="tabpanel" class="tab-pane" id="upcoming">
+                      </div>
+
+                      <!-- Past Interactions tab -->
+                      <div role="tabpanel" class="tab-pane" id="past">
+                          
+                      </div>
+
+                      <!-- Saved tab -->
+                      <div role="tabpanel" class="tab-pane" id="Saved">
+                      </div>
+                    </div>
+
+                
+                </div>
+                <!-- right content end -->
+            {% endblock right_content %}
+
+            </div>
+            <!-- page content body end -->
+
+        </section>
+        <!-- main section end -->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+           <div id="id_close_success_modal">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h1 class="modal-title">Login</h1>
+            </div>
+            <div class="modal-body">
+              <p id="id_success_message">{{message}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="id_success_accept">{{accept_btn}}</button>
+              <button type="button" id="id_success_reject">{{reject_btn}}</button>
+              <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+            </div>
+            </div>
+        </div>
+        </div>  
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp_error">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+           <div id="id_close_error_modal">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h1 class="modal-title">Login</h1>
+            </div>
+            <div class="modal-body">
+              <p id="id_error_message">{{message}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="id_error_accept">{{accept_btn}}</button>
+              <button type="button" id="id_error_reject">{{reject_btn}}</button>
+              <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+            </div>
+            </div>
+        </div>
+        </div>  
+        </div>
+      {% endblock main_section %}
+
+      {% block recommended_products %}
+          {% include "partial/recommended_product.html" %}
+      {% endblock recommended_products %}
+    {% endblock main_container %}
+
+    {% block js_section %}
+        {{block.super}}
+        <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}"></script>
+        <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+        <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
+    {% endblock js_section %}
+  
+{% endspaceless %}

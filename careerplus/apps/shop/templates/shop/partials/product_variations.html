@@ -1,3 +1,4 @@
+{% load humanize search_tags %}
 {% if prd_service == 'course' %}
 
 
@@ -21,12 +22,12 @@
           {% for vars in var_list %}
             <tr>
               <td><label><input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" data-price="{{vars.inr_price}}" data-id="{{vars.id}}" actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}"></label></td>
-              <td>{{vars.mode}}</td>
-              <td>{{vars.duration}} months</td>
+              <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
+              <td>{{vars.duration|get_choice_display:"DURATION_DICT"}}</td>
               <td>{% if vars.certify %}
                 Yes {% else %}
                 No{% endif %}</td>
-              <td>{{vars.type}}</td>
+              <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
               <td><strong>Rs. {{vars.inr_price}}/-</strong></td>
             </tr>
           {% endfor %}
@@ -38,7 +39,7 @@
 
 {% else %}
 
-    {% if prd_service == 'service' %}
+    {% if prd_service == 'service' and var_list %}
       
 
      <!-- Select products (optional) -->

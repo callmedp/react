@@ -23,7 +23,7 @@ month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7, 'Au
 
 
 class RoundoneDashboardView(RoundOneAPI, TemplateView):
-    template_name = 'roundone/dashboard-roundone.html'
+    template_name = 'dashboard/dashboard-roundone.html'
 
     def get_context_data(self, **kwargs):
         context = super(RoundoneDashboardView, self).get_context_data(**kwargs)
@@ -63,7 +63,7 @@ class RoundoneDashboardView(RoundOneAPI, TemplateView):
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
 
         if rcourses:
             rcourses = rcourses[:6]

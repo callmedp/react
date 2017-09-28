@@ -17,7 +17,6 @@ from review.models import Review
 from users.mixins import RegistrationLoginApi
 from order.models import Order, OrderItem
 from console.order_form import FileUploadForm, VendorFileUploadForm
-from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
@@ -136,6 +135,9 @@ class AjaxProductLoadMoreView(TemplateView):
             except EmptyPage:
                 # products=paginator.page(paginator.num_pages)
                 products = 0
+            for product in products:
+                if float(product.pPfin):
+                    product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
             context.update({
                 'products': products, 'page': page,
                 'slug': slug,
@@ -275,7 +277,6 @@ class ApproveByAdminDraft(View):
                         added_by=request.user)
 
                 elif product_flow in [1, 12, 13]:
-
                     last_oi_status = obj.last_oi_status
                     if (obj.draft_counter + 1) == settings.DRAFT_MAX_LIMIT:
                         obj.oi_status = 4

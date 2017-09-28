@@ -164,8 +164,7 @@ class ProductInformationMixin(object):
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
-
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
         if rcourses:
             rcourses = rcourses[:6]
         if rcourses:
@@ -244,7 +243,7 @@ class ProductInformationMixin(object):
             return {'country_variation_list': service_list}
 
     def solar_product_variation(self, product):
-        course_variation_list = json.loads(sqs.pVrs)
+        course_variation_list = json.loads(product.pVrs)
         return course_variation_list
 
     def get_frequentlybought(self, product, category):
@@ -323,7 +322,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             ctx.update(json.loads(self.sqs.pPOP))
         else:
             ctx.update(json.loads(self.sqs.pPOP))
-        if self.sqs.pTP == 1:
+        if self.sqs.pPc == 'course':
             pvrs_data = json.loads(self.sqs.pVrs)
             try:
                 selected_var = pvrs_data['var_list'][0]

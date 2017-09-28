@@ -1,5 +1,5 @@
 from .settings import *
-from .settings_local import *
+
 
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning1.shine.com'

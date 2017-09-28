@@ -91,6 +91,26 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error(str(e))
         return None
 
+    def get_candidate_public_detail(self, email=None, shine_id=None):
+
+        headers = self.get_api_headers()
+
+        if not shine_id and email:
+            shine_id = self.get_shine_id(email=email, headers=headers)
+        elif not email and not shine_id:
+            logging.getLogger('error_log').error("Email ID or shine_id required for profile")
+            return
+        detail_url = settings.SHINE_SITE + \
+            "/api/v2/candidate-public-profiles/" + \
+                shine_id + "/?format=json"
+        try:
+            detail_response = requests.get(detail_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+            if detail_response.status_code == 200 and detail_response.json():
+                return detail_response.json()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return
+
     def get_status_detail(self, email=None, shine_id=None):
         try:
             if shine_id:

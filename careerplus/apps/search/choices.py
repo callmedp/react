@@ -218,11 +218,37 @@ DURATION_FACETS = {
     "d7": "3+ years"
 }
 
+DURATION_DICT = {
+    'D0': '0-1 month',
+    'D1': '1- 3 month',
+    'D2': '3-6 month',
+    'D3': '9 months',
+    'D4': '9-12 months',
+    'D5': '1 -2 years',
+    'D6': '2 -3 years',
+    'D7': '3+ years',
+}
+
+ATTRIBUTE_OPTION = {
+    'BD': 'Basic + More Deliverable',
+    'BS': 'Basic',
+}
+
 STUDY_FACETS = {
     "ol": "Online",
     "cl": "Classroom",
     "bl": "Blended"
 }
+
+STUDY_MODE = dict((
+    ('ON', 'Online'),
+    ('OF', 'Offline'),
+    ('IL', 'Instructor Led'),
+    ('BL', 'Blended'),
+    ('CA', 'Classroom'),
+    ('CF', 'Certifications'),
+    ('DL', 'Distance Learning'),
+))
 
 PRICE_FACETS = {
     1: "0-10000",

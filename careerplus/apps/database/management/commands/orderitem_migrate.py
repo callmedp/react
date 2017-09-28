@@ -324,6 +324,7 @@ class Command(BaseCommand):
                 ON ( cart_orderitem.order_id = cart_order.id ) WHERE cart_order.added_on >= '2014-04-01 00:00:00'  
                 ORDER BY cart_orderitem.added_on DESC
                 """
+        
         oi_df = pd.read_sql(sql,con=db)
                 
         new_order_df = pd.read_sql('SELECT id AS order_obj, co_id as order_id  from order_order', con=db2)
@@ -356,6 +357,7 @@ class Command(BaseCommand):
 
         del product_variation_df
         del product_df
+        del new_order_df
         
         
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
@@ -391,13 +393,12 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Bulk Insert Start')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        
         for i, row in oi_df.iterrows():
             if row['order_obj'] and row['order_obj'] == row['order_obj']:
                 is_combo = False,
                 is_variation = False,
                 is_addon = False
-                product_id = row['product_id']
+                product_id = row['product_id'] if row['product_id'] and row['product_id'] == row['product_id'] else None
                 if row['combo_id'] and row['combo_id'] == row['combo_id']:
                     is_combo = True
 
@@ -414,7 +415,7 @@ class Command(BaseCommand):
                 data_tup = (
                         '',
                         row['name'] if row['name'] and row['name'] == row['name'] else None,
-                        row['product_id'],
+                        product_id,
                         row['units'],
                         Decimal(0),
                         Decimal(0),
@@ -454,18 +455,17 @@ class Command(BaseCommand):
                         row['id'],
                         str(row['expires_on']) if row['expires_on'] == row['expires_on'] else None,
                         )
-                
                 update_values.append(data_tup)    
             if len(update_values) > 5000:
                 
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 print( 'Bulk Insert ' + str(i))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                # cursor.executemany(update_sql, update_values)
+                cursor.executemany(update_sql, update_values)
                 update_values = []
                 
         if update_values:
-            # cursor.executemany(update_sql, update_values)
+            cursor.executemany(update_sql, update_values)
             update_values = []
         cursor.close()
         cursor = db2.cursor()
@@ -475,11 +475,12 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
         new_order_item_df = pd.read_sql('SELECT id as new_parent_id, coi_id as parent_id FROM order_orderitem',con=db2)
-        
+        new_order_item_df = new_order_item_df[new_order_item_df.parent_id.notnull()]
         oi_df = pd.merge(oi_df, new_order_item_df, how='left', on='parent_id')
         new_order_item_df = new_order_item_df.rename(columns={'new_parent_id': 'new_id', 'parent_id': 'id'})
         oi_df = pd.merge(oi_df, new_order_item_df, how='left', on='id')
 
+        del new_order_item_df
         coi_list = []
         parent_id_list = []
         for i, row in oi_df[~oi_df.new_parent_id.isnull()].iterrows():

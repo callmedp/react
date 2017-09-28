@@ -165,45 +165,42 @@
                     <div class="box row mb-15">
                         <div class="media">
                             <div class="media-left">
-                                <a href="#" class="sigma-pro color1">
-                                    <img src="images/course-logo1.png">
+                                <a href="javascript:void(0);" class="sigma-pro color1">
+                                    <img src="{{ product.pImg}}">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <p class="pb-0"><a href="#">
-                                    <strong>{{product.name}}</strong></a>
+                                <p class="pb-0"><a href="{{site}}{{product.pURL}}">
+                                    <strong>{{product.pNm}}</strong></a>
                                 </p>
                         
                                 <div class="mb-10 c6">
                                     <div class="rating inline-block ml-0 fs-12">
-                                        {% for rating in product.get_ratings %}
-                                            {% if rating == "*" %}
-                                                <sup class="fill-star"></sup>
-                                            {% endif %}
-                                        {% endfor %}
-                                        {{product.avg_rating |floatformat:1}}/5
-                                    </div><!-- end of star rating -->
-
+                                        <sup class="fill-star"></sup>
+                                        {{product.pARx |floatformat:1}}/5
+                                    </div>
                                     <div class="inline-block fs-12">
                                         <figure class="icon-comments"></figure>
                                         <a href="#">{{product.no_review}}</a>
                                         <figure class="icon-jobs ml-10"></figure>
-                                        <strong>{{product.num_jobs}}</strong> Jobs
+                                        {% if product.pNJ %}
+                                            <strong>{{product.pNJ}}</strong> Jobs
+                                        {% endif %}
+                                        {% if "true" in product.pCert %}
                                         <figure class="icon-certificate ml-10">
                                         </figure>Certification
+                                        {% endif %}
                                     </div>
                                 </div><!-- end of icons wrapper -->
 
                                 <p class="pb-5 fs-12 c6">
                                     Providers
                                     <a href="#" class="tag-bg fs-11 ml-5">
-                                    {{product.vendor.name}}
+                                    {{product.pPvn}}
                                     </a>
                                 </p>
                                 <p class="pb-0 fs-12">
-                                    Starting at <strong>{{product.inr_price}}</strong> 
-                                    <span class="strike-through c9 fs-11"></span>
-                                    <span class="off"></span>
+                                    Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
                                 </p>
                             </div><!-- end of media body -->
                         </div><!-- end of media -->
