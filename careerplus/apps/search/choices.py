@@ -257,3 +257,9 @@ PRICE_FACETS = {
     4: "30001-40000",
     5: "40000+"
 }
+
+EXP_DICT = dict((
+    ('FR', '0-1 years'),
+    ('ME', '1-4 years'),
+    ('EX', '4-8 years'),
+    ('SU', '8-15 years'),))

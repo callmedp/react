@@ -1,5 +1,6 @@
 from django.conf import settings
 from cart.mixins import CartMixin
+from cart.models import Subscription
 
 
 def js_settings(request):
@@ -24,6 +25,11 @@ def js_settings(request):
 def common_context_processor(request):
     context = {}
     cart_count = CartMixin().get_cart_count(request)
+    try:
+        candidate_id = request.session.get('candidate_id', None)
+        roundone_user = Subscription.objects.filter(candidateid=candidate_id)
+    except:
+        pass
     context.update({
         "cart_count": cart_count,
         "PRODUCT_GROUP_LIST": settings.PRODUCT_GROUP_LIST,
@@ -37,5 +43,6 @@ def common_context_processor(request):
         "BUSINESS_HEAD_GROUP_LIST": settings.BUSINESS_HEAD_GROUP_LIST,
         "DEPARTMENT_HEAD_GROUP_LIST": settings.DEPARTMENT_HEAD_GROUP_LIST,
         "FINANCE_GROUP_LIST": settings.FINANCE_GROUP_LIST,
+        "roundone_user": roundone_user,
     })
     return context

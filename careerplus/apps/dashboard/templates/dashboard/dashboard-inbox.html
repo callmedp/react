@@ -53,8 +53,6 @@
                 <a class="active" href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
                 <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
                 <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
-                <a href="{% url "dashboard:roundone-dashboard" %}"><span class="referal-icon"></span> Referral</a> 
-                
               {% if roundone_user %}
                 <a href="{% url "dashboard:roundone-dashboard" %}"><span class="referal-icon"></span> Referral</a>
               {% endif %}
