@@ -41,7 +41,7 @@ class HomePageView(TemplateView):
         if self.request.session.get('candidate_id'):
             rcourses = get_recommendations(self.request.session.get('func_area', None),
                                            self.request.session.get('skills', None),
-                                           SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+                                           SQS().only('pTt pURL pHd pNJ pImA pImg pARx pStar'))
             if rcourses:
                 rcourses = rcourses[:9]
             else:

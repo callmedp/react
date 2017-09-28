@@ -77,10 +77,10 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd|truncatechars:55 }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|truncatechars:50 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
-                                    <strong>{{product.pAR}}<small>/5</small></strong>
+                                    <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
 
@@ -104,10 +104,10 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd|truncatechars:55 }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|truncatechars:50 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
-                                    <strong>{{product.pAR}}<small>/5</small></strong>
+                                    <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
 
@@ -183,7 +183,7 @@
                                     <a title="{{tprd.product.title}}" class="box-panel" href="{{tprd.product.get_absolute_url}}">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h3 class="listing-heading">{{tprd.product.heading|truncatechars:55}}</h3>
+                                                <h3 class="listing-heading">{{tprd.product.heading|truncatechars:50}}</h3>
                                                 <div class="rating-review-box">
                                                     <figure class="full-star"></figure>
                                                     <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
@@ -226,7 +226,7 @@
                                     <img class="img-responsive" src="{{ tprd.product.image.url }}" width="200" height="125" alt="{{tprd.product.image_alt}}">
                                 </figure>
                                 <div class="caption">
-                                    <h3 class="listing-heading">{{tprd.product.heading|truncatechars:55}}</h3>
+                                    <h3 class="listing-heading">{{tprd.product.heading|truncatechars:50}}</h3>
                                     <div class="rating-review-box">
                                         <figure class="full-star"></figure>
                                         <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>

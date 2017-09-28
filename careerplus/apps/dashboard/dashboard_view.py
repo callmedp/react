@@ -178,7 +178,7 @@ class DashboardMyorderView(TemplateView):
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
 
         if rcourses:
             rcourses = rcourses[:6]
@@ -657,7 +657,7 @@ class DashboardMyWalletView(TemplateView):
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
 
         if rcourses:
             rcourses = rcourses[:6]
