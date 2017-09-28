@@ -61,36 +61,6 @@ class ProductInformationMixin(object):
             'breadcrumbs': breadcrumbs
         }
 
-    def get_info(self, product):
-        info = {}
-        info['prd_img'] = product.image.url
-        info['prd_img_alt'] = product.image_alt
-        info['prd_img_bg'] = product.get_bg
-        info['prd_H1'] = product.heading if product.heading else product.name
-        info['prd_about'] = product.about
-        info['prd_desc'] = product.description
-        info['prd_uget'] = product.buy_shine
-        info['prd_rating'] = round(product.avg_rating, 1)
-        info['prd_num_rating'] = product.no_review
-        info['prd_num_bought'] = product.buy_count
-        info['prd_num_jobs'] = product.num_jobs
-        info['prd_vendor'] = product.vendor.name
-        info['prd_vendor_img'] = product.vendor.image.url
-        info['prd_vendor_img_alt'] = product.vendor.image_alt
-        info['prd_rating_star'] = product.pStar
-        info['prd_video'] = product.video_url
-        if product.is_course:
-            info['prd_service'] = 'course'
-        elif product.is_writing:
-            info['prd_service'] = 'resume'
-        elif product.is_service:
-            info['prd_service'] = 'service'
-        else:
-            info['prd_service'] = 'other'
-        info['prd_product'] = product.type_product
-        info['prd_exp'] = product.get_exp
-        return info
-
     def solar_info(self, product):
         info = {}
         info['prd_img'] = product.pImg
