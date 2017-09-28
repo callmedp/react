@@ -96,6 +96,10 @@ function update_variation_price(req_price, actual_price){
     }
 }
 
+function updateCartPrice(){
+    
+}
+
 
 $(document).ready(function() {
     var req_selected = true;
@@ -114,7 +118,7 @@ $(document).ready(function() {
                     actual_price = parseFloat($(this).attr('actual-price'));
                     update_variation_price(req_price, actual_price);
                     $(this).attr('checked', true);
-                    console.log(req_price, actual_price);
+                    // console.log(req_price, actual_price);
 
                 }catch(err){
                     console.log(err);

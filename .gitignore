@@ -23,6 +23,10 @@ sdist/
 var/
 media/
 
+*
+!*/
+!media/attachment/**
+
 *.egg-info/
 .installed.cfg
 *.egg
@@ -94,7 +98,6 @@ ENV/
 careerplus/templates/.gitignore
 # Pycharm files
 .idea
-media/
 
 static/
 settings_local.py

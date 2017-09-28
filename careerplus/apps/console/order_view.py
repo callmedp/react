@@ -82,7 +82,7 @@ class OrderListView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(OrderListView, self).get_queryset()
         user = self.request.user
-        excl_txns = PaymentTxn.objects.filter(status=0).exclude(payment_mode__in=[1, 4])
+        excl_txns = PaymentTxn.objects.filter(status__in=[0, 2, 3, 4, 5], payment_mode__in=[6, 7])
         excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
         queryset = queryset.exclude(id__in=excl_order_list)
         if user.has_perm('order.can_show_all_order'):
@@ -97,7 +97,8 @@ class OrderListView(ListView, PaginationMixin):
                 queryset = queryset.filter(
                     Q(number__icontains=self.query) |
                     Q(email__icontains=self.query) |
-                    Q(mobile__icontains=self.query))
+                    Q(mobile__icontains=self.query) |
+                    Q(id__icontains=self.query))
         except:
             pass
 
@@ -197,7 +198,8 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
                 queryset = queryset.filter(
                     Q(number__icontains=self.query) |
                     Q(email__icontains=self.query) |
-                    Q(mobile__icontains=self.query))
+                    Q(mobile__icontains=self.query) |
+                    Q(id__icontains=self.query))
         except:
             pass
 

@@ -11,7 +11,7 @@
         <a title="{{ prd.pTt }}" class="box-panel" href="{{prd.pURL}}">
           <div class="media">
             <div class="media-body">
-              <h3 class="listing-heading">{{ product.pHd|truncatechars:55 }}</h3>
+              <h3 class="listing-heading">{{ prd.pHd|truncatechars:50 }}</h3>
               <div class="rating-review-box">
                     {% for star in prd.pStar %}
                           {% if star == '*' %}

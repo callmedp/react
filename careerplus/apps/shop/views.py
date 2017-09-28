@@ -164,8 +164,7 @@ class ProductInformationMixin(object):
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
-
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
         if rcourses:
             rcourses = rcourses[:6]
         if rcourses:
@@ -339,8 +338,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
         ctx.update(json.loads(self.sqs.pFBT))
         get_fakeprice = self.get_solar_fakeprice(self.sqs.pPinb, self.sqs.pPfinb)
-        # ctx.update(self.getSelectedProduct(product))
-        # ctx.update(self.getSelectedProductPrice(product))
+
+        # ctx.update(self.getSelectedProduct_solr(self.sqs))
+        # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         return ctx

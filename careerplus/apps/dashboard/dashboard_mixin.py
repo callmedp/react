@@ -64,7 +64,11 @@ class DashboardInfo(object):
                 status__in=[0, 1, 3],
                 candidate_id=candidate_id)
 
-            excl_txns = PaymentTxn.objects.filter(status=0, order__candidate_id=candidate_id).exclude(payment_mode__in=[1, 4])
+            excl_txns = PaymentTxn.objects.filter(
+                status__in=[0, 2, 3, 4, 5],
+                payment_mode__in=[6, 7],
+                order__candidate_id=candidate_id)
+            # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
             excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
 
             orders = orders.exclude(id__in=excl_order_list)
