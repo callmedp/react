@@ -143,7 +143,7 @@ ROUNDONE_API_DICT = {
 # SHINE_API_USER = 'scpapiuser@gmail.com'
 # SHINE_API_USER_PWD = 'tarun@123'
 
-SHINE_SITE = 'https://mapi.shine.com'
+SHINE_SITE = 'https://www.shine.com'
 SHINE_API_URL = 'https://mapi.shine.com/api/v2'
 CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
 CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
