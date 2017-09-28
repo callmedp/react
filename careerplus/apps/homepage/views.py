@@ -77,22 +77,23 @@ class HomePageView(TemplateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id')
         if candidate_id:
-            candidate_detail = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
             if candidate_detail:
-                func_area = candidate_detail.get('functional_area')[0] \
-                    if len(candidate_detail.get('functional_area', [])) else ''
+                func_area = candidate_detail.get('jobs')[0].get("sub_field", "") \
+                    if len(candidate_detail.get('jobs', [])) else ''
                 skills = [skill['value'] for skill in candidate_detail['skills']]
-                context.update({'recmnd_func_area': func_area, 'recmnd_skills': ','.join(skills)})
-                func_area = FunctionalArea.objects.filter(name__iexact=func_area)
-                if func_area:
+                func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
+                if func_area_obj:
                     self.request.session.update({
-                        'func_area': func_area[0].id
+                        'func_area': func_area_obj[0].id
                     })
-                skills = [s.id for s in Skill.objects.filter(name__in=skills)]
-                if skills:
+                    context.update({'recmnd_func_area': func_area})
+                skills_obj = [s.id for s in Skill.objects.filter(name__in=skills)]
+                if skills_obj:
                     self.request.session.update({
-                        'skills': skills
+                        'skills': skills_obj
                     })
+                    context.update({'recmnd_skills': ','.join(skills)})
         func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
         skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
         context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
