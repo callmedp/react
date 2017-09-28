@@ -73,10 +73,6 @@
     </script>
     <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}">
     </script>
-    <script type='text/javascript' id='spd-busns-spt' async=''  
-        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-        data-client='324ed0abb0694b0c66a6daecb178352d'>
-    </script>
     <script>
         $('.nav-tabs > li > a').hover(function() {
             $(this).tab('show');
@@ -86,6 +82,12 @@
           });
     </script>
 {% endblock js_section %}
+{% block johukum %}
+    <script type='text/javascript' id='spd-busns-spt' async=''  
+        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  
+        data-client='324ed0abb0694b0c66a6daecb178352d'>
+    </script>
+{% endblock johukum %}
 </body>
 </html>
 {% endspaceless %}
