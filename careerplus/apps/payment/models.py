@@ -1,6 +1,7 @@
 from django.db import models
 
 from seo.models import AbstractAutoDate
+from geolocation.models import CURRENCY_SYMBOL
 
 from .choices import STATUS_CHOICES, PAYMENT_MODE
 
@@ -22,8 +23,8 @@ class PaymentTxn(AbstractAutoDate):
 
     payment_date = models.DateTimeField(null=True, blank=True)
 
-    currency = models.CharField(
-        "Currency", max_length=12, null=True, blank=True)
+    currency = models.PositiveIntegerField(
+        "Currency", choices=CURRENCY_SYMBOL, default=0)
 
     txn_amount = models.DecimalField(
         "Txn Amount", decimal_places=2, max_digits=12, default=0)
@@ -33,6 +34,9 @@ class PaymentTxn(AbstractAutoDate):
     instrument_issuer = models.CharField(max_length=255, null=True, blank=True)
     instrument_issue_date = models.CharField(
         max_length=255, null=True, blank=True)
+
+    txn_info = models.TextField(
+        "Transaction info")
 
     class Meta:
         app_label = 'payment'

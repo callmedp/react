@@ -11,24 +11,35 @@ from payment.models import PaymentTxn
 class CouponOrderInline(admin.TabularInline):
     model = CouponOrder
     extra = 0
+    raw_id_fields = ('coupon',)
 
 
 class WalletOrderInline(admin.TabularInline):
     model = WalletTransaction
     extra = 0
+    raw_id_fields = ('wallet', 'cart',)
 
 
 class TxnOrderInline(admin.TabularInline):
     model = PaymentTxn
+    raw_id_fields = ('cart',)
     extra = 0
-    
+
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    raw_id_fields = ('parent', 'partner', 'product', 'delivery_service',
+        'assigned_to', 'assigned_by',)
+    extra = 0
+
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'number', 'site', 'candidate_id', 'email',
         'status', 'date_placed']
     list_filter = ('status', )
+    raw_id_fields = ('country',)
     search_fields = ('number', 'id', 'candidate_id', 'email')
-    inlines = [CouponOrderInline, WalletOrderInline, TxnOrderInline]
+    inlines = [OrderItemInline, TxnOrderInline, CouponOrderInline, WalletOrderInline]
 
 
 class OrderItemOperationInline(admin.TabularInline):

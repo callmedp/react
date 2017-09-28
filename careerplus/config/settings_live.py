@@ -18,3 +18,8 @@ HAYSTACK_CONNECTIONS = {
         'INCLUDE_SPELLING': False,
     },
 }
+
+####### CCAVENUE SETTINGS ###########################
+CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
+CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
+CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'

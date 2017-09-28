@@ -196,6 +196,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+# ckeditor settings...
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
 CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
@@ -207,6 +208,8 @@ CKEDITOR_CONFIGS = {
         # 'extraPlugins': 'codesnippet',
     },
 }
+CKEDITOR_RESTRICT_BY_USER = False
+CKEDITOR_REQUIRE_STAFF = False
 
 
 BROKER_URL = 'redis://localhost:6379/0'

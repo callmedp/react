@@ -17,6 +17,7 @@ from hashlib import md5
 from cart.models import Cart
 from order.mixins import OrderMixin
 from order.models import Order
+from geolocation.models import PAYMENT_CURRENCY_SYMBOL
 
 from .mixin import PaymentMixin
 from .models import PaymentTxn
@@ -32,15 +33,18 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         res_dict['merchant_id'] = '392'
         res_dict['integration_type'] = 'iframe_normal'
         res_dict['language'] = 'EN'
+        res_dict['accesscode'] = settings.CCAVENUE_ACCESS_CODE
+        res_dict['workingkey'] = settings.CCAVENUE_WORKING_KEY
+        res_dict['url'] = settings.CCAVENUE_URL
 
-        if settings.DEBUG:
-            res_dict['accesscode'] = 'AVJH02BJ75AO65HJOA'
-            res_dict['workingkey'] = '608D07A4DCF6EE54C142F158A107DB44'
-            res_dict['url'] = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
-        else:
-            res_dict['accesscode'] = 'AVQE02BI61BL12EQLB'
-            res_dict['workingkey'] = '2A4038880C818A5E64E59B6F33493D0F'
-            res_dict['url'] = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+        # if settings.DEBUG:
+        #     res_dict['accesscode'] = 'AVJH02BJ75AO65HJOA'
+        #     res_dict['workingkey'] = '608D07A4DCF6EE54C142F158A107DB44'
+        #     res_dict['url'] = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+        # else:
+        #     res_dict['accesscode'] = 'AVQE02BI61BL12EQLB'
+        #     res_dict['workingkey'] = '2A4038880C818A5E64E59B6F33493D0F'
+        #     res_dict['url'] = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
         return res_dict
 
@@ -56,7 +60,11 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         #     res_dict['currency'] = request.session.get('currency')
         # else:
         #     res_dict['currency'] = 'INR'
-        res_dict['currency'] = order_obj.currency
+        currency_dict = dict(PAYMENT_CURRENCY_SYMBOL)
+        if currency_dict.get(order_obj.currency):
+            res_dict['currency'] = currency_dict.get(order_obj.currency)
+        else:
+            res_dict['currency'] = 'INR'
         return res_dict
 
     def pad(self, data):
@@ -111,7 +119,7 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         context_dict.update(self.get_constants())
         context_dict.update(self.default_params(request, order_obj))
         order_id = pay_txn.txn
-        
+
         amount = amount = order_obj.total_incl_tax
         surl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("success",))
         curl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("cancel",))
@@ -239,6 +247,9 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
             order_status = decresp_dict.get('order_status')
             order = Order.objects.get(pk=order_id)
             txn_obj = PaymentTxn.objects.get(txn=txn_id)
+            txn_info = str(decresp_dict)
+            txn_obj.txn_info = txn_info
+            txn_obj.save()
 
             if stresp.upper() == "SUCCESS":
 

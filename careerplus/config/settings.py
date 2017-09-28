@@ -134,6 +134,12 @@ ROUNDONE_API_DICT = {
 }
 
 
+####### CCAVENUE SETTINGS ###########################
+CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
+CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
+CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+
+
 # Shine settings
 
 # SHINE_SITE = 'https://sumosc.shine.com'
@@ -247,4 +253,3 @@ CACHES = {
         }
     },
 }
-from .settings_local import *
