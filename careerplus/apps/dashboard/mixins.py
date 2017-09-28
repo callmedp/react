@@ -1,11 +1,12 @@
 import requests
 import logging
-import time
+
 from datetime import date
 import json
 from django.conf import settings
-from shine.core import ShineToken, ShineCandidateDetail
+from shine.core import ShineCandidateDetail
 from microsite.roundoneapi import RoundOneAPI
+
 
 class RoundOneMixin(RoundOneAPI):
 
@@ -47,15 +48,15 @@ class RoundOneMixin(RoundOneAPI):
                 try:
                     institute = institute_list[index_edu]
                 except:
-                    institute = 'xxx'
+                    institute = ''
                 try:
                     degree = degree_list[index_edu]
                 except:
-                    degree = 'xxx'
+                    degree = ''
                 try:
                     major = major_list[index_edu]
                 except:
-                    major = 'xxx'
+                    major = ''
                 try:
                     year = year_list[index_edu]
                 except:
@@ -106,21 +107,21 @@ class RoundOneMixin(RoundOneAPI):
 
             if company_list and position_list:
                 try:
-                    company = company_list[index_edu]
+                    company = company_list[index_job]
                 except:
-                    company = 'xxx'
+                    company = ''
                 try:
-                    position = position[index_edu]
+                    position = position_list[index_job]
                 except:
-                    position = 'xxx'
+                    position = ''
                 try:
                     emp_from = date(start_year_list[index_job], 1, start_month_list[index_job]).strftime("%Y-%m-%d")
                 except:
-                    emp_from = 'xxx'
+                    emp_from = ''
                 try:
                     emp_to = date(end_year_list[index_job], 1, end_month_list[index_job]).strftime("%Y-%m-%d")
                 except:
-                    emp_to = 'xxx'
+                    emp_to = ''
                 
                 roundone_profile = request.session.get("roundone_profile")
                 if not roundone_profile:
@@ -185,7 +186,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     personal_data = {
                         "candidate_id": shine_id,
                         "first_name": first_name,
-                        "last_name" : last_name,
+                        "last_name": last_name,
                         "cell_phone": mobile,
                         "email": email,
                         "country_code": country_code,
@@ -370,7 +371,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                         returnlist.append(True)
 
                 if False not in returnlist:
-                    return True, ""    
+                    return True, ""
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

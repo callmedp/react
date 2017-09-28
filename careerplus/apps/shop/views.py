@@ -321,25 +321,28 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update(self.get_reviews(product, 1))
         if self.sqs.pPc == 'course':
             ctx.update(json.loads(self.sqs.pPOP))
-        else:
-            ctx.update(json.loads(self.sqs.pPOP))
-        if self.sqs.pPc == 'course':
             pvrs_data = json.loads(self.sqs.pVrs)
             try:
                 selected_var = pvrs_data['var_list'][0]
             except Exception as e:
                 selected_var = None
-            ctx.update({'selected_var':selected_var})
+            ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
-        if self.is_combos(self.sqs): 
+
+        else:
+            ctx.update(json.loads(self.sqs.pPOP))
+            pvrs_data = json.loads(self.sqs.pVrs)
+            ctx.update(pvrs_data)
+
+        if self.is_combos(self.sqs):
             ctx.update(json.loads(self.sqs.pCmbs))
 
         ctx.update(json.loads(self.sqs.pFBT))
         get_fakeprice = self.get_solar_fakeprice(self.sqs.pPinb, self.sqs.pPfinb)
         # ctx.update(self.getSelectedProduct(product))
         # ctx.update(self.getSelectedProductPrice(product))
-        ctx.update({'sqs':self.sqs})
-        ctx.update({'get_fakeprice':get_fakeprice})
+        ctx.update({'sqs': self.sqs})
+        ctx.update({'get_fakeprice': get_fakeprice})
         return ctx
 
     def redirect_if_necessary(self, current_path, product):

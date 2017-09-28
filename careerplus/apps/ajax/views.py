@@ -27,7 +27,7 @@ from haystack.query import SearchQuerySet
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
 from order.mixins import OrderMixin
-from .functions import draft_upload_mail
+from .functions import draft_upload_mail, roundone_product
 
 
 class ArticleCommentView(View):
@@ -243,6 +243,7 @@ class ApproveByAdminDraft(View):
 
                     # mail to candidate for resume critique closed
                     to_emails = [obj.order.email]
+                    token = token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
                     email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     email_dict = {}
                     email_dict.update({
@@ -251,6 +252,7 @@ class ApproveByAdminDraft(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -258,6 +260,8 @@ class ApproveByAdminDraft(View):
                     if 42 not in email_sets:
                         send_email_task.delay(to_emails, mail_type, email_dict, status=42, oi=obj.pk)
                         try:
+                            urlshortener = create_short_url(login_url=email_dict)
+                            email_dict.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
@@ -572,6 +576,9 @@ class MarkedPaidOrderView(View):
 
                 # send email through process mailers
                 process_mailer(order=obj)
+
+                #roundone order
+                roundone_product(order=obj)
 
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
