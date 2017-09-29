@@ -73,7 +73,10 @@ class ActionUserMixin(object):
                     "writer_name": assigned_to.name,
                     "writer_email": assigned_to.email,
                     "subject": "Your developed document has been shared with our expert",
-                    "oi": obj,
+                    "type_flow": obj.product.type_flow,
+                    'delivery_service': obj.delivery_service,
+                    'delivery_service_slug': obj.delivery_service.slug,
+                    'delivery_service_name': obj.delivery_service.name,
                 })
                 self.product_flow_wise_mail(orderitem_obj=obj, to_emails=to_emails, mail_type=mail_type, data=email_data)
                 try:
@@ -145,7 +148,10 @@ class ActionUserMixin(object):
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
                             "subject": "Your developed document has been shared with our expert",
-                            "oi": oi,
+                            "type_flow": oi.product.type_flow,
+                            'delivery_service': oi.delivery_service,
+                            'delivery_service_slug': oi.delivery_service.slug,
+                            'delivery_service_name': oi.delivery_service.name,
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if oi.delivery_service.name == 'super-express':
