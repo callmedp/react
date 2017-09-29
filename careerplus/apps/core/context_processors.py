@@ -27,9 +27,9 @@ def common_context_processor(request):
     cart_count = CartMixin().get_cart_count(request)
     try:
         candidate_id = request.session.get('candidate_id', None)
-        roundone_user = Subscription.objects.filter(candidateid=candidate_id)
+        roundone_user = Subscription.objects.filter(candidateid=candidate_id).exists()
     except:
-        pass
+        roundone_user = None
     context.update({
         "cart_count": cart_count,
         "PRODUCT_GROUP_LIST": settings.PRODUCT_GROUP_LIST,

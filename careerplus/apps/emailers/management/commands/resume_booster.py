@@ -1,4 +1,6 @@
 import textwrap
+import logging
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
@@ -63,6 +65,7 @@ def booster():
                 )
 
             except Exception as e:
+                logging.getLogger('cron_log').error("%s" % (str(e)))
                 print (str(e))
         else:
             continue
@@ -72,4 +75,5 @@ def booster():
             mail_type = 'BOOSTER_RECRUITER'
             send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
     except Exception as e:
+        logging.getLogger('cron_log').error("%s" % (str(e)))
         print (str(e))

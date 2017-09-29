@@ -51,7 +51,6 @@ class ArticleCommentView(View):
                     blog.save()
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
-                pass
             data = {"status": status}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -67,8 +66,8 @@ class ArticleShareView(View):
                 obj.no_shares += 1
                 obj.update_score()
                 obj.save()
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
             data = {"status": "success"}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -108,8 +107,8 @@ class CmsShareView(View):
                 pg_counter.no_shares += 1
                 pg_counter.save()
 
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
             data = ["Success"]
             return HttpResponse(json.dumps(list(data)), content_type="application/json")
 
@@ -192,8 +191,8 @@ class AjaxStateView(View):
             country_obj = Country.objects.get(pk=country, active=True)
             states = country_obj.state_set.all().values_list('name', flat=True)
             data['states'] = list(states)
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
@@ -217,8 +216,8 @@ class AjaxOrderItemCommentView(View):
                             added_by=request.user,
                             is_internal=is_internal)
                         data['status'] = 1
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -334,8 +333,9 @@ class ApproveByAdminDraft(View):
                             last_oi_status=obj.last_oi_status,
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
+                
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -356,8 +356,9 @@ class RejectByAdminDraft(View):
                     last_oi_status=last_status,
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
+                
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -501,7 +502,8 @@ class ApproveDraftByLinkedinAdmin(View):
                             last_oi_status=last_status,
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
@@ -523,7 +525,8 @@ class RejectDraftByLinkedinAdmin(View):
                     last_oi_status=last_status,
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()

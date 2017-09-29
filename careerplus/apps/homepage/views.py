@@ -1,3 +1,5 @@
+import logging
+
 from django.views.generic import TemplateView
 from django.conf import settings
 
@@ -32,7 +34,8 @@ class HomePageView(TemplateView):
 
             job_services = job_sqs[: 5]
             job_asst_view_all = tjob.view_all
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
         return {"job_asst_services": list(job_services), "job_asst_view_all": job_asst_view_all}
 
