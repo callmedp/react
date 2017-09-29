@@ -193,7 +193,7 @@ class CartMixin(object):
 
             # update cart_obj in session
             if cart_obj:
-                self.request.session.update({
+                request.session.update({
                     "cart_pk": cart_obj.pk,
                     "checkout_type": 'cart',
                 })
