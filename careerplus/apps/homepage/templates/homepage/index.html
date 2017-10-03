@@ -296,27 +296,31 @@
 
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},
-                skillsSet = {{ skills_set|safe }},
-                prefetchedFuncArea = '{{ recmnd_func_area }}',
-                prefetchedSkills = '{{ recmnd_skills }}';
-      $('#myCarousel1').carousel({
-        interval: false
-      });
+            skillsSet = {{ skills_set|safe }},
+            prefetchedFuncArea = '{{ recmnd_func_area }}',
+            prefetchedSkills = '{{ recmnd_skills }}';
+        $('#myCarousel1').carousel({
+            interval: false
+        });
 
-      $('.product-carousel .carousel .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-          next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
+        $('#query1').typeahead({
+            local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
+        });
 
-        if (next.next().length>0) {
-          next.next().children(':first-child').clone().appendTo($(this));
-        }
-        else {
-          $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-        }
-      });
+        $('.product-carousel .carousel .item').each(function(){
+            var next = $(this).next();
+            if (!next.length) {
+              next = $(this).siblings(':first');
+            }
+            next.children(':first-child').clone().appendTo($(this));
+
+            if (next.next().length>0) {
+              next.next().children(':first-child').clone().appendTo($(this));
+            }
+            else {
+              $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+            }
+        });
     </script>
 
     <script type="text/javascript">

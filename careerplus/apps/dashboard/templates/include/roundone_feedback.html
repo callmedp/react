@@ -23,73 +23,51 @@
 </header>
 <!-- main section start -->
 <section class="container mt-10">
-
     <!-- page content body start -->
     <div class="row">
-
     <!-- left content start -->
-    <div class="col-sm-6">
-     <div class="feedback-enter">
-       <h2>Enter your feedback</h2>
-        <em>"Sanjay Singh" has decided on your referral. <br>Submit feedback to view your result.</em>
-      <form id="id_feedback" method="post">
-        {% csrf_token %}  
-        <p>On a scale of 0-10 would u recommend round one to a friend?</p>
-        <span class="custom-select">
-          <select class="form-control" name="roundoneRating">
-            <option>5 - May be</option>
-            <option>4 - May be</option>
-            <option>3 - May be</option>
-            <option>2 - May be</option>
-            <option>1 - May be</option>
-          </select>
-        </span>
-        <p>Please rate the interation with your referrer</p>
-        <label class="radio-inline">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" 
-          value="option1"> Bad
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" 
-          value="option2"> Ok
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio3" 
-          value="option3"> Good
-        </label>
-        <textarea class="form-control" placeholder="Comments" rows="3"></textarea>
-        <button type="submit" class="submit-button">Submit</button>
-      </form>
-     </div>
-    </div>  
+      <div class="col-sm-6">
+       <div class="feedback-enter">
+         <h2>Enter your feedback</h2>
+          <em>"Sanjay Singh" has decided on your referral. <br>Submit feedback to view your result.</em>
+        <form id="id_feedback" method="post">
+          {% csrf_token %}  
+          <p>On a scale of 0-10 would u recommend round one to a friend?</p>
+          <span class="custom-select">
+            <select class="form-control" name="roundoneRating">
+              <option>5 - May be</option>
+              <option>4 - May be</option>
+              <option>3 - May be</option>
+              <option>2 - May be</option>
+              <option>1 - May be</option>
+            </select>
+          </span>
+          <p>Please rate the interation with your referrer</p>
+          <label class="radio-inline">
+            <input type="radio" name="interviewerRating" id="inlineRadio1" 
+            value="1"> Bad
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="interviewerRating" id="inlineRadio2" 
+            value="2"> Ok
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="interviewerRating" id="inlineRadio3" 
+            value="3"> Good
+          </label>
+          <textarea class="form-control" placeholder="Comments" rows="3" 
+          name="comments"></textarea>
+          <button type="submit" class="submit-button">Submit</button>
+          <input type="hidden" name="form_feedback" 
+          data-url="{% url "dashboard_roundone_result" order_id=order_id %}">
+        </form>
+       </div>
+      </div>  
     <!-- left content end -->
 
     <!-- right content start -->
-    <div class="col-sm-6 referrer-listing">
-      <div class="feedback-referrer">
-       <div class="media">
-          <div class="media-left">
-            <span class="referrer-feedback-icon"></span>
-          </div>
-          <div class="media-body">
-            <h3 class="media-heading">Feedback from your referrer</h3>
-            Thanks for the interviewing with Sanjay Singh. We collected the following feedback
-          </div>
-        </div>
-        <div class="data">
-          <datalist><strong>Parameter</strong></datalist>
-          <datalist><strong>Feedback</strong></datalist>
-          <datalist>Communication Skills</datalist>
-          <datalist>Average</datalist>
-          <datalist>Subject Knowledge</datalist>
-          <datalist>Good</datalist>
-          <datalist>Cultural Fit</datalist>
-          <datalist>Excellent</datalist>
-        </div>
-        <strong>Sanjay Singh has the following comments for you</strong>
-        <em>'Good candidate'</em>
-      </div>
-      <a class="back-dashboard" href="#">Back to Dahsboard</a>
+    <div id="id_interaction_result">
+      {{ result_html }}
     </div>
     <!-- right content end -->
 

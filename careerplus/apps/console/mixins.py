@@ -75,8 +75,8 @@ class ActionUserMixin(object):
                     "subject": "Your developed document has been shared with our expert",
                     "type_flow": obj.product.type_flow,
                     'delivery_service': obj.delivery_service,
-                    'delivery_service_slug': obj.delivery_service.slug,
-                    'delivery_service_name': obj.delivery_service.name,
+                    'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
+                    'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                 })
                 self.product_flow_wise_mail(orderitem_obj=obj, to_emails=to_emails, mail_type=mail_type, data=email_data)
                 try:
@@ -284,11 +284,10 @@ class ActionUserMixin(object):
                 to_emails = [oi.order.email]
                 email_dict = {}
                 email_dict.update({
-
-                    "info": 'Your service has been processed',
-                    "subject": 'Your service has been processed',
-                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "subject": 'Your service(s) has been initiated',
+                    "name": oi.order.first_name if oi.order.first_name else 'User',
                     "mobile": oi.order.mobile,
+                    'oi': oi,
                 })
 
                 mail_type = 'COURSE_CLOSER_MAIL'
