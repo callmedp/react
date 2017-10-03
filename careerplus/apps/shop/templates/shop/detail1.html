@@ -149,7 +149,7 @@
                 <div class="container">
                   <div class="col-sm-12 col-md-8">
                   {% if prd_desc %}
-                    <a title="About Six Sigma" class="active" href="#course">About {{prd_H1}}</a>
+                    <a title="About Six Sigma" class="active" href="#course">About Product</a>
                   {% endif %}
                   {% if prd_uget %}
                     <a title="What’ll you get" href="#get">What’ll you get</a>
@@ -175,8 +175,10 @@
                   <div class="row">
                     <div id="course" class="col-sm-12 col-md-8 scroll">
                       <h2>About {{prd_H1}}</h2>
+                        {% if prd_video %}
                       <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
-                      {{prd_desc|safe}}
+                      {% endif %}
+                            {{prd_desc|safe}}
                      </div>
                   </div>
                 </div>
@@ -217,7 +219,7 @@
 
     {% block prdrecommended %}
 
-              {% include "shop/partials/recommended_prd.html" %}
+    {% include "shop/partials/recommended_product.html" %}
 
     {% endblock prdrecommended %}
 {% endblock main_container %}

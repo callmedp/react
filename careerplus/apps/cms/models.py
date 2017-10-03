@@ -33,7 +33,10 @@ class ColumnHeading(models.Model):
 class IndexColumn(models.Model):
     indexer = models.ForeignKey(IndexerWidget)
     column = models.PositiveIntegerField(choices=COLUMN_TYPE)
-    url = models.CharField(max_length=2048, null=True, blank=True, help_text='provide full url including https://')
+    url = models.CharField(
+        max_length=2048, null=True,
+        blank=True,
+        help_text='provide full url with valid protocol https:// or http://')
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -41,25 +44,33 @@ class IndexColumn(models.Model):
 
 
 class Widget(AbstractCommonModel):
-    widget_type = models.PositiveIntegerField(choices=WIDGET_CHOICES, null=False, blank=False)
+    widget_type = models.PositiveIntegerField(
+        choices=WIDGET_CHOICES, null=False, blank=False)
     heading = models.CharField(max_length=1024, null=True, blank=True)
-    redirect_url = models.URLField(null=True, blank=True,
+    redirect_url = models.URLField(
+        null=True, blank=True,
         verbose_name='Re-directing Url',
         help_text='Append http://.')
 
-    image = models.FileField("Image", max_length=200, upload_to="images/cms/widget/",
+    image = models.FileField(
+        "Image", max_length=200,
+        upload_to="images/cms/widget/",
         blank=True, null=True, help_text='use this for Resume help')
     image_alt = models.CharField(max_length=100, null=True, blank=True)
 
     description = RichTextUploadingField(null=True, blank=True)
 
-    document_upload = models.FileField("Document", max_length=200,
+    document_upload = models.FileField(
+        "Document", max_length=200,
         upload_to="documents/cms/widget/", blank=True, null=True)
 
-    display_name = models.CharField(max_length=100, null=True, blank=True)
-    writer_designation = models.CharField(max_length=255, null=True, blank=True)
+    display_name = models.CharField(
+        max_length=100, null=True, blank=True)
+    writer_designation = models.CharField(
+        max_length=255, null=True, blank=True)
 
-    iw = models.ForeignKey(IndexerWidget, null=True, blank=True,
+    iw = models.ForeignKey(
+        IndexerWidget, null=True, blank=True,
         verbose_name='Indexer Widget')
 
     related_article = models.ManyToManyField(Blog, blank=True)
@@ -120,15 +131,19 @@ class Widget(AbstractCommonModel):
 
 
 class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
-    name = models.CharField(max_length=255, null=False, blank=False,
+    name = models.CharField(
+        max_length=255, null=False, blank=False,
         verbose_name="Name", help_text='The H1 heading for the page.')
 
-    parent = models.ForeignKey("self", verbose_name="Parent",
+    parent = models.ForeignKey(
+        "self", verbose_name="Parent",
         null=True, blank=True)
 
-    slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
+    slug = models.SlugField(
+        max_length=255, unique=True, null=True, blank=True)
 
-    widgets = models.ManyToManyField(Widget, through='PageWidget',
+    widgets = models.ManyToManyField(
+        Widget, through='PageWidget',
         verbose_name="Widgets", blank=True)
 
     total_view = models.PositiveIntegerField(default=0)
@@ -184,9 +199,11 @@ class PageWidget(AbstractCommonModel):
 
     page = models.ForeignKey(Page)
     widget = models.ForeignKey(Widget)
-    section = models.CharField(choices=SECTION, max_length=255,
+    section = models.CharField(
+        choices=SECTION, max_length=255,
         help_text='determine section of widget')
-    ranking = models.IntegerField(default=0,
+    ranking = models.IntegerField(
+        default=0,
         help_text='determine ranking of widget')
 
     class Meta:
@@ -201,7 +218,8 @@ class PageWidget(AbstractCommonModel):
 
 
 class Document(models.Model):
-    doc = models.FileField("Document", max_length=200,
+    doc = models.FileField(
+        "Document", max_length=200,
         storage=my_store, null=False, blank=False)
     is_active = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
@@ -227,7 +245,8 @@ class Comment(AbstractCommonModel):
     message = models.TextField(null=False, blank=False)
     is_published = models.BooleanField(default=False)
     is_removed = models.BooleanField(default=False)
-    replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
+    replied_to = models.ForeignKey(
+        "self", on_delete=models.CASCADE, null=True,
         blank=True, related_name="comments")
 
     class Meta:
@@ -245,8 +264,10 @@ class PageCounter(models.Model):
     no_downloads = models.PositiveIntegerField(default=0)
     no_shares = models.PositiveIntegerField(default=0)
     comment_count = models.PositiveIntegerField(default=0)
-    added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+    added_on = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True)
+    modified_on = models.DateTimeField(
+        auto_now=True, null=True, blank=True)
 
     class Meta:
         unique_together = ('page', 'count_period')

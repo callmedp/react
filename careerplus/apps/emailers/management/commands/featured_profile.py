@@ -10,6 +10,7 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from users.tasks import user_register
 from core.api_mixin import FeatureProfileUpdate
+from shop.choices import S_ATTR_DICT
 
 
 class Command(BaseCommand):
@@ -79,9 +80,9 @@ def featured_updated():
                             send_email_task.delay(to_emails, mail_type, data, status=72, oi=obj.pk)
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
-                        print (str(e))
+                        logging.getLogger('cron_log').error("%s" % (str(e)))
             except Exception as e:
-                print (str(e))
+                logging.getLogger('cron_log').error("%s" % (str(e)))
 
     out_str = out_str = '%s profile featured out of %s' % (featured_count, featured_orderitems.count())
 
@@ -115,8 +116,8 @@ def unfeature():
             logging.getLogger('cron_log').error("%s" % (str(e)))
             continue
 
-        if getattr(obj.product.attr, 'feature_duration', None):
-            duration_days = getattr(obj.product.attr, 'feature_duration')
+        if getattr(obj.product.attr, S_ATTR_DICT.get('FD'), None):
+            duration_days = getattr(obj.product.attr, S_ATTR_DICT.get('FD'))
         else:
             duration_days = 180  # 6 months
 
@@ -148,6 +149,7 @@ def unfeature():
                         last_oi_status=obj.last_oi_status,
                         assigned_to=obj.assigned_to)
             except Exception as e:
+                logging.getLogger('cron_log').error("%s" % (str(e)))
                 print (str(e))
 
     out_str = '%s profile expired out of %s featured items' % (unfeature_count, featured_orderitems.count())

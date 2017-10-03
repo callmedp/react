@@ -11,10 +11,10 @@ from django.http import (HttpResponse,
 from django.core.urlresolvers import reverse
 from datetime import datetime
 
-from shine.core import ShineToken, ShineCandidateDetail
+from shine.core import ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from .utills import ques_dict
-from order.models import Order, OrderItem, OrderItemOperation
+from order.models import OrderItem
 from quizs.models import QuizResponse
 
 class AutoLoginView(View):
@@ -48,26 +48,25 @@ class AutoLoginView(View):
 
 class CounsellingSubmit(TemplateView):
     template_name = "linkedin/counselling_form.html"
-    
-    def get(self,request,*args,**kwargs):
+
+    def get(self, request, *args, **kwargs):
         return super(CounsellingSubmit, self).get(request, *args, **kwargs)
-        
+
 
     def get_context_data(self, **kwargs):
         context = super(CounsellingSubmit, self).get_context_data(**kwargs)
-        flag = False
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
         except:
             orderitem = None
 
         quiz_resp = orderitem.quizresponse
-        context={
+        context = {
             'ques_dict': ques_dict,
             'quiz_resp': quiz_resp if quiz_resp else None,
             'flag': quiz_resp.submitted if quiz_resp else False,
-            "orderitem":orderitem,
-        } 
+            "orderitem": orderitem,
+        }
         return context
 
     def post(self, request, *args, **kwargs):
@@ -115,6 +114,75 @@ class CounsellingSubmit(TemplateView):
                         last_oi_status=last_oi_status,
                         assigned_to=orderitem.assigned_to)
                 return HttpResponseRedirect(reverse('console:linkedin-inbox'))
+
+
+class CounsellingForm(TemplateView):
+    template_name = "linkedin/dashboard_counselling_form.html"
+    
+    def get(self, request, *args, **kwargs):
+        return super(CounsellingForm, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(CounsellingForm, self).get_context_data(**kwargs)
+        try:
+            orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
+        except:
+            orderitem = None
+
+        quiz_resp = orderitem.quizresponse
+        context = {
+            'ques_dict': ques_dict,
+            'quiz_resp': quiz_resp if quiz_resp else None,
+            'flag': quiz_resp.submitted if quiz_resp else False,
+            "orderitem": orderitem,
+        }
+        return context
+
+    def post(self, request, *args, **kwargs):
+        try:
+            orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
+        except:
+            orderitem = None
+        if request.POST.get('save') == 'save':
+            if orderitem:
+                quiz_obj = orderitem.quizresponse
+                quiz_obj.question1 = ques_dict.get('q1', '')
+                quiz_obj.question2 = ques_dict.get('q2', '')
+                quiz_obj.question3 = ques_dict.get('q3', '')
+                quiz_obj.question4 = ques_dict.get('q4', '')
+                quiz_obj.question5 = ques_dict.get('q5', '')
+                quiz_obj.anser1 = request.POST.get('q1', '')
+                quiz_obj.anser2 = request.POST.get('q2', '')
+                quiz_obj.anser3 = request.POST.get('q3', '')
+                quiz_obj.anser4 = request.POST.get('q4', '')
+                quiz_obj.anser5 = request.POST.get('q5', '')
+                quiz_obj.save()
+                return HttpResponseRedirect(reverse('dashboard:dashboard'))
+        elif request.POST.get('submit') == 'submit':
+            if orderitem:
+                quiz_obj = orderitem.quizresponse
+                quiz_obj.question1 = ques_dict.get('q1', '')
+                quiz_obj.question2 = ques_dict.get('q2', '')
+                quiz_obj.question3 = ques_dict.get('q3', '')
+                quiz_obj.question4 = ques_dict.get('q4', '')
+                quiz_obj.question5 = ques_dict.get('q5', '')
+                quiz_obj.anser1 = request.POST.get('q1', '')
+                quiz_obj.anser2 = request.POST.get('q2', '')
+                quiz_obj.anser3 = request.POST.get('q3', '')
+                quiz_obj.anser4 = request.POST.get('q4', '')
+                quiz_obj.anser5 = request.POST.get('q5', '')
+                quiz_obj.submitted = True
+                quiz_obj.save()
+                if not orderitem.tat_date:
+                    last_oi_status = orderitem.oi_status
+                    orderitem.tat_date = datetime.now()
+                    orderitem.oi_status = 42
+                    orderitem.save()
+                    orderitem.orderitemoperation_set.create(
+                        oi_status=orderitem.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=orderitem.assigned_to)
+                return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
 class LinkedinDraftView(TemplateView):

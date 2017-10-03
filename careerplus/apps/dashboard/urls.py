@@ -1,9 +1,15 @@
 from django.conf.urls import url
 
-from .views import RoundoneDashboardView, DashboardSavedDeleteView, \
-    DashboardUpcomingView, DashboardPastView, DashboardSavedView, \
-    DashboardResultView, DashboardMyProfileView, \
-    UpdateShineProfileView
+from .views import (
+    RoundoneDashboardView,
+    DashboardSavedDeleteView,
+    DashboardUpcomingView,
+    DashboardPastView,
+    DashboardSavedView,
+    DashboardResultView,
+    DashboardMyProfileView,
+    UpdateShineProfileView,
+)
 from . import dashboard_view, mobile_view
 
 
@@ -23,14 +29,17 @@ urlpatterns = [
     url(r'^roundone/saved/$', DashboardSavedView.as_view(),
         name='dashboard_saved'),
 
-    url(r'^roundone/result/$', DashboardResultView.as_view(),
-        name='dashboard_roundone_result'),
+    # url(r'^roundone/result/$', DashboardResultView.as_view(),
+    #     name='dashboard_roundone_result'),
 
     url(r'^roundone/profile/$', DashboardMyProfileView.as_view(),
         name='dashboard_profile'),
 
     url(r'^shine-profile/$',
         UpdateShineProfileView.as_view(), name='post_shine_detail'),
+
+    url(r'^roundone/result/(?P<order_id>.+)/?$',
+        DashboardResultView.as_view(), name='dashboard_roundone_result'),
 ]
 
 urlpatterns += [

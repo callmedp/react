@@ -7,13 +7,15 @@ from .models import IndexerWidget, ColumnHeading,\
 class ColumnHeadingAdmin(admin.TabularInline):
     model = ColumnHeading
     raw_id_fields = ('indexer',)
-    extra = 1
+    extra = 2
+    max_num = 2
 
 
-class IndexColumnAdmin(admin.TabularInline):
+class IndexColumnAdmin(admin.StackedInline):
     model = IndexColumn
     raw_id_fields = ('indexer',)
     extra = 1
+
 
 class IndexerWidgetAdmin(admin.ModelAdmin):
     list_display = ('id', 'heading')
@@ -46,22 +48,13 @@ class PageWidgetAdminInline(admin.TabularInline):
     extra = 1
 
 
-class PageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'parent', 'slug',
-        'total_view', 'total_download', 'total_share', 'is_active', 'allow_comment',
-        'comment_count', 'publish_date')
-    search_fields = ('id', 'name', 'slug')
-    filter_horizontal = ('widgets', )
-    raw_id_fields = ('parent', 'created_by', 'last_modified_by')
-    inlines = [DocumentAdminInline]
-
-
 class PageWidgetAdmin(admin.ModelAdmin):
     list_display = ('id', 'page', 'widget', 'section', 'ranking')
     list_filter = ('section', )
     search_fields = ('id',)
     filter_horizontal = ()
-    # raw_id_fields = ('created_by', 'last_modified_by', 'page', 'widget')
+    raw_id_fields = ('created_by', 'last_modified_by', 'page', 'widget')
+
 
 class PageAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'parent', 'slug',
@@ -72,13 +65,6 @@ class PageAdmin(admin.ModelAdmin):
     raw_id_fields = ('parent', 'created_by', 'last_modified_by')
     inlines = [DocumentAdminInline, PageWidgetAdminInline]
 
-
-# class PageWidgetAdmin(admin.ModelAdmin):
-#   list_display = ('id', 'page', 'widget', 'section', 'ranking')
-#   list_filter = ('section', )
-#   search_fields = ('id',)
-#   filter_horizontal = ()
-#   # raw_id_fields = ('created_by', 'last_modified_by', 'page', 'widget')
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'page', 'candidate_id', 'name', 'created_on', 'is_published',

@@ -1,4 +1,4 @@
-
+{% load humanize search_tags %}
 {% if prd_service == 'course' %}
 
   <!-- main package start -->
@@ -33,7 +33,7 @@
     <div class="main-package-content">
       <span>Experience</span>
       {% if prd_exp %}
-        <strong>{{prd_exp}}</strong>
+        <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
       {% endif %}
       <p>Starting at <small>Rs. {{start_price}}/-</small></p>
     </div>

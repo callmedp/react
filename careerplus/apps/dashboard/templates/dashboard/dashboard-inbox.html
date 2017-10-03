@@ -53,8 +53,10 @@
                 <a class="active" href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
                 <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
                 <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
-                <!-- <a href="dashboard-recommended.html"><span class="recommended-icon"></span> Recommended courses</a> -->
+              {% if roundone_user %}
                 <a href="{% url "dashboard:roundone-dashboard" %}"><span class="referal-icon"></span> Referral</a>
+              {% endif %}
+
                 <div class="please-call">
                   Please call us at <strong>0120-4959420/32</strong> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.
                 </div>
@@ -111,7 +113,7 @@
       {% endblock main_section %}
 
       {% block recommended_products %}
-          {% include "partial/recommended_product.html" %}
+          {% include "shop/partials/recommended_product.html" %}
       {% endblock recommended_products %}
 
     <!--Reject Subit Message Modal-->

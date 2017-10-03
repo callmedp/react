@@ -98,9 +98,8 @@ class CartMixin(object):
 
                         # for addons
                         child_products = product.related.filter(
-                            secondaryproduct__active=True,
-                            secondaryproduct__type_relation=1)
-                        addons = Product.objects.filter(id__in=addons, active=True)
+                            secondaryproduct__active=True)
+                        addons = Product.objects.filter(id__in=addons)
                         for child in addons:
                             if child in child_products:
                                 li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
@@ -116,9 +115,8 @@ class CartMixin(object):
                     parent.price_excl_tax = product.get_price()
                     parent.save()
                     child_products = product.related.filter(
-                        secondaryproduct__active=True,
-                        secondaryproduct__type_relation=1)
-                    addons = Product.objects.filter(id__in=addons, active=True)
+                        secondaryproduct__active=True)
+                    addons = Product.objects.filter(id__in=addons)
                     for child in addons:
                         if child in child_products:
                             li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
@@ -126,7 +124,7 @@ class CartMixin(object):
                             li.price_excl_tax = child.get_price()
                             li.save()
 
-                    req_products = Product.objects.filter(id__in=req_options, active=True)
+                    req_products = Product.objects.filter(id__in=req_options)
                     if req_products.exists():
                         parent.no_process = True
                         parent.save()
@@ -148,10 +146,11 @@ class CartMixin(object):
             logging.getLogger('error_log').error(str(e))
         return flag
 
-    def getCartObject(self):
+    def getCartObject(self, request=None):
         try:
             cart_obj = None
-            request = self.request
+            if not request:
+                request = self.request
             candidate_id = request.session.get('candidate_id')
             if not request.session.session_key:
                 request.session.create()
@@ -187,10 +186,14 @@ class CartMixin(object):
                 cart_obj = cart_session
             elif cart_session:
                 cart_obj = cart_session
+            elif candidate_id:
+                cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2)
+            elif sessionid:
+                    cart_obj = Cart.objects.create(session_id=sessionid, status=0)
 
             # update cart_obj in session
             if cart_obj:
-                self.request.session.update({
+                request.session.update({
                     "cart_pk": cart_obj.pk,
                     "checkout_type": 'cart',
                 })
@@ -459,6 +462,23 @@ class CartMixin(object):
                 data['selected_products'] = selected_product
         return data
 
+    def getSelectedProduct_solr(self, sqs):
+        data = {'selected_products': []}
+        if not self.request.session.get('cart_pk'):
+            self.getCartObject()
+        cart_pk = self.request.session.get('cart_pk')
+        if cart_pk:
+            cart_obj = Cart.objects.get(pk=cart_pk)
+            try:
+                product = Product.objects.get(id=sqs.id)
+                parent_li = cart_obj.lineitems.get(product=product)
+            except:
+                parent_li = None
+            if parent_li:
+                selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)
+                data['selected_products'] = selected_product
+        return data
+
     def getSelectedProductPrice(self, product):
         data = {}
         total = Decimal(0)
@@ -498,13 +518,53 @@ class CartMixin(object):
             "fake_total": round(fake_total, 0)})
         return data
 
+    def getSelectedProductPrice_solr(self, sqs):
+        data = {}
+        total = Decimal(0)
+        fake_total = Decimal(0)
+        if not self.request.session.get('cart_pk'):
+            self.getCartObject()
+        cart_pk = self.request.session.get('cart_pk')
+        if cart_pk:
+            cart_obj = Cart.objects.get(pk=cart_pk)
+            try:
+                product = Product.objects.get(id=sqs.id)
+                parent_li = cart_obj.lineitems.get(product=product)
+                if parent_li.product.is_course and parent_li.no_process == True:
+                    pass
+                else:
+                    total += parent_li.product.get_price()
+                    if parent_li.product.get_fakeprice():
+                        fake_total += parent_li.product.get_fakeprice()[0]
+                    else:
+                        fake_total += parent_li.product.get_price()
+            except:
+                parent_li = None
+            if parent_li:
+                lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')
+                for li in lis:
+                    total += li.product.get_price()
+                    if li.product.get_fakeprice():
+                        fake_total += li.product.get_fakeprice()[0]
+                    else:
+                        fake_total += li.product.get_price()
+        if fake_total > Decimal(0.00):
+            diff = fake_total - total
+            percent_diff = round((diff / fake_total) * 100, 0)
+            data.update({'percent_diff': percent_diff, })
+
+        data.update({
+            "product_total_price": round(total, 0),
+            "fake_total": round(fake_total, 0)})
+        return data
+
     def get_cart_count(self, request=None):
         total_count = 0
         try:
             if not request:
                 request = self.request
             if not request.session.get('cart_pk'):
-                self.getCartObject()
+                self.getCartObject(request=request)
             cart_pk = request.session.get('cart_pk')
 
             if cart_pk:

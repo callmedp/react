@@ -14,8 +14,10 @@ from console.decorators import (
     Decorate,
     stop_browser_cache,)
 from cart.mixins import CartMixin
+from core.library.haystack.query import SQS
+from search.helpers import get_recommendations
 
-from .models import Product, Category, Attribute
+from .models import Product
 from review.models import Review
 
 
@@ -58,36 +60,6 @@ class ProductInformationMixin(object):
         return {
             'breadcrumbs': breadcrumbs
         }
-
-    def get_info(self, product):
-        info = {}
-        info['prd_img'] = product.image.url
-        info['prd_img_alt'] = product.image_alt
-        info['prd_img_bg'] = product.get_bg
-        info['prd_H1'] = product.heading if product.heading else product.name
-        info['prd_about'] = product.about
-        info['prd_desc'] = product.description
-        info['prd_uget'] = product.buy_shine
-        info['prd_rating'] = round(product.avg_rating, 1)
-        info['prd_num_rating'] = product.no_review
-        info['prd_num_bought'] = product.buy_count
-        info['prd_num_jobs'] = product.num_jobs
-        info['prd_vendor'] = product.vendor.name
-        info['prd_vendor_img'] = product.vendor.image.url
-        info['prd_vendor_img_alt'] = product.vendor.image_alt
-        info['prd_rating_star'] = product.pStar
-        info['prd_video'] = product.video_url
-        if product.is_course:
-            info['prd_service'] = 'course'
-        elif product.is_writing:
-            info['prd_service'] = 'resume'
-        elif product.is_service:
-            info['prd_service'] = 'service'
-        else:
-            info['prd_service'] = 'other'
-        info['prd_product'] = product.type_product
-        info['prd_exp'] = product.get_exp
-        return info
 
     def solar_info(self, product):
         info = {}
@@ -159,14 +131,16 @@ class ProductInformationMixin(object):
         recommendation = {
             'prd_recommend': False,
         }
-        recommended_list = product.related.filter(
-            secondaryproduct__active=True,
-            active=True,
-            secondaryproduct__type_relation=2)
-        if recommended_list:
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
+        if rcourses:
+            rcourses = rcourses[:6]
+        if rcourses:
             recommendation.update({
                 'prd_recommend': True,
-                'recommended_list': recommended_list
+                'recommended_products': rcourses
             })
         return recommendation
 
@@ -239,7 +213,7 @@ class ProductInformationMixin(object):
             return {'country_variation_list': service_list}
 
     def solar_product_variation(self, product):
-        course_variation_list = json.loads(sqs.pVrs)
+        course_variation_list = json.loads(product.pVrs)
         return course_variation_list
 
     def get_frequentlybought(self, product, category):
@@ -312,29 +286,33 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update(self.solar_info(self.sqs))
         ctx.update(self.solar_program_structure(self.sqs))
         ctx.update(self.solar_faq(self.sqs))
-        # ctx.update(self.get_recommendation(product))
+        ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
         if self.sqs.pPc == 'course':
             ctx.update(json.loads(self.sqs.pPOP))
-        else:
-            ctx.update(json.loads(self.sqs.pPOP))
-        if self.sqs.pTP == 1:
             pvrs_data = json.loads(self.sqs.pVrs)
             try:
                 selected_var = pvrs_data['var_list'][0]
             except Exception as e:
                 selected_var = None
-            ctx.update({'selected_var':selected_var})
+            ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
-        if self.is_combos(self.sqs): 
+
+        else:
+            ctx.update(json.loads(self.sqs.pPOP))
+            pvrs_data = json.loads(self.sqs.pVrs)
+            ctx.update(pvrs_data)
+
+        if self.is_combos(self.sqs):
             ctx.update(json.loads(self.sqs.pCmbs))
 
         ctx.update(json.loads(self.sqs.pFBT))
         get_fakeprice = self.get_solar_fakeprice(self.sqs.pPinb, self.sqs.pPfinb)
-        # ctx.update(self.getSelectedProduct(product))
-        # ctx.update(self.getSelectedProductPrice(product))
-        ctx.update({'sqs':self.sqs})
-        ctx.update({'get_fakeprice':get_fakeprice})
+
+        # ctx.update(self.getSelectedProduct_solr(self.sqs))
+        # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
+        ctx.update({'sqs': self.sqs})
+        ctx.update({'get_fakeprice': get_fakeprice})
         return ctx
 
     def redirect_if_necessary(self, current_path, product):

@@ -6,7 +6,6 @@
                 instances: []
             };
         }
-        ;
 
         window.inputTags.methods = {
             tags: function (element, callback) {
@@ -121,7 +120,7 @@
                 self.ELEMENT_CLASS = self.DEFAULT_CLASS + '-' + self.UNIQID;
                 self.LIST_CLASS = self.DEFAULT_CLASS + '-list';
                 self.ITEM_CLASS = self.DEFAULT_CLASS + '-item';
-                self.ITEM_CONTENT = '<span class="value" title="Cliquez pour éditer">%s</span><i class="close-item">&times</i>';
+                self.ITEM_CONTENT = '<span class="value" title="Click to delete">%s</span><i class="close-item">&times</i>';
                 self.FIELD_CLASS = self.DEFAULT_CLASS + '-field';
                 self.ERROR_CLASS = self.DEFAULT_CLASS + '-error';
                 self.ERROR_CONTENT = '<p class="' + self.ERROR_CLASS + '">%s</p>';
@@ -153,6 +152,7 @@
                     self.destroy();
                     self._autocomplete()._init();
                     self._focus();
+                    self._blur();
                 };
 
                 /*
@@ -162,7 +162,8 @@
                     self.$html = $('<div>').addClass(self.LIST_CLASS);
                     self.$input = $('<input>').attr({
                         'type': 'text',
-                        'class': self.FIELD_CLASS
+                        'class': self.FIELD_CLASS,
+                        'placeholder': self.options.placeholder
                     });
 
                     self.$html.insertAfter(self.$element).prepend(self.$input);
@@ -173,7 +174,9 @@
                         if ($(e.target).hasClass('inputTags-field')) {
                             return false;
                         }
-                        self.$input.focus();
+                        if (self.tags.length < self.options.max) {
+                             self.$input.focus();
+                        }
                     });
                 };
 
@@ -214,7 +217,7 @@
                 };
 
                 /*
-                 * Ajoute ou édite un tag en fonction de la touche sur laquelle l'utilisateur appuie
+                 * Adds or edits a tag based on which key the user is pressing
                  */
                 self.save = function () {
                     self.$input.on('keyup', function (e) {
@@ -224,7 +227,17 @@
                         var value = self.$input.val().trim();
 
                         if ($.inArray(key, self.keys) < 0) {
-                            return false;
+                            if (self._autocomplete()._isSet()) {
+                                self.options.autocomplete['values'] = $.grep(self.options.autocomplete['actualValues'], function(v) {
+                                    return v.toLowerCase().indexOf(value.toLowerCase()) >= 0;
+                                });
+                                self._autocomplete()._build();
+                                if (self.options.autocomplete['values'].length){
+                                    self._autocomplete()._show();
+                                }
+
+                            }
+                            return
                         }
 
                         if (27 === key) {
@@ -282,22 +295,23 @@
                             self._buildItem(value);
                             self._insert(value);
                         }
-
                         self._cancel();
                         self._updateValue();
                         self.destroy();
                         self._autocomplete()._build();
-
                         self._setInstance(self);
-
-                        self.$input.focus();
-
+                        if (self._autocomplete()._isSet()) {
+                            self.options.autocomplete['values'] = self.options.autocomplete['actualValues'];
+                        }
+                        if (self.tags.length < self.options.max) {
+                             self.$input.focus();
+                        }
                         return false;
                     });
                 };
 
                 /*
-                 * Initialise le champ d'édition lors du clic sur l'élément HTML représentant un tag
+                 * Initializes the edit field when clicking on the HTML element representing a tag
                  */
                 self.edit = function () {
                     self.$list.on('click', '.' + self.ITEM_CLASS, function (e) {
@@ -321,7 +335,7 @@
                 };
 
                 /*
-                 * Supprime un tag lors du clic sur l'élément HTML représentant un tag
+                 * Deletes a tag when clicking on the HTML element representing a tag
                  */
                 self.destroy = function () {
                     $('.' + self.ITEM_CLASS, self.$list).off('click').on('click', '.close-item', function () {
@@ -346,7 +360,7 @@
                 };
 
                 /*
-                 * Construit l'objet jQuery représentant un tag et l'injecte dans la liste HTML
+                 * Constructs the jQuery object representing a tag and injects it into the HTML list
                  */
                 self._buildItem = function (value) {
                     var $content = $(self.ITEM_CONTENT.replace('%s', value));
@@ -358,15 +372,15 @@
                 };
 
                 /*
-                 * Retourne l'index en fonction du tag si celui-ci est présent dans l'array self.tags, false sinon
+                 * Returns the index according to the tag if it is present in the array self.tags, false otherwise
                  */
                 self._getIndex = function (value) {
                     return self.tags.indexOf(value);
                 };
 
                 /*
-                 * Supprime les tags en trop si self.options.tags.length > self.options.max
-                 * Concatène les tags passés en paramètre par l'utilisateur.
+                 * Removes excess tags if self.options.tags.length> self.options.max
+                 * Concatenates tags passed as parameters by the user.
                  */
                 self._concatenate = function () {
                     if (!'boolean' === typeof self.options.max || self.options.max > 0) {
@@ -387,7 +401,7 @@
                 };
 
                 /*
-                 * Insert item dans l'array self.tags
+                 * Insert item in array self.tags
                  */
                 self._insert = function (item) {
                     self.tags.push(item);
@@ -396,7 +410,7 @@
                 };
 
                 /*
-                 * Remplace old_value par new_value dans l'array self.tags
+                 * Replace old value with new value in array self.tags
                  */
                 self._update = function (old_value, new_value) {
                     var index = self._getIndex(old_value);
@@ -406,7 +420,7 @@
                 };
 
                 /*
-                 * Supprime l'élément corrspondant à value dans l'array self.tags
+                 * Removes the corresponding value element from the self.tags array
                  */
                 self._pop = function (value) {
                     var index = self._getIndex(value);
@@ -421,7 +435,7 @@
                 };
 
                 /*
-                 * Réinitialise le champ de saisie
+                 * Resets the input field
                  */
                 self._cancel = function () {
                     $('.' + self.ITEM_CLASS).removeClass('is-edit');
@@ -434,14 +448,14 @@
                 };
 
                 /*
-                 * retourne un objet comprennant différentes méthodes pour l'autocompletion
+                 * returns an object with different methods for autocompletion
                  */
                 self._autocomplete = function () {
                     var values = self.options.autocomplete.values;
 
                     return {
                         _isSet: function () {
-                            return values.length > 0;
+                            return self.options.autocomplete.actualValues.length > 0;
                         },
                         _init: function () {
                             if (!self._autocomplete()._isSet()) {
@@ -464,12 +478,12 @@
                             });
 
                             self._autocomplete()._bindClick();
-
-                            $(document)
-                                .not(self.$autocomplete)
-                                .on('click', function () {
-                                    self._autocomplete()._hide();
-                                });
+                            // $(document)
+                            //     .not(self.$autocomplete)
+                            //     .on('click', function () {
+                            //         debugger;
+                            //         self._autocomplete()._hide();
+                            //     });
                         },
                         _bindClick: function () {
                             $(self.$autocomplete).off('click').on('click', '.' + self.AUTOCOMPLETE_ITEM_CLASS, function (e) {
@@ -516,14 +530,14 @@
                 };
 
                 /*
-                 * Met à jour l'attribut value de l'input sur lequel est bindé le plugin
+                 * Updates the value attribute of the input on which the plugin is binded
                  */
                 self._updateValue = function () {
                     self.$element.attr('value', self.tags.join(','));
                 };
 
                 /*
-                 * Définit les events attaché au focus sur le champ de saisie d'un tag
+                 * Sets the events attached to focus on the input field of a tag
                  */
                 self._focus = function () {
                     self.$input.on('focus', function () {
@@ -534,9 +548,18 @@
                         }
                     });
                 };
+                self._blur = function () {
+                    self.$input.on('blur', function () {
+                        self._bindEvent('blur');
+
+                        if (self._autocomplete()._isSet()) {
+                            self._autocomplete()._hide();
+                        }
+                    });
+                };
 
                 /*
-                 * return arr converti en objet
+                 * return arr converted to object
                  */
                 self._toObject = function (arr) {
                     return arr.reduce(function (o, v, i) {
@@ -546,7 +569,7 @@
                 };
 
                 /*
-                 * Valide la saisie de l'utilisateur en fonction de différents paramètres passés en option
+                 * Enables user input based on various optional settings
                  */
                 self._validate = function (value, alert) {
                     var type = '', re;
@@ -586,14 +609,14 @@
                 };
 
                 /*
-                 * return true si value se trouve dans l'array self.tags, false sinon
+                 * return true if value is in the self.tags array, false otherwise
                  */
                 self._exists = function (value) {
                     return $.inArray(value, self.tags) >= 0;
-                }
+                };
 
                 /*
-                 * Récupère le message en fonction du type passé en paramètres
+                 * Retrieves the message according to the type passed in parameters
                  */
                 self._errors = function (type) {
                     if (0 === type.length) {
@@ -610,33 +633,33 @@
                 };
 
                 /*
-                 * Affiche la/les erreur(s) s'il y en a
+                 * Displays the error (s) if any
                  */
                 self._displayErrors = function (error, type) {
-                    var $error = $(self.ERROR_CONTENT.replace('%s', error)).attr('data-error', type);
-                    var timeout = self.options.errors.timeout;
-
-                    if ($('.' + self.ERROR_CLASS + '[data-error="' + type + '"]').length) {
-                        return false;
-                    }
-
-                    $error.hide().insertAfter(self.$list).slideDown();
-
-                    if (!timeout || timeout <= 0) {
-                        return false;
-                    }
-
-                    $('.' + self.ERROR_CLASS).on('click', function () {
-                        self._collapseErrors($(this));
-                    });
-
-                    setTimeout(function () {
-                        self._collapseErrors();
-                    }, timeout);
+                    // var $error = $(self.ERROR_CONTENT.replace('%s', error)).attr('data-error', type);
+                    // var timeout = self.options.errors.timeout;
+                    //
+                    // if ($('.' + self.ERROR_CLASS + '[data-error="' + type + '"]').length) {
+                    //     return false;
+                    // }
+                    //
+                    // $error.hide().insertAfter(self.$list).slideDown();
+                    //
+                    // if (!timeout || timeout <= 0) {
+                    //     return false;
+                    // }
+                    //
+                    // $('.' + self.ERROR_CLASS).on('click', function () {
+                    //     self._collapseErrors($(this));
+                    // });
+                    //
+                    // setTimeout(function () {
+                    //     self._collapseErrors();
+                    // }, timeout);
                 };
 
                 /*
-                 * Efface la/les erreur(s) s'il y en a
+                 * Clears the error (s) if any
                  */
                 self._collapseErrors = function ($elem) {
 
@@ -648,28 +671,28 @@
                 };
 
                 /*
-                 * Return une instance de inputTags() en fonction de son ID
+                 * Returns an instance of inputTags () according to its ID
                  */
                 self._getInstance = function () {
                     return window.inputTags.instances[self.UNIQID];
                 };
 
                 /*
-                 * Push l'instance value dans l'array window.inputTags.instances
+                 * Push the value instance in the array window.inputTags.instances
                  */
                 self._setInstance = function (value) {
                     window.inputTags.instances[self.UNIQID] = self;
                 };
 
                 /*
-                 * Return true si elem est défini dans self.options, false sinon
+                 * Return true if elem is set in self.options, false otherwise
                  */
                 self._isSet = function (elem) {
                     return undefined === self.options[elem] || false === self.options[elem] || self.options[elem].length <= 0 ? false : true;
                 };
 
                 /*
-                 * Appelle la méthode method_name si celle-ci est définie dans self.options, return false sinon
+                 * Call method_name if it is set in self.options, return false otherwise
                  */
                 self._callMethod = function (method_name, self) {
                     if (undefined === self.options[method_name] || 'function' !== typeof self.options[method_name]) {
@@ -677,7 +700,7 @@
                     }
 
                     self.options[method_name].apply(this, Array.prototype.slice.call(arguments, 1));
-                }
+                };
 
                 self._initEvent = function (method, callback) {
                     if (!method) {

@@ -83,6 +83,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
 
     pVi = indexes.CharField(null=True, indexed=False)
+    pViA = indexes.CharField(null=True, indexed=False)
     pCT = indexes.CharField(null=True, indexed=False)
     pDD = indexes.IntegerField(default=0, indexed=False)
     pRD = indexes.BooleanField(default=True, indexed=False)
@@ -505,6 +506,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.vendor:
             return obj.vendor.image.url if obj.vendor.image else ''
         return ''
+
+    def prepare_pViA(self, obj):
+        if obj.vendor:
+            return obj.vendor.image_alt
+        return ''
     
     def prepare_pRD(self, obj):
         if obj.is_course:
@@ -604,24 +610,23 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'variation': True
                 })
                 for pv in var:
-                    for pv in var:
-                        var_list.append({
-                            'id': pv.id,
-                            'label': pv.name,
-                            'country': pv.get_profile_country(),
-                            'experience': pv.get_exp(),
-                            'inrp': pv.get_inr_price(),
-                            'aedp': pv.get_aed_price(),
-                            'usdp': pv.get_usd_price(),
-                            'gbpp': pv.get_gbp_price(),
-                            'inr_price': float(pv.inr_price),
-                            'fake_inr_price': float(pv.fake_inr_price),
-                            'usd_price': float(pv.usd_price),
-                            'fake_usd_price': float(pv.fake_usd_price),
-                            'aed_price': float(pv.aed_price),
-                            'fake_aed_price': float(pv.fake_aed_price),
-                            'gbp_price': float(pv.gbp_price),
-                            'fake_gbp_price': float(pv.fake_gbp_price)})
+                    var_list.append({
+                        'id': pv.id,
+                        'label': pv.name,
+                        'country': pv.get_profile_country(),
+                        'experience': pv.get_exp(),
+                        'inrp': pv.get_inr_price(),
+                        'aedp': pv.get_aed_price(),
+                        'usdp': pv.get_usd_price(),
+                        'gbpp': pv.get_gbp_price(),
+                        'inr_price': float(pv.inr_price),
+                        'fake_inr_price': float(pv.fake_inr_price),
+                        'usd_price': float(pv.usd_price),
+                        'fake_usd_price': float(pv.fake_usd_price),
+                        'aed_price': float(pv.aed_price),
+                        'fake_aed_price': float(pv.fake_aed_price),
+                        'gbp_price': float(pv.gbp_price),
+                        'fake_gbp_price': float(pv.fake_gbp_price)})
                 var_dict.update({
                     'var_list': var_list
                 })
@@ -730,20 +735,19 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'pop': True
                 })
                 for pv in pop:
-                    for pv in pop:
-                        pop_list.append({
-                            'id': pv.id,
-                            'label': pv.name,
-                            'experience': pv.get_exp(),
-                            'url': pv.get_url(relative=True),
-                            'inr_price': float(pv.inr_price),
-                            'fake_inr_price': float(pv.fake_inr_price),
-                            'usd_price': float(pv.usd_price),
-                            'fake_usd_price': float(pv.fake_usd_price),
-                            'aed_price': float(pv.aed_price),
-                            'fake_aed_price': float(pv.fake_aed_price),
-                            'gbp_price': float(pv.gbp_price),
-                            'fake_gbp_price': float(pv.fake_gbp_price)})
+                    pop_list.append({
+                        'id': pv.id,
+                        'label': pv.name,
+                        'experience': pv.get_exp(),
+                        'url': pv.get_url(relative=True),
+                        'inr_price': float(pv.inr_price),
+                        'fake_inr_price': float(pv.fake_inr_price),
+                        'usd_price': float(pv.usd_price),
+                        'fake_usd_price': float(pv.fake_usd_price),
+                        'aed_price': float(pv.aed_price),
+                        'fake_aed_price': float(pv.fake_aed_price),
+                        'gbp_price': float(pv.gbp_price),
+                        'fake_gbp_price': float(pv.fake_gbp_price)})
                 pop_dict.update({
                     'pop_list': pop_list
                 })

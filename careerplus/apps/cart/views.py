@@ -19,6 +19,9 @@ from users.mixins import RegistrationLoginApi, UserMixin
 from console.decorators import Decorate, stop_browser_cache
 from wallet.models import Wallet
 from geolocation.models import Country
+from users.tasks import user_register
+from core.library.haystack.query import SQS
+from search.helpers import get_recommendations
 
 from .models import Cart
 from .mixins import CartMixin
@@ -30,11 +33,12 @@ class CartView(TemplateView, CartMixin, UserMixin):
     template_name = "cart/cart.html"
 
     def get_recommended_products(self):
-        recommended_products = []
-        # course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
-        # recommended_products = Product.objects.filter(
-        #     product_class__in=course_classes, active=True)
-        return {'recommended_products': list(recommended_products)}
+        rcourses = get_recommendations(self.request.session.get('func_area', None),
+                                       self.request.session.get('skills', None),
+                                       SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
+        if rcourses:
+            rcourses = rcourses[:6]
+        return {'recommended_products': rcourses}
 
     def get(self, request, *args, **kwargs):
         return super(self.__class__, self).get(request, *args, **kwargs)
@@ -67,7 +71,7 @@ class AddToCartView(View, CartMixin):
             prod_id = request.POST.get('prod_id')
 
             try:
-                product = Product.objects.get(id=prod_id, active=True)
+                product = Product.objects.get(id=prod_id)  # not filter on active because product is coming from solr 
                 addons = request.POST.getlist('addons[]')
                 req_options = request.POST.getlist('req_options[]')
                 cv_id = request.POST.get('cv_id')
@@ -297,6 +301,26 @@ class PaymentShippingView(UpdateView, CartMixin):
                 # form.data['email]' = form.initial.get('email')  # readonly
                 obj = form.save(commit=False)
                 obj.shipping_done = True
+                if not request.session.get('candidate_id'):
+                    obj.owner_id = ''
+                    data = {}
+                    data.update({
+                        "email": obj.email,
+                        "country_code": obj.country_code,
+                        "cell_phone": obj.mobile,
+                        "name": obj.first_name + ' ' + obj.last_name,
+                    })
+                    candidate_id = user_register(data=data)
+                    obj.owner_id = candidate_id
+
+                elif request.session.get('candidate_id'):
+                    obj.owner_id = request.session.get('candidate_id')
+
+                if not obj.owner_id:
+                    non_field_error = 'Internal error on shinelearning, please try again after sometimes.'
+                    form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
+                    return self.form_invalid(form)
+
                 valid_form = self.form_valid(form)
                 return valid_form
             except Exception as e:
@@ -321,7 +345,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
                 cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
-                if not self.cart_obj.shipping_done:
+                if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
                     return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
 
                 elif not self.cart_obj.lineitems.all().exists() or not cart_dict.get('total_amount'):
@@ -358,7 +382,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 points = wal_txn.point_txn.all()
                 points_active = points.filter(expiry__gte=timezone.now())
                 points_used = wal_txn.usedpoint.all()
-                
+
                 if len(points_active) == len(points):
                     cart_wallet = wal_txn
                     wal_point = wal_txn.point_value

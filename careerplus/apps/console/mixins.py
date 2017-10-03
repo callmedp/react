@@ -6,6 +6,8 @@ from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from order.models import OrderItem
+from linkedin.models import Draft, Organization, Education
+from quizs.models import QuizResponse
 
 
 class ActionUserMixin(object):
@@ -29,7 +31,6 @@ class ActionUserMixin(object):
 
             })
             mail_type = 'ALLOCATED_TO_WRITER'
-            
             try:
                 SendMail().send(to_emails, mail_type, email_data)
             except Exception as e:
@@ -65,7 +66,6 @@ class ActionUserMixin(object):
 
                 # mail to user about writer information
                 to_emails = [obj.order.email]
-                email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                 mail_type = 'ALLOCATED_TO_WRITER'
                 email_data = {}
                 email_data.update({
@@ -73,7 +73,10 @@ class ActionUserMixin(object):
                     "writer_name": assigned_to.name,
                     "writer_email": assigned_to.email,
                     "subject": "Your developed document has been shared with our expert",
-                    "oi": obj,
+                    "type_flow": obj.product.type_flow,
+                    'delivery_service': obj.delivery_service,
+                    'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
+                    'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                 })
                 self.product_flow_wise_mail(orderitem_obj=obj, to_emails=to_emails, mail_type=mail_type, data=email_data)
                 try:
@@ -145,10 +148,13 @@ class ActionUserMixin(object):
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
                             "subject": "Your developed document has been shared with our expert",
-                            "oi": oi,
+                            "type_flow": oi.product.type_flow,
+                            'delivery_service': oi.delivery_service,
+                            'delivery_service_slug': oi.delivery_service.slug,
+                            'delivery_service_name': oi.delivery_service.name,
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
-                        if oi.delivery_service.name == 'SuperExpress':
+                        if oi.delivery_service.name == 'super-express':
                             try:
                                 SendSMS().send(sms_type=mail_type, data=email_data)
                             except Exception as e:
@@ -178,10 +184,13 @@ class ActionUserMixin(object):
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
                             "subject": "Your developed document has been shared with our expert",
-                            "oi": oi,
+                            "type_flow": oi.product.type_flow,
+                            'delivery_service': oi.delivery_service,
+                            'delivery_service_slug': oi.delivery_service.slug,
+                            'delivery_service_name': oi.delivery_service.name,
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
-                        if obj.delivery_service.name == 'SuperExpress':
+                        if oi.delivery_service.name == 'super-express':
                             try:
                                 SendSMS().send(sms_type=mail_type, data=email_data)
                             except Exception as e:
@@ -275,11 +284,10 @@ class ActionUserMixin(object):
                 to_emails = [oi.order.email]
                 email_dict = {}
                 email_dict.update({
-
-                    "info": 'Your service has been processed',
-                    "subject": 'Your service has been processed',
-                    "name": oi.order.first_name + ' ' + oi.order.last_name,
+                    "subject": 'Your service(s) has been initiated',
+                    "name": oi.order.first_name if oi.order.first_name else 'User',
                     "mobile": oi.order.mobile,
+                    'oi': oi,
                 })
 
                 mail_type = 'COURSE_CLOSER_MAIL'
@@ -379,3 +387,31 @@ class ActionUserMixin(object):
             send_email_task.delay(to_emails, mail_type, data, status=61, oi=orderitem_obj.pk)
         else:
             pass
+
+    def associate_linkedin_draft_with_order(order=None):
+
+        orderitems = order.orderitems.filter(product__type_flow=8, oio_linkedin__isnull=True)
+
+        for oi in orderitems:
+            # associate draft object with order
+            last_oi_status = oi.oi_status
+            draft_obj = Draft.objects.create()
+            org_obj = Organization()
+            org_obj.draft = draft_obj
+            org_obj.save()
+
+            edu_obj = Education()
+            edu_obj.draft = draft_obj
+            edu_obj.save()
+
+            quiz_rsp = QuizResponse()
+            quiz_rsp.oi = oi
+            quiz_rsp.save()
+
+            oi.counselling_form_status = 49
+            oi.oio_linkedin = draft_obj
+            oi.save()
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=last_oi_status,
+            )

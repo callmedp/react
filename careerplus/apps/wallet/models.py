@@ -47,7 +47,7 @@ class Wallet(AbstractAutoDate):
         null=True,
         blank=True,
         verbose_name=_("Owner Email"))
-
+    
     class Meta:
         verbose_name = _('Wallet')
         verbose_name_plural = _('Wallets')

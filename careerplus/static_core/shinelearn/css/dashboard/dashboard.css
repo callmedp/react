@@ -322,7 +322,7 @@
   font-size: 40px;
   color: #707070;
   font-weight: 400;
-  background: url(../../images/sprite.png) no-repeat -445px -92px;
+  background: url(../images/sprite.png) no-repeat -445px -92px;
   width: 16px;
   height: 3px;
 }
@@ -337,64 +337,6 @@
   background: url(../../images/sprite.png) no-repeat -427px -91px;
   width: 16px;
   height: 17px;
-}
-.recommended-products .listing {
-  list-style-type: none;
-  padding: 0;
-  margin: 0 0 0 15px;
-}
-.recommended-products .listing li {
-  display: block;
-  padding: 0 15px;
-  margin: 0 0 25px 0;
-}
-.recommended-products .listing li a {
-  display: block;
-  overflow: hidden;
-}
-.recommended-products .listing li a:hover {
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-  -webkit-box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-  -ms-box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-}
-.recommended-products .listing .media {
-  margin-top: 0;
-}
-.recommended-products .listing .media .media-left {
-  border-spacing: 0 12px 0 0;
-}
-.recommended-products .listing .media .media-left figure {
-  width: 100px;
-  height: 100px;
-}
-.recommended-products .listing .media .media-left figure img {
-  max-width: 100%;
-}
-.recommended-products .listing .listing-heading {
-  margin: 10px 10px 5px 0;
-  display: block;
-  color: #3f5f94;
-  font-size: 18px;
-  font-weight: 600;
-}
-.recommended-products .listing .rating-review-box {
-  display: block;
-  color: #666;
-  font-size: 13px;
-}
-.recommended-products .listing .rating-review-box strong {
-  font-weight: 600;
-  margin-left: 5px;
-}
-.recommended-products .listing .rating-review-box .jobs-available {
-  font-size: 13px;
-  color: #666;
-  display: block;
-  margin-top: 10px;
-}
-.recommended-products .listing .rating-review-box .jobs-available strong {
-  font-weight: 600;
 }
 
 .notification-resume {
@@ -1185,7 +1127,7 @@
   padding-right: 10px;
 }
 .profile-data li .pro-select, .profile-data li .pro-select2 {
-  background: url(../../images/dropdown.png);
+  background: url(../../images/sprite.png);
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: right;
@@ -1486,6 +1428,60 @@
 }
 .reject-msg textarea {
   padding-left: 0;
+}
+
+/*counselling form page css*/
+.counselling-form {
+  border: none;
+  color: #999;
+}
+.counselling-form h2 {
+  font-weight: 300;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 17px;
+}
+.counselling-form p {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+.counselling-form ol {
+  clear: both;
+  font-weight: 400;
+  margin: 0;
+  padding: 0 0 0 15px;
+  color: #333;
+}
+.counselling-form ol li {
+  margin: 0;
+  padding: 10px 0 20px 0;
+  font-size: 14px;
+  color: #666;
+  vertical-align: top;
+  clear: both;
+}
+.counselling-form ol li textarea {
+  border-radius: 0;
+  font-size: 14px;
+  color: #666;
+  margin-left: -15px;
+}
+.counselling-form ol li h3 {
+  display: block;
+  font-size: 15px;
+  font-weight: 400;
+}
+.counselling-form .submit-button {
+  display: inline;
+  width: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-right: 15px;
+}
+.counselling-form .view-job {
+  padding: 8px 20px;
+  margin-right: 20px;
 }
 
 /* Ratings widget */

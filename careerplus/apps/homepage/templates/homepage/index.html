@@ -7,7 +7,7 @@
 {% block css_section %}
   {{block.super}}
     {% if request.session.candidate_id %}
-    <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/homepage/home1.css' %}" rel="stylesheet">
     {% else %}
     <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
     {% endif %}
@@ -25,9 +25,9 @@
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     <div class="item active">
-                        <img src="{% if request.session.candidate.id %}{% static 'shinelearn/images/home-header-loggedin-pic1.jpg' %}{% else %}{% static 'shinelearn/images/home-header-pic1.jpg' %}{% endif %}" alt="Shine Learning">
+                        <img src="{% if request.session.candidate_id %}{% static 'shinelearn/images/home-header-loggedin-pic1.jpg' %}{% else %}{% static 'shinelearn/images/home-header-pic1.jpg' %}{% endif %}" alt="Shine Learning">
                         <div class="carousel-caption">
-                            {% if request.session.candidate.id %}
+                            {% if request.session.candidate_id %}
                             <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
                             <strong>Want to make your career future ready? <br>Discover courses matched for your profile</strong>
                             {% else %}
@@ -77,10 +77,10 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|truncatechars:50 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
-                                    <strong>{{product.pAR}}<small>/5</small></strong>
+                                    <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
 
@@ -104,10 +104,10 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|truncatechars:50 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
-                                    <strong>{{product.pAR}}<small>/5</small></strong>
+                                    <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
 
@@ -180,19 +180,19 @@
                             <ul class="listing">
                                 {% for tprd in course.tprds %}
                                 <li class="col-sm-6 col-md-4">
-                                    <a title="{{tprd.product.title}}" class="box-panel" href="{{tprd.product.get_absolute_url}}">
+                                    <a title="{{tprd.pTt}}" class="box-panel" href="{{tprd.pURL}}">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h3 class="listing-heading">{{tprd.product.heading}}</h3>
+                                                <h3 class="listing-heading">{{tprd.pHd|truncatechars:50}}</h3>
                                                 <div class="rating-review-box">
                                                     <figure class="full-star"></figure>
-                                                    <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
-                                                    <span class="jobs-available"><strong>{{tprd.product.num_jobs}}</strong> jobs available</span>
+                                                    <strong>{{tprd.pARx}}<small>/5</small></strong>
+                                                    <span class="jobs-available"><strong>{{tprd.pNJ}}</strong> jobs available</span>
                                                 </div>
                                             </div>
                                             <div class="media-left">
                                                 <figure>
-                                                    <img class="img-responsive" src="{{tprd.product.image.url}}" alt="{{tprd.product.image_alt}}">
+                                                    <img class="img-responsive" src="{{tprd.pImg}}" alt="{{tprd.pImA}}">
                                                 </figure>
                                             </div>
                                         </div>
@@ -217,27 +217,29 @@
             <div class="row">
                 <div class="container">
                     <h2>Job assistance services</h2>
-                    <<article>Find your next job faster by using our services.</article>
+                    <article>Find your next job faster by using our services.</article>
                     <ul class="listing">
                         {% for tprd in job_asst_services %}
                         <li>
-                            <a title="{{tprd.product.title}}" class="box-panel" href="{{tprd.product.get_absolute_url}}">
+                            <a title="{{tprd.pTt}}" class="box-panel" href="{{tprd.pURL}}">
                                 <figure class="media-object">
-                                    <img class="img-responsive" src="{{ tprd.product.image.url }}" width="200" height="125" alt="{{tprd.product.image_alt}}">
+                                    <img class="img-responsive" src="{{ tprd.pImg}}" width="200" height="125" alt="{{tprd.pImA}}">
                                 </figure>
                                 <div class="caption">
-                                    <h3 class="listing-heading">{{tprd.product.heading}}</h3>
+                                    <h3 class="listing-heading">{{tprd.pHd|truncatechars:50}}</h3>
                                     <div class="rating-review-box">
                                         <figure class="full-star"></figure>
-                                        <strong>{{tprd.product.get_avg_ratings}}<small>/5</small></strong>
-                                        <span class="jobs-available"><strong>{{tprd.product.buy_count}}</strong> people bought</span>
+                                        <strong>{{tprd.pARx}}<small>/5</small></strong>
+                                        <span class="jobs-available"><strong>{{tprd.pBC}}</strong> people bought</span>
                                     </div>
                                 </div>
                             </a>
                         </li>
                         {% endfor %}
                     </ul>
-{#                    <a title="View all" href="{{job_asst_view_all}}" class="view-all">View all</a> TODO: Show in v2 #}
+                   {% comment %}
+                   <a title="View all" href="{{job_asst_view_all}}" class="view-all">View all</a> TODO: Show in v2
+                   {% endcomment %}
                 </div>
             </div>
         </section>
@@ -293,24 +295,32 @@
     <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
 
     <script type="text/javascript">
-      $('#myCarousel1').carousel({
-        interval: false
-      });
+        var funcAreaSet = {{ func_area_set|safe }},
+            skillsSet = {{ skills_set|safe }},
+            prefetchedFuncArea = '{{ recmnd_func_area }}',
+            prefetchedSkills = '{{ recmnd_skills }}';
+        $('#myCarousel1').carousel({
+            interval: false
+        });
 
-      $('.product-carousel .carousel .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-          next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
+        $('#query1').typeahead({
+            local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
+        });
 
-        if (next.next().length>0) {
-          next.next().children(':first-child').clone().appendTo($(this));
-        }
-        else {
-          $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-        }
-      });
+        $('.product-carousel .carousel .item').each(function(){
+            var next = $(this).next();
+            if (!next.length) {
+              next = $(this).siblings(':first');
+            }
+            next.children(':first-child').clone().appendTo($(this));
+
+            if (next.next().length>0) {
+              next.next().children(':first-child').clone().appendTo($(this));
+            }
+            else {
+              $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+            }
+        });
     </script>
 
     <script type="text/javascript">
@@ -320,3 +330,5 @@
     </script>
 
 {% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}

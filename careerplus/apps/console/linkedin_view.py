@@ -1,8 +1,6 @@
 import json
 import logging
-import csv
 import datetime
-import logging
 
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -11,15 +9,16 @@ from django.views.generic import (
 from django.http import (
     HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest,
     HttpResponse,)
+from weasyprint import HTML
+from django.template.loader import get_template
+from django.template import Context
 from django.shortcuts import render
 from django.contrib import messages
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from .decorators import Decorate, check_permission
 from django.forms.models import inlineformset_factory
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import permission_required, login_required
 from django.utils.decorators import method_decorator
 
 from linkedin.models import Draft, Organization, Education
@@ -42,7 +41,6 @@ from .order_form import MessageForm, OIActionForm
 from blog.mixins import PaginationMixin
 from order.models import OrderItem, Order, InternationalProfileCredential
 
-from emailers.email import SendMail
 from emailers.sms import SendSMS
 from django.conf import settings
 
@@ -123,8 +121,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             })
 
                             if 101 not in email_sets:
-                                send_email_task.delay(to_emails, mail_type, email_dict, status=101, oi=obj.pk)
-                            if obj.delivery_service.name == 'SuperExpress':
+                                send_email_task.delay(to_emails, mail_type, data, status=101, oi=obj.pk)
+                            if obj.delivery_service and (obj.delivery_service.slug == 'super-express'):
                                 try:
                                     SendSMS().send(sms_type=mail_type, data=data)
                                 except Exception as e:
@@ -146,8 +144,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[8]).exclude(oi_status__in=[4,45,46,47,48, 161, 162, 163])
-
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow=8).exclude(oi_status__in=[4,45,46,47,48, 161, 162, 163])
         user = self.request.user
         if user.is_superuser:
             pass
@@ -886,7 +883,7 @@ class ProfileUpdationView(DetailView):
         self.object = self.get_object()
         context = super(ProfileUpdationView, self).get(request, *args, **kwargs)
         return context
-    
+
     def get_context_data(self, **kwargs):
         context = super(ProfileUpdationView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
@@ -899,12 +896,11 @@ class ProfileUpdationView(DetailView):
             country_obj = Country.objects.get(pk=profile_obj.object_id)
             profile_urls = country_obj.profile_url.split(',')
             profile_info = InternationalProfileCredential.objects.filter(oi=order.pk)
-            
             for profile in profile_info:
                 profile_url_dict[profile.site_url] = profile
         except Exception as e:
             logging.getLogger('error_log').error("%s - %s" % (str(profile_url_dict), str(e)))
-        
+
         context.update({
             "messages": alert,
             "order": order,
@@ -924,26 +920,28 @@ class ProfileUpdationView(DetailView):
         queue_name = request.POST.get('queue_name', '')
         update_sub = request.POST.get('update', '')
         count = request.POST.get('count', None)
-        username=request.POST.get('username'+str(count)+'', None)
-        password=request.POST.get('password'+str(count)+'', None)
-        site=request.POST.get('site'+str(count)+'', None)
-        flag=request.POST.get('flag'+str(count)+'', None)
+        username = request.POST.get('username'+str(count)+'', None)
+        password = request.POST.get('password'+str(count)+'', None)
+        site = request.POST.get('site'+str(count)+'', None)
+        flag = request.POST.get('flag'+str(count)+'', None)
         
         if action == -9 and queue_name == "internationalprofileupdate":
-            count = 0
-            counts = request.POST.getlist('count', None)
-            print(counts)
-            for count in counts:
-                username=request.POST.get('username'+count+'', None)
-                password=request.POST.get('password'+count+'', None)
-                if not username and not password:
-                    msg = 'Please update all the profiles first'
-                    messages.add_message(request, messages.SUCCESS, msg)
-                    return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
-
             selected_id = json.loads(selected)
             try:
-                orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=int(selected_id[0]))
+                orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id__in=selected_id)
+                profile_obj = orderitem.product.productextrainfo_set.get(info_type='profile_update')
+                country_obj = Country.objects.get(pk=profile_obj.object_id)
+                profile_urls = country_obj.profile_url.split(',')
+                count = 0
+                for cnt in profile_urls:
+                    count = count + 1
+                    username = request.POST.get('username'+str(count)+'', None)
+                    password = request.POST.get('password'+str(count)+'', None)
+                    if not username and not password:
+                        msg = 'Please update all the profiles first'
+                        messages.add_message(request, messages.SUCCESS, msg)
+                        return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
+
                 approval = 0
                 if orderitem:
                     last_oi_status = orderitem.oi_status
@@ -986,7 +984,7 @@ class ProfileUpdationView(DetailView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(ProfileUpdationView, self).dispatch(request, *args, **kwargs)
-    
+
 
 class InterNationalAssignmentOrderItemView(View):
     def post(self, request, *args, **kwargs):
@@ -1018,12 +1016,11 @@ class InterNationalAssignmentOrderItemView(View):
                         "writer_name": assign_to.name,
                         "subject": "Your developed document has been shared with our expert",
                         "writer_email": assign_to.email,
-                        "subject": "Your developed document has been uploaded",
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'
                     if 63 not in email_sets:
-                        send_email_task.delay(to_emails, mail_type, email_dict, status=63, oi=oi.pk)
-                    if obj.delivery_service.name == 'SuperExpress':
+                        send_email_task.delay(to_emails, mail_type, data, status=63, oi=obj.pk)
+                    if obj.delivery_service and (obj.delivery_service.slug == 'super-express'):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                         except Exception as e:
@@ -1045,3 +1042,27 @@ class InterNationalAssignmentOrderItemView(View):
 
         messages.add_message(request, messages.ERROR, "Please select valid assignment.")
         return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+
+class ProfileCredentialDownload(View):
+
+    def get(self, request, *args, **kwargs):
+        oi = kwargs.get('oi', '')
+        try:
+            profile_credentials = InternationalProfileCredential.objects.filter(oi=oi)
+            try:
+                context_dict = {
+                    'pagesize': 'A4',
+                    'profile_credentials': profile_credentials,
+                }
+                template = get_template('console/order/profile-update-credentials.html')
+                context = Context(context_dict)
+                html = template.render(context)
+                pdf_file = HTML(string=html).write_pdf()
+                http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
+                return http_response
+            except:
+                return HttpResponseForbidden()
+        except:
+            return HttpResponseForbidden()

@@ -31,11 +31,8 @@ class SearchRecommendedForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control js_area',
-                'data-rulesid': "01",
-                'data-selecttype': 'multiple',
                 'maxlength': '150',
-                'placeholder': 'Functional Area',
-                'holder': 'Functional Area'}),
+                'placeholder': 'Select Functional Area'}),
         initial=''
     )
     skills = forms.CharField(
@@ -44,8 +41,7 @@ class SearchRecommendedForm(forms.Form):
             attrs={
                 'class': 'form-control js_skill',
                 'maxlength':'150',
-                'placeholder':'Key Skills',
-                'holder': 'Key Skills'
+                'placeholder':'Choose upto 3 Skills'
             }
         ),
         initial=''

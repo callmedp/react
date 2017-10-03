@@ -16,7 +16,7 @@ from django.conf import settings
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from order.models import OrderItem
-from emailers.email import SendMail
+
 from emailers.tasks import send_email_task
 
 from .forms import (
@@ -48,7 +48,7 @@ class RegistrationApiView(FormView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        login_dict, post_data = {}, {}
+        post_data = {}
         post_data.update({
             "email": request.POST.get('email'),
             "raw_password": request.POST.get('raw_password'),
@@ -372,3 +372,19 @@ class LinkedinCallbackView(View):
 
         except Exception as e:
             return HttpResponseRedirect('/login/')
+
+
+class Custom404(TemplateView):
+    template_name = "error_pages/404.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context, status=404)
+
+
+class Custom500(TemplateView):
+    template_name = "error_pages/500.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context, status=500)

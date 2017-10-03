@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -67,7 +68,7 @@ class PaymentMixin(object):
         if order:
             request.session['order_pk'] = order.pk
             if not order.candidate_id:
-                user_register(data={}, order=order.pk)
+                user_register.delay(data={}, order=order.pk)
 
             if order.status == 1:
                 order = InvoiceGenerate().save_order_invoice_pdf(order=order)
@@ -79,7 +80,8 @@ class PaymentMixin(object):
                 del request.session['cart_pk']
                 del request.session['checkout_type']
                 self.request.session.modified = True
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
                 pass
 
             # emails

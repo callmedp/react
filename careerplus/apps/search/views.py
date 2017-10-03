@@ -1,7 +1,9 @@
 # built-in imports
 import re
 import uuid
+from collections import OrderedDict
 import json
+import logging
 
 # django imports
 from django.shortcuts import render, HttpResponsePermanentRedirect
@@ -13,10 +15,12 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse_lazy, resolve, reverse
 from django.http import HttpResponse
 from django.conf import settings
+from django.utils.http import urlencode, urlquote_plus
 
 # third party imports
 # from haystack.views import SearchView
 from haystack.query import EmptySearchQuerySet
+from django_redis import get_redis_connection
 
 # local imports
 from .forms import SearchForm, SearchRecommendedForm
@@ -24,6 +28,8 @@ from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams,
 from shop.models import FunctionalArea, Skill
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
+error_log = logging.getLogger('error_log')
+redis_conn = get_redis_connection("search_lookup")
 
 class SearchBaseView(TemplateView):
     template_name = 'search/search.html'
@@ -209,6 +215,7 @@ class SearchBaseView(TemplateView):
             context['mode'] = self.request.GET.getlist('fmode')
         if self.search_params.getlist('fprice'):
             context['price'] = self.request.GET.getlist('fprice')
+        context['breadcrumbs'] = self.get_breadcrumbs()
         return context
 
     def build_page(self):
@@ -281,6 +288,15 @@ class SearchBaseView(TemplateView):
                 context[value] = self.search_params.getlist(param)
         return context
 
+    def get_breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append(
+            OrderedDict({
+                'label': 'Home',
+                'url': '/',
+                'active': True}))
+        return breadcrumbs
+
     def prepare_response(self):
         """
         Handle both GET and POST requests in the same way.
@@ -327,6 +343,15 @@ class SearchListView(SearchBaseView):
                                                                  'skill': 'development'}))
         return super(SearchListView, self).prepare_response()
 
+    def get_breadcrumbs(self):
+        breadcrumbs = super(SearchListView, self).get_breadcrumbs()
+        breadcrumbs.append(
+            OrderedDict({
+                'label': 'Search',
+                'active': None
+            }))
+        return breadcrumbs
+
     def get_extra_context(self):
         request_get = self.search_params.copy()
         request_get.update(self.request.GET)
@@ -349,7 +374,7 @@ class SearchListView(SearchBaseView):
         return paginator, page
 
 
-class RecommendedSearchView(SearchBaseView):
+class RecommendedSearchView(SearchBaseView, FormView):
     """
     Simple text search
     """
@@ -368,13 +393,37 @@ class RecommendedSearchView(SearchBaseView):
         """
         pass  # Do nothing
 
+    def get_initial(self):
+        super(RecommendedSearchView, self).get_initial()
+        if self.request.session.get('candidate_id'):
+            func_area = self.request.session.get('func_area')
+            func_area = FunctionalArea.objects.filter(pk=func_area)
+            func_area = func_area[0].name if func_area else ''
+            skills = self.request.session.get('skills').split(",")
+            skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
+        else:
+            func_area = ''
+            skills_found = []
+        return {'area': func_area, 'skills': ",".join(skills_found)}
+
+    def get_breadcrumbs(self):
+        breadcrumbs = super(RecommendedSearchView, self).get_breadcrumbs()
+        breadcrumbs.append(
+            OrderedDict({
+                'label': 'Recommendation',
+                'active': None
+            }))
+        return breadcrumbs
+
     def get_extra_context(self):
         request_get = self.search_params.copy()
         request_get.update(self.request.GET)
         request_get.update(self.request.POST)
         self.request_get = request_get
         context = super(RecommendedSearchView, self).get_extra_context()
-
+        func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
+        skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
+        context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "recommended"})
         return context
@@ -396,7 +445,7 @@ class FuncAreaPageView(SearchBaseView):
     form = None
     __name__ = 'FuncAreaSearch'
     search_type = "func_area"
-    extra_context = {'type': 'search'}
+    extra_context = {'type': 'func_area'}
     track_query_dict = QueryDict('').copy()
     search_class = FuncAreaSearch
     params_class = FuncAreaParams
@@ -407,6 +456,16 @@ class FuncAreaPageView(SearchBaseView):
         Override for allowing no query search
         """
         pass    # Do nothing
+
+    def get_breadcrumbs(self):
+        breadcrumbs = super(FuncAreaPageView, self).get_breadcrumbs()
+        func_area = FunctionalArea.objects.filter(id=self.kwargs['pk'])
+        if func_area:
+            breadcrumbs.append(
+                OrderedDict({
+                    'label': func_area[0].name,
+                    'active': None}))
+        return breadcrumbs
 
     def get_extra_context(self):
         request_get = self.search_params.copy()
@@ -431,22 +490,31 @@ class FuncAreaPageView(SearchBaseView):
 
 class RedirectToRecommendationsView(FormView):
     form_class = SearchRecommendedForm
+    template_name = 'search/search.html'
 
-    def get_initial(self):
-        if self.request.session.get('candidate_id'):
-            func_area = self.request.session.get('func_area')
-            func_area = FunctionalArea.objects.filter(name__iexact=func_area)
-            func_area = func_area[0].name if func_area else ''
-            skills = self.request.session.get('skills').split(",")
-            skills_found = []
-            for skill in skills:
-                skill_obj = Skill.objects.filter(name__iexact=skill)
-                if skill_obj:
-                    skills_found.append(skill_obj[0].name)
-        else:
-            func_area = 'Real Estate'
-            skills_found = ['Delphi Certified', 'Certified Green Belt']
-        return {'area': func_area, 'skills': ",".join(skills_found)}
-
-    # def get_success_url(self):
+    def get_success_url(self):
+        form_data = self.get_form().data
+        func_area = form_data['area']
+        func_area_obj = None
+        try:
+            func_area_obj = FunctionalArea.objects.get(name__iexact=func_area)
+            self.request.session.update({'func_area': func_area_obj.id})
+        except:
+            error_log.error('Func Area not found in DB:', func_area)
+        skills = form_data['skills'].split(",")
+        skills = Skill.objects.filter(name__in=skills)
+        self.request.session.update({'skills': [skill.id for skill in skills]})
+        func_area_slug = func_area_obj.name if func_area_obj else func_area
+        rx = '[' + re.escape(''.join(settings.CHARS_TO_REMOVE)) + ']'
+        func_area_slug = urlquote_plus(re.sub(rx, '', func_area_slug))
+        skills_slug = '-'.join([skill.name for skill in skills])
+        skills_slug = urlquote_plus(re.sub(rx, '', skills_slug))
+        self.success_url = reverse_lazy('search:recommended_listing',
+                                        kwargs={
+                                            'area_slug': func_area_slug,
+                                            'area': func_area_obj.id if func_area_obj else 0,
+                                            'skills_slug': skills_slug,
+                                            'skills': '-'.join([str(skill.id) for skill in skills])
+                                        })
+        return self.success_url
 

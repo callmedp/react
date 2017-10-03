@@ -15,13 +15,20 @@ from .mixins import UpdateShineProfileMixin
 
 from microsite.roundoneapi import RoundOneAPI
 from microsite.common import ShineUserDetail
-from django.conf import settings
+from search.helpers import get_recommendations
+from core.library.haystack.query import SQS
+from .config import ROUNDONE_INTERACTION_RESULT
 
-month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
+
+month_dict = {
+    'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5,
+    'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9,
+    'Oct': 10, 'Nov': 11, 'Dec': 12
+}
 
 
 class RoundoneDashboardView(RoundOneAPI, TemplateView):
-    template_name = 'roundone/dashboard-roundone.html'
+    template_name = 'dashboard/dashboard-roundone.html'
 
     def get_context_data(self, **kwargs):
         context = super(RoundoneDashboardView, self).get_context_data(**kwargs)
@@ -35,22 +42,22 @@ class RoundoneDashboardView(RoundOneAPI, TemplateView):
                     try:
                         status = data.get("status", "")
                         data.update({"status": status})
-                        data.update(
-                            {"requestedDate": datetime.utcfromtimestamp(
+                        data.update({
+                            "requestedDate": datetime.utcfromtimestamp(
                                 int(data.get(
-                                    'requestedDate', 0))
-                                ).strftime("%d %b, %Y")})
+                                    'requestedDate', 0))).strftime("%d %b, %Y")
+                        })
 
-                        data.update(
-                            {"expiryDate": datetime.utcfromtimestamp(
+                        data.update({
+                            "expiryDate": datetime.utcfromtimestamp(
                                 int(data.get(
-                                    'expiryDate', 0))
-                                ).strftime("%d %b, %Y")})
+                                    'expiryDate', 0))).strftime("%d %b, %Y")})
+
                         if data.get("acceptedDate") and str(status) == "1":
-                            data.update(
-                                {"acceptedDate": datetime.utcfromtimestamp(
-                                    int(data.get('acceptedDate', 0))
-                                    ).strftime("%d %b, %Y")})
+                            data.update({
+                                "acceptedDate": datetime.utcfromtimestamp(
+                                    int(data.get(
+                                        'acceptedDate', 0))).strftime("%d %b, %Y")})
                             accepted.append(data)
                         else:
                             pending.append(data)
@@ -58,6 +65,14 @@ class RoundoneDashboardView(RoundOneAPI, TemplateView):
                         pass
         context['accepted'] = accepted
         context['pending'] = pending
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
+
+        if rcourses:
+            rcourses = rcourses[:6]
+            context['recommended_products'] = rcourses
         return context
 
     def get(self, request, *args, **kwargs):
@@ -123,7 +138,29 @@ class DashboardResultView(RoundOneAPI, TemplateView):
     template_name = "include/roundone_feedback.html"
 
     def get_context_data(self, **kwargs):
+        show_feedback = True
         context = super(DashboardResultView, self).get_context_data(**kwargs)
+        past_interaction = str(self.request.GET.get('status', ''))
+
+        if past_interaction == '1' or past_interaction == '0':
+            show_feedback = False
+            context.update({'show_feedback': show_feedback})
+        else:
+
+            context.update({'show_feedback': show_feedback})
+
+        try:
+            data_dict = {
+                'userEmail': self.request.session.get('email', ''),
+                'orderId': kwargs.get("order_id"),
+            }
+
+            result_html = self.get_result_template(
+                self.request, data_dict, show_feedback)
+            context.update({'result_html': result_html})
+        except:
+            pass
+        context.update(kwargs)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -132,7 +169,7 @@ class DashboardResultView(RoundOneAPI, TemplateView):
         comments = request.POST.get('comments')
         orderId = kwargs.get('order_id')
 
-        userEmail = request.user.email
+        userEmail = request.session.get('email', '')
 
         data_dict = {
             'userEmail': userEmail,
@@ -172,7 +209,6 @@ class DashboardResultView(RoundOneAPI, TemplateView):
                     str(subjectKnowledge))
                 culturalFit_str = ROUNDONE_INTERACTION_RESULT.get(
                     str(culturalFit))
-                
                 feedback.update({
                     "commSkills": commSkills_str,
                     "subjectKnowledge": subjectKnowledge_str,
@@ -205,7 +241,6 @@ class DashboardSavedDeleteView(RoundOneAPI, View):
         return HttpResponse(json.dumps({'status': False}))
 
 
-
 class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView):
     template_name = "include/roundone_profile.html"
 
@@ -220,7 +255,7 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
                     shine_profile = self.get_candidate_detail(email=email)
                     f_area = self.get_functional_area(email=email)
                     request.session.update({
-                        'candidate_profile': shine_profile, 'f_area':f_area,
+                        'candidate_profile': shine_profile, 'f_area': f_area,
                     })
                 else:
                     shine_profile = {}
@@ -228,7 +263,7 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
             education_detail = shine_profile.get('education', '')
             experience_detail = shine_profile.get('jobs', '')
             total_exp = shine_profile.get('total_experience', '')
-            resumes = self.get_resume_file(request) #shine_profile.get('resumes', '')
+            resumes = self.get_resume_file(request)
             skill_detail = self.get_skills(request)
             context.update({
                 "personal_detail": personal_detail,
@@ -236,14 +271,14 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
                 "experience_detail": experience_detail,
                 "skill_detail": skill_detail,
                 'skill_len': len(skill_detail),
-                'total_exp':total_exp,
+                'total_exp': total_exp,
                 'years': [i for i in range(12)],
-                'st_years': [i for i in range(1960,2017)],
-                'csrf_token_value':get_token(request),
-                'month_dict':month_dict,
+                'st_years': [i for i in range(1960, 2017)],
+                'csrf_token_value': get_token(request),
+                'month_dict': month_dict,
                 # 'f_area': f_area,
-                "resumes":resumes,
-                "passout_yr": [yr for yr in range(1960,2017)]
+                "resumes": resumes,
+                "passout_yr": [yr for yr in range(1960, 2017)]
             })
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -272,7 +307,7 @@ class UpdateShineProfileView(UpdateShineProfileMixin, View):
                 edit_for = request.POST.get('edit_type')
                 if shine_id and user_access_token and client_token and edit_for:
                     if edit_for == "editpersonal":
-                        if len(skill)>len(old_skill):
+                        if len(skill) > len(old_skill):
                             update_status, update_msg =\
                                 self.update_candidate_skills(
                                     shine_id=shine_id,
@@ -286,7 +321,7 @@ class UpdateShineProfileView(UpdateShineProfileMixin, View):
                                     user_access_token=user_access_token,
                                     client_token=client_token, data=request.POST,
                                     type_of='edit', token=None)
-                            
+
                     elif edit_for == "editeducation":
                         update_status, update_msg =\
                             self.update_candidate_education(
