@@ -10,6 +10,7 @@ from emailers.sms import SendSMS
 from core.mixins import InvoiceGenerate
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
+from geolocation.models import Country
 
 
 def update_initiat_orderitem_sataus(order=None):
@@ -57,6 +58,9 @@ def update_initiat_orderitem_sataus(order=None):
                         oi_status=oi.oi_status,
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
+                profile_obj = oi.product.productextrainfo_set.get(info_type='profile_update')
+                country_obj = Country.objects.get(pk=profile_obj.object_id)
+                oi.internationalprofilecredential_set.create(country=country_obj)
 
             elif oi.product.type_flow == 5:
                 if oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists():

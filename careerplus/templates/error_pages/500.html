@@ -1,46 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>500 - Shine Learning</title>
+{% extends "basic/base.html" %}
+{%load static%}
+{% block title %}
+        500 - Shine Learning
+{% endblock title %}
+{% block css_section %}
+    {{block.super}}
+{% endblock css_section %}
+{% block navigation %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url "homepage" %}"></a>
+        </div>
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
-    <!-- Bootstrap -->
-    <link type="text/css" href="css/bootstrap.css" rel="stylesheet">
-    <link type="text/css" href="css/header-footer.css" rel="stylesheet">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown have-query">
+              <a href="tel:0124-3955001">Have a query? Call us at 
+                <strong>0124-3955001</strong>
+              </a>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+{% endblock navigation %}
+{% block container %}
 
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-<nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#"></a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown have-query">
-          <a>Have a query? Call us at <strong>0124-3955001</strong></a>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
-<!-- main section start -->
 <section class="container">
 
     <!-- page content body start -->
@@ -74,41 +63,11 @@
     </div>
     <!-- page content body end -->
 
-</section>
-<!-- main section end -->
+</section> 
+{% endblock container %}
 
-
-  <!-- footer -->
-  <footer>
-    <div class="container">
-      <article>
-        <strong>Disclaimer</strong>
-Careerplus is the Trade Mark of HT Media and the services associated with it are only provided through the website Shine.com. You are advised to be cautious of calls/emails asking for payment from other web sites that claim to offer similar services under the name of careeerplus.shine.com. We have no associates or agents other than the partner sites that have been specifically named on the homepage of the website careerplus.shine.com Any specific advice or replies to queries in any part of the Site is/are the personal opinion of such experts/consultants/persons and are not subscribed to by this Site. HT Media neither endorses nor offers any judgement or warranty and accepts no responsibility or liability for the authenticity/availability of any of the goods/services/or for any damage, loss or harm, direct or consequential or any violation of local or international laws that may be incurred by your visit and/or transaction/s on these sites. We also recommend that you visit Security Guidelines and Terms and Conditions before availing the services.The information mentioned about salary increase is based on the internal research by the experts in the relevant domain in HT Media Limited. The said information is merely illustration of probability in increase and no guarantee is being provided by the company for the same. User agree and undertakes to comply with additional Terms and conditions, <a href="#">click here</a>
-      </article>
-      <div class="secure-payment">
-        <figure class="secure-icon"></figure>
-        <span class="secure-text"><strong>100% Secure Payment</strong>
-        All major credit & debit cards accepted</span>
-      </div>
-      <div class="payment-options">
-        <figure class="payment-option-txt">Payment options</figure>
-        <span class="payment-option-bg"></span>
-      </div>
-    </div>
-
-    <div class="footer-links">
-      <div class="container">
-        <a href="#">About Us</a> <a href="#">Partners</a> <a href="#">Privacy Policy</a> <a href="#">Terms & Condition</a> <a href="#">Contact us</a>
-        <span>Copyright © 2017 HT Media Limited.</span>
-      </div>
-    </div>
-    
-  </footer>
-
-
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-  </body>
-</html>
+{% block js_section %}
+    {{block.super}}  
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
