@@ -11,10 +11,10 @@ from django.http import (HttpResponse,
 from django.core.urlresolvers import reverse
 from datetime import datetime
 
-from shine.core import ShineToken, ShineCandidateDetail
+from shine.core import ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from .utills import ques_dict
-from order.models import Order, OrderItem, OrderItemOperation
+from order.models import OrderItem
 from quizs.models import QuizResponse
 
 class AutoLoginView(View):

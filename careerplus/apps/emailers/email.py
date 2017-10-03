@@ -168,8 +168,8 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "COURSE_CLOSER_MAIL":
-            send_dict['subject'] = data.get('subject', "Your service has been processed")
-            template_name = data.get('template_name', 'course-closer.html')
+            send_dict['subject'] = data.get('subject', "Your service(s) has been initiated")
+            template_name = data.get('template_name', 'course_closer.html')
             send_dict['template'] = 'emailers/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
