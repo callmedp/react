@@ -62,7 +62,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                     })
-                    send_email_task.delay(to_emails, mail_type, email_dict, status=26, oi=oi.pk)
+                    send_email_task.delay(to_emails, mail_type, data, status=26, oi=oi.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
@@ -78,7 +78,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                     })
-                    send_email_task.delay(to_emails, mail_type, email_dict, status=26, oi=oi.pk)             
+                    send_email_task.delay(to_emails, mail_type, data, status=26, oi=oi.pk)             
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:

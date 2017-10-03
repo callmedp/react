@@ -25,7 +25,7 @@ def booster():
     
     for oi in booster_ois:
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
-        email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+        email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
         candidate_data.update({
             "email": oi.order.email,
             "mobile": oi.order.mobile,
@@ -42,6 +42,7 @@ def booster():
             download_link = resumevar
             recruiter_data.update({
                 email: download_link,
+                'to_emails': email,
             })
 
             try:
@@ -70,7 +71,7 @@ def booster():
         recruiters = settings.BOOSTER_RECRUITERS
         if 92 not in email_sets:
             mail_type = 'BOOSTER_RECRUITER'
-            send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
+            send_email_task.delay([recruiter_data.get('to_emails')], mail_type, recruiter_data, status=92, oi=oi.pk)
     except Exception as e:
         print (str(e))
     
