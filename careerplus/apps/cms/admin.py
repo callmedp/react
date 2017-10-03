@@ -11,7 +11,7 @@ class ColumnHeadingAdmin(admin.TabularInline):
     max_num = 2
 
 
-class IndexColumnAdmin(admin.TabularInline):
+class IndexColumnAdmin(admin.StackedInline):
     model = IndexColumn
     raw_id_fields = ('indexer',)
     extra = 1

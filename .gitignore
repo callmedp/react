@@ -99,5 +99,5 @@ careerplus/templates/.gitignore
 # Pycharm files
 .idea
 
-static/
+static
 settings_local.py
