@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from order.models import OrderItem
-from core.common import TokenExpiry
+from core.mixins import TokenExpiry
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 
