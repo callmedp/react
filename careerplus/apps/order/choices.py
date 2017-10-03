@@ -247,7 +247,10 @@ OI_EMAIL_STATUS = (
     (161, 'Sent Flow2 Process Mailer'),
 
     # flow6 :171 - 180
-    (171, 'Sent Flow6 Process Mailer'),   
+    (171, 'Sent Flow6 Process Mailer'),
+
+    # cashback wallet status: 181 - 190
+    (181, '')  
 )
 
 OI_SMS_STATUS = (

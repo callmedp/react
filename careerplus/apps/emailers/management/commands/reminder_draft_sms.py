@@ -34,7 +34,7 @@ def draft_reminder_sms():
             data = {}
             if today_date >= approved_date + datetime.timedelta(days=2):
                 data.update({
-                    "first_name": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                    "user": oi.order.first_name,
                 })
                 try:
                     SendSMS().send(sms_type=mail_type, data=data)

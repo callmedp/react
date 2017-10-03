@@ -1,10 +1,8 @@
-import logging
 import base64
 import datetime
 
-from Crypto.Cipher import XOR, AES
+from Crypto.Cipher import XOR
 from django.conf import settings
-from shine.core import ShineCandidateDetail
 
 
 class AutoLogin(object):
