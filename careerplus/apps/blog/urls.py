@@ -7,9 +7,6 @@ from .views import BlogLandingPageView, BlogLandingAjaxView,\
 
 from . import mobile_view
 
-from .adminview import TagAddFormView, CategoryAddFormView, BlogAddFormView,\
-    TagListView, TagUpdateView, CategoryListView, CategoryUpdateView,\
-    BlogListView, BlogUpdateView, CommentListView, CommentUpdateView
 
 urlpatterns = [
     url(r'^$', BlogLandingPageView.as_view(), name='blog-landing'),
@@ -41,41 +38,6 @@ urlpatterns = [
     url(r'^register-to-comment/$',
         RegisterToCommentView.as_view(), name='register-to-comment'),
 
-
-
-    url(r'^admin/comment-to-moderate/$', CommentListView.as_view(),
-        name='blog-comment-moderate'),
-
-    url(r'^admin/comment-to-moderate/(?P<pk>\d+)/change/$', CommentUpdateView.as_view(),
-        name='blog-comment-update'),
-
-
-    url(r'^admin/tag-add/$', TagAddFormView.as_view(),
-        name='blog-tag-add'),
-
-    url(r'^admin/tags/$', TagListView.as_view(),
-        name='blog-tag-list'),
-
-    url(r'^admin/tags/(?P<pk>\d+)/change/$', TagUpdateView.as_view(),
-        name='blog-tag-update'),
-
-    url(r'^admin/category-add/$', CategoryAddFormView.as_view(),
-        name='blog-category-add'),
-
-    url(r'^admin/categories/$', CategoryListView.as_view(),
-        name='blog-category-list'),
-
-    url(r'^admin/categories/(?P<pk>\d+)/change/$', CategoryUpdateView.as_view(),
-        name='blog-category-update'),
-
-    url(r'^admin/article-add/$', BlogAddFormView.as_view(),
-        name='blog-article-add'),
-
-    url(r'^admin/articles/$', BlogListView.as_view(),
-        name='blog-article-list'),
-
-    url(r'^admin/articles/(?P<pk>\d+)/change/$', BlogUpdateView.as_view(),
-        name='blog-article-update'),
 ]
 
 

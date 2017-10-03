@@ -1,5 +1,6 @@
 import json
 import datetime
+import logging
 
 from collections import OrderedDict
 from decimal import Decimal
@@ -133,13 +134,15 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
             if self.query:
                 queryset = queryset.filter(
                     Q(order__number__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.status != -1:
                 queryset = queryset.filter(status=self.status)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -163,7 +166,8 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
                 end = end_date.strftime("%d/%m/%Y")
 
                 self.created = start + ' - ' + end
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset
@@ -226,13 +230,15 @@ class RefundOrderRequestView(ListView, PaginationMixin):
             if self.query:
                 queryset = queryset.filter(
                     Q(order__number__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.status != -1:
                 queryset = queryset.filter(status=self.status)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -256,7 +262,8 @@ class RefundOrderRequestView(ListView, PaginationMixin):
                 end = end_date.strftime("%d/%m/%Y")
 
                 self.created = start + ' - ' + end
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset

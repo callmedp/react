@@ -1,3 +1,5 @@
+import logging
+
 from django.views.generic import FormView, ListView, UpdateView
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -123,8 +125,8 @@ class CommentModerateListView(ListView, PaginationMixin):
 		try:
 			if self.query:
 				queryset = queryset.filter(Q(message__icontains=self.query))
-		except:
-			pass
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e)) 
 		return queryset
 
 
@@ -248,25 +250,29 @@ class ArticleListView(ListView, PaginationMixin):
 			if self.query:
 				queryset = queryset.filter(Q(name__icontains=self.query) |
 					Q(slug__icontains=self.query))
-		except:
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
 			pass
 
 		try:
 			if self.sel_status != -1:
 				queryset = queryset.filter(status=self.sel_status)
-		except:
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
 			pass
 
 		try:
 			if self.sel_p_cat:
 				queryset = queryset.filter(p_cat__pk=self.sel_p_cat)
-		except:
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
 			pass
 
 		try:
 			if self.sel_writer:
 				queryset = queryset.filter(user__pk=self.sel_writer)
-		except:
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
 			pass
 
 		return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by')
@@ -341,7 +347,8 @@ class CategoryListView(ListView, PaginationMixin):
 		try:
 			if self.query:
 				queryset = queryset.filter(Q(name__icontains=self.query))
-		except:
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
 			pass
 		return queryset
 
@@ -448,7 +455,8 @@ class TagListView(ListView, PaginationMixin):
 		try:
 			if self.query:
 				queryset = queryset.filter(Q(name__icontains=self.query))
-		except:
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
 			pass
 		return queryset
 

@@ -99,7 +99,8 @@ class OrderListView(ListView, PaginationMixin):
                     Q(email__icontains=self.query) |
                     Q(mobile__icontains=self.query) |
                     Q(id__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -113,7 +114,8 @@ class OrderListView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -127,7 +129,8 @@ class OrderListView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.order_by('-modified')
@@ -200,7 +203,8 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
                     Q(email__icontains=self.query) |
                     Q(mobile__icontains=self.query) |
                     Q(id__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -214,7 +218,8 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -228,7 +233,8 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.order_by('-modified')
@@ -309,7 +315,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                     Q(order__email__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__number__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -323,7 +330,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.order_by('-modified')
@@ -418,7 +426,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -432,13 +441,15 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.writer:
                 queryset = queryset.filter(assigned_to=self.writer)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -451,7 +462,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related('order', 'product', 'delivery_service').order_by('-modified')
@@ -626,7 +638,8 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -640,21 +653,24 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.writer:
                 queryset = queryset.filter(
                     assigned_to=self.writer)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -667,7 +683,8 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related(
@@ -741,7 +758,8 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
         try:
             if self.modified:
@@ -754,21 +772,24 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.writer:
                 queryset = queryset.filter(
                     assigned_to=self.writer)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -781,7 +802,8 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related(
@@ -859,7 +881,8 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -873,21 +896,24 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.writer:
                 queryset = queryset.filter(
                     assigned_to=self.writer)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -900,7 +926,8 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
         return queryset.select_related(
             'order', 'product', 'assigned_by',
@@ -977,7 +1004,8 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -991,21 +1019,24 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.writer:
                 queryset = queryset.filter(
                     assigned_to=self.writer)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.draft_level != -1:
                 queryset = queryset.filter(
                     draft_counter=self.draft_level)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1018,7 +1049,8 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related(
@@ -1090,7 +1122,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1104,19 +1137,22 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if self.writer:
                 queryset = queryset.filter(assigned_to=self.writer)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if int(self.oi_status) != -1:
                 queryset = queryset.filter(oi_status=self.oi_status)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1129,7 +1165,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related(
@@ -1197,7 +1234,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1211,7 +1249,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1225,7 +1264,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related(
@@ -1319,7 +1359,8 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1333,7 +1374,8 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1347,7 +1389,8 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
@@ -1404,7 +1447,8 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1418,7 +1462,8 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
 
@@ -1433,7 +1478,8 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
@@ -1514,7 +1560,8 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
@@ -1528,7 +1575,8 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         return queryset.order_by('-modified')
@@ -1579,7 +1627,8 @@ class ActionOrderItemView(View):
                                 str(oi.get_draft_level()),
                                 str(oi.draft_added_on),
                                 str(oi.order.payment_date)])
-                        except:
+                        except Exception as e:
+                            logging.getLogger('error_log').error("%s " % str(e))
                             continue
                     response = HttpResponse(csvfile.getvalue())
                     file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
@@ -1624,7 +1673,8 @@ class ActionOrderItemView(View):
                                 str(oi.get_draft_level()),
                                 str(oi.draft_added_on),
                                 str(oi.order.payment_date)])
-                        except:
+                        except Exception as e:
+                            logging.getLogger('error_log').error("%s " % str(e))
                             continue
                     response = HttpResponse(csvfile.getvalue())
                     file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
@@ -1669,7 +1719,8 @@ class ActionOrderItemView(View):
                                 str(oi.get_draft_level()),
                                 str(oi.draft_added_on),
                                 str(oi.order.payment_date)])
-                        except:
+                        except Exception as e:
+                            logging.getLogger('error_log').error("%s " % str(e))
                             continue
                     response = HttpResponse(csvfile.getvalue())
                     file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
@@ -1706,7 +1757,8 @@ class ActionOrderItemView(View):
                                 str(oi.get_oi_status),
                                 str(oi.modified),
                                 str(oi.order.payment_date)])
-                        except:
+                        except Exception as e:
+                            logging.getLogger('error_log').error("%s " % str(e))
                             continue
                     response = HttpResponse(csvfile.getvalue())
                     file_name = queue_name + timezone.now().date().strftime("%Y-%m-%d")
