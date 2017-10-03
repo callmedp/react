@@ -41,8 +41,11 @@
       </div>
     </div>
 
+    
     <div class="clearfix"></div>
+    
     <div class="row">
+
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
@@ -54,20 +57,24 @@
             <div class="pull-left">
               {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
                 <form method="POST" role="form" id="action_form" action="">
-                  {% csrf_token %}
-                  <div class="col-sm-4">
-                      <div class="input-group">
-                          {{action_form.action}}
-                          <input type="hidden" name="queue_name" value="internationalprofileupdate" />
-                          <input type="hidden" id="selected-id" name="selected_id" />
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
-                          </span>
-                      </div>
-                  </div>
-                  <input type="hidden" name="username" value="">
-                  <input type="hidden" name="password" value="">
-                </form>
+                {% csrf_token %}
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            {{action_form.action}}
+                            <input type="hidden" name="queue_name" value="internationalprofileupdate" />
+                            <input type="hidden" id="selected-id" name="selected_id" />
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                            </span>
+                        </div>
+                    </div>
+                    {% for profile_url in profile_urls %}
+                      <input type="hidden" name="count" value="{{forloop.counter}}">
+                      <input type="hidden" name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}">
+                      <input type="hidden" 
+                      name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}">
+                    {% endfor %}
+                    </form>
               {% endif %}
                 <!-- modal action -->
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
@@ -96,8 +103,7 @@
 
           <div class="x_content">
             <div class="table-responsive">
-              <table class="table table-striped jambo_table bulk_action" 
-              id="inbox-table">
+              <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
                     {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
@@ -125,7 +131,7 @@
                             </td>
                       {% endif %}
                       <td>{{order.order.id}}</td>
-                      <td>{{order.product.name}}</td>
+                      <td>Profile Update({{country_obj.name}})</td>
                       <td><a href="{{order.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Resume</button></a></td>
                       <td>
                         <table>
@@ -147,36 +153,30 @@
                             <tr>
                             {% for profile_url in profile_urls %}
                               <td>
-                                <form method="POST" id="pro_update{{ forloop.counter }}" action="{% url "console:international_profile_update" 
-                                order.pk %}">
-
-                                <input type="hidden" name="site{{forloop.counter}}" 
-                                value="{{profile_url}}">
-
-                                <input type="hidden" name="count" value="{{forloop.counter}}">
-
-                                <input type="hidden" name="update" value="1">
-                                <label>Username</label>
-
-                                <input type="text" 
-                                name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}"id="{{forloop.counter}}_username" maxlength="35">
-
-                                <label>Password</label>
-                                <input type="text" 
-                                name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}"id="{{forloop.counter}}_password" maxlength="35">
-
-                                <label>
-                                  <input type="checkbox" name="flag{{forloop.counter}}" class="flag" {% if profile_url|profile_status:profile_url_dict%} checked{% endif %} id="{{forloop.counter}}_flag">
-                                  Profile Updation Flag
-                                </label>
-                                <br>
-                                <div class="form-group">
-                                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <center>
-                                      <button type="button" onclick="jobProfileUpdate({{ forloop.counter }},)" class="btn btn-success btn-xs">Update</button>
-                                    </center>
+                                <form method="POST" id="pro_update{{ forloop.counter }}"
+                                action="{% url "console:international_profile_update" order.pk %}">
+                                  <input type="hidden" name="site{{forloop.counter}}" 
+                                  value="{{profile_url}}">
+                                  <input type="hidden" name="count" value="{{forloop.counter}}">
+                                  <input type="hidden" name="update" 
+                                  value="1">
+                                  <label>Username</label>
+                                  <input type="text" name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}" id="{{forloop.counter}}_username" 
+                                   maxlength="35">
+                                  <label>Password</label>
+                                    <input type="text" 
+                                    name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}" id="{{forloop.counter}}_password"
+                                    maxlength="35">
+                                  <label>
+                                  <input type="checkbox" name="flag{{forloop.counter}}" class="flag" {% if profile_url|profile_status:profile_url_dict%} checked{% endif %} id="{{forloop.counter}}_flag">Profile Updation Flag</label>
+                                  <br>
+                                  <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                      <center>
+                                        <button type="button" onclick="jobProfileUpdate({{ forloop.counter }},)" class="btn btn-success btn-xs">Update</button>
+                                      </center>
+                                    </div>
                                   </div>
-                                </div>
                                 </form>
                               </td>
                             {% endfor %}
