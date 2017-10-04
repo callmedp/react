@@ -190,17 +190,17 @@ DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
 DOWNLOAD_URL = '/download/'
 
 REST_FRAMEWORK = {
+    # authentication permission
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
+
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser'
     ],
     'PAGE_SIZE': 10,
-
-    # # authentication permission
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-    # )
 }
 
 OAUTH2_PROVIDER = {
