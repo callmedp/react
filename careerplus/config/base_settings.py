@@ -52,6 +52,7 @@ THIRD_PARTY_APPS = [
     'requests',
     'sekizai',
     'sorl.thumbnail',
+    'oauth2_provider',
     'rest_framework',
     'haystack',
     'celery',
@@ -86,6 +87,7 @@ LOCAL_APPS = [
     'emailers',
     'quizs',
     'database',
+    'api',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -193,7 +195,19 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser'
     ],
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+
+    # # authentication permission
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    # )
+}
+
+OAUTH2_PROVIDER = {
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 60 * 10,
+    'OAUTH_DELETE_EXPIRED': True,
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
 }
 
 # ckeditor settings...

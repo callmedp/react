@@ -82,6 +82,11 @@ urlpatterns += [
     url(r'^linkedin/login/$',
         LinkedinCallbackView.as_view(), name='linkedin-login'),
 
+    url(r'^api/', include('api.urls', namespace='api')),
+
+    # django-oauth-toolkit
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
