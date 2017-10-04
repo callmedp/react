@@ -17,6 +17,7 @@ from .utills import ques_dict
 from order.models import OrderItem
 from quizs.models import QuizResponse
 
+
 class AutoLoginView(View):
 
     def get_context_data(self, **kwargs):
@@ -42,6 +43,19 @@ class AutoLoginView(View):
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
+                elif candidateid and next1 == 'payment':
+                    try:
+                        resp_status = ShineCandidateDetail().get_status_detail(
+                            email=None, shine_id=candidateid)
+                        request.session.update(resp_status)
+                        if resp_status:
+                            return HttpResponseRedirect(reverse('cart:payment-summary'))
+                        else:
+                            return HttpResponseRedirect('/?login_attempt=fail')
+                    except Exception as e:
+                        logging.getLogger('error_log').error(
+                            "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
+
                 return HttpResponseRedirect('/?login_attempt=fail')
         return HttpResponseRedirect('/?login_attempt=fail')
 
@@ -51,7 +65,6 @@ class CounsellingSubmit(TemplateView):
 
     def get(self, request, *args, **kwargs):
         return super(CounsellingSubmit, self).get(request, *args, **kwargs)
-
 
     def get_context_data(self, **kwargs):
         context = super(CounsellingSubmit, self).get_context_data(**kwargs)

@@ -112,7 +112,7 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
 
                 {% elif obj.oi_status == 4 %}
-                    <p><strong>Status:</strong> Service has been processed - <a href="{% url 'console:profile_credentials' %}">Download Credential</a></p>
+                    <p><strong>Status:</strong> Service has been processed - <a href="{% url 'console:profile_credentials' obj.pk %}">Download Credential</a></p>
 
                 {% elif obj.oi_status == 61 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>

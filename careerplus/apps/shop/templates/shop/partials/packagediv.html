@@ -50,7 +50,9 @@
       <a href="{{package.url}}" class="other-package">
         <p>
           Experience
-          <strong>{{package.experience}}</strong>
+      {% if package.experience %}
+          <strong>{{package.experience|get_choice_display:"EXP_DICT"}}</strong>
+      {% endif %}
         </p>
       </a>
 
