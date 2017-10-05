@@ -33,9 +33,16 @@
 
         <div class="text-center payment-done">
             <figure class="waiting-icon"></figure>
-            <h1>Waiting for payment to be made, meanwhile order has been created!</h1>
+
+            <h1>{% if order.status == 1 %}
+                    Your payment has been maed successfully!
+                {% else %}
+                    Waiting for payment to be made, meanwhile order has been created!
+                {% endif %}
+            </h1>
+
             <article>Your transaction ID is <strong>{{order.ordertxns.last.txn}}</strong></article>
-            <article>An email, along with all the details, has been sent to <a href="mailto:abc@gmail.com">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+            <article>An email, along with all the details, has been sent to <a href="mailto:{{order.email}}">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
 
             {% if pending_resume_items %}
 
