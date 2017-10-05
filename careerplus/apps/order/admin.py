@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models import Order, OrderItem, OrderItemOperation, Message,\
     RefundRequest, RefundItem, RefundOperation, CouponOrder,\
-    EmailOrderItemOperation, SmsOrderItemOperation
+    EmailOrderItemOperation, SmsOrderItemOperation,\
+    InternationalProfileCredential
 
 from wallet.models import WalletTransaction
 from payment.models import PaymentTxn
@@ -105,4 +106,4 @@ admin.site.register(RefundRequest, RefundRequestAdmin)
 admin.site.register(EmailOrderItemOperation)
 admin.site.register(SmsOrderItemOperation)
 admin.site.register(Message, MessageAdmin)
-
+admin.site.register(InternationalProfileCredential)

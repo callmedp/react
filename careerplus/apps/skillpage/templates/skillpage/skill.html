@@ -315,10 +315,12 @@
             <textarea class="form-control" rows="1" name="message_box" placeholder="Message"></textarea>
             <span class="error position-error" style="color:red"></span>
         </div>
+        <input type="hidden" name="lead_source" value="1">
+        <input type="hidden" name="product" value="{{products.0.pNm}}">
+      	<button type="button" id="id_query"  class="submit-button">
+     		Message
+      	</button>
       </form>
-      <button type="button" id="id_query"  class="submit-button">
-      Message
-      </button>
       <div class="call-service">
         <strong>
           <span class="call-service-icon"></span>

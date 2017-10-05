@@ -2,13 +2,22 @@ import json
 from collections import OrderedDict
 from decimal import Decimal
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, redirect
+from django.http import (
+    HttpResponseRedirect, Http404,
+    HttpResponse,
+    HttpResponseForbidden,
+    HttpResponsePermanentRedirect,
+)
+
 from django.utils.http import urlquote
-from django.views.generic import DetailView, ListView, TemplateView
-from django.template.loader import render_to_string
+from django.views.generic import (
+    ListView,
+    TemplateView,
+    View
+)
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from geolocation.models import Country
+from django.db.models import Q
 from haystack.query import SearchQuerySet
 from console.decorators import (
     Decorate,
@@ -19,6 +28,7 @@ from search.helpers import get_recommendations
 
 from .models import Product
 from review.models import Review
+from crmapi.models import UserQuries
 
 
 class ProductInformationMixin(object):
@@ -262,7 +272,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     http_method_names = ['get', 'post']
 
     model = Product
-    
+
     def __init__(self, *args, **kwargs):
         # _view_signal = product_viewed
         self.category = None
@@ -288,6 +298,13 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update(self.solar_faq(self.sqs))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
+        country_choices = [(m.phone, m.phone) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        ctx.update({
+            'country_choices': country_choices,
+            'initial_country': initial_country,
+        })
         if self.sqs.pPc == 'course':
             ctx.update(json.loads(self.sqs.pPOP))
             pvrs_data = json.loads(self.sqs.pVrs)
@@ -464,7 +481,7 @@ class ProductReviewListView(ListView, ProductInformationMixin):
 
     def get_queryset(self):
         return Review.objects.none()
-        
+
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             self._page_kwarg = self.request.GET.get('pg', 1)
@@ -473,7 +490,7 @@ class ProductReviewListView(ListView, ProductInformationMixin):
                     pk=self.kwargs['product_pk'])
             except:
                 pass
-            
+
             if self._product:
                 return super(self.__class__, self).get(request, args, **kwargs)
             else:
@@ -487,3 +504,36 @@ class ProductReviewListView(ListView, ProductInformationMixin):
         context.update(self.get_reviews(
             self._product, self._page_kwarg))
         return context
+
+
+class LeadView(View):
+    http_method_names = [u'post', ]
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            query_dict = {}
+            name = request.POST.get('name', '').strip()
+            country_code = request.POST.get('country_code')
+            mobile = request.POST.get('mobile', '').strip()
+            message = request.POST.get('message', '').strip()
+            product = request.POST.get('product', '').strip()
+            lead_source = request.POST.get('lead_source', '').strip()
+
+            try:
+                country_obj = Country.objects.get(phone=country_code)
+            except:
+                country_obj = Country.objects.get(phone='91')
+
+            query_dict = {
+                "name": name,
+                "country": country_obj,
+                "phn_number": mobile,
+                "message": message,
+                'product': product,
+                'lead_source': lead_source,
+            }
+            query_obj = UserQuries(**query_dict)
+            query_obj.save()
+            data = {'status': 1}
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()

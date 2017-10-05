@@ -11,7 +11,7 @@ from django.conf import settings
 
 class Command(BaseCommand):
     """
-        Daily Cron for draft reminder mail/Sms
+        Daily Cron for last cart item
     """
 
     def __init__(self, *args, **kwargs):
@@ -74,7 +74,6 @@ def get_last_cart_item():
 
                 try:
                     SendMail().send(to_email, mail_type, data)
-
                 except Exception as e:
                     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_email), str(mail_type), str(e)))
     except Exception as e:

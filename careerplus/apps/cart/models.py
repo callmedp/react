@@ -69,6 +69,7 @@ class Cart(AbstractAutoDate):
 
     shipping_done = models.BooleanField(default=False)  #shipping process
     # summary_done = models.BooleanField(default=False)  #summary process
+    lead_archive = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'cart'

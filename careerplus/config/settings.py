@@ -13,6 +13,8 @@ ALLOWED_HOSTS = ['*']
 SITE_ID = 1
 SITE_DOMAIN = 'localhost:8000'
 SITE_PROTOCOL = 'https'
+MOBILE_ADSERVER_ENCODE_KEY = 'el!bomen!h$'
+ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
 
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
@@ -79,8 +81,8 @@ ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
 if DEBUG or not IS_LIVE:
     # ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
     # ROUNDONE_API_BASEURL = "http://api.roundone.asia"
-    ROUNDONE_API_BASEURL = "http://api.roundone.in"  # "http://api.roundone.asia"
-    ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in"  # "http://testing.roundone.asia"
+    ROUNDONE_API_BASEURL = "http://testing.roundone.asia"  # "http://api.roundone.asia"
+    ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"  # "http://testing.roundone.asia"
     ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
     ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
     ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
@@ -155,6 +157,17 @@ CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
 CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
+
+# Use for CRM Lead
+SHINECPCRM_DICT = {
+    'base_url': 'http://172.22.65.32:8003',
+    'token': 'bb56404f6a32be78479a590e8683bdbbfe1c9d62',
+    'psuedo_lead_url': '/api/pseudo-leads/',
+    'update_products_url': '/api/update-products/',
+    'update_cartleads_url': '/api/update-cartleads/',
+    'ad_server_url': '/api/mobile-version-leads/',
+    'timeout': 30
+}
 
 
 # Email settings

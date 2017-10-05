@@ -31,8 +31,10 @@
     <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
     
     <div class="query-call">
-      <a href="#"><figure class="email-icon"></figure> Have a query?</a>
-      <a><figure class="calling-icon"></figure> 0124-395 5001</a>
+      <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm3"><figure class="email-icon"></figure> Have a query?</a>
+      <a href="tel:0124-395 5001">
+        <figure class="calling-icon"></figure> 0124-395 5001
+      </a>
     </div>
   </div>
   {% comment %}

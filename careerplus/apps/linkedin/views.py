@@ -2,12 +2,15 @@ import logging
 
 from django.template.loader import get_template
 
-from weasyprint import HTML, CSS
+from weasyprint import HTML
 from django.template import Context
 
 from django.views.generic import View, TemplateView
-from django.http import (HttpResponse,
-    HttpResponseRedirect, HttpResponseForbidden)
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,
+    HttpResponseForbidden,
+)
 from django.core.urlresolvers import reverse
 from datetime import datetime
 
@@ -15,7 +18,6 @@ from shine.core import ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from .utills import ques_dict
 from order.models import OrderItem
-from quizs.models import QuizResponse
 
 
 class AutoLoginView(View):
@@ -26,7 +28,6 @@ class AutoLoginView(View):
 
     def get(self, request, *args, **kwargs):
         token = kwargs.get('token', '')
-        context = self.get_context_data(**kwargs)
         if token:
             next1 = request.GET.get('next') or '/'
             email, candidateid, valid = AutoLogin().decode(token)
@@ -200,8 +201,8 @@ class CounsellingForm(TemplateView):
 
 class LinkedinDraftView(TemplateView):
     template_name = "linkedin/linkedin_draft.html"
-    
-    def get(self,request,*args,**kwargs):
+
+    def get(self, request, *args, **kwargs):
         return super(LinkedinDraftView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -210,10 +211,10 @@ class LinkedinDraftView(TemplateView):
         op_id = kwargs.get('op_id', '')
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
-            op_id = oi.orderitemoperation_set.filter(linkedin = op_id)[0]
+            op_id = oi.orderitemoperation_set.filter(linkedin=op_id)[0]
             try:
                 draft = ''
-                if op_id:    
+                if op_id:
                     draft = op_id.linkedin
                     flag2 = False
                     skill_list = draft.key_skills
@@ -247,24 +248,24 @@ class LinkedinDraftView(TemplateView):
                         'current_org': current_org
                     })
                 else:
-                    context.update({'draft':''})
+                    context.update({'draft': ''})
             except:
-                context.update({'draft':''})        
-            
+                context.update({'draft': ''})
+
         except:
-            context.update({'draft':''})
+            context.update({'draft': ''})
         return context
 
 
 class DraftAdminView(TemplateView):
     template_name = "linkedin/linkedin-resume-pdf.html"
-    
-    def get(self,request,*args,**kwargs):
+
+    def get(self, request, *args, **kwargs):
         orderitem_id = kwargs.get('order_item', '')
         op_id = kwargs.get('op_id', '')
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
-            op_id = oi.orderitemoperation_set.get(pk = op_id)
+            op_id = oi.orderitemoperation_set.get(pk=op_id)
             if self.request.user.is_anonymous():
                 return HttpResponseForbidden()
             if not self.request.user:
@@ -280,11 +281,10 @@ class DraftAdminView(TemplateView):
         op_id = kwargs.get('op_id', '')
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
-            op_id = oi.orderitemoperation_set.get(pk = op_id)
-            
+            op_id = oi.orderitemoperation_set.get(pk=op_id)
             try:
                 draft = ''
-                if op_id:    
+                if op_id:
                     draft = op_id.linkedin
                     name = draft.candidate_name
                     flag2 = False
@@ -320,12 +320,11 @@ class DraftAdminView(TemplateView):
                         'current_org': current_org
                     })
                 else:
-                    context.update({'draft':''})
+                    context.update({'draft': ''})
             except:
-                context.update({'draft':''})        
-            
+                context.update({'draft': ''})
         except:
-            context.update({'draft':''})
+            context.update({'draft': ''})
         return context
 
 
@@ -337,7 +336,7 @@ class DraftDownloadView(View):
 
         try:
             order_item = OrderItem.objects.get(pk=orderitem_id)
-            oio = order_item.orderitemoperation_set.get(linkedin = op_id)
+            oio = order_item.orderitemoperation_set.get(linkedin=op_id)
             try:
                 draft = ''
                 if oio:
@@ -379,7 +378,7 @@ class DraftDownloadView(View):
                     }
                     template = get_template('linkedin/linkedin-resume-pdf.html')
                     context = Context(context_dict)
-                    html  = template.render(context)
+                    html = template.render(context)
                     pdf_file = HTML(string=html).write_pdf()
                     http_response = HttpResponse(pdf_file, content_type='application/pdf')
                     http_response['Content-Disposition'] = 'filename="report.pdf"'

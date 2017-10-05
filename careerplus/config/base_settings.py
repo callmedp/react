@@ -86,6 +86,7 @@ LOCAL_APPS = [
     'emailers',
     'quizs',
     'database',
+    'crmapi',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

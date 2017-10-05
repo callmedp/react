@@ -60,7 +60,13 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
                 profile_obj = oi.product.productextrainfo_set.get(info_type='profile_update')
                 country_obj = Country.objects.get(pk=profile_obj.object_id)
-                oi.internationalprofilecredential_set.create(country=country_obj)
+                profile_urls = country_obj.profile_url.split(',')
+                for profile_url in profile_urls:
+                    oi.internationalprofilecredential_set.create(
+                        country=country_obj,
+                        username=None,
+                        password=None,
+                    )
 
             elif oi.product.type_flow == 5:
                 if oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists():
