@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from django.utils import timezone
 
@@ -69,10 +70,17 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     order.currency = int(request.data.get('currency', 0))
                     order.tax_config = ''
                     order.status = 1
+                    order.site = 1
                     order.total_excl_tax = request.data.get('total_excl_tax_excl_discount', 0)
                     order.total_incl_tax = request.data.get('total_payable_amount', 0)
+                    crm_lead_id = request.data.get('crm_lead_id', '')
+                    crm_sales_id = request.data.get('crm_sales_id', '')
+                    sales_user_info = request.data.get('sales_user_info', {})
+                    sales_user_info = str(sales_user_info)
+                    order.crm_lead_id = crm_lead_id
+                    order.crm_sales_id = crm_sales_id
+                    order.sales_user_info = sales_user_info
                     order.save()
-
                     for data in item_list:
                         parent_id = data.get('id')
                         addons = data.get('addons', [])
@@ -157,7 +165,25 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             oi.tax_amount = tax_amount
                             oi.discount_amount = discount
                             oi.save()
+
                     update_initiat_orderitem_sataus(order=order)
+                    txns_list = request.data.get('txns_list', [])
+
+                    for txn_dict in txns_list:
+                        try:
+                            payment_date = txn_dict.get('payment_date')
+                            payment_date = datetime.datetime.strptime(payment_date, "%Y-%m-%d %H:%M:%S")
+                        except:
+                            payment_date = timezone.now()
+                        order.ordertxns.create(
+                            txn=txn_dict.get('txn_id', ''),
+                            status=int(txn_dict.get('status', 0)),
+                            payment_mode=int(txn_dict.get('payment_mode', 7)),
+                            payment_date=payment_date,
+                            currency=int(txn_dict.get('currency', 0)),
+                            txn_amount=txn_dict.get('amount', 0)
+                        )
+
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
                         status=status.HTTP_200_OK)
