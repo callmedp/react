@@ -144,19 +144,13 @@ CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=i
 
 # Shine settings
 
-# SHINE_SITE = 'https://sumosc.shine.com'
-# SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
-# CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
-# CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
-# SHINE_API_USER = 'scpapiuser@gmail.com'
-# SHINE_API_USER_PWD = 'tarun@123'
-
-SHINE_SITE = 'https://www.shine.com'
-SHINE_API_URL = 'https://mapi.shine.com/api/v2'
-CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
-CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
+SHINE_SITE = 'https://sumosc.shine.com'
+SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
+CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
+CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
+
 
 # Use for CRM Lead
 SHINECPCRM_DICT = {
@@ -169,6 +163,12 @@ SHINECPCRM_DICT = {
     'timeout': 30
 }
 
+# SHINE_SITE = 'https://www.shine.com'
+# SHINE_API_URL = 'https://mapi.shine.com/api/v2'
+# CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
+# CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
+# SHINE_API_USER = 'scpapiuser@gmail.com'
+# SHINE_API_USER_PWD = 'tarun@123'
 
 # Email settings
 

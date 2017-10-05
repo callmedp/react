@@ -87,7 +87,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 "igst": payment_dict.get('igst')})
             tax_dict = json.dumps(tax_dict)
             order.tax_config = tax_dict
-            order.total_excl_tax = total_amount  # before discount amount
+            order.total_excl_tax = total_amount  # before discount amount and before tax
             order.total_incl_tax = total_payable_amount  # payable amount including tax and excluding discount
             order.save()
 

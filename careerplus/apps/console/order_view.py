@@ -558,7 +558,7 @@ class OrderDetailVeiw(DetailView):
         order = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
 
-        order_items = order.orderitems.all().select_related('product', 'partner')
+        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
 
         context.update({
             "order": order,
