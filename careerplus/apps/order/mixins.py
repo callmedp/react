@@ -87,7 +87,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 "igst": payment_dict.get('igst')})
             tax_dict = json.dumps(tax_dict)
             order.tax_config = tax_dict
-            order.total_excl_tax = total_amount  # before discount amount
+            order.total_excl_tax = total_amount  # before discount amount and before tax
             order.total_incl_tax = total_payable_amount  # payable amount including tax and excluding discount
             order.save()
 
@@ -112,11 +112,12 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             update_initiat_orderitem_sataus(order=order)
 
             # for linkedin
-            linkedin_product = order.orderitems.filter(product__type_flow=8)
+            linkedin_products = order.orderitems.filter(product__type_flow=8)
 
-            if linkedin_product:
+            for linkedin_product in linkedin_products:
                 # associate draft object with order
-                order_item = linkedin_product.first()
+                order_item = linkedin_product
+                last_oi_status = order_item.oi_status
                 draft_obj = Draft.objects.create()
                 org_obj = Organization()
                 org_obj.draft = draft_obj
@@ -127,12 +128,16 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 edu_obj.save()
 
                 quiz_rsp = QuizResponse()
-                quiz_rsp.oi = order_item
+                quiz_rsp.oi = linkedin_product
                 quiz_rsp.save()
 
-                order_item.counselling_form_status = 41
+                order_item.counselling_form_status = 49
                 order_item.oio_linkedin = draft_obj
                 order_item.save()
+                order_item.orderitemoperation_set.create(
+                    oi_status=order_item.oi_status,
+                    last_oi_status=last_oi_status,
+                )
             return order
 
     def createOrderitems(self, order, cart_obj, payment_dict={}):

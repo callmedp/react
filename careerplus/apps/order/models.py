@@ -97,6 +97,13 @@ class Order(AbstractAutoDate):
         upload_to=get_upload_path_order_invoice, max_length=255,
         blank=True, null=True)
 
+    # crm information
+    crm_sales_id = models.CharField(
+        max_length=255, null=True, blank=True)
+    crm_lead_id = models.CharField(
+        max_length=255, null=True, blank=True)
+    sales_user_info = models.TextField(default='')
+
     class Meta:
         app_label = 'order'
         ordering = ['-date_placed']
@@ -384,8 +391,7 @@ class OrderItem(AbstractAutoDate):
             pass
         elif self.oi_status not in [141, 142, 143]:
             pass
-        dict_status = dict(OI_USER_STATUS)
-        return dict_status.get(self.oi_status)
+        return self.oi_status
 
     def get_test_obj(self):
         return self

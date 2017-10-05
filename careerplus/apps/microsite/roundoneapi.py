@@ -16,12 +16,13 @@ from django.conf import settings
 from cart.models import Subscription
 from .tasks import post_roundone_order
 
+
 class RoundOneAPI(object):
 
     def create_roundone_order(self, order):
         try:
             user = order.candidate_id
-            post_roundone_order.delay({'user': user, 'order': order})
+            post_roundone_order.delay({'user': user, 'order_id': order.id})
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
@@ -48,7 +49,7 @@ class RoundOneAPI(object):
                 "affiliateName": settings.ROUNDONE_API_DICT.get(
                     "affiliateName", 'CP'),
                 "username": email,
-                "password": '592be7a753c034509597de71', #password.candidateid,
+                "password": password.candidateid,
             }
 
             headers = {'content-type': 'application/json'}

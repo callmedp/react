@@ -17,6 +17,9 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
+
+from ckeditor_uploader import views as ckeditor_views
 
 from users.views import (
     RegistrationApiView, LoginApiView, LogoutApiView)
@@ -62,7 +65,10 @@ urlpatterns += [
     url(r'^payment/', include('payment.urls', namespace='payment')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^design/', include('design.urls', namespace='design')),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+
+    url(r'^ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
+    url(r'^ckeditor/bbrowse/', login_required(ckeditor_views.browse), name='ckeditor_browse'),
+
     url(r'^search/', include('search.urls', namespace='search')),
     # partner url
     url(r'^partner/', include('partner.urls')),
@@ -75,6 +81,11 @@ urlpatterns += [
     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
     url(r'^linkedin/login/$',
         LinkedinCallbackView.as_view(), name='linkedin-login'),
+
+    url(r'^api/', include('api.urls', namespace='api')),
+
+    # django-oauth-toolkit
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

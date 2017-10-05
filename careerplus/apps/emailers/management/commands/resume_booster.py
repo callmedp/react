@@ -1,9 +1,11 @@
 import textwrap
+import logging
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from order.models import OrderItem
-from core.common import TokenExpiry
+from core.mixins import TokenExpiry
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 
@@ -43,13 +45,14 @@ def booster():
             download_link = resumevar
             recruiter_data.update({
                 email: download_link,
+                'to_emails': email,
             })
 
             try:
                 # send mail to candidate
                 if 93 not in email_sets:
                     mail_type = 'BOOSTER_CANDIDATE'
-                    send_email_task.delay([candidate_data.get('email')], mail_type, candidate_data, status=93, oi=oi.pk)
+                    send_email_task.delay(to_emails, mail_type, candidate_data, status=93, oi=oi.pk)
                 # send sms to candidate
                 SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
                 last_oi_status = oi.oi_status
@@ -63,6 +66,7 @@ def booster():
                 )
 
             except Exception as e:
+                logging.getLogger('cron_log').error("%s" % (str(e)))
                 print (str(e))
         else:
             continue
@@ -72,4 +76,5 @@ def booster():
             mail_type = 'BOOSTER_RECRUITER'
             send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
     except Exception as e:
+        logging.getLogger('cron_log').error("%s" % (str(e)))
         print (str(e))

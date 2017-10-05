@@ -190,7 +190,7 @@ class InvoiceGenerate(object):
 
             total_amount_before_discount = order.total_excl_tax  # without discount
             total_amount_after_discount = total_amount_before_discount - coupon_amount
-            total_amount_after_discount = total_amount_before_discount - redeemed_reward_point
+            total_amount_after_discount = total_amount_after_discount - redeemed_reward_point
 
             tax_amount = total_payable_amount - total_amount_after_discount
 

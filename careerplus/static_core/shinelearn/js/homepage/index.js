@@ -7,6 +7,7 @@ jQuery(document).ready(function($) {
         placeholder: prefetchedFuncArea ? '': "Select Functional Area",
         autocomplete: {
             values: funcAreaSet,
+            actualValues: funcAreaSet,
             only: true
         },
         max: 1,
@@ -17,6 +18,7 @@ jQuery(document).ready(function($) {
         },
         destroy: function(e) {
             var $field = e.$input[0];
+            if (e.tags.length == 0)
             $field.placeholder = 'Select Functional Area';
         },
         errors: {
@@ -35,6 +37,7 @@ jQuery(document).ready(function($) {
         placeholder: prefetchedSkills ? '': "Choose upto 3 Skills",
         autocomplete: {
             values: skillsSet,
+            actualValues: skillsSet,
             only: true
         },
         max: 3,

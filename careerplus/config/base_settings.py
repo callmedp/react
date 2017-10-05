@@ -52,6 +52,7 @@ THIRD_PARTY_APPS = [
     'requests',
     'sekizai',
     'sorl.thumbnail',
+    'oauth2_provider',
     'rest_framework',
     'haystack',
     'celery',
@@ -86,6 +87,7 @@ LOCAL_APPS = [
     'emailers',
     'quizs',
     'database',
+    'api',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -188,14 +190,27 @@ DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
 DOWNLOAD_URL = '/download/'
 
 REST_FRAMEWORK = {
+    # authentication permission
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
+
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser'
     ],
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
 }
 
+OAUTH2_PROVIDER = {
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 60 * 10,
+    'OAUTH_DELETE_EXPIRED': True,
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
+
+# ckeditor settings...
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
 CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
@@ -207,6 +222,8 @@ CKEDITOR_CONFIGS = {
         # 'extraPlugins': 'codesnippet',
     },
 }
+CKEDITOR_RESTRICT_BY_USER = False
+CKEDITOR_REQUIRE_STAFF = False
 
 
 BROKER_URL = 'redis://localhost:6379/0'

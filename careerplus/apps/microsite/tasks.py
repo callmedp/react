@@ -3,42 +3,41 @@ import urllib
 import hmac
 import hashlib
 import logging
-import csv
 import requests
 
 from django.conf import settings
-from django.utils import timezone
 from datetime import datetime, timedelta
-from order.models import Order
 
 from celery.decorators import task
 from cart.models import Subscription
+from order.models import Order
 
-@task
+
+@task(name="post_roundone_order")
 def post_roundone_order(data_dict):
-    try: 
+    try:
         candidateid = data_dict.get('user')
-        order = data_dict.get('order')
-        if order and candidateid:
+        ord_obj = Order.objects.get(id=data_dict.get('order_id'))
+        if ord_obj.status == 1 and candidateid:
             roundone_order, created = Subscription.objects.get_or_create(
-                candidateid=candidateid, order=order)
-            if order.status != 2:
+                candidateid=candidateid, order=ord_obj)
+            if roundone_order.status != 1:
                 roundone_api_dict = settings.ROUNDONE_API_DICT
                 data_str = ''
                 api_secret_key = roundone_api_dict.get('order_secret_key')
 
                 try:
-                    billingDate = order.date_placed.date().strftime("%Y-%m-%d")
+                    billingDate = ord_obj.payment_date.date().strftime("%Y-%m-%d")
                 except:
                     billingDate = datetime.now().strftime("%Y-%m-%d")
 
                 data_dict = {
-                    'emailId': order.email,
-                    'name': order.first_name,
-                    'mobile': order.mobile,
+                    'emailId': ord_obj.email,
+                    'name': ord_obj.first_name,
+                    'mobile': ord_obj.mobile,
                     'amount': roundone_api_dict.get('amount', 1999),
-                    'orderId': order.id,
-                    'transactionId': order.number,
+                    'orderId': ord_obj.id,
+                    'transactionId': ord_obj.number,
                     'billingDate': billingDate,
                     'isBundled': 0,
                     'organisationId': roundone_api_dict.get('organisationId', 11),
@@ -58,12 +57,10 @@ def post_roundone_order(data_dict):
                             status = resp_json.get('status')
                             roundone_order.status = status
                             if status == 1 or status == "1":
-                                # roundone_order.remark = resp_json.get('data', resp_json)
-                                roundone_order.added_on = datetime.now()
+                                roundone_order.remark = resp_json.get('data', resp_json)
                                 roundone_order.expire_on = datetime.now() + timedelta(6*365/12)
                             else:
-                                pass
-                                # roundone_order.remark = resp_json.get('error', resp_json)
+                                roundone_order.remark = resp_json.get('error', resp_json)
                 except Exception as e:
                     logging.getLogger('error_log').error(str(e))
                 roundone_order.save()

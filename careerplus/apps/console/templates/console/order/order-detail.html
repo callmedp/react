@@ -165,6 +165,7 @@
                         <th>Can Process</th>
                         <th>Is Combo</th>
                         <th>Is Variation</th>
+                        <th>Is Addon</th>
                     <tr>
                       
                   </thead>
@@ -172,10 +173,25 @@
                       {% for obj in orderitems %}
                       <tr>
                           <td>{{obj.id}}</td>
-                          <td>{% if obj.parent and obj.is_variation %}
-                              {{obj.parent.product.name}}:</br>
-                          {% endif %}
-                          {{obj.product.name}}{%if obj.product.get_exp %} :{{obj.product.get_exp}}{% endif %}</td>
+                          <td>
+                            {% if obj.parent and obj.is_variation %}
+                              {{obj.parent.product.get_name}}:</br>
+                            {% endif %}
+                                {{obj.product.get_name}}<br/>
+                            {%if obj.product.product.get_exp_db %}
+                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_studymode_db %}
+                                <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_coursetype_db %}
+                                <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_duration_db %}
+                                <strong>Duration:</strong> {{obj.product.get_duration_db}}
+                            {% endif %}
+
+                          </td>
                           <td>{{obj.get_oi_status}}</td>
                           
                           <td>
@@ -251,6 +267,7 @@
                           <td>{% if obj.no_process %}Can not Processed{% endif %}</td>
                           <td>{% if obj.is_combo %}Combo product{% endif %}</td>
                           <td>{% if obj.is_variation %}Variation product{% endif %}</td>
+                          <td>{% if obj.is_addon %}addon product{% endif %}</td>
                       </tr>
                       {% endfor %}          
                   </tbody>

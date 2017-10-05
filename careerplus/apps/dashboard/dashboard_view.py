@@ -24,7 +24,6 @@ from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from wallet.models import Wallet
-from cart.models import Subscription
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
@@ -77,14 +76,6 @@ class DashboardView(TemplateView):
         if rcourses:
             rcourses = rcourses[:6]
             context['recommended_products'] = rcourses
-        try:
-            roundone_user = Subscription.objects.filter(candidateid=candidate_id)
-            context.update({
-                'roundone_user': roundone_user
-            })
-        except Exception as e:
-            raise e
-
         return context
 
     def post(self, request, *args, **kwargs):

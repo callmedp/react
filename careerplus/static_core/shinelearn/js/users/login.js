@@ -19,7 +19,7 @@ $().ready(function() {
     );
     $("#login_form").validate({
         submitHandler: function(form) {
-            e.preventDefault();
+            // e.preventDefault();
             if($(this).val() != '')
             {
               $('button[type="submit"]').prop('disabled', false);  

@@ -27,8 +27,11 @@
                 <ul class="resume-type mt-10">
                     {% for oi in pending_resume_items %}
                         <li>
-                            <input type="checkbox" id="test1" name="resume_pending" value="{{oi.pk}}">
-                            <label for="test1">{{oi.product.heading}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</label>
+                            <input type="checkbox" id="pending-item-id{{oi.pk}}" name="resume_pending" value="{{oi.pk}}">
+                            <label for="pending-item-id{{oi.pk}}">{{oi.product.get_name}}
+                                {% if obj.product.get_exp_db %}
+                                 - {{obj.product.get_exp_db}}
+                                {% endif %}
                         </li>
                     {% endfor %}
                 </ul>

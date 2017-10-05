@@ -1,10 +1,13 @@
 import logging
-from decimal import Decimal, ROUND_HALF_DOWN
+from decimal import Decimal
 from django.core.management.base import BaseCommand
 
 from emailers.email import SendMail
-from cart.models import Cart, LineItem
+from cart.models import Cart
 from shine.core import ShineCandidateDetail
+from linkedin.autologin import AutoLogin
+from django.conf import settings
+
 
 class Command(BaseCommand):
     """
@@ -21,7 +24,7 @@ class Command(BaseCommand):
 def get_last_cart_item():
     try:
         mail_type = 'CART_DROP_OUT'
-        cart_objs = Cart.objects.filter(status__in = [2,3]).exclude(owner_id=None)
+        cart_objs = Cart.objects.filter(status__in=[2, 3]).exclude(owner_id=None)
         for cart_obj in cart_objs:
             crt_obj = cart_obj
             data = {}
@@ -59,12 +62,15 @@ def get_last_cart_item():
                         li.save()
                         total_price += li.price_incl_tax
                 data['total'] = round(total_price, 2)
+                data['subject'] = 'Product is ready to checkout'
                 if m_prod.cart.email and m_prod.cart.owner_id:
                     to_email.append(m_prod.cart.email)
-                else: 
+                else:
                     json_data = ShineCandidateDetail().get_status_detail(
                         email=None, shine_id=m_prod.cart.owner_id)
                     to_email.append(json_data['email'])
+                token = AutoLogin().encode(m_prod.cart.email, m_prod.cart.owner_id, days=None)
+                data['autologin'] = "%s://%s/autologin/%s/?next=payment" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()) 
 
                 try:
                     SendMail().send(to_email, mail_type, data)

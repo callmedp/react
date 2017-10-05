@@ -27,7 +27,7 @@ from haystack.query import SearchQuerySet
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
 from order.mixins import OrderMixin
-from .functions import draft_upload_mail
+from .functions import draft_upload_mail, roundone_product
 
 
 class ArticleCommentView(View):
@@ -51,7 +51,6 @@ class ArticleCommentView(View):
                     blog.save()
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
-                pass
             data = {"status": status}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -67,8 +66,8 @@ class ArticleShareView(View):
                 obj.no_shares += 1
                 obj.update_score()
                 obj.save()
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
             data = {"status": "success"}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -108,8 +107,8 @@ class CmsShareView(View):
                 pg_counter.no_shares += 1
                 pg_counter.save()
 
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
             data = ["Success"]
             return HttpResponse(json.dumps(list(data)), content_type="application/json")
 
@@ -192,8 +191,8 @@ class AjaxStateView(View):
             country_obj = Country.objects.get(pk=country, active=True)
             states = country_obj.state_set.all().values_list('name', flat=True)
             data['states'] = list(states)
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
@@ -217,8 +216,8 @@ class AjaxOrderItemCommentView(View):
                             added_by=request.user,
                             is_internal=is_internal)
                         data['status'] = 1
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -243,6 +242,7 @@ class ApproveByAdminDraft(View):
 
                     # mail to candidate for resume critique closed
                     to_emails = [obj.order.email]
+                    token = token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
                     email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     email_dict = {}
                     email_dict.update({
@@ -251,6 +251,7 @@ class ApproveByAdminDraft(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -258,6 +259,8 @@ class ApproveByAdminDraft(View):
                     if 42 not in email_sets:
                         send_email_task.delay(to_emails, mail_type, email_dict, status=42, oi=obj.pk)
                         try:
+                            urlshortener = create_short_url(login_url=email_dict)
+                            email_dict.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
@@ -330,8 +333,9 @@ class ApproveByAdminDraft(View):
                             last_oi_status=obj.last_oi_status,
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
+                
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -352,8 +356,9 @@ class RejectByAdminDraft(View):
                     last_oi_status=last_status,
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
+                
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -497,7 +502,8 @@ class ApproveDraftByLinkedinAdmin(View):
                             last_oi_status=last_status,
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
@@ -519,7 +525,8 @@ class RejectDraftByLinkedinAdmin(View):
                     last_oi_status=last_status,
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
@@ -572,6 +579,9 @@ class MarkedPaidOrderView(View):
 
                 # send email through process mailers
                 process_mailer(order=obj)
+
+                #roundone order
+                roundone_product(order=obj)
 
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))

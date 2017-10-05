@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -79,7 +80,8 @@ class PaymentMixin(object):
                 del request.session['cart_pk']
                 del request.session['checkout_type']
                 self.request.session.modified = True
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
                 pass
 
             # emails

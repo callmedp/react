@@ -4,6 +4,8 @@ from django.conf import settings
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from order.functions import create_short_url
+from microsite.roundoneapi import RoundOneAPI
+
 
 def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
     email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
@@ -111,3 +113,19 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
     else:
         pass
+
+
+def roundone_product(order=None):
+    if order.status == 1:
+        orderitems = order.orderitems.filter(
+            no_process=False).select_related('order', 'product', 'partner')
+        for oi in orderitems:
+            if oi.product.type_flow == 9:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 141
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status)
+                RoundOneAPI().create_roundone_order(order)

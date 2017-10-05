@@ -91,6 +91,7 @@ class RegistrationLoginApi(object):
 
     @staticmethod
     def reset_update(data_dict):
+        
         response_json = {"response": False}
         post_data = {}
 
@@ -101,7 +102,7 @@ class RegistrationLoginApi(object):
             'password':data_dict.get('new_password1'),
             'confirm_password':data_dict.get('new_password2')
         })
-        request_header = ShineCandidateDetail().get_api_headers()
+        request_header = ShineCandidateDetail().get_api_headers(token=None)
         request_header.update({'Content-Type':'application/json'})
         try:
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
@@ -146,7 +147,7 @@ class RegistrationLoginApi(object):
             post_url = "{}/api/v2/linkedin/login/?format=json".format(settings.SHINE_SITE)
 
         try:
-            request_header = ShineCandidateDetail().get_api_headers()
+            request_header = ShineCandidateDetail().get_api_headers(token=None)
             request_header.update({'Content-Type':'application/json'})
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
