@@ -28,7 +28,7 @@ class IndexerWidgetAdmin(admin.ModelAdmin):
 
 class WidgetAdmin(admin.ModelAdmin):
     list_display = ('id', 'widget_type', 'is_active',
-        'display_name', 'heading', 'redirect_url', 'is_external', 'is_pop_up',)
+        'display_name', 'heading', 'redirect_url', 'is_external', 'is_pop_up')
     list_filter = ('widget_type', )
     search_fields = ('heading', 'id')
     filter_horizontal = ['related_article', ]
