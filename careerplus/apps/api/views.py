@@ -15,6 +15,8 @@ from users.tasks import user_register
 from order.models import Order
 from shop.views import ProductInformationMixin
 from shop.models import Product
+from coupon.models import Coupon
+from order.mixins import OrderMixin
 from order.functions import update_initiat_orderitem_sataus
 
 
@@ -68,7 +70,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     order.number = 'CP' + str(order.id)
                     order.first_name = name
                     order.currency = int(request.data.get('currency', 0))
-                    order.tax_config = ''
+                    order.tax_config = str(request.data.get('tax_config', {}))
                     order.status = 1
                     order.site = 1
                     order.total_excl_tax = request.data.get('total_excl_tax_excl_discount', 0)
@@ -81,6 +83,34 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     order.crm_sales_id = crm_sales_id
                     order.sales_user_info = sales_user_info
                     order.save()
+                    coupon_amount = request.data.get('coupon', 0)
+                    coupon_obj = Coupon.objects.create_coupon(
+                        coupon_type='flat',
+                        value=coupon_amount,
+                        valid_until=None,
+                        prefix="crm",
+                        campaign=None,
+                        user_limit=1
+                    )
+
+                    coupon_obj.min_purchase = coupon_amount
+                    coupon_obj.max_deduction = coupon_amount
+                    coupon_obj.valid_from = timezone.now()
+                    coupon_obj.valid_until = timezone.now()
+                    coupon_obj.active = False
+                    coupon_obj.save()
+
+                    coupon_obj.users.create(
+                        user=email,
+                        redeemed_at=timezone.now()
+                    )
+
+                    order.couponorder_set.create(
+                        coupon=coupon_obj,
+                        coupon_code=coupon_obj.code,
+                        value=coupon_amount
+                    )
+
                     for data in item_list:
                         parent_id = data.get('id')
                         addons = data.get('addons', [])
@@ -184,6 +214,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             txn_amount=txn_dict.get('amount', 0)
                         )
 
+                    OrderMixin().addRewardPointInWallet(order=order)
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
                         status=status.HTTP_200_OK)

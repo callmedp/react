@@ -1,6 +1,8 @@
 import logging
+import base64
 import requests
 import json
+from Crypto.Cipher import XOR
 
 from django.conf import settings
 
@@ -200,3 +202,40 @@ class UploadResumeToShine(ShineToken):
             logging.getLogger('error_log').error(
                 "%s error in sync_candidate_resume_to_shine function" % (str(e)))
         return False
+
+
+class AdServerShine(object):
+
+    def encode(self, email, mobile, timestamp):
+        inp_str = '{key}|{email}|{mobile}|{timestamp}'.format(**{'key': settings.MOBILE_ADSERVER_ENCODE_KEY, 'email': email, 'timestamp': timestamp, 'mobile': mobile})
+        xor_cipher = XOR.new(settings.MOBILE_ADSERVER_ENCODE_KEY)
+        return base64.urlsafe_b64encode(xor_cipher.encrypt(inp_str))
+
+    def decode(self, encoded_str):
+        if encoded_str:
+            import urllib
+            token = urllib.unquote(encoded_str).decode('utf8')
+            xor_cipher = XOR.new(settings.MOBILE_ADSERVER_ENCODE_KEY)
+            inp_str = xor_cipher.decrypt(token)
+            inp_list = inp_str.split('|')
+            if inp_list and len(inp_list) > 1 and inp_list[0] == settings.MOBILE_ADSERVER_ENCODE_KEY:
+                return inp_list
+        return None
+
+
+class AcrossShine(object):
+
+    def encode(self, email):
+        inp_str = '{email}|{key}'.format(**{'key': settings.ACROSS_ENCODE_KEY, 'email': email})
+        xor_cipher = XOR.new(settings.ACROSS_ENCODE_KEY)
+        return base64.urlsafe_b64encode(xor_cipher.encrypt(inp_str))
+
+    def decode(self, encoded_str):
+        if encoded_str:
+            token = base64.urlsafe_b64decode(str(encoded_str))
+            xor_cipher = XOR.new(settings.ACROSS_ENCODE_KEY)
+            inp_str = xor_cipher.decrypt(token)
+            inp_list = inp_str.split('|')
+            if inp_list and len(inp_list) > 1 and inp_list[1] == settings.ACROSS_ENCODE_KEY:
+                return inp_list[0]
+        return None

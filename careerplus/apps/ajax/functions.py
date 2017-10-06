@@ -44,7 +44,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-    elif oi.product.type_flow == 12 :
+    elif oi.product.type_flow == 12:
         if oi.draft_counter == 1 and (142 not in email_sets and 142 not in sms_sets):
             email_dict['subject'] = "Your developed document has been uploaded" 
             send_email_task.delay(to_emails, mail_type, email_dict, status=142, oi=oi.pk)
@@ -116,16 +116,21 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
 
 
 def roundone_product(order=None):
-    if order.status == 1:
-        orderitems = order.orderitems.filter(
-            no_process=False).select_related('order', 'product', 'partner')
-        for oi in orderitems:
-            if oi.product.type_flow == 9:
-                last_oi_status = oi.oi_status
-                oi.oi_status = 141
-                oi.last_oi_status = last_oi_status
-                oi.save()
-                oi.orderitemoperation_set.create(
-                    oi_status=oi.oi_status,
-                    last_oi_status=last_oi_status)
-                RoundOneAPI().create_roundone_order(order)
+    try:
+        if order.status == 1:
+            orderitems = order.orderitems.filter(
+                no_process=False,
+                product__type_flow=9).select_related(
+                'order', 'product', 'partner')
+            for oi in orderitems:
+                if oi.product.type_flow == 9:
+                    last_oi_status = oi.oi_status
+                    oi.oi_status = 141
+                    oi.last_oi_status = last_oi_status
+                    oi.save()
+                    oi.orderitemoperation_set.create(
+                        oi_status=oi.oi_status,
+                        last_oi_status=last_oi_status)
+                    RoundOneAPI().create_roundone_order(order)
+    except Exception as e:
+        logging.getLogger('error_log').error("%s - %s" % (str(order), str(e)))

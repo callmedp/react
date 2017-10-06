@@ -61,10 +61,12 @@ def post_roundone_order(data_dict):
                                 roundone_order.expire_on = datetime.now() + timedelta(6*365/12)
                             else:
                                 roundone_order.remark = resp_json.get('error', resp_json)
+                    else:
+                        print (resp.json())
+                        logging.getLogger('error_log').error("%s" % (resp.json()))
                 except Exception as e:
                     logging.getLogger('error_log').error(str(e))
                 roundone_order.save()
 
     except Exception as e:
         logging.getLogger('error_log').error(str(e))
-

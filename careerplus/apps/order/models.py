@@ -471,14 +471,15 @@ class Message(AbstractAutoDate):
     def __str__(self):
         return '#'+str(self.pk)
 
+
 class InternationalProfileCredential(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country, null=True)
     username = models.CharField(_('Username'), max_length=100)
-    password = models.CharField(_('Password'), max_length=100)
-    candidateid = models.CharField(_('CandidateId'), max_length=100)
+    password = models.CharField(_('Password'), max_length=100, null=True, blank=True)
+    candidateid = models.CharField(_('CandidateId'), max_length=100, null=True, blank=True)
     candidate_email = models.CharField(_('Candidate Email'), max_length=100)
-    site_url = models.CharField(_('Site Url'), max_length=100, blank=True)
+    site_url = models.CharField(_('Site Url'), max_length=100, null=True, blank=True)
     profile_status = models.BooleanField(default=False)
 
     def __str__(self):

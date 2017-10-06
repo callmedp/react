@@ -87,6 +87,7 @@ LOCAL_APPS = [
     'emailers',
     'quizs',
     'database',
+    'crmapi',
     'api',
 ]
 

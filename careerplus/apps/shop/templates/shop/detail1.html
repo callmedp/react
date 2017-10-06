@@ -222,6 +222,59 @@
     {% include "shop/partials/recommended_product.html" %}
 
     {% endblock prdrecommended %}
+    <!--equiry form-->
+<div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="request-call call1">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Have a Query</h1>
+      </div>
+        <form id="callback_form" role="form">
+          <div style='display:none'>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="name" placeholder="Name">
+            <span class="error position-error" style="color:red"></span>
+          </div>
+          <div class="form-group">
+            <div class="country-code">
+              <div class="custom-select">
+                <select class="form-control" name="country_code">
+                  {% for country in country_choices %}
+                      <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.1}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <input type="text" class="form-control" name="mobile" 
+              placeholder="Mobile">
+              <span class="error position-error" style="color:red"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" rows="1" placeholder="Message" 
+            name="message"></textarea>
+            <span class="error position-error" style="color:red"></span>
+          </div>
+          <input type="hidden" name="lead_source" value="2">
+          <input type="hidden" name="product" value="{{sqs.pNm}}">
+          <button type="button" id="id_callback" class="submit-button">
+            Submit
+          </button>
+        </form>
+        <div class="call-service">
+          <strong>
+            <span class="call-service-icon"></span>
+            0124-395 5001
+          </strong>
+          9am to 7pm ist monday-saturday
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock main_container %}
 
 
@@ -340,7 +393,81 @@
                 'top': 0
             });
         }*/
-    </script> 
+    $.validator.addMethod("indiaMobile", function(value, element) {
+        var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
 
-     
+    $('#callback_form').validate({
+        rules:{
+            name:{
+                required: true,
+                maxlength: 80
+            },
+            mobile:{
+                required: true,
+                number: true,
+                indiaMobile: true,
+                minlength: 4,
+                maxlength: 15
+            },
+            message_box:{
+                required: true,
+                maxlength: 300
+            }
+        },
+        messages:{
+            name:{
+                required: "Name is Mandatory.",
+                maxlength: "Maximum 80 characters."
+            },
+            mobile:{
+                required: "Mobile Number is Mandatory",
+                number: "Enter only number",
+                indiaMobile: "Please enter 10 digits only",
+                maxlength: "Please enter less than 16 digits",
+                minlength: "Please enter atleast 4 digits"
+            },
+            message_box:{
+                required: "Message is required.",
+                maxlength: "Enter less than 300 characters."
+            }
+            
+        },
+        highlight:function(element, errorClass) {
+            $(element).siblings('.error').removeClass('hide_error'); 
+        },
+        unhighlight:function(element, errorClass) {
+            $(element).siblings('.error').addClass('hide_error');    
+        },
+        errorPlacement: function(error, element){
+            $(element).siblings('.error').html(error.text());
+        } 
+    });
+
+    $('#id_callback').click(function() {
+        var $callbackForm = $("#callback_form");
+        var flag = $callbackForm.valid();
+        if (flag){
+            var formData = $callbackForm.serialize();
+            $.ajax({
+                url : "/shop/crm/lead/",
+                type: "POST",
+                data : formData,
+                success: function(data, textStatus, jqXHR)
+                {
+                    alert('Your Query Submitted Successfully.');
+                    $('#callback_form')[0].reset();
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Something went wrong. Try again later.');
+                }
+            });
+        }
+    });
+    </script> 
 {% endblock js_section %}

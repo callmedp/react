@@ -45,7 +45,7 @@ $(function() {
 		if ( $("#queryform").valid()) {
 			var formData = $("#queryform").serialize();
 			$.ajax({
-	            url : "/skillpage/skill-query-lead/",
+	            url : "/shop/crm/lead/",
 	            type: "POST",
 	            data : formData,
 	            success: function(data, textStatus, jqXHR)
