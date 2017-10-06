@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
 
 from ckeditor_uploader import views as ckeditor_views
 
@@ -39,6 +40,9 @@ urlpatterns = []
 
 # Product Detail URLs
 urlpatterns += [
+    url(r'^robots.txt$', TemplateView.as_view(
+        template_name='robots.txt', content_type='text/plain')),
+    
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
     url(r'^resume/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
