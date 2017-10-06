@@ -51,7 +51,7 @@ from .choices import (
     convert_usd,
     convert_aed,
     convert_gbp)
-
+from search.choices import EXP_DICT
 
 class ProductClass(AbstractAutoDate, AbstractSEO,):
     name = models.CharField(
@@ -998,7 +998,7 @@ class Product(AbstractProduct, ModelMeta):
             if self.category_main:
                 return '%s -  for %s' % (
                     self.category_main.name,
-                    self.get_exp(),
+                    EXP_DICT.get(self.get_exp(), ''),
                 )
 
         return ''
@@ -1011,9 +1011,14 @@ class Product(AbstractProduct, ModelMeta):
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
+                try:
+                    return dict(getattr(choices, choice))[int(value) if value.isdigit() else value]
+                except:
+                    return 'Others'
+
                 return '%s -  for %s -  Online Services - Learning.Shine' % (
                     self.category_main.name,
-                    self.get_exp(),
+                    EXP_DICT.get(self.get_exp(), ''),
                 )            
         return ''
 
@@ -1026,7 +1031,7 @@ class Product(AbstractProduct, ModelMeta):
             if self.category_main:
                 return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
                         self.category_main.name,
-                        self.get_exp(),
+                        EXP_DICT.get(self.get_exp(), ''),
                         self.category_main.name,
                     )            
         
@@ -1102,9 +1107,9 @@ class Product(AbstractProduct, ModelMeta):
 
     def pv_name(self):
         if self.is_course:
-            return self.name + ' ( ' + str(self.get_exp()) + ' ) '
+            return self.name + ' ( ' + str(EXP_DICT.get(self.get_exp(), '')) + ' ) '
         elif self.is_writing:
-            return self.name + ' ( ' + str(self.get_exp()) + ' ) '
+            return self.name + ' ( ' + str(EXP_DICT.get(self.get_exp(), '')) + ' ) '
         elif self.is_course:
             return self.name + ' by ' + self.vendor.name
         return self.name

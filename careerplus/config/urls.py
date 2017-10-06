@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
 
 from ckeditor_uploader import views as ckeditor_views
 
@@ -28,12 +29,20 @@ from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 from users.views import LinkedinCallbackView
 from search.views import FuncAreaPageView
-from users.views import Custom500, Custom404
+from django.conf.urls import (
+    handler400, handler403, handler404, handler500
+)
+
+handler404 = 'users.views.page_not_found'
+handler500 = 'users.views.server_error'
 
 urlpatterns = []
 
 # Product Detail URLs
 urlpatterns += [
+    url(r'^robots.txt$', TemplateView.as_view(
+        template_name='robots.txt', content_type='text/plain')),
+    
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
     url(r'^resume/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
@@ -100,5 +109,3 @@ if settings.DEBUG:
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 
-handler500 = Custom500.as_view()
-handler404 = Custom404.as_view()

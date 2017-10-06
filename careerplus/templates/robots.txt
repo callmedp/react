@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /media/
+
+sitemap: http://learning.shine.com/skillcourse_sitemap.xml
+sitemap: http://learning.shine.com/article_sitemap.xml
+sitemap: http://learning.shine.com/search_sitemap.xml
+sitemap: http://learning.shine.com/product_sitemap.xml
+sitemap: http://learning.shine.com/listingpage_sitemap.xml
