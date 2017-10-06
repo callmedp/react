@@ -89,6 +89,7 @@ LOCAL_APPS = [
     'database',
     'crmapi',
     'api',
+    'marketing',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
