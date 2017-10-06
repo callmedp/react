@@ -4,6 +4,7 @@
 {% block css_section %}
   {{block.super}}
   <link type="text/css" href="{% static '/shinelearn/css/product/detail.css' %}" rel="stylesheet">
+  <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
 {% endblock css_section %}
     
 
@@ -223,7 +224,7 @@
 
     {% endblock prdrecommended %}
     <!--equiry form-->
-<div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
      <div class="request-call call1">
@@ -393,6 +394,7 @@
                 'top': 0
             });
         }*/
+    
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
         if(country_code == '91'){
@@ -400,29 +402,28 @@
         }
         return true;
     });
-
     $('#callback_form').validate({
         rules:{
-            name:{
-                required: true,
-                maxlength: 80
+                name:{
+                  required: true,
+                    maxlength: 80,
+                },
+                mobile:{
+                    required: true,
+                    number: true,
+                    indiaMobile: true,
+                    minlength: 4,
+                    maxlength: 15
+                },
+                message:{
+                  required: true,
+                  maxlength: 500,
+                },
             },
-            mobile:{
-                required: true,
-                number: true,
-                indiaMobile: true,
-                minlength: 4,
-                maxlength: 15
-            },
-            message_box:{
-                required: true,
-                maxlength: 300
-            }
-        },
         messages:{
             name:{
-                required: "Name is Mandatory.",
-                maxlength: "Maximum 80 characters."
+              required: "Name is Mandatory.",
+                maxlength: "Maximum 80 characters.",
             },
             mobile:{
                 required: "Mobile Number is Mandatory",
@@ -431,10 +432,6 @@
                 maxlength: "Please enter less than 16 digits",
                 minlength: "Please enter atleast 4 digits"
             },
-            message_box:{
-                required: "Message is required.",
-                maxlength: "Enter less than 300 characters."
-            }
             
         },
         highlight:function(element, errorClass) {
@@ -446,28 +443,28 @@
         errorPlacement: function(error, element){
             $(element).siblings('.error').html(error.text());
         } 
-    });
+  });
 
-    $('#id_callback').click(function() {
-        var $callbackForm = $("#callback_form");
-        var flag = $callbackForm.valid();
-        if (flag){
-            var formData = $callbackForm.serialize();
-            $.ajax({
-                url : "/shop/crm/lead/",
-                type: "POST",
-                data : formData,
-                success: function(data, textStatus, jqXHR)
-                {
-                    alert('Your Query Submitted Successfully.');
-                    $('#callback_form')[0].reset();
-                },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
-                    alert('Something went wrong. Try again later.');
-                }
-            });
-        }
+  
+  $('#id_callback').click(function(){
+    if ( $("#callback_form").valid()) {
+      var formData = $("#callback_form").serialize();
+      $.ajax({
+              url : "/shop/crm/lead/",
+              type: "POST",
+              data : formData,
+              success: function(data, textStatus, jqXHR)
+              {
+                $("#detailpage").modal('hide');
+                alert('Your Query Submitted Successfully.');
+                    window.location.reload();
+              },
+              error: function (jqXHR, textStatus, errorThrown)
+              {
+                  window.location.reload(); 
+              }
+          }); 
+    }  
     });
     </script> 
 {% endblock js_section %}

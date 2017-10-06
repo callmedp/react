@@ -1,17 +1,25 @@
 $(function() {
+    $.validator.addMethod("indiaMobile", function(value, element) {
+        var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
     $('#queryform').validate({
         rules:{
                 name:{
                 	required: true,
                     maxlength: 80,
                 },
-                mobile_number:{
+                mobile:{
                     required: true,
                     number: true,
-                    minlength: 5,
-                    maxlength: 15,                        
+                    indiaMobile: true,
+                    minlength: 4,
+                    maxlength: 15
                 },
-                message_box:{
+                message:{
                 	required: true,
                 	maxlength: 500,
                 },
@@ -21,11 +29,12 @@ $(function() {
             	required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters.",
             },
-            mobile_number:{
-                required:"Mobile Number is Mandatory",
-                number:"Enter only number",
-                maxlength: "Please enter below 15 digits",
-                minlength: "Please enter atleast 10 digits",
+            mobile:{
+                required: "Mobile Number is Mandatory",
+                number: "Enter only number",
+                indiaMobile: "Please enter 10 digits only",
+                maxlength: "Please enter less than 16 digits",
+                minlength: "Please enter atleast 4 digits"
             },
             
         },
@@ -45,7 +54,7 @@ $(function() {
 		if ( $("#queryform").valid()) {
 			var formData = $("#queryform").serialize();
 			$.ajax({
-	            url : "/skillpage/skill-query-lead/",
+	            url : "/shop/crm/lead/",
 	            type: "POST",
 	            data : formData,
 	            success: function(data, textStatus, jqXHR)
