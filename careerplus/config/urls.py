@@ -28,7 +28,12 @@ from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 from users.views import LinkedinCallbackView
 from search.views import FuncAreaPageView
-from users.views import Custom500, Custom404
+from django.conf.urls import (
+    handler400, handler403, handler404, handler500
+)
+
+handler404 = 'users.views.page_not_found'
+handler500 = 'users.views.server_error'
 
 urlpatterns = []
 
@@ -100,5 +105,3 @@ if settings.DEBUG:
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 
-handler500 = Custom500.as_view()
-handler404 = Custom404.as_view()

@@ -2,10 +2,19 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block title %}Home Page - Shine Learning{% endblock title %}
+{% block title %}Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning{% endblock title %}
+    {% block meta_html %}
+        {{block.super}}
+        <meta name="description" content="Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses">
+        {% block canonical %}
+            <link rel="canonical" href="{{ request.build_absolute_uri }}">
+        {% endblock canonical %}
 
+    {% endblock meta_html %}
+    
 {% block css_section %}
   {{block.super}}
+
     {% if request.session.candidate_id %}
     <link type="text/css" href="{% static 'shinelearn/css/homepage/home1.css' %}" rel="stylesheet">
     {% else %}
