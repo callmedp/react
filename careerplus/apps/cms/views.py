@@ -104,7 +104,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
         context['left_widgets'] = ''
         context['right_widgets'] = ''
         context['page_obj'] = page_obj
-        context['page_heading'] = page_obj.name
+        context['page_heading'] = page_obj.get_display_name
 
         country_choices = [(m.phone, m.phone) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]

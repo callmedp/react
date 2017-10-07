@@ -181,6 +181,12 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
             title = self.name
         return title.strip()
 
+    @property
+    def get_display_name(self):
+        if self.heading:
+            return self.heading
+        return self.name
+
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
 
