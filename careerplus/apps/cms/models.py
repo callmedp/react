@@ -192,6 +192,8 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
+        if self.parent:
+            return reverse('cms:page', kwargs={'parent_slug': self.parent.slug, 'child_slug':self.slug, 'pk': self.pk})
         return reverse('cms:page', kwargs={'slug': self.slug, 'pk': self.pk})
 
 
@@ -209,7 +211,7 @@ class PageWidget(AbstractCommonModel):
     class Meta:
         # Comment this while initial migration
         # auto_created = True
-        ordering = ['section', '-ranking']
+        ordering = ['section', 'ranking']
         unique_together = ('page', 'widget')
 
     def __str__(self):

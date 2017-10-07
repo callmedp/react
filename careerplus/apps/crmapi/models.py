@@ -7,20 +7,31 @@ LEAD_LOCATION = (
     (0, 'Default'),
     (1, 'Skill Page'),
     (2, 'Detail Page'),
+    
+    (6, 'Marketing'),
 )
+
+DEVICE = ((0, 'Desktop'), (1, 'Mobile'))
 
 
 class UserQuries(AbstractAutoDate):
     """
     Contains the data for candidate who wants to contact, data got from call_me
     """
-    name = models.CharField(max_length=75)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    email = models.CharField(max_length=255, null=True, blank=True)
     country = models.ForeignKey(Country, null=True)
     phn_number = models.CharField(max_length=50)
-    message = models.TextField(max_length=200)
+    message = models.TextField()
     lead_created = models.BooleanField(default=False)
     lead_source = models.SmallIntegerField(choices=LEAD_LOCATION, default=0)
     product = models.CharField(max_length=100, null=True, blank=True)
+
+    medium = models.SmallIntegerField(choices=DEVICE, default=0)
+    source = models.CharField(
+        max_length=255, null=True, blank=True)
+    path = models.CharField(
+        max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'User Queries'
@@ -28,6 +39,9 @@ class UserQuries(AbstractAutoDate):
 
     def get_lead_source(self):
         return dict(LEAD_LOCATION).get(self.lead_source)
+
+    def get_medium(self):
+        return dict(DEVICE).get(self.medium)
 
 
 SOURCE_CHOICE = (
