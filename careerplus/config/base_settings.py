@@ -466,3 +466,8 @@ SERVICE_SLUG = ['service', ]
 DELIVERY_SLUG = ['normal', 'express', 'super-express']
 CHARS_TO_REMOVE = ['/', "'"]
 ############################################
+
+# google captcha settings
+G_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
+G_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'
+G_RECAPTCHA_SECRET = '6LctaRcUAAAAAA93epQV2CjvCHIcKbvlu0ui2K28'

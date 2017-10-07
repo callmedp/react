@@ -83,6 +83,9 @@ urlpatterns += [
         LinkedinCallbackView.as_view(), name='linkedin-login'),
 
     url(r'^api/', include('api.urls', namespace='api')),
+    url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
+
+    url(r'^', include('marketing.urls', namespace='marketing')),
 
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
