@@ -6,6 +6,9 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y python3-pip
 sudo apt-get install build-essential libssl-dev libffi-dev python3-dev libmysqlclient-dev
+sudo apt-get install libcairo2-dev
+sudo apt-get install python3-pip python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0.0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
+
 sudo pip3 install virtualenv virtualenvwrapper
 cp ~/.bashrc ~/.bashrc-org
 printf '\n%s\n%s\n%s' '# virtualenv' 'export WORKON_HOME=~/virtualenvs' 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc

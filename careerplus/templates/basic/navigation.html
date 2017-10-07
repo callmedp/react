@@ -13,14 +13,14 @@
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hamburber-icon"></span>All Courses</a>
           <div class="dropdown-menu courses-tabs">
             <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="{% url 'func_area_results' 'operations' 5 %}#courses1" aria-controls="courses1" role="tab">Operations</a></li>
-              <li role="presentation"><a href="{% url 'func_area_results' 'finance' 5 %}#courses2" aria-controls="courses2" role="tab">Finance</a></li>
-              <li role="presentation"><a href="{% url 'func_area_results' 'human-resource' 5 %}#courses3" aria-controls="courses3" role="tab">Human Resources</a></li>
-              <li role="presentation"><a href="{% url 'func_area_results' 'personal-development' 5 %}#courses4" aria-controls="courses4" role="tab">Personal Development</a></li>
-              <li role="presentation"><a href="{% url 'func_area_results' 'sales-marketing' 5 %}#courses5" aria-controls="courses5" role="tab">Sales And Marketing</a></li>
-              <li role="presentation"><a href="{% url 'func_area_results' 'it-software-certification' 5 %}#courses6" aria-controls="courses6" role="tab">IT Software & Certifications</a></li>
-              <li role="presentation"><a href="{% url 'func_area_results' 'development' 5 %}#courses7" aria-controls="courses7" role="tab">Development</a></li>
-              <li role="presentation"><a href="{% url 'func_area_results' 'other-online' 5 %}#courses8" aria-controls="courses8" role="tab">Other Online Courses</a></li>
+              <li role="presentation" class="active"><a href="{% url 'skillpage:func_area_results' 'operations' 5 %}#courses1" aria-controls="courses1" role="tab">Operations</a></li>
+              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'finance' 5 %}#courses2" aria-controls="courses2" role="tab">Finance</a></li>
+              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'human-resource' 5 %}#courses3" aria-controls="courses3" role="tab">Human Resources</a></li>
+              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'personal-development' 5 %}#courses4" aria-controls="courses4" role="tab">Personal Development</a></li>
+              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'sales-marketing' 5 %}#courses5" aria-controls="courses5" role="tab">Sales And Marketing</a></li>
+              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'it-software-certification' 5 %}#courses6" aria-controls="courses6" role="tab">IT Software & Certifications</a></li>
+              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'development' 5 %}#courses7" aria-controls="courses7" role="tab">Development</a></li>
+              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'other-online' 5 %}#courses8" aria-controls="courses8" role="tab">Other Online Courses</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -33,7 +33,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
-                <li><a href="{% url 'func_area_results' 'operations' 5 %}">View all products</a></li>
+                <li><a href="{% url 'skillpage:func_area_results' 'operations' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses2">
@@ -44,7 +44,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
-                <li><a href="{% url 'func_area_results' 'finance' 5 %}">View all products</a></li>
+                <li><a href="{% url 'skillpage:func_area_results' 'finance' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses3">
@@ -55,7 +55,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
-                <li><a href="{% url 'func_area_results' 'human-resource' 5 %}">View all products</a></li>
+                <li><a href="{% url 'skillpage:func_area_results' 'human-resource' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses4">
@@ -66,7 +66,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
-                <li><a href="{% url 'func_area_results' 'personal-development' 5 %}">View all products</a></li>
+                <li><a href="{% url 'skillpage:func_area_results' 'personal-development' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses5">
@@ -77,7 +77,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
-                <li><a href="{% url 'func_area_results' 'sales-marketing' 5 %}">View all products</a></li>
+                <li><a href="{% url 'skillpage:func_area_results' 'sales-marketing' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses6">
@@ -88,7 +88,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
-                <li><a href="{% url 'func_area_results' 'it-software-certification' 5 %}">View all products</a></li>
+                <li><a href="{% url 'skillpage:func_area_results' 'it-software-certification' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses7">
@@ -99,7 +99,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>
-                <li><a href="{% url 'func_area_results' 'development' 5 %}">View all products</a></li>
+                <li><a href="{% url 'skillpage:func_area_results' 'development' 5 %}">View all products</a></li>
               </ul>
               </div>
               <div role="tabpanel" class="tab-pane" id="courses8">
@@ -110,7 +110,7 @@
                 <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>
                 <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>
-                <li><a tabindex="-1" href="{% url 'func_area_results' 'other-online' 5 %}">View all products</a></li>
+                <li><a tabindex="-1" href="{% url 'skillpage:func_area_results' 'other-online' 5 %}">View all products</a></li>
               </ul>
               </div>
             </div>

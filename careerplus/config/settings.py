@@ -19,6 +19,12 @@ ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
 MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
+
+if not IS_LIVE:
+    SITEMAP_CACHING_TIME = 86400
+else:
+    SITEMAP_CACHING_TIME = 1
+
 # Database
 DATABASES = {
     'default': {
