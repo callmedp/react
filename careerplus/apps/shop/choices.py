@@ -47,27 +47,6 @@ FLOW_CHOICES = (
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
 )
 
-EXP_CHOICES = (
-    (0, 'Default'),
-    (1, '0-1 years'),
-    (2, '1-4 years'),
-    (3, '4-8 years'),
-    (4, '8-15 years'),)
-
-
-COURSE_TYPE_CHOICES = (
-    (0, 'Default'),
-    (1, 'Basic'),
-    (2, 'Intermediate'),
-    (3, 'Expert'),)
-
-
-MODE_CHOICES = (
-    (0, 'Default'),
-    (1, 'Online'),
-    (2, 'Classroom'),
-    (3, 'Online + Classroom'),)
-
 
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
     4: "#a69cba", 5: "#8cb3f6", 6: "#9ac7e5", 7: "#ad9c7f",
@@ -147,10 +126,10 @@ STUDY_MODE = dict((
 
 EXP_DICT = dict((
     ('FR', '0-1 years'),
-    ('ME', '1-4 years'),
-    ('EX', '4-8 years'),
-    ('SU', '8-15 years'),))
-
+    ('FP', '1-4 years'),
+    ('SP', '4-8 years'),
+    ('EP', '8-15 years'),
+    ('DP', '15+ years')))
 
 COURSE_TYPE_DICT = dict((
     ('BS', 'Basic'),

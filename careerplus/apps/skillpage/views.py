@@ -12,11 +12,11 @@ from django.db.models import Q
 from shop.models import Category
 from cms.mixins import UploadInFile
 from review.models import Review
-from partner.models import Vendor
 from shop.models import Product
 from .mixins import SkillPageMixin
 
 # Create your views here.
+
 
 class SkillPageView(DetailView, SkillPageMixin):
     model = Category
@@ -25,7 +25,7 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        slug = self.kwargs.get('slug')
+        slug = self.kwargs.get('skill_slug')
         if queryset is None:
             queryset = self.get_queryset()
 
@@ -46,7 +46,6 @@ class SkillPageView(DetailView, SkillPageMixin):
         return None
 
     def get(self, request, *args, **kwargs):
-        slug = self.kwargs.get('slug', None)
         self.pk = self.kwargs.get('pk', None)
         self.object = self.get_object()
         redirect = self.redirect_if_necessary(request.path, self.object)
@@ -54,11 +53,11 @@ class SkillPageView(DetailView, SkillPageMixin):
             return redirect
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
-        
+
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
-        slug = self.kwargs.get('slug', '')
+        slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
 
         api_data = self.get_job_count_and_fuctionan_area(slug)
@@ -69,7 +68,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
 
-        try:    
+        try:
             # top_3_prod = self.object.categoryproducts.all().order_by('-productcategories__prd_order')[0:3]
             top_3_prod = SearchQuerySet().filter(pCtg=self.pk)[0:3]
             top_4_vendors = SearchQuerySet().filter(pCtg=self.pk)[0:4]
@@ -121,7 +120,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_4_vendors": top_4_vendors,
             "products": products,
             'site': "http://" + settings.SITE_DOMAIN,
-            "page_reviews":prod_reviews[0:4] if self.request.flavour else page_reviews,
+            "page_reviews": prod_reviews[0:4] if self.request.flavour else page_reviews,
             'url': 'https://' + self.object.video_link,
             'country_choices': country_choices,
             'initial_country': initial_country,
@@ -132,13 +131,12 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        if self.object.get_parent():
+        parent = self.object.get_parent() 
+        if parent:
             breadcrumbs.append({
-                "url": reverse('skillpage:skill-page-listing',
-                kwargs={'slug': self.object.slug, 'pk':self.object.pk}),
-               "name": self.object.get_parent()[0].name,
+                "url": parent[0].get_absolute_url(), "name": parent[0].name,
             })
-        breadcrumbs.append({"url": None, "name": self.object.name})
+        breadcrumbs.append({"url": '', "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
 

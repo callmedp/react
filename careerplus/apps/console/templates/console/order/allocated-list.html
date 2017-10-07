@@ -234,7 +234,7 @@
                 <tbody id="body-table-list">
                   {% for obj in page %}
                     <tr class="even pointer">
-                      {% if perms.order.writer_assignment_permission %}
+                      {% if perms.order.writer_inbox_assigner %}
                           <td class="a-center ">
                               <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                           </td>

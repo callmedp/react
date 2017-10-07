@@ -181,6 +181,12 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
             title = self.name
         return title.strip()
 
+    @property
+    def get_display_name(self):
+        if self.heading:
+            return self.heading
+        return self.name
+
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
 
@@ -192,6 +198,8 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
+        if self.parent:
+            return reverse('cms:page', kwargs={'parent_slug': self.parent.slug, 'child_slug':self.slug, 'pk': self.pk})
         return reverse('cms:page', kwargs={'slug': self.slug, 'pk': self.pk})
 
 
@@ -209,7 +217,7 @@ class PageWidget(AbstractCommonModel):
     class Meta:
         # Comment this while initial migration
         # auto_created = True
-        ordering = ['section', '-ranking']
+        ordering = ['section', 'ranking']
         unique_together = ('page', 'widget')
 
     def __str__(self):
