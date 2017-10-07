@@ -38,10 +38,7 @@ from .choices import (
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
-    EXP_CHOICES,
     RELATION_CHOICES,
-    COURSE_TYPE_CHOICES,
-    MODE_CHOICES,
     BG_CHOICES,
     C_ATTR_DICT,
     R_ATTR_DICT,
@@ -1051,7 +1048,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_image_url(self, relative=False):
         if self.image:
             return self.get_full_url(url=self.image.url) if not relative else self.image.url
-        return ''
+        return '/media/static/shinelearn/images/default_product_image.jpg'
     
     def get_url(self, relative=False):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
@@ -1062,12 +1059,15 @@ class Product(AbstractProduct, ModelMeta):
         cat_slug = cat_slug.slug if cat_slug else None
         if self.is_course:
             return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
-        elif self.is_writing:
-            return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
-        elif self.is_service:
-            return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         else:
-            return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+            return reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+
+        # else self.is_writing:
+        #     return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        # elif self.is_service:
+        #     return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        # else:
+        #     return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
 
     def get_ratings(self):
         pure_rating = int(self.avg_rating)

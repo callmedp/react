@@ -63,13 +63,14 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
-    url(r'^resume/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
-        ProductDetailView.as_view(), name='resume-detail'),
-    url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
-        ProductDetailView.as_view(), name='job-assist-detail'),
-    url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
-        ProductDetailView.as_view(), name='other-detail'),
-    url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
+    url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
+        ProductDetailView.as_view(), name='service-detail'),
+
+    # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
+    #     ProductDetailView.as_view(), name='job-assist-detail'),
+    # url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
+    #     ProductDetailView.as_view(), name='other-detail'),
+    # url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
     
 ]
 urlpatterns += [

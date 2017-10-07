@@ -260,6 +260,8 @@ PRICE_FACETS = {
 
 EXP_DICT = dict((
     ('FR', '0-1 years'),
-    ('ME', '1-4 years'),
-    ('EX', '4-8 years'),
-    ('SU', '8-15 years'),))
+    ('FP', '1-4 years'),
+    ('SP', '4-8 years'),
+    ('EP', '8-15 years'),
+    ('DP', '15+ years')))
+
