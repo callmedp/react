@@ -34,6 +34,7 @@
     <datalist class="col-sm-2">
       {% if past.status != '-1' or past.status != -1 %}
         <a href="{% url "dashboard:dashboard_roundone_result" order_id=past.orderId %}?status={{past.status}}">View Result</a>
+      {% endif %}
     </datalist>
   </li>
   {% endfor %}
