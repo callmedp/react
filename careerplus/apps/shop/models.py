@@ -1048,7 +1048,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_image_url(self, relative=False):
         if self.image:
             return self.get_full_url(url=self.image.url) if not relative else self.image.url
-        return '/media/static/shinelearn/images/default_product_image.jpg'
+        return '/media/attachment/default_product_image.jpg'
     
     def get_url(self, relative=False):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
