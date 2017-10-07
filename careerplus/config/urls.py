@@ -33,7 +33,7 @@ from users.views import LinkedinCallbackView
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
-from seo.sitemap import CourseSitemap, SkillSitemap, CategorySitemap, ServiceSitemap
+from seo.sitemap import CourseSitemap, SkillSitemap, CategorySitemap, ServiceSitemap, ArticleSitemap, ArticleCategorySitemap, CMSSitemap
 
 handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
@@ -48,29 +48,45 @@ service_sitemap = {
    'service': ServiceSitemap,
 }
 
+article_sitemap = {
+   'article': ArticleSitemap,
+   'category': ArticleCategorySitemap,
+}
+
+cms_sitemap = {
+   'service': CMSSitemap,
+}
+
+
 urlpatterns = []
 
 # Product Detail URLs
 urlpatterns += [
     url(r'^robots.txt$', TemplateView.as_view(
         template_name='robots.txt', content_type='text/plain')),
-    url(r'^certification_course_sitemap\.xml$', sitemaps_views.sitemap, {
+    url(r'^certification_course_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
         'sitemaps': course_sitemap,
         'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^job_services_sitemap\.xml$', sitemaps_views.sitemap, {
+    url(r'^job_services_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
         'sitemaps': service_sitemap,
+        'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^article_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+        'sitemaps': article_sitemap,
+        'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^cms_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+        'sitemaps': cms_sitemap,
         'template_name': 'sitemap.xml'}, name='sitemap'),
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
-
+    url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
+    
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
     # url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='other-detail'),
-    url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
     
 ]
 urlpatterns += [
