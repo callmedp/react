@@ -2,7 +2,7 @@ from .settings import *
 
 DEBUG = False
 IS_LIVE = True
-
+STATIC_URL = 'https://origin-static3.shine.com/'
 ########## DOMAIN SETTINGS ######################
 MAIN_DOMAIN_PREFIX = 'http://learning1.shine.com'
 SITE_DOMAIN = 'learning1.shine.com'
