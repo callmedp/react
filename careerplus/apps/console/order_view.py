@@ -1600,12 +1600,12 @@ class ActionOrderItemView(View):
                     csvfile, delimiter=',', quotechar="'",
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
-                    'Orderitem Id', 'OrderId', 'Name',
+                    'Orderitem Id', 'Order Number', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
-            
-                orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
+                orderitems = OrderItem.objects.filter(
+                    id__in=selected_id).select_related('order', 'product', 'partner')
                 if orderitems:
                     for oi in orderitems:
                         try:
@@ -1615,11 +1615,11 @@ class ActionOrderItemView(View):
                                 writer = ''
                             csv_writer.writerow([
                                 str(oi.pk),
-                                str(oi.order.id),
+                                str(oi.order.number),
                                 str(oi.order.first_name + ' ' + oi.order.last_name),
                                 str(oi.order.email),
                                 str(oi.order.country_code + ' ' + oi.order.mobile),
-                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
                                 str(writer),
@@ -1646,11 +1646,11 @@ class ActionOrderItemView(View):
                     csvfile, delimiter=',', quotechar="'",
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
-                    'Orderitem Id', 'OrderId', 'Name',
+                    'Orderitem Id', 'Order Number', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
-            
+
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 if orderitems:
                     for oi in orderitems:
@@ -1661,11 +1661,11 @@ class ActionOrderItemView(View):
                                 writer = ''
                             csv_writer.writerow([
                                 str(oi.pk),
-                                str(oi.order.id),
+                                str(oi.order.number),
                                 str(oi.order.first_name + ' ' + oi.order.last_name),
                                 str(oi.order.email),
                                 str(oi.order.country_code + ' ' + oi.order.mobile),
-                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
                                 str(writer),
@@ -1692,7 +1692,7 @@ class ActionOrderItemView(View):
                     csvfile, delimiter=',', quotechar="'",
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
-                    'Orderitem Id', 'OrderId', 'Name',
+                    'Orderitem Id', 'Order Number', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
@@ -1707,11 +1707,11 @@ class ActionOrderItemView(View):
                                 writer = ''
                             csv_writer.writerow([
                                 str(oi.pk),
-                                str(oi.order.id),
+                                str(oi.order.number),
                                 str(oi.order.first_name + ' ' + oi.order.last_name),
                                 str(oi.order.email),
                                 str(oi.order.country_code + ' ' + oi.order.mobile),
-                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
                                 str(writer),
@@ -1738,7 +1738,7 @@ class ActionOrderItemView(View):
                     csvfile, delimiter=',', quotechar="'",
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
-                    'Orderitem Id', 'OrderId', 'Name',
+                    'Orderitem Id', 'Order Number', 'Name',
                     'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'modified', 'Payment Date'])
 
@@ -1748,11 +1748,11 @@ class ActionOrderItemView(View):
                         try:
                             csv_writer.writerow([
                                 str(oi.pk),
-                                str(oi.order.id),
+                                str(oi.order.number),
                                 str(oi.order.first_name + ' ' + oi.order.last_name),
                                 str(oi.order.email),
                                 str(oi.order.country_code + ' ' + oi.order.mobile),
-                                str(oi.product.name + ' ' + oi.product.get_exp),
+                                str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
                                 str(oi.modified),
@@ -1809,7 +1809,7 @@ class ActionOrderItemView(View):
                             if 93 not in email_sets:
                                 mail_type = 'BOOSTER_CANDIDATE'
                                 send_email_task.delay(to_emails, mail_type, candidate_data, status=93, oi=oi.pk)
-                            
+
                             # send sms to candidate
                             SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
                             last_oi_status = oi.oi_status
