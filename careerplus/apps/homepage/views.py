@@ -32,7 +32,7 @@ class HomePageView(TemplateView):
             job_services_pks = list(job_services.all().values_list('product', flat=True))
             job_sqs = SearchQuerySet().filter(id__in=job_services_pks)
 
-            job_services = job_sqs[: 5]
+            job_services = job_sqs[:5]
             job_asst_view_all = tjob.view_all
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -48,10 +48,9 @@ class HomePageView(TemplateView):
         t_objects = t_objects[:4]
         show_pcourses = False
         # recommended
-        if self.request.session.get('candidate_id'):
+        if self.request.session.get('candidate_id') and not self.request.flavour == 'mobile':
             rcourses = get_recommendations(self.request.session.get('func_area', None),
-                                           self.request.session.get('skills', None),
-                                           SQS().only('pTt pURL pHd pNJ pImA pImg pARx pStar'))
+                                           self.request.session.get('skills', None))
             if rcourses:
                 rcourses = rcourses[:9]
             else:
@@ -59,7 +58,7 @@ class HomePageView(TemplateView):
         else:
             show_pcourses = True
         if show_pcourses:
-            pcourses = SQS().only('pTt pURL pHd pAR pNJ pImA pImg').order_by('-pBC')[:9]
+            pcourses = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:9]
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']

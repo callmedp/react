@@ -143,8 +143,7 @@ class ProductInformationMixin(object):
         }
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
-            self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
+            self.request.session.get('skills', None))
         if rcourses:
             rcourses = rcourses[:6]
         if rcourses:

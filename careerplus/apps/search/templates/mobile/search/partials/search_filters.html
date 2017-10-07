@@ -1,0 +1,165 @@
+{% load humanize search_tags %}
+
+<form action="{{searchquery}}" id="form_facets">
+    <input type="hidden" name="page" id="id_page" value="1"/>
+    <input type="hidden" name="sort" id="id_sort" value="{{search_params.sort}}"/>
+    <input type="hidden" name="q" id="id_p_q" value="{{search_params.q}}"/>
+    <input type="hidden" name="area" id="id_p_area" value="{{search_params.area}}"/>
+    <input type="hidden" name="skills" id="id_p_skills" value="{{search_params.skills}}"/>
+    <input type="hidden" name="search_type" id="id_search_type" value="{{search_type}}"/>
+    <input type="hidden" name="rcount" id="id_rcount" value="{{paginator.num_pages}}"/>
+    <input type="hidden" name="rstart" id="id_rstart" value="{{ page.number }}"/>
+    <div class="sidebar-filter" id="sidebar-filter">
+    <header class="filter-menu">
+        <div class="text-center">
+            <a class="icon-close pull-left" href="#" onclick="goBack()"></a>
+            <strong>Filters</strong>
+            <a class="pull-right" href="#">Clear</a>
+        </div><!-- / Left side Icon ends here -->
+    </header><!-- header ends here -->
+  <div class="vertical-tabbing">
+  <div class="tab-container">
+    <ul class="tabs box-panel p-0">
+      <li><a href="#" class="current" data-tab="tab-1">Variation (1)</a></li>
+      <li><a href="#" data-tab="tab-2">Mode</a></li>
+      <li><a href="#" data-tab="tab-3">Review</a></li>
+      <li><a href="#" data-tab="tab-4">Duration</a></li>
+      <li><a href="#" data-tab="tab-5">Certification</a></li>
+      <li><a href="#" data-tab="tab-6">Price</a></li>
+      <li><a href="#" data-tab="tab-7">Seller</a></li>
+    </ul>
+
+    <!-- Tab content Satrts here -->
+    <div class="tab-container">
+      <div id="tab-1" class="tab-content current">
+        <ul>
+          <li>
+            <input type="checkbox" id="test1">
+              <label for="test1">Green Blet</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test2">
+              <label for="test2">Master Black Belt</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test3">
+              <label for="test3">Sixsigma</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test4">
+              <label for="test4">Black Belt</label>
+            </li>
+        </ul>
+      </div><!-- Tab content ends here -->
+
+      <div id="tab-2" class="tab-content">
+        <ul>
+          <li>
+            <input type="checkbox" id="test5">
+              <label for="test5">Black Belt</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test6">
+              <label for="test6">Sixsigma</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test7">
+              <label for="test7">Green Blet</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test8">
+              <label for="test8">Master Black Belt</label>
+            </li>
+        </ul>
+      </div><!-- Tab content ends here -->
+
+      <div id="tab-3" class="tab-content">
+        <ul>
+            <li>
+            <input type="checkbox" id="test9">
+              <label for="test9">Master Black Belt</label>
+            </li>
+
+          <li>
+            <input type="checkbox" id="test10">
+              <label for="test10">Black Belt</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test11">
+              <label for="test11">Sixsigma</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test12">
+              <label for="test12">Green Blet</label>
+            </li>
+
+        </ul>
+      </div><!-- Tab content ends here -->
+
+      <div id="tab-4" class="tab-content">
+        <ul>
+            <li>
+            <input type="checkbox" id="test1">
+              <label for="test1">Sixsigma</label>
+            </li>
+
+          <li>
+            <input type="checkbox" id="test1">
+              <label for="test1">Black Belt</label>
+            </li>
+
+
+            <li>
+            <input type="checkbox" id="test1">
+              <label for="test1">Green Blet</label>
+            </li>
+
+            <li>
+            <input type="checkbox" id="test1">
+              <label for="test1">Master Black Belt</label>
+            </li>
+        </ul>
+      </div><!-- Tab content ends here -->
+
+      <div id="tab-5" class="tab-content">
+        <ul>
+          <li><label class="c9"><input type="checkbox"> Master Black Belt</label></li>
+          <li><label class="c9"><input type="checkbox"> Green Blet</label></li>
+          <li><label class="c9"><input type="checkbox"> Black Belt</label></li>
+          <li><label class="c9"><input type="checkbox"> Sixsigma</label></li>
+        </ul>
+      </div><!-- Tab content ends here -->
+
+      <div id="tab-6" class="tab-content">
+        <ul>
+          <li><label class="c9"><input type="checkbox"> Sixsigma</label></li>
+          <li><label class="c9"><input type="checkbox"> Green Blet</label></li>
+          <li><label class="c9"><input type="checkbox"> Black Belt</label></li>
+          <li><label class="c9"><input type="checkbox"> Master Black Belt</label></li>
+        </ul>
+      </div><!-- Tab content ends here -->
+
+      <div id="tab-7" class="tab-content">
+        <ul>
+          <li><label class="c9"><input type="checkbox"> Black Belt</label></li>
+          <li><label class="c9"><input type="checkbox"> Green Blet</label></li>
+          <li><label class="c9"><input type="checkbox"> Sixsigma</label></li>
+          <li><label class="c9"><input type="checkbox"> Master Black Belt</label></li>
+        </ul>
+      </div><!-- Tab content ends here -->
+    </div>
+  </div><!-- Tab container -->
+
+</div><!-- vertival tabing container ends here -->
+
+<a href="#" class="btn-slg btn-blue block apply-bottom text-center js_apply_filter">Apply</a>
+</div>
+</form>

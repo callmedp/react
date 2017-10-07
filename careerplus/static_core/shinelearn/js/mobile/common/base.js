@@ -101,6 +101,6 @@ document.ontouchmove = function ( event ) {
 };
 
 
-document.getElementById("uploadBtn").onchange = function () {
-    document.getElementById("uploadFile").value = this.value;
+$("#uploadBtn").onchange = function () {
+    $("#uploadFile").value = this.value;
 };

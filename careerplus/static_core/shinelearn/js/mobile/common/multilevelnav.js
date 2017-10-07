@@ -66,6 +66,16 @@
             }
         });
 
+        $('#sidebar-filter').simplerSidebar({
+            opener: defaults.rightButton,
+            animation: {
+                easing: "easeOutQuint"
+            },
+            sidebar: {
+                align: 'right'
+            }
+        });
+
         $('#sidebar-countries').simplerSidebar({
             opener: defaults.countriesButton,
             animation: {

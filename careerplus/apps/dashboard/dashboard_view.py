@@ -28,7 +28,6 @@ from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
-from core.library.haystack.query import SQS
 from .dashboard_mixin import DashboardInfo
 
 
@@ -70,8 +69,7 @@ class DashboardView(TemplateView):
         })
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
-            self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg'))
+            self.request.session.get('skills', None))
 
         if rcourses:
             rcourses = rcourses[:6]
@@ -168,8 +166,7 @@ class DashboardMyorderView(TemplateView):
         })
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
-            self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
+            self.request.session.get('skills', None))
 
         if rcourses:
             rcourses = rcourses[:6]
@@ -647,8 +644,7 @@ class DashboardMyWalletView(TemplateView):
         })
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
-            self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
+            self.request.session.get('skills', None))
 
         if rcourses:
             rcourses = rcourses[:6]
