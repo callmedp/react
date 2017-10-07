@@ -193,10 +193,16 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
-        if self.pk:
-            return reverse('skillpage:skill-page-listing',
-                kwargs={'slug': self.slug, 'pk': self.pk})
-        
+        if self.is_skill:
+            parent = self.get_parent()
+            if parent:
+                return reverse('skillpage:skill-page-listing',
+                    kwargs={'fa_slug': parent[0].slug,'skill_slug': self.slug, 'pk': self.pk})
+            return ''
+        else:
+            return reverse('skillpage:func_area_results',
+                kwargs={'fa_slug': self.slug, 'pk': self.pk})
+
     def add_relationship(self, category):
         relationship, created = CategoryRelationship.objects.get_or_create(
             related_from=self,

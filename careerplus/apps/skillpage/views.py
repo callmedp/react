@@ -25,7 +25,7 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        slug = self.kwargs.get('slug')
+        slug = self.kwargs.get('skill_slug')
         if queryset is None:
             queryset = self.get_queryset()
 
@@ -46,7 +46,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         return None
 
     def get(self, request, *args, **kwargs):
-        slug = self.kwargs.get('slug', None)
+        slug = self.kwargs.get('skill_slug', None)
         self.pk = self.kwargs.get('pk', None)
         self.object = self.get_object()
         redirect = self.redirect_if_necessary(request.path, self.object)
@@ -58,7 +58,7 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
-        slug = self.kwargs.get('slug', '')
+        slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
 
         api_data = self.get_job_count_and_fuctionan_area(slug)
@@ -132,13 +132,13 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        if self.object.get_parent():
+        parent = self.object.get_parent() 
+        if parent:
             breadcrumbs.append({
-                "url": reverse('skillpage:skill-page-listing',
-                kwargs={'slug': self.object.slug, 'pk':self.object.pk}),
-               "name": self.object.get_parent()[0].name,
+                "url": parent[0].get_absolute_url(),
+               "name": parent[0].name,
             })
-        breadcrumbs.append({"url": None, "name": self.object.name})
+        breadcrumbs.append({"url": '', "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
