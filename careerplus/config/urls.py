@@ -33,7 +33,7 @@ from users.views import LinkedinCallbackView
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
-from seo.sitemap import CourseSitemap, SkillSitemap, CategorySitemap
+from seo.sitemap import CourseSitemap, SkillSitemap, CategorySitemap, ServiceSitemap
 
 handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
@@ -44,6 +44,10 @@ course_sitemap = {
    'category': CategorySitemap 
 }
 
+service_sitemap = {
+   'service': ServiceSitemap,
+}
+
 urlpatterns = []
 
 # Product Detail URLs
@@ -52,6 +56,9 @@ urlpatterns += [
         template_name='robots.txt', content_type='text/plain')),
     url(r'^certification_course_sitemap\.xml$', sitemaps_views.sitemap, {
         'sitemaps': course_sitemap,
+        'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^job_services_sitemap\.xml$', sitemaps_views.sitemap, {
+        'sitemaps': service_sitemap,
         'template_name': 'sitemap.xml'}, name='sitemap'),
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
