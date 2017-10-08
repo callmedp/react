@@ -697,6 +697,8 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
+    fixed_slug = models.BooleanField(default=False)
+
     type_product = models.PositiveSmallIntegerField(
         _('Type'), choices=PRODUCT_CHOICES, default=0)
     type_flow = models.PositiveSmallIntegerField(
@@ -911,7 +913,7 @@ class Product(AbstractProduct, ModelMeta):
         'keywords': 'meta_keywords',
         'published_time': 'created',
         'modified_time': 'modified',
-        'url': 'get_url',
+        'url': 'get_absolute_url',
     }
 
     class Meta:
@@ -1219,7 +1221,7 @@ class Product(AbstractProduct, ModelMeta):
             if category:
                 if self.is_course:
                     pop_list = category.get_products().filter(
-                        type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
+                        type_product__in=[0,1,3,5]).exclude(vendor=self.vendor).distinct()
                     return pop_list
                 elif self.is_writing or self.is_service:
                     pop_list = category.get_products().filter(
@@ -1391,6 +1393,9 @@ class Product(AbstractProduct, ModelMeta):
         else:
             price = self.inr_price * dict(CURRENCY_EXCHANGE).get('GB')
         return convert_gbp(price)
+
+    def get_canonical_url(self):
+        return self.get_absolute_url()
 
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(

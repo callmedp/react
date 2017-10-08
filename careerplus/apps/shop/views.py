@@ -51,13 +51,14 @@ class ProductInformationMixin(object):
                 'url': '/',
                 'active': True}))
         if category:
-            parent = category.get_parent()
-            if parent:
-                breadcrumbs.append(
-                    OrderedDict({
-                        'label': parent[0].name,
-                        'url': parent[0].get_absolute_url(),
-                        'active': True}))
+            if product.is_course:
+                parent = category.get_parent()
+                if parent:
+                    breadcrumbs.append(
+                        OrderedDict({
+                            'label': parent[0].name,
+                            'url': parent[0].get_absolute_url(),
+                            'active': True}))
             breadcrumbs.append(
                 OrderedDict({
                     'label': category.name,
@@ -329,6 +330,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
+        ctx['meta'] = self.product_obj.as_meta(self.request)
+        ctx['canonical_url'] = self.product_obj.get_canonical_url()
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
@@ -348,6 +351,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return True
     
     def get(self, request, **kwargs):
+        
         pk = self.kwargs.get('pk')
         sqs = SearchQuerySet().filter(id=pk)
         try:

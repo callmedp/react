@@ -718,6 +718,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'id': pv.id,
                         'label': pv.name,
                         'vendor': pv.vendor.name,
+                        'vendor_image': pv.vendor.image.url if pv.vendor.image else None,
                         'url': pv.get_url(relative=True),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),

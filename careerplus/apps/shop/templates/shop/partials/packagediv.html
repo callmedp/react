@@ -20,7 +20,7 @@
       <span>Other providers</span>
     {% for provider in pop_list|slice:"0:4" %}
       <a href="{{provider.url}}" class="other-package">
-        <img src="{{provider.vendor.image.url}}" class="img-responsive text-center" alt="{{provider.vendor}}">
+        <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
       </a>
     {% endfor %}
     </div>

@@ -75,37 +75,44 @@ class AbstractSEO(models.Model):
         pk_field_name = self._meta.pk.name
         url_value_name = getattr(self, 'url_value_name', 'name')
         url_slug_name = getattr(self, 'url_slug_name', 'slug')
+        url_slug_fix = getattr(self, 'url_slug_fix', 'fixed_slug')
+        
         max_interations = getattr(self, 'max_iterations', 1000)
         slug_separator = getattr(self, 'separator', '-')
-
         # fields, query set, other setup variables
-        slug_field = self._meta.get_field(url_slug_name)
-        slug_len = slug_field.max_length
-        queryset = self.__class__.objects.all()
-        # if the pk of the record is set, exclude it from the slug search
-        current_pk = getattr(self, pk_field_name)
-        if current_pk:
-            queryset = queryset.exclude(**{pk_field_name: current_pk})
+        fix_field = False
+        try:
+            fix_field = getattr(self, url_slug_fix)
+        except:
+            fix_field = False
+        if not fix_field:    
+            slug_field = self._meta.get_field(url_slug_name)
+            slug_len = slug_field.max_length
+            queryset = self.__class__.objects.all()
+            # if the pk of the record is set, exclude it from the slug search
+            current_pk = getattr(self, pk_field_name)
+            if current_pk:
+                queryset = queryset.exclude(**{pk_field_name: current_pk})
 
-        # setup the original slug, and make sure it is within the allowed length
-        slug = slugify(getattr(self, url_value_name))
-        if slug_len:
-            slug = slug[:slug_len]
-        original_slug = slug
+            # setup the original slug, and make sure it is within the allowed length
+            slug = slugify(getattr(self, url_value_name))
+            if slug_len:
+                slug = slug[:slug_len]
+            original_slug = slug
 
-        # iterate until a unique slug is found, or max_iterations
-        counter = 2
-        while queryset.filter(**{url_slug_name: slug}).count() > 0 and counter < max_interations:
-            slug = original_slug
-            suffix = '%s%s' % (slug_separator, counter)
-            if slug_len and len(slug) + len(suffix) > slug_len:
-                slug = slug[:slug_len - len(suffix)]
-            slug = '%s%s' % (slug, suffix)
-            counter += 1
+            # iterate until a unique slug is found, or max_iterations
+            counter = 2
+            while queryset.filter(**{url_slug_name: slug}).count() > 0 and counter < max_interations:
+                slug = original_slug
+                suffix = '%s%s' % (slug_separator, counter)
+                if slug_len and len(slug) + len(suffix) > slug_len:
+                    slug = slug[:slug_len - len(suffix)]
+                slug = '%s%s' % (slug, suffix)
+                counter += 1
 
-        if counter == max_interations:
-            raise IntegrityError('Unable to locate unique slug')
+            if counter == max_interations:
+                raise IntegrityError('Unable to locate unique slug')
 
-        setattr(self, slug_field.attname, slug)
+            setattr(self, slug_field.attname, slug)
 
         super(AbstractSEO, self).save(*args, **kwargs)

@@ -1,6 +1,15 @@
 {% extends "basic/base1.html" %}
 {% load static %}
+{% load meta %}
 
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{% endblock django_meta %}
+
+{% block canonical_url %}
+       <link rel="canonical" href="{{canonical_url}}">
+{% endblock canonical_url %}
+    
 {% block css_section %}
   {{block.super}}
   <link type="text/css" href="{% static '/shinelearn/css/product/detail.css' %}" rel="stylesheet">
@@ -22,7 +31,7 @@
             {% endblock breadcrumbs %}
             
             {% block product_header %}
-              <div class="course-caption">
+              <div class="course-caption col-sm-8 no-pad">
                 <div class="course-caption-img">
                   <figure style="background-color:#fff;">
                     <img src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
@@ -127,9 +136,6 @@
             {% include "shop/partials/product_variations.html" %}
             
             {% include "shop/partials/frequentlybought.html" %}
-            
-            
-
           </div>
       </section>
       <!-- main parent1 section end -->
