@@ -68,9 +68,9 @@
               <form class="form-inline" method="post" action="{% url 'search:recommend' %}">
                     {% csrf_token %}
                     <input class="form-control bdr1" name="area" placeholder="Functional area" type="text"
-                           autocomplete="off" value="{{ recmnd_func_area }}" id="tags1" >
+                           autocomplete="off" value="{{ recmnd_func_area }}" id="tags11" >
                     <input class="form-control bdr2" name="skills" placeholder="Skills" type="text"
-                           autocomplete="off" value="{{ recmnd_skills }}" id="tags2">
+                           autocomplete="off" value="{{ recmnd_skills }}" id="tags21">
                     <button type="submit" class="custom-search-btn search-icon-tab"></button>
               </form>
         </div>
@@ -255,6 +255,8 @@
 
 {% block js_section %}
     {{block.super}}
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+{#    <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>#}
     <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}" charset="utf-8"></script>
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},
@@ -264,8 +266,14 @@
         $('#id_q').typeahead({
             local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
         });
+        $('#tags11').typeahead({
+            local: funcAreaSet
+        });
+        $('#tags21').typeahead({
+            local: skillsSet
+        });
     </script>
-    <script src="{% static 'shinelearn/js/homepage/index.js' %}" type="text/javascript"></script>
+    <script src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

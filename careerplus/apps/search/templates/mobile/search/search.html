@@ -47,16 +47,12 @@
         <div class="clearfix"></div>
         {% if search_type == 'recommended' %}
         <div class="search-tagging mt-10">
-            {% for rarea in recmnd_func_area %}
-                <span>{{ rarea }}</span>
-            {% endfor %}
-            {% for rskill in recmnd_skills %}
-                <span>{{ rskill }}</span>
-            {% endfor %}
-            <a href="#" class="icon-edit sidebar-secondary-trigger" ></a>
+            <span>{{ recmnd_func_area }}</span>
+            <span>{{ recmnd_skills.0 }}</span>
+            <a href="#" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
-        <div class="search-tagging mt-10">
+        <div class="search-tagging mt-10 js_search_trigger">
             <span>{{ search_params.keywords }}</span>
         </div>
         {% endif %}
@@ -66,35 +62,37 @@
 {% block container %}
     <div class="body-wrapper ">
 <div class="content-box pt-5">
-  <div class="container pt-0">
+  <div class="container pt-0 js_listing">
     <h2 class="pt-5 filter-pd">
         {% if search_type == 'recommended' %}{{ paginator.count }} recommended products{% elif search_type == 'simple' %}{{ paginator.count }} products found{% endif %}
-        {% if page.object_list|length > 0 %}<a href="filter.html" class="icon-filter-white pull-right"></a>{% endif %}
+        {% if page.object_list|length > 0 %}<a class="icon-filter-white pull-right js_filters_trigger"></a>{% endif %}
     </h2>
     
     {% include 'mobile/search/ajax/search_listing.html' %}
 
     
   </div><!-- end of container -->
+    <span id="loading"></span>
 </div><!-- end of content box -->
 
-
+{% if page.object_list|length > 0 %}
 <div class="share-wrap">
-  <a href="#" class="blue-circle-60 sidebar-secondary-trigger"><span class="icon-filter"></span></a>
+  <a href="#" class="blue-circle-60 sidebar-secondary-trigger js_filters_trigger"><span class="icon-filter"></span></a>
 </div>
+{% endif %}
 
-
-<div class="sidebar" id="sidebar-secondary">
+<div class="sidebar js_sidebar_advanced">
   <div class="right-navbar pt-0">
     <h2>Advanced Search</h2>
-    <form>
+    <form method="post" action="{% url 'search:recommend' %}">
+        {% csrf_token %}
       <div class="form-group error">
-        <input type="text" class="form-control" placeholder="Functional area">
-        <p class="mgs">Please enter vaild entry.</p>
+        <input type="text" id="tags11" class="form-control" name="area" value="{{ recmnd_func_area }}" placeholder="Functional area">
+        <p class="mgs" style="display: none">Please enter vaild entry.</p>
       </div>
 
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Skill">
+        <input type="text" id="tags21" name="skills" value="{{ recmnd_skills.0 }}" class="form-control" placeholder="Skill">
       </div>
 
 
@@ -106,58 +104,50 @@
   </div>
 </div>
 
+
+<div class="search-wrapper sidebar js_sidebar_search">
+    <!-- Starts of auto search -->
+    <div class="auto-search">
+        <header class="filter-menu p-0">
+            <form class="search-list" id="search_form" data-role="form">
+                <input type="text" name="q" class="form-control js_query_input" value="{{ search_params.keywords }}" id="search-inupt">
+            </form><!-- / Left side Icon ends here -->
+        </header><!-- header ends here -->
+        <div class="clearfix"></div>
+{#        <ul class="suggest-list" id="list">#}
+{#            <li><a href="#">Six Sigma</a><span></span></li>#}
+{#            <li><a href="#">Six Sigma Black Belt</a><span></span></li>#}
+{#        </ul>#}
+
+    </div><!-- end of auto search -->
+</div><!-- /page -->
+
 {% if page.object_list|length > 0 %}
     {% include "mobile/search/partials/search_filters.html" %}
 {% endif %}
+
 
 </div>
 {% endblock container %}
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
-    <script src="{% static "shinelearn/js/mobile/dashboard/dashboard.js" %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+{#    <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>#}
     <script>
-        $( function() {
-            var availableTags = [
-              "Finance",
-              "Design",
-              "Java",
-              "UX Designer",
-              "Web Designer"
-            ];
-            $( "#finance" ).autocomplete({
-                source: availableTags
+            var funcAreaSet = {{ func_area_set|safe }},
+                skillsSet = {{ skills_set|safe }},
+                totalProducts = {{ paginator.count }};
+            $( "#tags11" ).autocomplete({
+                source: funcAreaSet
             });
-        } );
+            $('#tags21').autocomplete({
+                source: skillsSet
+            });
 
 
-        $( function() {
-            var availableTags = [
-                "Lorem Ipsum",
-                "Scrambled",
-                "Including",
-                "Versions",
-                "Humour"
-            ];
-            $( "#analytics" ).autocomplete({
-                source: availableTags
-            });
-        });
-
-        $( function() {
-            var availableTags = [
-              "1-2 years",
-              "2-3 years",
-              "3-4 years",
-              "4-5 years",
-              "5-6 years"
-            ];
-            $( "#years" ).autocomplete({
-                source: availableTags
-            });
-        });
     </script>
+    <script src="{% static 'shinelearn/js/mobile/search/search.js' %}"></script>
 {% endblock js_section %}
 
 

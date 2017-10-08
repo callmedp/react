@@ -66,8 +66,8 @@
             }
         });
 
-        $('#sidebar-filter').simplerSidebar({
-            opener: defaults.rightButton,
+        $('.js_sidebar_filter').simplerSidebar({
+            opener: '.js_filters_trigger',
             animation: {
                 easing: "easeOutQuint"
             },

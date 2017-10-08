@@ -207,25 +207,14 @@ CERT_FACETS = {
     0: 'Not Required'
 }
 
-DURATION_FACETS = {
-    "d0": "0-1 month",
-    "d1": "1-3 months",
-    "d2": "3-6 months",
-    "d3": "6-9 months",
-    "d4": "9-12 months",
-    "d5": "1-2 years",
-    "d6": "2-3 years",
-    "d7": "3+ years"
-}
-
 DURATION_DICT = {
     'D0': '0-1 month',
-    'D1': '1- 3 month',
+    'D1': '1-3 month',
     'D2': '3-6 month',
     'D3': '9 months',
     'D4': '9-12 months',
-    'D5': '1 -2 years',
-    'D6': '2 -3 years',
+    'D5': '1-2 years',
+    'D6': '2-3 years',
     'D7': '3+ years',
 }
 
@@ -234,11 +223,6 @@ ATTRIBUTE_OPTION = {
     'BS': 'Basic',
 }
 
-STUDY_FACETS = {
-    "ol": "Online",
-    "cl": "Classroom",
-    "bl": "Blended"
-}
 
 STUDY_MODE = dict((
     ('ON', 'Online'),
