@@ -186,7 +186,7 @@ MEDIA_URL = '/media/'
 LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
 
 STATIC_ROOT = os.path.join(MEDIA_ROOT, 'static')
-STATIC_URL = '/static/'
+STATIC_URL = '/media/static/'
 
 DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
 DOWNLOAD_URL = '/download/'

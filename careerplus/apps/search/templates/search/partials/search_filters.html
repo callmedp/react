@@ -12,8 +12,8 @@
 
     <div class="col-sm-3 col-md-2 mt-40">
         <div id="filters" class="panel-group filters">
+            <a href="#" class="apply-filter js_apply_filter" >Apply</a>
             <h2>Filter</h2>
-            <a class="apply-filter js_apply_filter" >Apply</a>
             {% if facets.fields.pFA|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -88,7 +88,7 @@
                     {% for i in '12345' %}
                         <div class="rating-review-box">
                             <input name="frating" type="checkbox" {% if i in rating %}checked="checked"{% endif %}
-                            {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %}>
+                            {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
                             {% for j in "12345" %}
                                 <figure class={% if j <= i %}"full-star"{% else %}"blank-star"{% endif %}></figure>
                             {% endfor %}
@@ -143,19 +143,19 @@
                 <div class="panel-collapse">
                     <div class="panel-body js_filter_sxn">
                         {% if facets.fields.pDM|length == 1 %}
-                        <label title="{{facets.fields.pDM.0.0|get_choice_display:"DURATION_FACETS"}}">
+                        <label title="{{facets.fields.pDM.0.0|get_choice_display:"DURATION_DICT"}}">
                             <input type="checkbox" {% if duration %}name="fduration" {% else %}name="ign_fduration"{% endif %}
                                        value="{{facets.fields.pDM.0.0}}" checked="checked" disabled="disabled">
-                            <span>{{facets.fields.pDM.0.0|get_choice_display:"DURATION_FACETS"}} <b>({{facets.fields.pDM.0.1|intcomma}})</span>
+                            <span>{{facets.fields.pDM.0.0|get_choice_display:"DURATION_DICT"}} <b>({{facets.fields.pDM.0.1|intcomma}})</span>
                         </label>
                         {% else %}
                             {% for facet in facets.fields.pDM %}
-                            <label title="{{facet.0|get_choice_display:"DURATION_FACETS"}}">
+                            <label title="{{facet.0|get_choice_display:"DURATION_DICT"}}">
                                 <input type="checkbox" name="fduration" value="{{facet.0}}" {% if facet.0 in duration %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_FACETS"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_FACETS"|slugify}}',true);"{% endif %} {% endcomment %}
+                                        {% comment %}onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',false);"
+                                        {% else %} onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',true);"{% endif %} {% endcomment %}
                                 />
-                                <span>{{facet.0|get_choice_display:"DURATION_FACETS"}} <b>({{facet.1|intcomma}})</b></span>
+                                <span>{{facet.0|get_choice_display:"DURATION_DICT"}} <b>({{facet.1|intcomma}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
@@ -175,19 +175,19 @@
                 <div class="panel-collapse">
                     <div class="panel-body js_filter_sxn">
                         {% if facets.fields.pStM|length == 1 %}
-                        <label title="{{facets.fields.pStM.0.0|get_choice_display:"STUDY_FACETS"}}">
-                            <input type="checkbox" {% if study_mode %}name="fmode" {% else %}name="ign_fmode"{% endif %}
+                        <label title="{{facets.fields.pStM.0.0|get_choice_display:"STUDY_MODE"}}">
+                            <input type="checkbox" {% if mode %}name="fmode" {% else %}name="ign_fmode"{% endif %}
                                        value="{{facets.fields.pStM.0.0}}" checked="checked" disabled="disabled">
-                            <span>{{facets.fields.pStM.0.0|get_choice_display:"STUDY_FACETS"}} <b>({{facets.fields.pStM.0.1|intcomma}})</span>
+                            <span>{{facets.fields.pStM.0.0|get_choice_display:"STUDY_MODE"}} <b>({{facets.fields.pStM.0.1|intcomma}})</span>
                         </label>
                         {% else %}
                             {% for facet in facets.fields.pStM %}
-                            <label title="{{facet.0|get_choice_display:"STUDY_FACETS"}}">
+                            <label title="{{facet.0|get_choice_display:"STUDY_MODE"}}">
                                 <input type="checkbox" name="fmode" value="{{facet.0}}" {% if facet.0 in mode %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('study_mode','{{facet.0|get_choice_display:"STUDY_FACETS"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('study_mode','{{facet.0|get_choice_display:"STUDY_FACETS"|slugify}}',true);"{% endif %} {% endcomment %}
+                                        {% comment %}onmousedown="jsrpTrackComscore('study_mode','{{facet.0|get_choice_display:"STUDY_MODE"|slugify}}',false);"
+                                        {% else %} onmousedown="jsrpTrackComscore('study_mode','{{facet.0|get_choice_display:"STUDY_MODE"|slugify}}',true);"{% endif %} {% endcomment %}
                                 />
-                                <span>{{facet.0|get_choice_display:"STUDY_FACETS"}} <b>({{facet.1|intcomma}})</b></span>
+                                <span>{{facet.0|get_choice_display:"STUDY_MODE"}} <b>({{facet.1|intcomma}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
@@ -216,8 +216,8 @@
                             {% for facet in facets.fields.pPinr %}
                             <label title="{{facet.0|get_choice_display:"PRICE_FACETS"}}">
                                 <input type="checkbox" name="fprice" value="{{facet.0}}" {% if facet.0 in price %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_FACETS"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_FACETS"|slugify}}',true);"{% endif %} {% endcomment %}
+                                        {% comment %}onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',false);"
+                                        {% else %} onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',true);"{% endif %} {% endcomment %}
                                 />
                                 <span>{{facet.0|get_choice_display:"PRICE_FACETS"}} <b>({{facet.1|intcomma}})</b></span>
                             </label>
@@ -228,7 +228,7 @@
             </div>
             {% endif %}
             <div class="bdr-btm"></div>
-            <a class="apply-filter js_apply_filter">Apply</a>
+            <a href="#" class="apply-filter js_apply_filter">Apply</a>
         </div>
     </div>
 </form>

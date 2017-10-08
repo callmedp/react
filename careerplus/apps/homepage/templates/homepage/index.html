@@ -86,7 +86,7 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd|truncatechars:50 }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
                                     <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
@@ -113,7 +113,7 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd|truncatechars:50 }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
                                     <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
@@ -192,7 +192,7 @@
                                     <a title="{{tprd.pTt}}" class="box-panel" href="{{tprd.pURL}}">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h3 class="listing-heading">{{tprd.pHd|truncatechars:50}}</h3>
+                                                <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:50}}</h3>
                                                 <div class="rating-review-box">
                                                     <figure class="full-star"></figure>
                                                     <strong>{{tprd.pARx}}<small>/5</small></strong>
@@ -235,7 +235,7 @@
                                     <img class="img-responsive" src="{{ tprd.pImg}}" width="200" height="125" alt="{{tprd.pImA}}">
                                 </figure>
                                 <div class="caption">
-                                    <h3 class="listing-heading">{{tprd.pHd|truncatechars:50}}</h3>
+                                    <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:50}}</h3>
                                     <div class="rating-review-box">
                                         <figure class="full-star"></figure>
                                         <strong>{{tprd.pARx}}<small>/5</small></strong>
@@ -312,7 +312,7 @@
             interval: false
         });
 
-        $('#query1').typeahead({
+        $('#id_q').typeahead({
             local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
         });
 
