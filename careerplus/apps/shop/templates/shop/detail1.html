@@ -97,6 +97,8 @@
                     <figure class="bought-icon"></figure>
                     <span><strong>&nbsp;{{prd_num_bought}}</strong>&nbsp;people bought</span>
                     </li>
+                    {% if prd_service == 'course' %}
+                  
                     {% if prd_num_jobs %}
                       <li>
                        <a href="javascript:void(0);">
@@ -112,7 +114,7 @@
                         <span>&nbsp;Certification</span>
                       </li>
                     {% endif %}
-
+                  {% endif %}
                 </ul>
 
               </div>

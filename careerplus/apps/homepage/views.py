@@ -77,7 +77,6 @@ class HomePageView(TemplateView):
             }
             tcourses.append(data)
             i += 1
-
         return {'tcourses': tcourses, 'pcourses': pcourses, 'rcourses': rcourses}
 
     def get_testimonials(self):
