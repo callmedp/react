@@ -72,4 +72,12 @@ jQuery(document).ready(function($) {
               $('.navbar').removeClass('navbar-color');
           }
       });
+
+
+    $('.key_press_js_search').keypress(function (e) {
+        if (e.which == 13) {
+            redirectToSearch();
+            return false; 
+        }
+    });
 });
