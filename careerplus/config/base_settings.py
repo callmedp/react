@@ -471,3 +471,6 @@ CHARS_TO_REMOVE = ['/', "'"]
 G_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
 G_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'
 G_RECAPTCHA_SECRET = '6LctaRcUAAAAAA93epQV2CjvCHIcKbvlu0ui2K28'
+
+###### SSL Settings ##########
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
