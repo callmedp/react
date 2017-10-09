@@ -194,6 +194,22 @@ body {
   width: auto;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
 }
+
+.home-search-box .home-advanced-search {
+  position: relative;
+  width: 1100px;
+  margin: 0 auto;
+  height: 64px;
+  vertical-align: top;
+  /*display: inline-flex;*/
+}
+.home-search-box .home-advanced-search .form-group {
+  width: 518px;
+  vertical-align: top;
+}
+.home-search-box .home-advanced-search .form-group input:focus {
+  box-shadow: none;
+}
 .home-search-box .find-jobs-btn {
   border-radius: 5px;
   height: 62px;

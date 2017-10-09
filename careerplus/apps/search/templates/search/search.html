@@ -26,6 +26,7 @@
                         {% if search_type == 'recommended' %}
                         <div class="home-advanced-search">
                             <form class="form-inline" method="post">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">
 {#                                    <span class="error-txt">Please enter correct keyword</span>#}

@@ -699,6 +699,7 @@ label:hover ~ label {
 }
 .popular-courses li .media {
     background-color: #fff;
+    height: 121px;
     -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -899,6 +900,7 @@ label:hover ~ label {
 .inputTags-list {
     width: 100%;
     height: 40px;
+    opacity:1;
     background-color: #fff;
 }
 
@@ -914,4 +916,8 @@ label:hover ~ label {
 
 .custom-advnaced-search span.twitter-typeahead + .custom-advnaced-search span.twitter-typeahead {
     border-right: 0 none;
+}
+
+span.twitter-typeahead {
+    background-color: #fff !important
 }

@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
             actualValues: skillsSet,
             only: true
         },
-        max: 3,
+        max: 2,
         create: function(e) {
             var $field = e.$input[0];
             $field.placeholder = '';
