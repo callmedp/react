@@ -20,7 +20,6 @@ from console.decorators import Decorate, stop_browser_cache
 from wallet.models import Wallet
 from geolocation.models import Country
 from users.tasks import user_register
-from core.library.haystack.query import SQS
 from search.helpers import get_recommendations
 
 from .models import Cart
@@ -34,8 +33,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
 
     def get_recommended_products(self):
         rcourses = get_recommendations(self.request.session.get('func_area', None),
-                                       self.request.session.get('skills', None),
-                                       SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar'))
+                                       self.request.session.get('skills', None))
         if rcourses:
             rcourses = rcourses[:6]
         return {'recommended_products': rcourses}

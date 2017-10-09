@@ -24,6 +24,15 @@ def get_choice_display(value, choice):
     listing facets but can be used elsewhere
     """
     try:
-        return dict(getattr(choices, choice))[int(value) if value.isdigit() else value]
+        mapping = dict(getattr(choices, choice))
+        if value not in mapping:
+            if value.isdigit():
+                value = int(value)
+            elif value.lower() in mapping:
+                value = value.lower()
+            elif value.upper() in mapping:
+                value = value.upper()
+
+        return mapping[value]
     except:
         return 'Others'

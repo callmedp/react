@@ -45,14 +45,14 @@ class Command(BaseCommand):
         def map_oi_status(flow, otype, new_status):
             new_status = not new_status
             oi_status, last_oi_status, counter, feedback = 0, 0, 1, False
-            if flow in [1, 3, 5, 12, 13] or new_status:
+            if flow in [1, 3, 5, 12, 13]:
                 if otype == 0:
                     oi_status = 2
                     last_oi_status = 1
                     counter = 0
                     feedback = False
-                elif otype == 1:
-                    oi_status = 3
+                elif otype in [1,8]:
+                    oi_status = 5
                     last_oi_status = 2
                     counter = 0
                     feedback = False
@@ -86,45 +86,53 @@ class Command(BaseCommand):
                     last_oi_status = 23
                     counter = 1
                     feedback = True
-                elif otype == 8:
-                    oi_status = 1
-                    last_oi_status = 1
-                    counter = 1
-                    feedback = True
-                elif otype == 9:
-                    oi_status = 62
-                    last_oi_status = 62
-                    counter = 1
-                    feedback = True
-                elif otype == 10:
-                    oi_status = 4
-                    last_oi_status = 4
-                    counter = 1
-                    feedback = True
-                elif otype == 11:
-                    oi_status = 28
-                    last_oi_status = 28
-                    counter = 1
-                    feedback = True
-                elif otype == 12:
-                    oi_status = 30
-                    last_oi_status = 30
-                    counter = 1
-                    feedback = True
                 else:
                     oi_status = 4
                     last_oi_status = 4
                     counter = 0
                     feedback = False
-            elif flow == 2:
-                if otype == 4:
+            elif flow in [2, 10, 11]:
+                if otype :
                     oi_status = 4
                     last_oi_status = 6
                     counter = 0
                     feedback = True
-                elif otype == 11:
-                    oi_status = 6
-                    last_oi_status = 5
+                else:
+                    oi_status = 5
+                    last_oi_status = 0
+                    counter = 0
+                    feedback = False
+            elif flow == 4:
+                if otype in [0,1,8,5,6]:
+                    oi_status = 2
+                    last_oi_status = 2
+                    counter = 0
+                    feedback = False
+                elif otype == 7:
+                    oi_status = 25
+                    last_oi_status = 2
+                    counter = 0
+                    feedback = True
+                else:
+                    oi_status = 4
+                    last_oi_status = 4
+                    counter = 0
+                    feedback = True
+            elif flow == 6:
+                if otype in [4,10,11,12]:
+                    oi_status = 4
+                    last_oi_status = 4
+                    counter = 0
+                    feedback = True
+                else:
+                    oi_status = 81
+                    last_oi_status = 1
+                    counter = 0
+                    feedback = False
+            elif flow == 7:
+                if otype in [4,9]:
+                    oi_status = 4
+                    last_oi_status = 62
                     counter = 0
                     feedback = True
                 else:
@@ -132,113 +140,35 @@ class Command(BaseCommand):
                     last_oi_status = 1
                     counter = 0
                     feedback = False
-            elif flow == 4:
-                if otype == 0:
-                    oi_status = 2
-                    last_oi_status = 1
-                    counter = 0
-                    feedback = False
-                elif otype == 1:
-                    oi_status = 3
-                    last_oi_status = 2
-                    counter = 0
-                    feedback = False
-                elif otype == 5:
-                    oi_status = 25
-                    last_oi_status = 25
-                    counter = 1
-                    feedback = True
-                elif otype in [6,13]:
-                    oi_status = 26
-                    last_oi_status = 26
-                    counter = 1
-                    feedback = True
-                elif otype == 7:
-                    oi_status = 23
-                    last_oi_status = 23
-                    counter = 1
-                    feedback = True
-                elif otype == 8:
-                    oi_status = 1
-                    last_oi_status = 1
-                    counter = 1
-                    feedback = True
-                elif otype == 4:
-                    oi_status = 4
-                    last_oi_status = 24
-                    counter = 0
-                    feedback = True
-                elif otype in [11,12]:
-                    oi_status = 24
-                    last_oi_status = 24
-                    counter = 0
-                    feedback = True
-                else:
-                    oi_status = 1
-                    last_oi_status = 1
-                    counter = 0
-                    feedback = False
-            elif flow == 6:
-                if otype == 4:
-                    oi_status = 4
-                    last_oi_status = 4
-                    counter = 0
-                    feedback = True
-                else:
-                    oi_status = 142
-                    last_oi_status = 1
-                    counter = 0
-                    feedback = False
-            elif flow == 7:
-                if otype == 4:
-                    oi_status = 4
-                    last_oi_status = 62
-                    counter = 0
-                    feedback = True
-                elif otype == 9:
-                    oi_status = 62
-                    last_oi_status = 61
-                    counter = 0
-                    feedback = True
-                else:
-                    oi_status = 61
-                    last_oi_status = 1
-                    counter = 0
-                    feedback = False
-            elif flow == 8 and new_status:
-                if otype == 0:
-                    oi_status = 2
-                    last_oi_status = 1
-                    counter = 0
-                    feedback = False
-                elif otype == 1:
+            elif flow == 8:
+                if otype in [0,1]:
                     oi_status = 49
                     last_oi_status = 2
                     counter = 0
                     feedback = False
+                elif otype == 8:
+                    oi_status = 42
+                    last_oi_status = 49
+                    counter = 0
+                    feedback = False
                 elif otype == 2:
-                    oi_status = 44
-                    last_oi_status = 44
+                    oi_status = 46
+                    last_oi_status = 45
                     counter = 1
                     feedback = False
                 elif otype == 3:
-                    oi_status = 44
-                    last_oi_status = 44
+                    oi_status = 46
+                    last_oi_status = 45
                     counter = 2
-                    feedback = False
-                elif otype == 4:
-                    oi_status = 4
-                    last_oi_status = 4
-                    counter = 3
                     feedback = False
                 elif otype == 5:
                     oi_status = 47
-                    last_oi_status = 47
+                    last_oi_status = 45
                     counter = 1
                     feedback = True
                 elif otype in [6,13]:
                     oi_status = 48
-                    last_oi_status = 48
+                    last_oi_status = 44
                     counter = 1
                     feedback = True
                 elif otype == 7:
@@ -246,57 +176,20 @@ class Command(BaseCommand):
                     last_oi_status = 45
                     counter = 1
                     feedback = True
-                elif otype == 8:
-                    oi_status = 43
-                    last_oi_status = 43
-                    counter = 1
-                    feedback = True
-                elif otype == 9:
-                    oi_status = 62
-                    last_oi_status = 62
-                    counter = 1
-                    feedback = True
-                elif otype == 10:
-                    oi_status = 4
-                    last_oi_status = 4
-                    counter = 1
-                    feedback = True
                 else:
                     oi_status = 4
                     last_oi_status = 4
-                    counter = 0
+                    counter = 3
                     feedback = False
             elif flow == 9:
                 if otype == 4:
-                    oi_status = 143
-                    last_oi_status = 142
-                    counter = 0
-                    feedback = True
-                else:
-                    oi_status = 142
-                    last_oi_status = 1
-                    counter = 0
-                    feedback = False
-            elif flow == 10:
-                if otype == 4:
-                    oi_status = 6
-                    last_oi_status = 5
+                    oi_status = 4
+                    last_oi_status = 143
                     counter = 0
                     feedback = True
                 else:
                     oi_status = 5
-                    last_oi_status = 1
-                    counter = 0
-                    feedback = False
-            elif flow == 11:
-                if otype == 4:
-                    oi_status = 6
-                    last_oi_status = 5
-                    counter = 0
-                    feedback = True
-                else:
-                    oi_status = 5
-                    last_oi_status = 1
+                    last_oi_status = 0
                     counter = 0
                     feedback = False
             

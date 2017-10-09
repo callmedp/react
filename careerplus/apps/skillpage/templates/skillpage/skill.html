@@ -240,7 +240,7 @@
 		        	<ul id="review_list">
 		        	{% for page_review in page_reviews %}
 		          		<li class="box-panel">
-		            		<span class="review-heading">Excelent!</a></span>
+		            		<span class="review-heading">Excellent!</span>
 				            <div class="rating-review-box">
 				                {% for rating in page_review.get_ratings %}
 				                    {% if rating == "*" %}
@@ -289,7 +289,6 @@
 			<!-- request a call -->
 	<div class="request-call query-form-right box-panel mt-40 cleafix">
     <h2 class="heading-right">request a call</h2>
-        </style>
       <form class="mt-20" role="form" id="queryform" >
         <div style='display:none'>
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
