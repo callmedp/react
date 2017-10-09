@@ -7,6 +7,10 @@
         {% include 'meta/meta.html' %}
     {%  endblock meta_html %}
 
+    {% block canonical %}
+        <link rel="canonical" href="{{ tag.get_absolute_url }}">
+    {% endblock canonical %}
+
     {% block title %}
        {{tag.name}} – Career Articles @ Learning.Shine
     {% endblock title %}

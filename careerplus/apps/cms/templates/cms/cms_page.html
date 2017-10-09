@@ -5,6 +5,9 @@
         {{block.super}}
         {% include 'meta/meta.html' %}
     {%  endblock meta_html %}
+    {% block canonical %}
+        <link rel="canonical" href="{{ page_obj.get_absolute_url }}">
+    {% endblock canonical %}
 
     {% block title %}
     CMS - Shine Learning
