@@ -36,7 +36,7 @@
         </div>
         {% endfor %}
         
-        <a href="{% url "blog:articles-by-category" key.slug %}" class="blue-link fs-14 text-right block">View all articles</a>
+        <a href="{{key.get_absolute_url}}" class="blue-link fs-14 text-right block">View all articles</a>
     </div>
 </section><!-- End of Bank job list -->
 {% endif %}

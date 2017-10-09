@@ -102,7 +102,7 @@ class Order(AbstractAutoDate):
         max_length=255, null=True, blank=True)
     crm_lead_id = models.CharField(
         max_length=255, null=True, blank=True)
-    sales_user_info = models.TextField(default='')
+    sales_user_info = models.TextField(default='', null=True, blank=True)
 
     class Meta:
         app_label = 'order'

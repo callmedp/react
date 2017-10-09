@@ -71,7 +71,7 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
-        return reverse('blog:articles-by-category', kwargs={'slug': self.slug})
+        return reverse('articles-by-category', kwargs={'slug': self.slug})
 
     def article_exists(self):
         q = self.primary_category.filter(status=1) | self.secondary_category.filter(status=1)

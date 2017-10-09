@@ -108,7 +108,7 @@
                 {% for cat in categories %}
                    {% if cat.article_exists %}
                     <li>
-                       <a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a>
+                       <a href="{{cat.get_absolute_url}}">{{cat.name}}</a>
                     </li>
                     {% endif %}
                 {% endfor %}

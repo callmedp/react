@@ -30,6 +30,7 @@ from homepage.views import HomePageView
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 from users.views import LinkedinCallbackView
+from blog import views as blog_view
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
@@ -124,6 +125,11 @@ urlpatterns += [
     url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
     url(r'^', include('marketing.urls', namespace='marketing')),
+
+
+    url(r'^article-categories/(?P<slug>[-\w]+)/$',
+        blog_view.BlogCategoryListView.as_view(),
+        name='articles-by-category'),
 
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),

@@ -221,7 +221,7 @@ class BlogDetailView(DetailView, BlogMixin):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
         breadcrumbs.append({"url": reverse('blog:blog-landing'), "name": "Career Guidance"})
-        breadcrumbs.append({"url": reverse('blog:articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
+        breadcrumbs.append({"url": reverse('articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
         breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data

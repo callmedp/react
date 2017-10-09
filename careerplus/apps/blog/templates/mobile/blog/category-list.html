@@ -22,7 +22,7 @@
                 <ul class="filter-item">
                     {% for cat in object_list %}
                         {% if cat.article_exists %}
-                            <li><a href="{% url "blog:articles-by-category" cat.slug %}">{{cat.name}}</a></li>
+                            <li><a href="{{cat.get_absolute_url}}">{{cat.name}}</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>
