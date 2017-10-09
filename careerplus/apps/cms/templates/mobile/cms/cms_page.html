@@ -1,6 +1,16 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
 {% block title %}CMS | listing Shine learning{% endblock %}
+
+{% block meta_html %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+{%  endblock meta_html %}
+
+{% block canonical_url %}
+    <link rel="canonical" href="{{ page_obj.get_absolute_url }}">
+{% endblock canonical_url %}
+
 {% block css_section %}
 {{ block.super }}
     <link type="text/css" href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">

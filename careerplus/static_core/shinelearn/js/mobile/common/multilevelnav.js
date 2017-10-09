@@ -89,7 +89,7 @@
         /* inner level button */ 
         $(defaults.level).on('click', function(e){
             e.preventDefault();
-            $(this).next('div').animate({ left: "0", }, {
+            $(this).next('div').animate({ left: "-100px" }, {
                 duration: defaults.timing,
                 start: function(){
                     $(this).css('display', 'block');

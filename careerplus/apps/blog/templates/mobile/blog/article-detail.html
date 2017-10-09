@@ -3,8 +3,13 @@
 {% load thumbnail %}
 
 {% block django_meta %}
+   {{block.super}}
    {% include 'meta/meta.html' %}
 {% endblock django_meta %}
+
+{% block canonical_url %}
+    <link rel="canonical" href="{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
 
 {% block title %}{{main_article.display_name}} Career Articles | Shinelearning{% endblock %}
 

@@ -33,14 +33,15 @@ $(document).ready(function() {
 	    $("#list").slideToggle("fast");
 	});
 
-
+	$(window).on('load', function(){
+		$('#main-sidebar').removeClass('hide')
+	});
 
 	$(".home-slider").slick({
 		autoplay:false,
 		autoplaySpeed:3000,
 		dots: false,
 		arrows: false,
-		variableWidth: true,
 		infinite: false
 	});
 

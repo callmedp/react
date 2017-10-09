@@ -6,6 +6,10 @@
    {% include 'meta/meta.html' %}
 {% endblock django_meta %}
 
+{% block canonical_url %}
+    <link rel="canonical" href="{{ category.get_absolute_url }}">
+{% endblock canonical_url %}
+
 {% block title %}{{category.name}} Career Articles | Shinelearning{% endblock %}
 
 {% block css_section %}

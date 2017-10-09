@@ -2,8 +2,14 @@
 {% load static %}
 
 {% block django_meta %}
+   {{block.super}}
    {% include 'meta/meta.html' %}
 {% endblock django_meta %}
+
+{% block canonical_url %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock canonical_url %}
+
 {% block title %}Article Landing | Shinelearning{% endblock %}
 {% block css_section %}
     {{ block.super }}

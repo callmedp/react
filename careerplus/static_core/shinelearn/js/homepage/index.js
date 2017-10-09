@@ -3,6 +3,7 @@ function redirectToSearch(e) {
 }
 
 jQuery(document).ready(function($) {
+    
     $('#tags1').inputTags({
         placeholder: prefetchedFuncArea ? '': "Select Functional Area",
         autocomplete: {
