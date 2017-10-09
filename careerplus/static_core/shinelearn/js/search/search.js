@@ -74,7 +74,7 @@ $(document).ready(function () {
     SearchFilter();
     
     $('#id_area').inputTags({
-        placeholder: "Select Functional Area",
+        placeholder: prefetchedFuncArea ? '': "Select Functional Area",
         autocomplete: {
             values: funcAreaSet,
             actualValues: funcAreaSet,
@@ -104,7 +104,7 @@ $(document).ready(function () {
     });
 
     $('#id_skills').inputTags({
-        placeholder: "Choose upto 3 Skills",
+        placeholder: prefetchedSkills ? '': "Choose upto 3 Skills",
         autocomplete: {
             values: skillsSet,
             actualValues: skillsSet,

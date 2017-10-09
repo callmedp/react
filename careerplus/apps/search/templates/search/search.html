@@ -5,6 +5,7 @@
     {{block.super}}
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
     <link type="text/css" href="{% static '/shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static '/shinelearn/css/search/listing.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static '/shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endblock css_section %}
@@ -22,7 +23,20 @@
 
                 {% block product_header %}
                     <div class="search-caption">
-                        {% if form %}
+                        {% if search_type == 'recommended' %}
+                        <div class="home-advanced-search">
+                            <form class="form-inline" method="post">
+                                <div class="form-group">
+                                    <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">
+{#                                    <span class="error-txt">Please enter correct keyword</span>#}
+                                </div>
+                                <div class="form-group form-group1">
+                                    <input class="" value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">
+                                </div>
+                                <button type="submit" class="find-jobs-btn btn"></button>
+                            </form>
+                        </div>
+                        {% elif search_type == 'simple' %}
                         <div class="search-box">
                             <form class="form-inline" id="search_form" data-role="form">
                                 {% for field in form %}
@@ -34,7 +48,7 @@
                             </form>
                         </div>
                         {% else %}
-                        <h1>Search Results Page</h1>
+                            <h1>Search Results Page</h1>
                         {% endif %}
                     </div>
                 {% endblock product_header %}
@@ -117,7 +131,9 @@
         })(jQuery);
 
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
-            skillsSet = {{ skills_set|safe|default:"[]" }};
+            skillsSet = {{ skills_set|safe|default:"[]" }},
+            prefetchedFuncArea = '{{ recmnd_func_area }}',
+            prefetchedSkills = '{{ recmnd_skills }}';
     </script>
 
     <script type="text/javascript">
