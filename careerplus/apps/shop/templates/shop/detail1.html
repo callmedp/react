@@ -161,7 +161,7 @@
                   {% if prd_uget %}
                     <a title="What’ll you get" href="#get">What’ll you get</a>
                   {% endif %}
-                  {% if chapter %}
+                  {% if prd_service == 'course' %}
                     <a title="Program structure" href="#programs">Program structure</a>
                   {% endif %}
                      <a title="How to begin" href="#delivery">How to begin</a>
@@ -208,8 +208,9 @@
             </section>
             {% endif %}
               
-            
-          {% include "shop/partials/program_structure.html" %}
+          {% if prd_service == 'course' %}
+            {% include "shop/partials/program_structure.html" %}
+          {% endif %}  
           
           {% include "shop/partials/delivery_flow.html" %}
             

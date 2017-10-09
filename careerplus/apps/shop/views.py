@@ -297,7 +297,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         if product:
             ctx.update(self.get_breadcrumbs(product, self.category))
         ctx.update(self.solar_info(self.sqs))
-        ctx.update(self.solar_program_structure(self.sqs))
+        if product.is_course:
+            ctx.update(self.solar_program_structure(self.sqs))
         ctx.update(self.solar_faq(self.sqs))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
