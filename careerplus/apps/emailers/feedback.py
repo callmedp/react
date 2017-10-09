@@ -19,7 +19,7 @@ def feedback_emailer():
                 subject = 'Your order has been processed. Give feedback and earn discount on the next order'
                 data_dict['orderid'] = oi_item.order.id
                 data_dict['username'] = oi_item.order.first_name if oi_item.order.first_name else oi_item.order.candidate_id
-                data_dict['site'] = 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
+                data_dict['site'] = settings.SITE_PROTOCOL + '://' + settings.SITE_DOMAIN + settings.STATIC_URL
                 token = AutoLogin().encode(oi_item.order.email, oi_item.order.candidate_id, oi_item.order.id)
                 data_dict['autologin'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
                 html = render_to_string(

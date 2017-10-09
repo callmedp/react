@@ -27,7 +27,6 @@ GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g58#1(xdr&s%t@$erwjosc@nuiuy4j)9#g+*jhr#m1o6c)zws7'
 
-
 TEMPLATE_DEBUG = False  # django sorl required
 
 
@@ -248,7 +247,9 @@ ACCESSKEY = 'Af7fa4f7dacdc996393c18071b57d0a6f'
 
 
 ########## DOMAIN SETTINGS ######################
-MAIN_DOMAIN_PREFIX = 'http://learning.shine.com'
+SITE_DOMAIN = 'learning.shine.com'
+SITE_PROTOCOL = 'https'
+MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
 CART_MAX_LIMIT = 5

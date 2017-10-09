@@ -119,9 +119,9 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
             "products": products,
-            'site': "http://" + settings.SITE_DOMAIN,
+            'site': settings.SITE_PROTOCOL + "://" + settings.SITE_DOMAIN,
             "page_reviews": prod_reviews[0:4] if self.request.flavour else page_reviews,
-            'url': 'https://' + self.object.video_link,
+            'url': settings.SITE_PROTOCOL + "://" + self.object.video_link,
             'country_choices': country_choices,
             'initial_country': initial_country,
         })
