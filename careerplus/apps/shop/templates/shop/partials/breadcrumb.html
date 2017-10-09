@@ -3,7 +3,7 @@
 		{% if breadcrumb.active %}
 			<li ><a href="{{breadcrumb.url}}">{{breadcrumb.label}}</a></li>
 		{% else %}
-			<li {% if breadcrumb.active %}class="active"{% endif %}>{{breadcrumb.label}}</li>
+			<li {% if breadcrumb.active %}class="active"{% endif %} style="color: #ababab;">{{breadcrumb.label}}</li>
 		{% endif %}
 		
 	{% endfor %}

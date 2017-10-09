@@ -5190,13 +5190,13 @@ header .breadcrumb > li {
 header .breadcrumb > li + li:before {
   content: "-";
   padding: 0 5px;
-  color: #cbcbcb;
+  color: #ababab;
 }
 header .breadcrumb a, header .breadcrumb a:hover {
-  color: #cbcbcb;
+  color: #ababab;
 }
 header .breadcrumb > .active {
-  color: #cbcbcb;
+  color: #ababab;
 }
 
 .breadcrumb {
