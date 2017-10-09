@@ -73,15 +73,13 @@
     <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}">
     </script>
     <script>
-        $('.dropdown').hover(
-          function(e) {
-            if(!$(e.target).closest('.dropdown').hasClass('open')){
-                      $('.dropdown-toggle', this).trigger('click');
-                    }
-          }, function(e) {
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+          });
+        $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
-          }
-        );
+          });
+
     </script>
 {% endblock js_section %}
 {% block johukum %}
