@@ -1,0 +1,241 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Contact us - Shine Learning{% endblock title %}
+    {% block meta_html %}
+        {{block.super}}
+        <meta name="description" content="Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses">
+        {% block canonical %}
+            <link rel="canonical" href="{{ request.build_absolute_uri }}">
+        {% endblock canonical %}
+
+    {% endblock meta_html %}
+    
+{% block css_section %}
+  {{block.super}}
+  <link type="text/css" href="{% static "shinelearn/css/skill/skill.css" %}" rel="stylesheet">
+  <link type="text/css" href="{% static "shinelearn/css/homepage/contact.css" %}" rel="stylesheet">
+    
+{% endblock css_section %}
+    
+
+{% block main_container %}
+    {% block page_heading %}
+        <!-- header -->
+        <header class="contact-header">
+          <div class="container">
+            
+           
+              <h1>Contact us</h1>
+             
+           
+          </div>
+        </header>
+    {% endblock page_heading %}
+
+    <!-- main section start -->
+    <section class="container">
+
+        <!-- page content body start -->
+        <div class="row">
+
+        <!-- left content start -->
+          <div class="col-md-9 col-sm-12">
+
+           
+
+            <div class="contactus mb-40">
+              <div class="row">
+                <ul class="col-sm-12 con">
+
+                <li>    <strong> Gurgaon</strong>
+    Shine.com, 3rd Floor, Park Centra, Sector – 30, Gurgaon, Opp. 32nd milestone
+    <br/>
+    Phone - 0124-3955001 </li>
+
+
+      <li>   <strong>Noida</strong>
+    Shine.com, C-95, Sector – 2, Noida, Near SBI Bank Branch.
+    <br/>
+    Phone - 0120 3823222 </li>
+
+
+         <li><strong>Hyderabad</strong>
+    Shine.com, Le Benaka Towers, 2nd Floor, Flat - 2A, Road - 1, Banjara Hills, Opp. Kotak Mahindra Bank 
+    <br/>
+    Phone - 040 66888909 </li>
+                           
+                
+              </ul>
+
+
+    <div class="customercare pull-left">
+    <span></span>
+    <strong>Customer Care</strong>
+    Phone - 01206158822<br/>
+    Email - <a href="mailto:resume@shine.com">resume@shine.com</a><br/>
+    Timings - 09:00 AM to 7:00 PM (Mon-Sat)
+
+    </div>
+
+
+
+    <div class="followus">
+    <strong>Follow us on</strong> <ul><li class="face"><span><a href=""></a></span></li><li class="google"><span><a href=""></a></span></li></ul>
+
+    </div>
+             </div>
+            </div>
+
+
+            
+
+
+            <!-- Reviews -->
+          
+
+            
+
+
+
+          </div>  
+        <!-- left content end -->
+
+        <!-- right content start -->
+        <div class="col-md-3 col-sm-12">
+
+           <!-- request a call -->
+          <div class="request-call query-form-right box-panel contactform cleafix">
+            <h2 class="heading-right">Feedback</h2>
+            We value your suggestions, we will try to revert 
+    at the earliest!
+              <form class="mt-20" id="lead" action="{% url "crmapi:lead-management" %}" method="post">{% csrf_token %}
+
+                <div class="form-group">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                  <span class="error-txt"></span>
+                </div>
+
+                <div class="form-group">
+                  <div class="country-code">
+                    <div class="custom-select">
+                      <select id="id_country_code" name="country" class="form-control">
+                        {% for country in countries %}
+                            <option {% if country.phone == "91" %} selected="selected" {%endif%} value="{{country.phone}}">{{country.phone}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Mobile" id="mobile" name="number">
+                    <span class="error-txt"></span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="msg" rows="1" placeholder="Message"></textarea>
+                  <span class="error-txt"></span>
+                </div>
+
+                <input type="hidden" name="lsource" value="3">
+                <input type="hidden" name="path" value="{{request.path}}">
+
+                <button type="submit" class="submit-button">Submit</button>
+              </form>
+             
+          </div> 
+
+
+
+        </div>
+        <!-- right content end -->
+
+        </div>
+        <!-- page content body end -->
+
+    </section>
+    <!-- main section end -->
+
+{% endblock main_container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript">
+        $.validator.addMethod("lettersonly", function (value, element){
+            return this.optional(element) || /^[a-z\s]*$/i.test(value);
+        }, "Letters only please");
+
+        $.validator.addMethod("defaultInvalid", function (value, element) {
+            return !(element.value == element.defaultValue);
+        }, "This field is required.");
+
+        $.validator.addMethod("indiaMobile", function(value, element) {
+            var country_code = $('#id_country_code').val();
+            if(country_code == '91'){
+                return value.length == 10;
+            }
+            return true;
+        });
+
+        $("#lead").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        alert('Thank you for your valuable suggestion.');
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    number:true,
+                    indiaMobile:true,
+                    minlength: 4,
+                    maxlength: 15,
+                },
+                name:{
+                    required:true,
+                    lettersonly:true,
+
+                },
+                msg:{
+                    required:true,
+                    maxlength:500,
+                }
+            },
+            messages:{
+                number:{
+                   required:"This field is required",
+                   indiaMobile: 'length must be 10 digits.',
+                   minlength: 'length must be greater than 3 digits.',
+                   maxlength: 'length must be less than 15 digits.',
+                },
+                name:{
+                    required:"This field is required"
+                },
+                msg:{
+                    required:"This field is required",
+                    maxlength:"No more than 500 characters."
+
+                }
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('error');
+            },
+            errorPlacement: function(error, element){
+                $(element).siblings('.error-txt').html(error.text());
+            }
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

@@ -26,11 +26,12 @@ from ckeditor_uploader import views as ckeditor_views
 
 from users.views import (
     RegistrationApiView, LoginApiView, LogoutApiView)
-from homepage.views import HomePageView
+from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 from users.views import LinkedinCallbackView
 from blog import views as blog_view
+
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
@@ -94,7 +95,7 @@ urlpatterns += [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^$', HomePageView.as_view(), name='homepage'),
+    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
     url(r'^console/', include('console.urls', namespace='console')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^user/', include('users.urls', namespace='users')),
@@ -126,6 +127,17 @@ urlpatterns += [
 
     url(r'^', include('marketing.urls', namespace='marketing')),
 
+    url(r'^about-us$',
+        homepage_view.AboutUsView.as_view(), name='about-us'),
+    url(r'^privacy-policy$',
+        homepage_view.PrivacyPolicyView.as_view(),
+        name='privacy-policy'),
+    url(r'^tnc$',
+        homepage_view.TermsConditionsView.as_view(),
+        name='tnc'),
+    url(r'^contact-us$',
+        homepage_view.ContactUsView.as_view(),
+        name='contact-us'),
 
     url(r'^article-categories/(?P<slug>[-\w]+)/$',
         blog_view.BlogCategoryListView.as_view(),
@@ -133,6 +145,7 @@ urlpatterns += [
 
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
 
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
