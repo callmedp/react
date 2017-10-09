@@ -467,7 +467,6 @@ class BaseParams(object):
         self.query = self.query_builder()
         if self.clean_query:
             self.query = self.query_cleaner()
-
         return self.query
 
     def get_search_params(self):
