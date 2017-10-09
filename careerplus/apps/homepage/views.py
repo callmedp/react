@@ -48,11 +48,9 @@ class HomePageView(TemplateView):
         t_objects = t_objects[:4]
         show_pcourses = False
         # recommended
-        import ipdb;ipdb.set_trace()
         if self.request.session.get('candidate_id') and not self.request.flavour == 'mobile':
             rcourses = get_recommendations(self.request.session.get('func_area', None),
                                            self.request.session.get('skills', None))
-            ipdb.set_trace()
             if rcourses:
                 rcourses = rcourses[:9]
             else:
