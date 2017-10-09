@@ -48,7 +48,7 @@ class HomePageView(TemplateView):
         t_objects = t_objects[:4]
         show_pcourses = False
         # recommended
-        if self.request.session.get('candidate_id') and not self.request.flavour == 'mobile':
+        if self.request.session.get('candidate_id'):
             rcourses = get_recommendations(self.request.session.get('func_area', None),
                                            self.request.session.get('skills', None))
             if rcourses:

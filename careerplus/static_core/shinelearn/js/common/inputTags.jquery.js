@@ -225,7 +225,17 @@
                         var value = self.$input.val().trim();
 
                         if ($.inArray(key, self.keys) < 0) {
-                            return false;
+                           if (self._autocomplete()._isSet()) {
+                                self.options.autocomplete['values'] = $.grep(self.options.autocomplete['actualValues'], function(v) {
+                                     return v.toLowerCase().indexOf(value.toLowerCase()) >= 0;
+                                 });
+                                 self._autocomplete()._build();
+                                 if (self.options.autocomplete['values'].length){
+                                     self._autocomplete()._show();
+                                 }
+
+                             }
+                            return;
                         }
 
                         if (27 === key) {

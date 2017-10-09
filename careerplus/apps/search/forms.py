@@ -1,7 +1,4 @@
 from django import forms
-from django.forms.widgets import Select
-
-from .choices import AREA_WITH_LABEL, SKILL_WITH_LABEL
 
 
 class SearchForm(forms.Form):
@@ -41,7 +38,7 @@ class SearchRecommendedForm(forms.Form):
             attrs={
                 'class': 'form-control js_skill',
                 'maxlength':'150',
-                'placeholder':'Choose upto 3 Skills'
+                'placeholder':'Choose upto 2 Skills'
             }
         ),
         initial=''

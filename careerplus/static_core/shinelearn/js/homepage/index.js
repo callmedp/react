@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
     });
 
     $('#tags2').inputTags({
-        placeholder: prefetchedSkills ? '': "Choose upto 3 Skills",
+        placeholder: prefetchedSkills ? '': "Choose upto 2 Skills",
         autocomplete: {
             values: skillsSet,
             actualValues: skillsSet,
@@ -49,7 +49,7 @@ jQuery(document).ready(function($) {
         destroy: function(e) {
             var $field = e.$input[0];
             if (e.tags.length == 0)
-            $field.placeholder = 'Choose upto 3 Skills';
+            $field.placeholder = 'Choose upto 2 Skills';
         },
         errors: {
             empty: "Be careful, you can't add an empty tag.",
