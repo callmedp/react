@@ -356,11 +356,14 @@ def get_recommendations(func_area, skills, results=None):
     if not skills:
         skills = [777, 795, 2064]
     func_area_prods = set(ProductFA.objects.filter(fa=func_area).values_list('product', flat=True))
+    import ipdb;ipdb.set_trace()
     skill_prods = set(ProductSkill.objects.filter(skill__in=skills).values_list('product', flat=True))
     products_fa_and_skill = func_area_prods.intersection(skill_prods)
+    ipdb.set_trace()
     ids = list(products_fa_and_skill)
     ids += list(skill_prods.difference(products_fa_and_skill))
     ids += list(func_area_prods.difference(products_fa_and_skill))
+    ipdb.set_trace()
     if ids:    
         if not results:
             results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm')

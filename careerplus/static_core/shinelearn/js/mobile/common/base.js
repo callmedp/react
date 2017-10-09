@@ -33,9 +33,9 @@ $(document).ready(function() {
 	    $("#list").slideToggle("fast");
 	});
 
-	$(window).on('load', function(){
-		$('#main-sidebar').removeClass('hide')
-	});
+	// $('.sidebar-main-trigger').on('click', function(){
+	// 	$('#main-sidebar').removeClass('hide')
+	// });
 
 	$(".home-slider").slick({
 		autoplay:false,

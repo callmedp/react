@@ -37,12 +37,6 @@
                         <h1>Get the right skills for <br>a future ready career</h1>
                     </span>
                 </li>
-                <li>
-                    <img src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive">
-                    <span class="slide-caption">
-                        <h1>Get the right skills for <br>a future ready career</h1>
-                    </span>
-                </li>
             {% endif %}
         </ul><!-- home slider end here -->
         
@@ -258,7 +252,6 @@
     {{block.super}}
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
 {#    <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>#}
-    <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}" charset="utf-8"></script>
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},
             skillsSet = {{ skills_set|safe }},
