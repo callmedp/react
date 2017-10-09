@@ -18,17 +18,18 @@
                 <button type="submit" onclick="redirectToSearch()" class="find-jobs-btn btn"></button>
             </div>
             <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">
-                <form id="advance-search-form" class="form-inline" method="post" action="{% url 'search:recommend' %}">{% csrf_token %}
+                <form id="advance-search-form js_advance_search_form" class="form-inline" method="post" action="{% url 'search:recommend' %}">
+                    {% csrf_token %}
                 <div class="form-group">
-                    <input name="area" type="text" value="{{ recmnd_func_area }}" id="tags1"><br/>
+                    <input name="area" required type="text" value="{{ recmnd_func_area }}" id="tags1"><br/>
                     <span class="error pull-left" style="color:red"></span>
                 </div>
                 <div class="form-group">
-                    <input name="skills" type="text" value="{{ recmnd_skills }}" id="tags2">
+                    <input name="skills" required type="text" value="{{ recmnd_skills }}" id="tags2">
                     <br/>
                     <span class="error pull-left" style="color:red"></span>
                 </div>
-                <button type="submit" id="advance-search-button" class="find-jobs-btn btn"></button>
+                <button type="button" id="advance-search-button" class="find-jobs-btn btn js_advance_search"></button>
                 </form>
             </div>
         </div>

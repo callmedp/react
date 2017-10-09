@@ -80,4 +80,30 @@ jQuery(document).ready(function($) {
             return false; 
         }
     });
+    
+    $('.js_advance_search').on('click', function () {
+        var flag = true;
+            if (!$('#tags1').val()){
+                flag = false;
+                $('#tags1').siblings('.error').html('Please choose a functional area.');
+            }
+            if (!$('#tags2').val()){
+                flag = false;
+                $('#tags2').siblings('.error').html('Please choose a skill.');
+            }
+            console.log(flag);
+            console.log($('#tags1').val());
+            console.log($('#tags2').val());
+            if (flag) {
+                $(".js_advance_search_form").submit();
+            }    
+    });
+    
+    
+        $('#tags1').change(function(){
+            if ($('#tags1').val()){
+                $('#tags1').siblings('.error').html('');
+            }
+        });
+ 
 });

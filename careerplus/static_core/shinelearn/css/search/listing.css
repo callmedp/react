@@ -546,6 +546,7 @@
   font-size: 16px;
   position: relative;
   margin-top: 2px !important;
+  vertical-align: top;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
 .home-advanced-search .find-jobs-btn:after {
