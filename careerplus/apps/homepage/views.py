@@ -11,6 +11,7 @@ from shop.models import ProductClass, FunctionalArea, Skill
 from search.helpers import get_recommendations
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
+from geolocation.models import Country
 
 from .models import TopTrending, Testimonial
 
@@ -27,11 +28,10 @@ class HomePageView(TemplateView):
             tjob = TopTrending.objects.filter(
                 is_active=True, is_jobassistance=True)[0]
             job_services = tjob.get_trending_products()
-            services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
-            job_services = job_services.filter(product__product_class__in=services_class, product__type_product__in=[0, 1, 3])
+            # services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
+            job_services = job_services.filter(product__type_product__in=[0, 1, 3])
             job_services_pks = list(job_services.all().values_list('product', flat=True))
             job_sqs = SearchQuerySet().filter(id__in=job_services_pks)
-
             job_services = job_sqs[:5]
             job_asst_view_all = tjob.view_all
         except Exception as e:
@@ -112,4 +112,41 @@ class HomePageView(TemplateView):
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         context.update(self.get_testimonials())
+        return context
+
+
+class AboutUsView(TemplateView):
+    template_name = 'homepage/about-us.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AboutUsView, self).get_context_data(**kwargs)
+        return context
+
+
+class PrivacyPolicyView(TemplateView):
+    template_name = 'homepage/privacy-policy.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PrivacyPolicyView, self).get_context_data(**kwargs)
+        return context
+
+
+class TermsConditionsView(TemplateView):
+    template_name = 'homepage/tnc.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TermsConditionsView, self).get_context_data(**kwargs)
+        return context
+
+
+class ContactUsView(TemplateView):
+    template_name = 'homepage/contact-us.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ContactUsView, self).get_context_data(**kwargs)
+        countries = Country.objects.filter(active=True)
+        countries = countries.exclude(phone='')
+        context.update({
+            "countries": countries,
+        })
         return context

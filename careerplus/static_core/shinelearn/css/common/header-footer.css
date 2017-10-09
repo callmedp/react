@@ -1516,6 +1516,46 @@ footer .footer-links span {
   vertical-align: sub;
 }
 
+.icon-resume-writing {
+  width: 50px;
+  height: 61px;
+  background: url(../../images/sprite.png) no-repeat -304px -252px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.icon-certifications {
+  width: 47px;
+  height: 61px;
+  background: url(../../images/sprite.png) no-repeat -357px -252px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.icon-linkedIn-profile {
+  width: 47px;
+  height: 61px;
+  background: url(../../images/sprite.png) no-repeat -407px -252px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.icon-free-resources {
+  width: 57px;
+  height: 57px;
+  background: url(../../images/sprite.png) no-repeat -457px -252px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+.icon-career-advice {
+  width: 44px;
+  height: 59px;
+  background: url(../../images/sprite.png) no-repeat -514px -285px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
 /*---------login signup banner page css---------*/
 .login-signup-box {
   -webkit-box-shadow: 0px 0px 21px 3px #ededed;

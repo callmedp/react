@@ -351,7 +351,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return True
     
     def get(self, request, **kwargs):
-        
         pk = self.kwargs.get('pk')
         sqs = SearchQuerySet().filter(id=pk)
         try:
