@@ -1,0 +1,141 @@
+.contact-header {
+  clear: both;
+  background: url(../../images/contact.jpg) no-repeat center top;
+  background-size: cover;
+  overflow: hidden;
+  display: block;
+  height: 191px;
+}
+
+.contact-header  h1 {
+  font-size: 21px;
+  color: #fff;
+   padding-top: 127px;
+}
+
+.contactus {
+
+}
+
+.con{
+  margin-top: 50px !important;
+
+}
+
+.contactus li {
+  padding:15px 0;
+  border-bottom:solid 1px #eaeaea;
+  list-style: none;  
+  line-height: 23px;
+  font-size: 15px;
+
+
+}
+.contactus li:nth-child(3) {
+  border-bottom: none;
+}
+
+.contactus li strong{
+color: #2f5da5;
+font-size: 18px;
+display: block;
+font-weight: 400;
+margin-bottom: 7px;
+}
+
+.contactus li strong:before{
+  content: "";
+  width: 20px;
+  height: 23px;
+  background: url(../../images/sprite.png)  -171px -364px;
+  float: left;
+
+
+}
+
+
+.contactform {
+  margin-top: -40px;
+}
+
+.contactform h2 {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.customercare {
+   background: #f8fafe;
+   padding:20px; 
+   font-size: 15px;
+   width: 100%;
+   margin-top: 20px;
+   line-height: 24px;
+
+}
+.customercare strong {
+  font-size: 18px;
+  display: block;
+  font-weight: 400;
+  color: #2f5da5;
+
+} 
+
+
+.customercare span{
+  width: 106px;
+  height: 95px;
+  background: url(../../images/sprite.png)  -206px -328px;
+  float: left;
+}
+
+
+.followus {
+
+    border-top:solid 1px #eaeaea;
+    padding:50px 0 20px ;
+    margin-top: 50px;
+    width: 100%;
+    float: left;
+    font-size: 15px; 
+
+}
+
+
+
+.followus strong {
+  font-weight: 400;
+  float: left;
+  display: inline-block;
+  width:18%;
+} 
+  .followus ul {
+  float: left;
+  width: 70%;
+  padding:0 !important;
+  margin-left:0; 
+} 
+.followus li {
+  border: none;
+  display: inline-block;
+  width: 75px;
+  height: 36px;
+  border-radius: 6px;
+  margin-right:10px; 
+}
+
+.followus li span {
+  width: 34px;
+  height: 25px;
+  display: block;
+  margin:-10px auto; 
+  cursor: pointer;
+
+}
+
+.followus li.face { background: #3b5896; }
+.followus li.face span { background:  url(../../images/sprite.png)  -183px -441px;
+ }
+
+.followus li.google { background: #f34a38; }
+.followus li.google span { background:  url(../../images/sprite.png)  -218px -441px;
+ }

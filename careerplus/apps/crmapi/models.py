@@ -7,7 +7,7 @@ LEAD_LOCATION = (
     (0, 'Default'),
     (1, 'Skill Page'),
     (2, 'Detail Page'),
-    
+    (3, 'Contact Us Page'),
     (6, 'Marketing'),
 )
 
