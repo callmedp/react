@@ -1789,8 +1789,8 @@ class ActionOrderItemView(View):
                     })
 
                     if oi.oi_draft:
-                        resumevar = "http://%s/user/resume/download/?token=%s" % (
-                            settings.SITE_DOMAIN, token)
+                        resumevar = "%s://%s/user/resume/download/?token=%s" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
                         resumevar = textwrap.fill(resumevar, width=80)
 
                         link_title = candidate_data.get('user_name') if candidate_data.get('user_name') else candidate_data.get('email')
@@ -2035,7 +2035,7 @@ class ActionOrderItemView(View):
                         'username': order.first_name if order.first_name else order.candidate_id,
                         'type_flow': oi.product.type_flow,
                         'product_name': oi.product.name,
-                        'upload_url': "http://%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)

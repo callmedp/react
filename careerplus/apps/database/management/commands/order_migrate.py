@@ -123,8 +123,9 @@ class Command(BaseCommand):
                 INSERT INTO order_order 
                 (created, modified, number, site, candidate_id, status, currency, total_incl_tax, 
                 total_excl_tax, date_placed, closed_on, email, country_code, mobile,
-                country_id, invoice, payment_date, archive_json, co_id, conv_charge, welcome_call_done, paid_by_id, tax_config) VALUES
-                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
+                country_id, invoice, payment_date, archive_json, co_id, conv_charge, welcome_call_done, paid_by_id, tax_config,
+                crm_sales_id, crm_lead_id, sales_user_info) VALUES
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
                 """
         
         user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
@@ -152,7 +153,7 @@ class Command(BaseCommand):
                 data_tup = (
                         str(row['added_on']) if row['added_on'] == row['added_on'] else None,
                         str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
-                        str(row['id']),
+                        str(row['transaction_id']) if row['transaction_id'] and row['transaction_id'] == row['transaction_id'] else str(row['id']),
                         0,
                         row['C_ID'] if row['C_ID'] and row['C_ID'] == row['C_ID'] else None,
                         STATUS_MAP.get(row['status'], 0),
@@ -172,7 +173,10 @@ class Command(BaseCommand):
                         row['convenience_charges'] if row['convenience_charges'] and row['convenience_charges'] == row['convenience_charges'] else Decimal(0),
                         row['welcome_call'],
                         None,
-                        None, 
+                        None,
+                        '',
+                        '',
+                        '' 
                     )
                 
                 update_values.append(data_tup)    
@@ -244,8 +248,8 @@ class Command(BaseCommand):
         print( 'Order Migrated Adding Transactions')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         update_sql2 = """INSERT INTO payment_paymenttxn (created, modified, txn, status, payment_mode, payment_date,
-                currency, instrument_number, instrument_issuer, instrument_issue_date, cart_id, order_id, txn_amount) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                currency, instrument_number, instrument_issuer, instrument_issue_date, cart_id, order_id, txn_amount, txn_info) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
         for i, row in migrated_df.iterrows():
             if row['order_obj'] and row['order_obj'] == row['order_obj']:
                 data_tup = (
@@ -262,6 +266,7 @@ class Command(BaseCommand):
                         None,
                         int(row['order_obj']) if row['order_obj'] and row['order_obj'] == row['order_obj'] else None,
                         row['amount_payable'] if row['amount_payable'] else Decimal(0),
+                        ''
                     )
                 update_values.append(data_tup)    
             if len(update_values) > 5000:

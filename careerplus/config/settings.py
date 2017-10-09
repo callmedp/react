@@ -11,14 +11,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
-SITE_DOMAIN = 'localhost:8000'
-SITE_PROTOCOL = 'https'
 MOBILE_ADSERVER_ENCODE_KEY = 'el!bomen!h$'
 ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
-
-MAIN_DOMAIN_PREFIX = 'http://127.0.0.1:8000'
-MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
-
 
 if not IS_LIVE:
     SITEMAP_CACHING_TIME = 86400
@@ -46,24 +40,28 @@ DATABASES = {
 }
 
 # Apps specific for this project go here.
-DEV_APPS = [
-    'debug_toolbar'
-]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DEV_APPS
+if DEBUG:
+    DEV_APPS = [
+        'debug_toolbar'
+    ]
+    INSTALLED_APPS += DEV_APPS
+    DEV_MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
+    MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
-DEV_MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
+if not IS_LIVE:
+    WSGI_APPLICATION = 'careerplus.config.wsgi.application'
+else:
+    WSGI_APPLICATION = 'careerplus.config.wsgi_live.application'
 
-MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
-
-WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-META_SITE_PROTOCOL = 'https'
-META_SITE_DOMAIN = 'learning.shine.com'
+META_SITE_PROTOCOL = SITE_DOMAIN
+META_SITE_DOMAIN = SITE_PROTOCOL
 META_SITE_TYPE = 'Website'
 META_SITE_NAME = 'ShineLearning'
 META_USE_SITES = True
