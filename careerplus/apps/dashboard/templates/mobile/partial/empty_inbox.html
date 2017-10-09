@@ -7,141 +7,34 @@
 	</div>
 </div>
 
+{% if recommended_products %}
 <div class="content-box">
   <div class="container">
     <h2 class="pt-5">Recommended products</h2>
     
-    <div class="box row mb-15">
-      <div class="media">
-        <div class="media-left">
-          <a href="#" class="sigma-pro color1"><img src="images/course-logo1.png"></a>
-        </div>
-        <div class="media-body">
-          <p class="pb-0"><a href="#"><strong>Resume / Visual Resume / LinkedIn</strong></a></p>
-          
-          <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-                <sup class="fill-star"></sup>
-                3/5
-            </div><!-- end of star rating -->
-          </div><!-- end of icons wrapper -->
+    {% for prd in recommended_products %}
+        <div class="box row mb-15">
+          <div class="media">
+            <div class="media-left">
+              <a title="{{ prd.pTt }}" href="{{prd.pURL}}" class="sigma-pro color1"><img src="{{prd.pImg}}" alt="{{prd.pImA}}"></a>
+            </div>
+            <div class="media-body">
+              <p class="pb-0"><a href="#"><strong>{{ prd.pHd|truncatechars:50 }}</strong></a></p>
+              
+              <div class="mb-10 c6">
+                <div class="rating inline-block ml-0 fs-12">
+                    <sup class="fill-star"></sup>
+                    {{prd.pAR}}/5
+                </div><!-- end of star rating -->
+              </div><!-- end of icons wrapper -->
 
-            <p class="pb-5 fs-12 c6">212 people bought</p>
+                <p class="pb-5 fs-12 c6">{{prd.pBC}} people bought</p>
 
-        </div><!-- end of media body -->
-      </div><!-- end of media -->
-    </div><!-- end of box -->
-
-    
-    <div class="box row mb-15">
-      <div class="media">
-        <div class="media-left">
-          <a href="#" class="sigma-pro color2"><img src="images/course-logo2.png"></a>
-        </div>
-        <div class="media-body">
-          <p class="pb-0"><a href="#"><strong>Background Verification</strong></a></p>
-          
-          <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-                <sup class="fill-star"></sup>
-                3/5
-            </div><!-- end of star rating -->
-          </div><!-- end of icons wrapper -->
-
-            <p class="pb-5 fs-12 c6">212 people bought</p>
-
-        </div><!-- end of media body -->
-      </div><!-- end of media -->
-    </div><!-- end of box -->
-
-    
-    <div class="box row mb-15">
-      <div class="media">
-        <div class="media-left">
-          <a href="#" class="sigma-pro color3"><img src="images/course-logo3.png"></a>
-        </div>
-        <div class="media-body">
-          <p class="pb-0"><a href="#"><strong>Background Verification</strong></a></p>
-          
-          <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-                <sup class="fill-star"></sup>
-                3/5
-            </div><!-- end of star rating -->
-          </div><!-- end of icons wrapper -->
-
-            <p class="pb-5 fs-12 c6">212 people bought</p>
-
-        </div><!-- end of media body -->
-      </div><!-- end of media -->
-    </div><!-- end of box -->
-
-    
-    <div class="box row mb-15">
-      <div class="media">
-        <div class="media-left">
-          <a href="#" class="sigma-pro color1"><img src="images/course-logo1.png"></a>
-        </div>
-        <div class="media-body">
-          <p class="pb-0"><a href="#"><strong>Resume / Visual Resume / LinkedIn</strong></a></p>
-          
-          <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-                <sup class="fill-star"></sup>
-                3/5
-            </div><!-- end of star rating -->
-          </div><!-- end of icons wrapper -->
-
-            <p class="pb-5 fs-12 c6">212 people bought</p>
-
-        </div><!-- end of media body -->
-      </div><!-- end of media -->
-    </div><!-- end of box -->
-
-    
-    <div class="box row mb-15">
-      <div class="media">
-        <div class="media-left">
-          <a href="#" class="sigma-pro color2"><img src="images/course-logo2.png"></a>
-        </div>
-        <div class="media-body">
-          <p class="pb-0"><a href="#"><strong>Background Verification</strong></a></p>
-          
-          <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-                <sup class="fill-star"></sup>
-                3/5
-            </div><!-- end of star rating -->
-          </div><!-- end of icons wrapper -->
-
-            <p class="pb-5 fs-12 c6">212 people bought</p>
-
-        </div><!-- end of media body -->
-      </div><!-- end of media -->
-    </div><!-- end of box -->
-
-    
-    <div class="box row mb-15">
-      <div class="media">
-        <div class="media-left">
-          <a href="#" class="sigma-pro color3"><img src="images/course-logo3.png"></a>
-        </div>
-        <div class="media-body">
-          <p class="pb-0"><a href="#"><strong>Background Verification</strong></a></p>
-          
-          <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-                <sup class="fill-star"></sup>
-                3/5
-            </div><!-- end of star rating -->
-          </div><!-- end of icons wrapper -->
-
-            <p class="pb-5 fs-12 c6">212 people bought</p>
-
-        </div><!-- end of media body -->
-      </div><!-- end of media -->
-    </div><!-- end of box -->
-
+            </div><!-- end of media body -->
+          </div><!-- end of media -->
+        </div><!-- end of box -->
+    {% endfor %}
     
   </div><!-- end of container -->
 </div><!-- end of content box -->
+{% endif %}

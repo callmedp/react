@@ -18,6 +18,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.base import ContentFile
 
 # from console.decorators import Decorate, stop_browser_cache
+from core.library.haystack.query import SQS
 from order.models import Order, OrderItem
 from review.models import Review
 from emailers.email import SendMail
@@ -69,7 +70,8 @@ class DashboardView(TemplateView):
         })
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
-            self.request.session.get('skills', None))
+            self.request.session.get('skills', None),
+            SQS().only('pTt pURL pHd pAR pNJ pImA pImg pBC'))
 
         if rcourses:
             rcourses = rcourses[:6]

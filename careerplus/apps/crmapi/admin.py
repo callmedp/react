@@ -14,13 +14,15 @@ def lead_creted_on_crm(modeladmin, request, queryset):
             usr_query = UserQuries.objects.get(id=query.id)
             query_dict.update({
                 'name': usr_query.name,
-                'country_code': usr_query.country.id,
+                'email': usr_query.email,
+                'country_code': usr_query.country.phone,
                 'mobile': usr_query.phn_number,
                 'message': usr_query.message,
-                'source': '',
+                'source': usr_query.sourse,
                 'lsource': usr_query.lead_source,
                 'product': usr_query.product,
-                'medium': 0,
+                'medium': usr_query.medium,
+                'path': usr_query.path,
             })
             if not usr_query.lead_created:
                 usr_query.lead_created = True
@@ -34,9 +36,9 @@ lead_creted_on_crm.short_description = 'create lead on crm'
 
 class UserQuriesAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'phn_number', 'message',
+        'id', 'name', 'phn_number', 'email', 'message',
         'product', 'created',
-        'lead_source', 'country'
+        'lead_source', 'source'
     )
     ordering = ['-created']
     actions = [lead_creted_on_crm]

@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import BlogLandingPageView, BlogLandingAjaxView,\
-    BlogCategoryListView, BlogDetailView, BlogDetailAjaxView,\
+    BlogDetailView, BlogDetailAjaxView,\
     LoginToCommentView, ShowCommentBoxView, LoadMoreCommentView,\
     BlogTagListView, RegisterToCommentView
 
@@ -13,9 +13,6 @@ urlpatterns = [
 
     url(r'^category-wise-loading/$', BlogLandingAjaxView.as_view(),
         name='blog-landing-load'),
-
-    url(r'^categories/(?P<slug>[-\w]+)/$', BlogCategoryListView.as_view(),
-        name='articles-by-category'),
 
     url(r'^tags/(?P<slug>[-\w]+)/$', BlogTagListView.as_view(),
         name='articles-by-tag'),
