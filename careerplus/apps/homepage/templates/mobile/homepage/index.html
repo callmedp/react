@@ -85,30 +85,50 @@
     {% block popular_courses %}
     <!-- Most popular Course Starts here -->
     <div class="popular-courses text-center">
-        <h2>Most popular courses</h2>
+        <h2>{% if request.session.candidate_id and rcourses %}Recommended{% else %}Most popular{% endif %} courses</h2>
         <!-- login slider starts here -->
             <ul class="login-slider">
-
-                {% for product in pcourses %}
-                    <li>
-                        <div class="media">
-                            
-                            <div class="media-body">
-                                <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:50 }}</a></p>
-                                
-                                <div class="rating block ml-0 fs-12 pb-10">
-                                    <sup class="fill-star"></sup>
-                                    <strong>{{product.pARx|floatformat}}</strong>/5
-                                </div><!-- end of star rating -->
-                                <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
-                                
-                            </div>
-                            <div class="media-left">
-                              <a href="{{ product.pURL }}" class="home-banner-img"><img src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
-                            </div><!-- end of media body -->
-                          </div><!-- end of media -->
-                    </li>
-                {% endfor %}
+                {% if request.session.candidate_id and rcourses %}
+                    {% for product in rcourses %}
+                        <li>
+                            <div class="media"> 
+                                <div class="media-body">
+                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:50 }}</a></p>
+                                    
+                                    <div class="rating block ml-0 fs-12 pb-10">
+                                        <sup class="fill-star"></sup>
+                                        <strong>{{product.pARx|floatformat}}</strong>/5
+                                    </div><!-- end of star rating -->
+                                    <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
+                                    
+                                </div>
+                                <div class="media-left">
+                                  <a href="{{ product.pURL }}" class="home-banner-img"><img src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                </div><!-- end of media body -->
+                              </div><!-- end of media -->
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    {% for product in pcourses %}
+                        <li>
+                            <div class="media"> 
+                                <div class="media-body">
+                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:50 }}</a></p>
+                                    
+                                    <div class="rating block ml-0 fs-12 pb-10">
+                                        <sup class="fill-star"></sup>
+                                        <strong>{{product.pARx|floatformat}}</strong>/5
+                                    </div><!-- end of star rating -->
+                                    <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
+                                    
+                                </div>
+                                <div class="media-left">
+                                  <a href="{{ product.pURL }}" class="home-banner-img"><img src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                </div><!-- end of media body -->
+                              </div><!-- end of media -->
+                        </li>
+                    {% endfor %}
+                {% endif %}
                 
             </ul><!-- login slider ends here -->
     </div><!-- Most popular Course Ends here -->
