@@ -156,17 +156,17 @@
                 <div class="container">
                   <div class="col-sm-12 col-md-8">
                   {% if prd_desc %}
-                    <a title="About Six Sigma" class="active" href="#course">About Product</a>
+                    <a title="About product" class="active" href="#course">About product</a>
                   {% endif %}
                   {% if prd_uget %}
                     <a title="What’ll you get" href="#get">What’ll you get</a>
                   {% endif %}
-                  {% if chapter %}
-                    <a title="Courses" href="#programs">Program structure</a>
+                  {% if prd_service == 'course' %}
+                    <a title="Program structure" href="#programs">Program structure</a>
                   {% endif %}
-                     <a title="Delivery flow" href="#delivery">Delivery flow</a>
+                     <a title="How to begin" href="#delivery">How to begin</a>
                   {% if prd_faq %}
-                    <a title="FAQ" href="#faq">FAQ</a>  
+                    <a title="FAQs" href="#faq">FAQs</a>  
                   {% endif %}
                   {% if prd_review_list %}
                     <a title="Review" href="#review">Review</a> 
@@ -183,8 +183,8 @@
                     <div id="course" class="col-sm-12 col-md-8 scroll">
                       <h2>About {{prd_H1}}</h2>
                         {% if prd_video %}
-                      <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
-                      {% endif %}
+                          <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
+                        {% endif %}
                             {{prd_desc|safe}}
                      </div>
                   </div>
@@ -208,8 +208,9 @@
             </section>
             {% endif %}
               
-            
-          {% include "shop/partials/program_structure.html" %}
+          {% if prd_service == 'course' %}
+            {% include "shop/partials/program_structure.html" %}
+          {% endif %}  
           
           {% include "shop/partials/delivery_flow.html" %}
             
@@ -227,7 +228,6 @@
     {% block prdrecommended %}
 
     {% include "shop/partials/recommended_product.html" %}
-
     {% endblock prdrecommended %}
     <!--equiry form-->
 <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">

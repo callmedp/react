@@ -5172,7 +5172,7 @@ header .breadcrumb {
   list-style: none;
   font-size: 12px;
   margin-top: 35px;
-  background-color: rgba(0, 0, 0, 0.4);
+  /* background-color: rgba(0, 0, 0, 0.4); */
   display: table;
   border-radius: 2px;
 }
@@ -5182,13 +5182,13 @@ header .breadcrumb > li {
 header .breadcrumb > li + li:before {
   content: "-";
   padding: 0 5px;
-  color: #cbcbcb;
+  color: #ababab;
 }
 header .breadcrumb a, header .breadcrumb a:hover {
-  color: #cbcbcb;
+  color: #ababab;
 }
 header .breadcrumb > .active {
-  color: #cbcbcb;
+  color: #ababab;
 }
 
 .breadcrumb {
@@ -5205,13 +5205,13 @@ header .breadcrumb > .active {
 .breadcrumb > li + li:before {
   content: "-";
   padding: 0 5px;
-  color: #999;
+  color: #ababab;
 }
 .breadcrumb a, .breadcrumb a:hover {
-  color: #999;
+  color: #ababab;
 }
 .breadcrumb > .active {
-  color: #999;
+  color: #ababab;
 }
 
 .pagination {

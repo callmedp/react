@@ -51,6 +51,9 @@ class ProductInformationMixin(object):
                 'url': '/',
                 'active': True}))
         if category:
+            if category.type_level == 4:
+                category = category.get_parent()[0] if category.get_parent() else None
+        if category:
             if product.is_course:
                 parent = category.get_parent()
                 if parent:
@@ -294,7 +297,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         if product:
             ctx.update(self.get_breadcrumbs(product, self.category))
         ctx.update(self.solar_info(self.sqs))
-        ctx.update(self.solar_program_structure(self.sqs))
+        if product.is_course:
+            ctx.update(self.solar_program_structure(self.sqs))
         ctx.update(self.solar_faq(self.sqs))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
@@ -351,31 +355,29 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return True
     
     def get(self, request, **kwargs):
-        
         pk = self.kwargs.get('pk')
-        sqs = SearchQuerySet().filter(id=pk)
-        try:
-            self.sqs = sqs[0]
-        except Exception as e:
-            raise Http404
         try:
             self.product_obj = Product.objects.get(pk=pk)
         except Exception as e:
-            pass
+            raise Http404
+        
+        try:
+            sqs = SearchQuerySet().filter(id=pk)
+            self.sqs = sqs[0]
+            if not self.sqs:
+                raise Http404
+        except Exception as e:
+            raise Http404
+        
         if self.product_obj:
             self.category = self.product_obj.verify_category(kwargs.get('cat_slug', None))
-        HTTP404 = self.return_http404(sqs)
-
-        if HTTP404:
-            raise Http404
-
+        
         redirection = self.redirect_if_necessary(request.path, self.sqs)
         if redirection is not None:
             return redirection
-        response = super(ProductDetailView, self).get(request, **kwargs)
+        return super(ProductDetailView, self).get(request, **kwargs)
         # self.send_signal(request, response, product)
-        return response
-
+        
 
 # @Decorate(stop_browser_cache())
 # class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
