@@ -433,7 +433,7 @@ class RecommendedSearchView(SearchBaseView, FormView):
         context.update({'recmnd_func_area': func_area})
         skills = self.request.session.get('skills')
         skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
-        context.update({'recmnd_skills': skills_found})
+        context.update({'recmnd_skills': ','.join(skills_found)})
         
         return context
 

@@ -37,8 +37,8 @@ def booster():
         })
 
         if oi.oi_draft:
-            resumevar = "http://%s/user/resume/download/?token=%s" % (
-                settings.SITE_DOMAIN, token)
+            resumevar = "%s://%s/user/resume/download/?token=%s" % (
+                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)
 
             email = candidate_data.get('email') if candidate_data.get('email') else ''

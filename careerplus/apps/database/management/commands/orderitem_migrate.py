@@ -304,7 +304,7 @@ class Command(BaseCommand):
                     product_id = row['variation_id']
                 
                 oi_status, last_oi_status, counter, feedback = map_oi_status(row['type_flow'], row['oio_operation_type'], row['new_status'])
-                if oi_status not in [2,5]:
+                if oi_status not in [2]:
                     assigned_to = row['oio_assigned_to_id'] if row['oio_assigned_to_id'] and row['oio_assigned_to_id'] == row['oio_assigned_to_id'] else None
                 data_tup = (
                         '',

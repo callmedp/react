@@ -2,12 +2,8 @@ from .settings import *
 
 
 ########## DOMAIN SETTINGS ######################
-MAIN_DOMAIN_PREFIX = 'http://learning1.shine.com'
-MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
-
 SITE_DOMAIN = 'learning1.shine.com'
 SITE_PROTOCOL = 'http'
-
 
 HAYSTACK_CONNECTIONS = {
     'default': {

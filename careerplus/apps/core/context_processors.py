@@ -31,6 +31,8 @@ def common_context_processor(request):
     except:
         roundone_user = None
     context.update({
+        "SITE_DOMAIN": settings.SITE_DOMAIN,
+        "SITE_PROTOCOL": settings.SITE_PROTOCOL,
         "cart_count": cart_count,
         "PRODUCT_GROUP_LIST": settings.PRODUCT_GROUP_LIST,
         "VENDOR_GROUP_LIST": settings.VENDOR_GROUP_LIST,

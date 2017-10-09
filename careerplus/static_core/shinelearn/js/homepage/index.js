@@ -61,4 +61,14 @@ jQuery(document).ready(function($) {
             timeout: 8000
         }
     });
+    // Header Scroll
+      $(window).on('scroll', function() {
+          var scroll = $(window).scrollTop();
+
+          if (scroll >= 50) {
+              $('.navbar').addClass('navbar-color');
+          } else {
+              $('.navbar').removeClass('navbar-color');
+          }
+      });
 });

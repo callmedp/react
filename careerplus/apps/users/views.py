@@ -276,7 +276,7 @@ class ForgotPasswordEmailView(View):
             email_dict = {}
             email_dict.update({
                 'email': email,
-                'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
+                'site': settings.SITE_PROTOCOL +"://" + settings.SITE_DOMAIN + settings.STATIC_URL
             })
 
             if user_exist.get('exists', ''):

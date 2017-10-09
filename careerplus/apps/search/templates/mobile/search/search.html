@@ -9,6 +9,8 @@
     <link href="{% static "shinelearn/css/mobile/search/course-listing.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/common/auto-suggest.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/search/filter.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+
     <style type="text/css">
         .error{
             color: red;
@@ -110,7 +112,7 @@
     <div class="auto-search">
         <header class="filter-menu p-0">
             <form class="search-list" id="search_form" data-role="form">
-                <input type="text" name="q" class="form-control js_query_input" value="{{ search_params.keywords }}" id="search-inupt">
+                <input type="text" id="id_q" name="q" class="form-control js_query_input" value="{{ search_params.keywords }}" id="search-inupt">
             </form><!-- / Left side Icon ends here -->
         </header><!-- header ends here -->
         <div class="clearfix"></div>
@@ -144,6 +146,9 @@
             $('#tags21').autocomplete({
                 source: skillsSet
             });
+             $('#id_q').typeahead({
+                local: ['career','international','six','six sigma','profile','logistics','supply chain','transport','analytics']
+                });
 
 
     </script>

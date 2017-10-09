@@ -227,6 +227,21 @@
 .listing1 li:hover {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
+.listing1 li.featured {
+  position: relative;
+  border: 1px solid rgba(63, 95, 148, 0.5);
+}
+.listing1 li.featured:after {
+  content: 'Featured';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #f2f2f2;
+  color: #999;
+  padding: 3px 15px;
+  border-top-left-radius: 5px;
+  font-size: 11px;
+}
 .listing1 .media {
   margin-top: 0;
 }
@@ -494,49 +509,64 @@
 }
 
 /*slider css end*/
-/*search typeahead css start*/
-.twitter-typeahead {
-  width: auto;
-}
-
-.twitter-typeahead .tt-query,
-.twitter-typeahead .tt-hint {
-  margin-bottom: 0;
-}
-
-.tt-dropdown-menu {
-  min-width: 160px;
-  margin-top: 2px;
-  padding: 5px 0;
-  color: #666;
-  background-color: #fff;
-  border: 1px solid #e1e1e1;
-  width: 100%;
-  text-align: left;
-}
-
-.tt-suggestion {
-  display: block;
-  padding: 3px 10px;
-}
-
-.tt-suggestion.tt-is-under-cursor {
-  color: #666;
-  background-color: #f2f2f2;
-}
-
-.tt-suggestion.tt-is-under-cursor a {
+/***search bar css***/
+.home-advanced-search {
+  position: relative;
+  width: 660px;
+  margin: 0 auto;
+  height: 64px;
   color: #666;
 }
-
-.tt-suggestion p {
-  margin: 0;
-  color: #666;
-  font-size: 13px;
-  text-align: left;
+.home-advanced-search .form-group {
+  width: 298px;
+}
+.home-advanced-search .form-group input:focus {
+  box-shadow: none;
+}
+.home-advanced-search button {
+  margin-top: -3px;
+}
+@media (max-width: 1190px) {
+  .home-advanced-search button {
+    margin-top: -4px;
+  }
+}
+@media (max-width: 991px) {
+  .home-advanced-search button {
+    margin-top: -3px;
+  }
+}
+.home-advanced-search .find-jobs-btn {
+  border-radius: 5px;
+  height: 62px;
+  width: 65px;
   padding: 0;
+  text-transform: uppercase;
+  margin-left: -9px;
+  font-size: 16px;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+.home-advanced-search .find-jobs-btn:after {
+  content: '';
+  background: url(../../images/sprite.png) no-repeat -526px -247px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 5px;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 1190px) {
+  .home-advanced-search .inputTags-list {
+    width: 302px !important;
+  }
 }
 
-/*search typeahead css end*/
+.error input {
+  border-bottom: 1px solid transparent !important;
+}
 
 /*# sourceMappingURL=listing.css.map */
