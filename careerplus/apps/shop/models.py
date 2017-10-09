@@ -959,6 +959,9 @@ class Product(AbstractProduct, ModelMeta):
             productcategories__active=True,
             active=True)
         if main_prod_cat:
+            if main_prod_cat[0].type_level == 4:
+                main_prod_cat = main_prod_cat[0].get_parent()[0] if main_prod_cat[0].get_parent() else None 
+                return main_prod_cat
             return main_prod_cat[0]
         else:
             prod_cat = self.categories.filter(
@@ -1140,7 +1143,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def verify_category(self, cat_slug=None):
         try:
-            prod_cat = self.categories.filter(
+            prod_cat = Category.objects.filter(
                 slug=cat_slug,
                 active=True)
             if prod_cat:
