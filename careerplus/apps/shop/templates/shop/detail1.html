@@ -156,17 +156,17 @@
                 <div class="container">
                   <div class="col-sm-12 col-md-8">
                   {% if prd_desc %}
-                    <a title="About Product" class="active" href="#course">About Product</a>
+                    <a title="About product" class="active" href="#course">About product</a>
                   {% endif %}
                   {% if prd_uget %}
                     <a title="What’ll you get" href="#get">What’ll you get</a>
                   {% endif %}
-                  {% if chapter %}
-                    <a title="Program Structure" href="#programs">Program structure</a>
+                  {% if prd_service == 'course' %}
+                    <a title="Program structure" href="#programs">Program structure</a>
                   {% endif %}
-                     <a title="Delivery flow" href="#delivery">Delivery flow</a>
+                     <a title="How to begin" href="#delivery">How to begin</a>
                   {% if prd_faq %}
-                    <a title="FAQ" href="#faq">FAQ</a>  
+                    <a title="FAQs" href="#faq">FAQs</a>  
                   {% endif %}
                   {% if prd_review_list %}
                     <a title="Review" href="#review">Review</a> 
@@ -208,8 +208,9 @@
             </section>
             {% endif %}
               
-            
-          {% include "shop/partials/program_structure.html" %}
+          {% if prd_service == 'course' %}
+            {% include "shop/partials/program_structure.html" %}
+          {% endif %}  
           
           {% include "shop/partials/delivery_flow.html" %}
             
