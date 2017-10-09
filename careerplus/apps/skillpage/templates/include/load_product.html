@@ -12,7 +12,7 @@
                     {% if "true" in product.pCert %}<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>{% endif %}
                     {% if product.pNJ %}<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ product.pNJ }}</span> jobs available</span>{% endif %}
                   </div>
-                	<h3 class="listing-heading">{{ product.pHd }}</h3>
+                	<h3 class="listing-heading">{{ product.pHd|default:product.pNm }}</h3>
 
                   <div class="rating-review-box">
                     {% for star in product.pStar %}

@@ -25,7 +25,7 @@ from django_redis import get_redis_connection
 # local imports
 from .forms import SearchForm, SearchRecommendedForm
 from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
-from shop.models import FunctionalArea, Skill
+from shop.models import FunctionalArea, Skill, Category
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 error_log = logging.getLogger('error_log')
@@ -426,6 +426,15 @@ class RecommendedSearchView(SearchBaseView, FormView):
         context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "recommended"})
+        func_area = self.request.session.get('func_area')
+        if func_area:
+            func_area = FunctionalArea.objects.filter(pk=func_area)
+            func_area = func_area[0].name if func_area else ''
+        context.update({'recmnd_func_area': func_area})
+        skills = self.request.session.get('skills')
+        skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
+        context.update({'recmnd_skills': skills_found})
+        
         return context
 
     def prepare_track(self, page):
@@ -459,7 +468,7 @@ class FuncAreaPageView(SearchBaseView):
 
     def get_breadcrumbs(self):
         breadcrumbs = super(FuncAreaPageView, self).get_breadcrumbs()
-        func_area = FunctionalArea.objects.filter(id=self.kwargs['pk'])
+        func_area = Category.objects.filter(id=self.kwargs['pk'])
         if func_area:
             breadcrumbs.append(
                 OrderedDict({

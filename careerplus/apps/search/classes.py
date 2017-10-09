@@ -35,7 +35,7 @@ class BaseSearch(object):
               "pPvn", "pCmbs", "pVrs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
               "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb",
               "pPinb", "pPfinb", "pPusb", "pPfusb", "pPaeb", "pPfaeb", "pPgbb", "pPfgbb",
-              "pPc", "pFA"]
+              "pPc", "pFA", "pNm"]
 
     similar_fields = []
 
@@ -82,7 +82,7 @@ class BaseSearch(object):
 
     needed_params_options = {}
 
-    sort_mapping = {'sort': {'1': '-pCD', '2': 'pAR'}}
+    sort_mapping = {'sort': {'1': '-pCD', '2': '-pAR'}}
 
     query_param_name = 'q'
 
