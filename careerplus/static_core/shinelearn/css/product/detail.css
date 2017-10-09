@@ -18,6 +18,7 @@ header {
   margin-bottom: 8px;
   line-height: 34px;
   font-size: 24px;
+  font-weight: 600;
 }
 .course-caption .course-caption-img {
   display: table-cell;
@@ -216,7 +217,7 @@ header {
   margin-bottom: 30px;
 }
 .detail-box h2 {
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 600;
   color: #333;
   margin: 0 0 20px 0;

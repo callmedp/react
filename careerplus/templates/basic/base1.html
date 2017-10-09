@@ -8,6 +8,8 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/media/static/shinelearn/images/fav_icon.png">
+        
         {% block django_meta %}
           
         {% endblock django_meta %}
@@ -92,15 +94,12 @@
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}">
     </script>
     <script>
-        $('.dropdown').hover(
-          function(e) {
-            if(!$(e.target).closest('.dropdown').hasClass('open')){
-                      $('.dropdown-toggle', this).trigger('click');
-                    }
-          }, function(e) {
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+          });
+        $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
-          }
-        );
+          });
     </script>
     {% endblock js_section %}
     {% block johukum %}

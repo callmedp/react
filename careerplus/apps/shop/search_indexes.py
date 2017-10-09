@@ -140,21 +140,40 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         categories = obj.categories.filter(
             productcategories__active=True,
             active=True)
-        if len(categories) > 0:
-            return [cat.pk for cat in categories]
+        categories_list = []
+        for cat in categories:
+            if cat.type_level == 4:
+                pcat = cat.get_parent()
+                for pc in pcat:
+                    categories_list.append(pc)
+                categories_list.append(cat)
+        categories_list = list(set(categories_list))
+        if len(categories_list) > 0:
+            return [cat.pk for cat in categories_list]
         
     def prepare_pCtgn(self, obj):
         categories = obj.categories.filter(
             productcategories__active=True,
             active=True)
-        if len(categories) > 0:
-            return [cat.name for cat in categories]
+        categories_list = []
+        for cat in categories:
+            if cat.type_level == 4:
+                pcat = cat.get_parent()
+                for pc in pcat:
+                    categories_list.append(pc)
+                categories_list.append(cat)
+        categories_list = list(set(categories_list))
+        if len(categories_list) > 0:
+            return [cat.name for cat in categories_list]
         
     def prepare_pFA(self, obj):
         if obj.is_course:    
             categories = obj.categories.filter(
                 productcategories__active=True,
                 active=True)
+            if len(categories) > 0:
+                if categories[0].type_level == 4:
+                    categories = categories[0].get_parent()
             if len(categories) > 0:
                 p_category = [pcat for cat in categories for pcat in cat.get_parent()]
                 # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
@@ -167,6 +186,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             categories = obj.categories.filter(
                 productcategories__active=True,
                 active=True)
+            if len(categories) > 0:
+                if categories[0].type_level == 4:
+                    categories = categories[0].get_parent()
             if len(categories) > 0:
                 p_category = [pcat for cat in categories for pcat in cat.get_parent()]
                 # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
