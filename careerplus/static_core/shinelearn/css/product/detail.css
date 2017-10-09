@@ -201,6 +201,13 @@ header {
   display: block;
   padding: 50px 0;
 }
+.detail-box li ul {
+  margin: 0;
+  padding: 0;
+}
+.detail-box li ul li {
+  padding: 5px 0;
+}
 .detail-box article {
   margin-bottom: 30px;
 }
@@ -1135,3 +1142,25 @@ header {
   display: block;
   content: "";
 }
+
+.call1 h1 {
+  font-size: 20px;
+  color: #666;
+  display: block;
+  margin-bottom: 20px;
+}
+.call1 .country-code .form-control {
+  width: 78% !important;
+}
+
+.about-txt a:after {
+  content: '...Know less';
+}
+.about-txt a.collapsed:after {
+  content: '...Know more';
+}
+.about-txt .collapse.in {
+  display: inline;
+}
+
+/*# sourceMappingURL=detail.css.map */
