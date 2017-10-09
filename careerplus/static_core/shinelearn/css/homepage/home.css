@@ -367,6 +367,7 @@ body {
 .job-assistance .listing li a {
   display: block;
   overflow: hidden;
+  height: 235px;
 }
 .job-assistance .listing li a:hover {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
@@ -389,6 +390,7 @@ body {
   color: #3f5f94;
   font-size: 18px;
   font-weight: 600;
+  height: 40px;
 }
 .job-assistance .listing li .rating-review-box {
   display: inline-block;
