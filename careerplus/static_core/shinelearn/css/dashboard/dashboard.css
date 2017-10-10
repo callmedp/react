@@ -322,7 +322,7 @@
   font-size: 40px;
   color: #707070;
   font-weight: 400;
-  background: url(../images/sprite.png) no-repeat -445px -92px;
+  background: url(../../images/sprite.png) no-repeat -445px -92px;
   width: 16px;
   height: 3px;
 }
@@ -358,7 +358,7 @@
 .notification-resume .resume-writing {
   text-align: left;
   margin: 20px auto 0 auto;
-  width: 400px;
+  width: 450px;
   display: block;
   font-size: 12px;
   color: #666;
@@ -404,6 +404,7 @@
   font-weight: 400;
   font-size: 14px;
 }
+
 .notification-resume .resume-writing .use-shine label input {
   margin-right: 5px;
 }
@@ -1127,7 +1128,7 @@
   padding-right: 10px;
 }
 .profile-data li .pro-select, .profile-data li .pro-select2 {
-  background: url(../../images/sprite.png);
+  background: url(../../images/dropdown.png);
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: right;
@@ -1256,7 +1257,7 @@
   font-size: 13px;
   color: #999;
   display: inline-block;
-  width: 19%;
+  width: 25%;
 }
 .linkedin_resume .wd80 {
   font-size: 13px;
@@ -1304,11 +1305,11 @@
   padding: 0;
 }
 .linkedin_resume ul li ul li.wd1 {
-  width: 10%;
+  width: 20%;
   display: inline-block;
 }
 .linkedin_resume ul li ul li.wd2 {
-  width: 85%;
+  width: 75%;
   display: inline-block;
 }
 .linkedin_resume .downloadpdf {

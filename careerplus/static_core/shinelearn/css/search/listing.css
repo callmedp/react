@@ -512,13 +512,13 @@
 /***search bar css***/
 .home-advanced-search {
   position: relative;
-  width: 660px;
+  width: 1000px;
   margin: 0 auto;
   height: 64px;
   color: #666;
 }
 .home-advanced-search .form-group {
-  width: 298px;
+  width: 463px;
 }
 .home-advanced-search .form-group input:focus {
   box-shadow: none;
@@ -538,13 +538,15 @@
 }
 .home-advanced-search .find-jobs-btn {
   border-radius: 5px;
-  height: 62px;
+  height: 63px;
   width: 65px;
   padding: 0;
   text-transform: uppercase;
   margin-left: -9px;
   font-size: 16px;
   position: relative;
+  margin-top: 2px !important;
+  vertical-align: top;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
 .home-advanced-search .find-jobs-btn:after {
@@ -569,4 +571,10 @@
   border-bottom: 1px solid transparent !important;
 }
 
+.home-advanced-search .inputTags-list {
+    width: 462px !important;
+    border-radius: 4px 0px 0px 4px !important;
+}
+
 /*# sourceMappingURL=listing.css.map */
+

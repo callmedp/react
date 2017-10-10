@@ -104,7 +104,7 @@ $(document).ready(function () {
     });
 
     $('#id_skills').inputTags({
-        placeholder: prefetchedSkills ? '': "Choose upto 3 Skills",
+        placeholder: prefetchedSkills ? '': "Choose upto 2 Skills",
         autocomplete: {
             values: skillsSet,
             actualValues: skillsSet,
@@ -118,7 +118,7 @@ $(document).ready(function () {
         destroy: function(e) {
             var $field = e.$input[0];
             if (e.tags.length == 0)
-            $field.placeholder = 'Choose upto 3 Skills';
+            $field.placeholder = 'Choose upto 2 Skills';
         },
         errors: {
             empty: "Be careful, you can't add an empty tag.",
@@ -131,4 +131,18 @@ $(document).ready(function () {
             timeout: 8000
         }
     });
+    // $('.js_advance_search').on('click', function () {
+    //     var flag = true;
+    //         if (!$('#id_area').val()){
+    //             flag = false;
+    //             $('#id_area').siblings('.error-txt').html('Please choose a functional area.');
+    //         }
+    //         if (!$('#id_skills').val()){
+    //             flag = false;
+    //             $('#id_skills').siblings('.error-txt').html('Please choose a skill.');
+    //         }
+    //         if (flag) {
+    //             $(".js_advance_search_form").submit();
+    //         }    
+    // });
 });

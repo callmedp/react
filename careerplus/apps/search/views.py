@@ -6,6 +6,8 @@ import json
 import logging
 
 # django imports
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, HttpResponsePermanentRedirect
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView, FormView
@@ -500,6 +502,10 @@ class FuncAreaPageView(SearchBaseView):
 class RedirectToRecommendationsView(FormView):
     form_class = SearchRecommendedForm
     template_name = 'search/search.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(RedirectToRecommendationsView, self).dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         form_data = self.get_form().data
