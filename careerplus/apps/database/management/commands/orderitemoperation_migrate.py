@@ -57,18 +57,18 @@ class Command(BaseCommand):
                     counter = 0
                     feedback = False
                 elif otype == 2:
-                    oi_status = 22
-                    last_oi_status = 22
+                    oi_status = 24
+                    last_oi_status = 24
                     counter = 1
                     feedback = False
                 elif otype == 3:
-                    oi_status = 22
-                    last_oi_status = 22
+                    oi_status = 24
+                    last_oi_status = 24
                     counter = 2
                     feedback = False
                 elif otype == 4:
                     oi_status = 4
-                    last_oi_status = 22
+                    last_oi_status = 24
                     counter = 2
                     feedback = False
                 elif otype == 5:
@@ -103,14 +103,24 @@ class Command(BaseCommand):
                     counter = 0
                     feedback = False
             elif flow == 4:
-                if otype in [0,1,8,5,6]:
+                if otype in [0]:
                     oi_status = 2
                     last_oi_status = 2
                     counter = 0
                     feedback = False
-                elif otype == 7:
+                if otype in [1,8]:
+                    oi_status = 5
+                    last_oi_status = 5
+                    counter = 0
+                    feedback = False
+                elif otype in [5,6]:
                     oi_status = 25
-                    last_oi_status = 2
+                    last_oi_status = 5
+                    counter = 0
+                    feedback = True
+                elif otype == 7:
+                    oi_status = 23
+                    last_oi_status = 5
                     counter = 0
                     feedback = True
                 else:
@@ -124,8 +134,13 @@ class Command(BaseCommand):
                     last_oi_status = 4
                     counter = 0
                     feedback = True
-                else:
+                elif otype in [14]:
                     oi_status = 81
+                    last_oi_status = 82
+                    counter = 0
+                    feedback = True
+                else:
+                    oi_status = 82
                     last_oi_status = 1
                     counter = 0
                     feedback = False
@@ -134,6 +149,21 @@ class Command(BaseCommand):
                     oi_status = 4
                     last_oi_status = 62
                     counter = 0
+                    feedback = True
+                elif otype == 5:
+                    oi_status = 25
+                    last_oi_status = 25
+                    counter = 1
+                    feedback = True
+                elif otype in [6,13]:
+                    oi_status = 25
+                    last_oi_status = 25
+                    counter = 1
+                    feedback = True
+                elif otype == 7:
+                    oi_status = 23
+                    last_oi_status = 23
+                    counter = 1
                     feedback = True
                 else:
                     oi_status = 5
