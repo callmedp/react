@@ -55,7 +55,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         return context
 
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(SkillPageView, self).get_context_data(**kwargs)
 
         slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
@@ -87,7 +87,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             raise Http404
 
         # prod_page = Paginator(prod_lists, 1)
-        prod_page = Paginator(all_results, 1)
+        prod_page = Paginator(all_results, 5)
 
         try:
             products = prod_page.page(self.page)

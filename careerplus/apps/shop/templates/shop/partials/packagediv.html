@@ -9,7 +9,7 @@
     <div class="main-package-content">
       <span>Provided by</span>
       <strong>{{prd_vendor}}</strong>
-      <p>Starting at <small>Rs. {{start_price}}/-</small></p>
+      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
     </div>
     <div class="main-package-arrow"></div>
   </div>
@@ -35,7 +35,7 @@
       {% if prd_exp %}
         <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
       {% endif %}
-      <p>Starting at <small>Rs. {{start_price}}/-</small></p>
+      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
     </div>
 
     <div class="main-package-arrow"></div>

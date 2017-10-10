@@ -49,21 +49,21 @@
 					<div class="provider">
 					       Provider
 					   {% for top_4_vendor in top_4_vendors %}    
-						{% if forloop.counter == 1 and top_4_vendor.pVi %}
+						{% if forloop.counter == 1 and top_4_vendor.pImg %}
 							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+							alt="{{top_4_vendor.pViA}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 2 and top_4_vendor.pVi %}
+						{% if forloop.counter == 2 and top_4_vendor.pImg %}
 							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+							alt="{{top_4_vendor.pViA}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 3 and top_4_vendor.pVi %}
+						{% if forloop.counter == 3 and top_4_vendor.pImg %}
 							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+							alt="{{top_4_vendor.pViA}}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 4 and top_4_vendor.pVi %}
+						{% if forloop.counter == 4 and top_4_vendor.pImg %}
 							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.image_alt}}" class="img-responsive">
+							alt="{{top_4_vendor.pViA}}" class="img-responsive">
 						{% endif %}
 						{% endfor %}
 					</div>

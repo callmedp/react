@@ -1,3 +1,4 @@
+{% load humanize search_tags %}
 {% if prd_service == 'course' %}
     <div class="detail-wrap">
         <div class="provided-by">
@@ -8,7 +9,7 @@
                 <div class="media-body rel">
                     <p class="pb-0">Provided by</p>
                     <a href="#">{{prd_vendor}}</a>
-                    <p class="pb-0">Starting at <strong>Rs. {{start_price}}/-</strong></p>
+                    <p class="pb-0">Starting at <strong>Rs. {{start_price|floatformat}}/-</strong></p>
                 </div>  
             </div>
         </div>
@@ -26,8 +27,10 @@
             <div class="media">
                 <div class="media-body rel">
                   <p class="pb-0">Experience</p>
-                  <a>{{prd_exp}}</a>
-                  <p class="pb-0">Starting at <strong>{{start_price}}/-</strong></p>
+                  {% if prd_exp %}
+                    <a>{{prd_exp|get_choice_display:"EXP_DICT"}}</a>
+                  {% endif %}
+                  <p class="pb-0">Starting at <strong>{{start_price|floatformat}}/-</strong></p>
                 </div>
             </div>
         </div>
