@@ -17,7 +17,9 @@
 }(function ( $, window, document, undefined ) {
   'use strict';
 
-
+  $(window).on('load', function(){
+    $('#main-sidebar').removeClass('hide');
+  })
 
   var
     /** Used later to scroll page to the top */
