@@ -176,13 +176,22 @@ h4 {
 }
 
 .logo-main {
+    margin-top: 0px;
+    background-position: -300px -351px;
+    width: 461px;
+    height: 90px;
+    display: table-cell;
+    float: left;
+}
+
+/*.logo-main {
 	margin-top: 30px;
 	background-position: -15px -0px;
 	width: 300px;
 	height: 68px;
 	display: table-cell;
 	float: left;
-}
+}*/
 /* contact us start*/
 
 .contact-icon {
@@ -690,9 +699,9 @@ h2 {
 }
 
 .logo-main {
-	margin-top: 20px;
+	margin-top: 0px;
 	background-position: -15px -376px;
-	width: 182px;
+	width: 242px;
 	height: 91px;
 	display: table-cell;
 	float: left;
@@ -751,7 +760,7 @@ h1 {
 	color: #1f3c6b;
 	line-height: 25px;
 	font-weight: 600;
-	margin-top: 40px;
+	margin-top: 50px;
 	width: 100%;
 	margin-bottom: 0;
 	padding-bottom: 0;

@@ -66,7 +66,7 @@
           {% for obj in recent_page %}
               <div class="box-panel article-listing mb-30">
                 <div class="media">
-                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
+                  <a title="{{obj.display_name}}" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
                    {% if obj.image %}
                     <figure class="media-left">
                       {% thumbnail obj.image "171x113" crop="center" as im %}
@@ -141,7 +141,7 @@
            {% for obj in pop_page %}
                <div class="box-panel article-listing mb-30">
                 <div class="media">
-                  <a title="Government Jobs" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
+                  <a title="{{obj.display_name}}" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
                   {% if obj.image %}
                     <figure class="media-left">
                       {% thumbnail obj.image "171x113" crop="center" as im %}
