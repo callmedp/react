@@ -50,7 +50,7 @@
         {% if search_type == 'recommended' %}
         <div class="search-tagging mt-10">
             <span>{{ recmnd_func_area }}</span>
-            <span>{{ recmnd_skills.0 }}</span>
+            <span>{{ recmnd_skills }}</span>
             <a href="#" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
@@ -94,7 +94,7 @@
       </div>
 
       <div class="form-group">
-        <input type="text" id="tags21" name="skills" value="{{ recmnd_skills.0 }}" class="form-control" placeholder="Skill">
+        <input type="text" id="tags21" name="skills" value="{{ recmnd_skills }}" class="form-control" placeholder="Skill">
       </div>
 
 
