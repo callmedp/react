@@ -2,8 +2,24 @@ html { margin:0; padding:0;}
 body { margin:0; padding:0; font-family: 'Open Sans', sans-serif; font-size:13px; font-weight:400; color:#000;}
 .sprite { background:url("pmp_sprite.png") 0 0 no-repeat}
 .container { margin:0 auto; padding:0; background:#f7f7f7;}
-.header {background: #1f3d6e; display:block; padding:0; overflow:hidden;}
-.logo { width:63px; height:52px; display:inline-block; background:url("logo-white.png"); margin-left:100px; float:left;}
+.header {background: #1f3d6e; display:block; padding:0; height: 54px; position: relative;}
+/*.logo { 
+	width:63px; 
+	height:52px; 
+	display:inline-block; background:url("logo-white.png"); 
+	margin-left:100px; 
+	float:left;
+}*/
+.logo {
+    width: 245px;
+    height: 81px;
+    display: inline-block;
+    background: url(logo-white.png);
+    margin-left: 100px;
+    float: left;
+    position: absolute;
+}
+
 .mobile_email { float:right; margin:17px 9% 0 0; color:#fff; font-size:14px;}
 .mobile_email a{ color:#fff; text-decoration:none;}
 .mobile_email  .mobile_icon { display:inline-block; width:20px; height:20px; background-position:-162px 0; margin:0 5px 0 0; vertical-align:top;}

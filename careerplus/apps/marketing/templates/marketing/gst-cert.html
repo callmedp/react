@@ -21,22 +21,6 @@
                 display: none;
             }
         </style>
-        <script type="text/javascript">
-            var recaptcha1;
-            var recaptcha2;
-            function recaptchaCallBack() {
-                if($("#captcha1").length){
-                //Render the recaptcha1 on the element with ID "recaptcha1"
-                recaptcha1 = grecaptcha.render('captcha1', {
-                  'sitekey' : '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV', //Replace this with your Site key
-                  'theme' : 'light'
-                });}};
-            function openPopupRecaptcha() {
-                if($('#recaptcha2').is(':empty')){
-                grecaptcha.render("captcha2", {sitekey: "6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV", theme: "light"});}
-            };
-        </script>
-        <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallBack&render=explicit" async defer></script>
 
 </head>
 

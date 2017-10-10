@@ -39,12 +39,12 @@
 <body>
     <div class="top_section"> 
 		<div class="container martb_30">
-	    	<a href="https://shinelearning.shine.com/" target="_blank" class="logo_cp sprite_call"> </a>
+	    	<a href="/" target="_blank" class="logo_cp sprite_call"> </a>
             <span class="martb_30 contact_box"> <span class="sprite_call icon_contact"> </span> 0124-3955001</span>
             
             <div class="fl_lt w550"> 
             	<h1>Become a Digital Marketing Certified Professional</h1>
-                <h3>Benefits of taking it from Career Plus</h3>
+                <h3>Benefits of taking it from Shine Learning</h3>
                 <ul> 
                 	<li> Get a 40% Salary Hike as compared to your peers.</li>
 					<li> More than 6000 jobs in the market.</li>
@@ -80,6 +80,7 @@
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
                 <input type="hidden" name="lsource" value="{{ lead_source }}">
+                <input type="hidden" name="path" value="{{request.path}}">
 
                 <input type="button" class="button" value="Send" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead').submit();return false;" id="submit"/>
             </form>

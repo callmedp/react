@@ -157,13 +157,22 @@ h4 {
 }
 
 .logo-main {
+    margin: 0px 0px 15px 0px;
+    background-position: -28px -353px;
+    width: 488px;
+    height: 91px;
+    display: table-cell;
+    float: left;
+}
+
+/*.logo-main {
     margin: 15px 0px;
     background-position: -15px -0px;
     width: 300px;
     height: 68px;
     display: table-cell;
     float: left;
-}
+}*/
 
 /* contact us start*/
 
@@ -459,6 +468,15 @@ h2 {
 
 
 @media screen and (max-width: 768px) and (min-width: 320px) {
+
+    .logo-main {
+        margin: 0px 0px 15px 0px;
+        background-position: -528px -336px;
+        width: 250px;
+        height: 93px;
+        display: table-cell;
+        float: left;
+    }
 	
 	ul {
 	margin: 0;
