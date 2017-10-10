@@ -87,7 +87,7 @@
                           <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
+                                <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:40 }}</h3>
                                 <div class="rating-review-box">
                                     <figure class="full-star"></figure>
                                     <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
