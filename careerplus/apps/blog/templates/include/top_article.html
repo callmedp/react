@@ -7,7 +7,7 @@
     <h2>{{ key.name }}</h2>
     {% for article in values %}
     <div class="media">
-      <a title="Government Jobs" href="{% url "blog:articles-deatil" article.slug article.pk %}">
+      <a title="{{article.display_name}}" href="{% url "blog:articles-deatil" article.slug article.pk %}">
         {% if article.image %}
         <figure class="media-left">
           {% thumbnail article.image "171x113" crop="center" as im %}
