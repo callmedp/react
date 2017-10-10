@@ -28,14 +28,14 @@
                             <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <input class="" required value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">
+                                    <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">
                                     <span class="error-txt" style="display:block;color:red"></span>
                                 </div>
                                 <div class="form-group form-group1">
-                                    <input class="" required value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">
+                                    <input class="" value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">
                                     <span class="error-txt" style="display: block;color:red"></span>
                                 </div>
-                                <button type="button" class="find-jobs-btn btn js_advance_search"></button>
+                                <button type="submit" class="find-jobs-btn btn js_advance_search"></button>
                             </form>
                         </div>
                         {% elif search_type == 'simple' %}

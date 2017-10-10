@@ -225,14 +225,18 @@
                         var value = self.$input.val().trim();
 
                         if ($.inArray(key, self.keys) < 0) {
+                            //debugger;
                            if (self._autocomplete()._isSet()) {
+                               //debugger;
                                 self.options.autocomplete['values'] = $.grep(self.options.autocomplete['actualValues'], function(v) {
                                      return v.toLowerCase().indexOf(value.toLowerCase()) >= 0;
                                  });
+                               //debugger;
                                  self._autocomplete()._build();
                                  if (self.options.autocomplete['values'].length){
                                      self._autocomplete()._show();
                                  }
+                               //debugger;
 
                              }
                             return;
@@ -300,7 +304,9 @@
                         self._autocomplete()._build();
 
                         self._setInstance(self);
-
+                        if (self._autocomplete()._isSet()) {
+                            self.options.autocomplete['values'] = self.options.autocomplete['actualValues'];
+                        }
                         self.$input.focus();
 
                         return false;
@@ -461,7 +467,7 @@
 
                     return {
                         _isSet: function () {
-                            return values.length > 0;
+                            return self.options.autocomplete.actualValues.length > 0;
                         },
                         _init: function () {
                             if (!self._autocomplete()._isSet()) {
@@ -515,9 +521,11 @@
                             });
                         },
                         _show: function () {
+                            //debugger;
                             if (!self._autocomplete()._isSet()) {
                                 return false;
                             }
+                            //debugger;
 
                             self.$autocomplete
                                 .css({
@@ -525,11 +533,12 @@
                                     'minWidth': self.$input.width()
                                 })
                                 .insertAfter(self.$input);
-
+                            //debugger;
                             setTimeout(function () {
                                 self._autocomplete()._bindClick();
                                 self.$autocomplete.addClass('is-active');
                             }, 100);
+                            //debugger;
                         },
                         _hide: function () {
                             self.$autocomplete.removeClass('is-active');

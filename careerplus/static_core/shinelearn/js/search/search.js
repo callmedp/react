@@ -131,18 +131,18 @@ $(document).ready(function () {
             timeout: 8000
         }
     });
-    $('.js_advance_search').on('click', function () {
-        var flag = true;
-            if (!$('#id_area').val()){
-                flag = false;
-                $('#id_area').siblings('.error-txt').html('Please choose a functional area.');
-            }
-            if (!$('#id_skills').val()){
-                flag = false;
-                $('#id_skills').siblings('.error-txt').html('Please choose a skill.');
-            }
-            if (flag) {
-                $(".js_advance_search_form").submit();
-            }    
-    });
+    // $('.js_advance_search').on('click', function () {
+    //     var flag = true;
+    //         if (!$('#id_area').val()){
+    //             flag = false;
+    //             $('#id_area').siblings('.error-txt').html('Please choose a functional area.');
+    //         }
+    //         if (!$('#id_skills').val()){
+    //             flag = false;
+    //             $('#id_skills').siblings('.error-txt').html('Please choose a skill.');
+    //         }
+    //         if (flag) {
+    //             $(".js_advance_search_form").submit();
+    //         }    
+    // });
 });
