@@ -1,8 +1,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import View, TemplateView, DetailView
+from django.views.generic import View, DetailView
 from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
 from django.utils.http import urlquote
 from haystack.query import SearchQuerySet
 from django.conf import settings
@@ -51,7 +50,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         redirect = self.redirect_if_necessary(request.path, self.object)
         if redirect:
             return redirect
-        context = super(self.__class__, self).get(request, args, **kwargs)
+        context = super(SkillPageView, self).get(request, args, **kwargs)
         return context
 
     def get_context_data(self, **kwargs):
