@@ -1619,6 +1619,10 @@ class ActionOrderItemView(View):
                             if oi.order.last_name:
                                 name = name + ' ' + oi.order.last_name
 
+                            partner_name = ''
+                            if oi.partner:
+                                partner_name = oi.partner.name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
@@ -1627,7 +1631,7 @@ class ActionOrderItemView(View):
                                 str(oi.order.country_code),
                                 str(oi.order.mobile),
                                 str(oi.product.get_name),
-                                str(oi.partner.name),
+                                str(partner_name),
                                 str(oi.get_oi_status),
                                 str(writer),
                                 str(oi.modified),
@@ -1673,6 +1677,10 @@ class ActionOrderItemView(View):
                             if oi.order.last_name:
                                 name = name + ' ' + oi.order.last_name
 
+                            partner_name = ''
+                            if oi.partner:
+                                partner_name = oi.partner.name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
@@ -1681,7 +1689,7 @@ class ActionOrderItemView(View):
                                 str(oi.order.country_code),
                                 str(oi.order.mobile),
                                 str(oi.product.get_name),
-                                str(oi.partner.name),
+                                str(partner_name),
                                 str(oi.get_oi_status),
                                 str(writer),
                                 str(oi.modified),
@@ -1727,6 +1735,10 @@ class ActionOrderItemView(View):
                             if oi.order.last_name:
                                 name = name + ' ' + oi.order.last_name
 
+                            partner_name = ''
+                            if oi.partner:
+                                partner_name = oi.partner.name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
@@ -1735,7 +1747,7 @@ class ActionOrderItemView(View):
                                 str(oi.order.country_code),
                                 str(oi.order.mobile),
                                 str(oi.product.get_name),
-                                str(oi.partner.name),
+                                str(partner_name),
                                 str(oi.get_oi_status),
                                 str(writer),
                                 str(oi.modified),
@@ -1775,6 +1787,10 @@ class ActionOrderItemView(View):
                             if oi.order.last_name:
                                 name = name + ' ' + oi.order.last_name
 
+                            partner_name = ''
+                            if oi.partner:
+                                partner_name = oi.partner.name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
@@ -1783,7 +1799,7 @@ class ActionOrderItemView(View):
                                 str(oi.order.country_code),
                                 str(oi.order.mobile),
                                 str(oi.product.get_name),
-                                str(oi.partner.name),
+                                str(partner_name),
                                 str(oi.get_oi_status),
                                 str(oi.modified),
                                 str(oi.order.payment_date)])

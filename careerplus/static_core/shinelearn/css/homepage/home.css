@@ -197,11 +197,14 @@ body {
 
 .home-search-box .home-advanced-search {
   position: relative;
-  width: 1100px;
+  width: 1000px;
   margin: 0 auto;
   height: 64px;
   vertical-align: top;
   /*display: inline-flex;*/
+}
+.advanced_functional{
+  width: 350px !important;
 }
 .home-search-box .home-advanced-search .form-group {
   width: 518px;
@@ -607,6 +610,27 @@ body {
   background: #f3f8fa;
 }
 
+.error .inputTags-list {
+  background-color: #da9a9a !important;
+  color: #fff !important;
+}
+
+.error input {
+  border-bottom: 0 none !important
+}
+
+.error .error-txt {
+  display: block;
+  color: #ff0000;
+  font-size: 11px;
+  position: absolute;
+  left: 15px;
+  bottom: -3px;
+  z-index: 9;
+  background-color: #fff;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
 /*product carousel css end*/
 
 /*# sourceMappingURL=home.css.map */
