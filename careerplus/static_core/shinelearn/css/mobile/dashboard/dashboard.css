@@ -113,9 +113,9 @@
       height: 100%; }
 
 .bottom-btn {
-  position: absolute;
-  bottom: 25px;
-  width: 90%; }
+  position: relative;
+  width: 100%; 
+}
 
 .cms-right .form-control {
   -webkit-border-radius: 0;
@@ -739,3 +739,7 @@ button {
     clear: both;
     margin-bottom: 30px;
     list-style: block; }
+
+#sidebar-secondary {
+  overflow: scroll;
+}

@@ -41,34 +41,62 @@
 {% endblock header %}
 
 {% block container %}
-    
-    <section class="content-box">
-        <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-              <sup class="fill-star"></sup>
-              {{prd_rating}}/5
-            </div><!-- end of star rating -->
-            <ul class="inline-block fs-12 jobs-icon-wrap">
-                <li>
-                    <figure class="icon-comments"></figure>
-                    <a href="javascript:void(0);">{{prd_num_rating}}</a>
-                </li>
-                {% if prd_num_jobs %}
+    <div class="body-wrapper mb-50">
+        <section class="content-box">
+            <div class="mb-10 c6">
+                <div class="rating inline-block ml-0 fs-12">
+                  <sup class="fill-star"></sup>
+                  {{prd_rating}}/5
+                </div><!-- end of star rating -->
+                <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
-                        <figure class="icon-bag"></figure>
-                        <strong>{{prd_num_jobs}}</strong>
+                        <figure class="icon-comments"></figure>
+                        <a href="javascript:void(0);">{{prd_num_rating}}</a>
                     </li>
-                {% endif %}
-                <li>
-                    <figure class="icon-jobs"></figure>
-                    <a href="javascript:void(0);" class="bold">
-                        {{prd_num_bought}}
-                    </a> bought
-                </li>
-                {% if prd_cert %}
+                    {% if prd_num_jobs %}
+                        <li>
+                            <figure class="icon-bag"></figure>
+                            <strong>{{prd_num_jobs}}</strong>
+                        </li>
+                    {% endif %}
                     <li>
-                        <figure class="icon-certificate"></figure>
+                        <figure class="icon-jobs"></figure>
+                        <a href="javascript:void(0);" class="bold">
+                            {{prd_num_bought}}
+                        </a> bought
                     </li>
+                    {% if prd_cert %}
+                        <li>
+                            <figure class="icon-certificate"></figure>
+                        </li>
+                    {% endif  %}
+                </ul>
+            </div><!-- end of icons wrapper -->
+            <hr class="row">
+            <article class="mt-20">
+            {% if prd_about %}
+                <h2>Overview</h2>
+                <p>
+                    {{prd_about|safe}}...
+                </p>
+                <p><a href="#">know more</a></p>
+            {% endif %}
+                {% include "shop/partials/prd_cart.html" %}
+                {% include "shop/partials/product_child.html" %}
+                {% include "shop/partials/frequentlybought.html" %}
+                <!-- Select products container Satrts here  -->
+                {% include "shop/partials/product_variations.html" %}
+                <!-- Select products container ends here -->
+                <div class="container">
+                <!-- Accordion begin -->
+                    <div class="accordion_example1 accordion-wrap row">
+                        <!-- Section 1 -->
+                        {% if prd_desc %}    
+                            <div class="accordion_in">
+                                <div class="acc_head">About Product</div>
+                                <div class="acc_content">
+                                    <p>{{prd_desc|safe}}</p>
+                                </div>
                 {% endif  %}
             </ul>
         </div><!-- end of icons wrapper -->
@@ -114,30 +142,39 @@
                             <div class="acc_content">
                                 <p>{{prd_uget|safe}}</p>
                             </div>
-                        </div><!-- What’ll you get edns here  -->
-                    {% endif %}
-                    <!-- Delivery flow starts here  -->
-                    {% include "shop/partials/delivery_flow.html" %}
-                    <!-- Delivery flow ends here  -->
-                    <!-- Program Structure starts here  -->
-                    {% include "shop/partials/program_structure.html" %}
-                    <!-- Program Structure ends here  -->
-                </div>
-                <!-- Accordion end -->
-                <!-- Accordion FAQ’s Starts here  -->
-                {% include "shop/partials/faq.html" %}
-                <!-- Accordion FAQ’s Ends here  -->
-            </div><!-- end of container -->
-            <!-- Revew Slide widget -->
-            {% include "shop/partials/reviews.html" %}
-        </article>
-    </section><!-- end of section here -->
+                        {% endif %}
+                        {% if prd_uget %}
+                            <!-- What’ll you get starts here  -->
+                            <div class="accordion_in">
+                                <div class="acc_head">What’ll you get</div>
+                                <div class="acc_content">
+                                    <p>{{prd_uget|safe}}</p>
+                                </div>
+                            </div><!-- What’ll you get edns here  -->
+                        {% endif %}
+                        <!-- Delivery flow starts here  -->
+                        {% include "shop/partials/delivery_flow.html" %}
+                        <!-- Delivery flow ends here  -->
+                        <!-- Program Structure starts here  -->
+                        {% include "shop/partials/program_structure.html" %}
+                        <!-- Program Structure ends here  -->
+                    </div>
+                    <!-- Accordion end -->
+                    <!-- Accordion FAQ’s Starts here  -->
+                    {% include "shop/partials/faq.html" %}
+                    <!-- Accordion FAQ’s Ends here  -->
+                </div><!-- end of container -->
+                <!-- Revew Slide widget -->
+                {% include "shop/partials/reviews.html" %}
+            </article>
+        </section><!-- end of section here -->
+    </div><!-- body wrapper ends here -->
 
     {% if prd_service == 'course' and pop %}
         <div class="sidebar" id="sidebar-secondary">
             <div class="right-navbar pt-0">
                 <h2 class="mb-0">Other providers</h2>
-                <ul class="underline mt-30">
+                <ul class="underline">
                 {% for provider in pop_list|slice:"0:4" %}
                     <li>
                         <a href="{{provider.url}}" for="test1">
