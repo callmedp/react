@@ -145,7 +145,7 @@ class ChangeCategoryView(DetailView):
             context.update({'relationship_formset': relationship_formset})
         childrens = self.object.category_set.filter(
             from_category__related_to=self.object)
-        products = self.object.categoryproducts.all()
+        products = self.object.check_products()
         context.update({
             'messages': alert,
             'form': main_change_form,

@@ -41,45 +41,54 @@
 {% endblock header %}
 
 {% block container %}
-    
-    <section class="content-box">
-        <div class="mb-10 c6">
-            <div class="rating inline-block ml-0 fs-12">
-              <sup class="fill-star"></sup>
-              {{prd_rating}}/5
-            </div><!-- end of star rating -->
-            <ul class="inline-block fs-12 jobs-icon-wrap">
-                <li>
-                    <figure class="icon-comments"></figure>
-                    <a href="javascript:void(0);">{{prd_num_rating}}</a>
-                </li>
-                {% if prd_num_jobs %}
+    <div class="body-wrapper mb-50">
+        <section class="content-box">
+            <div class="mb-10 c6">
+                <div class="rating inline-block ml-0 fs-12">
+                  <sup class="fill-star"></sup>
+                  {{prd_rating}}/5
+                </div><!-- end of star rating -->
+                <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
-                        <figure class="icon-bag"></figure>
-                        <strong>{{prd_num_jobs}}</strong>
+                        <figure class="icon-comments"></figure>
+                        <a href="javascript:void(0);">{{prd_num_rating}}</a>
                     </li>
-                {% endif %}
-                <li>
-                    <figure class="icon-jobs"></figure>
-                    <a href="javascript:void(0);" class="bold">
-                        {{prd_num_bought}}
-                    </a> bought
-                </li>
-                {% if prd_cert %}
+                    {% if prd_num_jobs %}
+                        <li>
+                            <figure class="icon-bag"></figure>
+                            <strong>{{prd_num_jobs}}</strong>
+                        </li>
+                    {% endif %}
                     <li>
-                        <figure class="icon-certificate"></figure>
+                        <figure class="icon-jobs"></figure>
+                        <a href="javascript:void(0);" class="bold">
+                            {{prd_num_bought}}
+                        </a> bought
                     </li>
-                {% endif  %}
-            </ul>
-        </div><!-- end of icons wrapper -->
+                    {% if prd_cert %}
+                        <li>
+                            <figure class="icon-certificate"></figure>
+                        </li>
+                    {% endif  %}
+                </ul>
+            </div><!-- end of icons wrapper -->
+            
         <hr class="row">
         <article class="mt-20">
         {% if prd_about %}
             <h2>Overview</h2>
-            <p>
+            <style>
+                .morecontent span {
+                      display: none;
+                  }
+                  .morelink {
+                      display: block;
+                  }
+            </style>
+            <p class="more">
                 {{prd_about|safe}}...
             </p>
-            <p><a href="#">know more</a></p>
+            <!--<p><a href="#">know more</a></p>-->
         {% endif %}
         
             {% include "shop/partials/prd_cart.html" %}
@@ -100,6 +109,7 @@
                             </div>
                         </div>
                     {% endif %}
+                    
                     {% if prd_uget %}
                         <!-- What’ll you get starts here  -->
                         <div class="accordion_in">
@@ -109,28 +119,29 @@
                             </div>
                         </div><!-- What’ll you get edns here  -->
                     {% endif %}
-                    <!-- Delivery flow starts here  -->
-                    {% include "shop/partials/delivery_flow.html" %}
-                    <!-- Delivery flow ends here  -->
-                    <!-- Program Structure starts here  -->
-                    {% include "shop/partials/program_structure.html" %}
-                    <!-- Program Structure ends here  -->
-                </div>
-                <!-- Accordion end -->
-                <!-- Accordion FAQ’s Starts here  -->
-                {% include "shop/partials/faq.html" %}
-                <!-- Accordion FAQ’s Ends here  -->
-            </div><!-- end of container -->
-            <!-- Revew Slide widget -->
-            {% include "shop/partials/reviews.html" %}
-        </article>
-    </section><!-- end of section here -->
+                        <!-- Delivery flow starts here  -->
+                        {% include "shop/partials/delivery_flow.html" %}
+                        <!-- Delivery flow ends here  -->
+                        <!-- Program Structure starts here  -->
+                        {% include "shop/partials/program_structure.html" %}
+                        <!-- Program Structure ends here  -->
+                    </div>
+                    <!-- Accordion end -->
+                    <!-- Accordion FAQ’s Starts here  -->
+                    {% include "shop/partials/faq.html" %}
+                    <!-- Accordion FAQ’s Ends here  -->
+                </div><!-- end of container -->
+                <!-- Revew Slide widget -->
+                {% include "shop/partials/reviews.html" %}
+            </article>
+        </section><!-- end of section here -->
+    </div><!-- body wrapper ends here -->
 
     {% if prd_service == 'course' and pop %}
         <div class="sidebar" id="sidebar-secondary">
             <div class="right-navbar pt-0">
                 <h2 class="mb-0">Other providers</h2>
-                <ul class="underline mt-30">
+                <ul class="underline">
                 {% for provider in pop_list|slice:"0:4" %}
                     <li>
                         <a href="{{provider.url}}" for="test1">
@@ -217,6 +228,43 @@
             slideSpeed: 200 //integer, miliseconds
         });
     });
+
+    $(document).ready(function() {
+      // Configure/customize these variables.
+      var showChar = 280;  // How many characters are shown by default
+      var ellipsestext = "...";
+      var moretext = " know more";
+      var lesstext = " know less";
+      
+
+      $('.more').each(function() {
+          var content = $(this).html();
+   
+          if(content.length > showChar) {
+   
+              var c = content.substr(0, showChar);
+              var h = content.substr(showChar, content.length - showChar);
+   
+              var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink" style="display:inline-block;">' + moretext + '</a></span>';
+   
+              $(this).html(html);
+          }
+   
+      });
+   
+      $(".morelink").click(function(){
+          if($(this).hasClass("less")) {
+              $(this).removeClass("less");
+              $(this).html(moretext);
+          } else {
+              $(this).addClass("less");
+              $(this).html(lesstext);
+          }
+          $(this).parent().prev().toggle();
+          $(this).prev().toggle();
+          return false;
+      });
+  });
 </script>
 {% endblock js_section %}
 

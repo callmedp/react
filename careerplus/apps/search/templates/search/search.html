@@ -122,7 +122,7 @@
     </script>
 
     <script>
-        (function($){
+        {% if facets.fields.pFA|length > 5%}
             $(window).on("load",function(){
                 $("#filters .scroll").mCustomScrollbar({
                   setHeight:140,
@@ -130,7 +130,7 @@
                 });
 
             });
-        })(jQuery);
+        {%endif%}
 
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
             skillsSet = {{ skills_set|safe|default:"[]" }},

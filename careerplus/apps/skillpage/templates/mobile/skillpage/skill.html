@@ -1,6 +1,8 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+{% block title %}
+    Skill - Shine Learning
+{% endblock %}
 {% block css_section %}
 {{ block.super }}
     <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" 
@@ -89,7 +91,7 @@
                 {% endif %}
                 </div><!-- end of provider slider -->
                 <div class="container">
-                    <h2>About Six Sigma</h2>
+                    <h2>About Product</h2>
                     <p class="pb-0">
                         {{category_obj.description | safe}}
                     </p>
@@ -205,6 +207,7 @@
                             </div><!-- end of media body -->
                         </div><!-- end of media -->
                     </div><!-- end of box -->
+                {% endfor %}
                     {% if products.has_next %}
                     <p class="text-right pb-0">
                         <a href="javascript:void(0);" id="product_load_more"
@@ -212,15 +215,13 @@
                         <strong>LoadMore</strong></a>
                     </p>
                     {% endif %}
-                {% endfor %}
-                <div id="prod_load_more">
-                    {% if products.has_next %}  
-                        <input type="hidden" name="page" 
-                        value="{{products.next_page_number}}" id="page_id">
-                        <input type="hidden" name="slug" value="{{slug}}" 
-                        id="slug_id">
-                    {% endif %}     
-                </div>
+                    <div id="prod_load_more">
+                        {% if products.has_next %}
+                            <input type="hidden" name="page" 
+                            value="{{products.next_page_number}}" id="page_id">
+                            <input type="hidden" name="slug" value="{{slug}}" id="slug_id">
+                        {% endif %}
+                    </div>
                 </div><!-- end of container -->
 
                 <!-- Revew Slide widget -->

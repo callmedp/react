@@ -137,6 +137,11 @@ class ProductInformationMixin(object):
             })
         return structure
 
+    def get_jobs_url(self, product):
+        job_url = 'https://www.shine.com/job-search/{}-jobs'.format(product.slug)\
+         if product.slug else None
+        return job_url
+
     def solar_faq(self, product):
         structure = json.loads(product.pFAQs)
         return structure
@@ -294,7 +299,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.product_obj
-        ctx['product'] = product 
+        ctx['product'] = product
+        ctx['num_jobs_url'] = self.get_jobs_url(product) 
         if product:
             ctx.update(self.get_breadcrumbs(product, self.category))
         ctx.update(self.solar_info(self.sqs))

@@ -123,7 +123,9 @@
             </div>
             <div class="countries" id="sidebar-countries-trigger">
                 <sup></sup>
-                <span></span><span></span><span></span>
+                {% for country in var_list %}
+                    <span>{{country.label}}</span>
+                {% endfor %}
             </div>
         </div><!-- Select products container ends here -->
     {% endif %}

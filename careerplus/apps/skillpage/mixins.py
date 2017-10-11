@@ -6,8 +6,8 @@ import logging
 class SkillPageMixin(object):
 
 	def get_job_count_and_fuctionan_area(self, slug):
+		data_dict = {}
 		try:
-			data_dict = {}
 			url = "https://www.shine.com/api/v2/search/simple/?q={}".format('"'+ slug + '"')
 			response = requests.get(url)
 			if response.status_code == 200:

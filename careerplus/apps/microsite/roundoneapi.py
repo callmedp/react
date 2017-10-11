@@ -6,6 +6,7 @@ import hmac
 import hashlib
 import urllib
 import requests
+from django.core.cache import cache
 from datetime import datetime, timedelta
 from collections import OrderedDict
 from itertools import islice
@@ -49,7 +50,7 @@ class RoundOneAPI(object):
                 "affiliateName": settings.ROUNDONE_API_DICT.get(
                     "affiliateName", 'CP'),
                 "username": email,
-                "password": password.candidateid,
+                "password": password.candidateid if password.candidateid else password,
             }
 
             headers = {'content-type': 'application/json'}
@@ -74,10 +75,10 @@ class RoundOneAPI(object):
 
     def get_location_list(self, **kwargs):
         try:
-            location_json = settings.REDIS_CON.get('roundone_location')
+            location_json = cache.get('roundone_location')
 
             if location_json:
-                return json.loads(location_json.decode())
+                return json.loads(location_json)
 
             url = settings.ROUNDONE_API_DICT.get("location_url")
             response = requests.get(url, timeout=settings.ROUNDONE_API_TIMEOUT)
@@ -85,7 +86,7 @@ class RoundOneAPI(object):
             if response.status_code == 200:
                 location_list = response.json()
                 location_json = json.dumps({"location_list": location_list[1: -1]})
-                settings.REDIS_CON.setex('roundone_location', 3600, location_json)
+                cache.set('roundone_location', location_json, 60 * 60)
                 return json.loads(location_json)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -128,7 +129,7 @@ class RoundOneAPI(object):
             keyword = kwargs.get('keyword', '')
             company_list = request.GET.get('company', '').split(',')
             
-            location  = location if location else kwargs.get('location', '')
+            location= location if location else kwargs.get('location', '')
 
             if location and location != "all":
                 post_data.update({"location": location.split(",")})
@@ -167,7 +168,7 @@ class RoundOneAPI(object):
                     response_json.update({'last_page': True})
 
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('sms_log').error("%s - %s" % (str(response_json.json()), str(e)))
         return response_json
 
     def get_job_detail(self, request, **kwargs):

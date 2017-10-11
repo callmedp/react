@@ -265,6 +265,23 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return []
 
     def get_products(self):
+        # if self.type_level == 3:
+        #     products = self.categoryproducts.filter(
+        #         active=True,
+        #         productcategories__active=True)
+        #     childrens = self.get_childrens()
+        #     for child in childrens:
+        #         products |= child.categoryproducts.filter(
+        #         active=True,
+        #         productcategories__active=True)
+        # else:
+        products = self.categoryproducts.filter(
+            active=True,
+            productcategories__active=True)
+
+        return products
+
+    def check_products(self):
         if self.type_level == 3:
             products = self.categoryproducts.filter(
                 active=True,
@@ -980,6 +997,25 @@ class Product(AbstractProduct, ModelMeta):
                 productcategories__active=True,
                 active=True)
             if prod_cat:
+                if prod_cat[0].type_level == 4:
+                    prod_cat = prod_cat[0].get_parent()[0] if prod_cat[0].get_parent() else None 
+                    return prod_cat
+                return prod_cat[0]
+        return None
+
+    def category_attached(self):
+        main_prod_cat = self.categories.filter(
+            productcategories__is_main=True,
+            productcategories__active=True,
+            active=True)
+        if main_prod_cat:
+            return main_prod_cat[0]
+        else:
+            prod_cat = self.categories.filter(
+                productcategories__is_main=False,
+                productcategories__active=True,
+                active=True)
+            if prod_cat:
                 return prod_cat[0]
         return None
 
@@ -1010,12 +1046,12 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_heading(self):
         if self.is_course:
-            return '%s - Certification Course' % (
+            return '%s Certification Course' % (
                 self.name,
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return '%s -  for %s' % (
+                return '%s  for %s' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
@@ -1024,7 +1060,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_title(self):
         if self.is_course:
-            return '%s Certification Course INR %s - Learning.Shine' % (
+            return '%s Certification Course INR %s  Learning.Shine' % (
                 self.name,
                 str(round(self.inr_price, 0)),
             )
@@ -1035,7 +1071,7 @@ class Product(AbstractProduct, ModelMeta):
                 except:
                     return 'Others'
 
-                return '%s -  for %s -  Online Services - Learning.Shine' % (
+                return '%s -  for %s -  Online Services  Learning.Shine' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )            
@@ -1231,7 +1267,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_pops(self):
         # Products from other vendors
         if self.type_product in [0, 1, 3, 5]:
-            category = self.category_main
+            category = self.category_attached()
             if category:
                 if self.is_course:
                     pop_list = category.get_products().filter(

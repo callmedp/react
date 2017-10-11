@@ -185,7 +185,9 @@ nav {
   top: 56px;
   bottom: 0;
   width: 300px;
-  background-color: #fff; }
+  background-color: #fff; 
+  z-index: 999999999 !important;
+}
 
 #sidebar-main {
   top: 56px; }
