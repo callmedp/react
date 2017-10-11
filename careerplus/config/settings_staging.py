@@ -23,6 +23,6 @@ CELERY_ALWAYS_EAGER = False
 CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
 CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
-DEBUG = False
-IS_LIVE = True
+DEBUG = True
+IS_LIVE = False
 from .settings_local import *
