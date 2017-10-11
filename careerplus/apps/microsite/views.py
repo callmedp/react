@@ -10,7 +10,13 @@ from django.utils import timezone
 from datetime import datetime
 
 from .roundoneapi import RoundOneAPI, RoundOneSEO
-from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
+from users.forms import (
+    ModalLoginApiForm,
+    ModalRegistrationApiForm,
+    SetConfirmPasswordForm,
+    PasswordResetRequestForm
+)
+
 from .models import MicroSite, PartnerTestimonial, PartnerFaq
 from cart.models import Subscription
 
@@ -56,7 +62,7 @@ class PartnerHomeView(TemplateView):
 
 class PartnerListView(TemplateView):
     template_name = 'microsite/roundone-list.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super(PartnerListView, self).get_context_data(**kwargs)
         partner = kwargs.get('partner', '')
@@ -68,7 +74,7 @@ class PartnerListView(TemplateView):
                 expire_on__gt=timezone.now()).exists()
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-            
+
         if partner == 'roundone':
             context.update(self.get_partner_context(**kwargs))
             context.update(self.get_breadcrumb_data())
@@ -76,9 +82,10 @@ class PartnerListView(TemplateView):
             context.update({
                 "loginform": ModalLoginApiForm(),
                 "registerform": ModalRegistrationApiForm(),
-                "flag": flag_status      
+                "flag": flag_status,
+                "reset_form": PasswordResetRequestForm()
             })
-                                
+
         return context
 
     def get(self, request, *args, **kwargs):

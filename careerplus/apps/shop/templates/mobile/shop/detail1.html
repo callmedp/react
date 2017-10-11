@@ -72,34 +72,7 @@
                     {% endif  %}
                 </ul>
             </div><!-- end of icons wrapper -->
-            <hr class="row">
-            <article class="mt-20">
-            {% if prd_about %}
-                <h2>Overview</h2>
-                <p>
-                    {{prd_about|safe}}...
-                </p>
-                <p><a href="#">know more</a></p>
-            {% endif %}
-                {% include "shop/partials/prd_cart.html" %}
-                {% include "shop/partials/product_child.html" %}
-                {% include "shop/partials/frequentlybought.html" %}
-                <!-- Select products container Satrts here  -->
-                {% include "shop/partials/product_variations.html" %}
-                <!-- Select products container ends here -->
-                <div class="container">
-                <!-- Accordion begin -->
-                    <div class="accordion_example1 accordion-wrap row">
-                        <!-- Section 1 -->
-                        {% if prd_desc %}    
-                            <div class="accordion_in">
-                                <div class="acc_head">About Product</div>
-                                <div class="acc_content">
-                                    <p>{{prd_desc|safe}}</p>
-                                </div>
-                {% endif  %}
-            </ul>
-        </div><!-- end of icons wrapper -->
+            
         <hr class="row">
         <article class="mt-20">
         {% if prd_about %}
@@ -135,6 +108,7 @@
                             </div>
                         </div>
                     {% endif %}
+                    
                     {% if prd_uget %}
                         <!-- What’ll you get starts here  -->
                         <div class="accordion_in">
@@ -142,16 +116,8 @@
                             <div class="acc_content">
                                 <p>{{prd_uget|safe}}</p>
                             </div>
-                        {% endif %}
-                        {% if prd_uget %}
-                            <!-- What’ll you get starts here  -->
-                            <div class="accordion_in">
-                                <div class="acc_head">What’ll you get</div>
-                                <div class="acc_content">
-                                    <p>{{prd_uget|safe}}</p>
-                                </div>
-                            </div><!-- What’ll you get edns here  -->
-                        {% endif %}
+                        </div><!-- What’ll you get edns here  -->
+                    {% endif %}
                         <!-- Delivery flow starts here  -->
                         {% include "shop/partials/delivery_flow.html" %}
                         <!-- Delivery flow ends here  -->
