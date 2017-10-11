@@ -997,6 +997,25 @@ class Product(AbstractProduct, ModelMeta):
                 productcategories__active=True,
                 active=True)
             if prod_cat:
+                if prod_cat[0].type_level == 4:
+                    prod_cat = prod_cat[0].get_parent()[0] if prod_cat[0].get_parent() else None 
+                    return prod_cat
+                return prod_cat[0]
+        return None
+
+    def category_attached(self):
+        main_prod_cat = self.categories.filter(
+            productcategories__is_main=True,
+            productcategories__active=True,
+            active=True)
+        if main_prod_cat:
+            return main_prod_cat[0]
+        else:
+            prod_cat = self.categories.filter(
+                productcategories__is_main=False,
+                productcategories__active=True,
+                active=True)
+            if prod_cat:
                 return prod_cat[0]
         return None
 
@@ -1248,7 +1267,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_pops(self):
         # Products from other vendors
         if self.type_product in [0, 1, 3, 5]:
-            category = self.category_main
+            category = self.category_attached()
             if category:
                 if self.is_course:
                     pop_list = category.get_products().filter(
