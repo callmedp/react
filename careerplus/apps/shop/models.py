@@ -1046,12 +1046,12 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_heading(self):
         if self.is_course:
-            return '%s - Certification Course' % (
+            return '%s Certification Course' % (
                 self.name,
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return '%s -  for %s' % (
+                return '%s  for %s' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
@@ -1060,7 +1060,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_title(self):
         if self.is_course:
-            return '%s Certification Course INR %s - Learning.Shine' % (
+            return '%s Certification Course INR %s  Learning.Shine' % (
                 self.name,
                 str(round(self.inr_price, 0)),
             )
@@ -1071,7 +1071,7 @@ class Product(AbstractProduct, ModelMeta):
                 except:
                     return 'Others'
 
-                return '%s -  for %s -  Online Services - Learning.Shine' % (
+                return '%s -  for %s -  Online Services  Learning.Shine' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )            
