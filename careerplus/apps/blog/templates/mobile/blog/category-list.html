@@ -5,6 +5,9 @@
 {% block css_section %}
     {{ block.super }}
 {% endblock css_section %}
+{% block canonical_url %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock canonical_url %}
 
 <body>
     {% block main_container %}

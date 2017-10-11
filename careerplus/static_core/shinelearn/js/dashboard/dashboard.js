@@ -124,7 +124,9 @@ function acceptService(oi_pk) {
                 data : formData,
                 dataType: 'json',
                 success: function(data) {
-                    window.location.reload();
+                    $("#accept-modal" + oi_pk).modal("hide");
+                    $("#reject-message-id").text('thank you for accepting draft.');
+                    $('#reject_success_modal').modal("show");
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong, try after sometimes");
@@ -317,16 +319,17 @@ $(document).ready(function(){
             return false;
     });
 
-    $.validator.addMethod("custom_review",
-        function(value, element) {
-            if($('#id_review').val().trim()){
-                return true;
-            }
-            return false;
-    });
+    // $.validator.addMethod("custom_review",
+    //     function(value, element) {
+    //         if($('#id_review').val().trim()){
+    //             return true;
+    //         }
+    //         return false;
+    // });
 
     $(document).on('click', '[name="rating"]', function () {
         var flavour = $('[name="flavour"]').val();
+        console.log(flavour);
         if (flavour == 'mobile'){
             var rating_val = $(this).attr('value');
             $('#selected-rating').text(rating_val);
@@ -346,9 +349,7 @@ $(document).ready(function(){
                     required: true,
                 },
                 review: {
-                    required: true,
                     maxlength: 100,
-                    custom_review: true,
                 },
             },
             messages: {
@@ -356,9 +357,7 @@ $(document).ready(function(){
                     required: "rating is required."
                 },
                 review: {
-                    required: "review is Mandatory.",
                     maxlength: "length should be less than 100 characters.",
-                    custom_review: "review is Mandatory.",
                 },
             },
             errorPlacement: function(error, element){

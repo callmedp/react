@@ -75,6 +75,7 @@
 [type="checkbox"]:disabled:not(:checked) + label:before,
 [type="checkbox"]:disabled:checked + label:before {
   -webkit-box-shadow: none;
+     -moz-box-shadow: none;
           box-shadow: none;
   border-color: #f5f5f5;
   background-color: #f5f5f5; }
@@ -133,6 +134,7 @@ label:hover:before {
     border-bottom: 19px solid #2f5ea6;
     -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); }
+
   .select-product p {
     line-height: 1.3em; }
   .select-product [type="checkbox"]:not(:checked) + label:before,
@@ -196,6 +198,7 @@ label:hover:before {
   height: 18px;
   border: 1px solid #ddd;
   -webkit-border-radius: 100%;
+     -moz-border-radius: 100%;
           border-radius: 100%;
   background: #fff; }
 
@@ -209,6 +212,7 @@ label:hover:before {
   top: 4px;
   left: 4px;
   -webkit-border-radius: 100%;
+     -moz-border-radius: 100%;
           border-radius: 100%;
   -webkit-transition: all 0.2s ease;
   -o-transition: all 0.2s ease;

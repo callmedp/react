@@ -332,7 +332,7 @@ class DashboardFeedbackView(TemplateView):
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
-                if review and rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
+                if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     name = ''
                     if request.session.get('first_name'):
                         name += request.session.get('first_name')
@@ -341,7 +341,7 @@ class DashboardFeedbackView(TemplateView):
 
                     email = request.session.get('email')
                     content_type = ContentType.objects.get(app_label="shop", model="product")
-                    Review.objects.create(
+                    review_obj = Review.objects.create(
                         content_type=content_type,
                         object_id=self.oi.product.id,
                         user_name=name,
@@ -350,6 +350,13 @@ class DashboardFeedbackView(TemplateView):
                         content=review,
                         average_rating=rating
                     )
+
+                    extra_content_obj = ContentType.objects.get(app_label="order", model="OrderItem")
+
+                    review_obj.extra_content_type = extra_content_obj
+                    review_obj.extra_object_id = self.oi.id
+                    review_obj.save()
+
 
                     self.oi.user_feedback = True
                     self.oi.save()

@@ -259,7 +259,8 @@
                        <td>{{obj.created}}</td>
 
                        {% if perms.order.can_view_extra_field_inbox %}
-                           <td><a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
+                           
+                             <td> {% if obj.oi_resume %}<a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a>{% endif %}</td>
                            <td>
                             <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                                 {{draft_form.file}}

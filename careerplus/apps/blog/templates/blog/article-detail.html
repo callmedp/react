@@ -7,12 +7,12 @@
         {% include 'meta/meta.html' %}
     {%  endblock meta_html %}
 
-    {% block canonical %}
+    {% block canonical_url %}
         <link rel="canonical" href="{{ object.get_absolute_url }}">
-    {% endblock canonical %}
+    {% endblock canonical_url %}
 
     {% block title %}
-       Blog Detail- Shine Learning
+       {{object.display_name}} Career Articles | Shinelearning
     {% endblock title %}
     
     {% block css_section %}

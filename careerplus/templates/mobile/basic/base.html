@@ -15,8 +15,9 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}Shine Learning{%endblock title%}</title>
 
-    {% block canonical_url %}
-    {% endblock canonical_url %}
+       {% block canonical_url %}
+            <link rel="canonical" href="{{ request.build_absolute_uri }}">
+       {% endblock canonical_url %}
     
     {% block css_section %}
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
@@ -102,6 +103,7 @@
     {% block js_section %}
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>

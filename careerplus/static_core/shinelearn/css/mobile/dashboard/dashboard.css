@@ -100,6 +100,7 @@
       margin-bottom: 10px; }
   .right-navbar .form-control, .cms-right .form-control {
     -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
     border-radius: 4px; }
 
 .underline li {
@@ -118,6 +119,7 @@
 
 .cms-right .form-control {
   -webkit-border-radius: 0;
+  -moz-border-radius: 0;
   border-radius: 0; }
 
 /* Tabbing Start From Here */
@@ -147,6 +149,7 @@
 
 .cms .tabs {
   -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid #e5e5e5; }
@@ -246,6 +249,7 @@ input, select, textarea, button {
 input:focus {
   border: 1;
   -webkit-box-shadow: none;
+     -moz-box-shadow: none;
           box-shadow: none;
   outline: none; }
 
@@ -306,13 +310,16 @@ button {
   border: 1px solid #ddd; }
   .input-group-addon:first-child {
     -webkit-border-bottom-right-radius: 0;
+       -moz-border-radius-bottomright: 0;
             border-bottom-right-radius: 0;
     -webkit-border-top-right-radius: 0;
+       -moz-border-radius-topright: 0;
             border-top-right-radius: 0;
     border-right: 0; }
   .input-group-addon:last-child {
     border-left: 0 none;
     -webkit-border-radius: 0;
+       -moz-border-radius: 0;
             border-radius: 0; }
 
 .form-control {
@@ -326,6 +333,7 @@ button {
   font-family: "Open Sans", sans-serif;
   border: 1px solid #c1c1c1;
   -webkit-border-radius: 0;
+     -moz-border-radius: 0;
           border-radius: 0;
   color: #555;
   font-size: 12px;
@@ -334,9 +342,9 @@ button {
   -webkit-transition: border-color 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s;
   transition: border-color 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s;
   -o-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-  -moz-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  -moz-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s, -moz-box-shadow 0.15s ease-in-out 0s;
   transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s; }
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s, -moz-box-shadow 0.15s ease-in-out 0s; }
   .form-control::-moz-placeholder {
     color: #999;
     opacity: 1; }
@@ -352,6 +360,7 @@ button {
       height: 40px;
       width: 40px;
       -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
       border-radius: 50%;
       background-color: #ebebeb;
       position: absolute;
@@ -360,6 +369,7 @@ button {
         height: 40px;
         width: 40px;
         -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
         border-radius: 50%; }
 
 /* Form item Here */
@@ -395,6 +405,7 @@ button {
     position: relative;
     padding: 10px 25px;
     -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
             border-radius: 5px;
     font-size: 14px;
     line-height: 24px;
@@ -468,6 +479,7 @@ button {
     vertical-align: middle; }
   .modal .modal-content {
     -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
     border-radius: 5px;
     background-color: #fff;
     width: 95%;
@@ -605,7 +617,8 @@ button {
     padding: 0 10px; }
 
 .points-wrap {
-  margin: -10px; }
+  margin: -10px;
+  text-align: center; }
   .points-wrap .points-item {
     padding: 10px;
     width: 50%;
@@ -685,6 +698,7 @@ button {
       border-bottom: 1px solid #c1c1c1;
       padding: 0;
       -webkit-border-radius: 0;
+         -moz-border-radius: 0;
               border-radius: 0;
       font-size: 0.875em;
       color: #333; }

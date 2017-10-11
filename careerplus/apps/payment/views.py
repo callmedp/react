@@ -59,7 +59,6 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return super(PaymentOptionView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        
         payment_type = request.POST.get('payment_type', '').strip()
         if payment_type == 'cash':
             form = StateForm(request.POST)
