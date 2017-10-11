@@ -36,9 +36,12 @@
                                         <span class="caption-heading">{{cat.name}}</span>
                                         <div class="bottom-text">
                                             <p class="pb-5">{{art.display_name}}</p>
-
-                                            <span class="view-forward text-white mr-10 fs-12"><figure class="icon-view"></figure> {{art.no_views}}</span>
-                                            <span class="editor fs-12">{{art.created_by.name}}, {{art.publish_date.date}}</span>
+                                            <div class="mt-10">
+                                                <span class="editor fs-12 pull-left">{{art.created_by.name}}, {{art.publish_date.date}}</span>
+                                                <span class="view-forward text-white mr-10 fs-12 pull-right"><figure class="icon-view"></figure> {{art.no_views}}</span>
+                                            </div>
+                                            
+                                            
                                         </div>
                                     </a>
                                     {% if art.image %}

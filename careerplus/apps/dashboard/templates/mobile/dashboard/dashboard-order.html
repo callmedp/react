@@ -42,13 +42,17 @@
 
 {% block container %}
     {% if order_list %}
-        <div class="my-order">
-            <!-- Accordion begin -->
-            <div class="accordion_example1 accordion-wrap">
-                {{order_list|safe}}
-            </div>
-            <!-- Accordion end -->
-        </div><!-- /.My order -->
+    <div class="body-wrapper">
+        <div class="container">
+            <div class="my-order">
+                <!-- Accordion begin -->
+                <div class="accordion_example1 accordion-wrap">
+                    {{order_list|safe}}
+                </div>
+                <!-- Accordion end -->
+            </div><!-- /.My order -->
+    </div><!-- ends of container -->
+    </div><!-- body wrapper ends here -->
     {% else %}
         {% include "partial/empty_inbox.html" %}
     {% endif %}

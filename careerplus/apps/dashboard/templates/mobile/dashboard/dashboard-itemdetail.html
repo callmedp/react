@@ -43,6 +43,7 @@
 {% endblock header %}
 
 {% block container %}
+<div class="body-wrapper">
     <div class="content-box pt-0">
         <div class="box row">
             <h2 class="mb-5">{{oi.product.heading}}{% if oi.product.get_exp_db %}
@@ -256,6 +257,7 @@
 
         <a href="{% url "dashboard:dashboard-conversation" %}?oi={{oi.pk}}" class="btn btn-blue btn-round w100"><span class="icon-comment-white"></span>Leave us a message</a>
     </div>
+</div><!-- body wrapper ends here -->
 
     {% block pending_items %}
         {% include "partial/notification-box.html" %}
