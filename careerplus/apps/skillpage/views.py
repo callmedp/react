@@ -1,15 +1,20 @@
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import (
+    Http404, HttpResponse,
+    HttpResponseRedirect,
+    HttpResponsePermanentRedirect
+)
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import View, DetailView
 from django.contrib.contenttypes.models import ContentType
 from django.utils.http import urlquote
-from haystack.query import SearchQuerySet
+from core.library.haystack.query import SQS
 from django.conf import settings
 
 from geolocation.models import Country
 from django.db.models import Q
 from shop.models import Category
 from cms.mixins import UploadInFile
+from partner.models import Vendor
 from review.models import Review
 from shop.models import Product
 from .mixins import SkillPageMixin
@@ -55,8 +60,6 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_context_data(self, **kwargs):
         context = super(SkillPageView, self).get_context_data(**kwargs)
-
-        slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
         api_data = self.get_job_count_and_fuctionan_area(self.object.name)
         career_outcomes = self.object.split_career_outcomes()
@@ -65,21 +68,21 @@ class SkillPageView(DetailView, SkillPageMixin):
         initial_country = Country.objects.filter(phone='91')[0].phone
         prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
-        image_list = []
-        img_alt_list = []
         try:
-            top_3_prod = SearchQuerySet().filter(pCtg=self.pk)[0:3]
-            top_4_vendors = SearchQuerySet().filter(pCtg=self.pk)[0:4]
-            for top_4_vendor in top_4_vendors:
-                if top_4_vendor.pVi not in image_list and top_4_vendor.pViA not in img_alt_list:
-                    image_list.append(top_4_vendor.pVi)
-                    vendor = top_4_vendor.pViA if top_4_vendor.pViA else top_4_vendor.pPvn
-                    img_alt_list.append(vendor)
+            top_3_prod = SQS().filter(pCtg=self.pk)[0:3]
+            vendor_list = list(set(self.object.categoryproducts.values_list('vendor', flat=True)))
+            top_4_vendors = Vendor.objects.filter(id__in=vendor_list)[0:4]
+
         except:
             pass
         prd_obj = ContentType.objects.get_for_model(Product)
+<<<<<<< HEAD
+        all_results = SQS().filter(pCtg=self.pk)
+        prod_id_list = SQS().filter(pCtg=self.pk).only('id').values_list('id', flat=True)
+=======
         all_results = SearchQuerySet().filter(pCtg=self.pk)
         prod_id_list = self.object.check_products().values_list('id', flat=True)
+>>>>>>> a77761375f577b5cf2dbf42d065d1bb4ba614417
         prod_reviews = Review.objects.filter(
             object_id__in=prod_id_list, content_type=prd_obj)
 

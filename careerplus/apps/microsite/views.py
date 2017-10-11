@@ -30,7 +30,7 @@ class PartnerHomeView(TemplateView):
         flag_status = False
         try:
             flag_status = Subscription.objects.filter(
-                candidateid=self.request.session['candidate_id'],
+                candidateid=self.request.session.get('candidate_id', ''),
                 expire_on__gt=timezone.now()).exists()
         except:
             pass
@@ -70,7 +70,7 @@ class PartnerListView(TemplateView):
 
         try:
             flag_status = Subscription.objects.filter(
-                candidateid=self.request.session['candidate_id'],
+                candidateid=self.request.session.get('candidate_id', ''),
                 expire_on__gt=timezone.now()).exists()
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -128,12 +128,12 @@ class PartnerListView(TemplateView):
         return context
 
     def get_breadcrumb_data(self):
-        initial_keyword = ""                        
+        initial_keyword = ""
         keyword = self.kwargs.get('keyword', '')
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
         breadcrumbs.append({
-            "url": reverse('partner-home', kwargs={'partner':'roundone'}), 
+            "url": reverse('partner-home', kwargs={'partner': 'roundone'}),
             "name": "Roundone",
         })
 
@@ -155,7 +155,7 @@ class PartnerDetailView(TemplateView):
         flag_status = False
         try:
             flag_status = Subscription.objects.filter(
-                candidateid=self.request.session['candidate_id'],
+                candidateid=self.request.session.get('candidate_id', ''),
                 expire_on__gt=timezone.now()).exists()
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -197,7 +197,7 @@ class PartnerDetailView(TemplateView):
             breadcrumbs = []
             breadcrumbs.append({"url": '/', "name": "Home"})
             breadcrumbs.append({
-                "url": reverse('partner-home', kwargs={'partner':'roundone'}),
+                "url": reverse('partner-home', kwargs={'partner': 'roundone'}),
                 "name": "Roundone"
             })
 
@@ -281,7 +281,6 @@ class GetReferenceView(View, RoundOneAPI):
             logging.getLogger('error_log').error(str(e))
         return HttpResponse(
             json.dumps({'status': False, 'message': 'Something went wrong.'}))
-
 
 
 class SaveJobView(View, RoundOneAPI):
