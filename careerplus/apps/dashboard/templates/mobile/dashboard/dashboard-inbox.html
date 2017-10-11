@@ -48,12 +48,15 @@
     {% if empty_inbox %}
         {% include "partial/empty_inbox.html" %}
     {% else %}
+    <div class="body-wrapper">
         <div class="content-box">
             <div class="container" id="orderitem-inbox-box">
                 {{inbox_list|safe}}
 
             </div><!-- /container -->
         </div><!-- content box ends here -->
+    </div><!-- body wrapper ends here -->
+    
     {% endif %}
     
     {% block pending_items %}

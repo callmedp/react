@@ -57,7 +57,7 @@
           transform: scale(0.8); }
 
 .icon-view {
-  background-position: 0 -67px;
+  background-position: -485px -1px;
   width: 15px;
   height: 9px;
   display: inline-block;
@@ -148,7 +148,9 @@
   height: 12px;
   display: inline-block;
   position: relative;
-  top: 2px; }
+  top: 2px; 
+  margin-right: 5px;
+}
 
 .icon-jobs {
   background-position: -81px -111px;

@@ -38,68 +38,69 @@
 {% endblock header %}
 
 {% block container %}
-    <div class="content-box pt-0">
+    <div class="body-wrapper">
+        <div class="content-box pt-0">
 
-        {% if wal_total or wal_txns.exists %}
-        <div class="box row mb-30">
-            <div class="points-wrap">
-                <div class="points-item">
-                    <div class="light-blue">
-                        <span class="mb-5">loyality points</span>
-                        <strong class="fs-20">{{wal_total}} </strong>
-                    </div><!-- /.light blue -->
-                </div><!-- /.points-item -->
+            {% if wal_total or wal_txns.exists %}
+            <div class="box row mb-30">
+                <div class="points-wrap text-center">
+                    <div class="points-item">
+                        <div class="light-blue">
+                            <span class="mb-5">loyality points</span>
+                            <strong class="fs-20">{{wal_total}} </strong>
+                        </div><!-- /.light blue -->
+                    </div><!-- /.points-item -->
 
-                {% comment %}
-                <div class="points-item">
-                    <div class="light-blue">
-                        <span class="mb-5">Shine cash</span>
-                        <strong class="fs-20">300 </strong>
-                    </div><!-- /.light blue -->
-                </div><!-- /.points-item -->
-                {% endcomment %}
+                    {% comment %}
+                    <div class="points-item">
+                        <div class="light-blue">
+                            <span class="mb-5">Shine cash</span>
+                            <strong class="fs-20">300 </strong>
+                        </div><!-- /.light blue -->
+                    </div><!-- /.points-item -->
+                    {% endcomment %}
 
-            </div><!-- /.points-wrap -->
-        <div class="clearfix"></div>
-        <p class="pb-0 fs-16 bold text-center mt-15"><a href="/">Redeem now</a></p>
-        </div><!-- /.box and row -->
+                </div><!-- /.points-wrap -->
+            <div class="clearfix"></div>
+            <p class="pb-0 fs-16 bold text-center mt-15"><a href="/">Redeem now</a></p>
+            </div><!-- /.box and row -->
 
-        <!-- tab container starts here -->
-        <div class="tab-container cms mt-10">
-          <!--ul class="tabs p-0">
-            <li><a href="#" class="current" data-tab="tab-1">Shine loyality points</a></li>
-            <li><a href="#" data-tab="tab-2">Shine cash</a></li>
-          </ul-->
+            <!-- tab container starts here -->
+            <div class="tab-container cms mt-10">
+              <!--ul class="tabs p-0">
+                <li><a href="#" class="current" data-tab="tab-1">Shine loyality points</a></li>
+                <li><a href="#" data-tab="tab-2">Shine cash</a></li>
+              </ul-->
 
-        <!-- Tab content Satrts here -->
-        <div id="tab-1" class="tab-content current row pb-0">
-            <ul class="wallet-tab">
-                {% for obj in wal_txns %}
-                    <li class="box row">
-                        <div class="table-cell">
-                            <p class="fs-12 c6 pb-5">{{obj.created.date}} </p>
-                            <strong>{{obj.order.number}}</strong>
-                            {{obj.get_txn_type}}
+            <!-- Tab content Satrts here -->
+            <div id="tab-1" class="tab-content current row pb-0">
+                <ul class="wallet-tab">
+                    {% for obj in wal_txns %}
+                        <li class="box row">
+                            <div class="table-cell">
+                                <p class="fs-12 c6 pb-5">{{obj.created.date}} </p>
+                                <strong>{{obj.order.number}}</strong>
+                                {{obj.get_txn_type}}
 
-                            {% if obj.txn_type == 1 %}
-                                <span>|</span>
-                                Expiry date - {{obj.added_point_expiry}}
-                            {% endif %}
-                        </div>
+                                {% if obj.txn_type == 1 %}
+                                    <span>|</span>
+                                    Expiry date - {{obj.added_point_expiry}}
+                                {% endif %}
+                            </div>
 
-                        <div class="fs-20 c6 bold table-cell text-right">{{obj.point_value}}</div>
-                    </li><!-- /.li -->
-                {% endfor %}
+                            <div class="fs-20 c6 bold table-cell text-right">{{obj.point_value}}</div>
+                        </li><!-- /.li -->
+                    {% endfor %}
 
-            </ul><!-- /.ul -->
-        </div><!-- Tab content ends here -->
+                </ul><!-- /.ul -->
+            </div><!-- Tab content ends here -->
 
-      </div><!-- Tab container -->
-      {% else %}
-          {% include "partial/empty_inbox.html" %}
-      {% endif %}
-        
-    </div>
+          </div><!-- Tab container -->
+          {% else %}
+              {% include "partial/empty_inbox.html" %}
+          {% endif %}
+        </div><!-- Contant box ends here -->
+    </div><!-- body wrapper ends here -->
 
 {% endblock container %}
 
