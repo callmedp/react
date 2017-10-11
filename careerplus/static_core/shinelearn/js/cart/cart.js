@@ -100,6 +100,18 @@ function updateCartPrice(){
     
 }
 
+function cartScroller() {
+  var item = $('.price-box'),
+  height = item.height();
+  $(window).scroll(function(){
+      if(item.offset().top + height > $('.recomend-product-bg').offset().top - 50) {
+        item.css({'visibility':'hidden'})
+      } else {
+        item.css({'visibility':'visible'});
+      }
+  });
+}
+
 
 $(document).ready(function() {
     var req_selected = true;
@@ -513,19 +525,7 @@ $(document).ready(function() {
 
     });
 
-    var cartScroller = function() {
-      var item = $('.price-box'),
-      height = item.height();
-      $(window).scroll(function(){
-          if(item.offset().top + height > $('.recomend-product-bg').offset().top - 50) {
-            item.css({'visibility':'hidden'})
-          } else {
-            item.css({'visibility':'visible'});
-          }
-      });
-    }
-    $(document).ready(function(){
-        cartScroller();
-    })
+    cartScroller();
+
 
 });

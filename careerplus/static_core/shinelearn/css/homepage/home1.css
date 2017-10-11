@@ -618,6 +618,22 @@ body {
   background: #f3f8fa;
 }
 
+.error input {
+  border-bottom: 0 none !important
+}
+
+.error .error-txt {
+  display: block;
+  color: #ff0000;
+  font-size: 11px;
+  position: absolute;
+  left: 15px;
+  bottom: -3px;
+  z-index: 9;
+  background-color: #fff;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
 /*product carousel css end*/
 
 /*# sourceMappingURL=home1.css.map */
