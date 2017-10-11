@@ -73,9 +73,12 @@
         <strong>{{ref.department}}</strong>
       {% endwith %}
       </div>
-      {% if request.session.candidate_id %}
+      {% if request.session.candidate_id and flag %}
+        <a role="button" class="get-refferd pull-right" 
+        onclick="onClickGetReference({{job_data.jobId}});">Get Referred</a>
+      {% elif request.session.candidate_id %}
         <a role="button" class="get-refferd pull-right enrol-now-button"
-        prod-id="8">Get Referred</a>
+        prod-id="819">Get Referred</a>
       {% else %}
         <a role="button" class="get-refferd pull-right" 
         data-toggle="modal" data-target=".bs-example-modal-sm">Get Referred</a>

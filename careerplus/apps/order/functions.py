@@ -64,8 +64,6 @@ def update_initiat_orderitem_sataus(order=None):
                 for profile_url in profile_urls:
                     oi.internationalprofilecredential_set.create(
                         country=country_obj,
-                        username=None,
-                        password=None,
                     )
 
             elif oi.product.type_flow == 5:

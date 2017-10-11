@@ -58,7 +58,6 @@ class SkillPageView(DetailView, SkillPageMixin):
 
         slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
-
         api_data = self.get_job_count_and_fuctionan_area(slug)
         career_outcomes = self.object.split_career_outcomes()
         country_choices = [(m.phone, m.phone) for m in
@@ -66,11 +65,16 @@ class SkillPageView(DetailView, SkillPageMixin):
         initial_country = Country.objects.filter(phone='91')[0].phone
         prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
-
+        image_list = []
+        img_alt_list = []
         try:
-            # top_3_prod = self.object.categoryproducts.all().order_by('-productcategories__prd_order')[0:3]
             top_3_prod = SearchQuerySet().filter(pCtg=self.pk)[0:3]
             top_4_vendors = SearchQuerySet().filter(pCtg=self.pk)[0:4]
+            for top_4_vendor in top_4_vendors:
+                if top_4_vendor.pVi not in image_list and top_4_vendor.pViA not in img_alt_list:
+                    image_list.append(top_4_vendor.pVi)
+                    vendor = top_4_vendor.pViA if top_4_vendor.pViA else top_4_vendor.pPvn
+                    img_alt_list.append(vendor)
         except:
             pass
         prd_obj = ContentType.objects.get_for_model(Product)
@@ -99,7 +103,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             if float(product.pPfin):
                 product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 
-        prod_review = Paginator(prod_reviews, 1)
+        prod_review = Paginator(prod_reviews, 5)
 
         try:
             page_reviews = prod_review.page(self.page)
