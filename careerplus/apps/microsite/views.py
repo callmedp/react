@@ -66,8 +66,8 @@ class PartnerListView(TemplateView):
             flag_status = Subscription.objects.filter(
                 candidateid=self.request.session['candidate_id'],
                 expire_on__gt=timezone.now()).exists()
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             
         if partner == 'roundone':
             context.update(self.get_partner_context(**kwargs))
@@ -145,11 +145,20 @@ class PartnerDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PartnerDetailView, self).get_context_data(**kwargs)
         partner = kwargs.get('partner', '')
+        flag_status = False
+        try:
+            flag_status = Subscription.objects.filter(
+                candidateid=self.request.session['candidate_id'],
+                expire_on__gt=timezone.now()).exists()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+
         if partner:
             context.update(self.get_partner_context(**kwargs))
             context.update({
                 "loginform": ModalLoginApiForm(),
-                "registerform": ModalRegistrationApiForm()        
+                "registerform": ModalRegistrationApiForm(),
+                'flag': flag_status
             })
         return context
 
@@ -172,8 +181,10 @@ class PartnerDetailView(TemplateView):
                 jobTitle = detail_response.get('data').get('jobTitle')
                 breadcrumb_location = slugify(detail_response.get('data').get('location'))
                 context.update({'breadcrumb_location': breadcrumb_location})
-            except:
+            except Exception as e:
                 jobTitle = kwargs.get("job_title", "Job Referral")
+                logging.getLogger('error_log').error("%s-%s", (str(e), str(jobTitle)))
+
             context.update({'jobTitle': jobTitle})
 
             breadcrumbs = []
