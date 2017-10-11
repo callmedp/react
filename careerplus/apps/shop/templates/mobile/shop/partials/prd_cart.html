@@ -4,11 +4,12 @@
             <ul>
                 <li>
                     <p class="pb-0 fs-11">Total amount</p>
-                    <strong id="total-price" name="price_total" sum-price="{% if selected_products %}{{product_total_price}}{% elif selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_products %}{{product_total_price}}{% elif selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}/-</strong>
-                    {% if fake_total or selected_var.fake_inr_price or sqs.pPfinb %}
-                        <strike id="id-total-actual-price" total-actual-price="{% if fake_total %}{{fake_total}} {% elif selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}" >Rs.&nbsp;{% if fake_total %}{{fake_total|floatformat}} {% elif selected_var.fake_inr_price %}
+                    <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}/-</strong>
+
+                    {% if selected_var.fake_inr_price or sqs.pPfinb %}
+                        <strike id="id-total-actual-price" total-actual-price="{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}" >Rs.&nbsp;{% if selected_var.fake_inr_price %}
                         {{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}/-</strike>
-                        <small id="id_percentage-off" percentage-off="{% if fake_total %}{{percent_diff}} {% elif selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1}}{% endif %}">  {% if fake_total %}{{percent_diff}} {% elif selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}% off</small>
+                        <small id="id_percentage-off" percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1}}{% endif %}">  {% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}% off</small>
                     {% endif %}
                 </li>
 
