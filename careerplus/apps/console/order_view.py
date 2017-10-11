@@ -1601,7 +1601,7 @@ class ActionOrderItemView(View):
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
                     'Orderitem Id', 'Order Number', 'Name',
-                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Email', 'Country Code', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
                 orderitems = OrderItem.objects.filter(
@@ -1613,12 +1613,19 @@ class ActionOrderItemView(View):
                                 writer = oi.assigned_to.name or oi.assigned_to.email
                             else:
                                 writer = ''
+                            name = ''
+                            if oi.order.first_name:
+                                name = oi.order.first_name
+                            if oi.order.last_name:
+                                name = name + ' ' + oi.order.last_name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
-                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(name),
                                 str(oi.order.email),
-                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.order.country_code),
+                                str(oi.order.mobile),
                                 str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
@@ -1647,7 +1654,7 @@ class ActionOrderItemView(View):
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
                     'Orderitem Id', 'Order Number', 'Name',
-                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Email', 'Country Code', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
 
@@ -1659,12 +1666,20 @@ class ActionOrderItemView(View):
                                 writer = oi.assigned_to.name or oi.assigned_to.email
                             else:
                                 writer = ''
+
+                            name = ''
+                            if oi.order.first_name:
+                                name = oi.order.first_name
+                            if oi.order.last_name:
+                                name = name + ' ' + oi.order.last_name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
-                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(name),
                                 str(oi.order.email),
-                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.order.country_code),
+                                str(oi.order.mobile),
                                 str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
@@ -1693,7 +1708,7 @@ class ActionOrderItemView(View):
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
                     'Orderitem Id', 'Order Number', 'Name',
-                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Email', 'Country Code', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'Expert Name', 'modified', 'Draft Level',
                     'Draft Submited On', 'Payment Date'])
             
@@ -1705,12 +1720,20 @@ class ActionOrderItemView(View):
                                 writer = oi.assigned_to.name or oi.assigned_to.email
                             else:
                                 writer = ''
+
+                            name = ''
+                            if oi.order.first_name:
+                                name = oi.order.first_name
+                            if oi.order.last_name:
+                                name = name + ' ' + oi.order.last_name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
-                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(name),
                                 str(oi.order.email),
-                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.order.country_code),
+                                str(oi.order.mobile),
                                 str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
@@ -1739,19 +1762,26 @@ class ActionOrderItemView(View):
                     quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow([
                     'Orderitem Id', 'Order Number', 'Name',
-                    'Email', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
+                    'Email', 'Country Code', 'Mobile', 'Product Name', 'Partner', 'Flow Status',
                     'modified', 'Payment Date'])
 
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
                 if orderitems:
                     for oi in orderitems:
                         try:
+                            name = ''
+                            if oi.order.first_name:
+                                name = oi.order.first_name
+                            if oi.order.last_name:
+                                name = name + ' ' + oi.order.last_name
+
                             csv_writer.writerow([
                                 str(oi.pk),
                                 str(oi.order.number),
-                                str(oi.order.first_name + ' ' + oi.order.last_name),
+                                str(name),
                                 str(oi.order.email),
-                                str(oi.order.country_code + ' ' + oi.order.mobile),
+                                str(oi.order.country_code),
+                                str(oi.order.mobile),
                                 str(oi.product.get_name),
                                 str(oi.partner.name),
                                 str(oi.get_oi_status),
