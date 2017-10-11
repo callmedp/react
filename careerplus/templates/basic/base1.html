@@ -14,8 +14,8 @@
           
         {% endblock django_meta %}
         {% block canonical_url %}
-      
-        {% endblock canonical_url %}
+          <link rel="canonical" href="{{ request.build_absolute_uri }}">
+       {% endblock canonical_url %}
     
     {% endblock meta_html %}
     

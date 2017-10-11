@@ -12,10 +12,9 @@
         {% block django_meta %}
           
         {% endblock django_meta %}
-          {% block canonical_url %}
-      
-          {% endblock canonical_url %}
-    {% endblock meta_html %}
+   {% block canonical_url %}
+         <link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock canonical_url %}
+  {% endblock meta_html %}
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}Shine Learning{%endblock title%}</title>
 
