@@ -7,8 +7,8 @@
         <ul>
           {% for fbt in fbt_list  %}
             <li >
-              <label><input class="input" {% if fbt.id in selected_products %}checked{% endif %} name="fbt" type="checkbox" data-id="{{fbt.id}}" data-price="{{fbt.inr_price}}" actual-price="{% if fbt.fake_inr_price %} {{fbt.fake_inr_price}}{% else %}{{fbt.inr_price}}{% endif %}">{{fbt.label}}</label> 
-              <strong>Rs. {{fbt.inr_price}}/-</strong>
+              <label><input class="input" {% if fbt.id in selected_products %}checked{% endif %} name="fbt" type="checkbox" data-id="{{fbt.id}}" data-price="{{fbt.inr_price|floatformat}}" actual-price="{% if fbt.fake_inr_price %} {{fbt.fake_inr_price|floatformat}}{% else %}{{fbt.inr_price|floatformat}}{% endif %}">{{fbt.label}}</label> 
+              <strong>Rs. {{fbt.inr_price|floatformat}}/-</strong>
             </li>
           {% endfor %}
         </ul>

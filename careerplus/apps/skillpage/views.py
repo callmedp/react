@@ -1,8 +1,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import View, TemplateView, DetailView
+from django.views.generic import View, DetailView
 from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
 from django.utils.http import urlquote
 from haystack.query import SearchQuerySet
 from django.conf import settings
@@ -51,11 +50,11 @@ class SkillPageView(DetailView, SkillPageMixin):
         redirect = self.redirect_if_necessary(request.path, self.object)
         if redirect:
             return redirect
-        context = super(self.__class__, self).get(request, args, **kwargs)
+        context = super(SkillPageView, self).get(request, args, **kwargs)
         return context
 
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(SkillPageView, self).get_context_data(**kwargs)
 
         slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
@@ -87,7 +86,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             raise Http404
 
         # prod_page = Paginator(prod_lists, 1)
-        prod_page = Paginator(all_results, 1)
+        prod_page = Paginator(all_results, 5)
 
         try:
             products = prod_page.page(self.page)
