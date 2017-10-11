@@ -59,7 +59,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
 
-        api_data = self.get_job_count_and_fuctionan_area(slug)
+        api_data = self.get_job_count_and_fuctionan_area(self.object.name)
         career_outcomes = self.object.split_career_outcomes()
         country_choices = [(m.phone, m.phone) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
@@ -113,7 +113,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "career_outcomes": career_outcomes,
             "prod": prod_lists,
             "page": page,
-            "slug": slug,
+            "slug": self.object.name,
             "category_obj": self.object,
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
