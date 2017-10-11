@@ -122,11 +122,10 @@ class AjaxProductLoadMoreView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AjaxProductLoadMoreView, self).get_context_data(**kwargs)
         slug = self.request.GET.get('slug', '')
-        pk = self.request.GET.get('pk', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            all_results = SearchQuerySet().filter(pCtg=pk)
-            paginator = Paginator(all_results, 10)
+            all_results = SearchQuerySet().filter(pCtg=slug)
+            paginator = Paginator(all_results, 5)
             try:
                 products = paginator.page(page)
             except PageNotAnInteger:

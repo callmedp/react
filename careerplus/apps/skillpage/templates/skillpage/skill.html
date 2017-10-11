@@ -213,12 +213,11 @@
 					            </div>
 				          	</a>
 				        </li>
-				        {% if products.has_next %}
+			    	{% endfor %}
+			    	{% if products.has_next %}
 				        <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> 
 				        Load more</a>
-				        {% endif %}
-		      	
-			    	{% endfor %}
+				    {% endif %}
 		      	</ul>
                 <div id="prod_load_more">
 			    {% if products.has_next %} 	

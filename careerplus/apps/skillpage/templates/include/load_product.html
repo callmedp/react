@@ -24,10 +24,6 @@
 	                   Providers
 	                   <span>{{product.pPvn}}</span>
 	                </div>
-
-	                <div class="pricing-box">
-	                   Starting at <strong>Rs. 6299/-</strong> <strike>Rs. 6299/-</strike> <span class="discount">5% OFF</span>
-	                </div>
                   <div class="pricing-box">
                     Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
                   </div>
