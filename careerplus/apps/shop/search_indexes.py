@@ -531,7 +531,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pViA(self, obj):
         if obj.vendor:
-            return obj.vendor.image_alt
+            return obj.vendor.image_alt if obj.vendor.image_alt else ''
         return ''
     
     def prepare_pRD(self, obj):

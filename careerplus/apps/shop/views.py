@@ -294,6 +294,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.product_obj
+        ctx['product'] = product 
         if product:
             ctx.update(self.get_breadcrumbs(product, self.category))
         ctx.update(self.solar_info(self.sqs))
@@ -472,7 +473,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
 
 class ProductReviewListView(ListView, ProductInformationMixin):
-    template_name = 'product/partials/reviews.html'
+    template_name = 'shop/partials/reviews.html'
     model = Review
     paginate_by = 5
     _product = None
