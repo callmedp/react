@@ -265,6 +265,23 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return []
 
     def get_products(self):
+        # if self.type_level == 3:
+        #     products = self.categoryproducts.filter(
+        #         active=True,
+        #         productcategories__active=True)
+        #     childrens = self.get_childrens()
+        #     for child in childrens:
+        #         products |= child.categoryproducts.filter(
+        #         active=True,
+        #         productcategories__active=True)
+        # else:
+        products = self.categoryproducts.filter(
+            active=True,
+            productcategories__active=True)
+
+        return products
+
+    def check_products(self):
         if self.type_level == 3:
             products = self.categoryproducts.filter(
                 active=True,

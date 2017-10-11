@@ -79,7 +79,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             pass
         prd_obj = ContentType.objects.get_for_model(Product)
         all_results = SearchQuerySet().filter(pCtg=self.pk)
-        prod_id_list = self.object.get_products().values_list('id', flat=True)
+        prod_id_list = self.object.check_products().values_list('id', flat=True)
         prod_reviews = Review.objects.filter(
             object_id__in=prod_id_list, content_type=prd_obj)
 
