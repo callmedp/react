@@ -596,6 +596,36 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         var_list = []
         if obj.type_product == 1:
             var = obj.get_variations()
+        elif obj.type_product == 0:
+            if obj.is_course:
+                var_dict.update({
+                    'variation': True
+                })
+                var_list.append({
+                    'id': obj.id,
+                    'label': obj.name,
+                    'mode': obj.get_studymode(),
+                    'duration': obj.get_duration(),
+                    'type': obj.get_coursetype(),
+                    'level': obj.get_courselevel(),
+                    'certify': obj.get_cert(),
+                    'inrp': obj.get_inr_price(),
+                    'aedp': obj.get_aed_price(),
+                    'usdp': obj.get_usd_price(),
+                    'gbpp': obj.get_gbp_price(),
+                    'inr_price': float(obj.inr_price),
+                    'fake_inr_price': float(obj.fake_inr_price),
+                    'usd_price': float(obj.usd_price),
+                    'fake_usd_price': float(obj.fake_usd_price),
+                    'aed_price': float(obj.aed_price),
+                    'fake_aed_price': float(obj.fake_aed_price),
+                    'gbp_price': float(obj.gbp_price),
+                    'fake_gbp_price': float(obj.fake_gbp_price)})
+                var_dict.update({
+                    'var_list': var_list
+                })
+            elif obj.is_writing or obj.is_service:
+                return json.dumps(var_dict)
         else:
             return json.dumps(var_dict) 
         if var:
