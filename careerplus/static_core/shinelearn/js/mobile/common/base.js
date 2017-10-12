@@ -32,10 +32,7 @@ $(document).ready(function() {
 	    $("#close").css("display", "table-cell");
 	    $("#list").slideToggle("fast");
 	});
-
-	// $('.sidebar-main-trigger').on('click', function(){
-	// 	$('#main-sidebar').removeClass('hide')
-	// });
+	
 
 	$(".home-slider").slick({
 		autoplay:false,
