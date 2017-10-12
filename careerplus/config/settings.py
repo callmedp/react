@@ -159,7 +159,7 @@ SHINECPCRM_DICT = {
     'base_url': 'http://172.22.65.32:8003',
     'token': '73f53cf358b94156feb49d034081ed507334e02a',
     'psuedo_lead_url': '/api/pseudo-leads/',
-    'update_products_url': '/api/update-products/',
+    'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
     'ad_server_url': '/api/mobile-version-leads/',
     'timeout': 30
