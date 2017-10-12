@@ -42,6 +42,7 @@ jQuery(document).ready(function($) {
             only: true
         },
         max: 2,
+        maxLength: 100,
         create: function(e) {
             var $field = e.$input[0];
             $field.placeholder = '';
