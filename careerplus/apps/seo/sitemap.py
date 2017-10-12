@@ -18,8 +18,8 @@ class CourseSitemap(Sitemap):
         return 0.8
 
     def items(self):
-        return Product.objects.exclude(
-            product_class__isnull=True).filter(is_indexable=True, active=True, product_class__slug='course')
+        return Product.browsable.exclude(
+            product_class__isnull=True).filter(product_class__slug='course')
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
@@ -64,8 +64,8 @@ class ServiceSitemap(Sitemap):
         return 0.8
 
     def items(self):
-        return Product.objects.exclude(
-            product_class__isnull=True).exclude(product_class__slug='course').filter(is_indexable=True, active=True)
+        return Product.browsable.exclude(
+            product_class__isnull=True).exclude(product_class__slug='course')
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)

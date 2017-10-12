@@ -80,9 +80,9 @@
     <!-- page content body start -->
 	<div class="row">
 	<!-- left content start -->
-		<div class="col-md-9 col-sm-12">
+		<div class="col-md-9 col-sm-12 cls_scroller_parent">
 
-			<div class="about-course-links mb-40">
+			<div class="about-course-links mb-40 cls_scroller pr">
 	        	<a title="About course" class="active" href="#">About course</a> 
 	        	<a title="Importance in Market" href="#market">Importance in Market</a>
 	        	<a title="Courses" href="#programs">Courses</a>
@@ -218,29 +218,23 @@
 				          	</a>
 				        </li>
 			    	{% endfor %}
-			    	{% if products.has_next %}
-				        <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> 
-				        Load more</a>
-				    {% endif %}
+                	<div id="prod_load_more">
+				    	{% if products.has_next %}
+					        <a style="cursor:pointer;text-decoration:none;" id="product_load_more" class="load-more loadmore"> 
+					        Load more</a>
+		      				<input type="hidden" name="page" 
+		      				value="{{products.next_page_number}}" id="page_id">
+		      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+		      				id="slug_id">
+					    {% endif %}
+			    	</div>
 		      	</ul>
-                <div id="prod_load_more">
-			    {% if products.has_next %} 	
-	      		<input type="hidden" name="page" 
-	      		value="{{products.next_page_number}}" id="page_id">
-	      		<input type="hidden" name="slug" value="{{slug}}" 
-	      		id="slug_id">
-			    {% endif %} 	
-			    </div>
-
 		    </div>
 		    <!-- Reviews -->
 		    {% if page_reviews %}
 		    <div id="reviews" class="reviews mb-40 scroll">
 		    	<h2>Reviews</h2>
-		    	<!--
-		      	<a href="#" class="write-review">Write a review</a>
-		      	-->
-		        	<ul id="review_list">
+		        <ul id="review_list">
 		        	{% for page_review in page_reviews %}
 		          		<li class="box-panel">
 		            		<span class="review-heading">Excellent!</span>
@@ -266,21 +260,17 @@
 		            		</article>
 		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
+		          	{% endfor %}
+		        	<div id="review_load_more">
 		          		{% if page_reviews.has_next %}
 		          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview"> Load more</a>
-		          		{% endif %}
-		          	{% endfor %}
-		        	</ul>
-		        	<div id="review_load_more">
-					    {% if page_reviews.has_next %} 	
 			      		<input type="hidden" name="page" 
 			      		value="{{page_reviews.next_page_number}}" id="page_id1">
-			      		<input type="hidden" name="slug" value="{{slug}}" 
+			      		<input type="hidden" name="slug" value="{{category_obj.pk}}" 
 	      				id="slug_id1">
-	      				<input type="hidden" name="pk" 
-	      				value="{{category_obj.pk}}" id="pk_id">
-					    {% endif %} 	
+		          		{% endif %}
 			      	</div>
+		        </ul>	    	
 		    </div>
 		    {% endif %}
 		</div>  
@@ -341,5 +331,71 @@
    {{ block.super }}
    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
    <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+   <script type="text/javascript">
+      $('.about-course-links a').click(function(){
+        $('.about-course-links a').removeClass('active');
+        $(this).addClass('active');
+      });
+    </script>
+    <script type="text/javascript">
+    var Scroller = function(itm,className) {
+        this.item = itm;
+        this.parentItem = this.item.parent();
+        this.className = className || '.cls_scroller';
+    }
+
+    Scroller.prototype = {
+      constructor : Scroller,
+      scroll :  function() {
+        var that = this,
+        parentDivTop = that.parentItem.offset().top,
+        windowTop = $(window).scrollTop();
+
+        if(windowTop >= parentDivTop && windowTop < (that.item.closest('.cls_scroller_parent').height() + parentDivTop)) {
+          that.item.css({
+            'top': (windowTop - parentDivTop) + 53
+          })
+          that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
+        } else {
+          that.item.css({
+            'top': 0
+          })
+          that.item.find('.cls_scroller_hiddenDiv').addClass('hidden');
+        }
+      } 
+    }
+
+
+    $.fn.scrollerdiv = function() {
+      var that = this;
+      that.each(function(index,item){
+        var data  = $(item).data('scrollerdiv');
+        if(!data) {
+          data = new Scroller($(item));
+          $(item).data('scrollerdiv',data);
+        }
+        $(window).scroll(function() { 
+          data.scroll();
+        });
+      })
+    }
+
+    $('.cls_scroller').scrollerdiv();
+
+    var cartScroller = function() {
+      var item = $('.price-box'),
+      height = item.height();
+      $(window).scroll(function(){
+          if(item.offset().top + height > $('.recomend-product-bg').offset().top - 50) {
+            item.css({'visibility':'hidden'})
+          } else {
+            item.css({'visibility':'visible'});
+          }
+      });
+    }
+    $(document).ready(function(){
+      cartScroller();
+    })
+    </script> 
 
 {% endblock js_section %}

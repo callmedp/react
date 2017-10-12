@@ -121,12 +121,12 @@
             <div class="cart-message">
                 <span class="cart-error" id="error_required"></span>
             </div>
-            <div class="countries" id="sidebar-countries-trigger">
+            <a href="javascript:void(0)" class="countries" id="sidebar-countries-trigger">
                 <sup></sup>
                 {% for country in var_list %}
                     <span>{{country.label}}</span>
                 {% endfor %}
-            </div>
+            </a>
         </div><!-- Select products container ends here -->
     {% endif %}
 

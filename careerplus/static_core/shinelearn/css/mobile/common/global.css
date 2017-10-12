@@ -24,7 +24,9 @@ h2, h3, h4, h5, h6, p, li, ul, ol {
       -ms-user-select: none;
           user-select: none;
   vertical-align: middle;
-  white-space: nowrap; }
+  white-space: nowrap; 
+  -webkit-appearance: none;
+}
 
 .media-right, .media-body, .media-left {
   display: table-cell;
@@ -855,3 +857,14 @@ article ol {
   color: #fff;
 }
 
+
+.acc_content ul {
+  padding-left: 15px;
+
+}
+
+.acc_content ul li {
+  list-style-type: disc;
+  margin-bottom: 10px;
+  
+}

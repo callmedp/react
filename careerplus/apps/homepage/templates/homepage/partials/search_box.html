@@ -20,11 +20,11 @@
             <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">
                 <form id="advance-search-form js_advance_search_form" class="form-inline" method="post" action="{% url 'search:recommend' %}">
                     {% csrf_token %}
-                <div class="form-group {% if error_fa %}error{% endif %}">
+                <div class="form-group advanced_functional {% if error_fa %}error{% endif %}">
                     <input name="area" type="text" value="{{ recmnd_func_area }}" id="tags1"><br/>
                     <span class="error-txt pull-left" style="color:red"></span>
                 </div>
-                <div class="form-group {% if error_skill %}error{% endif %}">
+                <div class="form-group form-group1 {% if error_skill %}error{% endif %}">
                     <input name="skills" type="text" value="{{ recmnd_skills }}" id="tags2">
                     <br/>
                     <span class="error-txt pull-left" style="color:red"></span>

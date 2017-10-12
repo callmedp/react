@@ -16,7 +16,7 @@
 
 {% block container %}
     
-<div class="body-wrapper mb-50">
+<div class="body-wrapper">
     <!-- home banner starts here -->
     <div class="home-banner">    
         
@@ -81,6 +81,7 @@
     <div class="popular-courses text-center">
         <h2>{% if request.session.candidate_id and rcourses %}Recommended{% else %}Most popular{% endif %} courses</h2>
         <!-- login slider starts here -->
+        <div class="slide-container">
             <ul class="login-slider">
                 {% if request.session.candidate_id and rcourses %}
                     {% for product in rcourses %}
@@ -125,6 +126,7 @@
                 {% endif %}
                 
             </ul><!-- login slider ends here -->
+        </div><!-- slider container ends here -->
     </div><!-- Most popular Course Ends here -->
     {% endblock popular_courses %}
 
@@ -140,7 +142,7 @@
             <div class="media">
                 <a href="{% url 'skillpage:func_area_results' 'it-software-certification' 5 %}#courses1">
                     <div class="media-body">
-                        <p class="title">Certifications</p>
+                        <p class="title">Banking and Finance</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
@@ -157,7 +159,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/course-logo2.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/operation-management.png' %}">
                         </div>
                     </div>                
                 </a>
@@ -183,7 +185,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/course-logo1.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/hr.png' %}">
                         </div>
                     </div>         
                 </a>
@@ -199,19 +201,21 @@
         <div class="job-assistance text-center white-bg">
             <h2 class="mb-0">Job assistance services</h2>
             <p class="c6">Find your next job faster by using our services.</p>
-            <ul class="trending-slide mt-10">
-                {% for tprd in job_asst_services %}
-                <li>
-                    <a href="{{tprd.pURL}}">
-                        <div class="img-box">
-                            <img src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
-                        </div>
-                        <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:50}}</p>
-                    </a>
-                </li>
-                {% endfor %}
-                
-            </ul>
+            <div class="slide-container">
+                <ul class="trending-slide mt-10">
+                    {% for tprd in job_asst_services %}
+                    <li>
+                        <a href="{{tprd.pURL}}">
+                            <div class="img-box">
+                                <img src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
+                            </div>
+                            <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:50}}</p>
+                        </a>
+                    </li>
+                    {% endfor %}
+                    
+                </ul>
+            </div>
         </div><!-- Job assistance Ends here -->
     {% endif %}
     {% endblock job_assistance %}
@@ -222,14 +226,15 @@
         <!-- Testimonials Course Starts here -->
         <div class="testimonials text-center">
             <h2 class="mb-0">What our learners are saying</h2>
-
-            <ul class="review-slide">
-                {% for test in testimonials %}
-                <li>
-                    {{test.review|striptags|safe}}
-                </li>
-                {% endfor %}
-            </ul>
+            <div class="slide-container">
+                <ul class="review-slide">
+                    {% for test in testimonials %}
+                    <li>
+                        {{test.review|striptags|safe}}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div><!-- Testimonials Course ends here -->
         {% endif %}
 

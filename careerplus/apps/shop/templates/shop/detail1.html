@@ -165,7 +165,7 @@
               <div class="row detail-course-links cls_scroller pr">
               <!-- sticky sub header 2 -->
                 <div class="container">
-                  <div class="col-sm-12 col-md-8">
+                  <div class="col-sm-12 col-md-8 about-tab">
                   {% if prd_desc %}
                     <a title="About product" class="active" href="#course">About product</a>
                   {% endif %}
@@ -522,4 +522,10 @@
       });
   });
     </script> 
+    <script type="text/javascript">
+      $('.about-tab a').click(function(){
+        $('.about-tab a').removeClass('active');
+        $(this).addClass('active');
+      });
+    </script>
 {% endblock js_section %}

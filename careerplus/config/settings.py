@@ -14,7 +14,7 @@ SITE_ID = 1
 MOBILE_ADSERVER_ENCODE_KEY = 'el!bomen!h$'
 ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
 
-if not IS_LIVE:
+if IS_LIVE:
     SITEMAP_CACHING_TIME = 86400
 else:
     SITEMAP_CACHING_TIME = 1
@@ -162,9 +162,9 @@ SHINE_API_USER_PWD = 'tarun@123'
 # Use for CRM Lead
 SHINECPCRM_DICT = {
     'base_url': 'http://172.22.65.32:8003',
-    'token': 'bb56404f6a32be78479a590e8683bdbbfe1c9d62',
+    'token': '73f53cf358b94156feb49d034081ed507334e02a',
     'psuedo_lead_url': '/api/pseudo-leads/',
-    'update_products_url': '/api/update-products/',
+    'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
     'ad_server_url': '/api/mobile-version-leads/',
     'timeout': 30

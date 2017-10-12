@@ -380,18 +380,20 @@ button {
     .enrol-now ul li {
       display: inline-block;
       vertical-align: middle;
-      width: 37.33%;
+      width: 36.33%;
       margin: 0 -2px;
       padding: 0 5px; }
       .enrol-now ul li:first-child {
-        width: 25.77%; }
+        width: 27.77%; }
       .enrol-now ul li:last-child {
         margin-right: 0; }
 
 .countries {
   border: 1px solid #c1c1c1;
   padding: 10px;
-  position: relative; }
+  position: relative; 
+  display: block;
+}
   .countries span + span:before {
     content: ", "; }
   .countries sup {
@@ -412,7 +414,9 @@ button {
 
 .define-flow li {
   text-align: center;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  list-style: none !important; 
+}
   .define-flow li small {
     background-position: -404px 0;
     width: 16px;

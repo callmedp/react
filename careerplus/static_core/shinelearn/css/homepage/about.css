@@ -17,6 +17,7 @@
 
 .why-us-box {
   padding: 40px 0;
+  font-size: 15px;
 }
 .why-us-box .why-us {
   padding: 20px;
@@ -89,9 +90,13 @@
   color: #3f5f94;
   margin: 10px 0 20px 0;
 }
+.we-provide ul li p {
+  font-size: 15px;
+}
 
 .our-partners {
   padding-top: 20px;
+  font-size: 15px;
 }
 .our-partners h2 {
   text-align: center;
@@ -105,5 +110,3 @@
 .our-partners .media .media-left {
   width: 17%;
 }
-
-/*# sourceMappingURL=about.css.map */

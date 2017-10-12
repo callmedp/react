@@ -112,7 +112,7 @@
     -moz-border-radius: 4px;
     border-radius: 4px;
     border: 0 none;
-    width: 100%;
+    width: 90%;
 }
 .tab-search .tab-content .custom-advnaced-search {
     position: relative;
@@ -604,9 +604,10 @@ label:hover ~ label {
 
 .testimonials {
     background-color: #e6f0f5;
-    padding: 20px 15px 40px;
+    padding: 20px 15px 20px;
     overflow: hidden;
 }
+
 .testimonials li {
     font-size: 0.875em;
     text-align: left;
@@ -619,16 +620,16 @@ label:hover ~ label {
     top: 10px;
     color: #2f5ea6;
 }
-.testimonials .slick-initialized .slick-slide {
+/*.testimonials .slick-initialized .slick-slide {
     width: 345px;
     margin-right: 35px;
     margin-left: 10px;
-}
+}*/
 @media (max-width: 320px) {
-    .testimonials .slick-initialized .slick-slide {
+    /*.testimonials .slick-initialized .slick-slide {
         width: 280px;
         margin-right: 15px;
-    }
+    }*/
 }
 .testimonials .slick-dots li:before {
     content: none;
@@ -689,7 +690,7 @@ label:hover ~ label {
 }
 .popular-courses {
     overflow: hidden;
-    padding: 20px 0 40px 0;
+    padding: 20px 0 20px 0;
 }
 .popular-courses h2 {
     text-align: left;
@@ -861,7 +862,6 @@ label:hover ~ label {
     display: table-cell;
     height: 85px;
     vertical-align: middle;
-    font-size: 12px;
 }
 
 .job-assistance li img {
@@ -869,14 +869,14 @@ label:hover ~ label {
 }
 .job-assistance .slick-initialized .slick-slide {
     width: 135px;
-    margin-right: 15px;
+    margin: 15px 15px 15px 0px;
 }
 .job-assistance .slick-list {
     padding-bottom: 10px !important;
 }
 .how-it-works {
     background-color: #fff;
-    padding: 30px 15px;
+    padding: 30px 15px 80px 15px;
     overflow: hidden;
 }
 .how-it-works ul {
