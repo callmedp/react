@@ -73,7 +73,7 @@ class CRMProductSerializer(ModelSerializer):
         return obj.vendor.id if obj.vendor else ''
 
     def get_display_url(self,obj):
-        return obj.get_url(relative=True)
+        return obj.get_url(relative=False)
 
     def get_fbt(self, obj):
         return ProductIndex().prepare_pFBT(obj=obj)

@@ -88,8 +88,9 @@
             }
         });
 
-        $('#sidebar-countries-trigger', '.sidebar-secondary-trigger').on('click', function(){})
-
+        // $('#sidebar-countries-trigger', '.sidebar-secondary-trigger').on('click', function(){})
+        $(document).on("click", '#sidebar-countries-trigger', function(event) {});
+        $(document).on("click", '.sidebar-secondary-trigger', function(event) {});
         /* inner level button */ 
         $(defaults.level).on('click', function(e){
             e.preventDefault();

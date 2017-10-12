@@ -54,7 +54,7 @@
             <a href="#" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
-        <div class="search-tagging mt-10 js_search_trigger">
+        <div class="search-tagging mt-10 sidebar-secondary-trigger js_search_trigger">
             <span>{{ search_params.keywords }}</span>
         </div>
         {% endif %}
@@ -67,7 +67,7 @@
   <div class="container pt-0 js_listing">
     <h2 class="pt-5 filter-pd">
         {% if search_type == 'recommended' %}{{ paginator.count }} recommended products{% elif search_type == 'simple' %}{{ paginator.count }} products found{% endif %}
-        {% if page.object_list|length > 0 %}<a class="icon-filter-white pull-right js_filters_trigger"></a>{% endif %}
+        {% if page.object_list|length > 0 %}<a class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
     </h2>
     
     {% include 'mobile/search/ajax/search_listing.html' %}
