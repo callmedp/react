@@ -534,33 +534,45 @@
 /***search bar css***/
 .home-advanced-search {
   position: relative;
-  width: 660px;
+  width: 1000px;
   margin: 0 auto;
   height: 64px;
-  color: #666;
+  vertical-align: top;
+}
+@media (max-width: 991px) {
+  .home-advanced-search {
+    width: 750px;
+  }
 }
 .home-advanced-search .form-group {
-  width: 298px;
+  width: 518px;
+  vertical-align: top;
+  color: #333;
+}
+@media (max-width: 991px) {
+  .home-advanced-search .form-group {
+    width: 380px;
+  }
+}
+@media (max-width: 991px) {
+  .home-advanced-search .form-group input {
+    padding: 10px 5px;
+  }
 }
 .home-advanced-search .form-group input:focus {
   box-shadow: none;
 }
-.home-advanced-search button {
-  margin-top: -3px;
-}
-@media (max-width: 1190px) {
-  .home-advanced-search button {
-    margin-top: -4px;
-  }
+.home-advanced-search .advanced_functional {
+  width: 350px !important;
 }
 @media (max-width: 991px) {
-  .home-advanced-search button {
-    margin-top: -3px;
+  .home-advanced-search .advanced_functional {
+    width: 280px !important;
   }
 }
 .home-advanced-search .find-jobs-btn {
   border-radius: 5px;
-  height: 62px;
+  height: 64px;
   width: 65px;
   padding: 0;
   text-transform: uppercase;
@@ -568,6 +580,7 @@
   font-size: 16px;
   position: relative;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+  vertical-align: top;
 }
 .home-advanced-search .find-jobs-btn:after {
   content: '';
@@ -580,11 +593,6 @@
   bottom: 0;
   width: 20px;
   height: 20px;
-}
-@media (max-width: 1190px) {
-  .home-advanced-search .inputTags-list {
-    width: 302px !important;
-  }
 }
 
 .error input {
