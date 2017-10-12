@@ -14,7 +14,7 @@
       <span><figure class="view-icon"></figure> <strong> {{article.no_views}}</strong></span>
     </div>
     <div class="social-login">
-      <a class="share-txt" role="button"><strong>{{article.no_shares}}</strong> <small>Shares</small></a>
+      <a class="share-txt" role="button"><strong>{{article.no_shares}}</strong> <small>{% if article.no_shares > 1 %}Shares{% else %}Share{% endif %}</small></a>
       <a class="facebook" target="_blank" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{article.get_absolute_url}}" article-slug="{{article.slug}}"></a>
 
 
