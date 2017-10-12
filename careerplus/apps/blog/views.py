@@ -240,6 +240,8 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         self.page = request.GET.get('page', 1)
         try:
             self.active_tab = int(request.GET.get('tab', 0))
+            if self.active_tab not in [0, 1]:
+                self.active_tab = 0
         except:
             self.active_tab = 0
         try:
@@ -324,11 +326,11 @@ class BlogTagListView(TemplateView, PaginationMixin):
             self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
-        context = super(self.__class__, self).get(request, args, **kwargs)
+        context = super(BlogTagListView, self).get(request, args, **kwargs)
         return context
 
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(BlogTagListView, self).get_context_data(**kwargs)
         tag_obj = self.tag_obj
         categories = Category.objects.filter(is_active=True)
         article_list = tag_obj.blog_set.filter(status=1)

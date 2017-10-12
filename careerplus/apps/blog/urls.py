@@ -46,4 +46,8 @@ urlpatterns += [
     url(r'^lodemore-articlebycategory/$',
         mobile_view.ArticleLoadMoreMobileView.as_view(),
         name='lodemore-articlebycategory'),
+
+    url(r'^lodemore-articlebytag/$',
+        mobile_view.ArticleLoadMoreTagView.as_view(),
+        name='lodemore-articlebytag'),
 ]

@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 
 from console.decorators import mobile_page_only
 
-from .models import Category, Blog
+from .models import Category, Blog, Tag
 from .mixins import PaginationMixin
 
 
@@ -45,6 +45,8 @@ class ArticleLoadMoreMobileView(TemplateView, PaginationMixin):
             self.page = int(request.GET.get('page', 1))
             try:
                 self.active_tab = int(request.GET.get('tab', 0))
+                if self.active_tab not in [0, 1]:
+                    self.active_tab = 0
             except:
                 self.active_tab = 0
             self.cat_slug = self.request.GET.get('cat_slug', '')
@@ -73,6 +75,56 @@ class ArticleLoadMoreMobileView(TemplateView, PaginationMixin):
         context.update({
             "page_obj": page_data.get('page'),
             "category": cat_obj,
+            "active_tab": self.active_tab,
+        })
+        return context
+
+
+class ArticleLoadMoreTagView(TemplateView, PaginationMixin):
+    model = Tag
+    template_name = 'include/loadmore-tag-articles.html'
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 10
+        self.active_tab = 0
+        self.tag_obj = None
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.page = int(request.GET.get('page', 1))
+            try:
+                self.active_tab = int(request.GET.get('tab', 0))
+                if self.active_tab not in [0, 1]:
+                    self.active_tab = 0
+            except:
+                self.active_tab = 0
+            self.tag_slug = self.request.GET.get('tag_slug', '')
+            try:
+                self.tag_obj = Tag.objects.get(slug=self.tag_slug, is_active=True)
+                return super(ArticleLoadMoreTagView, self).get(request, args, **kwargs)
+            except:
+                return ''
+        else:
+            return HttpResponseForbidden()
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleLoadMoreTagView, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+        article_list = tag_obj.blog_set.filter(status=1)
+        article_list = article_list.order_by('-publish_date')
+
+        if self.active_tab == 0:
+            paginator = Paginator(article_list, self.paginated_by)
+            page_data = self.pagination(paginator, self.page)
+        else:
+            article_list = article_list.order_by('-score', '-publish_date')
+            paginator = Paginator(article_list, self.paginated_by)
+            page_data = self.pagination(paginator, self.page)
+
+        context.update({
+            "page_obj": page_data.get('page'),
+            "tag": tag_obj,
             "active_tab": self.active_tab,
         })
         return context
