@@ -113,23 +113,25 @@ function updateCheckedPrice(this_obj){
 
             // actual price update
             actual_total = actual_price + actual_total;
-            var show_price = 'Rs. ' + actual_total.toString() + '/';
-            $('#id-total-actual-price').text(show_price);
-            $("#id-total-actual-price").attr("total-actual-price", actual_total);
 
-            try{
-                var per_off;
-                per_off = actual_total - sum_price;
-                per_off = (per_off/actual_total)*100
-                per_off = Math.round(per_off);
-                $('#id_percentage-off').attr("percentage-off", per_off);
-                var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
-                $('#id_percentage-off').text(str_off);
+            if (actual_total > sum_price){
+                var show_price = 'Rs. ' + actual_total.toString() + '/';
+                $('#id-total-actual-price').text(show_price);
+                $("#id-total-actual-price").attr("total-actual-price", actual_total);
 
-            }catch(err){
-                console.log(err);
+                try{
+                    var per_off;
+                    per_off = actual_total - sum_price;
+                    per_off = (per_off/actual_total)*100
+                    per_off = Math.round(per_off);
+                    $('#id_percentage-off').attr("percentage-off", per_off);
+                    var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
+                    $('#id_percentage-off').text(str_off);
+
+                }catch(err){
+                    console.log(err);
+                }
             }
-
 
         }catch(err){
             console.log(err);
@@ -157,21 +159,24 @@ function updateUnCheckedPrice(this_obj){
 
             // actual price update
             actual_total = actual_total - actual_price;
-            var show_price = 'Rs. ' + actual_total.toString() + '/';
-            $('#id-total-actual-price').text(show_price);
-            $("#id-total-actual-price").attr("total-actual-price", actual_total);
 
-            try{
-                var per_off;
-                per_off = actual_total - sum_price;
-                per_off = (per_off/actual_total)*100
-                per_off = Math.round(per_off);
-                $('#id_percentage-off').attr("percentage-off", per_off);
-                var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
-                $('#id_percentage-off').text(str_off);
+            if (actual_price > sum_price){
+                var show_price = 'Rs. ' + actual_total.toString() + '/';
+                $('#id-total-actual-price').text(show_price);
+                $("#id-total-actual-price").attr("total-actual-price", actual_total);
 
-            }catch(err){
-                console.log(err);
+                try{
+                    var per_off;
+                    per_off = actual_total - sum_price;
+                    per_off = (per_off/actual_total)*100
+                    per_off = Math.round(per_off);
+                    $('#id_percentage-off').attr("percentage-off", per_off);
+                    var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
+                    $('#id_percentage-off').text(str_off);
+
+                }catch(err){
+                    console.log(err);
+                }
             }
 
 
@@ -256,22 +261,23 @@ $(document).ready(function() {
                 $('#total-price').text(str_price);
                 $('#total-price').attr("sum-price", var_price);
 
-            
-                var show_price = 'Rs. ' + actual_price.toString() + '/';
-                $('#id-total-actual-price').text(show_price);
-                $('#id-total-actual-price').attr("total-actual-price", actual_price);
+                if (actual_price > var_price){
+                    var show_price = 'Rs. ' + actual_price.toString() + '/';
+                    $('#id-total-actual-price').text(show_price);
+                    $('#id-total-actual-price').attr("total-actual-price", actual_price);
 
-                try{
-                    var per_off;
-                    per_off = actual_price - var_price;
-                    per_off = (per_off/actual_price)*100
-                    per_off = Math.round(per_off);
-                    $('#id_percentage-off').attr("percentage-off", per_off);
-                    var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
-                    $('#id_percentage-off').text(str_off);
+                    try{
+                        var per_off;
+                        per_off = actual_price - var_price;
+                        per_off = (per_off/actual_price)*100
+                        per_off = Math.round(per_off);
+                        $('#id_percentage-off').attr("percentage-off", per_off);
+                        var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
+                        $('#id_percentage-off').text(str_off);
 
-                }catch(err){
-                    console.log(err);
+                    }catch(err){
+                        console.log(err);
+                    }
                 }
 
             }catch(err){
