@@ -855,3 +855,14 @@ article ol {
   color: #fff;
 }
 
+
+.acc_content ul {
+  padding-left: 15px;
+
+}
+
+.acc_content ul li {
+  list-style-type: disc;
+  margin-bottom: 10px;
+  
+}

@@ -81,6 +81,8 @@ $(document).ready(function () {
         }
     });
 
+    $('.js_advanced_trigger', '.js_search_trigger').on('click', function(){})
+
     $(document).on('click', '.js_apply_filter', function () {
         filterquery();
     });

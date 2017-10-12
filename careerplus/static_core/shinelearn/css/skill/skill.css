@@ -15,8 +15,8 @@
   display: block;
 }
 .skill-header .skill-caption strong {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 400;
   display: block;
   margin: 20px 0 30px 0;
 }
@@ -46,7 +46,9 @@
   color: #333;
   border-bottom: 1px solid #d8d8d8;
   display: block;
-  padding: 10px 0;
+  padding: 20px 0;
+  z-index: 9;
+  background: #fff;
 }
 .about-course-links a {
   color: #333;
@@ -57,7 +59,7 @@
 }
 .about-course-links a.active {
   border-bottom: 2px solid #3f5f94;
-  padding: 9px 0;
+  padding: 19px 0;
   font-weight: 600;
 }
 
@@ -105,6 +107,7 @@
   display: inline-block;
   width: 33%;
   margin: 18px 0 0 0;
+  vertical-align: top;
 }
 .career-outcomes ul li:before {
   content: '';
@@ -272,8 +275,6 @@
 }
 
 .scroll {
-  margin-top: -65px;
-  padding-top: 65px;
+  margin-top: -100px;
+  padding-top: 100px;
 }
-
-/*# sourceMappingURL=skill.css.map */

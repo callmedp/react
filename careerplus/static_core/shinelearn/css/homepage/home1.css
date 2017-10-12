@@ -30,23 +30,22 @@ body {
     top: 20%;
   }
 }
-.home-header .carousel-caption h1 {
+.home-header .carousel-caption strong {
   font-size: 42px;
   display: block;
   font-weight: 400;
   line-height: 50px;
   margin-bottom: 20px;
   margin-top: 0;
-  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.7);
 }
 @media (max-width: 991px) {
-  .home-header .carousel-caption h1 {
+  .home-header .carousel-caption strong {
     font-size: 32px;
     line-height: 35px;
     margin-bottom: 10px;
   }
 }
-.home-header .carousel-caption strong {
+.home-header .carousel-caption span {
   display: block;
   font-size: 20px;
   color: #fff;
@@ -210,7 +209,6 @@ body {
   margin-left: -9px;
   font-size: 16px;
   position: relative;
-  vertical-align: top;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
 .home-search-box .find-jobs-btn:after {
@@ -379,6 +377,9 @@ body {
 .job-assistance .listing li a:hover {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
+.job-assistance .listing li a.box-panel {
+  min-height: 225px;
+}
 .job-assistance .listing li .media-object {
   text-align: center;
   margin: 20px auto;
@@ -395,7 +396,7 @@ body {
   margin: 10px 10px 5px 0;
   display: block;
   color: #3f5f94;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
 }
 .job-assistance .listing li .rating-review-box {
@@ -618,22 +619,4 @@ body {
   background: #f3f8fa;
 }
 
-.error input {
-  border-bottom: 0 none !important
-}
-
-.error .error-txt {
-  display: block;
-  color: #ff0000;
-  font-size: 11px;
-  position: absolute;
-  left: 15px;
-  bottom: -3px;
-  z-index: 9;
-  background-color: #fff;
-  padding: 2px 5px;
-  border-radius: 3px;
-}
 /*product carousel css end*/
-
-/*# sourceMappingURL=home1.css.map */
