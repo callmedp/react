@@ -259,10 +259,10 @@ button {
       text-align: center;
       color: #333; }
 
-.content-box .form-control {
+/*.content-box .form-control {
   border: 0 none;
   border-bottom: 1px solid #c1c1c1;
-  padding: 0; }
+  padding: 0; }*/
 
 .content-box .code {
   width: 22%; }
