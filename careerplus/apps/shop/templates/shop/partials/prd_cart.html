@@ -17,8 +17,17 @@
 
     
     {% if selected_var or sqs.pPfinb %}
-    <strike id="id-total-actual-price" total-actual-price="{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}" >Rs.&nbsp;{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}/-</strike>
-    <small id="id_percentage-off" percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}">{% if fake_total %}{{percent_diff}} {% elif selected_var.fake_inr_price %}{{get_fakeprice.1}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}% off</small>
+        <strike id="id-total-actual-price" total-actual-price="{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}" >
+            {% if selected_var.fake_inr_price > var_list.0.inr_price %}Rs.&nbsp;{{selected_var.fake_inr_price|floatformat}}/-{% elif sqs.pPfinb > sqs.pPinb %}Rs.&nbsp;{{sqs.pPfinb|floatformat}}/-{% endif %}
+        </strike>
+
+        <small id="id_percentage-off" percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}">
+            {% if selected_var.fake_inr_price > var_list.0.inr_price %}
+                {{get_fakeprice.1}}% off
+            {% elif sqs.pPfinb > sqs.pPinb %}% off
+                {{get_fakeprice.1|floatformat}}
+            {% endif %}
+        </small>
     {% endif %}
     <span class="clearfix db"></span>
 
