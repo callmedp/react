@@ -4774,7 +4774,7 @@ tbody.collapse.in {
 }
 .navbar-brand:after {
   content: '';
-  background: url(../images/sprite.png) no-repeat;
+  background: url(../../images/sprite.png) no-repeat;
   background-position: 0 0;
   width: 287px;
   height: 90px;
