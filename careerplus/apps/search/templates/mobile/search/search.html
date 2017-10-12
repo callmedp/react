@@ -34,17 +34,6 @@
 {#            </div><!-- / Right side Icon ends here -->#}
         </div><!-- header menu Icon ends here -->
 
-        <!-- Skill Tagging starts here -->
-
-
-        <!-- Skill Tagging ends here -->
-
-        <!-- Course detail header starts here -->
-
-
-        <!-- Course detail header Ends here -->
-
-        <!-- Search listing tagging starts here -->
 
         <div class="clearfix"></div>
         {% if search_type == 'recommended' %}
@@ -54,8 +43,8 @@
             <a href="#" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
-        <div class="search-tagging mt-10 sidebar-secondary-trigger js_search_trigger">
-            <span>{{ search_params.keywords }}</span>
+        <div class="search-tagging mt-10">
+            <input type="text" id="id_q" placeholder="Search for courses, services" name="q" class="form-control js_query_input" value="{{ search_params.keywords }}" id="search-inupt">
         </div>
         {% endif %}
     </header><!-- header ends here -->
