@@ -1,15 +1,20 @@
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import (
+    Http404, HttpResponse,
+    HttpResponseRedirect,
+    HttpResponsePermanentRedirect
+)
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import View, DetailView
 from django.contrib.contenttypes.models import ContentType
 from django.utils.http import urlquote
-from haystack.query import SearchQuerySet
+from core.library.haystack.query import SQS
 from django.conf import settings
 
 from geolocation.models import Country
 from django.db.models import Q
 from shop.models import Category
 from cms.mixins import UploadInFile
+from partner.models import Vendor
 from review.models import Review
 from shop.models import Product
 from .mixins import SkillPageMixin
@@ -55,27 +60,24 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_context_data(self, **kwargs):
         context = super(SkillPageView, self).get_context_data(**kwargs)
-
-        slug = self.kwargs.get('skill_slug', '')
         page = self.request.GET.get('page', 1)
-
-        api_data = self.get_job_count_and_fuctionan_area(slug)
+        api_data = self.get_job_count_and_fuctionan_area(self.object.name)
         career_outcomes = self.object.split_career_outcomes()
         country_choices = [(m.phone, m.phone) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
         prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
-
         try:
-            # top_3_prod = self.object.categoryproducts.all().order_by('-productcategories__prd_order')[0:3]
-            top_3_prod = SearchQuerySet().filter(pCtg=self.pk)[0:3]
-            top_4_vendors = SearchQuerySet().filter(pCtg=self.pk)[0:4]
+            top_3_prod = SQS().filter(pCtg=self.pk)[0:3]
+            vendor_list = list(set(self.object.categoryproducts.values_list('vendor', flat=True)))
+            top_4_vendors = Vendor.objects.filter(id__in=vendor_list)[0:4]
+
         except:
             pass
         prd_obj = ContentType.objects.get_for_model(Product)
-        all_results = SearchQuerySet().filter(pCtg=self.pk)
-        prod_id_list = self.object.get_products().values_list('id', flat=True)
+        all_results = SQS().filter(pCtg=self.pk)
+        prod_id_list = SQS().filter(pCtg=self.pk).only('id').values_list('id', flat=True)
         prod_reviews = Review.objects.filter(
             object_id__in=prod_id_list, content_type=prd_obj)
 
@@ -99,7 +101,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             if float(product.pPfin):
                 product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 
-        prod_review = Paginator(prod_reviews, 1)
+        prod_review = Paginator(prod_reviews, 5)
 
         try:
             page_reviews = prod_review.page(self.page)
@@ -113,7 +115,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "career_outcomes": career_outcomes,
             "prod": prod_lists,
             "page": page,
-            "slug": slug,
+            "slug": self.object.name,
             "category_obj": self.object,
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,

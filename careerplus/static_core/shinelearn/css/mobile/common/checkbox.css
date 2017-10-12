@@ -134,7 +134,6 @@ label:hover:before {
     border-bottom: 19px solid #2f5ea6;
     -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); }
-
   .select-product p {
     line-height: 1.3em; }
   .select-product [type="checkbox"]:not(:checked) + label:before,
