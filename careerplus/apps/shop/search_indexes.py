@@ -624,7 +624,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 var_dict.update({
                     'var_list': var_list
                 })
-            elif obj.is_writing or obj.is_service:
+                return json.dumps(var_dict)
+            else:
                 return json.dumps(var_dict)
         else:
             return json.dumps(var_dict) 
