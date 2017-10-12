@@ -157,7 +157,7 @@ SHINE_API_USER_PWD = 'tarun@123'
 # Use for CRM Lead
 SHINECPCRM_DICT = {
     'base_url': 'http://172.22.65.32:8003',
-    'token': 'bb56404f6a32be78479a590e8683bdbbfe1c9d62',
+    'token': '73f53cf358b94156feb49d034081ed507334e02a',
     'psuedo_lead_url': '/api/pseudo-leads/',
     'update_products_url': '/api/update-products/',
     'update_cartleads_url': '/api/update-cartleads/',

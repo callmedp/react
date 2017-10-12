@@ -29,7 +29,6 @@ class Command(BaseCommand):
             settings.SHINECPCRM_DICT.get('update_products_url')
 
         queryset_list = Product.browsable.filter()
-
         count = 0
         for que in queryset_list:
             data_dict = CRMProductSerializer(que).data
@@ -44,6 +43,7 @@ class Command(BaseCommand):
                     print(str(count) + ' Product Updated')
                 if response.status_code == 400:
                     print(response.content)
+                
             except Exception as e:
                 logging.getLogger('error_log').error("%s" % str(e))
                         
