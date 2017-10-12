@@ -141,7 +141,7 @@ function GetReference(idx){
                 }
                 else if(!result.response)
                 {
-                    showErrorModal(result.message,"", "Complete Profile", "", "/dashboard/roundone?tab=tab_roundone_profile&msg=1");
+                    showErrorModal(result.message, "", "Complete Profile", "", "/dashboard/roundone/profile/");
                 }
                 else
                 {
@@ -193,7 +193,7 @@ function onClickGetReference(idx){
                 if(result.redirect){
                     window.location.href = result.redirect_url;
                 }else{
-                    window.location.href = "/dashboard/roundone?tab=tab_roundone_profile";
+                    window.location.href = "/dashboard/roundone/profile/";
                 }
                 hideLoader();
             },

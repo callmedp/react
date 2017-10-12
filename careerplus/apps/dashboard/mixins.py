@@ -115,14 +115,14 @@ class RoundOneMixin(RoundOneAPI):
                 except:
                     position = ''
                 try:
-                    emp_from = date(start_year_list[index_job], 1, start_month_list[index_job]).strftime("%Y-%m-%d")
+                    emp_from = date(int(start_year_list[index_job]), 1, int(start_month_list[index_job])).strftime("%Y-%m-%d")
                 except:
                     emp_from = ''
                 try:
-                    emp_to = date(end_year_list[index_job], 1, end_month_list[index_job]).strftime("%Y-%m-%d")
+                    emp_to = date(int(end_year_list[index_job]), 1, int(end_month_list[index_job])).strftime("%Y-%m-%d")
                 except:
                     emp_to = ''
-                
+
                 roundone_profile = request.session.get("roundone_profile")
                 if not roundone_profile:
                     roundone_profile = self.get_roundone_profile(request)
@@ -181,8 +181,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                 resume_title = data.get('resume_title', '')
                 country_code = data.get('mobile_country', None)
                 gender = 1 if data.get('gender') == "Mail" else 2
-
-                if email and mobile and first_name and last_name:
+                if email and mobile and first_name:
                     personal_data = {
                         "candidate_id": shine_id,
                         "first_name": first_name,
@@ -287,7 +286,6 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                             "end_month": end_month
                         }
                     request_header = self.get_api_headers(token=token)
-
                     if type_of == "edit":
                         if not id_list[job]:
                             return False, "Job id doesnot exists."

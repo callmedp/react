@@ -190,9 +190,12 @@ class PartnerDetailView(TemplateView):
                 context.update({'breadcrumb_location': breadcrumb_location})
             except Exception as e:
                 jobTitle = kwargs.get("job_title", "Job Referral")
-                logging.getLogger('error_log').error("%s-%s", (str(e), str(jobTitle)))
+                logging.getLogger('error_log').error("%s-%s", (str(e), jobTitle))
 
-            context.update({'jobTitle': jobTitle})
+            context.update({
+                'jobTitle': jobTitle,
+                'job_params': kwargs.get('job_params'),
+            })
 
             breadcrumbs = []
             breadcrumbs.append({"url": '/', "name": "Home"})
@@ -255,7 +258,6 @@ class GetReferenceView(View, RoundOneAPI):
                                 return HttpResponse(json.dumps({
                                     'status': True, 'redirect': True,
                                     'redirect_url': roundone_source}))
-
                     response_json = self.post_referral_request(
                         request, job_params)
 
@@ -281,6 +283,21 @@ class GetReferenceView(View, RoundOneAPI):
             logging.getLogger('error_log').error(str(e))
         return HttpResponse(
             json.dumps({'status': False, 'message': 'Something went wrong.'}))
+
+
+class RedirectProfileView(View):
+
+    def post(self, request, *args, **kwargs):
+        roundone_job_params = request.POST.get("job_params")
+        roundone_source = request.POST.get("source")
+        if roundone_job_params and roundone_source:
+            request.session.update({
+                "roundone_job_params": roundone_job_params,
+                "roundone_source": roundone_source
+            })
+        return HttpResponse(json.dumps({
+            "redirect": True,
+            "redirect_url": "/dashboard/roundone/profile/"}))
 
 
 class SaveJobView(View, RoundOneAPI):

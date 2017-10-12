@@ -29,7 +29,7 @@
     
     {% block breadcrumb %}
        <section class="container">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb mt-0">
                 {% for bread in breadcrumbs %}
                     {% if bread.url %}
                         <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
