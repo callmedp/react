@@ -6,7 +6,7 @@
         {% include 'meta/meta.html' %}
 {%  endblock meta_html %}
 {% block title %}	
-	<title>{{category_obj.name}}</title>
+	{{category_obj.name}}
 {% endblock title %}
 
 {% block css_section %}
@@ -48,26 +48,14 @@
 					<div class="provider">
 					       Provider
 					   {% for top_4_vendor in top_4_vendors %}    
-						{% if forloop.counter == 0 and top_4_vendor.icon %}
-							<img src="{{top_4_vendor.icon.url}}" 
-							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
-							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
-						{% endif %}
-						{% if forloop.counter == 1 and top_4_vendor.icon %}
-							<img src="{{top_4_vendor.icon.url}}" 
-							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
-							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
-						{% endif %}
-						{% if forloop.counter == 2 and top_4_vendor.icon %}
-							<img src="{{top_4_vendor.icon.url}}" 
-							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
-							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
-						{% endif %}
-						{% if forloop.counter == 3 and top_4_vendor.icon %}
-							<img src="{{top_4_vendor.icon.url}}" 
-							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
-							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
-						{% endif %}
+							{% if top_4_vendor.icon or top_4_vendor.image %}
+
+								<img src="{% if top_4_vendor.icon %}
+									{{top_4_vendor.icon.url}}
+								{% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" 
+								alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
+								{{top_4_vendor.name}}{% endif %}" class="img-responsive">
+							{% endif %}
 						{% endfor %}
 					</div>
 				{% endif %}
