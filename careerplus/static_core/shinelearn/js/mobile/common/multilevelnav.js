@@ -88,6 +88,8 @@
             }
         });
 
+        $('#sidebar-countries-trigger', '.sidebar-secondary-trigger').on('click', function(){})
+
         /* inner level button */ 
         $(defaults.level).on('click', function(e){
             e.preventDefault();
