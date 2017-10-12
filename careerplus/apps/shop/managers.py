@@ -25,7 +25,7 @@ class ProductQuerySet(models.query.QuerySet):
     	return self.filter(active=True)
     	
     def browsable(self):
-    	return self.filter(active=True,
+    	return self.filter(is_indexable=True, active=True,
     		type_product__in=[0, 1, 3, 5])
 
 
