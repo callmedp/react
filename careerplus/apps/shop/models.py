@@ -1108,7 +1108,8 @@ class Product(AbstractProduct, ModelMeta):
     def get_absolute_url(self, prd_slug=None, cat_slug=None):
         if not cat_slug:
             cat_slug = self.category_main
-            cat_slug = cat_slug.get_parent() if cat_slug else None
+            if cat_slug:
+                cat_slug = cat_slug.get_parent()[0] if cat_slug.get_parent() else None
         cat_slug = cat_slug.slug if cat_slug else None
         if self.is_course:
             return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
