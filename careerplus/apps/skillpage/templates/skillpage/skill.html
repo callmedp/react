@@ -6,6 +6,7 @@
         {% include 'meta/meta.html' %}
 {%  endblock meta_html %}
 {% block title %}	
+	<title>{{category_obj.name}}</title>
 {% endblock title %}
 
 {% block css_section %}
@@ -32,37 +33,40 @@
 				<h1>{{category_obj.name}} <br> programs</h1>
 					<strong>
 					{% if top_3_prod.0 %}
-					    <a href="#">{{top_3_prod.0.pNm}}</a>  
+					    <a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a>  
 					{% endif %}
 
-					{% if top_3_prod.1 %}
-					                                  |    
-						<a href="#">{{top_3_prod.1.pNm}}</a>    
+					{% if top_3_prod.1 %}    
+						<a href="{{top_3_prod.1.pURL}}">{{top_3_prod.1.pNm}}</a>    
 					{% endif %}
+
 					{% if top_3_prod.2 %}
-					                                   |
-						<a href="#">{{top_3_prod.2.pNm}}</a>
+						<a href="{{top_3_prod.2.pURL}}">{{top_3_prod.2.pNm}}</a>
 					{% endif %}
 					</strong>
 				{% if top_4_vendors %}
 					<div class="provider">
 					       Provider
 					   {% for top_4_vendor in top_4_vendors %}    
-						{% if forloop.counter == 1 and top_4_vendor.pImg %}
-							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.pViA}}" class="img-responsive">
+						{% if forloop.counter == 0 and top_4_vendor.icon %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
+							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 2 and top_4_vendor.pImg %}
-							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.pViA}}" class="img-responsive">
+						{% if forloop.counter == 1 and top_4_vendor.icon %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
+							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 3 and top_4_vendor.pImg %}
-							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.pViA}}" class="img-responsive">
+						{% if forloop.counter == 2 and top_4_vendor.icon %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
+							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
 						{% endif %}
-						{% if forloop.counter == 4 and top_4_vendor.pImg %}
-							<img src="{{top_4_vendor.pVi}}" 
-							alt="{{top_4_vendor.pViA}}" class="img-responsive">
+						{% if forloop.counter == 3 and top_4_vendor.icon %}
+							<img src="{{top_4_vendor.icon.url}}" 
+							alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
+							{{top_4_vendor.name}}{% endif %}" class="img-responsive">
 						{% endif %}
 						{% endfor %}
 					</div>
@@ -160,7 +164,7 @@
 		    		{% for product in products %}
 				        <li class="box-panel">
 				        	<a title="{{product.pNm}}" 
-				        	href="{{site}}{{product.pURL}}">
+				        	href="{{product.pURL}}">
 					            <div class="media">
 					            	<div class="media-left">
 					                	<img class="media-object" 
@@ -214,29 +218,23 @@
 				          	</a>
 				        </li>
 			    	{% endfor %}
-			    	{% if products.has_next %}
-				        <a href="javascript:void(0);" id="product_load_more" class="load-more loadmore"> 
-				        Load more</a>
-				    {% endif %}
+                	<div id="prod_load_more">
+				    	{% if products.has_next %}
+					        <a style="cursor:pointer;text-decoration:none;" id="product_load_more" class="load-more loadmore"> 
+					        Load more</a>
+		      				<input type="hidden" name="page" 
+		      				value="{{products.next_page_number}}" id="page_id">
+		      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+		      				id="slug_id">
+					    {% endif %}
+			    	</div>
 		      	</ul>
-                <div id="prod_load_more">
-			    {% if products.has_next %} 	
-	      		<input type="hidden" name="page" 
-	      		value="{{products.next_page_number}}" id="page_id">
-	      		<input type="hidden" name="slug" value="{{slug}}" 
-	      		id="slug_id">
-			    {% endif %} 	
-			    </div>
-
 		    </div>
 		    <!-- Reviews -->
 		    {% if page_reviews %}
 		    <div id="reviews" class="reviews mb-40 scroll">
 		    	<h2>Reviews</h2>
-		    	<!--
-		      	<a href="#" class="write-review">Write a review</a>
-		      	-->
-		        	<ul id="review_list">
+		        <ul id="review_list">
 		        	{% for page_review in page_reviews %}
 		          		<li class="box-panel">
 		            		<span class="review-heading">Excellent!</span>
@@ -262,21 +260,17 @@
 		            		</article>
 		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
+		          	{% endfor %}
+		        	<div id="review_load_more">
 		          		{% if page_reviews.has_next %}
 		          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview"> Load more</a>
-		          		{% endif %}
-		          	{% endfor %}
-		        	</ul>
-		        	<div id="review_load_more">
-					    {% if page_reviews.has_next %} 	
 			      		<input type="hidden" name="page" 
 			      		value="{{page_reviews.next_page_number}}" id="page_id1">
-			      		<input type="hidden" name="slug" value="{{slug}}" 
+			      		<input type="hidden" name="slug" value="{{category_obj.pk}}" 
 	      				id="slug_id1">
-	      				<input type="hidden" name="pk" 
-	      				value="{{category_obj.pk}}" id="pk_id">
-					    {% endif %} 	
+		          		{% endif %}
 			      	</div>
+		        </ul>	    	
 		    </div>
 		    {% endif %}
 		</div>  

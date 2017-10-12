@@ -7,10 +7,10 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
+from core.library.haystack.query import SQS
 
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
-from shop.models import Category
 from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
@@ -23,7 +23,6 @@ from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
 from order.functions import pending_item_email, process_mailer
 from console.mixins import ActionUserMixin
-from haystack.query import SearchQuerySet
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
 from order.mixins import OrderMixin
@@ -124,7 +123,7 @@ class AjaxProductLoadMoreView(TemplateView):
         slug = self.request.GET.get('slug', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            all_results = SearchQuerySet().filter(pCtg=slug)
+            all_results = SQS().filter(pCtg=slug)
             paginator = Paginator(all_results, 5)
             try:
                 products = paginator.page(page)
@@ -157,10 +156,11 @@ class AjaxReviewLoadMoreView(TemplateView):
         slug = self.request.GET.get('slug', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            page_obj = Category.objects.get(slug=slug, active=True)
-            prod_id_list = page_obj.product_set.values_list('id', flat=True)
+            prod_id_list = SQS().filter(pCtg=slug).only('id').values_list('id', flat=True)
+            # page_obj = Category.objects.get(slug=slug, active=True)
+            # prod_id_list = page_obj.product_set.values_list('id', flat=True)
             prod_reviews = Review.objects.filter(id__in=prod_id_list)
-            paginator = Paginator(prod_reviews, 1)
+            paginator = Paginator(prod_reviews, 4)
             try:
                 page_reviews = paginator.page(page)
             except PageNotAnInteger:

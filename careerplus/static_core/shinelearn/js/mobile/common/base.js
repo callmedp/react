@@ -50,7 +50,7 @@ $(document).ready(function() {
 		autoplaySpeed:3000,
 		dots: true,
 		arrows: false,
-		variableWidth: true,
+		// variableWidth: true,
 		slidesToShow: 1,
 		slidesToScroll: 1,
 		infinite: false
@@ -73,8 +73,8 @@ $(document).ready(function() {
 		dots: false,
 		arrows: false,
 		variableWidth: true,
-		slidesToShow: 1,
-		slidesToScroll: 1,
+		slidesToShow: 2,
+		slidesToScroll: 2,
 		infinite: false
 	});
 

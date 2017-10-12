@@ -170,7 +170,7 @@
             <a role="button" class="get-refferd pull-right enrol-now-button" 
             prod-id="819">Get Referred</a>
           {% else %}
-            <a href="#" class="get-refferd pull-right" data-toggle="modal" data-target=".bs-example-modal-sm">Get Referred</a>
+            <a href="#" class="get-refferd pull-right" data-toggle="modal" data-target=".logindiv">Get Referred</a>
           {% endif %}
           <form id="id_{{job.jobId}}">
             {% csrf_token %}
@@ -235,7 +235,7 @@
 </section>
 <!-- main section end -->
 
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
+<div class="modal fade bs-example-modal-sm logindiv" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
      <div class="register">
@@ -262,7 +262,12 @@
             </label>
           </div>
           <button type="button" id="login-button" class="btn btn-primary submit">Login</button>
-          <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
+          <small class="form-text text-muted text-center">
+            <a href="#" data-toggle="modal" data-dismiss="modal" 
+            data-target=".forgotdiv">
+              Forgot Password?
+            </a>
+          </small>
           <div class="social-login">
             <span>or login with</span>
             <a class="facebook" href="#"></a>
@@ -368,14 +373,36 @@
             <a class="linkedin" href="#"></a>
             <a class="gplus" href="#"></a>
           </div>
-          <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm" data-dismiss="modal">Login Now</a></small>
+          <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".logindiv" data-dismiss="modal">Login Now</a></small>
         </form>
 
       </div>
     </div>
   </div>
 </div>       
-
+<div class="modal fade bs-example-modal-sm forgotdiv" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="forgot_div">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+      </div>
+        <form method="post" id="forgot_form" 
+        action="{% url "users:forgot-email-sent" %}">
+        {% csrf_token %}
+            {% for field in reset_form %}
+                <div class="form-group {% if field.errors %}error{% endif %}">
+                    {{field}}
+                    {% for error in  field.errors %}{{ error }}{% endfor %}
+                </div>
+            {% endfor %}
+          <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock container %}
 {% block js_section %}
    {{ block.super }}
@@ -398,4 +425,5 @@
     <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
 {% endblock js_section %}

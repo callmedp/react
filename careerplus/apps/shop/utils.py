@@ -629,7 +629,7 @@ class CategoryValidation(object):
                         if not self.validate_childs(
                             request=request, category=category):
                             return test_pass
-                    if category.get_products():
+                    if category.check_products():
                         messages.error(request, "Products is associated please reassign")
                         return test_pass
                     test_pass = True
@@ -751,7 +751,7 @@ class CategoryValidation(object):
                     if not category.career_outcomes:
                         messages.error(request, "Skill Career Outcomes is required")
                         return test_pass
-                    if not category.get_products():
+                    if not category.check_products():
                         messages.error(request, "Skill Products is required")
                         return test_pass
                     test_pass = True
