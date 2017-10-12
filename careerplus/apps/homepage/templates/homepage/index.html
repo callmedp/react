@@ -35,10 +35,10 @@
                         <img src="{% if request.session.candidate_id %}{% static 'shinelearn/images/home-header1.jpg' %}{% else %}{% static 'shinelearn/images/home-header1.jpg' %}{% endif %}" alt="Shine Learning">
                         <div class="carousel-caption">
                             {% if request.session.candidate_id %}
-                            <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
-                            <strong>Want to make your career future ready? <br>Discover courses matched for your profile</strong>
+                            <strong>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</strong>
+                            <span>Want to make your career future ready? <br>Discover courses matched for your profile</span>
                             {% else %}
-                            <h1>Get the right skills for <br>a future ready career</h1>
+                            <strong>Get the right skills for <br>a future ready career</strong>
                             {% endif %}
                         </div>
                     </div>

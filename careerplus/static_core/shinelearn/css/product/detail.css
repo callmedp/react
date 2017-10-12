@@ -18,7 +18,6 @@ header {
   margin-bottom: 8px;
   line-height: 34px;
   font-size: 24px;
-  font-weight: 600;
 }
 .course-caption .course-caption-img {
   display: table-cell;
@@ -27,6 +26,10 @@ header {
 .course-caption .course-caption-img figure {
   width: 100px;
   height: 100px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.course-caption .course-caption-img figure img {
+  padding-top: 15px;
 }
 .course-caption .course-caption-content {
   vertical-align: middle;
@@ -49,7 +52,7 @@ header {
   width: 24px;
   height: 12px;
   display: inline-block;
-  background: url(../images/sprite.png) no-repeat -770px -71px;
+  background: url(../../images/sprite.png) no-repeat -770px -71px;
   margin: 0 auto;
   z-index: 999;
 }
@@ -201,7 +204,7 @@ header {
 }
 .detail-box li {
   display: block;
-  padding: 5px 0;
+  padding: 50px 0;
 }
 .detail-box li ul {
   margin: 0;
@@ -217,7 +220,7 @@ header {
   margin-bottom: 30px;
 }
 .detail-box h2 {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 600;
   color: #333;
   margin: 0 0 20px 0;
@@ -520,7 +523,7 @@ header {
 
 .price-box {
   position: fixed;
-  right: 6%;
+  right: 4%;
   z-index: 999;
   top: 130px;
   width: 400px;
@@ -646,13 +649,13 @@ header {
 }
 
 .delivery-flow {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 400;
   color: #333;
 }
 .delivery-flow ul {
   list-style-type: none;
-  margin: 0;
+  margin: 60px 0 0 0;
   padding: 0;
   display: table;
   position: relative;
@@ -800,21 +803,6 @@ header {
   margin: 0 auto;
   position: relative;
 }
-
-
-.delivery-flow ul li .blue-circle .df-verification {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  content: '';
-  background: url(../../images/sprite.png) no-repeat -48px -440px;
-  width: 32px;
-  height: 34px;
-  margin: auto;
-}
-
 .delivery-flow ul li .blue-circle .df-cart {
   position: absolute;
   left: 0;
@@ -1084,6 +1072,7 @@ header {
   padding: 15px 0 5px 0;
   display: inline-block;
   line-height: 40px;
+  border-bottom: 3px transparent #3f5f94 !important;
 }
 @media (max-width: 1190px) {
   .detail-course-links a {
@@ -1099,7 +1088,7 @@ header {
   margin-left: -15px;
 }
 .detail-course-links a.active {
-  border-bottom: 3px solid #3f5f94;
+  border-bottom: 3px solid #3f5f94 !important;
   padding: 9px 0 5px 0;
 }
 
@@ -1164,5 +1153,3 @@ header {
 .about-txt .collapse.in {
   display: inline;
 }
-
-/*# sourceMappingURL=detail.css.map */
