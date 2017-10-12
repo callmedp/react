@@ -66,28 +66,25 @@ class SkillPageView(DetailView, SkillPageMixin):
         country_choices = [(m.phone, m.phone) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
-        prod_lists = self.object.categoryproducts.all()
         top_3_prod, top_4_vendors = None, None
         try:
-            top_3_prod = SQS().filter(pCtg=self.pk)[0:3]
-            vendor_list = list(set(self.object.categoryproducts.values_list('vendor', flat=True)))
-            top_4_vendors = Vendor.objects.filter(id__in=vendor_list)[0:4]
+            products = SQS().filter(pCtg=self.pk)
+            prod_id_list = [pv.id for pv in products]
+            vendor_list = [pv.pPv for pv in products]
+            vendor_list = list(set(vendor_list))
 
+            if not len(prod_id_list):
+                raise Http404
+            top_3_prod = products[:3]
+            top_4_vendors = Vendor.objects.filter(id__in=vendor_list)[:4] if len(vendor_list) >= 4 else Vendor.objects.filter(id__in=vendor_list)
         except:
             pass
+
         prd_obj = ContentType.objects.get_for_model(Product)
-        all_results = SQS().filter(pCtg=self.pk)
-        prod_id_list = SQS().filter(pCtg=self.pk).only('id').values_list('id', flat=True)
+        all_results = products
         prod_reviews = Review.objects.filter(
             object_id__in=prod_id_list, content_type=prd_obj)
 
-        try:
-            # prod_lists[0]
-            all_results[0]
-        except Exception:
-            raise Http404
-
-        # prod_page = Paginator(prod_lists, 1)
         prod_page = Paginator(all_results, 5)
 
         try:
@@ -113,7 +110,6 @@ class SkillPageView(DetailView, SkillPageMixin):
         context.update({
             "api_data": api_data,
             "career_outcomes": career_outcomes,
-            "prod": prod_lists,
             "page": page,
             "slug": self.object.name,
             "category_obj": self.object,
@@ -132,7 +128,7 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        parent = self.object.get_parent() 
+        parent = self.object.get_parent()
         if parent:
             breadcrumbs.append({
                 "url": parent[0].get_absolute_url(), "name": parent[0].name,

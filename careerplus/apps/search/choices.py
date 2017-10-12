@@ -243,9 +243,9 @@ ATTRIBUTE_OPTION = {
     'BS': 'Basic',
 }
 
-
+##DO NOT CHANGE#
 STUDY_MODE = dict((
-    ('ON', 'Online'),
+    ('OL', 'Online'),
     ('OF', 'Offline'),
     ('IL', 'Instructor Led'),
     ('BL', 'Blended'),

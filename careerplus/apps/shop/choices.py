@@ -113,15 +113,16 @@ S_ATTR_DICT = {
     'SI': 'service_im',
 }
 
+##DO NOT CHANGE#
 STUDY_MODE = dict((
-    ('ON', 'Online'),
+    ('OL', 'Online'),
     ('OF', 'Offline'),
     ('IL', 'Instructor Led'),
     ('BL', 'Blended'),
     ('CA', 'Classroom'),
     ('CF', 'Certifications'),
     ('DL', 'Distance Learning'),
-    ))
+))
 
 EXP_DICT = dict((
     ('FR', '0-1 years'),
