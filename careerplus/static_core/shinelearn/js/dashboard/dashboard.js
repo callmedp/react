@@ -125,7 +125,7 @@ function acceptService(oi_pk) {
                 dataType: 'json',
                 success: function(data) {
                     $("#accept-modal" + oi_pk).modal("hide");
-                    $("#reject-message-id").text('thank you for accepting draft.');
+                    $("#reject-message-id").text('Thank you for accepting draft.');
                     $('#reject_success_modal').modal("show");
                 },
                 error: function(xhr, ajaxOptions, thrownError) {

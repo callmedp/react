@@ -23,7 +23,7 @@
         <h3>Approved Queue</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-approved" %}" id="filter-tables">
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-approved" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -78,7 +78,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-approved" %}" id="list-filter-form">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-approved" %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.writer.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">

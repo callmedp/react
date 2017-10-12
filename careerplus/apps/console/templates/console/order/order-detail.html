@@ -239,7 +239,7 @@
                                     
 
                                   </ul>
-                                  <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                                  <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                     <fieldset>
 
                                         {% for field in message_form %}

@@ -24,7 +24,7 @@
         <h3>Closed Orderitems</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-closed-orderitems" %}" id="filter-tables">
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-closed-orderitems" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -69,7 +69,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-closed-orderitems" %}" id="list-filter-form">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-closed-orderitems" %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -135,8 +135,6 @@
                 <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
             {% endif %}
             <div class="table-responsive">
-              <form id="inbox_table_form" method="post" action=".">{% csrf_token %}
-              <input type="hidden" name="action_type" id="action_type_id" class="flat">
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
@@ -189,7 +187,6 @@
                   {% endfor %}
                 </tbody>
               </table>
-              </form>
             </div>
             {% block main_pagination %}
                 <div class="main_pagination">

@@ -4,6 +4,8 @@ import datetime
 import logging
 import textwrap
 
+from io import StringIO
+
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -16,10 +18,8 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
+
 from geolocation.models import Country
-
-from io import StringIO
-
 from order.models import Order, OrderItem, InternationalProfileCredential
 from shop.models import DeliveryService
 from blog.mixins import PaginationMixin
@@ -30,6 +30,10 @@ from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
 
+from .decorators import (
+    Decorate,
+    stop_browser_cache,
+)
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
     ResumeUploadForm,
@@ -43,6 +47,7 @@ from .order_form import (
 from .mixins import ActionUserMixin
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class OrderListView(ListView, PaginationMixin):
     context_object_name = 'order_list'
@@ -136,6 +141,7 @@ class OrderListView(ListView, PaginationMixin):
         return queryset.order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class WelcomeCallVeiw(ListView, PaginationMixin):
     context_object_name = 'welcome_list'
@@ -240,6 +246,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
         return queryset.order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_midout_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class MidOutQueueView(TemplateView, PaginationMixin):
     # context_object_name = 'midout_list'
@@ -337,6 +344,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         return queryset.order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_inbox_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class InboxQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'inbox_list'
@@ -473,6 +481,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         return super(InboxQueueVeiw, self).dispatch(request, *args, **kwargs)
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_view_order_item_detail', login_url='/console/login/', raise_exception=True), name='dispatch')
 class OrderItemDetailVeiw(DetailView):
     model = OrderItem
@@ -542,6 +551,7 @@ class OrderItemDetailVeiw(DetailView):
         return context
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/', raise_exception=True), name='dispatch')
 class OrderDetailVeiw(DetailView):
     model = Order
@@ -570,6 +580,7 @@ class OrderDetailVeiw(DetailView):
         return context
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_approval_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class ApprovalQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'approval_list'
@@ -692,6 +703,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             'assigned_to', 'delivery_service').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class ApprovedQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'approved_list'
@@ -811,6 +823,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
             'assigned_to', 'delivery_service').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_rejectedbyadmin_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class RejectedByAdminQueue(ListView, PaginationMixin):
     context_object_name = 'rejectedbyadmin_list'
@@ -934,6 +947,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             'assigned_to', 'delivery_service').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_rejectedbycandidate_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class RejectedByCandidateQueue(ListView, PaginationMixin):
     context_object_name = 'rejectedbycandidate_list'
@@ -1058,6 +1072,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             'assigned_to', 'delivery_service').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class AllocatedQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'allocated_list'
@@ -1174,6 +1189,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             'assigned_by', 'delivery_service').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_closed_oi_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'closed_oi_list'
@@ -1273,6 +1289,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             'assigned_by', 'delivery_service').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
@@ -1396,6 +1413,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_domestic_profile_approval_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class DomesticProfileApprovalQueue(ListView, PaginationMixin):
     context_object_name = 'object_list'
@@ -1485,6 +1503,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_booster_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
 class BoosterQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'booster_list'
