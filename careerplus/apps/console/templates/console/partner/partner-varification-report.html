@@ -24,7 +24,7 @@
         <h3>Varification Reports</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="filter-tables">
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -70,7 +70,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="list-filter-form">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -191,7 +191,7 @@
 
                         <td>
                             {% if obj.product.type_flow != 10 or test_obj %}
-                            <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                            <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                                 {{draft_form.file}}
                                 <div style="display:none">
                                     <input type="hidden" name="oi_pk" value="{{obj.pk}}">
@@ -223,7 +223,7 @@
                         </td>
 
                         <td>
-                            <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                            <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <fieldset>
 
                                     {% for field in message_form %}

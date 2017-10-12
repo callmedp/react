@@ -56,7 +56,7 @@
             <div class="col-lg-12">
             <div class="pull-left">
               {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
-                <form method="POST" role="form" id="action_form" action="">
+                <form autocomplete="off" method="POST" role="form" id="action_form" action="">
                 {% csrf_token %}
                     <div class="col-sm-4">
                         <div class="input-group">
@@ -108,7 +108,7 @@
                   <tr class="headings">
                     {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
                         <th>
-                          <input type="checkbox" id="check-all" class="flat">
+                          <input autocomplete="off" type="checkbox" id="check-all" class="flat">
                         </th>
                         <th class="bulk-actions" colspan="100%">
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
@@ -127,7 +127,7 @@
                     <tr class="even pointer">
                       {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
                             <td class="a-center ">
-                              <input type="checkbox" class="flat check_empty" name="table_records" value="{{order.pk}}" >
+                              <input autocomplete="off" type="checkbox" class="flat check_empty" name="table_records" value="{{order.pk}}" >
                             </td>
                       {% endif %}
                       <td>{{order.order.id}}</td>
@@ -153,7 +153,7 @@
                             <tr>
                             {% for profile_url in profile_urls %}
                               <td>
-                                <form method="POST" id="pro_update{{ forloop.counter }}"
+                                <form autocomplete="off" method="POST" id="pro_update{{ forloop.counter }}"
                                 action="{% url "console:international_profile_update" order.pk %}">
                                   <input type="hidden" name="site{{forloop.counter}}" 
                                   value="{{profile_url}}">

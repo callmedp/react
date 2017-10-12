@@ -23,7 +23,7 @@
         <h3>Orders</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-order" %}" id="filter-tables">
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-order" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -66,7 +66,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-order" %}" id="list-filter-form">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-order" %}" id="list-filter-form">
                       {% for field in filter_form %}
                       <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ field.label }}</label></br>
@@ -172,7 +172,7 @@
                       <td>{{obj.total_incl_tax}}</td>
                       <td>{{obj.get_status}}
                         {% if obj.status == 0 and perms.order.can_mark_order_as_paid %}
-                            <form role="form" method="post" id="order-paid-form{{obj.id}}">{% csrf_token %}
+                            <form autocomplete="off" role="form" method="post" id="order-paid-form{{obj.id}}">{% csrf_token %}
                            <input type="hidden" name="order_pk" id="order-id" value="{{obj.pk}}">
                           <center>
                             <button type="button" onclick="clickMarkPaidButton('{{obj.pk}}',)" class="btn btn-success btn-xs">Mark Paid</button>

@@ -158,7 +158,7 @@
         <label id="non-field-error" class="error"></label>
       </div>
 
-       <form role method="post" id="login_form" >{% csrf_token %}
+       <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
           
           <div class="form-group {% if loginform.email.errors %} error {% endif %}">
             {{loginform.email}}
@@ -201,7 +201,7 @@
         <label id="non-field-error-register" class="error"></label>
       </div>
 
-      <form role="form" id="register_form" >
+      <form autocomplete="off" role="form" id="register_form" >
         {% csrf_token %}
           <div class="form-group {% if registerform.email.errors %}error{% endif %}">
             {{ registerform.email }}
