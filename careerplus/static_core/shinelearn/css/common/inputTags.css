@@ -211,7 +211,6 @@ div.inputTags-list input.inputTags-field:active {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   text-align: left;
-  overflow: auto;
 }
 
 @media (max-width: 991px) {
