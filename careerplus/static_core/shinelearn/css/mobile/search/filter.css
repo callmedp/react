@@ -92,7 +92,7 @@
         padding-bottom: 15px; }
 
 .apply-bottom {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   z-index: 9;
   width: 80%;

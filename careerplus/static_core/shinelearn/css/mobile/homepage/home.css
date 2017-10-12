@@ -112,7 +112,7 @@
     -moz-border-radius: 4px;
     border-radius: 4px;
     border: 0 none;
-    width: 100%;
+    width: 90%;
 }
 .tab-search .tab-content .custom-advnaced-search {
     position: relative;
@@ -604,9 +604,10 @@ label:hover ~ label {
 
 .testimonials {
     background-color: #e6f0f5;
-    padding: 20px 15px 40px;
+    padding: 20px 15px 20px;
     overflow: hidden;
 }
+
 .testimonials li {
     font-size: 0.875em;
     text-align: left;
@@ -875,7 +876,7 @@ label:hover ~ label {
 }
 .how-it-works {
     background-color: #fff;
-    padding: 30px 15px;
+    padding: 30px 15px 80px 15px;
     overflow: hidden;
 }
 .how-it-works ul {

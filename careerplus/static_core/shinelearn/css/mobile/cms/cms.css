@@ -235,14 +235,20 @@ button {
         border-radius: 50%; }
 
 /* Bullets Start From Here */
+.bullet {
+  padding-left: 15px;
+}
+
 .bullet li {
   list-style-type: circle;
-  list-style-position: inside;
-  padding-bottom: 10px; }
+  list-style-position: outside;
+  min-height: 45px;
+}
 
 .cms .bullet li {
   float: left;
-  padding: 10px 5px; }
+  padding-right: 5px;
+}
 
 /* Related articles Start From Here */
 .related-article {
