@@ -3,7 +3,9 @@ from .settings import *
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning1.shine.com'
-SITE_PROTOCOL = 'http'
+SITE_PROTOCOL = 'https'
+MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  #'http://learning.shine.com'
+MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -25,4 +27,5 @@ CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 DEBUG = True
 IS_LIVE = False
+
 from .settings_local import *
