@@ -123,7 +123,7 @@ label:hover:before {
     position: relative;
     cursor: pointer;
     border: 1px solid #c1c1c1;
-    padding: 10px 10px 10px !important;
+    padding: 5px 5px 5px !important;
     width: 1000px;
     display: table-cell;
     vertical-align: middle;
@@ -143,7 +143,7 @@ label:hover:before {
     border: 0 none;
     bottom: 5px;
     top: auto;
-    right: 10px;
+    right: 0;
     left: auto; }
   .select-product [type="checkbox"]:not(:checked) + label:after,
   .select-product [type="checkbox"]:checked + label:after,

@@ -29,7 +29,7 @@
                   <strong>{{review.average_rating|floatformat:"1"}}/5</strong>
               </div>
               <article>{{review.content|safe}}</article>
-              <span class="editor">By <a>{{review.user_name}}</a>, {{review.created|date:"M d, Y" }}</span>
+              <span class="editor">By <a>{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</a>, {{review.created|date:"M d, Y" }}</span>
             </li>
           {% endfor %}
           {% if prd_review_list.has_next %}

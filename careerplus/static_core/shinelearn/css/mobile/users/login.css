@@ -14,9 +14,9 @@
 .tab-container .tabs li {
   display: inline-block; }
   .tab-container .tabs li a {
-    padding: 10px 15px;
+    padding: 10px 5px;
     display: block;
-    font-size: 90%; }
+    font-size: 80%; }
 
 .tab-container .tabs .current {
   color: #666;
@@ -259,7 +259,7 @@ button {
       text-align: center;
       color: #333; }
 
-.content-box .form-control {
+.login-form .form-control {
   border: 0 none;
   border-bottom: 1px solid #c1c1c1;
   padding: 0; }

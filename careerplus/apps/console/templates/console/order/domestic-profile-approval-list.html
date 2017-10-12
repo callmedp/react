@@ -24,7 +24,7 @@
         <h3>Domestic Profile Approval Orderitems</h3>
       </div>
 
-      <form class="form-group" method="GET" action="{% url "console:queue-domesticprofileapproval" %}" id="filter-tables">
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-domesticprofileapproval" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -72,7 +72,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form class="form-group" method="GET" action="{% url "console:queue-domesticprofileapproval" %}" id="list-filter-form">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-domesticprofileapproval" %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -131,7 +131,7 @@
               </li>
             </ul>
             {% if perms.order.oi_action_permission %}
-                <form method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view" %}">{% csrf_token %}
+                <form autocomplete="off" method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view" %}">{% csrf_token %}
                 <div class="col-sm-4">
                     <div class="input-group">
                         {{action_form.action}}
@@ -179,7 +179,7 @@
                   <tr class="headings">
                     {% if perms.order.oi_action_permission %}
                         <th>
-                          <input type="checkbox" id="check-all" class="flat">
+                          <input autocomplete="off" type="checkbox" id="check-all" class="flat">
                         </th>
                         <th class="bulk-actions" colspan="100%">
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
@@ -207,7 +207,7 @@
                     <tr class="even pointer">
                       {% if perms.order.oi_action_permission %}
                             <td class="a-center ">
-                              <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+                              <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
                       <td>{{obj.pk}}</td>
@@ -237,7 +237,7 @@
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>
                       <td>{% if obj.oi_draft %}<a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploaded Draft</button></a>{% endif %}</td>
                       <td>
-                          <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                          <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <fieldset>
                                     {% for field in message_form %}
                                         <div class="form-group"> 
@@ -267,7 +267,7 @@
                       </td>
                       <td>
                             <strong>Email:</strong></br>{{obj.order.email}}
-                            <form id="redirecShineForm{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                            <form autocomplete="off" id="redirecShineForm{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <input type="hidden" value="{{obj.order.email}}" name="email" />
                                 <input type="hidden"  value="1" name="type"/>
                                 <input type="hidden"  value="30" name="expires" />  
