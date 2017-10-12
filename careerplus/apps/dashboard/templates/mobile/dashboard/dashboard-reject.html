@@ -43,6 +43,7 @@
 {% endblock header %}
 
 {% block container %}
+<div class="body-wrapper">
     <section class="content-box">
         <form role="form" id="reject-form-id{{obj.pk}}" enctype='multipart/form-data'>{% csrf_token %}
             <p class="mt-30">If you have made changes to resume upload here</p>
@@ -62,9 +63,8 @@
 
             <button type="button" onclick="mobileRejectService('{{obj.pk}}')" class="btn w100 btn-round btn-blue mt-30">Submit</button>
         </form>
-
-
     </section><!-- end of section here -->
+</div><!-- body wrapper ends here -->
 {% endblock container %}
 
 {% block js_section %}

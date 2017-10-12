@@ -6,7 +6,7 @@
     <div class="tab-container cms mt-10">
         <ul class="tabs p-0">
             {% for key, value in column_data.items %}
-            <li><a href="#" {% if forloop.first %}class="current"{% endif %} data-tab="tab-{{ forloop.counter }}">{{ column_headings|get_value:key }}</a></li>
+            <li><a {% if forloop.first %}class="current"{% endif %} role="button" data-tab="tab-{{ forloop.counter }}">{{ column_headings|get_value:key }}</a></li>
             {% endfor %}
         </ul>
 
