@@ -110,7 +110,13 @@
   text-align: center;
   padding: 0;
   margin: 0;
-  width: 100%; }
+  width: 100%; 
+}
+
+.testimonials .slick-dots {
+  position: relative !important;
+  bottom: 0;
+}
   .slick-dots li {
     position: relative;
     display: inline-block;
