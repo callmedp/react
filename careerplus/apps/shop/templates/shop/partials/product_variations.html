@@ -28,7 +28,7 @@
                 Yes {% else %}
                 No{% endif %}</td>
               <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
-              <td><strong>Rs. {{vars.inr_price}}/-</strong></td>
+              <td><strong>Rs. {{vars.inr_price|floatformat}}/-</strong></td>
             </tr>
           {% endfor %}
             </tbody>
@@ -50,8 +50,8 @@
           <ul>
             {% for service in var_list  %}
               <li>
-                <label><input class="input" name="required_option" data-id="{{service.id}}" {% if service.id in selected_products %}checked{% endif %} type="checkbox" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price}}{% else %}{{service.inr_price}}{% endif %}">{{service.label}}</label> 
-                <strong>Rs. {{service.inr_price}}/-</strong>
+                <label><input class="input" name="required_option" data-id="{{service.id}}" {% if service.id in selected_products %}checked{% endif %} type="checkbox" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price}}{% else %}{{service.inr_price|floatformat}}{% endif %}">{{service.label}}</label> 
+                <strong>Rs. {{service.inr_price|floatformat}}/-</strong>
               </li>
             {% endfor %}
             

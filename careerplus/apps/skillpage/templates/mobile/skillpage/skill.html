@@ -37,13 +37,13 @@
         <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Programs</h1>
         <ul class="header-taging mt-10 w100fl">
             {% if top_3_prod.0 %}
-            <li><a href="#">{{top_3_prod.0.name}}</a></li>
+            <li><a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a></li>
             {% endif %}
             {% if top_3_prod.1 %}
-            <li><a href="#">{{top_3_prod.1.name}}</a></li>
+            <li><a href="{{top_3_prod.1.pURL}}">{{top_3_prod.1.pNm}}</a></li>
             {% endif %}
             {% if top_3_prod.2 %}
-            <li><a href="#">{{top_3_prod.2.name}}</a></li>
+            <li><a href="{{top_3_prod.2.pURL}}">{{top_3_prod.2.pNm}}</a></li>
             {% endif %}
         </ul>
     </header><!-- header ends here -->    
@@ -58,31 +58,12 @@
                     <h2 class="mb-0">Providers</h2>
                     <ul class="skill-provider home-slider">
                     {% for top_4_vendor in top_4_vendors %}
-                        {% if forloop.counter == 1 and top_4_vendor.image.url %}
+                        {% if top_4_vendor.icon or top_4_vendor.image %}
                         <li>
                             <a href="#" class="box">
-                                <img src="{{top_4_vendor.image.url}}">
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if forloop.counter == 2 and top_4_vendor.image.url %}
-                        <li>
-                            <a href="#" class="box">
-                                <img src="{{top_4_vendor.image.url}}">
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if forloop.counter == 3 and top_4_vendor.image.url %}
-                        <li>
-                            <a href="#" class="box">
-                                <img src="{{top_4_vendor.image.url}}">
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if forloop.counter == 4 and top_4_vendor.image.url %}
-                        <li>
-                            <a href="#" class="box">
-                                <img src="{{top_4_vendor.image.url}}">
+                                <img src="{% if top_4_vendor.icon %}
+                                    {{top_4_vendor.icon.url}}
+                                {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}">
                             </a>
                         </li>
                         {% endif %}
@@ -98,7 +79,7 @@
                 </div><!-- end of Six Sigma -->
 
                 <div class="container">
-                    <h2>Recommended  for</h2>
+                    <h2>Career Outcomes</h2>
                     <div class="box row">
                         <ul class="recommd-list">
                         {% for career_outcome in career_outcomes %}

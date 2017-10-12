@@ -1,3 +1,4 @@
+{% load humanize search_tags %}
 {% if prd_service == 'course' %}
     {% if variation %}
         <div class="container select-product course">
@@ -13,12 +14,12 @@
                                     <table class="table fs-10">
                                         <tr>
                                             <td>Study mode</td>
-                                            <td>{{vars.mode}}</td>
+                                            <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
                                         </tr>
 
                                         <tr>
                                             <td>Duration</td>
-                                            <td>{{vars.duration}} months</td>
+                                            <td>{{vars.duration|get_choice_display:"DURATION_DICT"}}</td>
                                         </tr>
 
                                         <tr>
@@ -32,12 +33,12 @@
 
                                         <tr>
                                             <td>Type</td>
-                                            <td>{{vars.type}}</td>
+                                            <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
                                         </tr>
 
                                         <tr>
                                             <td>Price</td>
-                                            <td><strong>Rs. {{vars.inr_price}}/- </strong></td>
+                                            <td><strong>Rs. {{vars.inr_price|floatformat}}/- </strong></td>
                                         </tr>
                                     </table>
                                 </label>
@@ -51,12 +52,12 @@
                                     <table class="table fs-10">
                                         <tr>
                                             <td>Study mode</td>
-                                            <td>{{vars.mode}}</td>
+                                            <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
                                         </tr>
 
                                         <tr>
                                             <td>Duration</td>
-                                            <td>{{vars.duration}} months</td>
+                                            <td>{{vars.duration|get_choice_display:"DURATION_DICT"}}</td>
                                         </tr>
 
                                         <tr>
@@ -70,7 +71,7 @@
 
                                         <tr>
                                             <td>Type</td>
-                                            <td>{{vars.type}}</td>
+                                            <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
                                         </tr>
 
                                         <tr>
