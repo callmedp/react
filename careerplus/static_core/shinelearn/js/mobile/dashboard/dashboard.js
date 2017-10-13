@@ -93,3 +93,12 @@ function mobileAccept(oi_pk){
         });
     }
 }
+
+function openPopup(el) {
+    $('.modal').hide();
+    $('#' + el).fadeIn(200);   
+}
+
+function closePopup() {
+    $('.modal').fadeOut(300);
+}

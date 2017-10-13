@@ -1,7 +1,5 @@
 {% extends "basic/base.html" %}
-{% load core_filter_tags %}
-{% load static %}
-{% load humanize %}
+{% load core_filter_tags static humanize compress %}
 {% load thumbnail %}
     {% block meta_tags %}
         {{block.super}}
@@ -14,8 +12,10 @@
     
     {% block css_section %}
         {{block.super}}
+        {% compress css %}
         <link type="text/css" href="{% static 'shinelearn/css/microsite/roundone.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/multiple-select.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/microsite/multiple-select.css' %}" rel="stylesheet">
+        {% endcompress %}
     {% endblock css_section %}
 
   {% block pageheading %}
@@ -420,11 +420,12 @@
             $("#id_search_location").multipleSelect("uncheckAll");
         {% endif %}
     });
-   </script> 
-    <script src="{% static 'console/js/microsite/multiple-select.js' %}">
-    </script>
+   </script>
+    {% compress js %}
+    <script src="{% static 'console/js/microsite/multiple-select.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}

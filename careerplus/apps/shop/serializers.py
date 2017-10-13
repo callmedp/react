@@ -56,23 +56,23 @@ class CRMProductSerializer(ModelSerializer):
 
     def get_i_price(self,obj):
         if obj.type_product == 1 and obj.is_course:
-            return Decimal(0)    
-        return str(obj.inr_price)
+            return 0.0    
+        return float(obj.inr_price)
 
     def get_u_price(self,obj):
         if obj.type_product == 1 and obj.is_course:
-            return Decimal(0)    
-        return str(obj.usd_price)
+            return 0.0    
+        return float(obj.usd_price)
     
     def get_a_price(self,obj):
         if obj.type_product == 1 and obj.is_course:
-            return Decimal(0)    
-        return str(obj.aed_price)
+            return 0.0    
+        return float(obj.aed_price)
     
     def get_g_price(self,obj):
         if obj.type_product == 1 and obj.is_course:
-            return Decimal(0)    
-        return str(obj.gbp_price)
+            return 0.0    
+        return float(obj.gbp_price)
     
     def get_vendor_name(self,obj):
         return obj.vendor.name if obj.vendor else ''

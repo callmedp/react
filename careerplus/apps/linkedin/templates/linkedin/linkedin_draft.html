@@ -1,13 +1,14 @@
 {% extends "basic/base.html" %}
-{% load static %}
+{% load static compress %}
 
 {% block title %}
  
 {% endblock title %}
 {% block css_section %}
-        {{block.super}}  
-  <link type="text/css" href="{% static 'shinelearn/css/linkedin/dashboard.css' %}" 
-  rel="stylesheet">    
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/linkedin/dashboard.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block pageheading %}
@@ -190,6 +191,3 @@
 </section>
 <!-- main section end -->
 {% endblock container %}
-{% block js_section %}
-   {{ block.super }}
-{% endblock js_section %}
