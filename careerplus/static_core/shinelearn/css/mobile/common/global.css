@@ -851,7 +851,7 @@ article ol {
   z-index: 999999999999 !important;
 }
 
-.slide-container {
+.slide-container, .review-container {
   overflow: hidden;
   width: 100%;
 }
@@ -875,3 +875,4 @@ article ol {
 .mt-sub-10{
   margin-top:-10px;
 }
+
