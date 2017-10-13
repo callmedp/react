@@ -20,18 +20,19 @@
 
     
     {% block css_section %}
-        {% compress css %}
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         <!-- Bootstrap -->
+        {% compress css %}
         <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+        {% endcompress %}
          <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-        {% endcompress %}
+
     {% endblock css_section %}
    </head>
    {{ JS_SETTINGS|safe }}
@@ -66,9 +67,9 @@
 {% endblock footer %}
 
 {% block js_section %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     {% compress js %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}">
@@ -84,12 +85,10 @@
     {% endcompress %}
 {% endblock js_section %}
 {% block johukum %}
-    {% compress js %}
-    <script type='text/javascript' id='spd-busns-spt' async=''  
+    <script type='text/javascript' id='spd-busns-spt' async=''
         src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
-    {% endcompress %}
 {% endblock johukum %}
 </body>
 </html>
