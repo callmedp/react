@@ -150,5 +150,16 @@ $(document).ready(function(){
 			.html('<a href="#">' + $(this).val() + '</a><div class="pull-right resume-close"><a href="#">X</a></div>')
 			.removeClass("text-center");
 	});
+	
+	$('input[type="checkbox"]').click(function(){
+		if($(this).is(":checked")){
+		  $(".endyear").hide();
+		  $(".endmonth").hide();
+		}
+		else if($(this).is(":not(:checked)")){
+		  $(".endyear").show();
+		  $(".endmonth").show();
+		}
+	});
 
 });
