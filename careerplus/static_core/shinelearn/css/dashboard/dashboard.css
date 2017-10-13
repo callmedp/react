@@ -404,7 +404,6 @@
   font-weight: 400;
   font-size: 14px;
 }
-
 .notification-resume .resume-writing .use-shine label input {
   margin-right: 5px;
 }
@@ -1541,5 +1540,3 @@ input:checked ~ label:hover ~ label,
 label:hover ~ input:checked ~ label {
   color: #3f5f94;
 }
-
-/*# sourceMappingURL=dashboard.css.map */
