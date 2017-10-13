@@ -27,32 +27,34 @@
         <div class="trending-articles">
             <div class="content-box">
                 <p class="heading">Trending articles</p>
-                <ul class="home-slider">
-                    {% for cat in categories %}
-                        {% with cat.primary_category.all.first as art %}
-                           {% if art %}
-                                <li>
-                                    <a href="{% url "blog:articles-deatil" art.slug art.pk %}" class="caption-bg-txt">
-                                        <span class="caption-heading">{{cat.name}}</span>
-                                        <div class="bottom-text">
-                                            <p class="pb-5">{{art.display_name}}</p>
-                                            <div class="mt-10">
-                                                <span class="editor fs-12 pull-left">{{art.created_by.name}}, {{art.publish_date.date}}</span>
-                                                <span class="view-forward text-white mr-10 fs-12 pull-right"><figure class="icon-view"></figure> {{art.no_views}}</span>
+                <div class="slide-container">
+                    <ul class="blog-slider">
+                        {% for cat in categories %}
+                            {% with cat.primary_category.all.first as art %}
+                               {% if art %}
+                                    <li>
+                                        <a href="{% url "blog:articles-deatil" art.slug art.pk %}" class="caption-bg-txt">
+                                            <span class="caption-heading">{{cat.name}}</span>
+                                            <div class="bottom-text">
+                                                <p class="pb-5">{{art.display_name}}</p>
+                                                <div class="mt-10">
+                                                    <span class="editor fs-12 pull-left">{{art.created_by.name}}, {{art.publish_date.date}}</span>
+                                                    <span class="view-forward text-white mr-10 fs-12 pull-right"><figure class="icon-view"></figure> {{art.no_views}}</span>
+                                                </div>
+                                                
+                                                
                                             </div>
-                                            
-                                            
-                                        </div>
-                                    </a>
-                                    {% if art.image %}
-                                        <img src="{{art.image.url}}" alt="{{art.image_alt}}" class="img-responsive">
-                                    {% endif %}
-                                </li>
-                            {% endif %}
-                        {% endwith %}
-                    {% endfor %}
-
-                </ul>
+                                        </a>
+                                        {% if art.image %}
+                                            <img src="{{art.image.url}}" alt="{{art.image_alt}}" class="img-responsive">
+                                        {% endif %}
+                                    </li>
+                                    
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </ul>
+                </div><!-- slide-container ends here -->
             </div>
         </div>
         <!-- Trending articles Ends here -->
