@@ -95,6 +95,7 @@
             {% include "shop/partials/frequentlybought.html" %}
             <!-- Select products container Satrts here  -->
             {% include "shop/partials/product_variations.html" %}
+
             <!-- Select products container ends here -->
             <div class="container mb-30">
             <!-- Accordion begin -->
@@ -180,17 +181,18 @@
         <div class="right-navbar packages pt-0">
             <ul class="underline">
             {% for country in var_list %}
-                <li>
+                <li id="element_checked">
                     <input {% if country.id in selected_products %}checked{% endif %}
                     value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
                     <label for="{{country.label}} ">
-                        <p class="pb-0">{{country.label}}</p>
+                        <p class="pb-0" id="text_val">{{country.label}}</p>
                     </label>
                 </li>
             {% endfor %}
             </ul>
             <div class="bottom-btn">
-                <a href="#" class="btn-slg btn-blue btn-round w100fl text-center">
+                <a href="#" class="btn-slg btn-blue btn-round w100fl text-center" 
+                id="done_click">
                     DONE
                 </a>
             </div>
@@ -219,6 +221,7 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
 
