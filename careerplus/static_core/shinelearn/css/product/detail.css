@@ -1123,7 +1123,7 @@ header {
 }
 
 .recomend-product-bg {
-  background-color: #f6f7f9 !important;
+  /* background-color: #f6f7f9 !important; */
   border-top: 50px solid transparent;
   border-bottom: 50px solid transparent;
 }

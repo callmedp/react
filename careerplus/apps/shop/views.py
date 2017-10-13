@@ -377,7 +377,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             raise Http404
         
         if self.product_obj:
-            self.category = self.product_obj.verify_category(kwargs.get('cat_slug', None))
+            self.category = self.product_obj.category_main
         
         redirection = self.redirect_if_necessary(request.path, self.sqs)
         if redirection is not None:
