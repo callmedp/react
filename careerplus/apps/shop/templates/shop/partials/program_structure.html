@@ -14,7 +14,7 @@
             <div class="panel-heading" role="tab" id="headingOne{{forloop.counter}}">
               <h3 class="panel-title">
                 <a role="button" data-toggle={% if chapter.content %}
-                  "collapse"{% else %}""{% endif %} data-parent="#accordion" href="#collapseOne{{forloop.counter}}"
+                  "collapse" data-parent="#accordion" href="#collapseOne{{forloop.counter}}"{% else %}""{% endif %} 
                   {% if chapter.content %}
                   {% if forloop.counter == 1 %}aria-expanded="true"{% else %}aria-expanded="false" class="collapsed"{% endif %}
                   {% else %}
