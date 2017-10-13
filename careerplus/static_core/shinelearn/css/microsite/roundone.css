@@ -11,7 +11,6 @@
   clear: both;
   background: url(../../images/microsite/roundone-header-bg.jpg) #0d141b no-repeat center top;
   background-size: cover;
-  overflow: hidden;
   display: block;
 }
 .roundone-header .roundone-caption {
@@ -773,6 +772,15 @@
 .get-referred-by strong {
   display: block;
   font-weight: 600;
+}
+
+.search-roundone input{
+  border: 1px solid #e1e1e1;
+  border-radius: 0;
+  padding: 10px;
+  height: 44px;
+  box-shadow: none;
+  width: 400px !important;
 }
 
 /*# sourceMappingURL=roundone.css.map */
