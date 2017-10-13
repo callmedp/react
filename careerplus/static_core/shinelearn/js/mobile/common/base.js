@@ -51,6 +51,15 @@ $(document).ready(function() {
 		variableWidth: true,
 	});
 
+	$(".skill-provider").slick({
+		autoplay:false,
+		autoplaySpeed:3000,
+		dots: false,
+		arrows: false,
+		infinite: false,
+		variableWidth: true,
+	});
+
 	$(".review-slide").slick({
 		autoplay:false,
 		autoplaySpeed:3000,

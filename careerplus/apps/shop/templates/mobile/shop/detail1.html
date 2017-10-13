@@ -97,6 +97,7 @@
             {% include "shop/partials/frequentlybought.html" %}
             <!-- Select products container Satrts here  -->
             {% include "shop/partials/product_variations.html" %}
+
             <!-- Select products container ends here -->
             <div class="container mb-30">
             <!-- Accordion begin -->
@@ -182,17 +183,18 @@
         <div class="right-navbar packages pt-0">
             <ul class="underline">
             {% for country in var_list %}
-                <li>
+                <li id="element_checked">
                     <input {% if country.id in selected_products %}checked{% endif %}
                     value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
                     <label for="{{country.label}} ">
-                        <p class="pb-0">{{country.label}}</p>
+                        <p class="pb-0" id="text_val">{{country.label}}</p>
                     </label>
                 </li>
             {% endfor %}
             </ul>
             <div class="bottom-btn">
-                <a href="#" class="btn-slg btn-blue btn-round w100fl text-center">
+                <a href="#" class="btn-slg btn-blue btn-round w100fl text-center" 
+                id="done_click">
                     DONE
                 </a>
             </div>
@@ -231,6 +233,7 @@
     });
 
     $(document).ready(function() {
+        updateTextArea();
       // Configure/customize these variables.
       var showChar = 280;  // How many characters are shown by default
       var ellipsestext = "...";
@@ -265,6 +268,22 @@
           $(this).prev().toggle();
           return false;
       });
+
+      $("#done_click").click(function(){
+          updateTextArea();
+          $("#sidebar-countries").hide();
+          $(".cls_mask").hide();
+      });
+      $("#sidebar-countries-trigger").click(function(){
+          $("#sidebar-countries").show();
+      });
+    function updateTextArea() {         
+        var allVals = [];
+        $('#element_checked :checked').each(function() {
+           allVals.push($(this).attr("id"));
+        });
+        $('#slected_country').text(allVals);
+    }
   });
 </script>
 {% endblock js_section %}
