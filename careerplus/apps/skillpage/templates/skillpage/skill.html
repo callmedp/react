@@ -213,13 +213,13 @@
 				        <a href="javascript:void(0)" 
 				        id="product_load_more" class="load-more loadmore"> 
 				        Load more</a>
+	            		<div id="prod_load_more">
+		      				<input type="hidden" name="page" 
+		      				value="{{products.next_page_number}}" id="page_id">
+		      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+		      				id="slug_id">
+			    		</div>
 				    {% endif %}
-            		<div id="prod_load_more">
-	      				<input type="hidden" name="page" 
-	      				value="{{products.next_page_number}}" id="page_id">
-	      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
-	      				id="slug_id">
-		    		</div>
 		      	</ul>
 		    </div>
 		    <!-- Reviews -->

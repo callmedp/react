@@ -46,6 +46,7 @@
   margin-left: 25px;
   position: relative;
   overflow: visible; 
+  text-indent: -1000px;
 }
 
 .icon-cart span {
