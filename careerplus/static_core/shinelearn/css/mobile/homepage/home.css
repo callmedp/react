@@ -519,7 +519,7 @@ label:hover ~ label {
 }
 .call-us .ui-block-a span {
     background-position: -47px -216px;
-    width: 16px;
+    width: 18px;
     height: 12px;
     display: inline-block;
     margin-right: 5px;
@@ -860,7 +860,8 @@ label:hover ~ label {
     background-color: #fff;
     padding: 5px 10px;
     display: table-cell;
-    height: 85px;
+    height: 95px;
+    line-height: 18px;
     vertical-align: middle;
 }
 
@@ -876,7 +877,7 @@ label:hover ~ label {
 }
 .how-it-works {
     background-color: #fff;
-    padding: 30px 15px 80px 15px;
+    padding: 30px 15px 30px 15px;
     overflow: hidden;
 }
 .how-it-works ul {

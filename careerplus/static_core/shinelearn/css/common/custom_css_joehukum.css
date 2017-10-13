@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 .online, .offline, .me {
 
   font-size: 10px;
@@ -939,7 +940,7 @@ Background Image for Chat Container
 
   .mobile-chat-container i.fa.fa-comments {
 
-      background-image: url(http://learning1.shine.com/media/static/shinelearn/images/mobile/common/sprites.svg);
+      background-image: url(../../images/mobile/common/sprites.svg);
 
       background-position: -22px -216px;
 
@@ -956,7 +957,18 @@ Background Image for Chat Container
       top: 13px;
 
       background-repeat: no-repeat;
+      left: -25px;
+      font-size: 14px;
+      font-family: "Open Sans", sans-serif;
 
   }
+
+    .mobile-chat-container i.fa.fa-comments:after {
+      content: "Chat";
+      position: absolute;
+      top: -3px;
+      left:25px;
+
+    }
 
 }

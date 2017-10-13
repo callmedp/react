@@ -439,6 +439,7 @@ header {
   display: block;
   position: relative;
   color: #666;
+  line-height: 20px;
 }
 .program-structure .panel-title > a:after {
   content: "";
@@ -1152,4 +1153,14 @@ header {
 }
 .about-txt .collapse.in {
   display: inline;
+}
+
+.panel-title > a.disabled {
+  content: "";
+  background: none !important;
+}
+
+.panel-title > a.disabled:after {
+  content: "";
+  background: none !important;
 }

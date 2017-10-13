@@ -32,7 +32,6 @@ def get_choice_display(value, choice):
                 value = value.lower()
             elif value.upper() in mapping:
                 value = value.upper()
-
         return mapping[value]
     except:
         return 'Others'

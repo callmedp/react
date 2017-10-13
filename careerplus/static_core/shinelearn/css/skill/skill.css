@@ -188,7 +188,10 @@
 .listing1 .media {
   margin-top: 0;
 }
-.listing1 .media figure .media-object {
+.listing1 .media .media-left {
+  padding-right: 0;
+}
+.listing1 .media .media-left figure .media-object {
   width: 130px;
   height: 130px;
 }
@@ -196,7 +199,7 @@
   margin: 0 0 5px 0;
   display: block;
   color: #3f5f94;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 }
 .listing1 .certification-jobs-box {
@@ -263,7 +266,7 @@
   clear: both;
 }
 .listing1 .pricing-box strong {
-  font-size: 20px;
+  font-size: 18px;
   color: #333;
   font-weight: 600;
 }
@@ -275,6 +278,5 @@
 }
 
 .scroll {
-  margin-top: -100px;
-  padding-top: 100px;
+  border-top: 10px solid transparent;
 }

@@ -25,7 +25,7 @@ media/
 
 #*
 #`!*/
-#!media/attachment/**
+!media/attachment/**
 
 *.egg-info/
 .installed.cfg
