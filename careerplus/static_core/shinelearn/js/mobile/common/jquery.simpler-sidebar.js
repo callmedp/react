@@ -21,7 +21,7 @@
 
                 animationStart = {},
                 animationReset = {},
-
+                dt = 'data-' + attr,
                 hiddenFlow = function() {
                     $('body, html').css('overflow', 'hidden');
                 },
@@ -65,7 +65,9 @@
                     }
                 },
 
-                $mask = $('<div>').attr('data-' + attr, 'mask');
+                // $mask = $('<div>').attr('data-' + attr, 'mask');
+                
+                $mask = $('<div>').attr({ dt : 'mask','class':'cls_mask'});
 
             //Checking sidebar align
             if (cfg.sidebar.align === undefined || cfg.sidebar.align === 'right') {
