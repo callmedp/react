@@ -1164,3 +1164,7 @@ header {
   content: "";
   background: none !important;
 }
+
+footer {
+  margin-top: 0 !important;
+}
