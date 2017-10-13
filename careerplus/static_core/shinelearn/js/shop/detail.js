@@ -157,6 +157,6 @@ $(document).ready(function () {
         $('.about-tab a').removeClass('active');
         $(this).addClass('active');
       });
-  
+        
   });
     
