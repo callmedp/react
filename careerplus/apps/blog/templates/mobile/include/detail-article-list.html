@@ -29,7 +29,9 @@
                 <div class="tagging mt-30 mb-30">
                   <p>Tagged in</p>
                   {% for tag in tags %}
-                      <a role="button">{{tag.name}}</a>
+                      {% if tag.is_active %}
+                        <a href="{{tag.get_absolute_url}}">{{tag.name}}</a>
+                      {% endif %}
                   {% endfor %}
                 </div>
             {% endif %}
