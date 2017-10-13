@@ -206,16 +206,17 @@
 				          	</a>
 				        </li>
 			    	{% endfor %}
-                	<div id="prod_load_more">
-				    	{% if products.has_next %}
-					        <a style="cursor:pointer;text-decoration:none;" id="product_load_more" class="load-more loadmore"> 
-					        Load more</a>
-		      				<input type="hidden" name="page" 
-		      				value="{{products.next_page_number}}" id="page_id">
-		      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
-		      				id="slug_id">
-					    {% endif %}
-			    	</div>
+			    	{% if products.has_next %}
+				        <a href="javascript:void(0)" 
+				        id="product_load_more" class="load-more loadmore"> 
+				        Load more</a>
+				    {% endif %}
+            		<div id="prod_load_more">
+	      				<input type="hidden" name="page" 
+	      				value="{{products.next_page_number}}" id="page_id">
+	      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+	      				id="slug_id">
+		    		</div>
 		      	</ul>
 		    </div>
 		    <!-- Reviews -->
@@ -249,15 +250,15 @@
 		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
 		          	{% endfor %}
-		        	<div id="review_load_more">
-		          		{% if page_reviews.has_next %}
-		          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview"> Load more</a>
-			      		<input type="hidden" name="page" 
-			      		value="{{page_reviews.next_page_number}}" id="page_id1">
-			      		<input type="hidden" name="slug" value="{{category_obj.pk}}" 
-	      				id="slug_id1">
-		          		{% endif %}
-			      	</div>
+		          	{% if page_reviews.has_next %}
+			        	<div id="review_load_more">
+			          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview">Load more</a>
+				      		<input type="hidden" name="page" 
+				      		value="{{page_reviews.next_page_number}}" id="page_id1">
+				      		<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+		      				id="slug_id1">
+				      	</div>
+		          	{% endif %}
 		        </ul>	    	
 		    </div>
 		    {% endif %}

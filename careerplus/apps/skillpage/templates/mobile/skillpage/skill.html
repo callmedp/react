@@ -190,17 +190,17 @@
                     </div><!-- end of box -->
                 {% endfor %}
                     {% if products.has_next %}
-                    <p class="text-right pb-0">
-                        <a href="javascript:void(0);" id="product_load_more"
-                        class="load-more loadmore">
-                        <strong>LoadMore</strong></a>
-                    </p>
+                        <p class="text-right pb-0">
+                            <a href="javascript:void(0);" id="product_load_more"
+                            class="load-more loadmore">
+                            <strong>LoadMore</strong></a>
+                        </p>
                     {% endif %}
                     <div id="prod_load_more">
                         {% if products.has_next %}
                             <input type="hidden" name="page" 
                             value="{{products.next_page_number}}" id="page_id">
-                            <input type="hidden" name="slug" value="{{slug}}" id="slug_id">
+                            <input type="hidden" name="slug" value="{{category_obj.pk}}" id="slug_id">
                         {% endif %}
                     </div>
                 </div><!-- end of container -->
