@@ -1,10 +1,10 @@
 {% extends "basic/base.html" %}
-{% load static %}
-{% load humanize %}
-{% load thumbnail %}
+{% load static humanize thumbnail compress %}
     {% block css_section %}
         {{block.super}}
+        {% compress css %}
         <link type="text/css" href="{% static 'shinelearn/css/dashboard/dashboard.css' %}" rel="stylesheet">
+        {% endcompress %}
     {% endblock css_section %}
 {% block container %}
   <section class="container">
@@ -191,16 +191,9 @@
 {% endblock container %}
 {% block js_section %}
    {{ block.super }}
-    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    {% compress js %}
     <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}"></script>
     <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
-    <script type="text/javascript">
-    $('.nav-tabs > li > a').hover(function() {
-        $(this).tab('show');
-      });
-    $('.dropdown').hover(function(){ 
-        $('.dropdown-toggle', this).trigger('click'); 
-      });
-    </script>
+    {% endcompress %}
 {% endblock js_section %}
