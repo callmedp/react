@@ -28,7 +28,6 @@ from django_redis import get_redis_connection
 from .forms import SearchForm, SearchRecommendedForm
 from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
 from shop.models import FunctionalArea, Skill, Category
-from shop.choices import SEARCH_OPTIONS
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 error_log = logging.getLogger('error_log')
@@ -364,7 +363,7 @@ class SearchListView(SearchBaseView):
 
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
-        context.update({"search_context": SEARCH_OPTIONS})
+        context.update({"search_context": redis_conn.smembers('product_set')})
         return context
 
     def prepare_track(self, page):
