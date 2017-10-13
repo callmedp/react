@@ -117,16 +117,16 @@ class LinkedinQueueView(ListView, PaginationMixin):
                                 "writer_name": writer.name,
                                 "writer_email": writer.email,
                                 "subject": "Your developed document has been shared with our expert",
-                                "oi": obj,
                             })
 
                             if 101 not in email_sets:
                                 send_email_task.delay(to_emails, mail_type, data, status=101, oi=obj.pk)
-                            if obj.delivery_service and (obj.delivery_service.slug == 'super-express'):
-                                try:
-                                    SendSMS().send(sms_type=mail_type, data=data)
-                                except Exception as e:
-                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            if obj.delivery_service:
+                                if obj.delivery_service.slug == 'super-express':
+                                    try:
+                                        SendSMS().send(sms_type=mail_type, data=data)
+                                    except Exception as e:
+                                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
                             obj.orderitemoperation_set.create(
                                 oi_status=1,

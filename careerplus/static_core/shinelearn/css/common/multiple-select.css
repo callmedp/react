@@ -6,6 +6,9 @@
     display: inline-block;
     position: relative;
     vertical-align: middle;
+    border-radius: 0;
+  padding: 10px;
+  height: 44px;
 }
 
 .ms-choice {
@@ -15,7 +18,7 @@
     padding: 0;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid #aaa;
+    border: none;
     text-align: left;
     white-space: nowrap;
     line-height: 26px;
@@ -46,13 +49,14 @@
     padding-left: 8px;
 }
 
-.ms-choice > span.placeholder {
+.ms-choice > span {
     color: #999;
+    margin-top: 10px;
 }
 
 .ms-choice > div {
     position: absolute;
-    top: 0;
+    top: 10px;
     right: 0;
     width: 20px;
     height: 25px;
@@ -64,19 +68,20 @@
 }
 
 .ms-drop {
-    width: 100%;
+    width: 150px;
+    text-align: left;
     overflow: hidden;
     display: none;
-    margin-top: -1px;
+    margin: 0 0 0 -10px;
     padding: 0;
     position: absolute;
     z-index: 1000;
     background: #fff;
     color: #000;
     border: 1px solid #aaa;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
 }
 
 .ms-drop.bottom {
@@ -183,9 +188,14 @@
 }
 
 .ms-drop input[type="checkbox"] {
-    vertical-align: middle;
+    vertical-align: sub;
+    margin-right: 5px;
 }
 
 .ms-drop .ms-no-results {
     display: none;
+}
+
+*:focus {
+    outline: none;
 }

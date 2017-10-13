@@ -195,14 +195,14 @@
                             class="load-more loadmore">
                             <strong>LoadMore</strong></a>
                         </p>
+                        <div id="prod_load_more">
+                            {% if products.has_next %}
+                                <input type="hidden" name="page" 
+                                value="{{products.next_page_number}}" id="page_id">
+                                <input type="hidden" name="slug" value="{{category_obj.pk}}" id="slug_id">
+                            {% endif %}
+                        </div>
                     {% endif %}
-                    <div id="prod_load_more">
-                        {% if products.has_next %}
-                            <input type="hidden" name="page" 
-                            value="{{products.next_page_number}}" id="page_id">
-                            <input type="hidden" name="slug" value="{{category_obj.pk}}" id="slug_id">
-                        {% endif %}
-                    </div>
                 </div><!-- end of container -->
 
                 <!-- Revew Slide widget -->
