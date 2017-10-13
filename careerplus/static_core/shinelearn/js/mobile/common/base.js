@@ -42,6 +42,15 @@ $(document).ready(function() {
 		infinite: false
 	});
 
+	$(".blog-slider").slick({
+		autoplay:false,
+		autoplaySpeed:3000,
+		dots: false,
+		arrows: false,
+		infinite: false,
+		variableWidth: true,
+	});
+
 	$(".review-slide").slick({
 		autoplay:false,
 		autoplaySpeed:3000,
