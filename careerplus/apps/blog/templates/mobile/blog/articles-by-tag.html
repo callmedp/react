@@ -7,10 +7,10 @@
 {% endblock django_meta %}
 
 {% block canonical_url %}
-    <link rel="canonical" href="{{ category.get_absolute_url }}">
+    <link rel="canonical" href="{{ tag.get_absolute_url }}">
 {% endblock canonical_url %}
 
-{% block title %}{{category.name}} Career Articles | Shinelearning{% endblock %}
+{% block title %}{{tag.name}} Career Articles | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
@@ -49,7 +49,7 @@
         
         
         
-        <h1 class="heading-back w100fl pb-0">{{category.name}}</h1>
+        <h1 class="heading-back w100fl pb-0">{{tag.name}}</h1>
         
 
     </header><!-- header ends here -->
@@ -102,10 +102,10 @@
             <form role="form" id="loadmore-recent-form">
                 <input type="hidden" name="page" value="{{recent_page.next_page_number}}">
                 <input type="hidden" name="tab" value="0">
-                <input type="hidden" name="cat_slug" value="{{category.slug}}">
+                <input type="hidden" name="tag_slug" value="{{tag.slug}}">
             </form>
             <div class="w100 text-center">
-                <a class="btn-slg btn-grey block" role="button" id="recent-loadmore" >Load more</a>
+                <a class="btn-slg btn-grey block" role="button" id="recent-loadmore-tag" >Load more</a>
             </div>
         </div>
     {% endif %}
@@ -148,10 +148,10 @@
             <form role="form" id="loadmore-pop-form">
                 <input type="hidden" name="page" value="{{pop_page.next_page_number}}">
                 <input type="hidden" name="tab" value="1">
-                <input type="hidden" name="cat_slug" value="{{category.slug}}">
+                <input type="hidden" name="tag_slug" value="{{tag.slug}}">
             </form>
              <div class="w100 text-center">
-                  <a class="btn-slg btn-grey block" role="button" id="popular-loadmore">Load more</a>
+                  <a class="btn-slg btn-grey block" role="button" id="popular-loadmore-tag">Load more</a>
               </div>
         </div>
     {% endif %}

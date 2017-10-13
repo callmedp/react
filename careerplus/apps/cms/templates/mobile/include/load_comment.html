@@ -6,7 +6,7 @@
     <li>
         <sup><img src="{{ default_user_pic }}"></sup>
         <p class="pb-0">{{comment.message}}</p>
-        <span class="editor fs-12 c9">{{ comment.name|title }}, {% get_humanize_date comment.created_on %}</span>
+        <span class="editor fs-12 c9">{% if comment.name %}{{ comment.name|title }}, {% endif %}{% get_humanize_date comment.created_on %}</span>
     </li>
 {% endfor %}
 

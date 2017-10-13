@@ -59,7 +59,7 @@
                         {% csrf_token %}
                         <textarea placeholder="Write comments" class="form-control" id="id_message" name="message"></textarea>
                         {% if request.session.candidate_id %}
-                            <input type='button' class="submit-button" id="comment_submit" value="Submit">
+                            <input type='button' class="submit-button btn btn-lg btn-blue btn-round mt-10" id="comment_submit" value="Submit">
                         {% else %}
                             <input type='button' class="submit-button js_redirect btn btn-lg btn-blue btn-round mt-10" value="Submit">
                         {% endif %}
