@@ -13,17 +13,27 @@
           <li class="panel panel-default">
             <div class="panel-heading" role="tab" id="headingOne{{forloop.counter}}">
               <h3 class="panel-title">
-                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne{{forloop.counter}}"{% if forloop.counter == 1 %}
-                  aria-expanded="true"{% else %}aria-expanded="false" class="collapsed"{% endif %}  aria-controls="collapseOne{{forloop.counter}}">
+                <a role="button" data-toggle={% if chapter.content %}
+                  "collapse"{% else %}""{% endif %} data-parent="#accordion" href="#collapseOne{{forloop.counter}}"
+                  {% if chapter.content %}
+                  {% if forloop.counter == 1 %}aria-expanded="true"{% else %}aria-expanded="false" class="collapsed"{% endif %}
+                  {% else %}
+                  aria-expanded="false" class="collapsed disabled"
+                  {% endif %}
+                  aria-controls="collapseOne{{forloop.counter}}">
                   {{forloop.counter}}.&nbsp;{{chapter.heading}}
                 </a>
               </h3>
             </div>
+
             <div id="collapseOne{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %}
                   in{% endif %}" role="tabpanel" aria-labelledby="headingOne{{forloop.counter}}">
+            {% if chapter.content %}
               <div class="panel-body">
                 {{chapter.content|safe}}
               </div>
+            {% endif %}
+            
             </div>
           </li>
           {% endfor %}
