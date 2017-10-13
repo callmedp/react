@@ -1,6 +1,5 @@
 {% extends "basic/base1.html" %}
-{% load static %}
-{% load thumbnail %}
+{% load static thumbnail compress %}
 
 {% block title %}About Us - Shine Learning{% endblock title %}
     {% block meta_html %}
@@ -13,10 +12,10 @@
     {% endblock meta_html %}
     
 {% block css_section %}
-  {{block.super}}
-
-  <link type="text/css" href="{% static "shinelearn/css/homepage/about.css" %}" rel="stylesheet">
-    
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static "shinelearn/css/homepage/about.css" %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
     
 
@@ -199,11 +198,6 @@
     <!-- Our Partners end -->
 
 {% endblock main_container %}
-
-
-{% block js_section %}
-    {{block.super}}
-{% endblock js_section %}
 
 {% block johukum %}
 {% endblock johukum %}

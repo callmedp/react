@@ -1,5 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
+{% load static compress %}
 
 {% block meta_html %}
         {{block.super}}
@@ -9,9 +9,11 @@
 {% endblock title %}
 
 {% block css_section %}
-        {{block.super}}  
-  <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" rel="stylesheet">
-  <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">       
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/skill/skill.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block pageheading %}
@@ -334,8 +336,9 @@
 </section>
 {% endblock container %}
 {% block js_section %}
-   {{ block.super }}
-   <script src="{% static 'console/js/jquery.validate.js' %}"></script>
-   <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
-
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}

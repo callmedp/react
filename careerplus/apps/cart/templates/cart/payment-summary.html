@@ -1,5 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
+{% load static compress %}
 
 {% block meta_html %}
     {{block.super}}
@@ -11,7 +11,9 @@
 
 {% block css_section %}
     {{block.super}}
+    {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block navigation %}
@@ -252,219 +254,7 @@
 
 {% block js_section %}
    {{ block.super }}
-   <script type="text/javascript">
-      function toggler(divId) {
-          $("#" + divId).toggle();
-      }
-
-      function JSApplyDiscount() {
-          let alert_message = '';
-          if ($('#discount_code').val().trim()){
-            $('#discount_code').parent().removeClass('error');
-              try {
-                  let discount_code = $('#discount_code').val().trim();
-                  $.ajax({
-                      url: '/cart/applycoupon/',
-                      type: 'post',
-                      data: 'code=' + discount_code,
-                      dataType: 'json',
-                      success: function(json) {
-                        window.location.reload();
-                      },
-                      failure: function(response){
-                          alert_message = 'Something is not working, Please try later!';
-                          $('#discount_code').parent().addClass('error');
-                          $('#discount-alert').empty();
-                          $('#discount-alert').text(alert_message);
-                          $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                          
-                      },
-                      error: function (result, status, err) {
-                        if(result && result.status == 400)
-                        {
-                          alert_message = result.responseJSON;
-                          alert_message = alert_message.error;
-                        }
-                        else{
-                          alert_message = 'Something is not working, Please try later!';
-                        
-                        }
-                        $('#discount_code').parent().addClass('error');
-                        $('#discount-alert').empty();
-                        $('#discount-alert').text(alert_message);
-                        $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                        
-                      }
-                  });
-              }
-              catch (e) {
-                alert_message = 'Something is not working, Please try later!';
-                $('#discount_code').parent().addClass('error');
-                $('#discount-alert').empty();
-                $('#discount-alert').text(alert_message);
-                $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                
-              }
-                  
-          }
-          else{
-              alert_message = 'Enter Discount Code First!';
-              $('#discount_code').parent().addClass('error');
-              $('#discount-alert').empty();
-              $('#discount-alert').text(alert_message);
-              $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-              
-          }
-      };
-
-      function JSApplyPoint() {
-          let alert_message = '';
-          if ($('#loyalty_point').val().trim()){
-            $('#loyalty_point').parent().removeClass('error');
-              try {
-                  let loyalty_point = $('#loyalty_point').val().trim();
-                  if(isNaN(loyalty_point)){
-                    throw "NaN"
-                  }
-                  loyalty_point = parseInt(loyalty_point, 10);
-                  let min_point = parseInt($('#loyalty_point').prop('min'), 10);
-                  let max_point = parseInt($('#loyalty_point').prop('max'), 10);
-                  if(loyalty_point <= min_point){
-                    throw "Min"
-                  }
-                  if(loyalty_point > max_point){
-                    throw "Max"
-                  }
-                  $.ajax({
-                      url: '/cart/applypoint/',
-                      type: 'post',
-                      data: 'point=' + loyalty_point,
-                      dataType: 'json',
-                      success: function(json) {
-                        window.location.reload();
-                      },
-                      failure: function(response){
-                        alert_message = 'Something is not working, Please try later!';
-                        $('#loyalty_point').parent().addClass('error');
-                        $('#point-alert').empty();
-                        $('#point-alert').text(alert_message);
-                        $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                      },
-                      error: function (result, status, err) {
-                        if(result && result.status == 400)
-                        {
-                          alert_message = result.responseJSON;
-                          alert_message = alert_message.error;
-                        }
-                        else{
-                          alert_message = 'Something is not working, Please try later!';
-                        }
-                        $('#loyalty_point').parent().addClass('error');
-                        $('#point-alert').empty();
-                        $('#point-alert').text(alert_message);
-                        $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                      }
-                  });
-              }
-              catch (e) {
-                if(e == 'NaN'){
-                  alert_message = 'Please enter digits!';
-                }
-                else if(e == 'Min'){
-                  alert_message = 'Redeem points should be greater than 0!';
-                }
-                else if(e == 'Max'){
-                  alert_message = 'Redeem points should be less than available points!';
-                }
-                else{
-                  alert_message = 'Something is not working, Please try later!';
-                }
-                $('#loyalty_point').parent().addClass('error');
-                $('#point-alert').empty();
-                $('#point-alert').text(alert_message);
-                $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-              }
-                  
-          }
-          else{
-              alert_message = 'Enter Loyalty Point First!';
-              $('#loyalty_point').parent().addClass('error');
-              $('#point-alert').empty();
-              $('#point-alert').text(alert_message);
-              $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-              
-          }
-      };
-      function JSRemoveDiscount() {
-          $.ajax({
-              url: '/cart/removecoupon/',
-              type: 'post',
-              dataType: 'json',
-              success: function(json) {
-                  window.location.reload();
-              },
-              failure: function(response){
-                  alert_message = 'Something is not working, Please try later!';
-                  $('#discount_code').parent().addClass('error');
-                  $('#discount-alert').empty();
-                  $('#discount-alert').text(alert_message);
-                  $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                  
-              },
-              error: function (result, status, err) {
-                if(result && result.status == 400)
-                {
-                  alert_message = result.responseJSON;
-                  alert_message = alert_message.error;
-                }
-                else{
-                  alert_message = 'Something is not working, Please try later!';
-                
-                }
-                $('#discount_code').parent().addClass('error');
-                $('#discount-alert').empty();
-                $('#discount-alert').text(alert_message);
-                $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                
-              }
-          });
-      
-      };
-      function JSRemovePoint() {
-          $.ajax({
-              url: '/cart/removepoint/',
-              type: 'post',
-              dataType: 'json',
-              success: function(json) {
-                  window.location.reload();
-              },
-              failure: function(response){
-                  alert_message = 'Something is not working, Please try later!';
-                  $('#loyalty_point').parent().addClass('error');
-                  $('#point-alert').empty();
-                  $('#point-alert').text(alert_message);
-                  $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                  
-              },
-              error: function (result, status, err) {
-                if(result && result.status == 400)
-                {
-                  alert_message = result.responseJSON;
-                  alert_message = alert_message.error;
-                }
-                else{
-                  alert_message = 'Something is not working, Please try later!';
-                
-                }
-                $('#loyalty_point').parent().addClass('error');
-                $('#point-alert').empty();
-                $('#point-alert').text(alert_message);
-                $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
-                
-              }
-          });
-      
-      };
-    </script>
-
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}

@@ -1,4 +1,4 @@
-{% load static sekizai_tags %}
+{% load static sekizai_tags compress %}
 {% spaceless %}
 <!DOCTYPE html>
 <html lang="en">
@@ -20,11 +20,13 @@
        {% endblock canonical_url %}
     
     {% block css_section %}
+        {% compress css %}
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
         <link href="{% static 'shinelearn/css/mobile/common/global.css' %}" rel="stylesheet">
         <link href="{% static 'shinelearn/css/mobile/common/icons.css' %}" rel="stylesheet">
         <link href="{% static 'shinelearn/css/mobile/common/navigation.css' %}" rel="stylesheet">
         <link href="{% static 'shinelearn/css/mobile/common/images.css' %}" rel="stylesheet" >
+        {% endcompress %}
     {% endblock css_section %}
     {% endblock head %}
 {% endspaceless %}
@@ -101,6 +103,7 @@
         {% endblock main_container %}
 
     {% block js_section %}
+        {% compress js %}
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
         <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
@@ -115,6 +118,7 @@
         <script type='text/javascript' id='spd-busns-spt' async=''  
             src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
+        {% endcompress %}
     {% endblock js_section %}
 {% endspaceless %}
     {% render_block "custom_js" %}

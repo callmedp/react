@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% block title %}CMS | listing Shine learning{% endblock %}
 
 {% block meta_html %}
@@ -13,10 +13,12 @@
 
 {% block css_section %}
 {{ block.super }}
+    {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/mobile/cms/cms.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 {% block back_icon %}<img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">{% endblock back_icon %}
 {% block header_title %}<h1 class="heading-back w100fl pb-0">Resume format for freshers</h1>{% endblock header_title %}
@@ -50,9 +52,11 @@
 {% endblock container %}
 {% block js_section %}
     {{block.super}}
+    {% compress js %}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/cms/cms.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/cms/cms.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
 
 

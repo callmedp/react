@@ -1,4 +1,4 @@
-{% load static %}
+{% load static compress %}
 {% spaceless %}
 <!DOCTYPE html>
 <html lang="en">
@@ -22,9 +22,11 @@
     <title> {% block title %}Shine Learning{% endblock title %}</title>
     
     {% block css_section %}
+        {% compress css %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
         <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+        {% endcompress %}
     {% endblock css_section %}
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -87,6 +89,7 @@
     {% endblock footer %}
 
     {% block js_section %}
+    {% compress js %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
@@ -101,12 +104,15 @@
             $('.dropdown-toggle', this).trigger('click');
           });
     </script>
+    {% endcompress %}
     {% endblock js_section %}
     {% block johukum %}
-      <script type='text/javascript' id='spd-busns-spt' async=''  
+    {% compress js %}
+    <script type='text/javascript' id='spd-busns-spt' async=''
         src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
+    {% endcompress %}
     {% endblock johukum %}
   </body>
 </html>

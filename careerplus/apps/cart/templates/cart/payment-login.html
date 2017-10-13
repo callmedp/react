@@ -1,5 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
+{% load static compress %}
 
 {% block meta_html %}
     {{block.super}}
@@ -11,12 +11,14 @@
 
 {% block css_section %}
     {{block.super}}
+    {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
     <style type="text/css">
         .error{
             color:red;
         }
     </style>
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block navigation %}
@@ -109,11 +111,7 @@
 
 {% block js_section %}
    {{ block.super }}
+    {% compress js %}
    <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
-   <script type="text/javascript">
-      function toggler(divId) {
-          $("#" + divId).toggle();
-      }
-    </script>
-
+    {% endcompress %}
 {% endblock js_section %}

@@ -1,15 +1,15 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
-{% load thumbnail %}
+{% load static thumbnail compress %}
 
 
 {% block title %} orderitem conversations | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
-    
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -96,5 +96,7 @@
 
 {% block js_section %}
     {{block.super}}
+    {% compress js %}
     <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
