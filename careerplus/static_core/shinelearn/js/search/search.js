@@ -131,6 +131,8 @@ $(document).ready(function () {
             timeout: 8000
         }
     });
+    $("#ex2").slider({});
+    $('.tt-query').css('background-color','#fff');
     // $('.js_advance_search').on('click', function () {
     //     var flag = true;
     //         if (!$('#id_area').val()){

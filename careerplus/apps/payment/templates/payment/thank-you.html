@@ -1,9 +1,8 @@
 {% extends "basic/base.html" %}
-{% load static %}
-{% load humanize %}
+{% load static humanize compress %}
     {% block meta_html %}
         {{block.super}}
-    {%  endblock meta_html %}
+    {% endblock meta_html %}
 
     {% block title %}
     Thank You - Shine Learning
@@ -11,12 +10,16 @@
     
     {% block css_section %}
         {{block.super}}
+        {% compress css %}
         <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+        {% endcompress %}
+        {% compress css %}
         <style type="text/css">
             .error{
                 color: red;
             }
-        </style>      
+        </style>
+        {% endcompress %}
     {% endblock css_section %}
     
 
@@ -127,6 +130,8 @@
   
 
 {% block js_section %}
-   {{ block.super }}
-   <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
