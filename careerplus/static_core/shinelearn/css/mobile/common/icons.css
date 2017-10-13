@@ -43,7 +43,27 @@
   width: 18px;
   height: 18px;
   display: block;
-  margin-left: 25px; }
+  margin-left: 25px;
+  position: relative;
+  overflow: visible; 
+}
+
+.icon-cart span {
+  position: absolute;
+  background-color: #fecd2f;
+  color: #000;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  text-align: center;
+  left: -7px;
+  top: -10px;
+  text-indent: 0px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: -1px;
+}
 
 .icon-close {
   background-position: -124px -175px;
