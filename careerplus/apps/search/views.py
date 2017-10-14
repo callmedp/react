@@ -363,6 +363,7 @@ class SearchListView(SearchBaseView):
 
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
+        context.update({"search_context": redis_conn.smembers('product_set')})
         return context
 
     def prepare_track(self, page):

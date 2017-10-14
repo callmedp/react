@@ -908,7 +908,7 @@ class ProfileUpdationView(DetailView):
             'country_obj': country_obj,
             "action_form": OIActionForm(queue_name="internationalprofileupdate"),
             "profile_url_dict": profile_url_dict,
-        }) 
+        })
         return context
 
     def post(self, request, *args, **kwargs):
@@ -920,28 +920,25 @@ class ProfileUpdationView(DetailView):
         queue_name = request.POST.get('queue_name', '')
         update_sub = request.POST.get('update', '')
         count = request.POST.get('count', None)
-        username = request.POST.get('username'+str(count)+'', None)
-        password = request.POST.get('password'+str(count)+'', None)
-        site = request.POST.get('site'+str(count)+'', None)
-        flag = request.POST.get('flag'+str(count)+'', None)
-        
+        username = request.POST.get('username' + str(count) + '', None)
+        password = request.POST.get('password' + str(count) + '', None)
+        site = request.POST.get('site' + str(count) + '', None)
+        flag = request.POST.get('flag' + str(count) + '', None)
+
         if action == -9 and queue_name == "internationalprofileupdate":
             selected_id = json.loads(selected)
             try:
-                orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id__in=selected_id)
-                profile_obj = orderitem.product.productextrainfo_set.get(info_type='profile_update')
-                country_obj = Country.objects.get(pk=profile_obj.object_id)
-                profile_urls = country_obj.profile_url.split(',')
-                count = 0
-                for cnt in profile_urls:
-                    count = count + 1
-                    username = request.POST.get('username'+str(count)+'', None)
-                    password = request.POST.get('password'+str(count)+'', None)
-                    if not username and not password:
+                orderitem = OrderItem.objects.select_related(
+                    'order', 'product', 'partner').get(
+                    id__in=selected_id)
+                objs = orderitem.internationalprofilecredential_set.all()
+                for obj in objs:
+                    if not obj.username and not password:
                         msg = 'Please update all the profiles first'
                         messages.add_message(request, messages.SUCCESS, msg)
-                        return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
-
+                        return HttpResponseRedirect(reverse(
+                            'console:international_profile_update',
+                            kwargs={'pk': kwargs.get('pk')}))
                 approval = 0
                 if orderitem:
                     last_oi_status = orderitem.oi_status
@@ -958,32 +955,39 @@ class ProfileUpdationView(DetailView):
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
-            return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':int(selected_id[0])}))
+            return HttpResponseRedirect(reverse(
+                'console:international_profile_update',
+                kwargs={'pk': int(selected_id[0])}))
 
         elif update_sub == "1":
             try:
-                orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id=kwargs.get('pk'))
-                profile_obj = orderitem.product.productextrainfo_set.get(info_type='profile_update')
-                country_obj = Country.objects.get(pk=profile_obj.object_id)
+                orderitem = OrderItem.objects.select_related(
+                    'order', 'product',
+                    'partner').get(id=kwargs.get('pk'))
                 if username and password and flag:
-                    profile_obj = InternationalProfileCredential()
-                    profile_obj.oi = orderitem
-                    profile_obj.country = country_obj
-                    profile_obj.username = username
-                    profile_obj.password = password
-                    profile_obj.candidateid = orderitem.order.candidate_id
-                    profile_obj.candidate_email = orderitem.order.email
-                    profile_obj.site_url = site
-                    profile_obj.profile_status = True
-                    profile_obj.save()
-                    return HttpResponse(json.dumps({'success':True}), content_type="application/json")
-                return HttpResponse(json.dumps({'success':False}), content_type="application/json")
+                    orderitem.internationalprofilecredential_set.update(
+                        username=username,
+                        password=password,
+                        candidateid=orderitem.order.candidate_id,
+                        site_url=site,
+                        profile_status=True,
+                    )
+                    return HttpResponse(
+                        json.dumps({'success': True}),
+                        content_type="application/json"
+                    )
+                return HttpResponse(
+                    json.dumps({'success': False}),
+                    content_type="application/json"
+                )
             except Exception as e:
-                logging.getLogger('error_log').error("%s - %s" % (str(update_sub), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (
+                    str(update_sub), str(e)))
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(ProfileUpdationView, self).dispatch(request, *args, **kwargs)
+        return super(ProfileUpdationView, self).dispatch(
+            request, *args, **kwargs)
 
 
 class InterNationalAssignmentOrderItemView(View):

@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'haystack',
     'celery',
+    'compressor'
 ]
 
 # Apps specific for this project go here.
@@ -175,6 +176,7 @@ USE_TZ = True
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Static files (CSS, JavaScript, Images)

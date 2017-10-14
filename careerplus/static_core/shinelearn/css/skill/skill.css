@@ -188,7 +188,10 @@
 .listing1 .media {
   margin-top: 0;
 }
-.listing1 .media figure .media-object {
+.listing1 .media .media-left {
+  padding-right: 0;
+}
+.listing1 .media .media-left figure .media-object {
   width: 130px;
   height: 130px;
 }
@@ -275,6 +278,5 @@
 }
 
 .scroll {
-  margin-top: -100px;
-  padding-top: 100px;
+  border-top: 10px solid transparent;
 }

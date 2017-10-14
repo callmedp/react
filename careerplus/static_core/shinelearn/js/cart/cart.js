@@ -188,6 +188,10 @@ function updateUnCheckedPrice(this_obj){
     }
 }
 
+function toggler(divId) {
+    $("#" + divId).toggle();
+}
+
 function updateCartPrice(){
 
     $('input[name="required_option"]').each(function(){
@@ -640,6 +644,4 @@ $(document).ready(function() {
     });
 
     cartScroller();
-
-
 });

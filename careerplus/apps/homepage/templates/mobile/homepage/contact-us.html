@@ -1,0 +1,100 @@
+{% extends "mobile/basic/base.html" %}
+{% load static thumbnail compress %}
+{% block title %}Shine learning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static 'shinelearn/css/mobile/homepage/checkbox.css' %}" rel="stylesheet" >
+    <link href="{% static 'shinelearn/css/mobile/homepage/contact.css' %}" rel="stylesheet" >
+            
+{% endblock css_section %}
+
+{% block header %}
+<!-- header menu Icon Starts here -->
+<header class="w100fl he-auto">
+    
+    
+    <img src="{% static 'shinelearn/images/mobile/homepage/contact.jpg' %}">
+    
+    <!-- header menu Icon Starts here -->
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            
+            <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
+
+                
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+        </div><!-- / Left side Icon ends here -->
+
+        <!--div class="pull-right">
+            
+            <a class="icon-search pull-left" href="search-listing.html">search</a>
+
+            
+            <a class="icon-cart pull-left" href="#">cart</a>
+        </div--><!-- / Right side Icon ends here -->
+    </div><!-- header menu Icon ends here -->
+
+    
+    
+    
+    <h1 class="heading-back w100fl pb-0">Contact Us</h1>
+    
+
+
+    <!-- Skill Tagging starts here -->
+    
+    
+    <!-- Skill Tagging ends here -->
+
+    <!-- Course detail header starts here -->
+    
+    
+    <!-- Course detail header Ends here -->
+
+    <!-- Search listing tagging starts here -->
+    
+
+    
+    <!-- Search listing tagging ends here -->
+</header><!-- header ends here -->
+
+{% endblock header %}
+
+{% block container %}
+    
+<div class="body-wrapper">
+<section class="content-box">
+  <ul class="find-us">
+    <li>
+       <h2><span class="icon-loc"></span>Gurgaon</h2>
+      Shine.com, 3rd Floor, Park Centra, Sector – 30, Gurgaon, Opp. 32nd milestone
+      Phone - 0124-3955001 
+    </li>
+    <li>
+       <h2><span class="icon-loc"></span>Noida</h2>
+       Shine.com, C-95, Sector – 2, Noida, Near SBI Bank Branch.
+       Phone - 0120 3823222 </li>
+    <li>
+       <h2><span class="icon-loc"></span>Hyderabad</h2>
+       Shine.com, Le Benaka Towers, 2nd Floor, Flat - 2A, Road - 1, Banjara Hills, Opp. Kotak Mahindra Bank <br>
+       Phone - 040 66888909 
+     </li>
+  </ul>
+  <div class="care-seciton">
+    <div class="care-left"><img src="{% static 'shinelearn/images/mobile/homepage/contact-phone.png' %}"></div>
+    <div class="care-rgt">
+    <h2>Customer Care</h2>
+      Phone - 01206158822
+      <br>
+      Email - <a href="mailto:resume@shine.com">resume@shine.com</a><br>
+      Timings - 09:00 AM to 7:00 PM</div>
+  </div>
+
+  <div class="mail-icon"><span class="mail-iconStrock"></span></div>
+</section>
+
+</div>
+
+{% endblock container %}
+

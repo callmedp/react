@@ -1,6 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
-{% load humanize %}
+{% load static humanize compress %}
     {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
@@ -14,9 +13,11 @@
     {% endblock title %}
     
     {% block css_section %}
-        {{block.super}}        
+        {{block.super}}
+        {% compress css %}
         <link type="text/css" href="{% static 'shinelearn/css/cms/cms.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/cms/extra.css' %}" rel="stylesheet">
+        {% endcompress %}
     {% endblock css_section %}
     
     {% block breadcrumb %}
@@ -218,7 +219,9 @@
 
 {% block js_section %}
    {{ block.super }}
+    {% compress js %}
    <script src="{% static 'shinelearn/js/cms/cms.js' %}"></script>
    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
+    {% endcompress %}
 
 {% endblock js_section %}

@@ -1,4 +1,4 @@
-{% load static sekizai_tags %}
+{% load static sekizai_tags compress %}
 {% spaceless %}
 <!DOCTYPE html>
 <html lang="en">
@@ -22,10 +22,12 @@
     
     {% block css_section %}
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
+        {% compress css %}
         <link href="{% static 'shinelearn/css/mobile/common/global.css' %}" rel="stylesheet">
         <link href="{% static 'shinelearn/css/mobile/common/icons.css' %}" rel="stylesheet">
         <link href="{% static 'shinelearn/css/mobile/common/navigation.css' %}" rel="stylesheet">
         <link href="{% static 'shinelearn/css/mobile/common/images.css' %}" rel="stylesheet" >
+        {% endcompress %}
     {% endblock css_section %}
     {% endblock head %}
 {% endspaceless %}
@@ -88,8 +90,9 @@
     {% block js_section %}
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
-        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
+        {% compress js %}
+        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
         <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
@@ -97,9 +100,13 @@
         <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
         <script src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
         <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
-        <script type='text/javascript' id='spd-busns-spt' async=''  
-            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  data-client='324ed0abb0694b0c66a6daecb178352d'>
+        {% endcompress %}
+        {% block johukum %}
+        <script type='text/javascript' id='spd-busns-spt' async=''
+            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
+            data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
+        {% endblock johukum %}
     {% endblock js_section %}
 {% endspaceless %}
     {% render_block "custom_js" %}

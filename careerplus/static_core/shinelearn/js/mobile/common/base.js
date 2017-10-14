@@ -51,6 +51,15 @@ $(document).ready(function() {
 		variableWidth: true,
 	});
 
+	$(".skill-provider").slick({
+		autoplay:false,
+		autoplaySpeed:3000,
+		dots: false,
+		arrows: false,
+		infinite: false,
+		variableWidth: true,
+	});
+
 	$(".review-slide").slick({
 		autoplay:false,
 		autoplaySpeed:3000,
@@ -82,6 +91,18 @@ $(document).ready(function() {
 		slidesToShow: 2,
 		slidesToScroll: 2,
 		infinite: false
+	});
+
+	$(".slide-provide").slick({
+		autoplay:false,
+		autoplaySpeed:3000,
+		dots: false,
+		arrows: false,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		variableWidth: true,
+		slideWidth: 240,
+		infinite: true
 	});
 
 });// Document ready function ends here

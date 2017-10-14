@@ -1,13 +1,14 @@
 {% extends "basic/base.html" %}
-{% load static %}
+{% load static compress %}
 
 {% block title %}
   Counselling form - Shine Learning
 {% endblock title %}
 {% block css_section %}
-        {{block.super}}  
-  <link type="text/css" href="{% static 'shinelearn/css/dashboard/dashboard.css' %}" 
-  rel="stylesheet">    
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/dashboard/dashboard.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block pageheading %}
@@ -98,33 +99,9 @@
 <!-- main section end -->
 {% endblock container %}
 {% block js_section %}
-   {{ block.super }}
-   <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
-  <script type="text/javascript">
-      $().ready(function() {
-        var element = 'submit-error';
-        $("#dashboard_counselling_form").validate({
-            submitHandler: function(form) {
-              form.submit();
-          },
-          rules: {
-              q1:{ required:true,},
-              q2: { required:true,},
-              q3:{ required:true,},
-              q4: { required:true,},
-              q5:{ required:true,},        
-          },
-          messages:{
-              q1:{ required:"This field is required",},
-              q2:{ required:"This field is required",},
-              q3:{ required:"This field is required",},
-              q4:{ required:"This field is required",},
-              q5:{ required:"This field is required",},   
-          },
-          errorPlacement: function(error, element) {
-              element.siblings(".submit-error").text('This field is required');
-          }
-      });
-    });
-  </script>
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/dashboard/counselling.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
