@@ -42,18 +42,19 @@
 
 {% block container %}
 
+{% if cart_items %}
 <div class="body-wrapper mb-50">
 
-    {% if cart_items or 1 %}
     <div class="content-box">
         <!-- Tab content Satrts here -->
         <div class="my-cart">
             <ul>
                 {% for item in cart_items %}
                     <!-- item 1 -->
-                    {% with addons=item.addons variations=item.variations %}
+                    {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
                         {% if item.product_class == 'course' and variations %}
                             <li class="box row">
+                                <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
                                 <div class="table{% if not item.is_available %} disbale{% endif %}">
                                     <div class="table-cell">
                                         <strong class="c6">{{item.name}}</strong>
@@ -68,9 +69,71 @@
                                     </div><!-- /.table cell -->
                                 </div><!-- /.table -->
 
+                                {% if addons %}
+                                    <div class="addons">
+                                        <h4>Addons</h4>
+                                        <ul class="mt-10 fs-12 c6">
+                                            {% for addon in addons %}
+                                                <li class="{% if not addon.is_available %}disbale{% endif %}">
+                                                    <span>
+                                                        <input type="checkbox" id="addon-{{addon.id}}" name="child_list" value="{{addon.reference}}">
+                                                        <label for="addon-{{addon.id}}">{{addon.name}}
+                                                        </label>
+                                                    </span>
+
+                                                    <span>Rs. {{addon.price}}/-</span>
+                                                </li>
+                                                {% if not addon.is_available %}
+                                                    <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+
+                                {% if delivery_types %}
+                                    <div class="table">
+                                        <div class="table-cell">
+                                            <div class="">
+                                                <form role="form" id="delivery-option-form{{variations.0.id}}">{% csrf_token %}
+                                                    <select id="delivery-option{{variations.0.id}}" onchange="deliveryOptionUpdate('{{variations.0.id}}')" name="delivery_type">
+                                                        {% for d_obj in delivery_types %}
+                                                            <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.0.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                                        {% endfor %}
+                                                        <!--option>Select shipping</option>
+                                                        <option>Fedx</option>
+                                                        <option>UPSC</option>
+                                                        <option>DHL</option>
+                                                        <option>DTDC</option-->
+                                                    </select>
+                                                    <input type="hidden" name="lineid" value="{{variations.0.id}}" />
+                                                </form>
+                                            </div>
+                                        </div><!-- /.table cell -->
+
+                                        <div class="table-cell text-right">
+                                            <span class="mt-15" id="delivery-charge{{variations.0.id}}">{% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-{% endif %}</span>
+                                        </div><!-- /.table cell -->
+                                    </div><!-- /.table -->
+                                {% endif %}
+
+                                <div class="table">
+                                    <div class="table-cell">
+                                    </div><!-- /.table cell -->
+                                    <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
+
+                                    <div class="table-cell text-right">
+                                        <button class="btn btn-sm btn-outline mt-20" onclick="removeFromCartMobile('{{item.id}}')">Remove</button>
+                                    </div><!-- /.table cell -->
+                                </div><!-- /.table -->
+                                </form>
+
                             </li><!-- /.li -->
                         {% else %}
+
                             <li class="box row">
+                                <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                               
                                 <div class="table{% if not item.is_available %} disbale{% endif %}">
                                     <div class="table-cell">
                                         <strong class="c6">{{item.name}}</strong>
@@ -90,37 +153,80 @@
                                         <h4>Addons</h4>
                                         <ul class="mt-10 fs-12 c6">
                                             {% for var in variations %}
-                                            <li class="{% if not var.is_available %}disbale{% endif %}">
-                                                <span>
-                                                    <input type="checkbox" id="addon-1 ">
-                                                    <label for="addon-1 ">{{var.name}}
-                                                    </label>
-                                                </span>
-
-                                                <span>Rs. {{var.price}}/-</span>
-                                            </li>
+                                                <li class="{% if not var.is_available %}disbale{% endif %}">
+                                                    <span>
+                                                        <input type="checkbox" name="child_list" id="var-{{var.id}}" value="{{var.reference}}">
+                                                        <label for="var-{{var.id}}">{{var.name}}
+                                                        </label>
+                                                    </span>
+                                                    <span>Rs. {{var.price}}/-</span>
+                                                </li>
+                                                {% if not var.is_available %}
+                                                    <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
+                                                {% endif %}
                                             {% endfor %}
 
                                             {% for addon in addons %}
-                                            <li class="{% if not addon.is_available %}disbale{% endif %}">
-                                                <span>
-                                                    <input type="checkbox" id="addon-2 ">
-                                                    <label for="addon-2 ">{{addon.anem}}
-                                                    </label>
-                                                </span>
-
-                                                <span>Rs. {{addon.price}}/-</span>
-                                            </li>
+                                                <li class="{% if not addon.is_available %}disbale{% endif %}">
+                                                    <span>
+                                                        <input type="checkbox" name="child_list" id="addon-{{addon.id}}" value="{{addon.reference}}">
+                                                        <label for="addon-{{addon.id}}">{{addon.name}}
+                                                        </label>
+                                                    </span>
+                                                    <span>Rs. {{addon.price}}/-</span>
+                                                </li>
+                                                {% if not addon.is_available %}
+                                                    <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
+                                                {% endif %}
                                             {% endfor %}
                                         </ul>
                                     </div>
                                 {% endif %}
+
+                                {% if delivery_types %}
+                                    <div class="table">
+                                        <div class="table-cell">
+                                            <div class="">
+                                                <form role="form" id="delivery-option-form{{item.id}}">{% csrf_token %}
+                                                    <select id="delivery-option{{item.id}}" onchange="deliveryOptionUpdate('{{item.id}}')" name="delivery_type">
+                                                        {% for d_obj in delivery_types %}
+                                                            <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == item.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                                        {% endfor %}
+                                                        <!--option>Select shipping</option>
+                                                        <option>Fedx</option>
+                                                        <option>UPSC</option>
+                                                        <option>DHL</option>
+                                                        <option>DTDC</option-->
+                                                    </select>
+                                                    <input type="hidden" name="lineid" value="{{item.id}}" />
+                                                </form>
+                                            </div>
+                                        </div><!-- /.table cell -->
+
+                                        <div class="table-cell text-right">
+                                            <span class="mt-15" id="delivery-charge{{item.id}}">{% if item.delivery_obj and item.delivery_obj.get_price %}Rs. {{item.delivery_obj.get_price|floatformat:0}}/-{% endif %}</span>
+                                        </div><!-- /.table cell -->
+                                    </div><!-- /.table -->
+                                {% endif %}
+
+
+                                <div class="table">
+                                    <div class="table-cell">
+                                    </div><!-- /.table cell -->
+                                     <input type="hidden" name="product_reference" value="{{item.reference}}">
+
+                                    <div class="table-cell text-right">
+                                        <button class="btn btn-sm btn-outline mt-20" onclick="removeFromCartMobile('{{item.id}}')">Remove</button>
+                                    </div><!-- /.table cell -->
+                                </div><!-- /.table -->
+                              </form>
 
                             </li><!-- /.li -->
                         {% endif %}
                     {% endwith %}
                 {% endfor %}
 
+                {% comment %}
                 <li class="box row">
                     <div class="table">
                         <div class="table-cell">
@@ -224,6 +330,8 @@
                     </div><!-- /.table -->
                 </li><!-- /.li -->
 
+                {% endcomment %}
+
                 <li class="text-center"><img src="images/secure-payment.jpg"></li>
             </ul><!-- /.ul -->
         </div><!-- Tab content ends here -->
@@ -236,21 +344,31 @@
             <div class="wf100">
                 <div class="pull-left">
                     <p class="c9 fs-12 pb-0">Payable Amount</p>
-                    <span class="fs-22 c3">Rs. 28356/-</span>
+                    <span class="fs-22 c3" >Rs. <span id="total-cart-amount-id">{{total_amount}}</span>/-</span>
                 </div>
-                
-                <a href="#" class="btn btn-yellow pull-right">Proceed to checkout</a>
+                <a href="{% url "cart:payment-login" %}" class="btn btn-yellow pull-right">Proceed to checkout</a>
             </div>
-        <div class="clearfix"></div>    
+        <div class="clearfix"></div>   
         </div>
     </div><!-- call us and chat widget ends here -->
-    {% endif %}
-
 </div>
+{% else %}
+    <div class="body-wrapper">
+        <div class="content-box">
+            <div class="text-center mt-50">
+                <span class="inline-block"><img src="{% static "shinelearn/images/mobile/common/wallet_empty.jpg" %}" alt="empty-image"></span>
+                <p class="fs-18 c6 mt-10">You have no product in your cart. Add your first product and earn Shine loyalty points</p>
+
+            <a href="/" class="btn btn-blue btn-lg">Search now</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
 
 {% endblock container %}
 
 
 {% block js_section %}
     {{block.super}}
+    <script src="{% static "shinelearn/js/mobile/cart/cart.js" %}"></script>
 {% endblock js_section %}

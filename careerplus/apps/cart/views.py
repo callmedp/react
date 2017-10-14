@@ -444,7 +444,8 @@ class UpdateDeliveryType(View, CartMixin):
                 delivery_obj = delivery_servieces.get(pk=delivery_type)
                 line_obj.delivery_service = delivery_obj
                 line_obj.save()
-                total_cart_amount = self.getTotalAmount(cart_obj=cart_obj)
+                cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+                total_cart_amount = cart_dict.get('total_amount')
                 delivery_charge = delivery_obj.get_price()
                 data.update({
                     "total_cart_amount": int(total_cart_amount),
