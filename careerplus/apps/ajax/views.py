@@ -138,7 +138,6 @@ class AjaxProductLoadMoreView(TemplateView):
             context.update({
                 'products': products, 'page': page,
                 'slug': slug,
-                'site': settings.SITE_PROTOCOL + "://" + settings.SITE_DOMAIN,
             })
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))

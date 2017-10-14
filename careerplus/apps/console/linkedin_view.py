@@ -931,14 +931,24 @@ class ProfileUpdationView(DetailView):
                 orderitem = OrderItem.objects.select_related(
                     'order', 'product', 'partner').get(
                     id__in=selected_id)
-                objs = orderitem.internationalprofilecredential_set.all()
-                for obj in objs:
-                    if not obj.username and not password:
+                profile_obj = orderitem.product.productextrainfo_set.get(
+                    info_type='profile_update'
+                )
+                country_obj = Country.objects.get(pk=profile_obj.object_id)
+                profile_urls = country_obj.profile_url.split(',')
+                count = 0
+                for cnt in profile_urls:
+                    count = count + 1
+                    username = request.POST.get('username' + str(count) + '', None)
+                    password = request.POST.get('password' + str(count) + '', None)
+                    if not username and not password:
                         msg = 'Please update all the profiles first'
                         messages.add_message(request, messages.SUCCESS, msg)
-                        return HttpResponseRedirect(reverse(
-                            'console:international_profile_update',
-                            kwargs={'pk': kwargs.get('pk')}))
+                        return HttpResponseRedirect(
+                            reverse(
+                                'console:international_profile_update',
+                                kwargs={'pk': kwargs.get('pk')})
+                        )
                 approval = 0
                 if orderitem:
                     last_oi_status = orderitem.oi_status
@@ -964,14 +974,21 @@ class ProfileUpdationView(DetailView):
                 orderitem = OrderItem.objects.select_related(
                     'order', 'product',
                     'partner').get(id=kwargs.get('pk'))
+                profile_obj = orderitem.product.productextrainfo_set.get(
+                    info_type='profile_update'
+                )
+                country_obj = Country.objects.get(pk=profile_obj.object_id)
                 if username and password and flag:
-                    orderitem.internationalprofilecredential_set.update(
-                        username=username,
-                        password=password,
-                        candidateid=orderitem.order.candidate_id,
-                        site_url=site,
-                        profile_status=True,
-                    )
+                    profile_obj = InternationalProfileCredential()
+                    profile_obj.oi = orderitem
+                    profile_obj.country = country_obj
+                    profile_obj.username = username
+                    profile_obj.password = password
+                    profile_obj.candidateid = orderitem.order.candidate_id
+                    profile_obj.candidate_email = orderitem.order.email
+                    profile_obj.site_url = site
+                    profile_obj.profile_status = True
+                    profile_obj.save()
                     return HttpResponse(
                         json.dumps({'success': True}),
                         content_type="application/json"

@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td style="padding: 10px; background-color: #f8f8f8;">
-      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {{username}},</strong>
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if username %}{{username}} {% else %} User {% endif %},</strong>
       	<span style="display: block; padding-bottom: 3px;">Shine learning wishes you all the best for your learning ahead! </span>
       	<strong>You can avail your services as below:</strong>
       </td>

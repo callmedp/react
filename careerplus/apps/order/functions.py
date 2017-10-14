@@ -58,13 +58,6 @@ def update_initiat_orderitem_sataus(order=None):
                         oi_status=oi.oi_status,
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
-                profile_obj = oi.product.productextrainfo_set.get(info_type='profile_update')
-                country_obj = Country.objects.get(pk=profile_obj.object_id)
-                profile_urls = country_obj.profile_url.split(',')
-                for profile_url in profile_urls:
-                    oi.internationalprofilecredential_set.create(
-                        country=country_obj,
-                    )
 
             elif oi.product.type_flow == 5:
                 if oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists():
@@ -296,7 +289,7 @@ def process_mailer(order=None):
             to_emails = [oi.order.email]
             mail_type = "PROCESS_MAILERS"
             data['subject'] = 'Your service details related to order <'+str(oi.order.id)+'>'
-            data['username'] = oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+            data['username'] = oi.order.first_name,
             token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, days=None)
             try:
                 email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
@@ -458,7 +451,7 @@ def payment_pending_mailer(order=None):
                     data = {}
                     data.update({
                         "subject": 'Your Shine Payment Confirmation pending',
-                        "first_name": order.first_name if order.first_name else order.candidate_id,
+                        "username": order.first_name,
                         "txn": pymt_obj.txn,
                         'mobile': oi.order.mobile,
                     })
