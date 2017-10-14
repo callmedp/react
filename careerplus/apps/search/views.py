@@ -134,34 +134,23 @@ class SearchBaseView(TemplateView):
                 variations = json.loads(result.pVrs)
                 # if no variations, skip
                 if variations['variation']:
+                    selected_price = result.pPinb if result.pPc == 'writing' or result.pPc == 'service' else result.pPin
+                    selected_fprice = result.pPfinb if result.pPc == 'writing' or result.pPc == 'service' else result.pPfin
+                    # add variation price to parent price
+                    for var in variations['var_list']:
+                        continue_flag = 0
+                        for att in requested_filters:
+                            if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
+                                continue_flag = 1
+                                break
+                        if continue_flag:
+                            continue
+                        if var['inr_price'] < selected_price:
+                            selected_price = var['inr_price']
+                            selected_fprice = var['fake_inr_price']
                     if result.pPc == 'writing' or result.pPc == 'service':
-                        selected_price = result.pPinb
-                        selected_fprice = result.pPfinb
-                        # add variation price to parent price
-                        for var in variations['var_list']:
-                            continue_flag = 0
-                            for att in requested_filters:
-                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
-                                    continue_flag = 1
-                                    break
-                            if continue_flag:
-                                continue
-                            if var['inr_price'] < selected_price:
-                                selected_price = var['inr_price']
-                                selected_fprice = var['fake_inr_price']
                         selected_price += selected_price
                         selected_fprice += selected_fprice
-                    else:
-                        selected_price = result.pPin
-                        selected_fprice = result.pPfin
-                        # only variation price
-                        for var in variations['var_list']:
-                            for att in requested_filters:
-                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
-                                    break
-                            if var['inr_price'] < selected_price:
-                                selected_price = var['inr_price']
-                                selected_fprice = var['fake_inr_price']
                     result.pPin = selected_price
                     result.pPfin = selected_fprice
 
@@ -363,7 +352,7 @@ class SearchListView(SearchBaseView):
 
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
-        context.update({"search_context": redis_conn.smembers('product_set')})
+        context.update({"search_context": [p.decode() for p in redis_conn.smembers('product_set')]})
         return context
 
     def prepare_track(self, page):

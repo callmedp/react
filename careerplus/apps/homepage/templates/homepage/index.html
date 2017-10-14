@@ -299,6 +299,7 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
+    <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     {% endcompress %}
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},
@@ -310,7 +311,6 @@
         });
     </script>
     {% compress js %}
-    <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     <script>
         $('#myCarousel1').carousel({
             interval: false
