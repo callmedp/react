@@ -9,7 +9,6 @@ from django.conf import settings
 
 #third party imports
 from haystack.inputs import Raw
-from haystack.query import EmptySearchQuerySet
 
 #local imports
 from search import inputs
@@ -69,9 +68,9 @@ class BaseSearch(object):
         '{!tag=funa}pFA': 'farea',
         '{!tag=ratng}pAR': 'frating',
         '{!tag=inr}pAttrINR': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        '{!tag=usd}pAttrUSD': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        '{!tag=aed}pAttrAED': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        '{!tag=gbp}pAttrGBP': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice']
+        # '{!tag=usd}pAttrUSD': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        # '{!tag=aed}pAttrAED': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
+        # '{!tag=gbp}pAttrGBP': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice']
     }
 
     boost_mapping = {
@@ -325,10 +324,13 @@ class BaseSearch(object):
     def add_filters(self):
 
         results = self.results
+        found = True
         results = self.add_basic_filters(results)
-
+        if not results.count():
+            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            found = False
         # results = self.add_sws_filters(results)
-        return results
+        return results, found
 
     def add_custom_boost(self):
         """
@@ -383,25 +385,30 @@ class BaseSearch(object):
         Calls all other functions and returns the results.
         """
         if self.needed_params_options and not self.needed_params_options.intersection(self.get_params().keys()):
-            return EmptySearchQuerySet()
+            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            found = False
+            return results, found
 
         self.results_per_page = self.get_rps()
-        self.results = self.add_filters()
+        self.results, found = self.add_filters()
         if self.params.get("sort") != "1":
             self.results = self.add_boost()
         self.results = self.add_sort()
-        self.results = self.results.extra(self.get_extra_params())
-        self.results = self.results.filter(content=Raw(self.get_query()))
-        self.results  = self.add_facets()
-        if self.fields and not self.params.getlist('fl'):
-            self.results = self.results.only(*self.fields)
-        else:
-            asked_fields = map(str,self.params.getlist('fl')[0].split(","))
-            self.results = self.results.only(*asked_fields)
+        if found:
+            self.results = self.results.extra(self.get_extra_params())
+            self.results = self.results.filter(content=Raw(self.get_query()))
+            self.results = self.add_facets()
+            if self.fields and not self.params.getlist('fl'):
+                self.results = self.results.only(*self.fields)
+            else:
+                asked_fields = map(str,self.params.getlist('fl')[0].split(","))
+                self.results = self.results.only(*asked_fields)
+        if not self.results.count():
+            self.results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            found = False
         (start_offset, end_offset) = self.get_load_range()
-        self.results[start_offset:end_offset]
-
-        return self.results
+        # self.results[start_offset:end_offset]
+        return self.results, found
 
     def get_results_count_only(self):
         """
@@ -412,7 +419,7 @@ class BaseSearch(object):
         if self.needed_params_options and not self.needed_params_options.intersection(self.get_params().keys()):
             return 0
 
-        self.results = self.add_filters()
+        self.results, self.found = self.add_filters()
         self.results = self.add_facets()
         self.results = self.results.filter(content=Raw(self.get_query()))
         self.results = self.results.only(*fields)
@@ -604,14 +611,15 @@ class FuncAreaSearch(BaseSearch):
     needed_params_options = {'pk', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
 
     def add_filters(self):
-        results = super(FuncAreaSearch, self).add_filters()
+        results, found = super(FuncAreaSearch, self).add_filters()
 
         # Functional Area Filter
         if self.params.get('pk') and search_clean_fields(self.params.get('pk')):
             results = results.narrow('pFA:%s' % self.params.get('pk'))
-
-        return results
-
+        if not results.count():
+            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            found = False
+        return results, found
 
 class FuncAreaParams(BaseParams):
     query_param_name = None
@@ -629,9 +637,12 @@ class RecommendedSearch(BaseSearch):
     needed_params_options = {'area', 'skills'}  # , 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
 
     def add_filters(self):
-        results = super(RecommendedSearch, self).add_filters()
+        results, found = super(RecommendedSearch, self).add_filters()
         results = get_recommendations(self.params['area'], self.params['skills'], results)
-        return results
+        if not results.count():
+            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            found = False
+        return results, found
 
 
 class RecommendedParams(BaseParams):

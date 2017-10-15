@@ -90,7 +90,7 @@
             {% if facets.fields.pAR|length %}
             <div id="tab-3" class="tab-content">
             <ul>
-                {% for i in '12345' %}
+                {% for i in '54321' %}
                 <li>
                 <input name="frating" type="checkbox" id="test3{{ forloop.counter }}" {% if i in rating %}checked="checked"{% endif %}
                             {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
