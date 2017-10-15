@@ -403,9 +403,9 @@ class BaseSearch(object):
             else:
                 asked_fields = map(str,self.params.getlist('fl')[0].split(","))
                 self.results = self.results.only(*asked_fields)
-        if not self.results.count():
-            self.results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
-            found = False
+            if not self.results.count():
+                self.results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+                found = False
         (start_offset, end_offset) = self.get_load_range()
         # self.results[start_offset:end_offset]
         return self.results, found
