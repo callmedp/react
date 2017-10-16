@@ -1,0 +1,196 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load static compress %}
+
+
+{% block canonical_url %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock canonical_url %}
+
+{% block title %}Thankyou | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+        <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+        <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css %}
+        <style>
+           .error{
+            color:red;
+           }
+        </style>
+    {% endcompress %}
+    
+{% endblock css_section %}
+
+{% block header %}
+
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+    
+      <!-- header menu Icon Starts here -->
+      <div class="main-menu w100fl">
+          <div class="pull-left">
+              
+              <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
+
+              
+              <a class="icon-back pull-left"  role="button"  onclick="goBack()"></a> 
+          </div><!-- / Left side Icon ends here -->
+
+      </div><!-- header menu Icon ends here -->
+
+  </header><!-- header ends here -->
+
+{% endblock header %}
+
+{% block container %}
+
+<div class="body-wrapper ">
+
+  <!-- Tab content Satrts here -->
+  <div class="content-box mt-20">
+
+    <div class="text-center mt-20">
+      {% if order.status == 1 %}
+          <span class="icon-tick"></span>
+          <p class="fs-22 mt-20">Your payment has been made successfully!</p>
+      {% else %}
+          <span class="icon-wait"></span>
+          <p class="fs-22 mt-20">Waiting for payment to be made, meanwhile order has been created!</p>
+      {% endif %}
+
+      <p class="c9 fs-14 semi-bold">Your transaction ID is {{order.ordertxns.last.txn}}</p>
+      <p class="c9 mt-20">An email, along with all the details, has been sent to <a href="mailto:{{order.email}}">{{order.email}}</a>. For any further assistance, you can get in touch with us on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></p>
+    </div>
+
+    {% if pending_resume_items %}
+        <!-- shine-options Satrts here -->
+        <div class="shine-options mt-20">
+           <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
+              {% if request.session.resume_id %}
+                  <div class="label-wrap box">
+                    <input type="radio" id="shine-resume-box" name="radio-group">
+                    <label for="shine-resume-box" class="fs-13">Use latest shine resume</label>
+                  </div>
+
+                  <div class="text-center mb-15 fs-20">or</div>
+              {% endif %}
+
+              <div class="label-wrap box">
+                <input type="radio" checked id="upload-resume-box" name="radio-group">
+                <label for="upload-resume-box" class="fs-13">Upload new resume or fill questionnaire</label>
+
+                <span id="resume_name_id"></span>
+                <!-- btn-wrap -->
+                <ul class="btn-wrap mt-20">
+                  <li class="rel">
+                    <div class="btn btn-outline w100">
+                        <span>Upload resume</span>
+                        <input id="id-upload-resume" type="file" name="resume_file" class="upload" />
+                    </div>
+                  </li>
+                  <li>or</li>
+                  <li><a href="{% url "dashboard:dashboard-downloadquestionnaire" %}" class="btn btn-outline w100">Questionnaire</a></li>
+                </ul><!-- ./ lbtn-wrap -->
+              </div><!-- ./ label-wrap -->
+
+               <div class="text-center">  
+                <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
+                <button type="button" class="btn btn-blue mt-0" id="resume-sumbmit-button">Proceed</button>
+               </div>
+         </form>
+        </div><!-- shine-options Ends here -->
+    {% endif %}
+
+  <!-- subscribed widgets Satrts here -->
+  <div class="box payment-summary row w-auto mt-20">
+    <p class="semi-bold">You have subscribed to the following services</p>
+
+    {% for item in orderitems %}
+        {% with oi=item.oi addons=item.addons variations=item.variations %}
+            <!-- Item wrap -->
+            {% if oi.product.is_course and variations %}
+                <div class="w100fl item-wrap c6">
+                  <div class="w100fl">
+                    <span class="item">
+                      <strong class="block">{{oi.product.get_name}}</strong>
+                      <!--span class="fs-12">{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}</span-->
+                    </span>
+                  </div>
+
+                  <ul class="w100fl mt-20 list-item fs-12">
+                    {% for addon in addons %}
+                        <li>
+                          <span class="item">{{addon.product.name}}</span>
+                        </li>
+                    {% endfor %}
+
+                    {% if variations.first.delivery_service %}
+                        <li>
+                          <span class="item">{{variations.first.delivery_service.name}}</span>
+                        </li>
+                    {% endif %}
+
+                  </ul>
+                </div><!-- /.Item wrap -->
+            {% else %}
+                <div class="w100fl item-wrap c6">
+                  <div class="w100fl">
+                    <span class="item">
+                      <strong class="block">{{oi.product.get_name}}</strong>
+                      <span class="fs-12">{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}</span>
+                    </span>
+                  </div>
+
+                  <ul class="w100fl mt-20 list-item fs-12">
+                    {% for var in variations %}
+                        <li>
+                          <span class="item">{{var.product.name}}</span>
+                        </li>
+                    {% endfor %}
+
+                    {% for addon in addons %}
+                        <li>
+                          <span class="item">{{addon.product.name}}</span>
+                        </li>
+                    {% endfor %}
+
+                    {% if oi.delivery_service %}
+                        <li>
+                            <span class="item">{{oi.delivery_service.name}}</span>
+                        </li>
+                    {% endif %}
+
+                  </ul>
+                </div><!-- /.Item wrap -->
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
+
+    
+  </div><!-- subscribed widgets ends here -->
+    {% if request.session.candidate_id %}
+        <a href="{% url "dashboard:dashboard" %}" class="btn btn-blue w100 mt-20">Go to dashboard</a>
+    {% endif %}
+  <div class="clearfix"></div>
+</div><!-- Tab content ends here -->
+
+</div>
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+
+    {% compress js %}
+        <script src="{% static "shinelearn/js/mobile/payment/thank-you.js" %}"></script>
+    {% endcompress %}
+
+    {% block johukum %}
+    {% endblock johukum %}
+{% endblock js_section %}

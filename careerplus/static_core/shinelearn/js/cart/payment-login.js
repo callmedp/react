@@ -14,7 +14,7 @@ $().ready(function() {
         messages:{
             email: { required:"Please enter a valid email address",},
             password:{
-                required: "Please provide a password",
+                required: "Please enter valid password",
             },
         },
         highlight: function(element) {

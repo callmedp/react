@@ -139,8 +139,8 @@ class PaymentLoginView(TemplateView):
             login_resp = {}
             login_dict = {}
             remember_me = request.POST.get('remember_me')
-            email = self.request.POST.get('email').strip()
-            password = self.request.POST.get('password')
+            email = self.request.POST.get('email', '').strip()
+            password = self.request.POST.get('password', '')
 
             valid_email = False
             try:
@@ -235,6 +235,11 @@ class PaymentShippingView(UpdateView, CartMixin):
             return HttpResponsePermanentRedirect(reverse('homepage'))
         return None
 
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(PaymentShippingView, self).get_form_kwargs(**kwargs)
+        kwargs['flavour'] = self.request.flavour
+        return kwargs
+
     def get_object(self):
         if not self.request.session.get('cart_pk'):
             self.getCartObject()
@@ -268,9 +273,8 @@ class PaymentShippingView(UpdateView, CartMixin):
                 form.initial.update({
                     'last_name': self.request.session.get('last_name')})
 
-            if not form.instance.email:
-                form.instance.email = self.request.session.get('email')
-                form.instance.save()
+            form.instance.email = self.request.session.get('email')
+            form.instance.save()
 
             if not form.initial.get('mobile'):
                 form.initial.update({

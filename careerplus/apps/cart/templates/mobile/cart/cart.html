@@ -1,6 +1,8 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load static compress %}
+
 
 {% block canonical_url %}
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
@@ -10,8 +12,10 @@
 
 {% block css_section %}
     {{ block.super }}
-    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% compress css %}
+        <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+        <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% endcompress %}
     
 {% endblock css_section %}
 
@@ -370,7 +374,11 @@
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static "shinelearn/js/mobile/cart/cart.js" %}"></script>
+
+    {% compress js %}
+        <script src="{% static "shinelearn/js/mobile/cart/cart.js" %}"></script>
+    {% endcompress %}
+    
     {% block johukum %}
     {% endblock johukum %}
 {% endblock js_section %}
