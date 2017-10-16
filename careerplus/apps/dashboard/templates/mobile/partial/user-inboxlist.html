@@ -23,7 +23,7 @@
                 {% if obj.oi_status == 2 %}
                     <p><strong>Status</strong>: {{obj.get_user_oi_status}}
                     </p>
-                    <a role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
+                    <a href="javascript:void(0)" role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
                 {% elif obj.oi_status == 23 and obj.draft_counter %}
                     <p><strong>Status</strong>: Modifications requested
                     </p>
@@ -77,7 +77,7 @@
 
             {% elif obj.product.type_flow == 3 %}
                 {% if obj.oi_status == 2 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#" class="sidebar-secondary-trigger">Upload Resume</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="javascript:void(0)" class="sidebar-secondary-trigger">Upload Resume</a></p>
                 {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> Service has been processed and Final document is ready - <a href="{{obj.oi_draft.url}}" download>Download</a></p>
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
@@ -99,7 +99,7 @@
 
             {% elif obj.product.type_flow == 4 %}
                 {% if obj.oi_status == 2 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="#" class="sidebar-secondary-trigger">Upload Resume</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="javascript:void(0)" class="sidebar-secondary-trigger">Upload Resume</a></p>
 
                 {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> Service has been processed - <a href="#" download>Download Credential</a></p>
@@ -116,7 +116,7 @@
                 {% endif %}
             {% elif obj.product.type_flow == 5 %}
                 {% if obj.oi_status == 2 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="sidebar-secondary-trigger">Upload Resume</a></p>
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="javascript:void(0)" role="button" class="sidebar-secondary-trigger">Upload Resume</a></p>
 
                 {% elif obj.oi_status == 4 or obj.oi_status == 28 or obj.oi_status == 29 %}
                     <p><strong>Status:</strong> Service has been processed</p>

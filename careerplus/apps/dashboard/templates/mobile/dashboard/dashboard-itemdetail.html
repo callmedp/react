@@ -108,7 +108,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 24 %}
                             <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}" download>Download</a>
                         {% elif op.oi_status == 27 %}
@@ -152,7 +152,7 @@
                         {% if op.oi_draft %}
                             <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% elif oi.oi_status and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -178,7 +178,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 6 %}
                             <a href="#" lass="btn btn-outline w100 mt-20">Download Credential</a>
                         {% endif %}
@@ -193,7 +193,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                          <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                          <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}

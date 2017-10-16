@@ -43,7 +43,7 @@
         <div class="search-tagging mt-10">
             <span>{{ recmnd_func_area }}</span>
             <span>{{ recmnd_skills }}</span>
-            <a href="#" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
+            <a href="javascript:void(0)" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
         <div class="search-tagging mt-10">
@@ -65,7 +65,7 @@
     {% else %}
         No products found. Have a look at our most popular products.
     {% endif %}
-        {% if products_found and page.object_list|length > 0 %}<a href="#" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
+        {% if products_found and page.object_list|length > 0 %}<a href="javascript:void(0)" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
     </h2>
     
     {% include 'mobile/search/ajax/search_listing.html' %}
@@ -77,7 +77,7 @@
 
 {% if products_found and page.object_list|length > 0 %}
 <div class="share-wrap">
-  <a href="#" class="blue-circle-60 sidebar-secondary-trigger js_filters_trigger"><span class="icon-filter"></span></a>
+  <a href="javascript:void(0)" class="blue-circle-60 sidebar-secondary-trigger js_filters_trigger"><span class="icon-filter"></span></a>
 </div>
 {% endif %}
 
