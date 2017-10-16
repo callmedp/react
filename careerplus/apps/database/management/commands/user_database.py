@@ -31,72 +31,71 @@ class Command(BaseCommand):
 
         df = pd.read_csv('CP_staffusers_for_migration.csv', sep=',')
         df2 = pd.read_csv('CP_staffusers.csv')
-        try:
-            with transaction.atomic():
-                from django.contrib.auth.models import BaseUserManager
-                manager = BaseUserManager()
+        # try:
+        #     with transaction.atomic():
+        #         from django.contrib.auth.models import BaseUserManager
+        #         manager = BaseUserManager()
                 
-                for i, row in df.iterrows():
-                    if row['email'] == row['email']:
-                        if User.objects.filter(email=row['email']).exists():
-                            pass
-                        else:
-                            email = manager.normalize_email(row['email'])
-                            first_name = row['first_name'] if row['first_name'] == row['first_name'] else ''
-                            last_name = row['last_name'] if row['last_name'] == row['last_name'] else ''
-                            user_dict = {
-                                'name': first_name + ' ' + last_name,
-                                'email': row['email'],
-                                'cp_id': row['id'],
-                                'is_staff': False,
-                                'is_active': True,
-                                'date_joined': timezone.now(), 
-                                'last_login': timezone.now()
-                            }
-                            user = User(**user_dict)
-                            user.set_password('$hineP!us')
-                            user.save()
+        #         for i, row in df.iterrows():
+        #             if row['email'] == row['email']:
+        #                 if User.objects.filter(email=row['email']).exists():
+        #                     pass
+        #                 else:
+        #                     email = manager.normalize_email(row['email'])
+        #                     first_name = row['first_name'] if row['first_name'] == row['first_name'] else ''
+        #                     last_name = row['last_name'] if row['last_name'] == row['last_name'] else ''
+        #                     user_dict = {
+        #                         'name': first_name + ' ' + last_name,
+        #                         'email': row['email'],
+        #                         'cp_id': row['id'],
+        #                         'is_staff': False,
+        #                         'is_active': True,
+        #                         'date_joined': timezone.now(), 
+        #                         'last_login': timezone.now()
+        #                     }
+        #                     user = User(**user_dict)
+        #                     user.set_password('$hineP!us')
+        #                     user.save()
 
-                for i, row in df2.iterrows():
-                    if row['email'] == row['email']:
-                        if User.objects.filter(email=row['email']).exists():
-                            pass
-                        else:
-                            email = manager.normalize_email(row['email'])
-                            first_name = row['first_name'] if row['first_name'] == row['first_name'] else ''
-                            last_name = row['last_name'] if row['last_name'] == row['last_name'] else ''
-                            user_dict = {
-                                'name': first_name + ' ' + last_name,
-                                'email': row['email'],
-                                'cp_id': row['id'],
-                                'is_staff': False,
-                                'is_active': False,
-                                'date_joined': timezone.now(), 
-                                'last_login': timezone.now()
-                            }
-                            user = User(**user_dict)
-                            user.set_password('$hineP!us')
-                            user.save()
-        except IntegrityError:
-            print(row)
-            print('Fail')
-        
-        # sql = """
-        #         SELECT auth_user.email as Email, cart_userprofile.shine_id as ShineID, cart_userprofile.mobile as Mobile, theme_country.isd_code as Country_Code 
-        #         FROM auth_user 
-        #         LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
-        #         LEFT OUTER JOIN theme_country ON ( cart_userprofile.country_id = theme_country.id ) 
-        #         WHERE (auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
-        #         ORDER BY auth_user.date_joined DESC
-        #         """
-        # df = pd.read_sql(sql, con=db)
-        # df = df.drop_duplicates(subset=['Email'], keep='last')
-        # user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
-        # user_df = user_df[['Email', 'C_ID']]
-        # user_df = user_df.drop_duplicates(subset=['Email'], keep='last')
-        # df = pd.merge(df, user_df, how='left', on='Email')
-        # df = df[df.C_ID.isnull()]
-        # df.to_csv('new_absent_user.csv', index=False, encoding='utf-8')
+        #         for i, row in df2.iterrows():
+        #             if row['email'] == row['email']:
+        #                 if User.objects.filter(email=row['email']).exists():
+        #                     pass
+        #                 else:
+        #                     email = manager.normalize_email(row['email'])
+        #                     first_name = row['first_name'] if row['first_name'] == row['first_name'] else ''
+        #                     last_name = row['last_name'] if row['last_name'] == row['last_name'] else ''
+        #                     user_dict = {
+        #                         'name': first_name + ' ' + last_name,
+        #                         'email': row['email'],
+        #                         'cp_id': row['id'],
+        #                         'is_staff': False,
+        #                         'is_active': False,
+        #                         'date_joined': timezone.now(), 
+        #                         'last_login': timezone.now()
+        #                     }
+        #                     user = User(**user_dict)
+        #                     user.set_password('$hineP!us')
+        #                     user.save()
+        # except IntegrityError:
+        #     print(row)
+        #     print('Fail')
+        sql = """
+                SELECT auth_user.email as Email, cart_userprofile.shine_id as ShineID, cart_userprofile.mobile as Mobile, theme_country.isd_code as Country_Code 
+                FROM auth_user 
+                LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
+                LEFT OUTER JOIN theme_country ON ( cart_userprofile.country_id = theme_country.id ) 
+                WHERE (auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
+                ORDER BY auth_user.date_joined DESC
+                """
+        df = pd.read_sql(sql, con=db)
+        df = df.drop_duplicates(subset=['Email'], keep='last')
+        user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
+        user_df = user_df[['Email', 'C_ID']]
+        user_df = user_df.drop_duplicates(subset=['Email'], keep='last')
+        df = pd.merge(df, user_df, how='left', on='Email')
+        df = df[df.C_ID.isnull()]
+        df.to_csv('new_absent_user.csv', index=False, encoding='utf-8')
 
         # try:
         #     with transaction.atomic():
