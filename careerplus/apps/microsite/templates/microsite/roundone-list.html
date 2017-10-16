@@ -159,8 +159,8 @@
           </datatlist>
           {% if request.session.candidate_id %}
             <a role="button" class="save-job savejob_js" onclick="onClickSaveJob(this, {{job.jobId}});">Save this job</a>
-          {% else %}
-            <a href="#" class="save-job" data-toggle="modal" data-target=".bs-example-modal-sm">Save this job</a>
+          {% elif not request.session.candidate_id %}
+            <a href="#" class="save-job" data-toggle="modal" data-target=".logindiv">Save this job</a>
           {% endif %}
           <a href="{{detail_url}}" class="view-job">View job description</a>
           {% if request.session.candidate_id and flag %}
