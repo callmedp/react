@@ -91,7 +91,11 @@
               </tr>
               <tr valign="top">
                 <td>Discount / Shine loyalty points</td>
-                <td>- 900.00</td>
+                {% if coupon_amount %}
+                  <td>{{coupon_amount|floatformat:2}}</td>
+                {% elif redeemed_reward_point %}
+                  <td>{{redeemed_reward_point|floatformat:2}}</td>
+                {% endif %}
               </tr>
               <tr>
                 <td colspan="2"><span style="display: block; border-top: 1px dashed #333; margin: 5px 0"></span></td>
@@ -100,9 +104,11 @@
                 <td><strong>Net Payable</strong></td>
                 <td><strong>{{total_payable_amount}}</strong></td>
               </tr>
+              {% with total_sum=sgst_amount|add:cgst_amount%}
               <tr>
-                <td style="font-size: 12px;" colspan="2">The above Net Payable amount includes GST of 1177.17</td>
+                <td style="font-size: 12px;" colspan="2">The above Net Payable amount includes GST of {{total_payable_amount|add:total_sum}}</td>
               </tr>
+              {% endwith %}
             </tbody>
           </table>
         </span>  

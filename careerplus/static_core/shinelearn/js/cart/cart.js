@@ -6,7 +6,7 @@ function removeFromCart(line_id){
             url: '/cart/remove-from-cart/',
             type: 'POST',
             data:formData,
-            dataType: 'json',
+            dataType: 'json', 
             success: function(json) {
                 if (json.status == 1){
                     window.location.reload();

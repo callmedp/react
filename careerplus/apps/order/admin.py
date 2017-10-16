@@ -84,9 +84,11 @@ class RefundOperationInline(admin.TabularInline):
 
     extra = 0
 
+
 class MessageAdmin(admin.ModelAdmin):
     model = Message
     raw_id_fields = ('oi', 'oio')
+
 
 class RefundRequestAdmin(admin.ModelAdmin):
     list_display = ['id', 'order', 'status', 'last_status',
@@ -99,6 +101,11 @@ class RefundRequestAdmin(admin.ModelAdmin):
     inlines = [RefundItemInline, RefundOperationInline]
 
 
+class InternationalProfileCredentialAdmin(admin.ModelAdmin):
+    list_display = ['username', 'password', 'profile_status']
+    extra = 0
+    raw_id_fields = ('oi', 'country')
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(OrderItemOperation, OrderItemOperationAdmin)
@@ -106,4 +113,7 @@ admin.site.register(RefundRequest, RefundRequestAdmin)
 admin.site.register(EmailOrderItemOperation)
 admin.site.register(SmsOrderItemOperation)
 admin.site.register(Message, MessageAdmin)
-admin.site.register(InternationalProfileCredential)
+admin.site.register(
+    InternationalProfileCredential,
+    InternationalProfileCredentialAdmin
+)

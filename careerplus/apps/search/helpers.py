@@ -8,6 +8,7 @@ import ast
 # django imports
 from django.utils.text import slugify
 from core.library.haystack.query import SQS
+from haystack.query import EmptySearchQuerySet
 
 # third party imports
 from django_redis import get_redis_connection
@@ -355,6 +356,7 @@ def get_recommendations(func_area, skills, results=None):
         func_area = 23
     if not skills:
         skills = [777, 795, 2064]
+
     func_area_prods = set(ProductFA.objects.filter(fa=func_area).values_list('product', flat=True))
     skill_prods = set(ProductSkill.objects.filter(skill__in=skills).values_list('product', flat=True))
     products_fa_and_skill = func_area_prods.intersection(skill_prods)
@@ -365,4 +367,6 @@ def get_recommendations(func_area, skills, results=None):
         if not results:
             results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm')
         results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
+    else:
+        results = EmptySearchQuerySet()
     return results

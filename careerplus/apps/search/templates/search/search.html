@@ -51,8 +51,8 @@
                                 <button type="submit" class="find-jobs-btn btn"></button>
                             </form>
                         </div>
-                        {% else %}
-                            <h1>Search Results Page</h1>
+                        {% elif search_type == 'func_area' %}
+                            <h1>{{ func_area_name|title }} Courses</h1>
                         {% endif %}
                     </div>
                 {% endblock product_header %}
@@ -68,7 +68,7 @@
     <!-- page content body start -->
     <div class="row">
 
-    {% if page.object_list|length > 0 %}
+    {% if products_found and page.object_list|length > 0 %}
         {% include "search/partials/search_filters.html" %}
     {% endif %}
 
@@ -77,6 +77,7 @@
     <div class="col-sm-9 col-md-10 mt-40 ">
         {% if page.object_list|length > 0 %}
             <div class="listing-heading-box">
+                {% if products_found %}
                 <div class="form-group custom-select">
                     <select name="sort" hdn="id_sort" class="form-control cls_filter">
                         <option value="">Relevance</option>
@@ -84,17 +85,17 @@
                         <option value="2" {% if search_params.sort == '2' %}selected="selected"{% endif %}>Review(High to Low)</option>
                     </select>
                 </div>
-                <h2>{{ paginator.count }} products found</h2>
+                {% endif %}
+                <h2>{% if products_found %}{{ paginator.count }} products found{% else %}
+                    No products found. Have a look at our most popular products.{% endif %}</h2>
             </div>
 
             <ul class="listing1 js_listing">
                 {% include 'search/ajax/search_listing.html' %}
             </ul>
-            {% if paginator.num_pages > page.number %}
+            {% if products_found and paginator.num_pages > page.number %}
                 <a href="#" class="load-more cls_load_more">Load more</a>
             {% endif %}
-        {% else %}
-            <span>No results found</span>
         {%endif%}
     </div>       
     <!-- mid content end -->
@@ -130,10 +131,7 @@
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}';
         $('#id_q').typeahead({
-            local: {{ search_context|safe }}
+            local: {{ search_context|safe|default:"[]" }}
         });
     </script>
 {% endblock js_section %}
-
-{% block johukum %}
-{% endblock johukum %}

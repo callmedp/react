@@ -21,11 +21,11 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
 from core.tasks import upload_resume_to_shine
-from order.functions import pending_item_email, process_mailer
 from console.mixins import ActionUserMixin
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
 from order.mixins import OrderMixin
+from order.tasks import pending_item_email, process_mailer
 from .functions import draft_upload_mail, roundone_product
 
 
@@ -138,7 +138,6 @@ class AjaxProductLoadMoreView(TemplateView):
             context.update({
                 'products': products, 'page': page,
                 'slug': slug,
-                'site': settings.SITE_PROTOCOL + "://" + settings.SITE_DOMAIN,
             })
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -574,10 +573,10 @@ class MarkedPaidOrderView(View):
                 # add reward_point in wallet
                 OrderMixin().addRewardPointInWallet(order=obj)
                 # pending item email send
-                pending_item_email(order=obj)
+                pending_item_email.apply_async((obj.pk), countdown=900)
 
                 # send email through process mailers
-                process_mailer(order=obj)
+                process_mailer.apply_async((obj.pk), countdown=900)
 
                 #roundone order
                 roundone_product(order=obj)

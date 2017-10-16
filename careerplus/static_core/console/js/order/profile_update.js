@@ -68,6 +68,10 @@ function jobProfileUpdate(oi_id, ){
     else{
         var formData = $('#pro_update' + oi_id).serialize();
         var formAction = $('#pro_update' + oi_id).attr('action');
+        user = $('#'+oi_id+'_username').val();
+        pass = $('#'+oi_id+'_password').val();
+        $('#user' + oi_id).attr('value', user);
+        $('#pass' + oi_id).attr('value', pass);
         $.ajax({
             url: formAction,
             type: "POST",
@@ -75,7 +79,8 @@ function jobProfileUpdate(oi_id, ){
             dataType: 'json',
             success: function(data){
                 if (data['success']==true){
-                 alert('Value Updated');   
+                 alert('Value Updated');
+                 location.reload();   
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
