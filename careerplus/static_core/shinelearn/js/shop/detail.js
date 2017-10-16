@@ -1,4 +1,9 @@
-function LoadMoreProductReview(pv_id) {
+
+$(document).ready(function () {
+
+    var processing = false;
+  
+    function LoadMoreProductReview(pv_id) {
       if (processing) {
           return false;
       }
@@ -39,11 +44,6 @@ function LoadMoreProductReview(pv_id) {
         }
       }
     };
-
-$(document).ready(function () {
-
-    var processing = false;
-  
 
     
     $.validator.addMethod("indiaMobile", function(value, element) {

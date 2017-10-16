@@ -1,4 +1,12 @@
 $(function(){
+    var csrftoken = getCookie('csrftoken');
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 
 	$('#action_button_go').click(function(){
 		var action_type = $('#id_action').val();
