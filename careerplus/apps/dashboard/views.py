@@ -153,7 +153,6 @@ class DashboardResultView(RoundOneAPI, TemplateView):
                 'userEmail': self.request.session.get('email', ''),
                 'orderId': kwargs.get("order_id"),
             }
-
             result_html = self.get_result_template(
                 self.request, data_dict, show_feedback)
             context.update({'result_html': result_html})
@@ -190,7 +189,7 @@ class DashboardResultView(RoundOneAPI, TemplateView):
 
     def get_result_template(self, request, data_dict, show_feedback):
         result_json = self.interaction_result(request, data_dict)
-
+        status = result_json.get('status')
         if result_json.get("status") == "1":
             try:
                 data = result_json.get("data", {})
@@ -222,7 +221,7 @@ class DashboardResultView(RoundOneAPI, TemplateView):
             "status": status}
 
         template_html = render_to_string(
-            "dashboard/roundone_result.html", context)
+            "include/roundone_result.html", context)
         return template_html
 
 

@@ -44,4 +44,6 @@
 {% endfor %}  
 </ul>
 <input type="hidden" name="roundone-get-reference" value="{% url "roundone-get-reference" %}">
+{% else %}
+<div>No data</div>
 {% endif %}
