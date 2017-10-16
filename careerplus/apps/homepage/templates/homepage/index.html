@@ -189,7 +189,7 @@
                                     <a title="{{tprd.pTt}}" class="box-panel" href="{{tprd.pURL}}">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:50}}</h3>
+                                                <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
                                                 <div class="rating-review-box">
                                                     <figure class="full-star"></figure>
                                                     <strong>{{tprd.pARx}}<small>/5</small></strong>
@@ -299,6 +299,7 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
+    <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     {% endcompress %}
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},
@@ -310,7 +311,6 @@
         });
     </script>
     {% compress js %}
-    <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     <script>
         $('#myCarousel1').carousel({
             interval: false

@@ -86,7 +86,7 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:50 }}</a></p>
+                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         <sup class="fill-star"></sup>
@@ -106,7 +106,7 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:50 }}</a></p>
+                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         <sup class="fill-star"></sup>
@@ -207,7 +207,7 @@
                             <div class="img-box">
                                 <img src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
                             </div>
-                            <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:50}}</p>
+                            <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</p>
                         </a>
                     </li>
                     {% endfor %}

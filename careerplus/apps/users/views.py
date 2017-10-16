@@ -63,21 +63,27 @@ class RegistrationApiView(FormView):
             mail_type = "REGISTRATION"
             email_dict = {}
             email_dict.update({
-                'email':resp['email'],
+                'email': resp['email'],
                 'password': request.POST.get('raw_password'),
             })
             # task for email
-            send_email_task.delay([resp['email']], mail_type, email_dict, status=None, oi=None)
-            resp_status = ShineCandidateDetail().get_status_detail(shine_id=resp['id'], token=resp['access_token'])
+            send_email_task.delay(
+                [resp['email']], mail_type, email_dict, status=None, oi=None)
+            resp_status = ShineCandidateDetail().get_status_detail(
+                shine_id=resp['id'], token=resp['access_token'])
             request.session.update(resp_status)
             return HttpResponseRedirect(self.success_url)
-            
+
         elif resp['response'] == 'exist_user':
-            messages.add_message(self.request, messages.ERROR, "This user already exists", 'danger')
+            messages.add_message(
+                self.request, messages.ERROR,
+                "This user already exists", 'danger')
             return HttpResponseRedirect(reverse('login'))
 
         elif not resp['response']:
-            messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+            messages.add_message(
+                self.request, messages.ERROR,
+                "Something went wrong", 'danger')
         return render(self.request, self.template_name, {'form': form})
 
     def get_form_kwargs(self):
@@ -119,7 +125,8 @@ class LoginApiView(FormView):
                 login_resp = RegistrationLoginApi.user_login(login_dict) # TODO: Do we need this check here
                                                                         # TODO: if we have that check on frontend?
                 if login_resp['response'] == 'login_user':
-                    resp_status = ShineCandidateDetail().get_status_detail(email=None,
+                    resp_status = ShineCandidateDetail().get_status_detail(
+                        email=None,
                         shine_id=login_resp.get('candidate_id', ''))
                     if resp_status:
                         self.request.session.update(resp_status)
@@ -129,32 +136,46 @@ class LoginApiView(FormView):
                     return HttpResponseRedirect(self.success_url)
 
                 elif login_resp['response'] == 'error_pass':
-                    messages.add_message(self.request, messages.ERROR, login_resp["non_field_errors"][0], 'danger')
+                    messages.add_message(
+                        self.request, messages.ERROR,
+                        login_resp["non_field_errors"][0], 'danger')
                 elif not login_resp['response']:
-                    messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+                    messages.add_message(
+                        self.request, messages.ERROR,
+                        "Something went wrong", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form, 'reset_form':context['reset_form']})
+                    {'form': form, 'reset_form': context['reset_form']})
 
             elif not user_exist.get('response', ''):
-                messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+                messages.add_message(
+                    self.request, messages.ERROR,
+                    "Something went wrong", 'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form, 'reset_form':context['reset_form']})
+                    {'form': form, 'reset_form': context['reset_form']})
 
             elif not user_exist.get('exists', ''):
-                messages.add_message(self.request, messages.ERROR, "You do not have an account. Please register first.", 'danger')
+                messages.add_message(
+                    self.request, messages.ERROR,
+                    "You do not have an account. Please register first.",
+                    'danger')
                 return render(
                     self.request, self.template_name,
-                    {'form': form, 'reset_form':context['reset_form']})
+                    {'form': form, 'reset_form': context['reset_form']})
 
         except Exception as e:
-            logging.getLogger('error_log').error("Exception while logging in a user with email: %s. "
-                                                 "Exception: %s " % (user_email, str(e)))
-            messages.add_message(self.request, messages.ERROR, "Something went wrong", 'danger')
+            logging.getLogger(
+                'error_log').error(
+                "Exception while logging in a user with email: %s. "
+                "Exception: %s " % (user_email, str(e))
+            )
+            messages.add_message(
+                self.request, messages.ERROR,
+                "Something went wrong", 'danger')
             return render(
                 self.request, self.template_name,
-                {'form': form, 'reset_form':context['reset_form']})
+                {'form': form, 'reset_form': context['reset_form']})
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -195,14 +216,18 @@ class DownloadBoosterResume(View):
                     except IOError:
                         raise Exception("Resume not found.")
 
-                    response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
+                    response = HttpResponse(
+                        fsock, content_type=mimetypes.guess_type(path)[0])
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (newfilename)
                     return response
                 else:
                     raise Exception("Resume not found.")
         except:
-            messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
-            response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            messages.add_message(
+                request, messages.ERROR,
+                "Sorry, the document is currently unavailable.")
+            response = HttpResponseRedirect(
+                request.META.get('HTTP_REFERER', '/'))
             return response
 
 
@@ -227,28 +252,33 @@ class ForgotPasswordResetView(ShineCandidateDetail, FormView):
         return context
 
     def post(self, request, *arg, **kwargs):
-        email, type, valid = TokenGeneration().decode(request.POST.get("token"))
+        email, type, valid = TokenGeneration().decode(
+            request.POST.get("token"))
         form = self.form_class(request.POST)
         if valid:
             if form.is_valid():
                 data = request.POST
-                email_exist = RegistrationLoginApi.check_email_exist(data.get('email'))
+                email_exist = RegistrationLoginApi.check_email_exist(
+                    data.get('email'))
                 if email_exist['exists']:
                     pass_resp = RegistrationLoginApi.reset_update(data)
                     if pass_resp['response']:
                         messages.success(request, 'Password has been reset.')
                         return self.form_valid(form)
                     elif pass_resp['status_code'] == 400:
-                        messages.success(request, 'Client Authentication Failed')
+                        messages.success(
+                            request, 'Client Authentication Failed')
                         return self.form_valid(form)
                 elif not email_exist['exists']:
                     messages.success(request, 'email does not exist')
                     return self.form_valid(form)
             else:
-                messages.error(request, 'Password reset has not been unsuccessful.')
+                messages.error(
+                    request, 'Password reset has not been unsuccessful.')
                 return self.form_invalid(form)
         else:
-            messages.error(request, 'The reset password link is no longer valid.')
+            messages.error(
+                request, 'The reset password link is no longer valid.')
             return self.form_invalid(form)
 
 
@@ -268,26 +298,30 @@ class ForgotHtmlView(TemplateView):
 class ForgotPasswordEmailView(View):
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax():
-            email = request.POST.get('email')
-            user_exist = RegistrationLoginApi.check_email_exist(email)
-            mail_type = 'FORGOT_PASSWORD'
-            to_emails = [email]
-            email_dict = {}
-            email_dict.update({
-                'email': email,
-                'site': settings.SITE_PROTOCOL +"://" + settings.SITE_DOMAIN + settings.STATIC_URL
-            })
-
-            if user_exist.get('exists', ''):
-                # task call for email
-                send_email_task.delay(to_emails, mail_type, email_dict, status=None, oi=None)
-                return HttpResponse(json.dumps({'exist':True}), content_type="application/json")
-
-            elif not user_exist.get('exists', ''):
-                return HttpResponse(json.dumps({'notexist':True}), content_type="application/json")
+        email = request.POST.get('email')
+        user_exist = RegistrationLoginApi.check_email_exist(email)
+        mail_type = 'FORGOT_PASSWORD'
+        to_emails = [email]
+        email_dict = {}
+        email_dict.update({
+            'email': email,
+        })
+        if user_exist.get('exists', ''):
+            # task call for email
+            send_email_task.delay(
+                to_emails, mail_type, email_dict,
+                status=None, oi=None)
+            messages.success(
+                request, 'Link has been sent to your registered email id')
+            return HttpResponseRedirect('/user/forgot/html/')
+        elif not user_exist.get('exists', ''):
+            messages.error(
+                request, 'Your email does not exist on shine learning')
+            return HttpResponseRedirect('/user/forgot/html/')
         else:
-            return HttpResponse(json.dumps({'noresponse':True}), content_type="application/json")
+            messages.error(
+                request, 'Something went wrong. Try again later')
+            return HttpResponseRedirect('/user/forgot/html/')
 
 
 class SocialLoginView(View):
@@ -311,8 +345,7 @@ class SocialLoginView(View):
                 if gplus_user.get('response'):
                     candidateid = gplus_user['user_details']['candidate_id']
                     resp_status = ShineCandidateDetail().get_status_detail(
-                            email=None,
-                            shine_id=candidateid)
+                        email=None, shine_id=candidateid)
                     request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
                 elif gplus_user.get('response') == 400:
@@ -344,7 +377,7 @@ class LinkedinCallbackView(View):
     def get(self, request, *args, **kwargs):
         try:
             params = {
-                'grant_type':'authorization_code',
+                'grant_type': 'authorization_code',
                 'code': request.GET.get('code') if 'code' in request.GET else '',
                 'redirect_uri': settings.REDIRECT_URI,
                 'client_id': settings.CLIENT_ID,
@@ -353,18 +386,18 @@ class LinkedinCallbackView(View):
             if not params['code']:
                 return HttpResponseRedirect('/login/')
             params = urllib.parse.urlencode(params)
-            info = urllib.request.urlopen(settings.TOKEN_URL, params.encode("utf-8"))
+            info = urllib.request.urlopen(
+                settings.TOKEN_URL, params.encode("utf-8"))
             read_data = info.read()
             # convert byte object into string
-            str_data = str(read_data,'utf-8')
+            str_data = str(read_data, 'utf-8')
             data_dict = json.loads(str_data)
-            data_dict.update({'key':'linkedin'})
+            data_dict.update({'key': 'linkedin'})
             linkedin_user = RegistrationLoginApi.social_login(data_dict)
             if linkedin_user.get('response'):
                 candidateid = linkedin_user['user_details']['candidate_id']
                 resp_status = ShineCandidateDetail().get_status_detail(
-                        email=None,
-                        shine_id=candidateid)
+                    email=None, shine_id=candidateid)
                 request.session.update(resp_status)
                 return HttpResponseRedirect(self.success_url)
             elif linkedin_user['status_code'] == 400:
@@ -372,8 +405,6 @@ class LinkedinCallbackView(View):
 
         except Exception as e:
             return HttpResponseRedirect('/login/')
-
-
 
 
 # HTTP Error 404
