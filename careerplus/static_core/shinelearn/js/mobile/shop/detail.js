@@ -52,6 +52,7 @@ jQuery(document).ready(function($){
           updateTextArea();
           $("#sidebar-countries").hide();
           $(".cls_mask").hide();
+          $('body').css('overflow','auto');
       });
       $("#sidebar-countries-trigger").click(function(){
           $("#sidebar-countries").show();
