@@ -81,10 +81,6 @@ window.fbAsyncInit = function() {
      })();
 
 $(document).ready(function() {
-    // Social Facebook Login 
-     
-    // end social login js
-
     // login and registration js 
     var emailresponse;
     $.validator.addMethod("emailDoesNotExist",
