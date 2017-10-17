@@ -70,6 +70,7 @@
 
         $('.js_sidebar_filter').simplerSidebar({
             opener: '.js_filters_trigger',
+            quitter: ".js_close_filter",
             animation: {
                 easing: "easeOutQuint"
             },
