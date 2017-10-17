@@ -75,7 +75,8 @@
                 easing: "easeOutQuint"
             },
             sidebar: {
-                align: 'right'
+                align: 'right',
+                closingLinks: '.js_close_filter'
             }
         });
 
