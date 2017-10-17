@@ -432,10 +432,10 @@ footer .footer-links span {
 }
 
 .box-panel {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  -ms-box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+  -ms-box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
   background-color: #fff;
 }
 
@@ -1985,6 +1985,10 @@ footer .footer-links span {
 
 .mt-45 {
   margin-top: 45px;
+}
+
+.mt-50 {
+  margin-top: 50px;
 }
 
 .mt-53 {
