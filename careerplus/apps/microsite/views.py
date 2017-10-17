@@ -165,7 +165,8 @@ class PartnerDetailView(TemplateView):
             context.update({
                 "loginform": ModalLoginApiForm(),
                 "registerform": ModalRegistrationApiForm(),
-                'flag': flag_status
+                'flag': flag_status,
+                "reset_form": PasswordResetRequestForm()
             })
         return context
 
@@ -190,7 +191,8 @@ class PartnerDetailView(TemplateView):
                 context.update({'breadcrumb_location': breadcrumb_location})
             except Exception as e:
                 jobTitle = kwargs.get("job_title", "Job Referral")
-                logging.getLogger('error_log').error("%s-%s", (str(e), jobTitle))
+                logging.getLogger('error_log').error(
+                    "%s-%s" % (str(e), jobTitle))
 
             context.update({
                 'jobTitle': jobTitle,

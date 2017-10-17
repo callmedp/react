@@ -156,7 +156,8 @@ $().ready(function() {
                         $('#forgot_div').modal('show');
                     }
                     else if (json.noresponse == true){
-                        alert("Something went wrong. Try again later");
+                        $("#msg_for_user").html("Something went wrong. Try again later").show();
+                        $('#forgot_div').modal('show');           
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
