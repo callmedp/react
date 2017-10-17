@@ -57,7 +57,7 @@
 
             {% for item in cart_items %}
                 <!-- item 1 -->
-                {% with addons=item.addons variations=item.variations %}
+                {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
                     {% if item.product_class == 'course' and variations %}
 
                         <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
@@ -74,7 +74,7 @@
                                                 <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.0.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
                                             {% endfor %}
                                         </select>
-                                        <input type="hidden" name="lineid" value="{{variations.first.pk}}" />
+                                        <input type="hidden" name="lineid" value="{{variations.0.id}}" />
                                       </form>
                                     </span>
                                 </li>

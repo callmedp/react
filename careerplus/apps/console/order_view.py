@@ -369,8 +369,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and request.user.is_authenticated():
+            data = {"display_message": ''}
             try:
-                data = {"display_message": ''}
                 orderitem_list = request.POST.getlist('selected_id[]', [])
                 writer_pk = int(request.POST.get('action_type', '0'))
                 orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list).select_related('order')

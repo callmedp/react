@@ -15,8 +15,12 @@ from django.db.models import Q
 from django.middleware.csrf import get_token
 
 from geolocation.models import Country
-from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
 
+from users.forms import (
+    ModalLoginApiForm,
+    ModalRegistrationApiForm,
+    PasswordResetRequestForm,
+)
 from .models import Page, Comment
 from .mixins import UploadInFile, LoadMoreMixin
 
@@ -160,7 +164,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
         })
         context.update({
             "loginform": ModalLoginApiForm(),
-            "registerform": ModalRegistrationApiForm()
+            "registerform": ModalRegistrationApiForm(),
+            "reset_form": PasswordResetRequestForm(),
         })
         context['meta'] = page_obj.as_meta(self.request)
 

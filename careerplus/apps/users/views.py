@@ -298,30 +298,26 @@ class ForgotHtmlView(TemplateView):
 class ForgotPasswordEmailView(View):
 
     def post(self, request, *args, **kwargs):
-        email = request.POST.get('email')
-        user_exist = RegistrationLoginApi.check_email_exist(email)
-        mail_type = 'FORGOT_PASSWORD'
-        to_emails = [email]
-        email_dict = {}
-        email_dict.update({
-            'email': email,
-        })
-        if user_exist.get('exists', ''):
-            # task call for email
-            send_email_task.delay(
-                to_emails, mail_type, email_dict,
-                status=None, oi=None)
-            messages.success(
-                request, 'Link has been sent to your registered email id')
-            return HttpResponseRedirect('/user/forgot/html/')
-        elif not user_exist.get('exists', ''):
-            messages.error(
-                request, 'Your email does not exist on shine learning')
-            return HttpResponseRedirect('/user/forgot/html/')
+        if request.is_ajax():
+            email = request.POST.get('email')
+            user_exist = RegistrationLoginApi.check_email_exist(email)
+            mail_type = 'FORGOT_PASSWORD'
+            to_emails = [email]
+            email_dict = {}
+            email_dict.update({
+                'email': email,
+                'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
+            })
+
+            if user_exist.get('exists', ''):
+                # task call for email
+                send_email_task.delay(to_emails, mail_type, email_dict, status=None, oi=None)
+                return HttpResponse(json.dumps({'exist': True}), content_type="application/json")
+
+            elif not user_exist.get('exists', ''):
+                return HttpResponse(json.dumps({'notexist': True}), content_type="application/json")
         else:
-            messages.error(
-                request, 'Something went wrong. Try again later')
-            return HttpResponseRedirect('/user/forgot/html/')
+            return HttpResponse(json.dumps({'noresponse': True}), content_type="application/json")
 
 
 class SocialLoginView(View):

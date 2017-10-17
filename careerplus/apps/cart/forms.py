@@ -24,6 +24,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
 
     def __init__(self, *args, **kwargs):
+        flavour = kwargs.pop('flavour', None)
         super(ShippingDetailUpdateForm, self).__init__(*args, **kwargs)
         try:
             country_choices = []
@@ -51,10 +52,13 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['country_code'].widget.attrs['class'] = form_class
         self.fields['country_code'].choices = country_choices
         self.fields['country_code'].initial = '91'
-
+        
         self.fields['mobile'].required = True
         self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile'
         self.fields['mobile'].widget.attrs['class'] = form_class
+
+        if flavour == 'mobile':
+            self.fields['mobile'].widget.attrs['class'] += ' pull-left number'
 
         self.fields['address'].required = True
         self.fields['address'].widget.attrs['placeholder'] = 'Address'
@@ -63,10 +67,15 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['pincode'].required = True
         self.fields['pincode'].widget.attrs['placeholder'] = 'Pincode'
         self.fields['pincode'].widget.attrs['class'] = form_class
+        # if flavour == 'mobile':
+        #     self.fields['pincode'].widget.attrs['class'] += ' pull-left number'
 
         self.fields['state'].required = True
         self.fields['state'].widget.attrs['placeholder'] = 'State'
         self.fields['state'].widget.attrs['class'] = form_class
+
+        # if flavour == 'mobile':
+        #     self.fields['state'].widget.attrs['class'] += ' pull-left w-50'
 
         self.fields['country'].required = True
         self.fields['country'].widget.attrs['class'] = form_class

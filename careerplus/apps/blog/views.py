@@ -17,7 +17,11 @@ from django.conf import settings
 from meta.views import Meta
 
 from shine.core import ShineCandidateDetail
-from users.forms import ModalLoginApiForm, ModalRegistrationApiForm
+from users.forms import (
+    ModalLoginApiForm,
+    ModalRegistrationApiForm,
+    PasswordResetRequestForm
+)
 from users.mixins import RegistrationLoginApi
 
 from .mixins import BlogMixin, PaginationMixin, LoadCommentMixin
@@ -171,6 +175,7 @@ class BlogDetailView(DetailView, BlogMixin):
             "categories": categories,
             "pop_articles": pop_aricles,
             "recent_articles": articles[: 5],
+            "reset_form": PasswordResetRequestForm()
         })
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN

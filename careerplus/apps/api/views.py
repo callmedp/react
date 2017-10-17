@@ -215,6 +215,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         )
 
                     OrderMixin().addRewardPointInWallet(order=order)
+                    # email for order
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
                         status=status.HTTP_200_OK)
