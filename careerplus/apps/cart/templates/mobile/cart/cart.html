@@ -26,12 +26,12 @@
         <!-- header menu Icon Starts here -->
         <div class="main-menu w100fl">
             <div class="pull-left">
-                <a class="icon-back pull-left"  href="#"  onclick="goBack()"></a> 
+                <a class="icon-back pull-left" role="button" onclick="goBack()"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
                 
-                <a class=" pull-left" href="#">search</a>
+                <!--a class=" pull-left" href="#">search</a-->
                 
                 <a class=" pull-left" href="{% url "cart:cart-product-list" %}">cart</a>
             </div><!-- / Right side Icon ends here -->
@@ -336,7 +336,7 @@
 
                 {% endcomment %}
 
-                <li class="text-center"><img src="images/secure-payment.jpg"></li>
+                <li class="text-center"><img src="{% static "shinelearn/images/mobile/common/secure-payment.jpg" %}"></li>
             </ul><!-- /.ul -->
         </div><!-- Tab content ends here -->
 

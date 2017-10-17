@@ -29,6 +29,8 @@
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
+  height: 25px;
+  overflow: hidden;
 }
 .home-search .inputTags-list span.inputTags-item.is-edit {
   display: none;
@@ -253,6 +255,8 @@ div.inputTags-list input.inputTags-field:active {
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
+  height: 25px;
+  overflow: hidden;
 }
 .home-advanced-search .inputTags-list span.inputTags-item.is-edit {
   display: none;

@@ -1,6 +1,4 @@
-$().ready(function() {
-    // Social Facebook Login 
-    window.fbAsyncInit = function() {
+window.fbAsyncInit = function() {
         FB.init({
           appId  : '1482454715170390', // App ID
           status : true, // check login status
@@ -80,9 +78,9 @@ $().ready(function() {
        po.async = true;
        po.src = 'https://apis.google.com/js/client.js?onload=startApp';
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-     })(); 
-    // end social login js
+     })();
 
+$(document).ready(function() {
     // login and registration js 
     var emailresponse;
     $.validator.addMethod("emailDoesNotExist",
