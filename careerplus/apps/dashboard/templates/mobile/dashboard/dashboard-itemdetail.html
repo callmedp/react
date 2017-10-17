@@ -26,15 +26,14 @@
                 
                 <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
 
-                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+                <a href="{% url "dashboard:dashboard" %}" class="icon-back pull-left"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
                 
-{#                <a class="icon-search pull-left" href="search-listing.html">search</a>#}
-{##}
-{#                #}
-{#                <a class="icon-cart pull-left" href="#">cart</a>#}
+              <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+              <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+              
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
         
@@ -108,7 +107,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 24 %}
                             <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}" download>Download</a>
                         {% elif op.oi_status == 27 %}
@@ -152,7 +151,7 @@
                         {% if op.oi_draft %}
                             <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% elif oi.oi_status and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -178,7 +177,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 6 %}
                             <a href="#" lass="btn btn-outline w100 mt-20">Download Credential</a>
                         {% endif %}
@@ -193,7 +192,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                          <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                          <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -273,3 +272,7 @@
     <script src="{% static "shinelearn/js/mobile/dashboard/dashboard.js" %}"></script>
     {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}
+

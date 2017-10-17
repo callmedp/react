@@ -28,13 +28,13 @@
         <div class="main-menu w100fl">
             <div class="pull-left">
                 <a class="pull-left" id="sidebar-main-trigger" role="button"></a>
-                <a class="icon-back pull-left"  role="button"  onclick="goBack()"></a>
+                <a class="icon-back pull-left" href="/"></a>
             </div><!-- / Left side Icon ends here -->
 
-{#            <div class="pull-right">#}
-{#                <a class="icon-search pull-left" href="search-listing.html">search</a>#}
-{#                <a class="icon-cart pull-left" href="#">cart</a>#}
-{#            </div><!-- / Right side Icon ends here -->#}
+            <div class="pull-right">
+                <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+            </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
 
 
@@ -43,11 +43,14 @@
         <div class="search-tagging mt-10">
             <span>{{ recmnd_func_area }}</span>
             <span>{{ recmnd_skills }}</span>
-            <a href="#" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
+            <a href="javascript:void(0)" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
         <div class="search-tagging mt-10">
-            <input type="text" id="id_q" placeholder="Search for courses, services" name="q" class="form-control js_query_input" value="{{ search_params.keywords }}" id="search-inupt">
+            <form class="search-list" id="search_form" data-role="form">
+            <input type="text" id="id_q" placeholder="Search for courses, services" name="q"
+                   class="form-control js_query_input key_press_js_search" value="{{ search_params.keywords }}" id="search-inupt">
+            </form>
         </div>
         {% endif %}
     </header><!-- header ends here -->
@@ -58,8 +61,14 @@
 <div class="content-box pt-5">
   <div class="container pt-0 js_listing">
     <h2 class="pt-5 filter-pd">
-        {% if search_type == 'recommended' %}{{ paginator.count }} recommended products{% elif search_type == 'simple' %}{{ paginator.count }} products found{% endif %}
-        {% if page.object_list|length > 0 %}<a href="#" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
+    {% if products_found %}
+        {% if search_type == 'recommended' %}{{ paginator.count }} recommended products
+            {% elif search_type == 'simple' %}{{ paginator.count }} products found
+        {% elif search_type == 'func_area' %}{{ func_area_name|title }} Courses{% endif %}
+    {% else %}
+        No products found. Have a look at our most popular products.
+    {% endif %}
+        {% if products_found and page.object_list|length > 0 %}<a href="javascript:void(0)" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
     </h2>
     
     {% include 'mobile/search/ajax/search_listing.html' %}
@@ -69,54 +78,35 @@
     <span id="loading"></span>
 </div><!-- end of content box -->
 
-{% if page.object_list|length > 0 %}
+{% if products_found and page.object_list|length > 0 %}
 <div class="share-wrap">
-  <a href="#" class="blue-circle-60 sidebar-secondary-trigger js_filters_trigger"><span class="icon-filter"></span></a>
+  <a href="javascript:void(0)" class="blue-circle-60 sidebar-secondary-trigger js_filters_trigger"><span class="icon-filter"></span></a>
 </div>
 {% endif %}
 
 <div class="sidebar js_sidebar_advanced">
   <div class="right-navbar pt-0">
     <h2>Advanced Search</h2>
-    <form method="post" action="{% url 'search:recommend' %}">
+    <form method="post" action="{% url 'search:recommend' %}" class="js_advance_search_form">
         {% csrf_token %}
-      <div class="form-group error">
+      <div class="form-group">
         <input type="text" id="tags11" class="form-control" name="area" value="{{ recmnd_func_area }}" placeholder="Functional area">
-        <p class="mgs" style="display: none">Please enter vaild entry.</p>
+        <p class="mgs js_area_error"></p>
       </div>
 
       <div class="form-group">
         <input type="text" id="tags21" name="skills" value="{{ recmnd_skills }}" class="form-control" placeholder="Skill">
+        <p class="mgs js_skill_error"></p>
       </div>
-
-
       <div class="form-group text-center mt-40">
-        <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Find courses</button>
+        <button type="submit" class="btn btn-blue w100fl btn-round mb-20 js_advance_search">Find courses</button>
       </div>
 
     </form>
   </div>
 </div>
 
-
-<div class="search-wrapper sidebar js_sidebar_search">
-    <!-- Starts of auto search -->
-    <div class="auto-search">
-        <header class="filter-menu p-0">
-            <form class="search-list" id="search_form" data-role="form">
-                <input type="text" id="id_q" name="q" class="form-control js_query_input" value="{{ search_params.keywords }}" id="search-inupt">
-            </form><!-- / Left side Icon ends here -->
-        </header><!-- header ends here -->
-        <div class="clearfix"></div>
-{#        <ul class="suggest-list" id="list">#}
-{#            <li><a href="#">Six Sigma</a><span></span></li>#}
-{#            <li><a href="#">Six Sigma Black Belt</a><span></span></li>#}
-{#        </ul>#}
-
-    </div><!-- end of auto search -->
-</div><!-- /page -->
-
-{% if page.object_list|length > 0 %}
+{% if products_found and page.object_list|length > 0 %}
     {% include "mobile/search/partials/search_filters.html" %}
 {% endif %}
 
@@ -133,22 +123,18 @@
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
             skillsSet = {{ skills_set|safe|default:"[]" }},
             totalProducts = {{ paginator.count }};
-        $( "#tags11" ).autocomplete({
-            source: funcAreaSet
+        $( "#tags11" ).typeahead({
+            local: funcAreaSet
         });
-        $('#tags21').autocomplete({
-            source: skillsSet
+        $('#tags21').typeahead({
+            local: skillsSet
         });
          $('#id_q').typeahead({
-            local: {{ search_context|safe }}
+            local: {{ search_context|safe|default:"[]" }}
         });
     </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/search/search.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
-
-{% block johukum %}
-{% endblock johukum %}
-
 

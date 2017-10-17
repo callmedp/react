@@ -93,6 +93,18 @@ $(document).ready(function() {
 		infinite: false
 	});
 
+	$(".slide-provide").slick({
+		autoplay:false,
+		autoplaySpeed:3000,
+		dots: false,
+		arrows: false,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		variableWidth: true,
+		slideWidth: 240,
+		infinite: true
+	});
+
 });// Document ready function ends here
 
 function goBack() {

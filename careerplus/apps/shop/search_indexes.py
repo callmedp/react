@@ -303,14 +303,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pPin(self, obj):
         Pinr = obj.inr_price
-        if obj.type_product == 1 and (obj.is_writing or obj.is_service):
+        if obj.type_product == 1:
             var = obj.get_variations()
             var_price = None
             for pv in var:
                 if (var_price and pv.inr_price < var_price) or not var_price:
                     var_price = pv.inr_price
             if var_price:
-                Pinr += var_price
+                Pinr = Pinr + var_price if (obj.is_writing or obj.is_service) else var_price
         return Pinr
 
     def prepare_pPus(self, obj):

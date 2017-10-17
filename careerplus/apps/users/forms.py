@@ -85,6 +85,7 @@ class RegistrationForm(forms.Form):
             country_choices, indian_obj = [], None
         self.fields['country_code'].choices = country_choices
         self.fields['country_code'].initial = indian_obj
+        self.fields['is_job_seeker'].required = False
 
         if flavour == 'mobile':
             self.fields['cell_phone'].widget.attrs = {'class': 'form-control pull-left number'}

@@ -19,12 +19,12 @@
               <a title="{{ prd.pTt }}" href="{{prd.pURL}}" class="sigma-pro color1"><img src="{{prd.pImg}}" alt="{{prd.pImA}}"></a>
             </div>
             <div class="media-body">
-              <p class="pb-0"><a href="#"><strong>{{ prd.pHd|truncatechars:50 }}</strong></a></p>
+              <p class="pb-0"><a href="#"><strong>{{ prd.pHd|truncatechars:40 }}</strong></a></p>
               
               <div class="mb-10 c6">
                 <div class="rating inline-block ml-0 fs-12">
                     <sup class="fill-star"></sup>
-                    {{prd.pAR}}/5
+                    {{prd.pARx|floatformat}}/5
                 </div><!-- end of star rating -->
               </div><!-- end of icons wrapper -->
 

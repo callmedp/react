@@ -1,5 +1,15 @@
 function redirectToSearch(e) {
-    location.href = '/search/results/?q='+encodeURI($('#id_q').val())
+    var $q = $('#id_q');
+    if ($q.val()) {
+        $q.closest('div').removeClass('error');
+        $q.closest('div').find('.error-txt').html();
+        location.href = '/search/results/?q='+encodeURI($q.val());
+    }
+    else {
+        $q.closest('div').addClass('error');
+        $q.closest('div').find('.error-txt').html('Please enter a query');
+        return false;
+    }
 }
 
 jQuery(document).ready(function($) {
@@ -82,32 +92,35 @@ jQuery(document).ready(function($) {
         }
     });
     
-    // $('.js_advance_search').on('click', function () {
-    //     debugger;
-    //     var flag = true;
-    //         if (!$('#tags1').val()){
-    //             flag = false;
-    //             $('#tags1').siblings('.error').html('Please choose a functional area.');
-    //         }
-    //         if (!$('#tags2').val()){
-    //             flag = false;
-    //             $('#tags2').siblings('.error').html('Please choose a skill.');
-    //         }
-    //         console.log(flag);
-    //         console.log($('#tags1').val());
-    //         console.log($('#tags2').val());
-    //     debugger;
-    //         if (flag) {
-    //             debugger;
-    //             $(".js_advance_search_form").submit();
-    //         }    
-    // });
-    
-    
-        $('#tags1').change(function(){
-            if ($('#tags1').val()){
-                $('#tags1').siblings('.error').html('');
+    $('.js_advance_search').on('click', function (e) {
+        e.preventDefault();
+        var flag1 = true,
+            flag2 = true;
+        var $tags1 = $('#tags1'),
+            $tags2 = $('#tags2');
+            if (!$tags1.val()){
+                flag1 = false;
+                $tags1.closest('div').addClass('error');
+                $tags1.siblings('.error-txt').html('Please choose a functional area.');
             }
-        });
+            else {
+                flag1 = true;
+                $tags1.closest('div').removeClass('error');
+                $tags1.siblings('.error-txt').html('');
+            }
+            if (!$tags2.val()){
+                flag2 = false;
+                $tags2.closest('div').addClass('error');
+                $tags2.siblings('.error-txt').html('Please choose a skill.');
+            }
+            else {
+                flag2 = true;
+                $tags2.closest('div').removeClass('error');
+                $tags2.siblings('.error-txt').html('');
+            }
+            if (flag2 && flag1) {
+                $(".js_advance_search_form").submit();
+            }
+    });
  
 });

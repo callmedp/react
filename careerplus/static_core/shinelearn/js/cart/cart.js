@@ -6,7 +6,7 @@ function removeFromCart(line_id){
             url: '/cart/remove-from-cart/',
             type: 'POST',
             data:formData,
-            dataType: 'json',
+            dataType: 'json', 
             success: function(json) {
                 if (json.status == 1){
                     window.location.reload();
@@ -45,7 +45,6 @@ function deliveryOptionUpdate(line_id){
                     else{
                         $('#delivery-charge' + line_id).text('');
                     }
-                    console.log(data.total_cart_amount);
                     $('#total-cart-amount-id').text(data.total_cart_amount);
                 }
             },

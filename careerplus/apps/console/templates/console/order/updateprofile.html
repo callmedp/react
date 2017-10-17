@@ -70,9 +70,9 @@
                     </div>
                     {% for profile_url in profile_urls %}
                       <input type="hidden" name="count" value="{{forloop.counter}}">
-                      <input type="hidden" name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}">
+                      <input type="hidden" name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}" id="user_{{forloop.counter}}">
                       <input type="hidden" 
-                      name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}">
+                      name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}" id="pass_{{forloop.counter}}">
                     {% endfor %}
                     </form>
               {% endif %}

@@ -247,6 +247,8 @@ class Command(BaseCommand):
                 ON ( cart_orderitem.order_id = cart_order.id ) WHERE cart_order.added_on >= '2014-04-01 00:00:00'  
                 ORDER BY cart_orderitem.added_on DESC
                 """
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         oi_df = pd.read_sql(sql,con=db)
                 
@@ -257,6 +259,8 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Merging Order')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         staff_user_df = pd.read_sql('SELECT id as staff_obj, cp_id as user_id FROM users_user', con=db2)
         staff_user_df.user_id = pd.to_numeric(staff_user_df.user_id)
@@ -266,7 +270,9 @@ class Command(BaseCommand):
         staff_user_df = staff_user_df.set_index('user_id')['staff_obj'].to_dict()
         
 
-
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         product_df = pd.read_sql('SELECT id as product_obj, cp_id as pid, cpv_id as pvid, type_flow FROM shop_product', con=db2)
         product_variation_df = product_df[~product_df.pvid.isnull()]
         
@@ -334,6 +340,7 @@ class Command(BaseCommand):
                     product_id = row['variation_id']
                 
                 oi_status, last_oi_status, counter, feedback = map_oi_status(row['type_flow'], row['oio_operation_type'], row['new_status'])
+                assigned_to = None
                 if oi_status not in [2]:
                     assigned_to = row['oio_assigned_to_id'] if row['oio_assigned_to_id'] and row['oio_assigned_to_id'] == row['oio_assigned_to_id'] else None
                 data_tup = (
@@ -397,6 +404,8 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Bulk Update Parent Order Items')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         new_order_item_df = pd.read_sql('SELECT id as new_parent_id, coi_id as parent_id FROM order_orderitem',con=db2)
         new_order_item_df = new_order_item_df[new_order_item_df.parent_id.notnull()]

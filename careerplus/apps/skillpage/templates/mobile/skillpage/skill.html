@@ -22,16 +22,15 @@
                 <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
 
                 
-                <a class="icon-back pull-left"  href="#"  onclick="goBack()"></a> 
+                <a class="icon-back pull-left"  href="/"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
                 
-{#                <a class="icon-search pull-left" href="search-listing.html">search</a>#}
-{##}
-{#                #}
-{#                <a class="icon-cart pull-left" href="#">cart</a>#}
+                <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
             </div><!-- / Right side Icon ends here -->
+            
         </div><!-- header menu Icon ends here -->
         <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Programs</h1>
         <ul class="header-taging mt-10 w100fl">
@@ -112,6 +111,7 @@
                                   </p>
                                 </div>
                             </div><!-- end of media -->
+                            {% comment %}
                             <div class="media">
                                 <div class="media-left">
                                   <span class="icon-graph mt-10"></span>
@@ -122,7 +122,8 @@
                                         candidates are six sigma certified
                                     </p>
                                 </div>
-                            </div><!-- end of media -->  
+                            </div><!-- end of media -->
+                            {% endcomment %}
                         </div>
 
                         <p>Jobs require this skill in different functional area</p>

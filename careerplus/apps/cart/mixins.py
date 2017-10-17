@@ -268,6 +268,9 @@ class CartMixin(object):
                     elif is_available:
                         total_amount += price
 
+                    if m_prod.delivery_service and is_available:
+                        total_amount += m_prod.delivery_service.get_price()
+
                     sqs_vars = json.loads(sqs.pVrs).get('var_list', [])
                     deleted = False
                     for var in variations:
@@ -285,6 +288,10 @@ class CartMixin(object):
                                 found = True
                                 if var_available:
                                     total_amount += var_price
+
+                                if is_available and var.delivery_service:
+                                    total_amount += var.delivery_service.get_price()
+
 
                                 var_data = {
                                     "id": var_id,
@@ -355,7 +362,6 @@ class CartMixin(object):
                         "is_available": is_available,
                         "delivery_types": m_prod.product.get_delivery_types(),
                     }
-
                     cart_items.append(data)
 
                 except:

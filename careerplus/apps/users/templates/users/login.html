@@ -63,7 +63,8 @@
             </div>
             <button type="submit" class="btn btn-primary submit">Login</button>
             <small class="form-text text-muted text-center">
-                <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Forgot Password?</a>
+                <a href="javascript:void(0)" id="modalforgot">
+                Forgot Password?</a>
             </small>
             <div class="social-login">
                 <span>or login with</span>
@@ -82,110 +83,28 @@
   <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="forgot_div">
   <div class="modal-dialog modal-sm modal-custom" role="document">
     <div class="modal-content">
-     <div class="register">
-     <div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
-      </div>
-        <form method="post" id="forgot_form" 
-        action="{% url "users:forgot-email-sent" %}">
-        {% csrf_token %}
-            {% for field in reset_form %}
-                <div class="form-group {% if field.errors %}error{% endif %}">
-                    {{field}}
-                    {% for error in  field.errors %}{{ error }}{% endfor %}
-                </div>
-            {% endfor %}
-          <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
-        </form>
-      </div>
+        <div class="register">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+            </div>
+            <div id="msg_for_user"></div>
+            <form method="post" id="forgot_form" 
+            action="{% url "users:forgot-email-sent" %}">
+            {% csrf_token %}
+                {% for field in reset_form %}
+                    <div class="form-group {% if field.errors %}error{% endif %}">
+                        {{field}}
+                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endfor %}
+              <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+            </form>
+        </div>
     </div>
   </div>
 </div>
-<script>
-    // Social Facebook Login 
-    window.fbAsyncInit = function() {
-        FB.init({
-          appId  : '1482454715170390', // App ID
-          status : true, // check login status
-          cookie : true, // enable cookies to allow the server to access the session
-          xfbml  : true , // parse XFBML
-          version: 'v2.10',
-        });
-    };
-    
-    function Login()
-    {
-        FB.login(function(response) {
-           if (response.status == 'connected')
-               {
-                    var accessToken = response.authResponse.accessToken;
-                    var expiresIn = response.authResponse.expiresIn;
-                    window.location.href = '/user/social/login/?accessToken='+accessToken+'&expiresIn='+expiresIn+'&key=fb';
-                    console.log(response);
-               } 
-            else 
-                {
-                 console.log('User cancelled login or did not fully authorize.');
-                }
-        },{scope: 'email'});
-     }
-    // Load the SDK asynchronously
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10&appId=1482454715170390";
-            fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    
-    // Social Gplus Login
-
-    function loginCallback(result)
-    {
-
-        if(result['status']['signed_in'])
-            {
-                console.log(result);
-                var access_token = result.access_token
-                var expiresIn = result.expires_in
-                window.location.href = '/user/social/login/?accessToken='+access_token+'&expiresIn='+expiresIn+'&key=gplus';
-            }   
-    }
-
-
-    function glogin() 
-    {
-        var myParams = {
-            'clientid' : '284765467291-lo164ec1u4pcnhtrbicird7tsdt553sm.apps.googleusercontent.com',
-            'cookiepolicy' : 'single_host_origin',
-            'callback' : 'loginCallback', //callback function
-            'approvalprompt':'force',
-            'scope' : 'profile email',
-        };
-        gapi.auth.signIn(myParams);
-    }
-
-    var auth2;
-    var startApp = function() {
-        gapi.load('auth2', function(){
-            /* Retrieve the singleton for the GoogleAuth library and set up the client.*/
-            auth2 = gapi.auth2.init({
-                client_id: '284765467291-lo164ec1u4pcnhtrbicird7tsdt553sm.apps.googleusercontent.com',
-                cookiepolicy: 'single_host_origin',
-                /* Request scopes in addition to 'profile' and 'email'*/
-                scope: 'profile email'
-            });
-        });
-    };
-
-    (function() {
-       var po = document.createElement('script'); po.type = 'text/javascript'; 
-       po.async = true;
-       po.src = 'https://apis.google.com/js/client.js?onload=startApp';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-     })();
-</script>  
+  
 {% endblock container %}
 
 {% block js_section %}

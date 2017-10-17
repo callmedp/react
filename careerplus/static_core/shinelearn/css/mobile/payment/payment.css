@@ -1,0 +1,394 @@
+.input-group .form-control, .input-group-addon, .input-group-btn {
+  display: table-cell; }
+
+.input-group-addon, .input-group-btn {
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 1%; }
+
+/* current element like this */
+/* Main CSS Start From Here */
+.form-group {
+  margin-bottom: 15px;
+  position: relative; }
+
+input, select, textarea, button {
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.875em;
+  line-height: 1.3;
+  margin: 0; }
+
+input:focus {
+  border: 1;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  outline: none; }
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 40px;
+  background: url("../../../images/mobile/common/dropdown.svg");
+  background-color: #fff;
+  background-position: 98% 2px;
+  background-repeat: no-repeat;
+  border: 1px solid #c1c1c1;
+  color: #999;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  outline: 0;
+  padding: 6px 30px 6px 6px;
+  text-align: left;
+  -webkit-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  transition: all .3s ease; }
+  select option {
+    padding: 6px; }
+
+textarea.form-control {
+  height: auto; }
+
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
+
+.input-group {
+  border-collapse: separate;
+  display: table;
+  position: relative;
+  margin-bottom: 15px;
+  width: 100%; }
+  .input-group .form-control {
+    border: 1px solid #ddd;
+    float: left;
+    margin-bottom: 0;
+    position: relative;
+    width: 100%;
+    z-index: 2; }
+
+.input-group-addon {
+  background-color: #fff;
+  color: #555;
+  padding: 6px 12px;
+  text-align: center;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  border: 1px solid #ddd; }
+  .input-group-addon:first-child {
+    -webkit-border-bottom-right-radius: 0;
+       -moz-border-radius-bottomright: 0;
+            border-bottom-right-radius: 0;
+    -webkit-border-top-right-radius: 0;
+       -moz-border-radius-topright: 0;
+            border-top-right-radius: 0;
+    border-right: 0; }
+  .input-group-addon:last-child {
+    border-left: 0 none;
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0; }
+
+.form-control {
+  display: block;
+  height: 40px;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  font-family: "Open Sans", sans-serif;
+  border: 1px solid #c1c1c1;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.42857;
+  padding: 6px 12px;
+  -webkit-transition: border-color 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s;
+  transition: border-color 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s;
+  -o-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  -moz-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s, -moz-box-shadow 0.15s ease-in-out 0s;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s, -moz-box-shadow 0.15s ease-in-out 0s; }
+  .form-control::-moz-placeholder {
+    color: #999;
+    opacity: 1; }
+
+.comment-wrap ul {
+  border-bottom: 1px solid #f2f2f2;
+  margin-bottom: 15px; }
+  .comment-wrap ul li {
+    padding-left: 50px;
+    font-size: 100%;
+    margin-bottom: 20px; }
+    .comment-wrap ul li sup {
+      height: 40px;
+      width: 40px;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+      background-color: #ebebeb;
+      position: absolute;
+      left: 15px; }
+      .comment-wrap ul li sup img {
+        height: 40px;
+        width: 40px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%; }
+
+/* Line form Start From Here */
+.content-box .form-control {
+  border: 0 none;
+  border-bottom: 1px solid #c1c1c1;
+  padding: 0; }
+
+.content-box .code {
+  width: 22%; }
+  .content-box .code select {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    border: 0 none;
+    border-bottom: 1px solid #c1c1c1;
+    color: #666; }
+
+.content-box .number {
+  width: 72%;
+  margin-left: 15px; }
+
+.w-50 {
+  width: 47% !important; }
+
+/* error form Start From Here */
+.error .form-control {
+  border-color: #f34a38;
+  color: #f34a38; }
+
+.error .mgs {
+  font-size: 85%;
+  padding-top: 3px;
+  color: #f34a38;
+  display: block;
+  padding-bottom: 0; }
+
+.mgs {
+  display: none; }
+
+/* error form Start From Here */
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-bottom: 1px solid #ddd; }
+  .fileUpload span {
+    float: right;
+    font-weight: 600;
+    color: #2f5ea6;
+    margin-bottom: 10px;
+    font-size: 13px; }
+
+.fileUpload input.upload {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  width: 100%; }
+
+#uploadFile {
+  position: absolute;
+  top: 0;
+  font-size: 12px;
+  color: #999;
+  border: 0 none;
+  background-color: transparent; }
+
+.payment-nav {
+  font-size: 1em;
+  color: #fff;
+  font-weight: 600;
+  line-height: 26px;
+  text-transform: uppercase;
+  margin: 0 -10px;
+  padding-top: 15px;
+  width: 100%;
+  float: left; }
+  .payment-nav li {
+    display: inline-block; }
+    .payment-nav li:after {
+      display: inline-block;
+      height: 9px;
+      width: 5px;
+      background-position: -219px -156px;
+      content: '';
+      background-image: url("../../../images/mobile/common/sprites.svg"); }
+    .payment-nav li a {
+      color: #9abbed;
+      display: inline-block;
+      padding-right: 10px;
+      padding-left: 10px; }
+  .payment-nav .active a {
+    color: #fff; }
+
+.payment-nav .bg-none a {
+  padding-right: 0; }
+
+.payment-nav .bg-none:after {
+  background-image: none; }
+
+.payment-summary {
+  width: 100%;
+  float: left; }
+  .payment-summary .item {
+    width: 78%;
+    float: left;
+    padding-right: 15px; }
+  .payment-summary .price {
+    width: 22%;
+    float: left; }
+  .payment-summary .heading {
+    border-bottom: 1px solid #c1c1c1;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #333; }
+  .payment-summary .item-wrap {
+    border-bottom: 1px solid #f2f2f2;
+    padding-bottom: 15px;
+    margin-bottom: 15px; }
+  .payment-summary .list-item li {
+    margin-bottom: 10px;
+    width: 100%;
+    float: left; }
+    .payment-summary .list-item li:last-child {
+      margin-bottom: 0; }
+    .payment-summary .list-item li .item:before {
+      display: inline-block;
+      height: 14px;
+      width: 14px;
+      content: '';
+      background-position: -230px -154px;
+      background-repeat: no-repeat;
+      margin-right: 5px;
+      position: relative;
+      top: 2px;
+      float: left;
+      padding-bottom: 6px; }
+
+.loyalty-points .form-control {
+  border: 1px solid #c1c1c1;
+  height: 44px;
+  padding: 0 10px; }
+
+.total-amount {
+  border-top: 1px solid #f2f2f2;
+  padding-top: 15px;
+  padding-bottom: 15px; }
+  .total-amount .item {
+    text-align: right;
+    padding-right: 30px; }
+    .total-amount .item:before {
+      background-image: none !important; }
+
+.payment .accordion-wrap .acc_head,
+.payment .smk_accordion .accordion_in .acc_content {
+  background-color: #fff !important; }
+
+.payment .payment-mode {
+  margin: 10px -3px; }
+  .payment .payment-mode li {
+    display: inline-block;
+    margin: 2px 2px;
+    text-align: center;
+    font-size: 13px; }
+    .payment .payment-mode li a {
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      display: table-cell;
+      vertical-align: middle;
+      padding: 0 10px;
+      width: 110px;
+      height: 60px;
+      font-weight: 600; }
+  .payment .payment-mode .cc {
+    background-color: #efedb9; }
+  .payment .payment-mode .dc {
+    background-color: #ffd2c1; }
+  .payment .payment-mode .nb {
+    background-color: #fff0c1; }
+  .payment .payment-mode .ic {
+    background-color: #c1e7ff; }
+  .payment .payment-mode .emi {
+    background-color: #e4dced; }
+
+.shine-options {
+  /* BTN styling */ }
+  .shine-options .label-wrap {
+    margin-bottom: 15px;
+    border: 1px solid #a3c3d3; }
+    .shine-options .label-wrap label {
+      width: 100%;
+      padding: 5px 30px 5px 0; }
+    .shine-options .label-wrap [type="radio"]:checked + label:before, .shine-options .label-wrap [type="radio"]:not(:checked) + label:before {
+      display: block;
+      height: 18px;
+      width: 18px;
+      background-color: #cccccc;
+      background-position: -426px -147px;
+      background-image: url("../../../images/mobile/common/sprites.svg");
+      left: auto;
+      right: 0;
+      top: 50%;
+      margin-top: -9px; }
+    .shine-options .label-wrap [type="radio"]:checked + label:before {
+      background-color: #0e6c9d; }
+    .shine-options .label-wrap [type="radio"]:checked + label:after, .shine-options .label-wrap [type="radio"]:not(:checked) + label:after {
+      background-image: none;
+      background-color: transparent; }
+  .shine-options .btn-wrap li {
+    display: table-cell;
+    width: 800px; }
+    .shine-options .btn-wrap li:nth-child(2) {
+      width: 30px;
+      padding: 0 10px;
+      text-align: center; }
+    .shine-options .btn-wrap li input.upload {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      opacity: 0;
+      width: 100%; }
+
+.w-auto {
+  width: auto; }
+
+.mobilwik tr td {
+  padding-top: 5px;
+  padding-bottom: 5px; }
+
+.cheque .bank-detail {
+  border: 1px solid #c1c1c1;
+  padding: 15px; }
+
+.cheque ul {
+  padding-left: 15px;
+  margin-bottom: 20px; }
+  .cheque ul li {
+    margin-bottom: 10px;
+    list-style-type: disc; }

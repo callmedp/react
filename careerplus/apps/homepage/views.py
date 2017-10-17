@@ -8,7 +8,6 @@ from haystack.query import SearchQuerySet
 
 
 from shop.models import ProductClass, FunctionalArea, Skill
-from shop.choices import SEARCH_OPTIONS
 from search.helpers import get_recommendations
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
@@ -109,7 +108,7 @@ class HomePageView(TemplateView):
         func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
         skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
         context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
-        context.update({'search_context': SEARCH_OPTIONS})
+        context.update({"search_context": [p.decode() for p in redis_conn.smembers('product_set')]})
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         context.update(self.get_testimonials())

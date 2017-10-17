@@ -41,15 +41,16 @@
         <!-- search tab container starts here -->
         <div class="tab-search">
           <ul class="tabs">
-            <li><a href="javascript:void" class="current" data-tab="tab-1">Search</a></li>
-            <li><a href="javascript:void" data-tab="tab-2">Advanced Search</a></li>
+            <li><a href="javascript:void(0)" class="current" data-tab="tab-1">Search</a></li>
+            <li><a href="javascript:void(0)" data-tab="tab-2">Advanced Search</a></li>
           </ul>
 
         <!-- Tab content Satrts here -->
         <div id="tab-1" class="tab-content current row">
           <div class="custom-search">
-            <input class="form-control" id="id_q" placeholder="Search for courses, services"
+            <input class="form-control key_press_js_search" id="id_q" placeholder="Search for courses, services"
                    type="text" autocomplete="off">
+              <span class="error-txt"></span>
             <button type="images" onclick="redirectToSearch()" class="search-icon-tab"></button>
         </div>
         <div class="clearfix"></div>   
@@ -58,13 +59,15 @@
         <!-- Tab content Satrts here -->
         <div id="tab-2" class="tab-content row">
           <div class="custom-advnaced-search">
-              <form class="form-inline" method="post" action="{% url 'search:recommend' %}">
+              <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
                     {% csrf_token %}
                     <input class="form-control bdr1" name="area" placeholder="Functional area" type="text"
                            autocomplete="off" value="{{ recmnd_func_area }}" id="tags11" >
                     <input class="form-control bdr2" name="skills" placeholder="Skills" type="text"
                            autocomplete="off" value="{{ recmnd_skills }}" id="tags21">
-                    <button type="submit" class="custom-search-btn search-icon-tab"></button>
+                    <span class="error-txt pull-left js_area_error" style="color:red"></span>
+                    <span class="error-txt pull-left js_skill_error" style="color:red"></span>
+                    <button type="submit" class="custom-search-btn search-icon-tab js_advance_search"></button>
               </form>
         </div>
         <div class="clearfix"></div>   
@@ -86,7 +89,7 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:50 }}</a></p>
+                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         <sup class="fill-star"></sup>
@@ -106,7 +109,7 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:50 }}</a></p>
+                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         <sup class="fill-star"></sup>
@@ -207,7 +210,7 @@
                             <div class="img-box">
                                 <img src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
                             </div>
-                            <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:50}}</p>
+                            <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</p>
                         </a>
                     </li>
                     {% endfor %}

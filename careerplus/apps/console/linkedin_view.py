@@ -348,11 +348,11 @@ class ChangeDraftView(DetailView):
                 context['form'] = draft_form
                 context['org_formset'] = org_formset
                 context['edu_formset'] = edu_formset
-                messages.success(self.request, "Draft is not Saved successfully", 'error')
+                messages.error(self.request, "Draft is not Saved successfully", 'error')
                 return render(request, self.template_name, context)
 
             else:
-                messages.success(self.request, "Draft not exist with this order" 'error')
+                messages.error(self.request, "Draft not exist with this order" 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
             messages.add_message(request, messages.ERROR, str(e))
@@ -928,30 +928,27 @@ class ProfileUpdationView(DetailView):
         if action == -9 and queue_name == "internationalprofileupdate":
             selected_id = json.loads(selected)
             try:
-                orderitem = OrderItem.objects.select_related('order', 'product', 'partner').get(id__in=selected_id)
-                profile_obj = orderitem.product.productextrainfo_set.get(info_type='profile_update')
+                orderitem = OrderItem.objects.select_related(
+                    'order', 'product', 'partner').get(
+                    id__in=selected_id)
+                profile_obj = orderitem.product.productextrainfo_set.get(
+                    info_type='profile_update'
+                )
                 country_obj = Country.objects.get(pk=profile_obj.object_id)
-                objs = orderitem.internationalprofilecredential_set.all()
-                for obj in objs:
-                    if not obj.username and not password:
+                profile_urls = country_obj.profile_url.split(',')
+                count = 0
+                for cnt in profile_urls:
+                    count = count + 1
+                    username = request.POST.get('username' + str(count) + '', None)
+                    password = request.POST.get('password' + str(count) + '', None)
+                    if not username and not password:
                         msg = 'Please update all the profiles first'
                         messages.add_message(request, messages.SUCCESS, msg)
-                        return HttpResponseRedirect(reverse(
-                            'console:international_profile_update',
-                            kwargs={'pk': kwargs.get('pk')}))
-
-
-                # profile_urls = country_obj.profile_url.split(',')
-                # count = 0
-                # for cnt in profile_urls:
-                #     count = count + 1
-                #     username = request.POST.get('username'+str(count)+'', None)
-                #     password = request.POST.get('password'+str(count)+'', None)
-                #     if not username and not password:
-                #         msg = 'Please update all the profiles first'
-                #         messages.add_message(request, messages.SUCCESS, msg)
-                #         return HttpResponseRedirect(reverse('console:international_profile_update', kwargs={'pk':kwargs.get('pk')}))
-
+                        return HttpResponseRedirect(
+                            reverse(
+                                'console:international_profile_update',
+                                kwargs={'pk': kwargs.get('pk')})
+                        )
                 approval = 0
                 if orderitem:
                     last_oi_status = orderitem.oi_status
@@ -982,24 +979,16 @@ class ProfileUpdationView(DetailView):
                 )
                 country_obj = Country.objects.get(pk=profile_obj.object_id)
                 if username and password and flag:
-                    orderitem.internationalprofilecredential_set.create(
-                        country=country_obj,
-                        username=username,
-                        password=password,
-                        candidateid=orderitem.order.candidate_id,
-                        site_url=site,
-                        profile_status=True,
-                    )
-                    # profile_obj = InternationalProfileCredential()
-                    # profile_obj.oi = orderitem
-                    # profile_obj.country = country_obj
-                    # profile_obj.username = username
-                    # profile_obj.password = password
-                    # profile_obj.candidateid = orderitem.order.candidate_id
-                    # profile_obj.candidate_email = orderitem.order.email
-                    # profile_obj.site_url = site
-                    # profile_obj.profile_status = True
-                    # profile_obj.save()
+                    profile_obj = InternationalProfileCredential()
+                    profile_obj.oi = orderitem
+                    profile_obj.country = country_obj
+                    profile_obj.username = username
+                    profile_obj.password = password
+                    profile_obj.candidateid = orderitem.order.candidate_id
+                    profile_obj.candidate_email = orderitem.order.email
+                    profile_obj.site_url = site
+                    profile_obj.profile_status = True
+                    profile_obj.save()
                     return HttpResponse(
                         json.dumps({'success': True}),
                         content_type="application/json"

@@ -8,6 +8,7 @@ import ast
 # django imports
 from django.utils.text import slugify
 from core.library.haystack.query import SQS
+from haystack.query import EmptySearchQuerySet
 
 # third party imports
 from django_redis import get_redis_connection
@@ -124,43 +125,36 @@ def clean_id_fields(param):
 
 
 def handle_special_chars(query, slugified=True, reverse=False, hyphenate=False, ignore_quotes=False):
-    special_chars_mapping = {
-        "+": " plus ",
-        "#": " sharp ",
-        ".": " dot ",
-        "\"": " quotes ",
-        "&": " n ",
-        }
-
-    if ignore_quotes:
-        special_chars_mapping.pop("\"")
-
-    if hyphenate:
-        special_chars_mapping = {k:"-"+slugify(str(v))+"-" for k,v in special_chars_mapping.items()}
-
-    if reverse:
-
-        scm_copy = special_chars_mapping.copy()
-        special_chars_mapping = OrderedDict('').copy()
-        special_chars_mapping.update({"-"+slugify(str(k))+"-":v for v,k in scm_copy.items()})
-        special_chars_mapping.update({"-"+slugify(str(k)):v for v,k in scm_copy.items()})
-        special_chars_mapping.update({slugify(str(k))+"-":v for v,k in scm_copy.items()})
-
-        special_chars_mapping.update({slugify(str(k)):v for v,k in scm_copy.items()})
-        [special_chars_mapping.pop(extra_key) for extra_key in ['-n','n','n-']]
-
-    for key,value in special_chars_mapping.items():
-        if ignore_quotes:
-
-            split_query = re.split(r'(\"[^"]*?\")',query)
-            query = ''.join([i.replace(key,value) if '"' not in i else i for i in split_query])
-
-        else:
-
-            query = query.replace(key,value)
-
-    if not slugified:
-        return query
+    # special_chars_mapping = {
+    #     "+": " plus ",
+    #     "#": " sharp ",
+    #     ".": " dot ",
+    #     "\"": " quotes ",
+    #     "&": " n ",
+    #     }
+    #
+    # if ignore_quotes:
+    #     special_chars_mapping.pop("\"")
+    # if hyphenate:
+    #     special_chars_mapping = {k:"-"+slugify(str(v))+"-" for k,v in special_chars_mapping.items()}
+    # if reverse:
+    #     scm_copy = special_chars_mapping.copy()
+    #     special_chars_mapping = OrderedDict('').copy()
+    #     special_chars_mapping.update({"-"+slugify(str(k))+"-":v for v,k in scm_copy.items()})
+    #     special_chars_mapping.update({"-"+slugify(str(k)):v for v,k in scm_copy.items()})
+    #     special_chars_mapping.update({slugify(str(k))+"-":v for v,k in scm_copy.items()})
+    #     special_chars_mapping.update({slugify(str(k)):v for v,k in scm_copy.items()})
+    #     [special_chars_mapping.pop(extra_key) for extra_key in ['-n','n','n-']]
+    #
+    # for key,value in special_chars_mapping.items():
+    #     if ignore_quotes:
+    #         split_query = re.split(r'(\"[^"]*?\")',query)
+    #         query = ''.join([i.replace(key,value) if '"' not in i else i for i in split_query])
+    #
+    #     else:
+    #         query = query.replace(key,value)
+    # if not slugified:
+    #     return query
     return slugify(str(query))
 
 
@@ -355,6 +349,7 @@ def get_recommendations(func_area, skills, results=None):
         func_area = 23
     if not skills:
         skills = [777, 795, 2064]
+
     func_area_prods = set(ProductFA.objects.filter(fa=func_area).values_list('product', flat=True))
     skill_prods = set(ProductSkill.objects.filter(skill__in=skills).values_list('product', flat=True))
     products_fa_and_skill = func_area_prods.intersection(skill_prods)
@@ -365,4 +360,6 @@ def get_recommendations(func_area, skills, results=None):
         if not results:
             results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm')
         results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
+    else:
+        results = EmptySearchQuerySet()
     return results

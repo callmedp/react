@@ -46,11 +46,7 @@
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
-                
-{#                <a class="icon-search pull-left" href="search-listing.html">search</a>#}
-{##}
-{#                #}
-{#                <a class="icon-cart pull-left" href="#">cart</a>#}
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
 
@@ -77,7 +73,7 @@
             
             <li class="tw-bg"><a id="article_share" article-slug="{{main_article.slug}}" href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-tw"></span></a></li>
 
-            <li class="fb-bg"><a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{article.get_absolute_url}}" article-slug="{{article.slug}}"><span class="icon-fb"></span></a></li>
+            <li class="fb-bg"><a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{article.get_absolute_url}}" article-slug="{{article.slug}}" target="_blank"><span class="icon-fb"></span></a></li>
             <li class="share-bg"><a href="#">{{main_article.no_shares}}<br> {% if main_article.no_shares > 1 %}Shares{% else %}Share{% endif %}</a></li>
         </ul>
         <a href="JavaScript:Void(0);" id="share-btn" class="blue-circle-60"><span class="icon-share"></span></a>
@@ -92,3 +88,7 @@
     <script src="{% static "shinelearn/js/blog/blog-detail.js" %}"></script>
     <script src="{% static "shinelearn/js/mobile/blog/blog.js" %}"></script>
 {% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

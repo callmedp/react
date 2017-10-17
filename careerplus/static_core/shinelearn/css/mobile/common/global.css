@@ -116,6 +116,7 @@ header {
     right: 0;
     top: 0;
     width: auto;
+    z-index: -1;
     height: 100%;
     opacity: .15; }
 
@@ -872,6 +873,7 @@ article ol {
   
 }
 
-.mt-sub-10 {
-  margin-top: -10px;
+.mt-sub-10{
+  margin-top:-10px;
 }
+

@@ -13,6 +13,11 @@
     {% block css_section %}
         {{block.super}}
         {% compress css %}
+        <style type="text/css">
+        .error {
+            color: red;
+        }
+        </style>
         <link type="text/css" href="{% static 'shinelearn/css/microsite/roundone.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/microsite/multiple-select.css' %}" rel="stylesheet">
         {% endcompress %}
@@ -159,8 +164,8 @@
           </datatlist>
           {% if request.session.candidate_id %}
             <a role="button" class="save-job savejob_js" onclick="onClickSaveJob(this, {{job.jobId}});">Save this job</a>
-          {% else %}
-            <a href="#" class="save-job" data-toggle="modal" data-target=".bs-example-modal-sm">Save this job</a>
+          {% elif not request.session.candidate_id %}
+            <a href="#" class="save-job" data-toggle="modal" data-target=".logindiv">Save this job</a>
           {% endif %}
           <a href="{{detail_url}}" class="view-job">View job description</a>
           {% if request.session.candidate_id and flag %}
@@ -170,7 +175,8 @@
             <a role="button" class="get-refferd pull-right enrol-now-button" 
             prod-id="819">Get Referred</a>
           {% else %}
-            <a href="#" class="get-refferd pull-right" data-toggle="modal" data-target=".logindiv">Get Referred</a>
+            <a href="javascript:void(0)" class="get-refferd pull-right" 
+            data-toggle="modal" data-target=".logindiv">Get Referred</a>
           {% endif %}
           <form id="id_{{job.jobId}}">
             {% csrf_token %}
@@ -264,16 +270,16 @@
           </div>
           <button type="button" id="login-button" class="btn btn-primary submit">Login</button>
           <small class="form-text text-muted text-center">
-            <a href="#" data-toggle="modal" data-dismiss="modal" 
-            data-target=".forgotdiv">
+            <a href="javascript:void(0)" data-toggle="modal" data-dismiss="modal" 
+            id="modalforgot">
               Forgot Password?
             </a>
           </small>
           <div class="social-login">
             <span>or login with</span>
-            <a class="facebook" href="#"></a>
-            <a class="linkedin" href="#"></a>
-            <a class="gplus" href="#"></a>
+            <a class="facebook" onclick="Login();"></a>
+            <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+            <a class="gplus" onclick="glogin()"></a>
           </div>
           <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
         </form>
@@ -336,12 +342,12 @@
             {{ registerform.email }}
             <span class="error-txt">{{ registerform.email.errors.0 }}</span>
           </div>
+          <div id="user_email"></div>
           <div class="form-group {% if registerform.email.errors %}error{% endif %}">
             {{ registerform.raw_password }}
             <span class="error-txt">{{ registerform.raw_password.errors.0 }}</span>
           </div>
-
-          
+          <div id="raw_psd"></div>
           <div class="form-group {% if registerform.cell_phone.errors or registerform.country_code.errors %}error{% endif %}">
             <div class="country-code">
               <div class="custom-select">
@@ -358,6 +364,7 @@
             </div>
             
           </div>
+          <div id="cell_phone"></div>
           <div class="form-group">
             {{registerform.vendor_id }}
           </div>
@@ -367,12 +374,20 @@
               I agree to Terms & conditions
             </label>
           </div>
+          <div id="terms"></div>
+          <div class="form-check">
+              <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input"
+                  name="is_job_seeker">
+                  Recieve jobs notifications
+              </label>
+          </div>
           <button type="button" id="register-button" class="btn btn-primary submit">Register</button>
           <div class="social-login">
             <span>or Register with</span>
-            <a class="facebook" href="#"></a>
-            <a class="linkedin" href="#"></a>
-            <a class="gplus" href="#"></a>
+            <a class="facebook" onclick="Login();"></a>
+            <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+            <a class="gplus" onclick="glogin()"></a>
           </div>
           <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".logindiv" data-dismiss="modal">Login Now</a></small>
         </form>
@@ -424,8 +439,12 @@
     {% compress js %}
     <script src="{% static 'console/js/microsite/multiple-select.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

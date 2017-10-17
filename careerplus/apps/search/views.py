@@ -22,13 +22,13 @@ from django.utils.http import urlencode, urlquote_plus
 # third party imports
 # from haystack.views import SearchView
 from haystack.query import EmptySearchQuerySet
+from core.library.haystack.query import SQS
 from django_redis import get_redis_connection
 
 # local imports
 from .forms import SearchForm, SearchRecommendedForm
 from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
 from shop.models import FunctionalArea, Skill, Category
-from shop.choices import SEARCH_OPTIONS
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 error_log = logging.getLogger('error_log')
@@ -101,7 +101,7 @@ class SearchBaseView(TemplateView):
         Render response directly. No relaxing/redirects required.
         """
         if (not self.query and not self.allow_empty_query) or self.none_query:
-            self.results = EmptySearchQuerySet()
+            self.results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             return self.create_response()
 
     def get_results(self):
@@ -113,7 +113,7 @@ class SearchBaseView(TemplateView):
         search_class_obj.set_params(self.search_params)
         search_class_obj.user = self.request.user
         search_class_obj.query = self.query
-        self.results = search_class_obj.get_results()
+        self.results, self.found = search_class_obj.get_results()
 
     def post_processor(self):
         """
@@ -135,34 +135,23 @@ class SearchBaseView(TemplateView):
                 variations = json.loads(result.pVrs)
                 # if no variations, skip
                 if variations['variation']:
+                    selected_price = result.pPinb if result.pPc == 'writing' or result.pPc == 'service' else result.pPin
+                    selected_fprice = result.pPfinb if result.pPc == 'writing' or result.pPc == 'service' else result.pPfin
+                    # add variation price to parent price
+                    for var in variations['var_list']:
+                        continue_flag = 0
+                        for att in requested_filters:
+                            if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
+                                continue_flag = 1
+                                break
+                        if continue_flag:
+                            continue
+                        if var['inr_price'] < selected_price:
+                            selected_price = var['inr_price']
+                            selected_fprice = var['fake_inr_price']
                     if result.pPc == 'writing' or result.pPc == 'service':
-                        selected_price = result.pPinb
-                        selected_fprice = result.pPfinb
-                        # add variation price to parent price
-                        for var in variations['var_list']:
-                            continue_flag = 0
-                            for att in requested_filters:
-                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
-                                    continue_flag = 1
-                                    break
-                            if continue_flag:
-                                continue
-                            if var['inr_price'] < selected_price:
-                                selected_price = var['inr_price']
-                                selected_fprice = var['fake_inr_price']
                         selected_price += selected_price
                         selected_fprice += selected_fprice
-                    else:
-                        selected_price = result.pPin
-                        selected_fprice = result.pPfin
-                        # only variation price
-                        for var in variations['var_list']:
-                            for att in requested_filters:
-                                if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
-                                    break
-                            if var['inr_price'] < selected_price:
-                                selected_price = var['inr_price']
-                                selected_fprice = var['fake_inr_price']
                     result.pPin = selected_price
                     result.pPfin = selected_fprice
 
@@ -188,8 +177,8 @@ class SearchBaseView(TemplateView):
             context['form'] = self.form(self.search_params)
         context['search_params'] = self.search_params
         context['QUERY_STRING'] = self.request.get_full_path()
-
-        context['facets'] = self.results.facet_counts()
+        if self.found:
+            context['facets'] = self.results.facet_counts()
         context['search_params_string'] = self.search_params.urlencode()
         context = self.set_form_attributes_in_context(context)
         context['search_type'] = self.search_type
@@ -219,6 +208,7 @@ class SearchBaseView(TemplateView):
         if self.search_params.getlist('fprice'):
             context['price'] = self.request.GET.getlist('fprice')
         context['breadcrumbs'] = self.get_breadcrumbs()
+        context['products_found'] = self.found
         return context
 
     def build_page(self):
@@ -256,7 +246,6 @@ class SearchBaseView(TemplateView):
         4> Finally renders the mentioned search template
         """
         paginator, page = self.build_page()
-
         context = {
             'query': self.query,
             'page': page,
@@ -311,7 +300,10 @@ class SearchBaseView(TemplateView):
         if response:
             return response
         self.get_search_query()
-        self.empty_query_handler()
+        # empty_query = self.empty_query_handler()
+        # if empty_query:
+            # return response
+        # if not empty_query:
         self.get_results()
         response = self.post_processor()  # Handle relaxation.
         if response:
@@ -364,7 +356,7 @@ class SearchListView(SearchBaseView):
 
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
-        context.update({"search_context": SEARCH_OPTIONS})
+        context.update({"search_context": [p.decode() for p in redis_conn.smembers('product_set')]})
         return context
 
     def prepare_track(self, page):
@@ -472,11 +464,11 @@ class FuncAreaPageView(SearchBaseView):
 
     def get_breadcrumbs(self):
         breadcrumbs = super(FuncAreaPageView, self).get_breadcrumbs()
-        func_area = Category.objects.filter(id=self.kwargs['pk'])
-        if func_area:
+
+        if self.func_area:
             breadcrumbs.append(
                 OrderedDict({
-                    'label': func_area[0].name,
+                    'label': self.func_area[0].name,
                     'active': None}))
         return breadcrumbs
 
@@ -485,8 +477,10 @@ class FuncAreaPageView(SearchBaseView):
         request_get.update(self.request.GET)
         request_get.update(self.request.POST)
         self.request_get = request_get
+        self.func_area = Category.objects.filter(id=self.kwargs['pk'])
         context = super(FuncAreaPageView, self).get_extra_context()
-
+        if self.func_area:
+            context['func_area_name'] = self.func_area[0].name
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "func_area"})
         return context

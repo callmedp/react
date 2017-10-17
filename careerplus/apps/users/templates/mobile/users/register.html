@@ -13,6 +13,10 @@
             border-color: #f34a38;
             color: #f34a38;
         }
+        .error {
+            border-color: #f34a38;
+            color: #f34a38;
+        }
         .form-group label.error {
             font-size: 85%;
             padding-top: 3px;
@@ -33,15 +37,15 @@
                 
                 <a class=" pull-left" id="sidebar-main-trigger" href="/"></a> 
                 
-                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+                <a class="icon-back pull-left" href="/"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
                 
-                <a class=" pull-left" href="search-listing.html">search</a>
+                <!--a class=" pull-left" href="search-listing.html">search</a-->
 
                 
-                <a class=" pull-left" href="#">cart</a>
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
 
@@ -67,14 +71,16 @@
 
                     <div class="form-group {% if form.email.errors %}error{% endif %}">
                         {{ form.email }}
-                        {% if form.email.errors %}<p class="mgs">{{ form.email.errors.0 }}</p>{% endif %}
+                        <span class="error-txt" style="bottom:-25px">
+                            {{ form.email.errors}}
+                        </span>
                     </div>
-
+                    <div id="user_email"></div>
                     <div class="form-group {% if form.raw_password.errors %}error{% endif %}">
                         {{ form.raw_password }}
                         {% if form.raw_password.errors %}<p class="mgs">{{ form.raw_password.errors.0 }}</p>{% endif %}
                     </div>
-
+                    <div id="raw_psd"></div>
                     <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
                     <div class="pull-left code">
                          {{form.country_code}}
@@ -83,12 +89,16 @@
                         {% if form.cell_phone.errors %}<p class="mgs">{{ form.cell_phone.errors.0 }}</p>{% endif %}
                      <div class="clearfix"></div>
                     </div>
+                    <div id="cell_phone"></div>
                     <div class="form-group mt-30">
                         <p class="c9">
                           <input type="checkbox" id="id_term_conditions" name="term_conditions"/>
-                          <label for="id_term_conditions"> I agree to <a href="#">Terms &amp; Conditions</a></label>
+                          <label for="id_term_conditions"> I agree to 
+                          <a href="/tnc">Terms &amp; Conditions</a>and
+                          <a href="/privacy-policy">Privacy policy</a>
+                          </label>
                         </p>
-
+                        <div id="terms"></div>
                         <p class="c9">
                           {{ form.is_job_seeker }}
                           <label for="id_is_job_seeker">Receive jobs notifications</label>
