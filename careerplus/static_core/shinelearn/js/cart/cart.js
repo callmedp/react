@@ -548,7 +548,7 @@ $(document).ready(function() {
                         $('#cart-counter-id').addClass('cart-counter');
                         $('#cart-counter-id').text(json.cart_count);
                         if (window.CURRENT_FLAVOUR == 'mobile'){
-                            alert("product added in cart successfully");
+                            alert("Product added successfully in cart.);
                         }
                     }
 
