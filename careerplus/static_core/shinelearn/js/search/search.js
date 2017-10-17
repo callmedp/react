@@ -110,7 +110,7 @@ $(document).ready(function () {
             actualValues: skillsSet,
             only: true
         },
-        max: 3,
+        max: 2,
         create: function(e) {
             var $field = e.$input[0];
             $field.placeholder = '';
@@ -147,4 +147,35 @@ $(document).ready(function () {
     //             $(".js_advance_search_form").submit();
     //         }    
     // });
+
+    $('.js_advance_search').on('click', function (e) {
+        e.preventDefault();
+        var flag1 = true,
+            flag2 = true;
+        var $tags1 = $('#id_area'),
+            $tags2 = $('#id_skills');
+            if (!$tags1.val()){
+                flag1 = false;
+                $tags1.closest('div').addClass('error');
+                $tags1.siblings('.error-txt').html('Please choose a functional area.');
+            }
+            else {
+                flag1 = true;
+                $tags1.closest('div').removeClass('error');
+                $tags1.siblings('.error-txt').html('');
+            }
+            if (!$tags2.val()){
+                flag2 = false;
+                $tags2.closest('div').addClass('error');
+                $tags2.siblings('.error-txt').html('Please choose a skill.');
+            }
+            else {
+                flag2 = true;
+                $tags2.closest('div').removeClass('error');
+                $tags2.siblings('.error-txt').html('');
+            }
+            if (flag2 && flag1) {
+                $(".js_advance_search_form").submit();
+            }
+    });
 });
