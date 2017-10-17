@@ -1,5 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
+{% load static compress %}
 
 {% block meta_html %}
     {{block.super}}
@@ -11,9 +11,11 @@
 
 {% block css_section %}
     {{block.super}}
-    <!--link type="text/css" href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet"-->
+    {% compress css %}
     <link href="{% static "shinelearn/css/bootstrap-datepicker.min.css" %}" rel="stylesheet">
     <link type="text/css" href="{% static "shinelearn/css/cart/payment.css" %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css %}
     <style type="text/css">
         .danger-txt{
             color:red;
@@ -22,6 +24,7 @@
             color:red;
         }
     </style>
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block navigation %}
@@ -242,9 +245,11 @@
   
 
 {% block js_section %}
-   {{ block.super }}
-   <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
-   <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

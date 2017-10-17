@@ -1,19 +1,22 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
-{% load thumbnail %}
+{% load static thumbnail compress %}
 
 
 {% block title %}My Inbox | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css %}
     <style type="text/css">
         .error{
             color: red;
         }
     </style>
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -66,16 +69,11 @@
 
 {% block js_section %}
     {{block.super}}
+    {% compress js %}
     <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
     <script src="{% static "shinelearn/js/mobile/dashboard/dashboard.js" %}"></script>
-    <script>
-        function openPopup(el) {
-            $('.modal').hide();
-            $('#' + el).fadeIn(200);   
-        }
-
-        function closePopup() {
-            $('.modal').fadeOut(300);
-        }
-    </script>
+    {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

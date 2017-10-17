@@ -152,8 +152,9 @@
       text-align: center; }
       .skill-box .skill-provider li a img {
         display: inline-block;
-        height: auto;
-        width: auto; }
+        height: 100%;
+        width: auto;
+        vertical-align: middle; }
 
 .skill-box .recommd-list li {
   padding-left: 15px;

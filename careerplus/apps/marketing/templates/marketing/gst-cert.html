@@ -10,18 +10,30 @@
 <link href='{% static "shinelearn/css/marketing/gst-cert/bootstrap.css" %}' rel="stylesheet">
 <link href='{% static "shinelearn/css/marketing/gst-cert/style.css" %}' rel="stylesheet">
 
-<style>
+        <style>
             @media screen and (max-height: 1048px){
                 #rc-imageselect, #captcha1 {transform:scale(0.80);-webkit-transform:scale(0.80);transform-origin:0 0;-webkit-transform-origin:0 0;}
             }
-            .ferror .error{
-                display: block;
-            }
-            .error {
+            .noerror {
                 display: none;
             }
         </style>
-
+        <script type="text/javascript">
+            var recaptcha1;
+            var recaptcha2;
+            function recaptchaCallBack() {
+                if($("#captcha1").length){
+                //Render the recaptcha1 on the element with ID "recaptcha1"
+                recaptcha1 = grecaptcha.render('captcha1', {
+                  'sitekey' : '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV', //Replace this with your Site key
+                  'theme' : 'light'
+                });}};
+            function openPopupRecaptcha() {
+                if($('#recaptcha2').is(':empty')){
+                grecaptcha.render("captcha2", {sitekey: "6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV", theme: "light"});}
+            };
+        </script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallBack&render=explicit" async defer></script>
 </head>
 
 <body>
@@ -59,7 +71,10 @@
           <h2>Join the course</h2>
           
           <div class="clear-fix"></div>
-          <form id="lead" action="{% url "crmapi:lead-management" %}" method="post" class="cert-form">{% csrf_token %}
+          <form id="lead" 
+          action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
+
+          method="post" class="cert-form">{% csrf_token %}
           <div>          
           <input type="text" id="name" name="name" placeholder="Your Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="100">
           <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
@@ -74,7 +89,7 @@
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
                             
             <input id="mobile" type="text" name="number" onblur="leadSubmit();return false;"
-            placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right">          
+            placeholder="Mobile Number" maxlength="10" class="pull-right">          
             
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
          </div>
@@ -88,10 +103,10 @@
                <option selected="selected" value="5133">GST Pro Certification - Rs.5200</option>
             </select>  
             
-            <!--div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
+            <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
                 <div id="captcha1" class="input-field" style="width:45%; margin: 0px;" ></div>
                 <p style="color: rgb(255, 0, 0); display: none; font-size: 11px; margin: 0px; padding: 0px;  position: absolute; top: 58px;" id="hiddenrecaptcha"> Captcha Validation is required</p>
-            </div-->
+            </div>
                             
             <input type="hidden" name="prd" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
             <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
@@ -100,8 +115,7 @@
             <input type="hidden" name="path" value="{{request.path}}">
                         
           <input id="submit"
-            type="submit" value="Enquire Now" class="submit button" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead').submit();return false;" id="submit"
-          >
+            type="submit" value="Enquire Now" class="submit button" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;" >
           </form>
           
 <!--        <a href="#" class="emi-butn">Easy EMI payment option</a>-->
@@ -158,7 +172,7 @@
 <div class="container-full course-high">
 <div class="container">
 <div class="row">
-    <h2>Why buy from Shine Shinelearning?</h2>
+    <h2>Why buy from Shinelearning?</h2>
     
     <div class="col-lg-4 col-md-4 col-sm-6">
         <div class="course-bx">
@@ -217,9 +231,15 @@
 </div>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+<script type="text/javascript">
+            function leadSubmit() {
+                var form = $('#lead');
+                var action = form.data('non_captcha_action');
+                $.post(action, (form).serialize(), function (data) {
+                    }, 'json');
+            }
 
-        <script type="text/javascript">
             $(function() {
               $('a[href*=#]:not([href=#])').click(function() {
                 if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
@@ -234,10 +254,8 @@
                   }
                 }
               });
-            });
 
             var _gaq = _gaq || [];
-
             $.validator.addMethod("lettersonly", function (value, element){
                 return this.optional(element) || /^[a-z\s]*$/i.test(value);
             }, "Letters only please");
@@ -251,36 +269,44 @@
                     return value.length == 10 ;
                 }
             );
-            
-            function leadSubmit() {
-                var form = $('#lead');
-                var action = form.data('non_captcha_action');
-                $.post(action, (form).serialize(), function (data) {
-                    }, 'json');
-            }
 
+            
             $("#lead").validate({
                 submitHandler:function (form) {
-                    var action = $(form).attr('action');
-                    $.post(action, $(form).serialize(), function (data) {
-                        if (data['status']){
-                        $.each($("#lead"), function (i, e) {
-                            e.reset();
-                        });
-                        var conversion_id = 991709191;
-                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
-                        var ga_code = document.createElement('div');
-                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
-                        document.body.appendChild(ga_code);
-                        window.location.href ='thankyou-for-query';
-                        return false;
-                            
-                        }
-                        else {
-                            alert("Error! Something went wrong. Please try again");                            
-                        }
+                    if(grecaptcha.getResponse(recaptcha1) == '') {
+                        $('#hiddenrecaptcha').show();
+                    } else {
+                        $('#hiddenrecaptcha').hide();
+                        var action = $(form).attr('action');
+                        $.post(action, $(form).serialize(), function (data) {
+                            if (data['recaptcha']) {
+                                if (data['status']){
+                                $.each($("#lead"), function (i, e) {
+                                    e.reset();
+                                });
+                                $("#lead label").remove();
+                                grecaptcha.reset(recaptcha1);
+                                var conversion_id = 991709191;
+                                var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                                var ga_code = document.createElement('div');
+                                ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                                document.body.appendChild(ga_code);
+                                window.location.href ='thankyou-for-query'
+                                return false;
+                                    
+                                } else {
+                                    alert("Error! Something went wrong. Please try again");
+                                    grecaptcha.reset(recaptcha1);
+                                    
+                                }
+                            }
+                            else{
+                                alert("Only humans are allowed to submit this form.");
+                                grecaptcha.reset(recaptcha1);
+                            }
 
-                    }, 'json');
+                        }, 'json');
+                    }
 
                 },
                 rules:{
@@ -292,9 +318,11 @@
                     email:{
                         email:true,
                         required:true
+
                     },
                     name:{
                         lettersonly:true
+
                     },
                     msg:{
                         maxlength:500
@@ -314,19 +342,18 @@
                     }
                 },
                 highlight:function(element, errorClass) {
-                 $(element).parent().addClass('ferror');
-                        },
+                    $(element).siblings('.error').removeClass('noerror');
+                },
                 unhighlight:function(element, errorClass) {
-                    $(element).parent().removeClass('ferror');
+                    $(element).siblings('.error').addClass('noerror');    
+                },
+                errorPlacement: function(error, element){
+                    element.siblings('.error').text(error.text());
                     
                 },
-                
-                errorPlacement: function(error, element) {
-
-                    element.siblings('.error').html(error.text());
-                 
-               }
                 });
+            });
+            
         </script>
 
         <script type="text/javascript">

@@ -1,5 +1,5 @@
 {% extends "basic/base1.html" %}
-{% load static %}
+{% load static compress %}
 {% spaceless %}
 
     
@@ -7,12 +7,16 @@
     
     {% block css_section %}
         {{block.super}}
+        {% compress css %}
         <link type="text/css" href="{% static "/shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
+        {% endcompress %}
+        {% compress css %}
         <style type="text/css">
             .error{
                 color: red;
             }
         </style>
+        {% endcompress %}
     {% endblock css_section %}
     
     <!-- main section start -->
@@ -220,9 +224,13 @@
 
     {% block js_section %}
         {{block.super}}
+        {% compress js %}
         <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}"></script>
         <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
         <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
+        {% endcompress %}
     {% endblock js_section %}
+    {% block johukum %}
+{% endblock johukum %}
   
 {% endspaceless %}

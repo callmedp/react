@@ -1,14 +1,16 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
-{% load thumbnail %}
+{% load thumbnail compress %}
 
 
 {% block title %}My Wallet | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -104,7 +106,5 @@
 
 {% endblock container %}
 
-{% block js_section %}
-    {{block.super}}
-
-{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}

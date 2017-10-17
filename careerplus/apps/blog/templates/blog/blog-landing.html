@@ -1,7 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
-{% load humanize %}
-{% load thumbnail %}
+{% load static humanize thumbnail compress %}
     {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
@@ -17,7 +15,9 @@
     
     {% block css_section %}
         {{block.super}}
-        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet">        
+        {% compress css %}
+        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet">
+        {% endcompress %}
     {% endblock css_section %}
 
     {% block blogtrending %}
@@ -135,37 +135,10 @@
 
 {% block js_section %}
    {{ block.super }}
+    {% compress js %}
    <script src="{% static 'shinelearn/js/blog/blog-landing.js' %}"></script>
-   <!--script src="{% static 'console/js/blog/blog-landing.js' %}"></script-->
-
-   <script type="text/javascript">
-    $('.nav-tabs > li > a').hover(function() {
-        $(this).tab('show');
-      });
-    $('.dropdown').hover(function(){ 
-        $('.dropdown-toggle', this).trigger('click'); 
-      });
-    </script>
-
-    <script type="text/javascript">
-      $('#myCarousel').carousel({
-        interval: 10000
-      })
-
-      $('.carousel .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-          next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
-        
-        if (next.next().length>0) {
-          next.next().children(':first-child').clone().appendTo($(this));
-        }
-        else {
-          $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-        }
-      });
-    </script>
-
+    {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

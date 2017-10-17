@@ -1,18 +1,19 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
-{% load thumbnail %}
+{% load static thumbnail compress %}
 
 
 {% block title %}Order item detail | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
     <style type="text/css">
         .error{
             color: red;
         }
+    {% endcompress %}
     </style>
 {% endblock css_section %}
 
@@ -25,7 +26,7 @@
                 
                 <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
 
-                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+                <a href="{% url "dashboard:dashboard" %}" class="icon-back pull-left"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
@@ -107,7 +108,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 24 %}
                             <a class="btn btn-outline w100 mt-20" href="{{oi.oi_draft.url}}" download>Download</a>
                         {% elif op.oi_status == 27 %}
@@ -151,7 +152,7 @@
                         {% if op.oi_draft %}
                             <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
                         {% elif oi.oi_status and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -177,7 +178,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                            <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 6 %}
                             <a href="#" lass="btn btn-outline w100 mt-20">Download Credential</a>
                         {% endif %}
@@ -192,7 +193,7 @@
                             <span>{{op.created.date}}</span>
                         </div>
                         {% if oi.oi_status == 2 and not oi.oi_resume %}
-                          <a role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                          <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
@@ -267,17 +268,12 @@
 
 {% block js_section %}
     {{block.super}}
+    {% compress js %}
     <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
     <script src="{% static "shinelearn/js/mobile/dashboard/dashboard.js" %}"></script>
-    <script>
-        function openPopup(el) {
-            $('.modal').hide();
-            $('#' + el).fadeIn(200);   
-        }
-
-        function closePopup() {
-            $('.modal').fadeOut(300);
-        }
-    </script>
-
+    {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}
+

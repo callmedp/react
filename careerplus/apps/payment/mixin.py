@@ -6,11 +6,12 @@ from django.core.urlresolvers import reverse
 from users.tasks import user_register
 from core.mixins import InvoiceGenerate
 from order.mixins import OrderMixin
-from order.functions import (
-    payment_pending_mailer,
+from order.tasks import (
     pending_item_email,
+    process_mailer,
+    payment_pending_mailer,
     payment_realisation_mailer,
-    process_mailer,)
+)
 
 
 class PaymentMixin(object):
@@ -85,10 +86,14 @@ class PaymentMixin(object):
                 pass
 
             # emails
-            process_mailer(order=order)
-            payment_pending_mailer(order=order)
-            pending_item_email(order=order)
-            payment_realisation_mailer(order=order)
+            process_mailer.apply_async((order.pk), countdown=900)
+            # process_mailer(order=order)
+            payment_pending_mailer.delay(order.pk)
+            # payment_pending_mailer(order=order)
+            pending_item_email.apply_async((order.pk), countdown=900)
+            # pending_item_email(order=order)
+            # payment_realisation_mailer(order=order)
+            payment_realisation_mailer.delay(order.pk)
 
             if return_parameter:
                 return return_parameter

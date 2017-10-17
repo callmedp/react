@@ -1,15 +1,15 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
-{% load thumbnail %}
+{% load static thumbnail compress %}
 
 
 {% block title %} orderitem conversations | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
-    
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -21,7 +21,7 @@
                 
                 <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
 
-                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+                <a href="{% url 'dashboard:dashboard-itemdetail' %}?oi={{oi.pk}}" class="icon-back pull-left" role="button"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
@@ -97,5 +97,10 @@
 
 {% block js_section %}
     {{block.super}}
+    {% compress js %}
     <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

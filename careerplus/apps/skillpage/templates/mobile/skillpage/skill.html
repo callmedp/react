@@ -1,16 +1,15 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% block title %}
     Skill - Shine Learning
 {% endblock %}
 {% block css_section %}
 {{ block.super }}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" 
-    rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/skill/skill.css' %}" 
-    rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" 
-    rel="stylesheet">
+    {% compress css %}
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/skill/skill.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 {% block header %}
     <header class="w100fl he-auto">
@@ -113,6 +112,7 @@
                                   </p>
                                 </div>
                             </div><!-- end of media -->
+                            {% comment %}
                             <div class="media">
                                 <div class="media-left">
                                   <span class="icon-graph mt-10"></span>
@@ -123,7 +123,8 @@
                                         candidates are six sigma certified
                                     </p>
                                 </div>
-                            </div><!-- end of media -->  
+                            </div><!-- end of media -->
+                            {% endcomment %}
                         </div>
 
                         <p>Jobs require this skill in different functional area</p>
@@ -252,6 +253,8 @@
 
 {% block js_section %}
     {{block.super}}
+    {% compress js %}
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
 

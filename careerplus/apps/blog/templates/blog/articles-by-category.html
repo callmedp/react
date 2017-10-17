@@ -1,7 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
-{% load humanize %}
-{% load thumbnail %}
+{% load static humanize thumbnail compress %}
     {% block meta_html %}
         {{block.super}}
         {% include 'meta/meta.html' %}
@@ -16,8 +14,10 @@
     {% endblock title %}
     
     {% block css_section %}
-        {{block.super}} 
-        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet"> 
+        {{block.super}}
+        {% compress css %}
+        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet">
+        {% endcompress %}
     {% endblock css_section %}
 
     
@@ -328,8 +328,6 @@
 </section>
 <!-- main section end -->
 {% endblock container %}
-  
 
-{% block js_section %}
-   {{ block.super }}
-{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}

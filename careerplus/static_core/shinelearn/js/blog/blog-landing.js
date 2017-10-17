@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
-	var win = $(window);
-	let prev_page = 0;
+	var win = $(window),
+		prev_page = 0;
 
 	// Each time the user scrolls
 	win.scroll(function() {
@@ -29,4 +29,22 @@ $(document).ready(function() {
 			
 		}
 	});
-})
+  	$('#myCarousel').carousel({
+        interval: 10000
+  	});
+
+  	$('.carousel .item').each(function(){
+        var next = $(this).next();
+        if (!next.length) {
+          next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+        
+        if (next.next().length>0) {
+          next.next().children(':first-child').clone().appendTo($(this));
+        }
+        else {
+          $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+        }
+  	});
+});

@@ -98,10 +98,37 @@ $(document).ready(function () {
         }
     });
     
-    // $('#tags11').typeahead({
-    //         local: funcAreaSet
-    //     });
-    //     $('#tags21').typeahead({
-    //         local: skillsSet
-    //     });
+    
+    $('.js_advance_search').on('click', function (e) {
+        e.preventDefault();
+        var flag1 = true,
+            flag2 = true;
+        var $tags1 = $('#tags11'),
+            $tags2 = $('#tags21');
+            if (!$tags1.val()){
+                flag1 = false;
+                $tags1.closest('div').addClass('error');
+                // debugger;
+                $('.js_area_error').html('Please choose a functional area.');
+            }
+            else {
+                flag1 = true;
+                $tags1.closest('div').removeClass('error');
+                $('.js_area_error').html('');
+            }
+            if (!$tags2.val()){
+                flag2 = false;
+                $tags2.closest('div').addClass('error');
+                $('.js_skill_error').html('Please choose a skill.');
+            }
+            else {
+                flag2 = true;
+                $tags2.closest('div').removeClass('error');
+                $('.js_skill_error').html('');
+            }
+            if (flag2 && flag1) {
+                $(".js_advance_search_form").submit();
+            }
+    });
+
 });

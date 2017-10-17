@@ -10,6 +10,7 @@ from shop.views import ProductInformationMixin
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
 from wallet.models import Wallet
+from order.tasks import service_initiation
 
 from .models import Order, OrderItem
 from .functions import (
@@ -110,6 +111,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
             # update initial operation status
             update_initiat_orderitem_sataus(order=order)
+            service_initiation.delay(order.pk)
 
             # for linkedin
             linkedin_products = order.orderitems.filter(product__type_flow=8)

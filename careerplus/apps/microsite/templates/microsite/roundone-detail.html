@@ -1,7 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static %}
-{% load humanize %}
-{% load thumbnail %}
+{% load static humanize thumbnail compress %}
     {% block meta_tags %}
         {{block.super}}
         {% include 'meta/meta.html' %}
@@ -13,7 +11,9 @@
     
     {% block css_section %}
         {{block.super}}
+        {% compress css %}
         <link type="text/css" href="{% static 'shinelearn/css/microsite/roundone.css' %}" rel="stylesheet">
+        {% endcompress %}
     {% endblock css_section %}
 
   {% block pageheading %}
@@ -247,9 +247,14 @@
           showErrorModal("Roundone is facing some technical issues. Please Try again.", "Ok");
       {% endif %}
     </script>
-    <script src="{% static 'console/js/microsite/multiple-select.js' %}">
-    </script>
+    {% compress js %}
+    <script src="{% static 'console/js/microsite/multiple-select.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
+    {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

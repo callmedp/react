@@ -332,6 +332,9 @@ body {
   cursor: pointer;
   background: transparent;
 }
+.our-courses .listing {
+  overflow: hidden;
+}
 
 .job-assistance {
   padding-top: 60px;

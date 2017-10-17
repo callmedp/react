@@ -1,16 +1,16 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
-{% load thumbnail %}
+{% load static thumbnail compress %}
 
 
 {% block title %}My Order | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/common/smk-accordion.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
-    
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -61,16 +61,10 @@
 
 {% block js_section %}
     {{block.super}}
-
+    {% compress js %}
     <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
-    <script type="text/javascript">
-        jQuery(document).ready(function($){ 
-            $(".accordion_example1").smk_Accordion({
-                showIcon: true, //boolean
-                animation: true, //boolean
-                closeAble: true, //boolean
-                slideSpeed: 200 //integer, miliseconds
-            });
-        });
-    </script>
+    {% endcompress %}
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

@@ -8,7 +8,7 @@ from .models import Product
 from .search_indexes import ProductIndex
 from django.core.urlresolvers import reverse_lazy
 from decimal import Decimal
-
+from search.templatetags.search_tags import get_choice_display           
 
 class CRMProductSerializer(ModelSerializer):
     display_name = SerializerMethodField()
@@ -23,7 +23,7 @@ class CRMProductSerializer(ModelSerializer):
     fbt = SerializerMethodField()
     combo = SerializerMethodField()
     variation = SerializerMethodField()
-    otherp = SerializerMethodField()
+    attributes = SerializerMethodField()
     
     class Meta:
         model = Product
@@ -44,7 +44,7 @@ class CRMProductSerializer(ModelSerializer):
             'fbt',
             'combo',
             'variation',
-            'otherp',
+            'attributes',
             'active'
         ]
 
@@ -55,16 +55,24 @@ class CRMProductSerializer(ModelSerializer):
         return obj.product_class.slug if obj.product_class else ''
 
     def get_i_price(self,obj):
-        return str(obj.inr_price)
+        if obj.type_product == 1 and obj.is_course:
+            return 0.0    
+        return float(obj.inr_price)
 
     def get_u_price(self,obj):
-        return str(obj.usd_price)
+        if obj.type_product == 1 and obj.is_course:
+            return 0.0    
+        return float(obj.usd_price)
     
     def get_a_price(self,obj):
-        return str(obj.aed_price)
+        if obj.type_product == 1 and obj.is_course:
+            return 0.0    
+        return float(obj.aed_price)
     
     def get_g_price(self,obj):
-        return str(obj.gbp_price)
+        if obj.type_product == 1 and obj.is_course:
+            return 0.0    
+        return float(obj.gbp_price)
     
     def get_vendor_name(self,obj):
         return obj.vendor.name if obj.vendor else ''
@@ -82,9 +90,81 @@ class CRMProductSerializer(ModelSerializer):
         return ProductIndex().prepare_pCmbs(obj=obj)
 
     def get_variation(self,obj):
-        return ProductIndex().prepare_pVrs(obj=obj)
-
-    def get_otherp(self,obj):
-        return ProductIndex().prepare_pPOP(obj=obj)
-
-    
+        var_dict = {
+            'variation': False,
+            'var_list': []
+        }
+        var_list = []
+        if obj.type_product == 1:
+            var  = obj.get_variations()
+            if var:
+                if obj.is_course:
+                    var_dict.update({
+                        'variation': True
+                    })
+                    for pv in var:
+                        attr = ''
+                        mode = get_choice_display(pv.get_studymode(), "STUDY_MODE")
+                        duration = get_choice_display(pv.get_duration(), "DURATION_DICT")
+                        certify = 'Yes' if pv.get_cert() else 'No'
+                        if mode:
+                            attr = 'Mode:{} | '.format(mode)
+                        if duration:
+                            attr += ' Duration:{} | '.format(duration)
+                        if certify:
+                            attr += ' Certification:{} '.format(certify)
+                        var_list.append({
+                            'id': pv.id,
+                            'label': pv.name,
+                            'attr': attr,
+                            'inr_price': float(pv.inr_price),
+                            'usd_price': float(pv.usd_price),
+                            'aed_price': float(pv.aed_price),
+                            'gbp_price': float(pv.gbp_price),
+                        })
+                    var_dict.update({
+                        'var_list': var_list
+                    })
+                elif obj.is_writing or obj.is_service:
+                    var_dict.update({
+                        'variation': True
+                    })
+                    for pv in var:
+                        attr = ''
+                        experience = get_choice_display(pv.get_exp(), "EXP_DICT")
+                        if experience:
+                            attr = 'Exp: {} '.format(experience)
+                        var_list.append({
+                            'id': pv.id,
+                            'label': pv.name,
+                            'attr': attr,
+                            'inr_price': float(pv.inr_price),
+                            'usd_price': float(pv.usd_price),
+                            'aed_price': float(pv.aed_price),
+                            'gbp_price': float(pv.gbp_price),
+                        })
+                var_dict.update({
+                    'var_list': var_list
+                })
+            return json.dumps(var_dict)
+        else:
+            return json.dumps(var_dict)     
+        
+    def get_attributes(self,obj):
+        attr = ''
+        if obj.type_product in [0,3,4,5]:
+            if obj.is_course:
+                mode = get_choice_display(obj.get_studymode(), "STUDY_MODE")
+                duration = get_choice_display(obj.get_duration(), "DURATION_DICT")
+                certify = 'Yes' if obj.get_cert() else 'No'
+                if mode:
+                    attr = 'Mode:{} | '.format(mode)
+                if duration:
+                    attr += ' Duration:{} | '.format(duration)
+                if certify:
+                    attr += ' Certification:{} '.format(certify)
+            elif obj.is_writing or obj.is_service:
+                experience = get_choice_display(obj.get_exp(), "EXP_DICT")
+                if experience:
+                    attr = 'Exp: {} '.format(experience)
+        return attr

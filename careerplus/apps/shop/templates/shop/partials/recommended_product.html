@@ -1,6 +1,7 @@
-{% if recommended_products %}
 
 <section class="container-fluid detail-box recomend-product-bg">
+{% if recommended_products %}
+
 <!-- Recommended products start -->
 <div class="container">
   <div class="row">
@@ -15,7 +16,7 @@
             <a title="{{ prd.pTt }}" class="box-panel" href="{{prd.pURL}}">
               <div class="media">
                 <div class="media-body">
-                  <h3 class="listing-heading">{{ prd.pHd|default:prd.pNm|truncatechars:50 }}</h3>
+                  <h3 class="listing-heading">{{ prd.pHd|default:prd.pNm|truncatechars:40 }}</h3>
                   <div class="rating-review-box">
                         {% for star in prd.pStar %}
                               {% if star == '*' %}
@@ -27,7 +28,7 @@
                               {% endif %}
                         {% endfor %}
 
-                        <strong>{{prd.pAR}}<small>/5</small></strong>
+                        <strong>{{prd.pARx|floatformat}}<small>/5</small></strong>
                         <span class="jobs-available"><strong>{{prd.pNJ}}</strong> jobs available</span>
                     </div>
                 </div>
@@ -49,5 +50,6 @@
   </div>
 </div>
 <!-- Recommended products end -->
-</section>
 {% endif %}
+
+</section>

@@ -105,7 +105,7 @@
                 <input type="hidden" name="cat_slug" value="{{category.slug}}">
             </form>
             <div class="w100 text-center">
-                <a class="btn-slg btn-grey block" role="button" id="recent-loadmore" >Load more</a>
+                <a class="btn-slg btn-grey block" role="button" id="recent-loadmore" href="javascript:void();" >Load more</a>
             </div>
         </div>
     {% endif %}
@@ -170,3 +170,6 @@
     {{block.super}}
     <script src="{% static "shinelearn/js/mobile/blog/blog.js" %}"></script>
 {% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

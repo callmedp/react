@@ -6,7 +6,7 @@ function removeFromCart(line_id){
             url: '/cart/remove-from-cart/',
             type: 'POST',
             data:formData,
-            dataType: 'json',
+            dataType: 'json', 
             success: function(json) {
                 if (json.status == 1){
                     window.location.reload();
@@ -187,6 +187,10 @@ function updateUnCheckedPrice(this_obj){
     }catch(err){
         console.log(err);
     }
+}
+
+function toggler(divId) {
+    $("#" + divId).toggle();
 }
 
 function updateCartPrice(){
@@ -641,6 +645,4 @@ $(document).ready(function() {
     });
 
     cartScroller();
-
-
 });
