@@ -209,6 +209,7 @@ class SearchBaseView(TemplateView):
             context['price'] = self.request.GET.getlist('fprice')
         context['breadcrumbs'] = self.get_breadcrumbs()
         context['products_found'] = self.found
+        context['show_chat'] = True,
         return context
 
     def build_page(self):
