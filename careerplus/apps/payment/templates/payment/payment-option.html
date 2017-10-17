@@ -128,7 +128,7 @@
                 <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
 
                 <div class="continue">
-                  <button type="button" class="make-payment">Make Payment</button>
+                  <a href="{% url "payment:ccavenue_request" cart_id 'emi' %}"><button type="button" class="make-payment">Make Payment</button></a>
                   <figure class="secure-payment-icon"></figure>100% Secure Payment
                 </div>
               </div>

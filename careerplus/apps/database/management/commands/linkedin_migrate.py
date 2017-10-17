@@ -49,6 +49,9 @@ class Command(BaseCommand):
             4: 'Name 1 or 2 defining accomplishments. Think of events or projects that shaped your career path and make you proud. What was the impact of these accomplishments on you, your business, and your customers?',
             5: 'What is your goal moving forward?  What do you hope to achieve?'
             }
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         quiz_df = pd.read_sql(sql, con=db)
         quiz_df = quiz_df.groupby(['id', 'created_on', 'modified_on', 'oi_id', 'submitted']).apply(lambda x: dict(zip(x['question_id'], x['text']))).reset_index().rename(columns={0:"answerset"})
         new_order_item_df = pd.read_sql(
@@ -141,6 +144,8 @@ class Command(BaseCommand):
             linkedin_organization.work_to, linkedin_organization.current 
             FROM linkedin_organization
             """
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         
         linkedin_df = pd.read_sql(sql2, con=db)
@@ -150,6 +155,8 @@ class Command(BaseCommand):
             columns={'name':'key_list', 'draft_id': 'id' })
         linkedin_df = pd.merge(linkedin_df, keyskill_df, how='left',on='id')
         del keyskill_df
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         education_df = pd.read_sql(sql4, con=db)
         education_df = education_df.groupby(
@@ -157,6 +164,8 @@ class Command(BaseCommand):
             columns={'draft_id': 'id', 0:'edu_list'})
         linkedin_df = pd.merge(linkedin_df, education_df, how='left',on='id')
         del education_df
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         organ_df = pd.read_sql(sql5, con=db)
         organ_df = organ_df.groupby(
@@ -309,6 +318,9 @@ class Command(BaseCommand):
                 WHERE cart_order.added_on >= '2014-04-01 00:00:00' AND cart_orderitem.oio_linkedin_id IS NOT NULL
                 ORDER BY cart_orderitem.added_on DESC
                 """
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         oi_df = pd.read_sql(sql5,con=db)
         oi_df = pd.merge(oi_df, new_order_item_df, how='left', on='oi_id')
         oi_df = oi_df[~oi_df.oi_new_id.isnull()]
@@ -365,6 +377,9 @@ class Command(BaseCommand):
                 WHERE cart_order.added_on >= '2014-04-01 00:00:00' AND cart_orderitemoperation.linkedin_id IS NOT NULL
                 ORDER BY cart_orderitemoperation.added_on DESC;
             """
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         oio_df = pd.read_sql(sql6,con=db)
         new_oio_df = pd.read_sql(
             'SELECT order_orderitemoperation.id as new_oio_id, order_orderitemoperation.coio_id as oio_id FROM order_orderitemoperation;',con=db2)

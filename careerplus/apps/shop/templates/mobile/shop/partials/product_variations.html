@@ -96,7 +96,7 @@
             {% for service in var_list %}
                 {% if forloop.counter0|divisibleby:"2" %}
                     <div class="ui-block-a">
-                        <input type="checkbox" id="pro{{forloop.counter}}" name="required_option" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}">
+                        <input type="checkbox" id="pro{{forloop.counter}}" data-id="{{service.id}}" name="required_option" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}">
                         <label for="pro{{forloop.counter}}">
                             <p class="pb-5">{{service.label}}</p>
                             <strong>Rs. {{service.inr_price|floatformat}}/-</strong>

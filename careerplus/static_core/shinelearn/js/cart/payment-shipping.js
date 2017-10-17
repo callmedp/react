@@ -93,10 +93,20 @@ $().ready(function() {
             }
         },
         highlight: function(element) {
-            $(element).closest('.col-sm-6').addClass('error');
+            if (window.CURRENT_FLAVOUR == 'mobile'){
+                $(element).closest('.form-group').addClass('error');
+            }
+            else{
+                $(element).closest('.col-sm-6').addClass('error');
+            }
         },
         unhighlight: function(element) {
-            $(element).closest('.col-sm-6').removeClass('error');
+            if (window.CURRENT_FLAVOUR == 'mobile'){
+                $(element).closest('.form-group').removeClass('error');
+            }
+            else{
+                $(element).closest('.col-sm-6').removeClass('error');
+            }
         },
         errorPlacement: function(error, element){
             $(element).siblings('.error-txt').html(error.text());
