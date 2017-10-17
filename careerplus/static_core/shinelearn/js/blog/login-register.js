@@ -101,6 +101,24 @@ $().ready(function() {
               required:"Please accept term conditions",
             },
         },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "email")
+            {
+                error.appendTo("#user_email");
+            }
+            if (element.attr("name") == "raw_password")
+            {
+                error.appendTo("#raw_psd");
+            }
+            if (element.attr("name") == "cell_phone")
+            {
+                error.appendTo("#cell_phone");
+            }
+            if (element.attr("name") == "term_conditions")
+            {
+                error.appendTo("#terms");
+            }
+        }
     });
 
     $('#register-button').click(function() {

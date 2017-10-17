@@ -6,7 +6,7 @@
         {% include 'meta/meta.html' %}
 {%  endblock meta_html %}
 {% block title %}	
-	{{category_obj.name}}
+	{{category_obj.name|title}} Certification ({{ products.paginator.count }} Professional Courses) - ShineLearning
 {% endblock title %}
 
 {% block css_section %}
@@ -32,7 +32,7 @@
                 {% endfor %}
             </ol>
 			<div class="skill-caption">
-				<h1>{{category_obj.name}} programs</h1>
+				<h1>{{category_obj.name|title}} Certification Programs</h1>
 					<strong>
 					{% if top_3_prod.0 %}
 					    <a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a> | 
@@ -304,7 +304,7 @@
         <input type="hidden" name="lead_source" value="1">
         <input type="hidden" name="product" value="{{products.0.pNm}}">
       	<button type="button" id="id_query"  class="submit-button">
-     		Message
+     		Submit
       	</button>
       </form>
       <div class="call-service">

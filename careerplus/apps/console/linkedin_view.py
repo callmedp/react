@@ -348,11 +348,11 @@ class ChangeDraftView(DetailView):
                 context['form'] = draft_form
                 context['org_formset'] = org_formset
                 context['edu_formset'] = edu_formset
-                messages.success(self.request, "Draft is not Saved successfully", 'error')
+                messages.error(self.request, "Draft is not Saved successfully", 'error')
                 return render(request, self.template_name, context)
 
             else:
-                messages.success(self.request, "Draft not exist with this order" 'error')
+                messages.error(self.request, "Draft not exist with this order" 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
             messages.add_message(request, messages.ERROR, str(e))
