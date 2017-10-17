@@ -4,7 +4,7 @@
             <ul>
                 <li>
                     <p class="pb-0 fs-11">Total amount</p>
-                    <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}/-</strong>
+                    <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}}{% endif %}/-</strong>
 
                     {% if selected_var or sqs.pPfinb %}
                         <strike id="id-total-actual-price" total-actual-price="{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}" >
