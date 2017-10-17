@@ -93,7 +93,6 @@ class SkillPageView(DetailView, SkillPageMixin):
             products = prod_page.page(1)
         except EmptyPage:
             products = prod_page.page(prod_page.num_pages)
-
         for product in products:
             if float(product.pPfin):
                 product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)

@@ -106,4 +106,19 @@ class Command(BaseCommand):
                                     txn_type=4)
                                 pts.save()
                     txn.save()
+        
+
+        # df = pd.read_csv('urls.csv', sep=',')
+        # df['SLURL'] = ''
+        
+        # from shop.models import Product
+        # for i, row in df.iterrows():
+        #     try:
+        #         pp = Product.objects.get(cpv_id=int(row['ID']), active=True, is_indexable=True)
+        #         df.loc[df.ID == row['ID'], 'SLURL'] = 'https://learning.shine.com'+ pp.get_absolute_url()
+        #         # df.loc[df.ID == row['ID'], 'SLURL'] = + pp.get_absolute_url()
+        #     except:
+        #         print(row)
+        # df.to_csv('urls.csv', index=False, encoding='utf-8')
+
                         
