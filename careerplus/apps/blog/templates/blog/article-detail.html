@@ -292,6 +292,12 @@
    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
 
+  <script>
+    if (window.location.hash == '#_=_') {
+        open(location, '_self').close();
+    }
+  </script>
+
 {% endblock js_section %}
 
 {% block johukum %}
