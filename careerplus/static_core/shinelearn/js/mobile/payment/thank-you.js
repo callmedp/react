@@ -45,6 +45,17 @@ $(document).ready(function() {
                     },
                 },
 
+                highlight: function(element) {
+                    $('#id-upload-error').removeClass('hide-p');
+                },
+                unhighlight: function(element) {
+                    $('#id-upload-error').addClass('hide-p');
+                },
+                errorPlacement: function(error, element){
+                    // $(element).closest('ul').find(".error").html(error.text());
+                    $('#id-upload-error').html(error.text());
+
+                }
             });
             var flag = $('#upload-order-resume-form').valid();
         }

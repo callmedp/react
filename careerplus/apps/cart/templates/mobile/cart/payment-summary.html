@@ -16,6 +16,17 @@
         <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
         <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
     {% endcompress %}
+    {% compress css %}
+        <style type="text/css">
+            .hidden-div {
+              display: none;
+              margin-top: 10px;
+            }
+            .error-txt{
+                color:red;
+            }
+        </style>
+        {% endcompress %}
     
 {% endblock css_section %}
 
@@ -132,17 +143,62 @@
           {% endwith %}
           {% endfor %}
 
+          {% if cart_coupon %}
+              <div id="showCoupon" class="loyalty-points">
+                  <div class="input-group">
+                    <input id="discount_code" type="text" class="form-control fs-12" value="Coupon {{coupon.code}} is applied!" name="code" maxlength="15">
+                    <span class="error-txt" id="discount-alert"></span>
+
+                    <span class="input-group-btn">
+                    <button class="btn btn-blue" type="button" onclick="JSRemoveDiscount();">Remove</button>
+                    </span>
+                  </div>
+              </div>
+          {% elif cart_wallet %}
+              <div id="shineCredit" class="loyalty-points">
+                <div class="input-group">
+                  <input id="loyalty_point" type="text" class="form-control fs-12" placeholder="{{wallet_point}} loyalty points redeemed!">
+                  <span class="error-txt" id="point-alert" ></span>
+                  <span class="input-group-btn">
+                    <button class="btn btn-blue" type="button" onclick="JSRemovePoint();">Remove</button>
+                  </span>
+                </div>
+              </div>
+          {% else %}
+              <p class="mt-15 mb-10"><a href="javascript:void(0)" onclick="toggler('showCoupon');">Apply Coupon</a> <span class="side-spacer">or</span><a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a></p>
+          {% endif %}
+
+          {% comment %}
           <p class="mt-15 mb-10"><a href="#">Apply coupon</a> <span class="side-spacer">or</span><a href="#">Redeem Shine credit</a></p>
+          {% endcomment %}
 
           <!-- loyalty points starts here -->
-          <div class="loyalty-points">
-            <div class="input-group">
-              <input type="text" class="form-control fs-12" placeholder="You have 100 shine loyalty points">
-              <span class="input-group-btn">
-                <button class="btn btn-blue" type="button">Redeem</button>
-              </span>
-            </div><!-- /input-group -->
-          </div><!-- loyalty ends here -->
+          <form action="." id="discountForm">
+              <div class="loyalty-points hidden-div" id="showCoupon">
+                <div class="input-group">
+                  <input id="discount_code" type="text" class="form-control fs-12" placeholder="Enter Discount code" name="code" maxlength="15">
+                  <span class="input-group-btn">
+                    <button class="btn btn-blue" type="button" onclick="JSApplyDiscount();">Apply</button>
+                  </span>
+                </div><!-- /input-group -->
+              </div><!-- loyalty ends here -->
+              <span class="error-txt" id="discount-alert"></span>
+          </form>
+
+          {% if wallet %}
+          <form action="." id="walletForm">
+              <div class="loyalty-points hidden-div"  id="shineCredit">
+                You have {{wallet_total}} shine loyalty points.
+                <div class="input-group">
+                  <input class="form-control fs-12" id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
+                  <span class="input-group-btn">
+                    <button class="btn btn-blue" type="button"  onclick="JSApplyPoint();">Redeem</button>
+                  </span>
+                </div><!-- /input-group -->
+              </div><!-- loyalty ends here -->
+              <span class="error-txt" id="point-alert" ></span>
+          </form>
+          {% endif %}
 
            <!-- Total amount starts here -->
         <div class="total-amount w100fl mt-15">
@@ -156,14 +212,30 @@
             </div>
 
             <ul class="w100fl mt-20 list-item fs-12">
+              {% if cart_coupon %}
+                  <li>
+                    <span class="item">Coupon applied</span>
+                    <span class="price">-Rs. {{coupon_amount}}/-</span>
+                  </li>
+              {% elif cart_wallet %}
+                  <li>
+                    <span class="item">Shine loyalty points</span>
+                    <span class="price">-Rs. {{redeemed_reward_point}}/-</span>
+                  </li>
+              {% endif %}
+              {% if cart_coupon or cart_wallet %}
+                  <li>
+                    <span class="item">Total</span>
+                    <span class="price">Rs. {{amount_after_discount}}/-</span>
+                  </li>
+              {% endif %}
               <li>
-                <span class="item">Your Shine cash</span>
-                <span class="price">-Rs. 2000/-</span>
+                    <span class="item">SGST @ {{sgst}}%</span>
+                    <span class="price">+Rs. {{sgst_amount}}/-</span>
               </li>
-
               <li>
-                <span class="item">Coupon applied/ Shine loyalty points</span>
-                <span class="price">-Rs. 1000/-</span>
+                    <span class="item">CGST @ {{cgst}}%</span>
+                    <span class="price">+Rs. {{cgst_amount}}/-</span>
               </li>
             </ul>
           </div><!-- /.Item wrap -->

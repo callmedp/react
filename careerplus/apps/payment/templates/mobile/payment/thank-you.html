@@ -19,8 +19,18 @@
     {% compress css %}
         <style>
            .error{
-            color:red;
+/*            color:red;
+*/            font-size: 85%;
+            padding-top: 3px;
+            color: #f34a38;
+            display: block;
+            padding-bottom: 0;
            }
+
+           .hide-p{
+              display: none;
+           }
+
         </style>
     {% endcompress %}
     
@@ -95,6 +105,7 @@
                   </li>
                   <li>or</li>
                   <li><a href="{% url "dashboard:dashboard-downloadquestionnaire" %}" class="btn btn-outline w100">Questionnaire</a></li>
+                  <p class="error" id="id-upload-error"></p>
                 </ul><!-- ./ lbtn-wrap -->
               </div><!-- ./ label-wrap -->
 
