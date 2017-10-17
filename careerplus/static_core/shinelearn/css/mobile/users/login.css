@@ -314,6 +314,11 @@ button {
 .social-login .gp {
   border-color: #e08478; }
 
+
+.social-login .link {
+  border-color: #007eb6; }
+
+
 .any-query {
   background-color: #fbfbfb;
   padding: 30px; }
