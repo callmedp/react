@@ -60,7 +60,12 @@
     <div class="body-wrapper ">
 <div class="content-box pt-5">
   <div class="container pt-0 js_listing">
+
+    <div class="row enrol-now box pt-5 pb-5" id="hide-second">
+    <div class="content-box">
+
     <h2 class="pt-5 filter-pd">
+<<<<<<< Updated upstream
     {% if products_found %}
         {% if search_type == 'recommended' %}{{ paginator.count }} recommended products
             {% elif search_type == 'simple' %}{{ paginator.count }} products found
@@ -70,6 +75,11 @@
     {% endif %}
         {% if products_found and page.object_list|length > 0 %}<a href="javascript:void(0)" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
     </h2>
+=======
+        {% if search_type == 'recommended' %}{{ paginator.count }} recommended products{% elif search_type == 'simple' %}{{ paginator.count }} products found{% endif %}
+        {% if page.object_list|length > 0 %}<a href="#" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
+    </h2></div></div>
+>>>>>>> Stashed changes
     
     {% include 'mobile/search/ajax/search_listing.html' %}
 
@@ -78,11 +88,15 @@
     <span id="loading"></span>
 </div><!-- end of content box -->
 
+<<<<<<< Updated upstream
 {% if products_found and page.object_list|length > 0 %}
+=======
+<!-- {% if page.object_list|length > 0 %}
+>>>>>>> Stashed changes
 <div class="share-wrap">
   <a href="javascript:void(0)" class="blue-circle-60 sidebar-secondary-trigger js_filters_trigger"><span class="icon-filter"></span></a>
 </div>
-{% endif %}
+{% endif %} -->
 
 <div class="sidebar js_sidebar_advanced">
   <div class="right-navbar pt-0">
