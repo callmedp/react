@@ -343,6 +343,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = self.product_obj.as_meta(self.request)
         ctx['canonical_url'] = self.product_obj.get_canonical_url()
+        ctx['show_chat']=True
         return ctx
 
     def redirect_if_necessary(self, current_path, product):

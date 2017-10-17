@@ -240,6 +240,9 @@ class Command(BaseCommand):
                 WHERE cart_order.added_on >= '2014-04-01 00:00:00'  
                 ORDER BY cart_orderitemoperation.added_on DESC;
             """
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         oio_df = pd.read_sql(sql,con=db)
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Fetching Migrated OrderItem')
@@ -256,6 +259,8 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Merging Staff user OrderItem')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         staff_user_df = pd.read_sql('SELECT id as staff_obj, cp_id as user_id FROM users_user', con=db2)
         staff_user_df.user_id = pd.to_numeric(staff_user_df.user_id)
@@ -322,7 +327,9 @@ class Command(BaseCommand):
         cursor = db2.cursor()
 
         del oio_df
-
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         oio_df = pd.read_sql(
             'SELECT id as new_oio_id, oi_id as new_oi_id, coio_id as oio_id FROM order_orderitemoperation;',con=db2)
 
@@ -340,6 +347,9 @@ class Command(BaseCommand):
                 WHERE cart_order.added_on >= '2014-04-01 00:00:00' 
                 ORDER BY cart_message.added_on DESC;  
             """
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         msg_df = pd.read_sql(sql,con=db)
         msg_df = pd.merge(msg_df, oio_df, how='left', on='oio_id')
         msg_df = msg_df[~msg_df.new_oio_id.isnull()]

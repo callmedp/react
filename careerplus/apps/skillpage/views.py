@@ -120,6 +120,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             'url': settings.SITE_PROTOCOL + "://" + self.object.video_link,
             'country_choices': country_choices,
             'initial_country': initial_country,
+            'show_chat': True,
         })
         context.update(self.get_breadcrumb_data())
         return context

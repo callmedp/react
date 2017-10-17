@@ -86,11 +86,11 @@ class PaymentMixin(object):
                 pass
 
             # emails
-            process_mailer.apply_async((order.pk), countdown=900)
+            process_mailer.apply_async((order.pk,), countdown=900)
             # process_mailer(order=order)
             payment_pending_mailer.delay(order.pk)
             # payment_pending_mailer(order=order)
-            pending_item_email.apply_async((order.pk), countdown=900)
+            pending_item_email.apply_async((order.pk,), countdown=900)
             # pending_item_email(order=order)
             # payment_realisation_mailer(order=order)
             payment_realisation_mailer.delay(order.pk)

@@ -9,6 +9,7 @@
     <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
     <link href="{% static 'shinelearn/css/mobile/skill/skill.css' %}" rel="stylesheet">
     <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
+     <link href="{% static 'shinelearn/css/mobile/shop/course-detail.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 {% block header %}
@@ -22,7 +23,7 @@
                 <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
 
                 
-                <a class="icon-back pull-left"  href="#"  onclick="goBack()"></a> 
+                <a class="icon-back pull-left"  href="/"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
@@ -62,7 +63,7 @@
                                 <a href="#" class="box">
                                     <img src="{% if top_4_vendor.icon %}
                                         {{top_4_vendor.icon.url}}
-                                    {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}">
+                                    {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" class="img-responsive">
                                 </a>
                             </li>
                             {% endif %}
@@ -246,7 +247,9 @@
             </div><!-- end of skill box -->
         </section><!-- end of section here -->
     </div><!-- body wrapper ends here -->
-    
+    {% block call_us %}
+        {% include "shop/partials/call_us.html" %}
+    {% endblock call_us %}
     
 {% endblock container %}
 

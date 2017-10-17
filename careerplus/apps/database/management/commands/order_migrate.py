@@ -23,7 +23,6 @@ class Command(BaseCommand):
         db_name = db_settings.get('NAME')
         db_pwd = db_settings.get('PASSWORD')
         db_user = db_settings.get('USER')
-        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         db2_settings=settings.DATABASES.get('default')
         db2_host = db2_settings.get('HOST')
@@ -33,7 +32,8 @@ class Command(BaseCommand):
         db2_pwd = db2_settings.get('PASSWORD')
         db2_user = db2_settings.get('USER')
         db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
-
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         sql = """
                 SELECT cart_order.id, auth_user.email as Email,  
                 cart_order.transaction_id, cart_order.currency, cart_order.instrument_number, 
@@ -97,10 +97,16 @@ class Command(BaseCommand):
         #     row['C_ID'] = row['C_ID'] if row['C_ID'] and row['C_ID'] == row['C_ID'] else None
         #     row['']
         #     return row
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         order_df = pd.read_sql(sql, con=db)
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Mysql order select done')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         country_df = pd.read_sql('SELECT id AS country_obj, code2 from geolocation_country', con=db2)
         order_df = pd.merge(order_df,country_df, how='left', on='code2')
@@ -109,6 +115,9 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         
         del country_df
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         coupon_df = pd.read_sql('SELECT id AS coupon_obj, code AS coupon, value AS coupon_value, coupon_type  from coupon_coupon', con=db2)
         order_df = pd.merge(order_df, coupon_df, how='left', on='coupon')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
@@ -196,6 +205,9 @@ class Command(BaseCommand):
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         print( 'Order Migrated Adding Coupons')
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
+        
         new_order_df = pd.read_sql('SELECT id AS order_obj, co_id as id, candidate_id  from order_order', con=db2)
         migrated_df = order_df[order_df.id.isin(new_order_df.id)]
         
@@ -287,6 +299,8 @@ class Command(BaseCommand):
             cart_roundoneorder.status, cart_roundoneorder.remark, cart_roundoneorder.added_on, 
             cart_roundoneorder.completed_on FROM cart_roundoneorder
             """
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         round_df = pd.read_sql(sql3, con=db)
         order_df = migrated_df[['id', 'C_ID', 'order_obj', 'wallettransaction_id', 'wallettransaction_redeem_id', 'wallet_cashback']]
@@ -354,6 +368,8 @@ class Command(BaseCommand):
         user_df = pd.read_csv('cleaned_present_user.csv', sep=',')
         user_df = user_df[['Email', 'C_ID']]
         user_df = user_df.drop_duplicates(subset=['C_ID'], keep='last')
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         wallet_df = pd.read_sql(sql, con=db)
         wallettxn_df = pd.read_sql(sql2, con=db)
@@ -406,6 +422,8 @@ class Command(BaseCommand):
             print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
             cursor.executemany(update_sql2, update_values)
             update_values = []
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         new_wallet_df = pd.read_sql('SELECT id as new_id, owner as C_ID, owner_email FROM wallet_wallet', con=db2)
         wallet_df = pd.merge(wallet_df, new_wallet_df, how='left', on='C_ID')
@@ -471,6 +489,8 @@ class Command(BaseCommand):
             print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
             cursor.executemany(update_sql2, update_values)
             update_values = []
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         new_point_df = pd.read_sql('SELECT id as new_pt_id, cw_id as id, status as pt_status FROM wallet_rewardpoint', con=db2)
         wallet_add_df = pd.merge(wallet_add_df, new_point_df, how='left', on='id') 
@@ -518,6 +538,8 @@ class Command(BaseCommand):
             print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
             cursor.executemany(update_sql2, update_values)
             update_values = []
+        db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)
+        db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         
         new_point_df = pd.read_sql('SELECT id as new_txn_id, txn as new_pt_id FROM wallet_wallettransaction', con=db2)
         new_point_df.new_pt_id = pd.to_numeric(new_point_df.new_pt_id, errors='ignore')  
