@@ -16,8 +16,14 @@ from order.models import Order
 from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon
-from order.mixins import OrderMixin
+# from order.mixins import OrderMixin
+from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
+from order.tasks import (
+    pending_item_email,
+    process_mailer,
+    invoice_generation_order
+)
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -214,8 +220,17 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             txn_amount=txn_dict.get('amount', 0)
                         )
 
-                    OrderMixin().addRewardPointInWallet(order=order)
+                    # wallet reward point
+                    # OrderMixin().addRewardPointInWallet(order=order)
+                    add_reward_point_in_wallet.delay(order_pk=order.pk)
+
+                    # invoice generation
+                    invoice_generation_order.delay(order_pk=order.pk)
+
                     # email for order
+                    process_mailer.apply_async((order.pk,), countdown=900)
+                    pending_item_email.apply_async((order.pk,), countdown=900)
+
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
                         status=status.HTTP_200_OK)
