@@ -383,6 +383,9 @@ header {
 .program-structure .panel-body strong, .program-structure .panel-body b {
   font-weight: 600;
 }
+.program-structure .panel-body p {
+  margin-bottom: 0;
+}
 .program-structure .panel, .program-structure .panel-default {
   box-shadow: none;
   border-top: 2px solid #e4e5e7;
@@ -397,7 +400,7 @@ header {
   font-weight: 600;
 }
 .program-structure .panel ul, .program-structure .panel-default ul {
-  margin: 5px 0 0 20px;
+  margin: 0 0 10px 20px;
   padding: 0;
   list-style-type: disc;
   display: list-item;
@@ -440,6 +443,7 @@ header {
   position: relative;
   color: #666;
   line-height: 20px;
+  font-size: 16px;
 }
 .program-structure .panel-title > a:after {
   content: "";
