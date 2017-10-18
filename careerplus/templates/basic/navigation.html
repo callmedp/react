@@ -14,13 +14,13 @@
           <div class="dropdown-menu courses-tabs">
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="/courses/law-courses/23/#courses1" aria-controls="courses1" role="tab">Law Courses</a></li>
-{#              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'finance' 5 %}#courses2" aria-controls="courses2" role="tab">Finance</a></li>#}
+              <li role="presentation"><a href="/courses/management/27/#courses2" aria-controls="courses2" role="tab">Management</a></li>
               <li role="presentation"><a href="/courses/hr-human-resource/25/#courses3" aria-controls="courses3" role="tab">Human Resources</a></li>
               <li role="presentation"><a href="/courses/personal-development/21/#courses4" aria-controls="courses4" role="tab">Personal Development</a></li>
-{#              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'sales-marketing' 5 %}#courses5" aria-controls="courses5" role="tab">Sales And Marketing</a></li>#}
-{#              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'it-software-certification' 5 %}#courses6" aria-controls="courses6" role="tab">IT Software & Certifications</a></li>#}
+              <li role="presentation"><a href="/courses/banking-and-finance/20/#courses5" aria-controls="courses5" role="tab">Banking and Finance</a></li>
+              <li role="presentation"><a href="/courses/it-information-technology/22/#courses6" aria-controls="courses6" role="tab">Information Technology</a></li>
 {#              <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'development' 5 %}#courses7" aria-controls="courses7" role="tab">Development</a></li>#}
-{#                <li role="presentation"><a href="/courses/law-courses/23/#courses8" aria-controls="courses8" role="tab">Operation Management</a></li>#}
+                <li role="presentation"><a href="/courses/operation-management/19/#courses8" aria-controls="courses8" role="tab">Operation Management</a></li>
               <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'other-online' 5 %}#courses9" aria-controls="courses9" role="tab">Other Online Courses</a></li>
             </ul>
 
@@ -34,17 +34,14 @@
                 <li><a href="/courses/law-courses/23/">View all products</a></li>
               </ul>
               </div>
-{#              <div role="tabpanel" class="tab-pane" id="courses2">#}
-{#                <ul>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>#}
-{#                <li><a href="{% url 'skillpage:func_area_results' 'finance' 5 %}">View all products</a></li>#}
-{#              </ul>#}
-{#              </div>#}
+              <div role="tabpanel" class="tab-pane" id="courses2">
+                <ul>
+                <li><a href="/courses/management/business-analyst/58/">Business Analyst</a></li>
+                <li><a href="/courses/management/corporate-governance/59/">Corporate Governance</a></li>
+                <li><a href="/courses/management/general-management/102/">General Management</a></li>
+                <li><a href="/courses/management/27/">View all products</a></li>
+              </ul>
+              </div>
               <div role="tabpanel" class="tab-pane" id="courses3">
                 <ul>
                 <li><a href="/courses/hr-human-resource/compensation-2/110/">Compensation</a></li>
@@ -61,28 +58,25 @@
                 <li><a href="/courses/personal-development/21/">View all products</a></li>
               </ul>
               </div>
-{#              <div role="tabpanel" class="tab-pane" id="courses5">#}
-{#                <ul>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>#}
-{#                <li><a href="{% url 'skillpage:func_area_results' 'sales-marketing' 5 %}">View all products</a></li>#}
-{#              </ul>#}
-{#              </div>#}
-{#              <div role="tabpanel" class="tab-pane" id="courses6">#}
-{#                <ul>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>#}
-{#                <li><a href="{% url 'skillpage:func_area_results' 'it-software-certification' 5 %}">View all products</a></li>#}
-{#              </ul>#}
-{#              </div>#}
+              <div role="tabpanel" class="tab-pane" id="courses5">
+                <ul>
+                <li><a href="/courses/banking-and-finance/financial-analyst/104/">Financial Analyst</a></li>
+                <li><a href="/courses/banking-and-finance/advanced-accounting/114/">Advanced Accounting</a></li>
+                <li><a href="/courses/banking-and-finance/banking/113/">Banking</a></li>
+                <li><a href="/courses/banking-and-finance/20/">View all products</a></li>
+              </ul>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="courses6">
+                <ul>
+                <li><a href="/courses/it-information-technology/it-language/80/">IT Languages</a></li>
+                <li><a href="/courses/it-information-technology/database-development/83/">Database Development</a></li>
+                <li><a href="/courses/it-information-technology/it-development-interface-learning/119/">IT Development Interface Learning</a></li>
+                <li><a href="/courses/it-information-technology/big-data/84/">Big Data</a></li>
+                <li><a href="/courses/it-information-technology/graphic-design/54/">Graphic Design</a></li>
+                <li><a href="/courses/it-information-technology/it-admin/50/">IT Admin</a></li>
+                <li><a href="/courses/it-information-technology/22/">View all products</a></li>
+              </ul>
+              </div>
 {#              <div role="tabpanel" class="tab-pane" id="courses7">#}
 {#                <ul>#}
 {#                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>#}
@@ -94,17 +88,15 @@
 {#                <li><a href="{% url 'skillpage:func_area_results' 'development' 5 %}">View all products</a></li>#}
 {#              </ul>#}
 {#              </div>#}
-{#              <div role="tabpanel" class="tab-pane" id="courses8">#}
-{#                <ul>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Government+of+India+-+Vskills+Certification">Government of India - Vskills Certification</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ACCA+IFRS+Certifications">ACCA IFRS Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Aon+Hewitt+HR+Certifications">Aon Hewitt HR Certifications</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=ICFL+Training+Programs">ICFL Training Programs</a></li>#}
-{#                <li><a href="{% url 'search:search_listing' %}?q=Analytics+Big+Data">Analytics and Big Data</a></li>#}
-{#                <li><a tabindex="-1" href="{% url 'skillpage:func_area_results' 'other-online' 5 %}">View all products</a></li>#}
-{#              </ul>#}
-{#              </div>#}
+              <div role="tabpanel" class="tab-pane" id="courses8">
+                <ul>
+                <li><a href="/courses/operation-management/logistics-and-supply-chain/135/">Logistics & Supply Chain</a></li>
+                <li><a href="/courses/operation-management/production/39/">Production</a></li>
+                <li><a href="/courses/operation-management/six-sigma/193/">Six Sigma</a></li>
+                <li><a href="/courses/operation-management/customer-care/37/">Customer Care</a></li>
+                <li><a tabindex="-1" href="/courses/operation-management/19/">View all products</a></li>
+              </ul>
+              </div>
                 <div role="tabpanel" class="tab-pane" id="courses9">
                 <ul>
                 <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>
