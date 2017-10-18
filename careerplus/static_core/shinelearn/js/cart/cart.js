@@ -553,15 +553,15 @@ $(document).ready(function() {
                     }
 
                     else if (json.status == -1){
-                        alert("Something went wrong, Please try again.")
+                        alert("Something went wrong, Please try again.");
                     }
 
                 },
                 failure: function(response){
-                    alert("Something went wrong, Please try again")
+                    alert("Something went wrong, Please try again");
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    alert("Something went wrong, Please try again")
+                    alert("Something went wrong, Please try again");
                 }
             });
         }
