@@ -5,15 +5,16 @@ To initiate your services, upload resume or download this <a href="{% url "dashb
     <small id="non-field-errors" class="error">{{validation_error}}</small>
 
     <div class="resume-writing">
-      <div class="input-file col-sm-7">
+      <div class="input-file col-sm-7 error">
           <a class='' href='javascript:;'>
               <input maxlength="200" type="file" name="file" id="file-id" style='position:absolute;z-index:2;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="30"  onchange='$("#upload-file-info").html($(this).val());'>
               <span class="choose-file">Choose file</span>
           </a>
           <span class="upload-file" id="upload-file-info"></span>
-      </div>
-      <span class="error" id="file-error"></span>
+          <span class="error-txt" id="file-error">sjdfk djjfhdsjk fdhsk </span>
       {% if resume_id %}
+      </div>
+      
       <div class="col-sm-1 text-center"> Or</div>
       <div class="col-sm-4 use-shine no-pad">
         <label>
