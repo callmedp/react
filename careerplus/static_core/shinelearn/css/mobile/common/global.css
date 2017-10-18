@@ -52,7 +52,7 @@ body {
   color: #333;
   display: block;
   font-family: "Open Sans", sans-serif;
-  font-size: 0.875em;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1.3em;
   margin: 0;
@@ -81,7 +81,7 @@ ul, ol {
 
 h1 {
   color: #fff;
-  font-size: 2em;
+  font-size: 32px;
   font-weight: 400; }
 
 h3 {
@@ -94,7 +94,7 @@ h4, h5 {
   margin-top: 20px; }
 
 h5 {
-  font-size: .875em; }
+  font-size: 14px; }
 
 hr {
   border: 0 none;
@@ -121,7 +121,7 @@ header {
     opacity: .15; }
 
 .heading-back {
-  font-size: 1.250em;
+  font-size: 20px;
   color: #fff;
   font-weight: 600;
   margin: 15px 0 0;
@@ -157,7 +157,7 @@ footer {
 .breadcrumb {
   -webkit-border-radius: 4px;
           border-radius: 4px;
-  font-size: .625em;
+  font-size: 10px;
   list-style: outside none none;
   margin-bottom: 20px;
   margin-top: 15px;
@@ -275,11 +275,11 @@ footer {
 @media (max-width: 320px) {
   .btn {
     padding: 10px 5px;
-    font-size: 0.875em; } }
+    font-size: 14px; } }
 
 .btn-sm {
   padding: 2px 10px;
-  font-size: 0.875em; }
+  font-size: 14px; }
 
 .btn-slg {
   padding: 10px 40px; }
@@ -307,7 +307,7 @@ footer {
   padding: 0 0 60px; }
 
 .main-heading, h2 {
-  font-size: 1.313em;
+  font-size: 21px;
   font-weight: 600;
   line-height: 25px;
   margin-bottom: 10px; }
@@ -877,3 +877,28 @@ article ol {
   margin-top:-10px;
 }
 
+
+.error .form-control {
+  border-color: #f34a38;
+  }
+
+.error .error-txt {
+  font-size: 85%;
+  padding-top: 3px;
+  color: #f34a38;
+  display: block;
+  padding-bottom: 0; }
+
+.error .mgs {
+  font-size: 85%;
+  padding-top: 3px;
+  color: #f34a38;
+  display: block;
+  padding-bottom: 0; }
+
+.mgs {
+  display: none;
+}
+
+.error-txt {
+  display: none; }

@@ -7,17 +7,13 @@
     {{ block.super }}
     {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/users/login.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/search/course-listing.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/common/auto-suggest.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/search/filter.css" %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
     {% compress css %}
-    <style type="text/css">
-        .error{
-            color: red;
-        }
-    </style>
     {% endcompress %}
 {% endblock css_section %}
 
@@ -41,8 +37,8 @@
         <div class="clearfix"></div>
         {% if search_type == 'recommended' %}
         <div class="search-tagging mt-10">
-            <span>{{ recmnd_func_area }}</span>
-            <span>{{ recmnd_skills }}</span>
+            <span class="advanced">{{ recmnd_func_area }}</span>
+            <span class="advanced">{{ recmnd_skills }}</span>
             <a href="javascript:void(0)" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
@@ -60,6 +56,10 @@
     <div class="body-wrapper ">
 <div class="content-box pt-5">
   <div class="container pt-0 js_listing">
+
+    <div class="row enrol-now box pt-5 pb-5" id="hide-second">
+    <div class="content-box">
+
     <h2 class="pt-5 filter-pd">
     {% if products_found %}
         {% if search_type == 'recommended' %}{{ paginator.count }} recommended products
@@ -70,6 +70,7 @@
     {% endif %}
         {% if products_found and page.object_list|length > 0 %}<a href="javascript:void(0)" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
     </h2>
+</div></div>
     
     {% include 'mobile/search/ajax/search_listing.html' %}
 
@@ -78,11 +79,6 @@
     <span id="loading"></span>
 </div><!-- end of content box -->
 
-{% if products_found and page.object_list|length > 0 %}
-<div class="share-wrap">
-  <a href="javascript:void(0)" class="blue-circle-60 sidebar-secondary-trigger js_filters_trigger"><span class="icon-filter"></span></a>
-</div>
-{% endif %}
 
 <div class="sidebar js_sidebar_advanced">
   <div class="right-navbar pt-0">
@@ -112,6 +108,7 @@
 
 
 </div>
+{% include "shop/partials/call_us.html" %}
 {% endblock container %}
 
 {% block js_section %}

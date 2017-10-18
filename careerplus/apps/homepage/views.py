@@ -36,7 +36,6 @@ class HomePageView(TemplateView):
             job_asst_view_all = tjob.view_all
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
-            pass
         return {"job_asst_services": list(job_services), "job_asst_view_all": job_asst_view_all}
 
     def get_courses(self):
@@ -87,24 +86,44 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id')
-        if candidate_id:
-            candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
+        candidate_detail = None
+        session_fa = self.request.session.get('func_area')
+        session_skills = self.request.session.get('skills')
+        if not session_fa:
+            # Fetch from shine
+            if candidate_id:
+                candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
+                if candidate_detail:
+                    func_area = candidate_detail.get('jobs')[0].get("sub_field", "") \
+                        if len(candidate_detail.get('jobs', [])) else ''
+                    func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
+                    if func_area_obj:
+                        self.request.session.update({
+                            'func_area': func_area_obj[0].id
+                        })
+                        context.update({'recmnd_func_area': func_area})
+        else:
+            # Pre-populate session FA
+            try:
+                context.update({'recmnd_func_area': FunctionalArea.objects.get(id=session_fa).name})
+            except FunctionalArea.DoesNotExist:
+                logging.getLogger('error_log').error("FA not in DB - from session %s " % str(session_fa))
+        if not session_skills:
+            if not candidate_detail and candidate_id:
+                candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
             if candidate_detail:
-                func_area = candidate_detail.get('jobs')[0].get("sub_field", "") \
-                    if len(candidate_detail.get('jobs', [])) else ''
                 skills = [skill['value'] for skill in candidate_detail['skills']]
-                func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
-                if func_area_obj:
-                    self.request.session.update({
-                        'func_area': func_area_obj[0].id
-                    })
-                    context.update({'recmnd_func_area': func_area})
-                skills_obj = [s.id for s in Skill.objects.filter(name__in=skills)]
+                skills_obj = Skill.objects.filter(name__in=skills)[:2]
+                skills_ids = [s.id for s in skills_obj][:2]
                 if skills_obj:
                     self.request.session.update({
-                        'skills': skills_obj
+                        'skills': skills_ids
                     })
-                    context.update({'recmnd_skills': ','.join(skills)})
+                    context.update({'recmnd_skills': ','.join([skill.name for skill in skills_obj])})
+        else:
+            skills_found = Skill.objects.filter(pk__in=session_skills).values_list('name', flat=True)
+            context.update({'recmnd_skills': ','.join(skills_found)})
+
         func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
         skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
         context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})

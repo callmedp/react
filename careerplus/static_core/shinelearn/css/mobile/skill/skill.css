@@ -142,19 +142,25 @@
 
 .skill-box .skill-provider {
   margin-left: -5px; }
+
   .skill-box .skill-provider li {
-    padding: 10px; }
+    padding: 10px; 
+  }
+
     .skill-box .skill-provider li a {
       display: table-cell;
       height: 65px;
       width: 180px;
       vertical-align: middle;
-      text-align: center; }
-      .skill-box .skill-provider li a img {
+      text-align: center; 
+    }
+
+      /*.skill-box .skill-provider li a img {
         display: inline-block;
         height: 100%;
         width: auto;
         vertical-align: middle; }
+      */
 
 .skill-box .recommd-list li {
   padding-left: 15px;
