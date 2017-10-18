@@ -259,9 +259,16 @@ $(document).ready(function(){
                     required: 'this value is required.',
                 }
             },
-            errorPlacement: function(error, element){
-                $(element).siblings('.error').html(error.text());
+
+            highlight: function(element) {
+                $(element).closest('.file-box').addClass('error')
             },
+            unhighlight: function(element) {
+                $(element).closest('.file-box').removeClass('error')
+            },
+            errorPlacement: function(error, element){
+                $(element).closest('.file-box').find(".error-txt").html(error.text());
+            }
 
         });
 
