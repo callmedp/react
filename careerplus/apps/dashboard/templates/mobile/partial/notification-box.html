@@ -1,0 +1,47 @@
+{% load static %}
+
+{% if pending_resume_items %}
+    <!-- Other packages start here -->
+    <div class="sidebar" id="sidebar-secondary">
+      <div class="upload-resume p-15">
+        <p class="fs-16 c6 mt-20">To initiate your services, upload resume or download this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and upload it.</p>
+        <form role="form" method="post" action="{% url "dashboard:dashboard" %}" id="resume-upload-form" enctype='multipart/form-data'>{% csrf_token %}
+            <div class="rel mt-10">
+                <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+                <div class="fileUpload">
+                    <span>Upload</span>
+                    <input id="uploadBtn" type="file" name="file" class="upload" />
+                    </br><small class="pull-left error" style="color: red" id="file-error"></small>
+                </div>
+                {% if resume_id %}
+                    <p class="mt-10">OR</p>
+                    <p>
+                        <input type="checkbox" name="shine_resume" id="shine-res">
+                        <label for="shine-res">Use Shine resume{% if shine_resume_name %}({{shine_resume_name}}){% endif %}</label>
+                    </p>
+                {% endif %}
+            </div><!-- Choose file ends here -->
+
+            <div class="mt-30">
+                <p class="c6 fs-13"><strong>Use this resume for following products</strong></p>
+                <ul class="resume-type mt-10">
+                    {% for oi in pending_resume_items %}
+                        <li>
+                            <input type="checkbox" id="pending-item-id{{oi.pk}}" name="resume_pending" value="{{oi.pk}}">
+                            <label for="pending-item-id{{oi.pk}}">{{oi.product.get_name}}
+                                {% if obj.product.get_exp_db %}
+                                 - {{obj.product.get_exp_db}}
+                                {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p id="required_product_error" class="error"></p>
+                <div class="bottom-btn">
+                    <a role="button" class="btn-slg btn-blue btn-round w100fl text-center" id="upload-resume-button">Upload now</a>
+                </div>
+            </div>
+        </form>
+
+      </div>
+    </div><!-- Other packages ends here -->
+{% endif %}

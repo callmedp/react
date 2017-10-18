@@ -1,0 +1,33 @@
+{% if prd_review_list %}
+<div class="container">
+    <div class="w100fl">
+        <h2 class="pull-left">Reviews</h2>
+    </div>
+    <div class="clearfix"></div>
+    <div class="box row pb-30">
+        <div class="review-container rel">
+            <ul class="review-slide">
+            {% for review in prd_review_list|slice:"0:4" %}
+                <li>
+                    <div class="wrap">
+                    {% for star in review.get_ratings %}
+                        <div class="rating inline-block ml-0 fs-12">
+                            {% if star == "*" %}
+                                <sup class="fill-star"></sup>
+                            {% else %}
+                                <sup class="unfill-star"></sup>
+                            {% endif %}
+                        </div><!-- end of star rating -->
+                    {% endfor %}
+                        <p>{{review.content|safe}}.</p>
+                        <p class="fs-12 c9 pb-0">
+                            {{review.user_name}}, {{review.created|date:"M d, Y" }}
+                        </p>
+                    </div>
+                </li>
+            {% endfor %}   
+            </ul>
+        </div><!-- end of review wrap -->
+    </div><!-- end of box -->
+</div><!-- end of container -->
+{% endif %}

@@ -1,0 +1,239 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load console_tags %}
+
+{% block title %}
+  <title>Add Attributes</title>
+{% endblock title %}
+
+{% block css_block %}
+  {{ block.super }}
+  <!-- Switchery -->
+  <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}" rel="stylesheet" type="text/css">
+
+  <style type="text/css">
+      ul.parsley-errors-list {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+      ul.errorlist {
+          list-style: none;
+          color: #fff;
+          padding-left: 0;
+      }
+      .empty-form{
+        display: none;
+      }
+      .clearimg a{
+        margin-right: 30px;
+      }
+  
+      </style>
+                
+{% endblock css_block %}
+
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3>
+
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Add Attribute<small>(add new product attribute.)</small></h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <form class="form-horizontal form-label-left" method="POST" action="." novalidate id="add-attribute-form">
+              {% csrf_token %}
+              
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  {{form.non_field_errors}}
+                </div>
+              {% endif %}
+
+              <div class="item form-group {% if form.name.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.name.id_for_label }}"> Attribute Name <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.name}}
+                </div>
+                <div class="alert">{{form.name.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.display_name.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.display_name.id_for_label }}"> Attribute Display Name <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.display_name}}
+                </div>
+                <div class="alert">{{form.display_name.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.product_class.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.product_class.id_for_label }}"> Class<span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.product_class}}
+                </div>
+                <div class="alert">{{form.product_class.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.type_attribute.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_attribute.id_for_label }}"> Type Value <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.type_attribute}}
+                </div>
+                <div class="alert">{{form.type_attribute.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.option_group.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.option_group.id_for_label }}"> Option Group <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.option_group}}
+                </div>
+                <div class="alert">{{form.option_group.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.active.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.active.id_for_label }}"> Active <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.active}}
+                </div>
+                <div class="alert">{{form.active.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_sortable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_sortable.id_for_label }}"> Is Sortable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_sortable}}
+                </div>
+                <div class="alert">{{form.is_sortable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_filterable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_filterable.id_for_label }}"> Is Filterable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_filterable}}
+                </div>
+                <div class="alert">{{form.is_filterable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_indexable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_indexable.id_for_label }}"> Is Indexable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_indexable}}
+                </div>
+                <div class="alert">{{form.is_indexable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_visible.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_visible.id_for_label }}"> Is Visible? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_visible}}
+                </div>
+                <div class="alert">{{form.is_visible.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_multiple.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_multiple.id_for_label }}"> Is Multiple? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_multiple}}
+                </div>
+                <div class="alert">{{form.is_multiple.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.is_searchable.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.is_searchable.id_for_label }}"> Is Searchable? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.is_searchable}}
+                </div>
+                <div class="alert">{{form.is_searchable.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.required.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.required.id_for_label }}"> Required? <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.required}}
+                </div>
+                <div class="alert">{{form.required.errors}}</div>
+              </div>
+
+              <div class="ln_solid"></div>
+              <div class="form-group">
+                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                  <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </form>
+            
+        		        
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
+  <!-- Switchery -->
+  <script type="text/javascript" src="{% static "packages/switchery/dist/switchery.min.js" %}"></script>
+    
+      
+  <!-- Custom Theme Scripts -->
+  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
+
+
+{% endblock js_block %}

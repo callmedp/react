@@ -1,0 +1,137 @@
+{% extends "mobile/basic/base.html" %}
+{% load static custom_filters compress %}
+
+{% block title %}Search Listing | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/users/login.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/search/course-listing.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/common/auto-suggest.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/search/filter.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css %}
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+    <header class="w100fl he-auto">
+        <img src="{% static 'shinelearn/images/mobile/search/header-search.png' %}">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                <a class="pull-left" id="sidebar-main-trigger" role="button"></a>
+                <a class="icon-back pull-left" href="/"></a>
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+
+
+        <div class="clearfix"></div>
+        {% if search_type == 'recommended' %}
+        <div class="search-tagging mt-10">
+            <span class="advanced">{{ recmnd_func_area }}</span>
+            <span class="advanced">{{ recmnd_skills }}</span>
+            <a href="javascript:void(0)" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
+        </div>
+        {% elif search_type == 'simple' %}
+        <div class="search-tagging mt-10">
+            <form class="search-list" id="search_form" data-role="form">
+            <input type="text" id="id_q" placeholder="Search for courses, services" name="q"
+                   class="form-control js_query_input key_press_js_search" value="{{ search_params.keywords }}" id="search-inupt">
+            </form>
+        </div>
+        {% endif %}
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <div class="body-wrapper ">
+<div class="content-box pt-5">
+  <div class="container pt-0 js_listing">
+
+    <div class="row enrol-now box pt-5 pb-5" id="hide-second">
+    <div class="content-box">
+
+    <h2 class="pt-5 filter-pd">
+    {% if products_found %}
+        {% if search_type == 'recommended' %}{{ paginator.count }} recommended products
+            {% elif search_type == 'simple' %}{{ paginator.count }} products found
+        {% elif search_type == 'func_area' %}{{ func_area_name|title }} Courses{% endif %}
+    {% else %}
+        No products found. Have a look at our most popular products.
+    {% endif %}
+        {% if products_found and page.object_list|length > 0 %}<a href="javascript:void(0)" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
+    </h2>
+</div></div>
+    
+    {% include 'mobile/search/ajax/search_listing.html' %}
+
+    
+  </div><!-- end of container -->
+    <span id="loading"></span>
+</div><!-- end of content box -->
+
+
+<div class="sidebar js_sidebar_advanced">
+  <div class="right-navbar pt-0">
+    <h2>Advanced Search</h2>
+    <form method="post" action="{% url 'search:recommend' %}" class="js_advance_search_form">
+        {% csrf_token %}
+      <div class="form-group">
+        <input type="text" id="tags11" class="form-control" name="area" value="{{ recmnd_func_area }}" placeholder="Functional area">
+        <p class="mgs js_area_error"></p>
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="tags21" name="skills" value="{{ recmnd_skills }}" class="form-control" placeholder="Skill">
+        <p class="mgs js_skill_error"></p>
+      </div>
+      <div class="form-group text-center mt-40">
+        <button type="submit" class="btn btn-blue w100fl btn-round mb-20 js_advance_search">Find courses</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% if products_found and page.object_list|length > 0 %}
+    {% include "mobile/search/partials/search_filters.html" %}
+{% endif %}
+
+
+</div>
+{% include "shop/partials/call_us.html" %}
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    {% endcompress %}
+    <script>
+        var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
+            skillsSet = {{ skills_set|safe|default:"[]" }},
+            totalProducts = {{ paginator.count }};
+        $( "#tags11" ).typeahead({
+            local: funcAreaSet
+        });
+        $('#tags21').typeahead({
+            local: skillsSet
+        });
+         $('#id_q').typeahead({
+            local: {{ search_context|safe|default:"[]" }}
+        });
+    </script>
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/mobile/search/search.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+

@@ -1,0 +1,36 @@
+{% load static %}
+{% if page_reviews %}
+{% for page_review in page_reviews %}
+<li class="box-panel">
+	<span class="review-heading">Excelent!</a></span>
+		<div class="rating-review-box">
+		    {% for rating in page_review.get_ratings %}
+              {% if rating == "*" %}
+                <figure class="full-star">
+                </figure>
+              {% endif %}
+              {% if rating == "+" %}
+                <figure class="half-star">  
+                </figure>
+              {% endif %}
+              {% if rating == "-" %}
+                <figure class="blank-star"> 
+                </figure>
+              {% endif %}
+	        {% endfor %}
+		    <strong>{{page_review.average_rating |floatformat:1}}/5</strong>
+		</div>
+		<article>
+		{{page_review.content | safe}}
+		</article>
+		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
+</li>
+{% endfor %}
+{% endif %}
+{% if page_reviews.has_next %}
+<input type="hidden" name="page" 
+value="{{page_reviews.next_page_number}}" id="page_id1">
+<input type="hidden" name="slug" value="{{slug}}" 
+id="slug_id1">
+<a href="javascript:void();" id="review_load_more" class="load-more loadreview"> Load more</a>
+{% endif %}

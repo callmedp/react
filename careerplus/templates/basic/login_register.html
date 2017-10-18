@@ -1,0 +1,81 @@
+<!--modals-->
+<!--login-->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Login</h1>
+      </div>
+        <form role="form" method="post" action="{% url "cms:login-to-comment" page_obj.slug %}" >{% csrf_token %}
+          <div class="form-group">
+            <input type="text" class="form-control required" name="user_email" aria-describedby="nameHelp" placeholder="email">
+            <label class="error"></label>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control required" name="user_password" aria-describedby="passwordHelp" placeholder="Password">
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="remember_me">
+              Remember me
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary submit">Login</button>
+          <small class="form-text text-muted text-center"><a href="#">Forgot Password?</a></small>
+          <div class="social-login">
+            <span>or login with</span>
+            <a class="facebook" href="#"></a>
+            <a class="linkedin" href="#"></a>
+            <a class="gplus" href="#"></a>
+          </div>
+          <small class="form-text text-muted text-center">Don’t have an account yet? <a href="register.html" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>  
+
+<!--signup-->
+<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Register</h1>
+      </div>
+        <form>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Name">
+            <label class="error"></label>
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Mobile No.">
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input">
+              I agree to Terms & conditions
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary submit">Register</button>
+          <div class="social-login">
+            <span>or Register with</span>
+            <a class="facebook" href="#"></a>
+            <a class="linkedin" href="#"></a>
+            <a class="gplus" href="#"></a>
+          </div>
+          <small class="form-text text-muted text-center mt-4">Already have an account? <a href="login.html" data-toggle="modal" data-target=".bs-example-modal-sm" data-dismiss="modal">Login Now</a></small>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>  

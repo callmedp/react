@@ -1,0 +1,142 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+  <title>Add Category</title>
+{% endblock title %}
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3>
+
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Add New Product Category</h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+            <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="add-category-form">
+              {{form.media}}
+              <style type="text/css">
+                ul.parsley-errors-list {
+                    list-style: none;
+                    color: #fff;
+                    padding-left: 0;
+                }
+                ul.errorlist {
+                    list-style: none;
+                    color: #fff;
+                    padding-left: 0;
+                }
+                
+              </style>
+              {% csrf_token %}
+              <p>Product Category are differentiated in Levels shown in navigations. Please make sure new category doesn't conflict with existing one. After adding the category its relationship will be added later.
+              </p>
+              <span class="section">Category Form</span>
+              
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  {{form.non_field_errors}}
+                </div>
+              {% endif %}
+              
+              <div class="item form-group {% if form.name.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.name.id_for_label }}">Name <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.name}}
+                </div>
+                <div class="alert">{{form.name.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.type_level.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_level.id_for_label }}">Level <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.type_level}}
+                </div>
+                <div class="alert">{{form.type_level.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.banner.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.banner.id_for_label }}">Banner <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.banner}}
+                </div>
+                <div class="alert">{{form.banner.errors}}</div>
+              </div>
+
+              <div class="item form-group {% if form.image.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.image.id_for_label }}">Image <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.image}}
+                </div>
+                <div class="alert">{{form.image.errors}}</div>
+              </div>
+
+
+              <div class="ln_solid"></div>
+              <div class="form-group">
+                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                  <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  
+  <!-- Custom Theme Scripts -->
+  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
+
+
+{% endblock js_block %}

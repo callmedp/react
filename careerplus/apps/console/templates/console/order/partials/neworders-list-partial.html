@@ -1,0 +1,219 @@
+<div class="">
+  <div class="page-title">
+    <div class="title_left">
+      <h3>New Orders</h3>
+    </div>
+    <form class="form-group" method="GET" action="{% url 'console:order:pages:neworders-list' %}" id="filter-tables">
+        <div class="title_right">
+          <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <input type="text" name="search" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+    </form>
+  </div>
+
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Select Order to View</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                  <tr class="headings">
+                    <!--th>
+                      <input type="checkbox" id="check-all" class="flat">
+                    </th-->
+                    
+                    <th class="column-title">Order Number</th>
+                    <th class="column-title">Customer</th>
+                    <th class="column-title">Order Item Id</th>
+                    <th class="column-title">Product Name</th>
+                    <th class="column-title">Quantity</th>
+                    <th class="column-title">Order Placed On</th>
+                    {% if is_vendee %}
+                      <th class="column-title">Upload Supporting Document</th>
+                    {% endif %}
+                    {% if is_admin %}
+                      <th class="column-title">Uploaded Document</th>
+                    {% endif %}
+                    <th class="column-title">Other Actions</th>
+                    <th class="bulk-actions" colspan="7">
+                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for obj in page %}
+                  <tr class="even pointer" data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}">
+                    <!--td class="a-center ">
+                      <input type="checkbox" class="flat" name="table_records">
+                    </td-->
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.order.number}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{%if obj.order.first_name %}{{obj.order.first_name|default_if_none:""}} {{obj.order.last_name|default_if_none:""}} {%if obj.order.email%} | {{obj.order.email|default_if_none:""}}{%endif%}{%elif obj.order.email|default_if_none:""%}{{obj.order.email}}{%endif%}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.id}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.product.name|default_if_none:""}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.quantity}}</a></td>
+                    <td class=" "><a href="{% url 'console:order:pages:neworders-detail' pk=obj.id %}" data-pjax='.right_col'>{{obj.order.date_placed|slice:":10"}}</a></td>
+                    {% if is_vendee %}
+                      <td class=" ">
+                        <form enctype="multipart/form-data" action="{% url 'console:operations:neworders-vendor-upload' orderitem_id=obj.id vendor_id=obj.partner%}" method="post" onsubmit="postFile(event);">
+                        <input name="file" type="file" /><br/>
+                        <input type="submit" value="Submit" /><br/>
+                        <span data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}"></span>
+                        {% csrf_token %}
+                        </form>
+                      </td>
+                    {% endif %}
+                    {% if is_admin %}
+                      <td class=" " data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}"></td>
+                    {% endif %}
+                    <td class=" ">
+                      <form enctype="multipart/form-data">
+                        {% if is_vendee %}
+                          <input type="button" data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}" value="Hold" onclick="holdOrder(event);"/>
+                        {% endif %}
+                        {% if is_admin %}
+                          <input type="button" value="Close Order"  data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}" onclick="closeOrder(event);"/>
+                        {% endif %}
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+                   
+            {% block main_pagination %}
+                <div class="main_pagination">
+                  {% if page_object %}
+                  <div class="col-sm-4">
+                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+                        {% with current_page=page_object.number total_page=page_object.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+                        {% endwith %}
+                      </div>
+                  </div>
+                  
+
+                <div class="col-sm-8">
+                    <div class="pull-right">
+                        <ul class="pagination">
+                        {% if page_object.has_previous %}
+                            <li class="paginate_button previous">
+                                <a href="?page={{ page_object.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in begin %}
+                            <li class="paginate_button {% ifequal page_object.number page_number %} active disable {% endifequal %} ">
+                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if middle %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in middle %}
+                                <li class="paginate_button {% ifequal page_object.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                    
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page_end %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in page_end %}
+                                <li class="paginate_button {% ifequal page_object.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page_object.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?page={{ page_object.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                {% endif %}
+                </div>
+                {% endblock %}
+                </div>
+              </div>
+              </div>
+              </div>
+
+  </div>
+</div>
+
+{% block js_block %}
+  {% if doing_partial %}
+    <script type="text/javascript">
+        $('tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax]').pjax();
+    </script>
+  {% endif %}
+  <script type="text/javascript">
+    function postFile(event){
+      if ($(event.target).find('input[type=file]').length>0 && $(event.target).find('input[type=file]').get(0).files.length>0) {
+        if ($(event.target).closest('form') && $(event.target).closest('form').get(0)){
+          $(event.target).closest('form').get(0).submit();
+        }  
+      }
+      event.preventDefault();
+    }
+    function holdOrder (event) {
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+      });
+      $.ajax({
+        url: '/console/order/neworders/' + String(event.target.attributes['data-attr-id'].value)+'/hold/',
+        type: 'PUT',
+        success: function(data){
+          location.reload();
+        }
+      });
+    }
+    function closeOrder (event) {
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+      });
+      $.ajax({
+        url: '/console/order/neworders/' + String(event.target.attributes['data-attr-id'].value)+'/close/',
+        type: 'PUT',
+        success: function(data){
+          location.reload();
+        }
+      });
+    }
+  </script>
+{% endblock js_block %}

@@ -1,0 +1,49 @@
+{% extends "mobile/basic/base.html" %}
+{%load static%}
+{% block title %}
+        404 - Shine Learning
+{% endblock title %}
+{% block header %}
+  <header class="w100fl he-auto">
+      <!-- header menu Icon Starts here -->
+      <div class="main-menu w100fl">
+          <div class="pull-left">
+              <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
+              <a class="icon-back pull-left"  href="#"  onclick="goBack()"></a> 
+          </div><!-- / Left side Icon ends here -->
+          <div class="pull-right">
+              <a class=" pull-left" href="search-listing.html">search</a>
+              <a class=" pull-left" href="#">cart</a>
+          </div><!-- / Right side Icon ends here -->
+      </div><!-- header menu Icon ends here -->
+  </header><!-- header ends here -->
+{% endblock header %}
+{% block container %}
+<div class="body-wrapper ">
+  <!-- Tab content Satrts here -->
+  <div class="content-box payment">
+    <h2 class="fs-22">We could not find the page you are looking for</h2>
+    <p class="row"><img src="{% static 'shinelearn/images/mobile/common/404-img.jpg' %}" class="img-responsive"></p>
+    <h4 class="c3">Here are some helping links</h4>
+    <ul class="helping-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="#">Operational courses</a></li>
+      <li><a href="#">Financial courses</a></li>
+      <li><a href="#">Sales &amp; Marketing courses</a></li>
+      <li><a href="#">Human &amp; Resources courses</a></li>
+      <li><a href="#">IT &amp; software certifications</a></li>
+      <li><a href="#">Other courses</a></li>
+    </ul>
+    <ul class="helping-links">
+      <li><a href="#">Resume writing</a></li>
+      <li><a href="#">LinkedIn profile</a></li>
+      <li><a href="#">Interview preparations</a></li>
+      <li><a href="#">International resume</a></li>
+      <li><a href="#">Shine featured profile</a></li>
+      <li><a href="#">Profile update</a></li>
+    </ul>
+  </div><!-- Tab content ends here -->
+</div> 
+{% endblock container %}
+{% block johukum %}
+{% endblock johukum %}

@@ -1,0 +1,44 @@
+{% load static %}
+{% load thumbnail %}
+
+{% for key, values in article_list.items %}
+{% if values %}
+<div class="box-panel article-listing mb-40">
+    <h2>{{ key.name }}</h2>
+    {% for article in values %}
+    <div class="media">
+      <a title="{{article.display_name}}" href="{% url "blog:articles-deatil" article.slug article.pk %}">
+        {% if article.image %}
+        <figure class="media-left">
+          {% thumbnail article.image "171x113" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{article.image_alt}}">
+          {% endthumbnail %}
+          <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
+        </figure>
+        {% endif %}
+        <div class="media-body">
+          <h3 class="media-heading">{{article.display_name}}</h3>
+          <article>{{article.content|striptags|safe|truncatechars:300}}</article>
+          <span class="view-forward"><figure class="forward-icon"></figure> {{article.comment_moderated}} <figure class="view-icon ml-20"></figure> {{article.no_views}}</span>
+          <span class="editor">{{article.user.name}}, {{article.publish_date.date}}</span>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+    <a href="{{key.get_absolute_url}}" class="view-article text-right db mt-20">View all articles</a>
+</div> 
+{% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+{% comment %}
+<p id="loading">
+    <img src="{% static 'console/images/blog/loading.gif' %}" alt="Loading…" />
+</p>
+{% endcomment %}
+<div id="load_more" style='display:none'>
+    <div>
+    <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
+    </div>
+</div>
+{% endif %}

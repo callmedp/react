@@ -1,0 +1,140 @@
+{% extends "basic/base.html" %}
+{% load static humanize compress %}
+    {% block meta_html %}
+        {{block.super}}
+    {% endblock meta_html %}
+
+    {% block title %}
+    Thank You - Shine Learning
+    {% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+        {% endcompress %}
+        {% compress css %}
+        <style type="text/css">
+            .error{
+                color: red;
+            }
+        </style>
+        {% endcompress %}
+    {% endblock css_section %}
+    
+
+{% block container %}
+
+<!-- main section start -->
+<section class="container mt-53 bdr pd-40">
+
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+    <div class="col-sm-7">
+
+        <div class="text-center payment-done">
+            <figure class="waiting-icon"></figure>
+
+            <h1>{% if order.status == 1 %}
+                    Your payment has been made successfully!
+                {% else %}
+                    Waiting for payment to be made, meanwhile order has been created!
+                {% endif %}
+            </h1>
+
+            <article>Your transaction ID is <strong>{{order.ordertxns.last.txn}}</strong></article>
+            <article>An email, along with all the details, has been sent to <a href="mailto:{{order.email}}">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+
+            {% if pending_resume_items %}
+
+                <p>To proceed further please upload your resume or fill the questionnaire.</p>
+                <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
+                    <div class="latest-resume selected" id="upload-resume-box">
+                        <figure></figure>
+                        <a href="#">Upload</a> new resume
+                        <input type="file" name="resume_file">
+                        <span class="db">or</span>
+                        fill this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and upload
+                    </div>
+
+                    {% if request.session.resume_id %}
+                        <div class="latest-resume" id="shine-resume-box">
+                            <figure></figure>
+                            Use latest shine resume
+                        </div>
+                    {% endif %}
+                    <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
+                    <a role="button" class="blue-button mt-20" id="resume-sumbmit-button">Proceed</a>
+                </form>
+
+            {% endif %}
+
+        </div>
+
+    </div>    
+    <!-- left content end -->
+
+    <!-- right content start -->
+    <div class="col-sm-5">
+      <div class="box-panel subcribe-box">
+        <h2>You have subscribed to the following services</h2>
+        {% for item in orderitems %}
+            {% with oi=item.oi addons=item.addons variations=item.variations %}
+                {% if oi.product.is_course and variations %}
+                    <div class="subcribe-services">
+                         <strong>{{oi.product.get_name}}</strong>{% if oi.product.experience %} - {{oi.product.get_exp}}{% endif %}
+                        <ul>
+                            {% for addon in addons %}
+                                <li>{{addon.product.name}}</li>
+                            {% endfor %}
+
+                            {% if variations.first.delivery_service %}
+                                <li>{{variations.first.delivery_service.name}}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="subcribe-services">
+                        <strong>{{oi.product.get_name}}</strong>{% if oi.product.experience %} - {{oi.product.get_exp}}{% endif %}
+                        <ul>
+                            {% for var in variations %}
+                                <li>{{var.product.name}}</li>
+                            {% endfor %}
+
+                            {% for addon in addons %}
+                                <li>{{addon.product.name}}</li>
+                            {% endfor %}
+
+                            {% if oi.delivery_service %}
+                                <li>{{oi.delivery_service.name}}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+      </div>
+    </div>    
+    <!-- right content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+    
+
+{% endblock container %}
+  
+
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

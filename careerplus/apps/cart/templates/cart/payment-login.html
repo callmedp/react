@@ -1,0 +1,120 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block meta_html %}
+    {{block.super}}
+{%  endblock meta_html %}
+
+{% block title %}
+   Payment Login - Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    <style type="text/css">
+        .error{
+            color:red;
+        }
+    </style>
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block navigation %}
+  <!-- navigation bar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown have-query">
+              <a href="tel:0124-3955001">Have a query? Call us at <strong>0124-3955001</strong></a>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+</nav>
+
+{% endblock navigation %}
+
+
+{% block container %}
+    <section class="container mt-53">
+        <!-- page content body start -->
+        <div class="row">
+
+        <!-- left content start -->
+          <div class="col-sm-3 payment-summary-tab">
+          <a href="{% url "cart:payment-login" %}" class="active"><span>1</span> Login</a>
+          <a><span>2</span> Shipping</a>
+          <a><span>3</span> Summary</a>
+          <a><span>4</span> Payment</a>
+
+          <!-- secure payment -->
+          <div class="secure-payment">
+            <figure class="secure-icon-payment"></figure>
+            <strong>100% SECURE PAYMENT</strong>
+            All major Credit and Debit cards accepted
+            <figure class="cards-payment-icon mt-20"></figure>
+          </div>
+
+          </div>  
+        <!-- left content end -->
+
+        <!-- right content start -->
+        <div class="col-sm-9 bdr">
+            <form role="form" method="post" id="login_form" action="" class="personal-details col-sm-6"> {% csrf_token %}
+
+                {% if email_exist %}
+                    <strong class="personal-details-heading col-sm-12">Login with your email id</strong>
+                    <p id="non-field-error" class="error">{{non_field_error}}</p>
+                    <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
+                      <input type="email" name="email" value="{{email}}" readonly class="form-control" placeholder="Enter your email id">
+                      <span class="error-txt">{{email_error}}</span>
+                    </div>
+                    <div class="form-group col-sm-12">
+                      <input type="password" required name="password" class="form-control"  placeholder="Password">
+                      <span class="error-txt"></span>
+                    </div>
+                    <div class="continue col-sm-12">
+                      <button type="submit">Continue</button>
+                    </div>
+                {% else %}
+                    <strong class="personal-details-heading col-sm-12">Enter your email id</strong>
+                    <p id="non-field-error" class="error">{{non_field_error}}</p>
+                    <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
+                      <input type="email" name="email" class="form-control" placeholder="Enter your email id">
+                      <span class="error-txt">{{email_error}}</span>
+                    </div>
+                    <div class="continue col-sm-12">
+                      <button type="submit">Continue</button>
+                    </div>
+                {% endif %}
+            </form>
+
+        </div>
+        <!-- right content end -->
+
+        </div>
+        <!-- page content body end -->
+    </section>
+    <!-- main section end -->
+{% endblock container %}
+  
+
+{% block js_section %}
+   {{ block.super }}
+    {% compress js %}
+      <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

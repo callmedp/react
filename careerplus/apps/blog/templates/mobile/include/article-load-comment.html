@@ -1,0 +1,22 @@
+{% load static %}
+{% load humanize %}
+{% load humanize_tags %}
+
+{% for comment in comments %}
+	<li>
+	    <sup><img src="{% static "shinelearn/images/mobile/common/default-user.jpg" %}"></sup>
+	    <p class="pb-0">{{comment.message}}</p>
+	    <span class="editor fs-12 c9">{% if comment.name %}{{comment.name}},{% endif %} {% get_humanize_date comment.created_on %}</span>
+	</li>
+{% endfor %}
+{% if comments.has_next %}
+	<div id="load_more{{page_obj.id}}">
+		<form role="form" id="loadform{{page_obj.id}}">
+		    <input type="hidden" name="page" value="{{comments.next_page_number}}">
+		    <input type="hidden" name="slug" value="{{page_obj.slug}}">
+		</form>
+		<div class="w100 text-center">
+			<a class="btn-slg btn-grey block" role="button" onclick="loadMoreComment('{{page_obj.id}}')" id="comment_load_more{{page_obj.id}}" href="javascript:void();" ><span class="icon-chat"></span>Load more comments</a>
+		</div>
+	</div>
+{% endif %}

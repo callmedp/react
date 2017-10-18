@@ -1,0 +1,368 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>Order Item Detail- Shinelearning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+{% endblock css_block %}
+
+
+{% block pagecontent %}
+   <!-- page content -->
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            {% if messages %}
+                {% for message in messages %}
+
+                  <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                  {{ message }}
+                  </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Order item Detail <small>Item name: {{object.product.name}}({{object.product.get_exp}})</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>OrderItemId</th>
+                      <th>OrderId</th>
+                      <th>Email</th>
+                      <th>Mobile</th>
+                      <th>Name</th>
+                      <th>Payment Status</th>
+                      <th>Flow Status</th>
+                      <th>Added On</th>
+                      <th>Closed On</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{object.id}}</td>
+                      <td>{{order.id}}</td>
+                      <td>{{order.email}}</td>
+                      <td>{{order.country_code}} {{order.mobile}}</td>
+                      <td>{{order.first_name}} {{order.last_name}}</td>
+                      <td>{{order.get_status}}</td>
+                      <td>{{object.get_oi_status}}</td>
+                      <td>{{order.date_placed}}</td>
+                      <td>{% if order.closed_on %}{{order.closed_on}}{% endif %}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2><small>Following are order related items</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content col-md-6">
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                        <th>Order Item</th>
+                          <th>Status</th>
+                          <th>
+                              <h2><small>Candidate resumes/drafts:</small></h2>
+                              <table class="table table-bordered">
+                               <th>Label</th>
+                               <th>Draft</th>
+                              </table>
+                          </th>
+                          <th>
+                              <h2><small>Order items operations/actions:</small></h2>
+                              <table class="table table-bordered">
+                               <th>How Old</th>
+                               <th>Action</th>
+                               <th>Added By / Assigned</th>
+                              </table>
+                          </th>
+
+                          <th>
+                              Messages / Communications
+                          </th>
+                    <tr>
+                      
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>item name</td>
+                          <td>item status</td>
+                          <td>
+                              <table class="table table-bordered">
+                                   <tbody>
+                                     {% if object.oi_resume %}
+                                        <tr>
+                                          <td>Candidate Resume</td>
+                                          <td><a href="{{object.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
+                                        </tr>
+                                      {% endif %}
+
+                                    {% for draft in drafts %}
+                                        <tr>
+                                        <td>Draft {% if draft.draft_counter == max_limit_draft %}Final{% else %}{{draft.draft_counter}}{% endif %}</td>
+                                        <td><a href="{{draft.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td></tr>
+                                    {% endfor %}
+
+                                   </tbody>
+                              </table>
+                          </td>
+                          <td>
+                              <table class="table table-bordered">
+                                  {% for op in operations %}
+                                    <tr>
+                                      <td>{{op.created|naturaltime}}</td>
+                                      <td>{{op.get_oi_status}}</td>
+                                      <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
+                                    </tr>
+                                  {% endfor %}
+                              </table>
+                          </td>
+                          <td>
+                              <div class="x_content">
+                                  <ul class="list-unstyled msg_list">
+                                    {% for msg in communications %}
+                                        <li>
+                                          <a>
+                                            <span>
+                                              <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}} {{order.last_name}}{% endif %}</span>
+
+                                              <span class="time">{{msg.created|naturaltime}}</span>
+                                            </span>
+                                            <span class="message">
+                                              {{msg.message}}
+                                            </span>
+                                          </a>
+                                        </li>
+                                    {% endfor %}
+                                    
+
+                                  </ul>
+
+                                  <form autocomplete="off" id="message-add-form" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                                        <fieldset>
+                                            {% for field in message_form %}
+                                                <div class="form-group">
+                                                    <div class="col-md-8">
+                                                        {{ field }}
+                                                        {% if field.help_text %}
+                                                            <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            <div style='display:none'>
+                                            <input type="hidden" name="pk" value="{{object.pk}}">
+                                            </div>
+                                        </fieldset>
+                                          <div class="form-group">
+                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                              <center><button type="button" id="message-submit" class="btn btn-success">Add Message</button></center>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                          </td>
+                      </tr>          
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+          <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2><small>Candidate resume/Drafts</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content col-md-6">
+
+                <table class="table table-bordered">
+                  <tbody>
+                    {% if object.oi_resume %}
+                    <tr>
+                      <th>Candidate Resume</th>
+                      <td><a href="{{object.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a></td>
+                    </tr>
+                    {% endif %}
+                    {% for draft in drafts %}
+                        <tr>
+                        <th>Draft {% if draft.draft_counter == max_limit_draft %}Final{% else %}{{draft.draft_counter}}{% endif %}</th>
+                        <td><a href="{{draft.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td></tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+                {% if object.oi_status == 5 %}
+                    <form role="form" method="post" id="accept-reject-form{{object.id}}">{% csrf_token %}
+                    <input type="hidden" name="oi_pk" id="oi_id" value="{{object.pk}}">
+                    </form>
+                    <center>
+                        <button type="button" onclick="acceptDraftByAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
+                        <button type="button" onclick="rejectDraftByAdmin('{{object.id}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                    </center>
+                {% endif %}
+
+                {% if object.draft_counter < max_limit_draft %}
+                    <h2>Upload Draft</h2>
+                    <form data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">{% csrf_token %}
+                          {{draft_form.file}}
+                          <button type="submit" class="btn btn-success btn-xs">Submit</button>
+                    </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Order item Operations <small>action histories</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>How Old</th>
+                      <th>Action</th>
+                      <th>Added By / Assigned</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for op in operations %}
+                        <tr>
+                          <td>{{op.created|naturaltime}}</td>
+                          <td>{{op.get_oi_status}}</td>
+                          <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2><small>Communications</small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <ul class="list-unstyled msg_list">
+                    {% for msg in communications %}
+                        <li>
+                          <a>
+                            <span>
+                              <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}} {{order.last_name}}{% endif %}</span>
+
+                              <span class="time">{{msg.created|naturaltime}}</span>
+                            </span>
+                            <span class="message">
+                              {{msg.message}}
+                            </span>
+                          </a>
+                        </li>
+                    {% endfor %}
+                    
+
+                  </ul>
+
+                  <form id="message-add-form" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                        <fieldset>
+                            {% for field in message_form %}
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-4 col-xs-12">{{ field.label }}</label> 
+
+                                    <div class="col-md-8">
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div style='display:none'>
+                            <input type="hidden" name="pk" value="{{object.pk}}">
+                            </div>
+                        </fieldset>
+                          <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                              <center><button type="button" id="message-submit" class="btn btn-success">Add Message</button></center>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/order-item-detail.js" %}"></script>
+{% endblock js_block %}

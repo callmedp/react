@@ -1,0 +1,375 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title> Varification Report Orderitems- Shinelearning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Varification Reports</h3>
+      </div>
+
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="filter-tables">
+          <div class="title_right">
+            <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+
+                <div style="display:none">
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.modified }}
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.payment_date }}
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+
+                <span class="input-group-btn">
+                  <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
+                </span>
+
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+
+    <div class="row top_tiles">
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+      </div>
+      <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+                </div>
+                <div class="modal-body">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:partner:varificationreports" %}" id="list-filter-form">
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.payment_date }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.modified.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.modified }}
+                            </div>
+                            <br/>
+                        </div>
+                       {% if query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- /modals -->
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+    
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action" id="inbox-table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">#ItemId</th>
+                    <th class="column-title">OrderId</th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Email</th>
+                    <th class="column-title">Mobile</th>
+                    <th class="column-title">Item Name</th>
+                    <th class="column-title">Order Details</th>
+                    <th class="column-title">Initial Document</th>
+                    <th class="column-title">Upload verification Report</th>
+                    <th class="column-title">Submit Msg</th>
+                    <th class="column-title">Payment Date</th>
+                    <th class="column-title">How Old</th>
+                  </tr>
+                </thead>
+
+                <tbody id="body-table-list">
+                  {% for obj in page %}
+                  {% with obj.get_test_obj as test_obj %}
+                    <tr class="even pointer">
+                      
+                      <td>{{obj.pk}}</td>
+                      <td>{{obj.order.number}}</td>
+                      <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
+                      <td>{{obj.order.email}}</td>
+                      <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
+                      <td>
+                            {% if obj.parent and obj.is_variation %}
+                              {{obj.parent.product.get_name}}:</br>
+                            {% endif %}
+                                {{obj.product.get_name}}<br/>
+                            {%if obj.product.product.get_exp_db %}
+                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_studymode_db %}
+                                <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_coursetype_db %}
+                                <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_duration_db %}
+                                <strong>Duration:</strong> {{obj.product.get_duration_db}}
+                            {% endif %}
+                      </td>
+                      
+                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
+
+                       <td>
+                           {% if obj.oi_draft %}
+                                <a target="_blank" href="{{obj.oi_draft.url}}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                           {% endif %}
+                        </td>
+
+                        <td>
+                            {% if obj.product.type_flow != 10 or test_obj %}
+                            <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                                {{draft_form.file}}
+                                <div style="display:none">
+                                    <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                                    <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="{{obj.product.type_flow}}" />
+                                </div>
+                                <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                            </form>
+                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                      </button>
+                                      <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+                                    </div>
+                                    <div class="modal-body" id="myModalbody{{obj.pk}}">
+                                      Are You Sure???
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="uploadDraft('{{obj.pk}}',)">Yes</button>
+                                    </div>
+
+                                  </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                                <fieldset>
+
+                                    {% for field in message_form %}
+                                        <div class="form-group"> 
+                                            <div class="col-md-8">
+                                                {{ field }}
+                                                {% if field.help_text %}
+                                                    <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div style='display:none'>
+                                        <input type="hidden" name="pk" value="{{obj.pk}}">
+                                    </div>
+                                </fieldset>
+                                  <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                      <center><button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button></center>
+                                    </div>
+                                </div>
+                            </form>
+                          </td>
+
+                        <td>{{obj.order.payment_date.date}}</td>
+
+                        <td>
+                            {{obj.modified|naturaltime}}
+                            <b>Updated On: {{obj.modified.date}}</b>
+                        </td>
+                    </tr>
+                  {% endwith %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% block main_pagination %}
+                <div class="main_pagination">
+                  {% if page %}
+                  <div class="col-sm-4">
+                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+                        {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+                        {% endwith %}
+                      </div>
+                  </div>
+
+                <div class="col-sm-8">
+                    <div class="pull-right">
+                        <ul class="pagination">
+                        {% if page.has_previous %}
+                            <li class="paginate_button previous">
+                                <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in begin %}
+                            <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if middle %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in middle %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                    
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page_end %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in page_end %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                {% endif %}
+
+
+      </div><!-- main_pagination end here -->
+      {% endblock main_pagination %}
+     
+                
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+
+  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
+
+  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
+
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+        $('.date-range-picker').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+              format: 'DD/MM/YYYY',
+              cancelLabel: 'Clear',
+            },
+            maxDate: moment().endOf("day"),
+        },function(start, end, label) {
+          
+        });
+
+        $('.date-range-picker').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+        });
+
+        $('.date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        })
+
+        $('#id_filter').click(function(){
+            $('#list-filter-form').submit();
+        });
+    });
+
+ </script>
+
+{% endblock js_block %}

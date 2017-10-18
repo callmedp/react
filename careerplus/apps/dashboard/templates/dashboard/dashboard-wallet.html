@@ -1,0 +1,147 @@
+{% extends "basic/base1.html" %}
+{% load static compress %}
+{% spaceless %}
+
+    
+    {% block title %}My Wallet|Shinelearning{% endblock title %} 
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/css" href="{% static "/shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+    
+    <!-- main section start -->
+    {% block main_container %}
+
+      {% block page_heading %}
+
+       {% block breadcrumb %}
+           <!-- breadcrums -->
+            <section class="container">
+              <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li class="active">Dashboard</li>
+              </ol>
+            </section>
+       {% endblock breadcrumb %}
+      
+      {% endblock page_heading %}
+
+      {% block main_section %}
+          <section class="container mt-10">
+
+            <!-- page content body start -->
+            <div class="row">
+
+            {% block left_content %}
+                <!-- left content start -->
+                <div class="col-sm-3 dashboard-tab">
+                    <a href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
+                    <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
+
+                    <a class="active" href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
+                    {% if roundone_user %}
+                    <a href="{% url "dashboard:roundone-dashboard" %}"><span class="referal-icon"></span> Referral</a>
+                    {% endif %}
+                    <div class="please-call">
+                      Please call us at <a href="tel:0124-3955001"><strong>0120-4959420/32</strong></a> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.
+                    </div>
+                </div>  
+                <!-- left content end -->
+            {% endblock left_content %}
+
+            {% block right_content %}
+                <!-- right content start -->
+                {% if wal_total or wal_txns.exists %}
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="notification">loyality points - {{wal_total|floatformat:2}} <small>|</small><a href="{% if cart_count %}{% url "cart:cart-product-list" %}{% else %}/{% endif %}">Redeem now</a></div>
+                        </div>
+                      </div>
+                      
+                      <div class="table-heading">Shine loyality points</div>
+                      <ul class="table-data">
+                        <li class="data-heading">
+                          <datalist class="col-sm-2">
+                            Date
+                          </datalist>
+                          <datalist class="col-sm-2">
+                            Description
+                          </datalist>
+                          <datalist class="col-sm-2 col-md-3">
+                            Order id
+                          </datalist>
+                          <datalist class="col-sm-2">
+                            Loyality points
+                          </datalist>
+                          <datalist class="col-sm-2">
+                            Expiry date
+                          </datalist>
+                          <datalist class="col-sm-2 col-md-1">
+                            Balance
+                          </datalist>
+                        </li>
+                        {% for obj in wal_txns %}
+                            <li>
+                              <datalist class="col-sm-2">
+                                {{obj.created.date}}
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                {{obj.get_txn_type}}
+                              </datalist>
+                              <datalist class="col-sm-2 col-md-3">
+                                <strong>{{obj.order.number}}</strong>
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                <strong>{{obj.point_value}}</strong>
+                              </datalist>
+                              <datalist class="col-sm-2">
+                                {% if obj.txn_type == 1 %}
+                                    {{obj.added_point_expiry}}
+                                {% endif %}
+                              </datalist>
+                              <datalist class="col-sm-2 col-md-1">
+                                  <strong>{{obj.current_value}}</strong>
+                              </datalist>
+                            </li>
+                        {% endfor %}
+
+                      </ul>
+                    </div>
+                {% else %}
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                        <div class="empty-wallet">
+                            <figure class="empty-cart-pic"></figure>
+                            <article>Start with your first order and earn loyalty points</article>
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- right content end -->
+            {% endblock right_content %}
+
+            </div>
+            <!-- page content body end -->
+
+        </section>
+        <!-- main section end -->
+      {% endblock main_section %}
+
+      {% block recommended_products %}
+          {% include "shop/partials/recommended_product.html" %}
+      {% endblock recommended_products %}
+
+    {% endblock main_container %}
+
+    {% block js_section %}
+        {{block.super}}
+        {% compress js %}
+        <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+        {% endcompress %}
+    {% endblock js_section %}
+    {% block johukum %}
+{% endblock johukum %}
+  
+{% endspaceless %}

@@ -1,0 +1,117 @@
+{% load static sekizai_tags compress %}
+{% spaceless %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+    {% block head %}
+    {% block meta_html %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width shrink-to-fit=no, initial-scale=1.0, user-scalable=0">
+{#        <meta name="viewport" content="width=device-width ">#}
+        {% block django_meta %}
+        {% endblock django_meta %}
+    {% endblock meta_html %}
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %}Shine Learning{%endblock title%}</title>
+
+       {% block canonical_url %}
+            <link rel="canonical" href="{{ request.build_absolute_uri }}">
+       {% endblock canonical_url %}
+    
+    {% block css_section %}
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
+        {% compress css %}
+        <link href="{% static 'shinelearn/css/mobile/common/global.css' %}" rel="stylesheet">
+        <link href="{% static 'shinelearn/css/mobile/common/icons.css' %}" rel="stylesheet">
+        <link href="{% static 'shinelearn/css/mobile/common/navigation.css' %}" rel="stylesheet">
+        <link href="{% static 'shinelearn/css/mobile/common/images.css' %}" rel="stylesheet" >
+        {% endcompress %}
+    {% endblock css_section %}
+    {% endblock head %}
+{% endspaceless %}
+    {% render_block "custom_css" %}
+    {{ JS_SETTINGS|safe }}
+{% spaceless %}
+   </head>
+
+
+    <body>
+        {% block main_container %}
+        <div class="wrapper">
+            {% block header %}
+            <!-- header menu Icon Starts here -->
+                <header class="w100fl">
+                    <!-- header menu Icon Starts here -->
+                   <div class="main-menu w100fl">
+                    <div class="pull-left">
+                        <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a> 
+                        {% block back_icon %}
+                           <a href="/" class="icon-logo pull-left"></a>
+                        {% endblock back_icon %}
+                        
+                    </div><!-- / Left side Icon ends here -->
+
+                   <div class="pull-right">
+                        <!--a class="icon-search pull-left " href="search-listing.html">search</a--> 
+                        <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                   </div><!-- / Right side Icon ends here -->
+                </div><!-- header menu Icon ends here -->
+
+
+                    {% block header_title %}{% endblock header_title %}
+
+                    <!-- Search listing tagging ends here -->
+                </header><!-- header ends here -->
+            {% endblock header %}
+
+
+            {% block container %}
+                {% comment %}
+                <div class="body-wrapper mb-50">
+                    <!-- main section start -->
+                </div>
+                {% endcomment %}
+            {% endblock container %}
+
+            {% block footer %}
+                <!-- footer -->
+                {% include 'basic/footer.html' %}
+            {% endblock footer %}
+
+            {% block navigation %}
+                <!-- left side menu -->
+                {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
+        </div>
+        {% endblock main_container %}
+
+    {% block js_section %}
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
+        {% compress js %}
+        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
+        <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+        <script src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+        <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
+        <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
+        {% endcompress %}
+        {% block johukum %}
+        <script type='text/javascript' id='spd-busns-spt' async=''
+            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
+            data-client='324ed0abb0694b0c66a6daecb178352d'>
+        </script>
+        {% endblock johukum %}
+    {% endblock js_section %}
+{% endspaceless %}
+    {% render_block "custom_js" %}
+{% spaceless %}
+    </body>
+</html>
+{% endspaceless %}
+

@@ -1,0 +1,184 @@
+{% load static %}
+{% spaceless %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shine Learning</title>
+</head>
+
+<body style="margin: 0; padding: 0;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
+  <tbody>
+    <tr>
+      <td bgcolor="#ffb48f">
+      	<img src="https://static1.shine.com/shinecp/shinelearn/images/emailers/banner_process.jpg" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
+      	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #18549e; padding: 5px 10px 15px 10px;">
+      		{{subject}}
+      	</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px; background-color: #f8f8f8;">
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if username %}{{username}} {% else %} User {% endif %},</strong>
+      	<span style="display: block; padding-bottom: 3px;">Shine learning wishes you all the best for your learning ahead! </span>
+      	<strong>You can avail your services as below:</strong>
+      </td>
+    </tr>
+  {% if type_flow == 2 or type_flow == 6 %}
+    <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+            <tr>
+              <td style="font-size:14px; color:#333; padding-bottom:10px;">
+                <span>We bring <a href="{{oi.product.get_absolute_url}}" style="text-decoration: none; color: #2196f3">{{oi.product.name}}</a> course(s) in collaboration with partner(s)<strong>{{oi.product.vendor.name}}</strong> respectively.</span>
+                <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
+              </td>
+            </tr>
+            <tr>
+              <td style=" padding:10px 0;">
+                <strong>As the next step ,</strong>
+                <ol style="margin: 0px; padding: 2px 15px;">
+                  <li style="padding-bottom: 10px;"> You will receive an acknowledgment email, along with a login credentials and course link from our associate partner(s). </li>
+                  <li style="padding-bottom: 5px;">  Use these login credentials on following respective site(s) to get free access to your chosen courses: </li>
+                  <ul style="margin: 0px; padding:0px 15px; list-style-type: lower-alpha; line-height: 20px;">
+                    <li>For {{oi.product.name}}: <a href="{{oi.product.get_absolute_url}}" style="text-decoration: none; color: #2196f3">
+                    {{oi.product.vendor.name}}</a></li>
+                    <li>For Prince2: <a href="#" style="text-decoration: none; color: #2196f3">Owner 2 site</a> </li>
+                    <li>For PMI Agile: <a href="#" style="text-decoration: none; color: #2196f3">Owner 3 site</a> </li>
+                  </ul>
+                </ol>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+  {% if type_flow == 1 or type_flow == 3 %}
+    <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+      	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+          <tr>
+            <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">{{product_name}}</a></span>
+            <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
+            </td>
+          </tr>
+          <tr>
+           <td style=" padding:10px 0;">
+            	<ol style="margin: 0px; padding: 0px 15px;">
+            		<li style="padding-bottom: 10px;">  In order to start your services, we require your current resume.</li>
+      			<a href="{{upload_url}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Upload your details</a>
+            		<li style="padding-bottom: 5px; padding-top:20px;">Our professional experts will contact you for detailed discussion.</li>
+            		<li>Post discussion you will get your professional document from our experts. </li>
+            		
+            	</ol>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+  {% if type_flow == 8 %}
+   <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+      	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+            <tr>
+              <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">Linkedin</a></span>
+              <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
+              </td>
+            </tr>
+            <tr>
+             <td style=" padding:10px 0;">
+              	<ol style="margin: 0px; padding: 0px 15px;">
+              		<li style="padding-bottom: 10px;">  In order to start your services, we need you to fill in your details.</li>
+        			<a href="{{counselling_form}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 170px;font-size: 14px;">Complete Counselling Form</a>
+              		<li style="padding-bottom: 5px; padding-top:20px;">Our professional experts will contact you for detailed discussion. </li>
+              		<li> Post discussion you will get your professional document from our experts.</li>
+              		
+              	</ol>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+  {% if type_flow == 9 %}
+    <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+      	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+            <tr>
+              <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">Round one</a></span>
+              <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
+              </td>
+            </tr>
+            <tr>
+             <td style=" padding:10px 0;">
+              	<ol style="margin: 0px; padding: 0px 15px;">
+              		<li style="padding-bottom: 10px;">  In order to apply for job referrals , please complete your profile.</li>
+        			<a href="{{complete_profile}}" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 180px;font-size: 14px;">Complete your profile</a>
+              		<li style=" padding-top:20px;">Post the completion of your profile , your service will be initiated.</li>
+              		
+              	</ol>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+  {% if type_flow == 10 %}
+    <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+      	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+          <tr>
+            <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">Studymate</a></span>
+            <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
+            </td>
+          </tr>
+          <tr>
+           <td style=" padding:10px 0;">
+            	<ol style="margin: 0px; padding: 0px 15px;">
+            		<li style="padding-bottom: 10px;">  In order to start your course, please take a compulsory test .</li>
+      			<a href="" target="_blank" style="display: block; color: #fff; text-decoration: none; background-color: #3c5b9b; padding:7px 0px; text-align: center; border-radius:3px; width: 100px;font-size: 14px;">Take now</a>
+            		<li style=" padding-top:20px;">Post the completion of test, you can start with course</li>
+            		
+            	</ol>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+    <tr>
+    	<td style="padding: 10px;background-color: #f8f8f8;">
+    		<strong style="display: block; font-weight: normal; font-size: 12px; color: #333333; padding-top: 10px;">
+    		 Warm Regards, <br>
+    		 Shine Learning Team
+    		</strong>
+    	</td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px; border-top: 1px solid #f4f4f4;background-color: #f8f8f8;">
+    		<span style="color: #999999; padding-bottom: 5px; display: block; font-size: 11px; line-height: 16px;">
+	    		Please add <a href="mailto:alert@shinelearning.com" style="color: #2196f3; text-decoration: none;">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.
+	    	</span>
+	    	<span style="color: #999999; padding-bottom: 10px; display: block; font-size: 11px; line-height: 16px;">
+	    		<strong style="color: #525252; font-weight: normal;">Security Alert</strong> - In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="#" style="color: #2196f3; text-decoration: none;">Shinelearning.com</a> by writing to us at <a href="mailto:contactus@shinelearning.com" style="color: #2196f3; text-decoration: none;">contactus@shinelearning.com</a>. Please note that such offers / emails are a violation of our Terms and Conditions, and Shine.com does not endorse such communication with candidates. Please <a href="#" style="color: #2196f3; text-decoration: none;">click here</a> if you do not want to receive any further communication from us.
+	    	</span>
+    	</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+{% endspaceless %}

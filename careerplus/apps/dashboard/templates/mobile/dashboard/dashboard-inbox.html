@@ -1,0 +1,78 @@
+{% extends "mobile/basic/base.html" %}
+{% load static thumbnail compress %}
+
+
+{% block title %}My Inbox | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css %}
+    <style type="text/css">
+        .error{
+            color: red;
+        }
+    </style>
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+    <header class="w100fl he-auto">
+        
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="icon-bar pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a class=" pull-left"  role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+                
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">Inbox</h1>
+        
+
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <!-- content box Starts here -->
+    {% if empty_inbox %}
+        {% include "partial/empty_inbox.html" %}
+    {% else %}
+    <div class="body-wrapper">
+        <div class="content-box">
+            <div class="container" id="orderitem-inbox-box">
+                {{inbox_list|safe}}
+
+            </div><!-- /container -->
+        </div><!-- content box ends here -->
+    </div><!-- body wrapper ends here -->
+    
+    {% endif %}
+    
+    {% block pending_items %}
+        {% include "partial/notification-box.html" %}
+    {% endblock pending_items %}
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    <script src="{% static "shinelearn/js/mobile/dashboard/dashboard.js" %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

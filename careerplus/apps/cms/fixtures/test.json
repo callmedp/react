@@ -1,0 +1,616 @@
+[
+{
+    "model": "cms.columnheading",
+    "pk": 1,
+    "fields": {
+        "column": 1,
+        "name": "Choose Function Area",
+        "indexer": 1
+    }
+},
+{
+    "model": "cms.columnheading",
+    "pk": 2,
+    "fields": {
+        "column": 2,
+        "name": "Choose Other Formats",
+        "indexer": 1
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 1,
+    "fields": {
+        "indexer": 1,
+        "column": 1,
+        "url": "",
+        "name": "IT Software"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 2,
+    "fields": {
+        "indexer": 1,
+        "column": 1,
+        "url": "",
+        "name": "IT Hardware"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 3,
+    "fields": {
+        "indexer": 1,
+        "column": 1,
+        "url": "",
+        "name": "Sales"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 4,
+    "fields": {
+        "indexer": 1,
+        "column": 1,
+        "url": "",
+        "name": "Finance"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 5,
+    "fields": {
+        "indexer": 1,
+        "column": 2,
+        "url": "",
+        "name": "Covver Letter"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 6,
+    "fields": {
+        "indexer": 1,
+        "column": 2,
+        "url": "",
+        "name": "Resume Summary Statement"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 7,
+    "fields": {
+        "indexer": 1,
+        "column": 2,
+        "url": "",
+        "name": "Executive Summary"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 8,
+    "fields": {
+        "indexer": 1,
+        "column": 1,
+        "url": "",
+        "name": "Marketing"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 9,
+    "fields": {
+        "indexer": 1,
+        "column": 1,
+        "url": "",
+        "name": "Operations"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 10,
+    "fields": {
+        "indexer": 1,
+        "column": 2,
+        "url": "",
+        "name": "Linkdin Profile Summary"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 11,
+    "fields": {
+        "indexer": 1,
+        "column": 2,
+        "url": "",
+        "name": "Resignation Letter"
+    }
+},
+{
+    "model": "cms.indexcolumn",
+    "pk": 12,
+    "fields": {
+        "indexer": 1,
+        "column": 2,
+        "url": "",
+        "name": "statement of purpose"
+    }
+},
+{
+    "model": "cms.document",
+    "pk": 1,
+    "fields": {
+        "doc": "documents/cms/page/passport_apointment.pdf",
+        "is_active": true,
+        "priority": 1,
+        "page": 1
+    }
+},
+{
+    "model": "cms.pagecounter",
+    "pk": 2,
+    "fields": {
+        "page": 1,
+        "count_period": "2017-04-01",
+        "no_views": 384,
+        "no_downloads": 33,
+        "no_shares": 0,
+        "comment_count": 3,
+        "added_on": "2017-04-06T11:47:29.717Z",
+        "modified_on": "2017-04-10T06:42:20.436Z"
+    }
+},
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$mAT8OvE0h4dr$dbonG5sK639NlixrUUhaT7cxk3tBfmpdOgE//o8zINY=",
+        "last_login": "2017-04-10T06:04:11.646Z",
+        "is_superuser": true,
+        "name": "root",
+        "email": "root@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-03-29T04:08:37Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "cms.indexerwidget",
+    "pk": 1,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T04:31:39.938Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T17:17:19.710Z",
+        "heading": "Choose and Download Resume Format and Samples Written by our Experts"
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 1,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T04:41:37.404Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:26:08.133Z",
+        "widget_type": 1,
+        "heading": "",
+        "redirect_url": "",
+        "image": "",
+        "image_alt": "",
+        "description": "<p>As a Fresher, your Resume is one of the most important tool to get you a job interview, hence it deserves dedicated time and attention. Remember that as you have no full time work experience, you will be valued by employers for your attitude, skills and ability to work and deliver in teams. And the key in writing an impactful resume is to present a match between your qualities and the requirement of the job.</p>\r\n\r\n<h2>Formatting</h2>\r\n\r\n<ul>\r\n\t<li>Resume Format for Fresher</li>\r\n\t<li>For Banking - Freshers</li>\r\n\t<li>For IT Professional - Freshers</li>\r\n\t<li>For Finance Freshers</li>\r\n\t<li>For Teachers - Fresher</li>\r\n</ul>",
+        "document_upload": "",
+        "display_name": "",
+        "writer_designation": "",
+        "iw": null,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 2,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T04:44:39.702Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:37:55.359Z",
+        "widget_type": 2,
+        "heading": "Download As Pdf",
+        "redirect_url": "",
+        "image": "images/cms/widget/download-pdf.jpg",
+        "image_alt": "download_pdf",
+        "description": "",
+        "document_upload": "",
+        "display_name": "",
+        "writer_designation": "",
+        "iw": null,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 3,
+    "fields": {
+        "created_by": null,
+        "created_on": "2017-04-04T04:49:15.619Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:25:48.637Z",
+        "widget_type": 5,
+        "heading": "What our Content Writer says about this Resume Format   Shine",
+        "redirect_url": "",
+        "image": "images/cms/widget/writer-pic.jpg",
+        "image_alt": "content-writer",
+        "description": "<p><strong>Why do you think this is the best profile?</strong></p>\r\n\r\n<p>A profile which makes customer happy is considered as the best profile.</p>\r\n\r\n<p><strong>What were the challenges faced while drafting this cv format?</strong></p>\r\n\r\n<p>While developing this resume, I had to face a lot of challenges. The client did not like the resume in first go, he was not satisfied with the content and the layout. He rejected the resume a couple of times and even was irritated by the time of development call. But then I took it as a challenge and completed the resume and finally the client liked it.</p>",
+        "document_upload": "",
+        "display_name": "Sana Praveen",
+        "writer_designation": "Resume Writing Expert",
+        "iw": null,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 4,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T04:55:56.102Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:25:36.923Z",
+        "widget_type": 7,
+        "heading": "Shine Ad",
+        "redirect_url": "https://www.shine.com/",
+        "image": "images/cms/widget/shine-banner.jpg",
+        "image_alt": "shine",
+        "description": "",
+        "document_upload": "",
+        "display_name": "",
+        "writer_designation": "",
+        "iw": null,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 5,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T04:59:39.635Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:25:17.139Z",
+        "widget_type": 6,
+        "heading": "REQUEST A CALL",
+        "redirect_url": "",
+        "image": "",
+        "image_alt": "",
+        "description": "",
+        "document_upload": "",
+        "display_name": "",
+        "writer_designation": "",
+        "iw": null,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 6,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:02:42.613Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:25:02.274Z",
+        "widget_type": 4,
+        "heading": "FREE PRACTICE TEST",
+        "redirect_url": "http://careerplus.shine.com/test-preparation",
+        "image": "images/cms/widget/practice-test.jpg",
+        "image_alt": "practice-test",
+        "description": "",
+        "document_upload": "",
+        "display_name": "",
+        "writer_designation": "",
+        "iw": null,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 7,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:05:07.815Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:23:32.595Z",
+        "widget_type": 3,
+        "heading": "RELATED",
+        "redirect_url": "",
+        "image": "",
+        "image_alt": "",
+        "description": "",
+        "document_upload": "",
+        "display_name": "",
+        "writer_designation": "",
+        "iw": null,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.widget",
+    "pk": 8,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:19:49.422Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T05:23:16.322Z",
+        "widget_type": 8,
+        "heading": "",
+        "redirect_url": "",
+        "image": "",
+        "image_alt": "",
+        "description": "",
+        "document_upload": "",
+        "display_name": "",
+        "writer_designation": "",
+        "iw": 1,
+        "is_external": false,
+        "is_pop_up": false,
+        "is_active": true
+    }
+},
+{
+    "model": "cms.page",
+    "pk": 1,
+    "fields": {
+        "url": "",
+        "title": "Resume Format For Freshers",
+        "meta_desc": "",
+        "meta_keywords": "",
+        "heading": "",
+        "created_by": 1,
+        "created_on": "2017-04-04T04:22:38.246Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-10T06:42:20.376Z",
+        "name": "Resume Format For Freshers",
+        "parent": null,
+        "slug": "resume-format-for-freshers",
+        "total_view": 384,
+        "total_download": 33,
+        "total_share": 5,
+        "is_active": true,
+        "show_menu": false,
+        "allow_comment": true,
+        "comment_count": 3,
+        "publish_date": null,
+        "expiry_date": null
+    }
+},
+{
+    "model": "cms.page",
+    "pk": 2,
+    "fields": {
+        "url": "",
+        "title": "",
+        "meta_desc": "",
+        "meta_keywords": "",
+        "heading": "",
+        "created_by": null,
+        "created_on": "2017-04-08T10:09:05.033Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-08T10:09:05.033Z",
+        "name": "Resume Format For experience",
+        "parent": null,
+        "slug": "resume-format-for-experience",
+        "total_view": 0,
+        "total_download": 0,
+        "total_share": 0,
+        "is_active": false,
+        "show_menu": false,
+        "allow_comment": false,
+        "comment_count": 0,
+        "publish_date": null,
+        "expiry_date": null
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 1,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:08:55.665Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T05:08:55.665Z",
+        "page": 1,
+        "widget": 7,
+        "section": "right",
+        "ranking": 2
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 2,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:09:41.967Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T05:09:41.967Z",
+        "page": 1,
+        "widget": 6,
+        "section": "right",
+        "ranking": 0
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 3,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:10:07.031Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T05:10:07.031Z",
+        "page": 1,
+        "widget": 5,
+        "section": "right",
+        "ranking": 1
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 4,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:10:32.422Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T05:10:32.422Z",
+        "page": 1,
+        "widget": 4,
+        "section": "right",
+        "ranking": 3
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 5,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:12:35.736Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T05:12:35.736Z",
+        "page": 1,
+        "widget": 3,
+        "section": "left",
+        "ranking": 1
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 6,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:14:14.725Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T09:58:40.826Z",
+        "page": 1,
+        "widget": 2,
+        "section": "left",
+        "ranking": 4
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 7,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:14:49.338Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T05:14:49.338Z",
+        "page": 1,
+        "widget": 1,
+        "section": "left",
+        "ranking": 2
+    }
+},
+{
+    "model": "cms.pagewidget",
+    "pk": 8,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-04T05:20:51.141Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-04T05:20:51.141Z",
+        "page": 1,
+        "widget": 8,
+        "section": "left",
+        "ranking": 3
+    }
+},
+{
+    "model": "cms.comment",
+    "pk": 3,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-05T06:59:12.954Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-08T10:22:17.755Z",
+        "page": 1,
+        "message": "hiii man..",
+        "is_published": true,
+        "is_removed": false,
+        "replied_to": null
+    }
+},
+{
+    "model": "cms.comment",
+    "pk": 5,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-05T13:04:00.320Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-05T13:04:55.371Z",
+        "page": 1,
+        "message": "hello",
+        "is_published": true,
+        "is_removed": false,
+        "replied_to": null
+    }
+},
+{
+    "model": "cms.comment",
+    "pk": 6,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-07T09:59:38.375Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-07T09:59:58.955Z",
+        "page": 1,
+        "message": "jhjhjh",
+        "is_published": true,
+        "is_removed": false,
+        "replied_to": null
+    }
+},
+{
+    "model": "cms.comment",
+    "pk": 7,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-07T11:33:37.306Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-08T10:21:08.560Z",
+        "page": 1,
+        "message": "hello",
+        "is_published": true,
+        "is_removed": false,
+        "replied_to": null
+    }
+},
+{
+    "model": "cms.comment",
+    "pk": 8,
+    "fields": {
+        "created_by": 1,
+        "created_on": "2017-04-08T10:24:27.730Z",
+        "last_modified_by": null,
+        "last_modified_on": "2017-04-08T10:24:27.730Z",
+        "page": 1,
+        "message": "superb..",
+        "is_published": false,
+        "is_removed": false,
+        "replied_to": null
+    }
+}
+]

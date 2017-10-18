@@ -1,0 +1,55 @@
+{% load static %}
+{% load thumbnail %}
+
+{% for obj in page_obj %}
+  <div class="box-panel row ">
+    <div class="media">
+      <a title="{{obj.display_name}}" href="{% url "blog:articles-deatil" obj.slug obj.pk %}">
+        {% if obj.image %}
+            <figure class="media-left">
+                {% thumbnail obj.image "96x73" crop="center" as im %}
+                   <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="...">
+                {% endthumbnail %}
+            </figure>
+        {% endif %}
+        <div class="media-body rel">
+          <h3 class="media-heading">{{obj.display_name}}</h3>
+
+          <div class="blog-author fs-11">
+            <span class="editor">{{obj.created_by.name}}, {{obj.publish_date.date}}</span>
+            <span class="view-forward">
+              <figure class="icon-forward"></figure> {{obj.comment_moderated}} 
+              <figure class="icon-view icon-grey-view ml-10"></figure> {{obj.no_views}}
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+
+   {% if page_obj.has_next %}
+        {% if active_tab == 0 %}
+            <div id="load_more_recent">
+                <form role="form" id="loadmore-recent-form">
+                    <input type="hidden" name="page" value="{{page_obj.next_page_number}}">
+                    <input type="hidden" name="tab" value="0">
+                    <input type="hidden" name="tag_slug" value="{{tag.slug}}">
+                </form>
+                <div class="w100 text-center">
+                    <a class="btn-slg btn-grey block" role="button" id="recent-loadmore-tag" href="javascript:void();"  >Load more</a>
+                </div>
+            </div>
+        {% else %}
+            <div id="load_more_pop">
+                <form role="form" id="loadmore-pop-form">
+                    <input type="hidden" name="page" value="{{page_obj.next_page_number}}">
+                    <input type="hidden" name="tab" value="1">
+                    <input type="hidden" name="tag_slug" value="{{tag.slug}}">
+                </form>
+                <div class="w100 text-center">
+                    <a class="btn-slg btn-grey block" role="button" id="popular-loadmore-tag" href="javascript:void();" >Load more</a>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}

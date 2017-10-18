@@ -1,0 +1,137 @@
+{% extends "basic/base1.html" %}
+{% load static custom_filters compress %}
+
+{% block css_section %}
+    {{block.super}}
+    <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+    {% compress css %}
+    <link type="text/css" href="{% static '/shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/search/listing.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static '/shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+{% block title %}Search Result Page - Shine Learning{% endblock title %}
+
+{% block main_container %}
+    {% block page_heading %}
+        <!-- header -->
+        <header class="search-header">
+            <div class="container">
+                <!-- breadcrums -->
+                {% block breadcrumbs %}
+                  {% include "shop/partials/breadcrumb.html" %}
+                {% endblock breadcrumbs %}
+
+                {% block product_header %}
+                    <div class="search-caption">
+                        {% if search_type == 'recommended' %}
+                        <div class="home-advanced-search">
+                            <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
+                                {% csrf_token %}
+                                <div class="form-group advanced_functional">
+                                    <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">
+                                    <span class="error-txt" style="display:block;color:red"></span>
+                                </div>
+                                <div class="form-group form-group1">
+                                    <input class="" value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">
+                                    <span class="error-txt" style="display: block;color:red"></span>
+                                </div>
+                                <button type="submit" class="find-jobs-btn btn js_advance_search"></button>
+                            </form>
+                        </div>
+                        {% elif search_type == 'simple' %}
+                        <div class="search-box">
+                            <form class="form-inline" id="search_form" data-role="form">
+                                {% for field in form %}
+                                <div class="form-group">
+                                    {{field}}
+                                </div>
+                                {% endfor %}
+                                <button type="submit" class="find-jobs-btn btn"></button>
+                            </form>
+                        </div>
+                        {% elif search_type == 'func_area' %}
+                            <h1>{{ func_area_name|title }} Courses</h1>
+                        {% endif %}
+                    </div>
+                {% endblock product_header %}
+            </div>
+        </header>
+    {% endblock page_heading %}
+
+
+
+    <!-- main section start -->
+    <section class="container">
+
+    <!-- page content body start -->
+    <div class="row">
+
+    {% if products_found and page.object_list|length > 0 %}
+        {% include "search/partials/search_filters.html" %}
+    {% endif %}
+
+
+    <!-- mid content start -->
+    <div class="col-sm-9 col-md-10 mt-40 ">
+        {% if page.object_list|length > 0 %}
+            <div class="listing-heading-box">
+                {% if products_found %}
+                <div class="form-group custom-select">
+                    <select name="sort" hdn="id_sort" class="form-control cls_filter">
+                        <option value="">Relevance</option>
+                        <option value="1" {% if search_params.sort == '1' %}selected="selected"{% endif %}>Latest</option>
+                        <option value="2" {% if search_params.sort == '2' %}selected="selected"{% endif %}>Review(High to Low)</option>
+                    </select>
+                </div>
+                {% endif %}
+                <h2>{% if products_found %}{{ paginator.count }} products found{% else %}
+                    No products found. Have a look at our most popular products.{% endif %}</h2>
+            </div>
+
+            <ul class="listing1 js_listing">
+                {% include 'search/ajax/search_listing.html' %}
+            </ul>
+            {% if products_found and paginator.num_pages > page.number %}
+                <a href="#" class="load-more cls_load_more">Load more</a>
+            {% endif %}
+        {%endif%}
+    </div>       
+    <!-- mid content end -->
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+{% endblock main_container %}
+
+{% block js_section %}
+    {{block.super}}
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
+    <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/scroller.js' %}"></script>
+    {% endcompress %}
+    <script>
+        {% if facets.fields.pFA|length > 5%}
+            $(window).on("load",function(){
+                $("#filters .scroll").mCustomScrollbar({
+                  setHeight:140,
+                  theme:"dark-3"
+                });
+            });
+        {% endif %}
+        var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
+            skillsSet = {{ skills_set|safe|default:"[]" }},
+            prefetchedFuncArea = '{{ recmnd_func_area }}',
+            prefetchedSkills = '{{ recmnd_skills }}';
+        $('#id_q').typeahead({
+            local: {{ search_context|safe|default:"[]" }}
+        });
+    </script>
+{% endblock js_section %}

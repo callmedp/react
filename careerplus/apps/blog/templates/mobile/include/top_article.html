@@ -1,0 +1,51 @@
+{% load static %}
+{% load thumbnail %}
+
+{% for key, values in article_list.items %}
+{% if values %}
+<section class="content-box">
+    {% if heading %}
+        <h1 class="blog-heading">Top Articles</h1>
+    {% endif %}
+    <div class="box-panel row ">
+        <h2>{{key.name}}</h2>
+        {% for article in values %}
+        <div class="media">
+          <a title="{{article.display_name}}" href="{% url "blog:articles-deatil" article.slug article.pk %}">
+            
+            {% if article.image %}
+                <figure class="media-left">
+                  {% thumbnail article.image "96x73" crop="center" as im %}
+                        <img class="media-object w-auto" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{article.image_alt}}">
+                  {% endthumbnail %}
+                </figure>
+            {% endif %}
+            <div class="media-body rel">
+              <h3 class="media-heading">{{article.display_name}}</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">{{article.created_by.name}}, {{article.publish_date.date}}</span>
+                <span class="view-forward">
+                    <figure class="icon-forward"></figure> {{article.comment_moderated}}
+                    <figure class="icon-view icon-grey-view ml-10"></figure> {{article.no_views}}
+                </span>
+                
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+        
+        <a href="{{key.get_absolute_url}}" class="blue-link fs-14 text-right block">View all articles</a>
+    </div>
+</section><!-- End of Bank job list -->
+{% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+    <div id="load_more" style='display:none'>
+        <div>
+        <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
+        </div>
+    </div>
+{% endif %}

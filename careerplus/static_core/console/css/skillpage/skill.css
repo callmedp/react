@@ -1,0 +1,280 @@
+.skill-header {
+  clear: both;
+  background: url(../images/skill-header-bg.jpg) no-repeat center top;
+  background-size: cover;
+  overflow: hidden;
+  display: block;
+}
+.skill-header .skill-caption {
+  color: #fff;
+  margin: 0 0 4% 0;
+}
+.skill-header .skill-caption h1 {
+  font-size: 50px;
+  font-weight: 300;
+  display: block;
+}
+.skill-header .skill-caption strong {
+  font-size: 18px;
+  font-weight: 600;
+  display: block;
+  margin: 20px 0 30px 0;
+}
+.skill-header .skill-caption .provider {
+  display: inline-block;
+  border-radius: 3px;
+  background-color: #fff;
+  line-height: 40px;
+  font-size: 12px;
+  color: #333;
+  padding: 0 20px;
+}
+.skill-header .skill-caption .provider img {
+  display: inline-block;
+  margin-left: 10px;
+  transform: scale(0.8);
+  -ms-transform: scale(0.8);
+  -webkit-transform: scale(0.8);
+  width: 50px;
+}
+
+.about-course-links {
+  font-size: 15px;
+  color: #333;
+  border-bottom: 1px solid #d8d8d8;
+  display: block;
+  padding: 10px 0;
+}
+.about-course-links a {
+  color: #333;
+  margin-left: 40px;
+}
+.about-course-links a:first-child {
+  margin-left: 0;
+}
+.about-course-links a.active {
+  border-bottom: 2px solid #3f5f94;
+  padding: 9px 0;
+  font-weight: 600;
+}
+
+.about-course-text {
+  font-size: 14px;
+  color: #666;
+}
+.about-course-text iframe {
+  width: 100%;
+}
+.about-course-text .collapse-content {
+  display: inline;
+}
+.about-course-text .in.collapse + a.collapse-content:before {
+  content: '...less';
+}
+.about-course-text .collapse + a.collapse-content:before {
+  content: '...more';
+}
+.about-course-text p {
+  margin-bottom: 15px;
+}
+.about-course-text b, .about-course-text strong, .about-course-text em, .about-course-text u, .about-course-text table, .about-course-text form {
+  margin: 0;
+  padding: 0;
+}
+.about-course-text strong {
+  font-size: 15px;
+  font-weight: 600;
+  display: block;
+}
+
+.career-outcomes {
+  font-size: 14px;
+}
+.career-outcomes h2 {
+  margin-bottom: 15px;
+}
+.career-outcomes ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 20px 20px 20px;
+}
+.career-outcomes ul li {
+  display: inline-block;
+  width: 33%;
+  margin: 18px 0 0 0;
+}
+.career-outcomes ul li:before {
+  content: '';
+  width: 15px;
+  height: 11px;
+  background: url(../images/sprite.png) no-repeat -677px -88px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 7px;
+}
+
+.importance-market {
+  clear: both;
+}
+.importance-market h2 {
+  font-size: 26px;
+  color: #333;
+  margin-bottom: 15px;
+}
+.importance-market figure {
+  padding: 20px;
+}
+
+.market-growth {
+  color: #666;
+  font-size: 15px;
+  padding-right: 0;
+}
+.market-growth strong {
+  font-size: 25px;
+  color: #3f5f94;
+  display: block;
+  font-weight: 400;
+  line-height: 28px;
+}
+.market-growth .media {
+  margin: 0 5px 15px 5px;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.market-growth .media:first-child {
+  border-bottom: 1px solid #f5f5f5;
+  margin-top: 15px;
+  padding-bottom: 15px;
+}
+.market-growth .job-require {
+  font-size: 14px;
+  padding: 15px;
+}
+.market-growth .job-require strong {
+  font-size: 22px;
+  color: #666;
+  display: block;
+  font-weight: 300;
+  line-height: 24px;
+  margin-bottom: 12px;
+}
+
+.listing-box h2 {
+  color: #333;
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+
+.listing {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.listing li {
+  display: block;
+  padding: 10px 0 10px 10px;
+  margin: 0 0 25px 0;
+}
+.listing li:hover {
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+}
+.listing .media {
+  margin-top: 0;
+}
+.listing .listing-heading {
+  margin: 0 0 5px 0;
+  display: block;
+  color: #3f5f94;
+  font-size: 20px;
+  font-weight: 600;
+}
+.listing .certification-jobs-box {
+  float: right;
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 10px 20px;
+  min-width: 180px;
+}
+.listing .certification-jobs-box .certification-jobs {
+  border-top: 1px solid #f6f6f6;
+  padding: 10px;
+  display: block;
+}
+.listing .certification-jobs-box .certification-jobs:first-child {
+  border-top: none;
+}
+.listing .certification-jobs-box .certification-jobs .jobs-number {
+  color: #3f5f94;
+  font-weight: 600;
+}
+.listing .certification-jobs-box .certification-jobs figure {
+  margin-right: 5px;
+}
+.listing .rating-review-box {
+  display: block;
+  color: #999;
+}
+.listing .rating-review-box strong {
+  font-weight: 600;
+  margin-left: 5px;
+}
+.listing .rating-review-box b {
+  font-weight: 600;
+  margin-left: 10px;
+  font-size: 14px;
+  color: #3f5f94;
+}
+.listing .providers {
+  color: #666;
+  display: block;
+  margin: 10px 0 0 0;
+}
+.listing .providers span {
+  display: inline-block;
+  background-color: #ededed;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3f5f94;
+  padding: 3px 5px;
+  border-radius: 3px;
+  margin: 0 5px 0 0;
+}
+.listing .providers span:first-child {
+  margin-left: 10px;
+}
+.listing .pricing-box {
+  border-top: 1px solid #f6f6f6;
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-top: 15px;
+  padding-top: 5px;
+  clear: both;
+}
+.listing .pricing-box strong {
+  font-size: 20px;
+  color: #333;
+  font-weight: 600;
+}
+.listing .pricing-box strike {
+  color: #7f7f7f;
+}
+.listing .pricing-box .discount {
+  color: #45b34e;
+}
+
+.query-form-right h2 {
+  text-align: center;
+  border-bottom: none;
+  text-transform: uppercase;
+  font-size: 20px;
+  padding-bottom: 0;
+}
+
+.scroll {
+  margin-top: -65px;
+  padding-top: 65px;
+}
+
+/*# sourceMappingURL=skill.css.map */

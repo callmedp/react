@@ -1,0 +1,203 @@
+{% extends "basic/base1.html" %}
+{% load static thumbnail compress %}
+
+{% block title %}About Us - Shine Learning{% endblock title %}
+    {% block meta_html %}
+        {{block.super}}
+        <meta name="description" content="Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses">
+        {% block canonical %}
+            <link rel="canonical" href="{{ request.build_absolute_uri }}">
+        {% endblock canonical %}
+
+    {% endblock meta_html %}
+    
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static "shinelearn/css/homepage/about.css" %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+    
+
+{% block main_container %}
+    {% block page_heading %}
+        <!-- header -->
+        <header>
+          <div class="about-header">
+            <div class="container">
+              <div class="about-heading">
+                <h1>About us</h1>
+              </div>
+            </div>
+          </div>
+        </header>
+    {% endblock page_heading %}
+    
+    <!-- why us start -->
+    <section class="container why-us-box mt-10">
+
+        <!-- content start -->
+        <div class="row">
+
+        <div class="col-sm-7">
+          Shine.com is the 2nd leading job portal in India. As a part of Shine.com, Shinelearning has in depth insight into various job listings and industries. As a true professional job site, we understand your career needs and aspirations. In order to diversify and broaden up the horizon, Shine.com has put its endeavor into learning online courses as well.  With a rich background and a strong legacy of being a part of HT Media Ltd., we have earned trust across the job market today.<br><br>
+
+    With humongous effort and sincere dedication, Shine Shinelearning has turned out to be the biggest marketplace for e-learning courses in India with 650+ courses by top notch partners. We cater to all candidates who are looking for resume services, career advice, certifications or e-learning courses, under one umbrella in the form of an integrated career solution. 
+    <br><br>
+    We have not stopped just there only, we believe in re-inventing and innovating new products. We were the first platform to provide specialized social media profile services ranging from LinkedIn profile writing to summary writing across all levels of work experience.
+        </div>
+
+        <div class="col-sm-5">
+          <div class="why-us box-panel">
+            <h2>Why Us?</h2>
+            <p>If you feel similar things as below, we are the right options for you to choose:</p>
+            <ul>
+              <li>Feeling stuck in career?</li>
+              <li>In a fix as how to present your professional experience in a CV and that too effectively?</li>
+              <li>Have all the skills and knowledge but unable to highlight them in the CV?</li>
+              <li>Need to be specialized and rule in your own area of specialization</li>
+            </ul>
+          </div>
+        </div>
+
+        </div>
+        <!-- content end -->
+
+    </section>
+    <!-- why us end -->
+
+    <!-- We provide start -->
+    <section class="container-fluid text-center we-provide mt-10">
+
+        <!-- content start -->
+        <div class="container">
+          <div class="row">
+              <h2>We provide</h2>
+
+            <ul>
+              <li class="box-panel">
+                <figure class="icon-resume-writing"></figure>
+                <h3>Resume writing</h3>
+                <p>
+                  Our customer focused and quality conscious expert writers will give you superior quality, professional resume after discussing the same with you. This will highlight your work experience, skills, industry, domain and education.
+                </p>
+              </li>
+
+              <li class="box-panel">
+                <figure class="icon-certifications"></figure>
+                <h3>Certifications</h3>
+                <p>
+                  Choose from a large bouquet of 
+        courses / certifications to enhance and authorize your skills and knowledge. Boost your career with several options of courses to choose from.
+                </p>
+              </li>
+
+              <li class="box-panel">
+                <figure class="icon-linkedIn-profile"></figure>
+                <h3>LinkedIn Profile</h3>
+                <p>
+                  With a counseling and discussion, 
+        our experts understand your profile and requirement and build your professional brand. We help you connect with recruiters.
+                </p>
+              </li>
+
+              <li class="box-panel">
+                <figure class="icon-free-resources"></figure>
+                <h3>Free Resources</h3>
+                <p>
+                  We let you use our collection 
+        of large number of free resume formats and templates to give you a picture of how your resume should look like.
+                </p>
+              </li>
+
+              <li class="box-panel">
+                <figure class="icon-career-advice"></figure>
+                <h3>Career Advice</h3>
+                <p>
+                  Get career direction and guidance by expert’s help to choose and boost up your career path? 
+                </p>
+              </li>
+
+            </ul>
+
+          </div>
+        </div>
+        <!-- content end -->
+
+    </section>
+    <!-- We provide end -->
+
+
+    <!-- Our Partners start -->
+    <section class="container our-partners mt-10">
+
+        <!-- content start -->
+          <div class="row">
+              <h2>Our Partners</h2>
+
+            <div class="media box-panel">
+              <div class="media-left media-middle">
+                <a href="#">
+                  <img class="img-responsive" src="{% static "shinelearn/images/partner-vskills.jpg" %}" alt="Our Partners">
+                </a>
+              </div>
+              <div class="media-body">
+                Vskills is a Government Company that conduct skill 
+    testing and Certification Program. It is one of the largest professional certification bodies of India. This validates skills and increases employability of the candidates. Vskill certification exams authenticate that the person has the requisite skills to perform the job.
+              </div>
+            </div>
+
+            <div class="media box-panel">
+              <div class="media-left media-middle">
+                <a href="#">
+                  <img class="img-responsive" src="{% static "shinelearn/images/partner-getcertgo.jpg" %}" alt="Our Partners">
+                </a>
+              </div>
+              <div class="media-body">
+                GetCertGo is owned and operated by G.C.G. Infocomm FZC. They collaborate with the world’s leading course providers to offer the highest quality, career-focused online short term courses. They lend a hand to working professionals across the world to obtain new skills and take their careers one step ahead. GetCertGo provides industry recognized courses for working professionals and equip them with cutting edge knowledge and technologies.
+              </div>
+            </div>
+
+            <div class="media box-panel">
+              <div class="media-left media-middle">
+                <a href="#">
+                  <img class="img-responsive" src="{% static "shinelearn/images/partner-skillsoft.jpg" %}" alt="Our Partners">
+                </a>
+              </div>
+              <div class="media-body">
+                Skillsoft is the pioneering leader in e-Learning, online training and provide talent solutions to company’s most important asset, its people. Recognized as a trusted partner and leading global provider of high-quality, innovative, cloud-based learning and performance support resources.
+              </div>
+            </div>
+
+            <div class="media box-panel">
+              <div class="media-left media-middle">
+                <a href="#">
+                  <img class="img-responsive" src="{% static "shinelearn/images/partner-greycampus.jpg" %}" alt="Our Partners">
+                </a>
+              </div>
+              <div class="media-body">
+                GreyCampus provides skills and certification training and helps in transforming careers. GreyCampus is a leading provider of training for working professionals in the areas of Project Management, Big Data, Data Science, Service Management and Quality Management. They offer live - instructor-led online, instructor-led classroom and e-learning (online self-learning) courses. Their courses are accredited and intended to address the career enrichment aims of working professionals.
+              </div>
+            </div>
+
+            <div class="media box-panel">
+              <div class="media-left media-middle">
+                <a href="#">
+                  <img class="img-responsive" src="{% static "shinelearn/images/partner-digitalvidya.jpg" %}" alt="Our Partners">
+                </a>
+              </div>
+              <div class="media-body">
+                Digital Vidya is an IIT Delhi alumni startup based in New Delhi, India. Digital Vidya is Asia’s leading Digital Marketing & Data Analytics training company and the first to launch Social Media Marketing Workshop Series in India. Digital Vidya also offers customized Digital Marketing & Analytics Training Programs for corporations to scale up their businesses. Digital Vidya is Google & Microsoft India’s official training partner to train their agencies & partners correspondingly.
+              </div>
+            </div>
+
+          </div>
+        <!-- content end -->
+
+    </section>
+    <!-- Our Partners end -->
+
+{% endblock main_container %}
+
+{% block johukum %}
+{% endblock johukum %}

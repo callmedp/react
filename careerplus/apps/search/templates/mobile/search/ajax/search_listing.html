@@ -1,0 +1,45 @@
+{% load static custom_filters %}
+{% for result in page.object_list %}
+<div class="box row mb-15 js_prod_card pl-0">
+    <div class="media">
+        <div class="media-left pr-0">
+            <a href="{{ result.pURL }}" class="sigma-pro ">
+                <img src="{{ result.pImg}}" alt="{{ result.pImA|title }}">
+               
+            </a>
+        </div>
+        <div class="media-body">
+            <p class="pb-0"><a href="{{ result.pURL }}"><strong>{{ result.pHd|default:result.pNm|title|truncatechars:40 }}</strong></a></p>
+
+            <div class="mb-10 c6">
+                <div class="rating inline-block ml-0 fs-12">
+                    <sup class="fill-star"></sup>
+                    {{ result.pARx|floatformat }}/5
+                </div><!-- end of star rating -->
+
+                <div class="inline-block fs-12">
+                    {% if result.pRC %}<figure class="icon-comments"></figure>
+                    <a href="{{ result.pURL }}">{{ result.pRC }}</a>{% endif %}
+                    {% if result.pNJ %}<figure class="icon-jobs ml-10"></figure><strong>{{ result.pNJ }}</strong> Jobs{% endif %}
+                    {% if "true" in result.pCert %}<figure class="icon-certificate ml-10"></figure>Certification{% endif %}
+                </div>
+            </div><!-- end of icons wrapper -->
+
+            <p class="pb-5 fs-12 c6"> Provider <a class="tag-bg fs-11 ml-5">{{ result.pPvn|title }}</a></p>
+            {% with result.pCmbs|jsonify as combos %}
+                {% if combos.combo %}
+                    <p class="pb-5 fs-12 c6"> Includes
+                       {% for combo in combos.combo_list %}<a class="tag-bg fs-11 ml-5">{{ combo.name }}</a>{% endfor %}
+                    </p>
+                {% endif %}
+            {% endwith %}
+            <p class="pb-0 fs-12"> Starting at <strong>Rs. {{ result.pPin |floatformat:'0' }}/-</strong>
+                {% if result.pPfin|floatformat:0|add:"0" %}
+                <span class="strike-through c9 fs-11">Rs. {{ result.pPfin|floatformat:"0" }}/-</span>
+                <span class="off">{{ result.discount }}% OFF</span>
+                {% endif %}
+            </p>
+        </div><!-- end of media body -->
+    </div><!-- end of media -->
+</div><!-- end of box -->
+{% endfor %}

@@ -1,0 +1,21 @@
+{% load static %}
+<div class="col-sm-12 box-panel writer-comments mb-40">
+  <h2>{{heading}}</h2>
+  <div class="media">
+    <div class="media-left media-middle">
+      <a href="#">
+        <img class="media-object img-circle" src="{{image.url}}" alt="Shine">
+      </a>
+    </div>
+    <div class="media-body media-middle">
+      <strong class="media-heading">{{display_name|title}}</strong>
+      {{writer_designation|title}}
+    </div>
+  </div>          
+  <article class="mt-20">
+    {{ description|safe }}
+  </article>
+  {% if download_doc %}
+    <a class="sample-resume" href="#">Click here to Download Sample Resume <span class="sample-download-icon"></span></a>
+  {% endif %}
+</div>

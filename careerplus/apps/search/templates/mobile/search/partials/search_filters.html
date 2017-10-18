@@ -1,0 +1,199 @@
+{% load humanize search_tags %}
+
+<form action="{{searchquery}}" id="form_facets">
+    <input type="hidden" name="page" id="id_page" value="1"/>
+    <input type="hidden" name="sort" id="id_sort" value="{{search_params.sort}}"/>
+    <input type="hidden" name="q" id="id_p_q" value="{{search_params.q}}"/>
+    <input type="hidden" name="area" id="id_p_area" value="{{search_params.area}}"/>
+    <input type="hidden" name="skills" id="id_p_skills" value="{{search_params.skills}}"/>
+    <input type="hidden" name="search_type" id="id_search_type" value="{{search_type}}"/>
+    <input type="hidden" name="rcount" id="id_rcount" value="{{paginator.num_pages}}"/>
+    <input type="hidden" name="rstart" id="id_rstart" value="{{ page.number }}"/>
+    <div class="sidebar-filter js_sidebar_filter" id="sidebar-filter">
+        <header class="filter-menu">
+            <div class="text-center">
+                <a class="icon-close pull-left js_close_filter" href="#"></a>
+                <strong>Filters</strong>
+                <a class="pull-right js_clear_filters" href="javascript:void(0)">Clear</a>
+            </div><!-- / Left side Icon ends here -->
+        </header><!-- header ends here -->
+        <div class="vertical-tabbing">
+            <div class="tab-container pb-100">
+        <ul class="tabs box-panel p-0">
+            {% if facets.fields.pFA|length %}
+                <li><a href="#" class="current" data-tab="tab-1">Functional Area</a></li>
+            {% endif %}
+            {% if facets.fields.pCL|length %}
+                <li><a href="#" data-tab="tab-2">Course Level</a></li>
+            {% endif %}
+            {% if facets.fields.pAR|length %}
+                <li><a href="#" data-tab="tab-3">Review</a></li>
+            {% endif %}
+            {% if facets.fields.pDM|length %}
+                <li><a href="#" data-tab="tab-4">Duration</a></li>
+            {% endif %}
+            {% if facets.fields.pCert|length %}
+                <li><a href="#" data-tab="tab-5">Certification</a></li>
+            {% endif %}
+            {% if facets.fields.pStM|length %}
+                <li><a href="#" data-tab="tab-6">Study Mode</a></li>
+            {% endif %}
+            {% if facets.fields.pPinr|length %}
+                <li><a href="#" data-tab="tab-7">Price</a></li>
+            {% endif %}
+        </ul>
+
+        <!-- Tab content Satrts here -->
+        <div class="tab-container js_filter_container">
+            {% if facets.fields.pFA|length %}
+            <div id="tab-1" class="tab-content current">
+                <ul>
+                    {% if facets.fields.pFA|length == 1 %}
+                        <li>
+                            <input type="checkbox" id="test11" {% if areaf %}name="farea" {% else %}name="ign_farea"{% endif %}
+                                   value="{{facets.fields.pFA.0.0}}" checked="checked" disabled="disabled">
+                            <label for="test11" class="c9">{{facets.fields.pFA.0.0|get_choice_display:"FA_FACETS"}} ({{facets.fields.pFA.0.1|intcomma}})</label>
+                        </li>
+                    {% else %}
+                        {% for facet in facets.fields.pFA|slice:"15" %}
+                            <li>
+                                <input type="checkbox" id="test1{{ forloop.counter }}" name="farea"
+                                       value="{{facet.0}}" {% if facet.0 in areaf %}checked="checked" {% endif %}>
+                                <label for="test1{{ forloop.counter }}">{{facet.0|get_choice_display:"FA_FACETS"}} ({{facet.1|intcomma}})</label>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+            {% if facets.fields.pCL|length %}
+            <div id="tab-2" class="tab-content">
+            <ul>
+                {% if facets.fields.pCL|length == 1 %}
+                    <li>
+                        <input type="checkbox" {% if clevel %}name="fclevel" {% else %}name="ign_fclevel"{% endif %}
+                                   value="{{facets.fields.pCL.0.0}}" checked="checked" disabled="disabled" id="test21">
+                        <label for="test21" class="c9">{{facets.fields.pCL.0.0|get_choice_display:"CL_FACETS"}} ({{facets.fields.pCL.0.1|intcomma}})</label>
+                    </li>
+                {% else %}
+                    {% for facet in facets.fields.pCL|slice:"15" %}
+                        <li>
+                            <input type="checkbox" name="fclevel" id="test2{{ forloop.counter }}"
+                                   value="{{facet.0}}" {% if facet.0 in clevel %}checked="checked" {% endif %}>
+                            <label for="test2{{ forloop.counter }}">{{facet.0|get_choice_display:"CL_FACETS"}} ({{facet.1|intcomma}})</label>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+            {% if facets.fields.pAR|length %}
+            <div id="tab-3" class="tab-content">
+            <ul>
+                {% for i in '54321' %}
+                <li>
+                <input name="frating" type="checkbox" id="test3{{ forloop.counter }}" {% if i in rating %}checked="checked"{% endif %}
+                            {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
+                <label for="test3{{ forloop.counter }}" {% if facets.fields.pAR|length == 1 %}class="c9"{% endif %}>{{ i }} Star {% for facet in facets.fields.pAR%}{% if facet.0 == i %}({{facet.1|intcomma}}){% endif %}{% endfor %}</label>
+                </li>
+                {% endfor %}
+            </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+            {% if facets.fields.pDM|length %}
+            <div id="tab-4" class="tab-content">
+            <ul>
+                {% if facets.fields.pDM|length == 1 %}
+                    <li>
+                        <input type="checkbox" {% if duration %}name="fduration" {% else %}name="ign_fduration"{% endif %}
+                                   value="{{facets.fields.pDM.0.0}}" id="test41" checked="checked" disabled="disabled">
+                        <label for="test41" class="c9">
+                            {{facets.fields.pDM.0.0|get_choice_display:"DURATION_DICT"}} ({{facets.fields.pDM.0.1|intcomma}})
+                        </label>
+                    </li>
+                {% else %}
+                    {% for facet in facets.fields.pDM|slice:"15" %}
+                        <li>
+                            <input type="checkbox" name="fduration" id="test4{{ forloop.counter }}"
+                                   value="{{facet.0}}" {% if facet.0 in duration %}checked="checked" {% endif %}>
+                            <label for="test4{{ forloop.counter }}">{{facet.0|get_choice_display:"DURATION_DICT"}} ({{facet.1|intcomma}})</label>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+            {% if facets.fields.pCert|length %}
+            <div id="tab-5" class="tab-content">
+                <ul>
+                {% if facets.fields.pCert|length == 1 %}
+                <li>
+                    <input type="checkbox" {% if cert %}name="fcert" {% else %}name="ign_fcert"{% endif %}
+                               value="{{facets.fields.pCert.0.0}}" id="test51" checked="checked" disabled="disabled">
+                    <label for="test51" class="c9">
+                        {{facets.fields.pCL.0.0|get_choice_display:"CERT_FACETS"}} ({{facets.fields.pCert.0.1|intcomma}})</label>
+                </li>
+                {% else %}
+                    {% for facet in facets.fields.pCert|slice:"15" %}
+                        <li>
+                            <input type="checkbox" name="fcert" id="test5{{ forloop.counter }}"
+                                   value="{{facet.0}}" {% if facet.0 in cert %}checked="checked" {% endif %}>
+                            <label for="test5{{ forloop.counter }}">{{facet.0|get_choice_display:"CERT_FACETS"}} ({{facet.1|intcomma}})</label>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+                </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+            {% if facets.fields.pStM|length %}
+            <div id="tab-6" class="tab-content">
+            <ul>
+                {% if facets.fields.pStM|length == 1 %}
+                <li>
+                    <input type="checkbox" {% if mode %}name="fmode" {% else %}name="ign_fmode"{% endif %}
+                               value="{{facets.fields.pStM.0.0}}" id="test61" checked="checked" disabled="disabled">
+                    <label for="test61" class="c9">
+                        {{facets.fields.pCL.0.0|get_choice_display:"STUDY_MODE"}} ({{facets.fields.pStM.0.1|intcomma}})</label>
+                </li>
+                {% else %}
+                    {% for facet in facets.fields.pStM|slice:"15" %}
+                        <li>
+                            <input type="checkbox" name="fmode" id="test6{{ forloop.counter }}"
+                                   value="{{facet.0}}" {% if facet.0 in mode %}checked="checked" {% endif %}>
+                            <label for="test6{{ forloop.counter }}">{{facet.0|get_choice_display:"STUDY_MODE"}} ({{facet.1|intcomma}})</label>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+            {% if facets.fields.pPinr|length %}
+            <div id="tab-7" class="tab-content">
+            <ul>
+                {% if facets.fields.pPinr|length == 1 %}
+                <li>
+                    <input type="checkbox" {% if price %}name="fprice" {% else %}name="ign_fprice"{% endif %}
+                               value="{{facets.fields.pPinr.0.0}}" id="test71" checked="checked" disabled="disabled">
+                    <label for="test71" class="c9">
+                        {{facets.fields.pPinr.0.0|get_choice_display:"PRICE_FACETS"}} ({{facets.fields.pPinr.0.1|intcomma}})</label>
+                </li>
+                {% else %}
+                    {% for facet in facets.fields.pPinr|slice:"15" %}
+                        <li>
+                            <input type="checkbox" name="fprice" id="test7{{ forloop.counter }}"
+                                   value="{{facet.0}}" {% if facet.0 in price %}checked="checked" {% endif %}>
+                            <label for="test7{{ forloop.counter }}">{{facet.0|get_choice_display:"PRICE_FACETS"}} ({{facet.1|intcomma}})</label>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+        </div>
+      </div><!-- Tab container -->
+
+        </div><!-- vertival tabing container ends here -->
+
+        <a href="javascript:void(0)" class="btn-slg btn-blue block apply-bottom text-center js_apply_filter">Apply</a>
+    </div>
+</form>

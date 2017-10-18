@@ -1,0 +1,18 @@
+{% extends "basic/base.html" %}
+    {% block container %}
+
+    	<div class="container">
+    	    <div class="row">
+    	        <div class="jumbotron">
+    	            <h1>Hello</h1>
+    	            <p>{{request.session.mobile_no}}</p>
+    	        </div>
+    	    </div>
+    	</div>
+    <a href="{% url 'counselling-form' 3 %}"  target="_self">
+    submit counselling form</a>
+    {% endblock container %}
+
+{% block johukum %}
+{% endblock johukum %}
+

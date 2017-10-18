@@ -1,0 +1,107 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block title %}
+  Counselling form - Shine Learning
+{% endblock title %}
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/dashboard/dashboard.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block pageheading %}
+    
+{% endblock pageheading %}
+{% block container %}
+<section class="container mt-10">
+
+  <!-- header -->
+<header>
+  <div class="feedback-header">
+    <div class="container">
+      <!-- breadcrums -->
+      <ol class="breadcrumb mt-30">
+        <li><a href="#">Home</a></li>
+        <li class="active">Counselling form</li>
+      </ol>
+      <div class="listing-heading">
+        <h1>Counselling form</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- main section start -->
+<section class="container mt-10">
+  <!-- page content body start -->
+  <div class="row">
+
+    <!-- mid content start here -->
+    <div class="col-sm-12 col-md-9 counselling-form">
+      <h2 class="mb20">Linkedin counselling form update</h2>
+      <form method="post" id="dashboard_counselling_form" 
+        action="{% url "counselling_form" orderitem.pk %}">
+        {% csrf_token %}
+        <ol>
+          <li>
+            <h3>{{ques_dict.q1}}</h3>
+            <textarea class="form-control" rows="2" name="q1">
+              {{quiz_resp.anser1}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li><h3>{{ques_dict.q2}}</h3>
+            <textarea class="form-control" rows="2" name="q2">
+              {{quiz_resp.anser2}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li>
+            <h3>{{ques_dict.q3}}</h3>
+            <textarea class="form-control" rows="2" name="q3">
+              {{quiz_resp.anser3}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li>
+            <h3>{{ques_dict.q4}}</h3>
+            <textarea class="form-control" rows="2" name="q4">
+              {{quiz_resp.anser4}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+          <li>
+            <h3>{{ques_dict.q5}}</h3>
+            <textarea class="form-control" rows="2" name="q5">
+              {{quiz_resp.anser5}}
+            </textarea>
+            <p class='submit-error' style="color:red;"></p>
+          </li>
+        </ol> 
+          <button type="submit" name="submit" class="submit-button pull-right mt-20"
+          value="submit">
+          Submit</button>
+          <button type="submit" name="save" class="view-job pull-right mt-20" 
+          value="save">Save</button> 
+    </form>
+    </div>
+    <!-- mid content ends here --> 
+
+  </div>
+  <!-- page content body end -->
+</section>
+<!-- main section end -->
+  
+  <!-- page content body end -->
+</section>
+<!-- main section end -->
+{% endblock container %}
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/dashboard/counselling.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}

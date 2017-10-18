@@ -1,0 +1,11 @@
+<ol class="breadcrumb mt-30" >
+	{% for breadcrumb in breadcrumbs  %}
+		{% if breadcrumb.active %}
+			<li ><a href="{{breadcrumb.url}}">{{breadcrumb.label}}</a></li>
+		{% else %}
+			<li {% if breadcrumb.active %}class="active"{% endif %} style="color: #ababab;">{{breadcrumb.label}}</li>
+		{% endif %}
+		
+	{% endfor %}
+</ol>
+     

@@ -1,0 +1,57 @@
+<!--hidden form -->
+<div style="display: none">
+    <form role="form" method="POST" id="cartForm" > {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{sqs.id}}">
+        <input type="hidden" name="cart_type" id="id-cart-type" value="">
+    </form>
+</div>
+
+
+<div class="container pr">
+  <!-- right fixed content start -->
+  <div id="price-box" class="col-sm-5 col-md-4  price-box">
+  <div class="box-panel enrol-cart">
+     <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
+     {{var_list.0.inr_price|floatformat}}{% else %}
+     {{sqs.pPinb|floatformat}} {% endif %}/-</strong>
+
+    
+    {% if selected_var or sqs.pPfinb %}
+        <strike id="id-total-actual-price" total-actual-price="{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}" >
+            {% if selected_var.fake_inr_price > var_list.0.inr_price %}Rs.&nbsp;{{selected_var.fake_inr_price|floatformat}}/-{% elif sqs.pPfinb > sqs.pPinb %}Rs.&nbsp;{{sqs.pPfinb|floatformat}}/-{% endif %}
+        </strike>
+
+        <small id="id_percentage-off" percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}">
+            {% if selected_var.fake_inr_price > var_list.0.inr_price %}
+                {{get_fakeprice.1}}% off
+            {% elif sqs.pPfinb > sqs.pPinb %}
+                {{get_fakeprice.1|floatformat}}% off
+            {% endif %}
+        </small>
+    {% endif %}
+    <span class="clearfix db"></span>
+
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enrol now</a>
+
+    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}">Add to cart</a>
+
+    <div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div>
+
+    <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
+    
+    <div class="query-call">
+      <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm3"><figure class="email-icon"></figure> Have a query?</a>
+      <a href="tel:0124-395 5001">
+        <figure class="calling-icon"></figure> 0124-395 5001
+      </a>
+    </div>
+  </div>
+  {% comment %}
+    
+  <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
+  {% endcomment %}
+     
+  </div>
+<!-- right fixed content end -->
+
+</div>

@@ -1,0 +1,222 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load console_tags %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>International Profile Update Order Item- Shinelearning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>International Profile Update Orderitems</h3>
+      </div> 
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+    
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="col-lg-12">
+            <div class="pull-left">
+              {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
+                <form autocomplete="off" method="POST" role="form" id="action_form" action="">
+                {% csrf_token %}
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            {{action_form.action}}
+                            <input type="hidden" name="queue_name" value="internationalprofileupdate" />
+                            <input type="hidden" id="selected-id" name="selected_id" />
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+                            </span>
+                        </div>
+                    </div>
+                    {% for profile_url in profile_urls %}
+                      <input type="hidden" name="count" value="{{forloop.counter}}">
+                      <input type="hidden" name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}" id="user_{{forloop.counter}}">
+                      <input type="hidden" 
+                      name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}" id="pass_{{forloop.counter}}">
+                    {% endfor %}
+                    </form>
+              {% endif %}
+                <!-- modal action -->
+                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Action</h4>
+                        </div>
+                        <div class="modal-body" id="myModalbody">
+                          Are You Sure???
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary" id="action_button">Yes</button>
+                        </div>
+
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action" id="inbox-table">
+                <thead>
+                  <tr class="headings">
+                    {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
+                        <th>
+                          <input autocomplete="off" type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th class="bulk-actions" colspan="100%">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    {% endif %}
+                    <th class="column-title">OrderId</th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Resume</th>
+                    <th class="column-title">Website</th>
+                    <th class="column-title">Detailed Info</th>
+                    <th class="column-title">Status</th>
+                  </tr>
+                </thead>
+
+                <tbody id="body-table-list">
+                    <tr class="even pointer">
+                      {% if perms.order.oi_action_permission and perms.order.international_profile_update_assignee %}
+                            <td class="a-center ">
+                              <input autocomplete="off" type="checkbox" class="flat check_empty" name="table_records" value="{{order.pk}}" >
+                            </td>
+                      {% endif %}
+                      <td>{{order.order.id}}</td>
+                      <td>Profile Update({{country_obj.name}})</td>
+                      <td><a href="{{order.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Resume</button></a></td>
+                      <td>
+                        <table>
+                          <tbody>
+                            <tr>
+                            {% for profile_url in profile_urls %}
+                              <th class="column-title">Website</th>
+                            {% endfor %}
+                            </tr>
+                            <tr>  
+                            {% for profile_url in profile_urls %} 
+                              <td>
+                                <a target="_blank" href="https://{{profile_url}}/">
+                                  {{profile_url}}
+                                </a>
+                              </td>
+                            {% endfor %}  
+                            </tr>
+                            <tr>
+                            {% for profile_url in profile_urls %}
+                              <td>
+                                <form autocomplete="off" method="POST" id="pro_update{{ forloop.counter }}"
+                                action="{% url "console:international_profile_update" order.pk %}">
+                                  <input type="hidden" name="site{{forloop.counter}}" 
+                                  value="{{profile_url}}">
+                                  <input type="hidden" name="count" value="{{forloop.counter}}">
+                                  <input type="hidden" name="update" 
+                                  value="1">
+                                  <label>Username</label>
+                                  <input type="text" name="username{{forloop.counter}}" value="{{profile_url|dict_username:profile_url_dict}}" id="{{forloop.counter}}_username" 
+                                   maxlength="35">
+                                  <label>Password</label>
+                                    <input type="text" 
+                                    name="password{{forloop.counter }}" value="{{profile_url|dict_password:profile_url_dict}}" id="{{forloop.counter}}_password"
+                                    maxlength="35">
+                                  <label>
+                                  <input type="checkbox" name="flag{{forloop.counter}}" class="flag" {% if profile_url|profile_status:profile_url_dict%} checked{% endif %} id="{{forloop.counter}}_flag">Profile Updation Flag</label>
+                                  <br>
+                                  <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                      <center>
+                                        <button type="button" onclick="jobProfileUpdate({{ forloop.counter }},)" class="btn btn-success btn-xs">Update</button>
+                                      </center>
+                                    </div>
+                                  </div>
+                                </form>
+                              </td>
+                            {% endfor %}
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                      <td>
+                        Email : {{order.order.email}}
+                        Phone : {{order.order.mobile}}
+                      </td>
+                      <td>{{order.get_oi_status}}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>    
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript" 
+    src="{% static "console/js/order/profile_update.js" %}">
+  </script>
+<script type="text/javascript">
+
+</script>
+
+{% endblock js_block %}

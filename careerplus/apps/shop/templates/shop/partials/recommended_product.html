@@ -1,0 +1,55 @@
+
+<section class="container-fluid detail-box recomend-product-bg">
+{% if recommended_products %}
+
+<!-- Recommended products start -->
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 mt-40">
+      <h2 class="detail-heading">Recommended products</h2>
+
+      <div class="row">
+
+        <ul class="listing">
+          {% for prd in recommended_products %}
+          <li class="col-sm-6 col-md-4">
+            <a title="{{ prd.pTt }}" class="box-panel" href="{{prd.pURL}}">
+              <div class="media">
+                <div class="media-body">
+                  <h3 class="listing-heading">{{ prd.pHd|default:prd.pNm|truncatechars:40 }}</h3>
+                  <div class="rating-review-box">
+                        {% for star in prd.pStar %}
+                              {% if star == '*' %}
+                                <figure class="full-star"></figure>
+                              {% elif star == '+' %}
+                                <figure class="half-star"></figure>
+                              {% else %}
+                                <figure class="blank-star"></figure>
+                              {% endif %}
+                        {% endfor %}
+
+                        <strong>{{prd.pARx|floatformat}}<small>/5</small></strong>
+                        <span class="jobs-available"><strong>{{prd.pNJ}}</strong> jobs available</span>
+                    </div>
+                </div>
+                <div class="media-left">
+                    <figure>
+                        <img class="img-responsive" src="{{prd.pImg}}" alt="{{prd.pImA}}">
+                    </figure>
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endfor %}
+
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Recommended products end -->
+{% endif %}
+
+</section>

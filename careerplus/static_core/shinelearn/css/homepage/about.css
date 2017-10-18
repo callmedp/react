@@ -1,0 +1,112 @@
+/*----------------feddback & interview page css----------------*/
+.about-header {
+  clear: both;
+  background: url(../../images/about-header-bg.jpg) no-repeat center top;
+  background-size: cover;
+  display: block;
+}
+
+.about-heading {
+  display: table-cell;
+}
+.about-heading h1 {
+  display: block;
+  margin: 20px 0 30px 0;
+  color: #fff;
+}
+
+.why-us-box {
+  padding: 40px 0;
+  font-size: 15px;
+}
+.why-us-box .why-us {
+  padding: 20px;
+}
+.why-us-box .why-us h2 {
+  color: #3f5f94;
+  margin: 0 0 15px 0;
+  font-size: 24px;
+}
+.why-us-box .why-us p {
+  font-size: 15px;
+  font-weight: 600;
+}
+.why-us-box .why-us ul {
+  list-style-type: none;
+  margin: 15px 0 0 8px;
+  padding: 0;
+  border-left: 1px solid #3cb878;
+}
+.why-us-box .why-us ul li {
+  display: block;
+  margin: 0 0 10px 0;
+  position: relative;
+  padding: 0 0 0 20px;
+}
+.why-us-box .why-us ul li:before {
+  content: '';
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+  background: url(../../images/sprite.png) no-repeat -561px -289px;
+  position: absolute;
+  top: 0;
+  left: -8px;
+}
+
+.we-provide {
+  background-color: #eaeef6;
+  padding: 30px 0;
+}
+.we-provide h2 {
+  font-size: 40px;
+  color: #3f5f94;
+}
+.we-provide ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+  overflow: visible;
+}
+.we-provide ul li {
+  display: inline-block;
+  padding: 40px 30px 20px 30px;
+  margin: 1.5%;
+  width: 30%;
+  vertical-align: top;
+  min-height: 300px;
+}
+@media (max-width: 1190px) {
+  .we-provide ul li {
+    min-height: 315px;
+  }
+}
+@media (max-width: 991px) {
+  .we-provide ul li {
+    min-height: 370px;
+  }
+}
+.we-provide ul li h3 {
+  color: #3f5f94;
+  margin: 10px 0 20px 0;
+}
+.we-provide ul li p {
+  font-size: 15px;
+}
+
+.our-partners {
+  padding-top: 20px;
+  font-size: 15px;
+}
+.our-partners h2 {
+  text-align: center;
+  color: #3f5f94;
+  font-size: 40px;
+}
+.our-partners .media {
+  padding: 20px;
+  margin-top: 40px;
+}
+.our-partners .media .media-left {
+  width: 17%;
+}

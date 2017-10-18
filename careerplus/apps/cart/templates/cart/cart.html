@@ -1,0 +1,290 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block meta_html %}
+    {{block.super}}
+{%  endblock meta_html %}
+
+{% block title %}
+   Cart - Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block navigation %}
+  <!-- navigation bar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better common display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown have-query">
+              <a href="tel:0124-3955001">Have a query? Call us at <strong>0124-3955001</strong></a>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+</nav>
+
+{% endblock navigation %}
+
+
+{% block container %}
+    {% if cart_items %}
+    <section class="container mt-53">
+        <!-- page content body start -->
+        <div class="row">
+        <!-- left content start -->
+        <div class="col-sm-9">
+          <div class="cart">
+            <ul class="bdr-btm">
+              <li class="col-sm-5 col-md-6"><span class="cart-heading">Item</span></li>
+              <li class="col-sm-3"><span class="cart-heading">Shipping</span></li>
+              <li class="col-sm-2"><span class="cart-heading">Price</span></li>
+              <li class="col-sm-2 col-md-1"></li>
+            </ul>
+
+            {% for item in cart_items %}
+                <!-- item 1 -->
+                {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
+                    {% if item.product_class == 'course' and variations %}
+
+                        <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
+                            <li class="col-sm-5 col-md-6{% if not item.is_available %} disabled{% endif %}">
+                                <span class="cart-sub-heading">{{item.name}}</span>
+                                <span class="provided-by">Provided by <a href="">{{item.vendor}}</a></span>
+                            </li>
+                            {% if delivery_types %}
+                                <li class="col-sm-3 {% if not item.is_available %} disabled{% endif %}">
+                                    <span class="custom-select">
+                                      <form id="delivery-option-form{{variations.0.id}}">{% csrf_token %}
+                                        <select class="form-control" id="delivery-option{{variations.0.id}}" name="delivery_type" onchange="deliveryOptionUpdate('{{variations.0.id}}')">
+                                            {% for d_obj in delivery_types %}
+                                                <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.0.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="hidden" name="lineid" value="{{variations.0.id}}" />
+                                      </form>
+                                    </span>
+                                </li>
+                            {% else %}
+                                <li class="col-sm-3">
+                                    <!--span class="custom-select">
+                                      <select class="form-control">
+                                        <option>Normal</option>
+                                      </select>
+                                    </span-->
+                                </li>
+                            {% endif %}
+                            <li class="col-sm-2 {% if not item.is_available %} disabled{% endif %}">
+                                <strong>Rs. {{variations.0.price}}/-</strong>
+                                {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{variations.0.id}}">+ Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-</span>
+                                {% else %}
+                                    <span class="delivery-charges" id="delivery-charge{{variations.0.id}}"></span>
+                                {% endif %}
+                                {% if not item.is_available %}
+                                    <span class="not-available">Not available</span>
+                                {% endif %}
+                            </li>
+
+                            <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{variations.0.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
+                                </li>
+                            </form>
+                        </ul>
+                        {% if addons %}
+                            <span class="addons-heading"></span>
+                            {% for addon in addons %}
+                            <ul class="ml-15 addons">
+                              <li class="col-sm-8 col-md-9{% if not addon.is_available %} disabled{% endif %}">
+                                {{addon.name}}
+                              </li>
+                              <li class="col-sm-2{% if not addon.is_available %} disabled{% endif %}">
+                                <strong>Rs. {{addon.price}}/-</strong>
+                              </li>
+                              <!--li class="col-sm-2 col-md-1">
+                                <a href="#">Remove</a>
+                              </li-->
+                              <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                </li>
+                            </form>
+                            </ul>
+                            {% endfor %}
+                        {% endif %}
+
+                    {% else %}
+
+                        <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
+                            <li class="col-sm-5 col-md-6{% if not item.is_available %} disabled{% endif %}">
+                                <span class="cart-sub-heading">{{item.name}}</span>
+                                <span class="provided-by">Provided by <a href="#">{{item.vendor}}</a></span>
+                            </li>
+                            {% if delivery_types %}
+                                <li class="col-sm-3{% if not item.is_available %} disabled{% endif %}">
+                                    <span class="custom-select">
+                                        <form id="delivery-option-form{{item.id}}">{% csrf_token %}
+                                            <select class="form-control" id="delivery-option{{item.id}}" onchange="deliveryOptionUpdate('{{item.id}}')" name="delivery_type">
+                                                {% for d_obj in delivery_types %}
+                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == item.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <input type="hidden" name="lineid" value="{{item.id}}" />
+                                        </form>
+                                    </span>
+                                </li>
+                            {% else %}
+                                <li class="col-sm-3">
+                                    <!--span class="custom-select">
+                                      <select class="form-control">
+                                        <option>Normal</option>
+                                      </select>
+                                    </span-->
+                                </li>
+                            {% endif %}
+                            
+                            <li class="col-sm-2{% if not item.is_available %} disabled{% endif %}">
+                                <strong>Rs. {{item.price}}/-</strong>
+                                {% if item.delivery_obj and item.delivery_obj.get_price %}
+                                    <span class="delivery-charges" id="delivery-charge{{item.id}}">+ Rs. {{item.delivery_obj.get_price|floatformat:0}}/-</span>
+                                {% else %}
+                                    <span class="delivery-charges" id="delivery-charge{{item.id}}"></span>
+                                {% endif %}
+                                {% if not item.is_available %}
+                                    <span class="not-available">Not available</span>
+                                {% endif %}
+                            </li>
+
+
+                            <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{item.reference}}">
+                                <li class="col-sm-2 col-md-1">
+                                    <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
+                                </li>
+                            </form>
+                        </ul>
+                        {% if addons or variations %}
+                            <span class="addons-heading"></span>
+                            {% for var in variations %}
+                                <ul class="ml-15 addons">
+                                  <li class="col-sm-8 col-md-9{% if not var.is_available %} disabled{% endif %}">
+                                    {{var.name}}
+                                  </li>
+                                  <li class="col-sm-2{% if not var.is_available %} disabled{% endif %}">
+                                    <strong>Rs. {{var.price}}/-</strong>
+                                  </li>
+                                  
+                                  <form role="form" id="cart_remove_form{{var.id}}">{% csrf_token %}
+                                    <input type="hidden" name="reference_id" value="{{var.reference}}">
+                                    <li class="col-sm-2 col-md-1">
+                                        <a role="button" onclick="removeFromCart('{{var.id}}')">Remove</a>
+                                    </li>
+                                </form>
+                                </ul>
+                            {% endfor %}
+
+                            {% for addon in addons %}
+                                <ul class="ml-15 addons">
+                                  <li class="col-sm-8 col-md-9{% if not addon.is_available %} disabled{% endif %}">
+                                    {{addon.name}}
+                                  </li>
+                                  <li class="col-sm-2{% if not addon.is_available %} disabled{% endif %}">
+                                    <strong>Rs. {{addon.price}}/-</strong>
+                                  </li>
+                                  <!--li class="col-sm-2 col-md-1">
+                                    <a href="#">Remove</a>
+                                  </li-->
+                                  <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                                    <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                                    <li class="col-sm-2 col-md-1">
+                                        <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                    </li>
+                                </form>
+                                </ul>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+
+            {% endfor %}
+
+
+          </div>
+
+        </div>
+        <!-- left content end -->
+        
+
+        <!-- right content start -->
+          <div class="col-sm-3 payment-summary-tab cls_scroller_parent">
+          <div class="box-panel checkout-box cls_scroller pr">
+            Amount Payable
+            <strong>Rs. <span id="total-cart-amount-id">{{total_amount}}</span>/-</strong>
+            <a href="{% url "cart:payment-login" %}">Proceed to checkout</a>
+          </div>
+
+          <!-- secure payment -->
+          <div class="secure-payment">
+            <figure class="secure-icon-payment"></figure>
+            <strong>100% SECURE PAYMENT</strong>
+            All major Credit and Debit cards accepted
+            <figure class="cards-payment-icon mt-20"></figure>
+          </div>
+
+          </div>  
+        <!-- right content end -->
+
+        </div>
+        <!-- page content body end -->
+
+    </section>
+    <!-- main section end -->
+    {% else %}
+        <!-- Blank Cart -->
+        <section class="container">
+
+            <!-- page content body start -->
+            <div class="row">
+                <!-- content start -->
+                <div class="col-sm-12 mt-53">
+                  <div class="empty-cart bdr">
+                    <figure class="empty-cart-pic"></figure>
+                    <article>You have no product in your cart. <br>Add your first product and earn <strong>Shine loyalty points</strong></article>
+                    <a href="{% url "homepage" %}" class="search-button">Search now</a>
+                  </div>
+                </div>
+                <!-- content end -->
+
+                  {% include "shop/partials/recommended_product.html" %}
+            </div>
+        </section>
+    {% endif %}
+{% endblock container %}
+  
+
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script select="{% static 'shinelearn/js/common/scroller.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

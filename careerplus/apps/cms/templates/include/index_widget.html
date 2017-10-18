@@ -1,0 +1,14 @@
+{% load static look_up_tags %}
+<div class="col-sm-12 box-panel mb-40 download-resume">
+  <h2>{{indexer_heading}}</h2>
+  {% for key, value in column_data.items %}
+      <div class="col-sm-12 col-md-6 no-pad">
+            <h3>{{ column_headings|get_value:key }}</h3>
+            <ul>
+            {% for k, v in value.items %}
+                <li><a href="{{v}}">{{k}}</a></li>
+            {% endfor %}
+            </ul>
+       </div>
+   {% endfor %}
+</div>

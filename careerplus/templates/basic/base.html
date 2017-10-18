@@ -1,0 +1,96 @@
+{% load static compress %}
+{% spaceless %}
+<!DOCTYPE html>
+<html lang="en">
+  {% block head %}
+    <head>
+    {% block meta_html %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/media/static/shinelearn/images/fav_icon.png">
+        {% block django_meta %}
+          
+        {% endblock django_meta %}
+   {% block canonical_url %}
+         <link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock canonical_url %}
+  {% endblock meta_html %}
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %}Shine Learning{%endblock title%}</title>
+
+    
+    {% block css_section %}
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+        <!-- Bootstrap -->
+        {% compress css %}
+        <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+        {% endcompress %}
+         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    {% endblock css_section %}
+   </head>
+   {{ JS_SETTINGS|safe }}
+{% endblock head %} 
+<body>
+{% block navigation %}
+  <!-- navigation bar -->
+  {% include 'basic/navigation.html' %}
+
+{% endblock navigation %}
+
+{% block blogtrending %}
+
+{% endblock blogtrending %}
+<!-- breadcrums -->
+{% block breadcrumb %}
+      
+{% endblock breadcrumb %}
+
+{% block pageheading %}
+  
+
+{% endblock pageheading %}
+
+<!-- main section start -->
+{% block container %}
+
+{% endblock container %}
+{% block footer %}
+      <!-- footer -->
+  {% include 'basic/footer.html' %}      
+{% endblock footer %}
+
+{% block js_section %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    {% compress js %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}">
+    </script>
+    <script>
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+          });
+        $('.dropdown').hover(function(){
+            $('.dropdown-toggle', this).trigger('click');
+          });
+    </script>
+    {% endcompress %}
+{% endblock js_section %}
+{% block johukum %}
+    <script type='text/javascript' id='spd-busns-spt' async=''
+        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  
+        data-client='324ed0abb0694b0c66a6daecb178352d'>
+    </script>
+{% endblock johukum %}
+</body>
+</html>
+{% endspaceless %}
+

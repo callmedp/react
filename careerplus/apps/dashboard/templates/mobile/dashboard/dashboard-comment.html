@@ -1,0 +1,106 @@
+{% extends "mobile/basic/base.html" %}
+{% load static thumbnail compress %}
+
+
+{% block title %} orderitem conversations | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a href="{% url 'dashboard:dashboard-itemdetail' %}?oi={{oi.pk}}" class="icon-back pull-left" role="button"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">Comments</h1>
+        
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <div class="body-wrapper">
+        <section class="content-box">
+            <h2 class="mb-5">{{oi.product.name}}
+                {% if oi.product.get_exp_db %}
+                 - {{oi.product.get_exp_db}}
+                {% endif %}</h2>
+            <p class="fs-12 c9">Order ID : {{oi.order.number}}</p>
+            <form class="comment-form" method="POST" role="form" action="{% url "dashboard:dashboard-conversation" %}" id="user-comment-form"> {% csrf_token %}
+                <div class="mt-10 feedback-mgs">
+                    <textarea placeholder="" class="form-control" id="id_comment" name="comment" required></textarea>
+                    <span class="error" style="color:red"></span>
+                    <input type="hidden" name="oi_pk" value="{{oi.pk}}" />
+                    <input type="hidden" name="flavour" value="mobile" />
+                </div>
+                <p class="fs-12 c9 mt-10">Max 100 characters</p>
+                <button type="button" class="btn btn-slg btn-blue mt-20" id="comment_submit_button">Submit</button>
+            </form>
+
+            <div class="message_detail mt-30">
+                  <ul class="chat_items">
+                       {% for msg in comments %}
+                            {% if msg.added_by %}
+                                <li class="user_1">
+                                    <div class="chat">
+                                        <sup></sup>
+                                        {{msg.message|safe}}
+                                    </div>
+
+                                    <div class="user-info">
+                                        <strong class="name">{{msg.added_by}}</strong>
+                                        {{msg.created.date}}
+                                    </div>
+
+                                  </li><!-- end of LI here -->
+                            {% elif msg.candidate_id %}
+                                <li class="user_2">
+                                    <div class="chat">
+                                        <sup></sup>
+                                        {{msg.message|safe}}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="user-info">
+                                        {{msg.created.date}}
+                                        <strong class="name">Me</strong>
+                                    </div>                   
+                                </li><!-- end of LI here -->
+                            {% endif %}
+                      {% endfor %}
+                       
+                  </ul><!-- end of UL here -->
+            </div>
+            <div class="clearfix"></div>
+        </section><!-- end of section here -->
+    </div><!-- body wrapper ends here -->
+
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

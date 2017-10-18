@@ -1,0 +1,31 @@
+{% with feedback=result.data.referrerFeedback data=result.data %}
+  <div class="col-sm-6 referrer-listing">
+    <div class="feedback-referrer">
+     <div class="media">
+        <div class="media-left">
+          <span class="referrer-feedback-icon"></span>
+        </div>
+        <div class="media-body">
+          <h3 class="media-heading">Feedback from your referrer</h3>
+          Thanks for the interviewing with {{feedback.interviewerName}}. We collected the following feedback<br />
+          {% if not show_feedback %}<strong>'{{ status }}'</strong>{% endif %}
+        </div>
+      </div>
+      <div class="data">
+        <datalist><strong>Parameter</strong></datalist>
+        <datalist><strong>Feedback</strong></datalist>
+        <datalist>Communication Skills</datalist>
+        <datalist>{{feedback.commSkills}}</datalist>
+        <datalist>Subject Knowledge</datalist>
+        <datalist>{{feedback.subjectKnowledge}}</datalist>
+        <datalist>Cultural Fit</datalist>
+        <datalist>{{feedback.culturalFit}}</datalist>
+      </div>
+      {% if data.referrerComments %}
+        <strong>{{feedback.interviewerName}} has the following comments for you</strong>
+        <em>'{{data.referrerComments}}'</em>
+      {% endif %}
+    </div>
+    <a class="back-dashboard" href="{% url "dashboard:roundone-dashboard" %}">Back to Dahsboard</a>
+  </div>
+{% endwith %}

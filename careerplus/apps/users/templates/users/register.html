@@ -1,0 +1,119 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+{% block title %}
+    Register
+{% endblock title %}
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <style type="text/css">
+      .error {
+            color: red;
+      }
+    </style>
+    {% endcompress %}
+{% endblock css_section %}
+{% block container %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% if messages %}
+                {% for message in messages %}
+                <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+        <!-- /.row -->
+    <!-- main section start -->
+    <div class="container pr">
+        <header class="login-page-bg">
+            <div class="login-bg-txt">
+                <figure class="login-icon1"></figure>
+                <strong>1 Lacs+</strong>
+                Satisfied users
+            </div>
+            <div class="login-bg-txt">
+                <figure class="login-icon2"></figure>
+                <strong>300+</strong>
+                Courses
+            </div>
+            <div class="login-bg-txt">
+                <figure class="login-icon3"></figure>
+                <strong>500+</strong>
+                Professional resumes delivered
+            </div>
+        </header>
+
+        <!-- login form start -->
+        <div class="register login-signup-box">
+            <div>
+                <h1 class="modal-title">Register</h1>
+            </div>
+            <form method="post" id="register_form" role="form">
+                {% csrf_token %}
+                <div class="form-group {% if form.email.errors %}error{% endif %}">
+                    {{ form.email }}
+                    <span class="error-txt" style="bottom:-25px">{{ form.email.errors }}</span>
+                </div>
+                <div id="user_email"></div>
+                <div class="form-group {% if form.email.errors %}error{% endif %}">
+                    {{ form.raw_password }}
+                    <span class="error-txt" style="bottom:-25px">{{ form.raw_password.errors }}
+                    </span>
+                </div>
+                <div id="raw_psd"></div>
+                <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
+                    <div class="country-code">
+                        <div class="custom-select">
+                            {{form.country_code}}
+                        </div>
+                        {{form.cell_phone}}
+                        <span class="error-txt" style="bottom:-33px">{{form.cell_phone.errors}}
+                        </span>
+                    </div>
+                </div>
+                <div id="cell_phone"></div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input"
+                            name="term_conditions">
+                            I agree to <a href="/tnc">Terms & Conditions</a>
+                            and<a href="/privacy-policy"> Privacy policy</a>
+                    </label>
+                </div>
+                <div id="terms"></div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input"
+                        name="is_job_seeker">
+                        Recieve jobs notifications
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary submit">Register</button>
+                <div class="social-login">
+                    <span>or Register with</span>
+                    <a class="facebook" onclick="Login();"></a>
+                    <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+                    <a class="gplus" onclick="glogin()"></a>
+                </div>
+                <small class="form-text text-muted text-center mt-4">
+                    Already have an account? <a href="{% url 'login' %}">Login Now</a>
+                </small>
+            </form>
+        </div>
+        <!-- login form end -->
+
+    </div>
+    <!-- main section end --> 
+{% endblock container %}
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/users/registration.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}

@@ -1,0 +1,309 @@
+<div class="back-inbox">
+<a href="{% url "dashboard:dashboard" %}">Back to inbox</a>
+</div>
+
+<ul class="products-inbox">
+    
+    <li class="col-sm-12">
+        <h2>{{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
+        <span class="transaction">Order ID : {{oi.order.number}}</span>
+        <ul class="view-comments-links col-sm-7 col-md-8">
+            <li>View details</li>
+            <li><a role="button" onclick="viewCommentOrderitem('{{oi.pk}}',)">Leave us a message</a></li>
+        </ul>
+        {% if oi.oi_status == 24 or oi.oi_status == 46 %}
+            <!--div class="accept-reject col-sm-5 col-md-4">
+                <a class="accept" href="#" data-toggle="modal" data-target=".bs-example-modal-sm3">Accept</a>
+                <a class="reject" href="#" data-toggle="modal" data-target=".bs-example-modal-sm4">Reject</a>
+            </div-->
+
+            <div class="accept-reject col-sm-5 col-md-4">
+                <a class="accept" role="button" onclick="acceptService('{{oi.pk}}')">Accept</a>
+                <a class="reject" role="button" onclick="rejectService('{{oi.pk}}')">Reject</a>
+            </div>
+
+            <!--Accept Modal-->
+            <div class="modal fade bs-example-modal-sm3" tabindex="-1" id="accept-modal{{oi.pk}}" role="dialog" aria-labelledby="mySmallModalLabel">
+              <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                 <div class="register">
+                 <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h1 class="modal-title" id="myModalLabel">Accept Confirmation</h1>
+                  </div>
+                    <form role="form" id="accept-form-id{{oi.pk}}">
+                      <div style='display:none'>
+                           <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+                           <input type='hidden' name='oi_pk' value='{{oi.pk}}'/>
+                      </div>
+                      <div class="form-group accept-msg">
+                        <strong>Are you sure you want to accept ?</strong>
+                        <small>Note: Once you accept, your service will be closed.</small>
+                      </div>
+                      <button type="button" id="accept-submit-button{{oi.pk}}" class="btn btn-primary submit">Accept</button>
+                      <small class="form-text text-muted text-center"><a href="#" data-toggle="modal" data-target="" data-dismiss="modal">Skip</a></small>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div> 
+
+
+            <!--Reject Modal-->
+            <div class="modal fade bs-example-modal-sm4" id="reject-modal{{oi.pk}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+              <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                 <div class="register">
+                 <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h1 class="modal-title" id="myModalLabel">Reject confirmation</h1>
+                  </div>
+                    <form class="reject-msg" id="reject-form-id{{oi.pk}}" enctype='multipart/form-data'>{% csrf_token %}
+                      <div class="form-group">
+                        <label>If you have made changes to resume upload here</label>
+                        <div class="input-file">
+                          <a class='' href='javascript:;'>
+                              <input maxlength="200" type="file" id="reject-file-id" name="reject_file" style='position:absolute;z-index:1;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:#333;' size="30"  onchange='$("#upload-file-info1").html($(this).val());'>
+                               <span class="choose-file">Browse</span>
+                          </a>
+                          <span class="upload-file" id="upload-file-info"></span>
+                        </div>
+                      </div>
+                      <div class="form-group text-center">
+                        Or
+                      </div>
+                      <div class="form-group">
+                        <label>Leave your comments</label>
+                        <textarea class="form-control" id="reject-reason" name="comment" rows="1" placeholder="Comments"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <input type="hidden" name="oi_pk" value="{{oi.pk}}" />
+                      </div>
+                      <button type="button" id="reject-submit-button{{oi.pk}}" class="btn btn-primary submit" data-toggle="modal">Submit</button>
+                      <small class="form-text text-muted text-center"><a href="#" data-toggle="modal" data-target="" data-dismiss="modal">Skip</a></small>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endif %}
+        <div class="hr"></div>
+        <ul class="table-data">
+            <li class="data-heading">
+                <datalist class="col-sm-3">
+                  Date
+                </datalist>
+                <datalist class="col-sm-6">
+                  Status
+                </datalist>
+                <datalist class="col-sm-3">
+                </datalist>
+            </li>
+
+            {% if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {% if op.oi_status == 24 and op.draft_counter == 1 %}
+                                {{op.get_user_oi_status}}
+                            {% elif op.oi_status == 24 and op.draft_counter < max_draft_limit %}
+                                Revised Document is ready
+                            {% elif op.oi_status == 24 and op.draft_counter == max_draft_limit %}
+                                Final Document is ready
+                            {% else %}
+                               {{op.get_user_oi_status}}
+                            {% endif %}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if oi.oi_status == 2 %}
+                          <a role="button" class="upload-resume">Upload Resume</a>
+                          {% elif op.oi_status == 24 %}
+                              <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                          {% elif op.oi_status == 27 %}
+                              <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 8 %}
+
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {% if op.oi_status == 46 and op.draft_counter == 1 %}
+                                {{op.get_user_oi_status}}
+                            {% elif op.oi_status == 46 and op.draft_counter < max_draft_limit %}
+                                Revised Document is ready
+                            {% elif op_oi_status == 4 %}
+                                Document is finalized
+                            {% else %}
+                               {{op.get_user_oi_status}}
+                            {% endif %}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if op.oi_status == 49 and oi.counselling_form_status == 41 %}
+                          <a href="{% url 'counselling_form' oi.pk %}">Complete form</a>
+                          {% elif op.oi_status == 46 %}
+                              <a href="#" target="_blank">Download</a>
+                          {% elif op.oi_status == 27 %}
+                              <a href="" target="_blank">Download</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 3 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+
+                          {% if op.oi_draft %}
+                              <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                          {% elif oi.oi_status == 2 %}
+                              <a role="button" class="upload-resume">Upload Resume</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 2 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if op.oi_status == 6 %}
+                              <a href="{{oi.oi_draft.url}}" target="_blank">Download</a>
+                          {% endif %}
+                        </datalist>
+                  </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 4 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if oi.oi_status == 2 and not oi.oi_resume %}
+                              <a role="button" class="upload-resume">Upload Resume</a>
+                          {% elif op.oi_status == 6 %}
+                              <a href="#">Download Credential</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 5 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if oi.oi_status == 2 and not oi.oi_resume %}
+                              <a role="button" class="upload-resume">Upload Resume</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 6 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if op.oi_draft %}
+                              <a href="{{op.oi_draft.url}}" target="_blank">Download</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 7 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                            {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 9 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if op.oi_status == 141 %}
+                              <a href="#">Complete Profile</a>
+                          {% elif op.oi_status == 142 %}
+                              <a href="#">Edit your profile</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% elif oi.product.type_flow == 10 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if op.oi_status == 101 %}
+                              <a href="#" target="_blank">Take Test</a>
+                          {% elif op.oi_draft %}
+                              <a href="{{op.oi_draft.url}}" target="_blank">Download</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
+            {% endif %}
+          
+        </ul>
+    </li>
+
+</ul>

@@ -1,0 +1,88 @@
+{% extends "basic/base.html" %}
+{% load static humanize thumbnail compress %}
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/css" href="{% static 'shinelearn/css/dashboard/dashboard.css' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+{% block container %}
+<header>
+<div class="feedback-header">
+  <div class="container">
+    <!-- breadcrums -->
+    <ol class="breadcrumb mt-30">
+      <li><a href="#">Home</a></li>
+      <li class="active">Feedback</li>
+    </ol>
+    <div class="feedback-heading">
+      <h1>Feedback</h1>
+    </div>
+  </div>
+</div>
+</header>
+<!-- main section start -->
+<section class="container mt-10">
+    <!-- page content body start -->
+    <div class="row">
+    <!-- left content start -->
+      <div class="col-sm-6">
+       <div class="feedback-enter">
+         <h2>Enter your feedback</h2>
+          <em>"Sanjay Singh" has decided on your referral. <br>Submit feedback to view your result.</em>
+        <form id="id_feedback" method="post">
+          {% csrf_token %}  
+          <p>On a scale of 0-10 would u recommend round one to a friend?</p>
+          <span class="custom-select">
+            <select class="form-control" name="roundoneRating">
+              <option>5 - May be</option>
+              <option>4 - May be</option>
+              <option>3 - May be</option>
+              <option>2 - May be</option>
+              <option>1 - May be</option>
+            </select>
+          </span>
+          <p>Please rate the interation with your referrer</p>
+          <label class="radio-inline">
+            <input type="radio" name="interviewerRating" id="inlineRadio1" 
+            value="1"> Bad
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="interviewerRating" id="inlineRadio2" 
+            value="2"> Ok
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="interviewerRating" id="inlineRadio3" 
+            value="3"> Good
+          </label>
+          <textarea class="form-control" placeholder="Comments" rows="3" 
+          name="comments"></textarea>
+          <button type="submit" class="submit-button">Submit</button>
+          <input type="hidden" name="form_feedback" 
+          data-url="{% url "dashboard:dashboard_roundone_result" order_id %}">
+        </form>
+       </div>
+      </div>  
+    <!-- left content end -->
+
+    <!-- right content start -->
+    <div id="id_interaction_result">
+      {{ result_html }}
+    </div>
+    <!-- right content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+{% endblock container %}
+{% block js_section %}
+   {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
+    <script type="text/javascript">
+    {% endcompress %}
+    </script>
+{% endblock js_section %}

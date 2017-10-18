@@ -1,0 +1,63 @@
+{% load humanize search_tags %}
+{% if prd_service == 'course' %}
+
+  <!-- main package start -->
+  <div class="main-package">
+    <div class="main-package-img">
+      <img src="{{prd_vendor_img}}" class="img-responsive" alt="{{prd_vendor}}">
+    </div>
+    <div class="main-package-content">
+      <span>Provided by</span>
+      <strong>{{prd_vendor}}</strong>
+      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
+    </div>
+    <div class="main-package-arrow"></div>
+  </div>
+  <!-- main package start end-->
+  {% if pop %}
+    <!-- other package start -->
+    <div class="other-package-box">
+      <span>Other providers</span>
+    {% for provider in pop_list|slice:"0:4" %}
+      <a href="{{provider.url}}" class="other-package">
+        <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
+      </a>
+    {% endfor %}
+    </div>
+    <!-- other package end -->
+  {% endif %}
+
+{% else %}
+  <!-- main package start -->
+  <div class="main-package">
+    <div class="main-package-content">
+      <span>Experience</span>
+      {% if prd_exp %}
+        <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
+      {% endif %}
+      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
+    </div>
+
+    <div class="main-package-arrow"></div>
+  </div>
+  <!-- main package start end-->
+  {% if pop %}
+
+    <!-- other package start -->
+    <div class="other-package-box">
+      <span>Other experiences</span>
+    {% for package in pop_list|slice:"0:4"  %}
+      <a href="{{package.url}}" class="other-package">
+        <p>
+          Experience
+      {% if package.experience %}
+          <strong>{{package.experience|get_choice_display:"EXP_DICT"}}</strong>
+      {% endif %}
+        </p>
+      </a>
+
+    {% endfor %}
+    </div>
+    <!-- other package end -->
+  {% endif %}
+{% endif %}

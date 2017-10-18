@@ -1,0 +1,132 @@
+{% load humanize search_tags %}
+{% if prd_service == 'course' %}
+    {% if variation %}
+        <div class="container select-product course">
+            <h2>Choose study mode and duration</h2>
+                <div class="ui-grid-a">
+                    {% for vars in var_list %}
+                        {% if forloop.counter0|divisibleby:"2" %}
+                            <div class="ui-block-a">
+                                <input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" 
+                                data-price="{{vars.inr_price}}" data-id="{{vars.id}}" 
+                                actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}" id="pro{{vars.id}}">
+                                <label for="pro{{vars.id}}">
+                                    <table class="table fs-10">
+                                        <tr>
+                                            <td>Study mode</td>
+                                            <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Duration</td>
+                                            <td>{{vars.duration|get_choice_display:"DURATION_DICT"}}</td>
+                                        </tr>
+
+                                        <tr>
+                                        <td>Certification</td>
+                                            {% if vars.certify %}
+                                                <td>Yes</td>
+                                            {% else %}
+                                                <td>No</td>
+                                            {% endif %}
+                                        </tr>
+
+                                        <tr>
+                                            <td>Type</td>
+                                            <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Price</td>
+                                            <td><strong>Rs. {{vars.inr_price|floatformat}}/- </strong></td>
+                                        </tr>
+                                    </table>
+                                </label>
+                            </div>     
+                        {% else %}
+                            <div class="ui-block-b">
+                                <input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" 
+                                data-price="{{vars.inr_price}}" data-id="{{vars.id}}" 
+                                actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}" id="pro{{vars.id}}">
+                                <label for="pro{{vars.id}}">
+                                    <table class="table fs-10">
+                                        <tr>
+                                            <td>Study mode</td>
+                                            <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Duration</td>
+                                            <td>{{vars.duration|get_choice_display:"DURATION_DICT"}}</td>
+                                        </tr>
+
+                                        <tr>
+                                        <td>Certification</td>
+                                            {% if vars.certify %}
+                                                <td>Yes</td>
+                                            {% else %}
+                                                <td>No</td>
+                                            {% endif %}
+                                        </tr>
+
+                                        <tr>
+                                            <td>Type</td>
+                                            <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Price</td>
+                                            <td><strong>Rs. {{vars.inr_price|floatformat}}/- </strong></td>
+                                        </tr>
+                                    </table>
+                                </label>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+    <div class="clearfix"></div>
+    </div><!-- Select products container ends here -->
+    {% endif  %}
+{% else %}
+    {% if prd_service == 'service' and var_list %}
+        <!-- Select products container Satrts here -->
+        <div class="container select-product">
+            <h2>Select products (optional)</h2>
+            <div class="ui-grid-a">
+            {% for service in var_list %}
+                {% if forloop.counter0|divisibleby:"2" %}
+                    <div class="ui-block-a">
+                        <input type="checkbox" id="pro{{forloop.counter}}" data-id="{{service.id}}" name="required_option" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}">
+                        <label for="pro{{forloop.counter}}">
+                            <p class="pb-5">{{service.label}}</p>
+                            <strong>Rs. {{service.inr_price|floatformat}}/-</strong>
+                        </label>
+                    </div>
+                {% else %}
+                    <div class="ui-block-b">
+                        <input type="checkbox" id="pro{{forloop.counter}}" name="required_option" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}">
+                        <label for="pro{{forloop.counter}}">
+                            <p class="pb-5">{{service.label}}</p>
+                            <strong>Rs. {{service.inr_price|floatformat}}/-</strong>
+                        </label>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        <div class="clearfix"></div>    
+        </div><!-- Select products container ends here -->
+    {% elif prd_service == 'resume' and var_list %}
+        <!-- Select products container Starts here -->
+        <div class="container">
+            <h2>Select countries (optional)</h2>
+            <div class="cart-message">
+                <span class="cart-error" id="error_required"></span>
+            </div>
+            <a href="javascript:void(0)" class="countries" id="sidebar-countries-trigger">
+                <sup></sup>
+                <span id="slected_country"></span>  
+            </a>
+        </div><!-- Select products container ends here -->
+    {% endif %}
+
+{% endif %}

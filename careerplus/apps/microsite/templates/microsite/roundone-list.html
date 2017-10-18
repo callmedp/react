@@ -1,0 +1,450 @@
+{% extends "basic/base.html" %}
+{% load core_filter_tags static humanize compress %}
+{% load thumbnail %}
+    {% block meta_tags %}
+        {{block.super}}
+        {% include 'meta/meta.html' %}
+    {%  endblock meta_tags %}
+
+    {% block title %}
+       Roundone - Shine Learning
+    {% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <style type="text/css">
+        .error {
+            color: red;
+        }
+        </style>
+        <link type="text/css" href="{% static 'shinelearn/css/microsite/roundone.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/microsite/multiple-select.css' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+
+  {% block pageheading %}
+  <header class="roundone-header">
+    <div class="container">
+    
+    <!-- breadcrums -->
+      <ol class="breadcrumb mt-30">
+        {% for bread in breadcrumbs %}
+            {% if bread.url %}
+                <li><a href='{{bread.url}}'>{{bread.name}}
+                </a></li>
+            {% else %}
+                <li class="active">{{bread.name}}</li>
+            {% endif %}
+        {% endfor %}
+      </ol>
+      <div class="roundone-caption">
+        <h1>Request referrals</h1>
+        <div class="">
+          <form class="form-inline" id="roundone_search" method="POST">
+          {% csrf_token %}
+          <div class="form-group custom-select">
+            <select class="form-control" id="id_search_location" 
+              multiple="multiple" name="locationlist[]">
+              {% for location in location_list %}
+                  <option value="{{location}}">{{location}}</option>
+              {% endfor %}
+            </select>    
+          </div>
+          <div class="form-group search-roundone">
+            <input type="text" class="form-control" placeholder="Job title, keyword or company name" name="keyword" value="{{initial_keyword}}">
+          </div>
+          <button type="button" class="find-jobs-btn btn" onclick="onClickRoundOneSearch();">Find jobs</button> 
+          <span class="powered-by">Powered by</span>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+  {% endblock pageheading %}
+
+{% block container %}
+<!-- main section start -->
+<section class="container">
+    <div class="overlay"></div>
+    <div id="id_overlay" style="background-color: rgba(255, 255, 255,1); height: 100%; left: 0; position: fixed; top: 0px; width: 100%; z-index: 100; min-height: 100%; display:none;">
+    </div>
+    <div id="id_load" style='position: fixed; width: 100%; background: url("{% static "/shinelearn/images/loader.gif" %}") no-repeat; height: 100%; top: 50%; left: 50%; z-index: 101; display:none;'>
+    </div>
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+    <div id="filters" class="col-sm-3 col-md-2 mt-40">
+      <div class="panel-group filters" id="accordion" role="tablist" aria-multiselectable="true">
+        <h2>Refine search</h2>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Variation
+              </a>
+            </h4>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+            {% for companyID, company in search_result.sortedCompany.items %}
+              <label>
+                <input type="checkbox" name="filterbyCompany" 
+                value="{{companyID}}" {% if companyID in search_result.company_list %}checked{% endif %}>
+                <span>{{company.companyName}} ({{company.jobCount}})</span>
+              </label>
+            {% endfor %}  
+            </div>
+          </div>
+        </div>
+      <button class="search-button" id="id_applyfilter" type="submit">
+      Filter companies</button>
+      </div>
+    </div>       
+    <!-- left content end -->
+
+    <!-- mid content start -->
+    <div class="col-sm-9 col-md-7 mt-40 ">
+      <div class="referral-heading-box">
+      {% if search_result.jobCount %}
+        <div class="form-group custom-select">
+          <select id="id_search_sort" class="form-control">
+            <option value="0">Most Relevant</option>
+            <option value="1" {% if search_result.sort == 1 %} selected="selected"{% endif %}>Latest</option>
+          </select>
+        </div>
+      {% endif %}
+        <h2>
+          {% if search_result.jobCount %}
+              {% if clean_location == "all" %}
+                  {% if clean_keyword == "all" %}
+                      Showing top jobs
+                  {% else %}
+                      {{search_result.jobCount}} <strong>"{{clean_keyword|title}}"</strong> jobs
+                  {% endif %}
+              {% else %}
+                  {% if clean_keyword == "all" %}
+                      {{search_result.jobCount}} jobs in {{clean_location|title|truncatechars:20}}
+                  {% else %}
+                      {{search_result.jobCount}} <strong>"{{clean_keyword|title}}"</strong> jobs in {{clean_location|title|truncatechars:20}}
+                  {% endif %}
+              {% endif %}
+          {% else %}
+              No Jobs Found
+          {% endif %}
+        </h2>
+      </div>
+
+      <ul class="referral-jobs">
+      {% for job in search_result.data %}
+        {% with job.jobId|slugit:job.jobType|slugit:job.interviewerId as job_params %}
+        {% url 'partner-detail' partner='roundone' job_title=job.jobTitle|slugify job_params=job_params as detail_url %}
+        <li>
+          <h2><a href="{{detail_url}}">{{job.jobTitle}}</a></h2>
+          <span class="location"><strong>{{job.companyName}} </strong> | 
+          {{job.jobLocation}}</span> 
+          <!--
+          <datatlist class="list1">Exp:</datatlist>
+          <datatlist class="list2">4 years</datatlist>
+          -->
+          <div class="clearfix"></div>
+          <datatlist class="list1">Job Description:</datatlist>
+          <datatlist class="list2">
+            {{job.jobDescription|safe|truncatewords:15}}
+          </datatlist>
+          <div class="clearfix"></div>
+          <datatlist class="list1">Your Referrer:</datatlist>
+          <datatlist class="list2">
+          <figure>
+            <img src="{% static 'shinelearn/images/referral-job.jpg' %}" 
+            alt="Shine Learning">
+          </figure>
+            {{job.position}}, {{job.departmentName}}
+          </datatlist>
+          {% if request.session.candidate_id %}
+            <a role="button" class="save-job savejob_js" onclick="onClickSaveJob(this, {{job.jobId}});">Save this job</a>
+          {% elif not request.session.candidate_id %}
+            <a href="#" class="save-job" data-toggle="modal" data-target=".logindiv">Save this job</a>
+          {% endif %}
+          <a href="{{detail_url}}" class="view-job">View job description</a>
+          {% if request.session.candidate_id and flag %}
+            <a role="button" class="get-refferd pull-right" 
+            onclick="onClickGetReference({{job.jobId}});">Get Referred</a>
+          {% elif request.session.candidate_id %}
+            <a role="button" class="get-refferd pull-right enrol-now-button" 
+            prod-id="819">Get Referred</a>
+          {% else %}
+            <a href="javascript:void(0)" class="get-refferd pull-right" 
+            data-toggle="modal" data-target=".logindiv">Get Referred</a>
+          {% endif %}
+          <form id="id_{{job.jobId}}">
+            {% csrf_token %}
+            <input type="hidden" name="job_params" value="{{job_params}}">
+            <input name="source" type="hidden" value="{{request.path}}">
+            <input name="origin" type="hidden" value="{{request.path}}">
+          </form>
+        </li>
+        {% endwith %}
+      {% endfor %}
+      </ul>
+      <input type="hidden" name="roundone-get-reference" value="{% url "roundone-get-reference" %}">
+      <input type="hidden" name="roundone-redirect-profile" value="{% url "roundone-redirect-profile" %}">
+      <input type="hidden" name="roundone-save-job" value="{% url "roundone-save-job" %}">
+    </div>       
+    <!-- mid content end -->
+
+    <!-- right content start -->
+    <div id="fix_form" class="col-sm-3 hidden-sm mt-40">
+      <div class="how-it-works-rightbar">
+      <h2>How it works</h2>
+        <ul>
+          <li>
+            <figure class="request-referral-icon"></figure>
+            <article>
+              <strong>Request a Referral</strong>
+              Search 10,000+ jobs and request referrals.
+            </article>
+          </li>
+          <li>
+            <figure class="speak-referrer-icon"></figure>
+            <article>
+              <strong>Speak with the Referrer</strong>
+              We'll schedule a phone call.
+            </article>
+          </li>
+          <li>
+            <figure class="get-referred-icon"></figure>
+            <article>
+              <strong>Get Referred</strong>
+              Prove your merit and earn a referral.
+            </article>
+          </li>
+          <li>
+            <figure class="interview-call-icon"></figure>
+            <article>
+              <strong>Get Hired!</strong>
+              Increase your chance of getting hired by ten times!
+            </article>
+          </li>
+        </ul>               
+      </div>
+      <div class="or-callus">
+          Or call us at
+          <a href="tel:0124-3955001"><strong>0124 - 3955001 / 02</strong></a>
+      </div> 
+    </div>       
+    <!-- right content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+
+<div class="modal fade bs-example-modal-sm logindiv" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Login</h1>
+        <label id="non-field-error" class="error"></label>
+      </div>
+
+       <form role method="post" id="login_form" >{% csrf_token %}
+          
+          <div class="form-group {% if loginform.email.errors %} error {% endif %}">
+            {{loginform.email}}
+            <span class="error-txt">{{loginform.email.errors.0}}</span>
+          </div>
+          <div class="form-group {% if loginform.password.errors %} error {% endif %}">
+               {{loginform.password}}
+               <span class="error-txt">{{loginform.password.errors.0}}</span>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" name="remember_me" class="form-check-input">
+              Remember me
+            </label>
+          </div>
+          <button type="button" id="login-button" class="btn btn-primary submit">Login</button>
+          <small class="form-text text-muted text-center">
+            <a href="javascript:void(0)" data-toggle="modal" data-dismiss="modal" 
+            id="modalforgot">
+              Forgot Password?
+            </a>
+          </small>
+          <div class="social-login">
+            <span>or login with</span>
+            <a class="facebook" onclick="Login();"></a>
+            <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+            <a class="gplus" onclick="glogin()"></a>
+          </div>
+          <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>  
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+       <div id="id_close_success_modal" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="id_success_message">{{message}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="id_success_accept">{{accept_btn}}</button>
+          <button type="button" id="id_success_reject">{{reject_btn}}</button>
+          <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+        </div>
+        </div>
+    </div>
+  </div>  
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="api_rsp_error">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+       <div id="id_close_error_modal" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p id="id_error_message">{{message}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="id_error_accept">{{accept_btn}}</button>
+          <button type="button" id="id_error_reject">{{reject_btn}}</button>
+          <!--<a role="button" data-toggle="modal" data-dismiss="modal">OK</a>-->
+        </div>
+        </div>
+    </div>
+  </div>  
+</div>
+<!--signup-->
+<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Register</h1>
+        <label id="non-field-error-register" class="error"></label>
+      </div>
+
+      <form role="form" id="register_form" >
+        {% csrf_token %}
+          <div class="form-group {% if registerform.email.errors %}error{% endif %}">
+            {{ registerform.email }}
+            <span class="error-txt">{{ registerform.email.errors.0 }}</span>
+          </div>
+          <div id="user_email"></div>
+          <div class="form-group {% if registerform.email.errors %}error{% endif %}">
+            {{ registerform.raw_password }}
+            <span class="error-txt">{{ registerform.raw_password.errors.0 }}</span>
+          </div>
+          <div id="raw_psd"></div>
+          <div class="form-group {% if registerform.cell_phone.errors or registerform.country_code.errors %}error{% endif %}">
+            <div class="country-code">
+              <div class="custom-select">
+                {{registerform.country_code}}
+              </div>
+               {{registerform.cell_phone}}
+              <span class="error-txt">
+                   {% if registerform.cell_phone.errors %}
+                      {{registerform.cell_phone.errors.0}}
+                   {% else %}
+                       {{registerform.country_code.errors.0}}
+                   {% endif %}
+              </span>
+            </div>
+            
+          </div>
+          <div id="cell_phone"></div>
+          <div class="form-group">
+            {{registerform.vendor_id }}
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="term_conditions">
+              I agree to Terms & conditions
+            </label>
+          </div>
+          <div id="terms"></div>
+          <div class="form-check">
+              <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input"
+                  name="is_job_seeker">
+                  Recieve jobs notifications
+              </label>
+          </div>
+          <button type="button" id="register-button" class="btn btn-primary submit">Register</button>
+          <div class="social-login">
+            <span>or Register with</span>
+            <a class="facebook" onclick="Login();"></a>
+            <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+            <a class="gplus" onclick="glogin()"></a>
+          </div>
+          <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".logindiv" data-dismiss="modal">Login Now</a></small>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>       
+<div class="modal fade bs-example-modal-sm forgotdiv" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="forgot_div">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+      </div>
+        <form method="post" id="forgot_form" 
+        action="{% url "users:forgot-email-sent" %}">
+        {% csrf_token %}
+            {% for field in reset_form %}
+                <div class="form-group {% if field.errors %}error{% endif %}">
+                    {{field}}
+                    {% for error in  field.errors %}{{ error }}{% endfor %}
+                </div>
+            {% endfor %}
+          <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock container %}
+{% block js_section %}
+   {{ block.super }}
+   <script type="text/javascript">
+    $(window).load(function(){
+        {% if initial_location %}
+            {% if "all" in initial_location %}
+                $("#id_search_location").multipleSelect("checkAll");
+                $("input[data-name=selectItemlocation]").prop('disabled', true);
+            {% else %}
+                $("#id_search_location").multipleSelect("setSelects", {{initial_location|safe}});
+            {% endif %}
+        {% else %}
+            $("#id_search_location").multipleSelect("uncheckAll");
+        {% endif %}
+    });
+   </script>
+    {% compress js %}
+    <script src="{% static 'console/js/microsite/multiple-select.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/roundone.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/common_v2.js' %}"></script>
+    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
+    <script src="{% static 'shinelearn/js/microsite/cart_msite.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

@@ -1,0 +1,20 @@
+{% load static %}
+<!-- box starts here -->
+<div class="container">
+    <div class="box row">
+        <h2>{{heading}}</h2>
+        <div class="media">
+            <figure class="media-left">
+                <img class="media-object user" src="{{image.url}}" alt="Shine">
+            </figure>
+
+            <div class="media-body rel">
+                <h3 class="media-heading">{{display_name|title}}</h3>
+                <p>{{writer_designation|title}}</p>
+            </div>
+        </div>
+        <hr>
+        {{ description|safe }}
+        <hr>
+    </div>
+</div><!-- box ends here -->

@@ -1,0 +1,117 @@
+{% spaceless %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shine Learning</title>
+</head>
+
+<body style="margin: 0; padding: 0;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
+  <tbody>
+    <tr>
+      <td bgcolor="#9fffb1">
+      	<img src="https://static1.shine.com/shinecp/shinelearn/images/emailers/writer_assignment.jpg" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
+      	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #18549e; padding: 5px 10px 15px 10px;">
+      		{{subject}}
+      	</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:10px">
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #666; padding-bottom: 5px; padding-top: 2px;"><span style="color: #333;">Dear {{username}},</span></strong>
+      	<span>
+        {% if type_flow == 1 %}
+          I am {{ writer_name }} from Shine Resume Services. I will be working with you to create a profile that highlights your accomplishments and capabilities and helps you meet your career objectives. Below is an outline of our document development process: <br><br>
+        {% elif type_flow == 3 %}
+          I am {{ writer_name }} from Shine learning. In next 2 days, I will share an email with you with resume assessment report and my suggestions. In case you have any questions post sharing of the resume assessment report, please feel free to get in touch with me via email.<br><br>
+        {% elif type_flow == 8 %}
+          I am {{ writer_name }} from Shine Resume Services. I will be working with you to create a profile that highlights your accomplishments and capabilities.<br><br>
+        {% endif %}
+
+			<ul style="margin:0px;">
+              {% if type_flow == 8 or type_flow == 1 %}
+                {% if delivery_service and delivery_service_slug == 'super-express' %}
+                    <li style="padding-bottom: 7px;">
+                        You will get a call from me within 15 hours for Super Express delivery on your resume. Request you to be available for the call, so the resume can be processed as per timelines. The resume would then be prepared by me and delivered to you within the next 24 hours. 
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                        In case we are not able to connect with you even after 2 days the resume would be prepared as per inputs available on the resume sent by you and submitted.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                       You will have a maximum of 7 days after delivery of the initial resume to discuss the document with me and to incorporate changes in case you are not satisfied with the initial resume.
+                    </li>
+
+                {% elif delivery_service and delivery_service_name == 'express' %}
+                    <li style="padding-bottom: 7px;">
+                        You will get a call from me within 48 hours for Express delivery on your resume. Request you to be available for the call, so the resume can be processed as per timelines. The resume would then be prepared by me and delivered to you within 4 working days.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                        In case we are not able to connect with you even after 4 days the resume would be prepared as per inputs available on the resume sent by you and submitted.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                       You will have a maximum of 7 days after delivery of the initial resume to discuss the document with me and to incorporate changes in case you are not satisfied with the initial resume.
+                    </li>
+
+                {% else %}
+    				<li style="padding-bottom: 7px;">
+                        You will get a call from me within 3 working days. In case 
+                        you have availed super express delivery, you will be
+                        called within 24 hours and in case of express delivery you
+                        will be called within 36 hours.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                        You will get an initial draft of resume within 5 working days of the telephonic consultation, provided you have given us all the required information.
+                    </li>
+                    <li style="padding-bottom: 7px;">
+                       In case you are not satisfied with the initial resume, you
+                       can discuss the same with us within the next 10 days of
+                       receiving the draft.
+                    </li>
+                {% endif %}
+              {% endif %}
+			</ul>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px;">
+        <span style="background: #fffbe9; color: #333333;  display: block; padding: 10px 10px 10px 15px; font-size: 13px;">
+          <span>I am sending across some of the questions I would be asking, so that you can think over them before our discussion. You can also e-mail answers to these questions at <a href="mailto:{{writer_email}}" style="text-decoration: none; color: #000; font-weight: bold;">{{writer_email}}</a> :</span>
+ 			<ol style="line-height:20px;">
+ 			<li style="padding-bottom: 5px;">What is your target industry and functional area you
+        wish to move into?</li>
+        <li style="padding-bottom: 5px;">What do you consider as your 3 major
+       achievements in each of the last 2- 3 positions held?</li>
+        <li style="padding-bottom: 5px;">Name 3 personal qualities you possess which might
+       help you in your career.</li>
+        <li style="padding-bottom: 5px;">What skill sets would you want to emphasize the
+       most to your future employer?</li>
+ 			</ol>
+        </span>
+      </td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px;">
+    		<strong style="display: block; font-weight: normal; font-size: 12px; color: #333333; padding-top: 10px;">
+    		 Warm Regards, <br>
+    		 Shine Learning Team
+    		</strong>
+    	</td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px; border-top: 1px solid #f4f4f4">
+    		<span style="color: #999999; padding-bottom: 5px; display: block; font-size: 11px; line-height: 16px;">
+	    		Please add <a href="mailto:alert@shinelearning.com" style="color: #2196f3; text-decoration: none;">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.
+	    	</span>
+	    	<span style="color: #999999; padding-bottom: 10px; display: block; font-size: 11px; line-height: 16px;">
+	    		<strong style="color: #525252; font-weight: normal;">Security Alert</strong> - In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="#" style="color: #2196f3; text-decoration: none;">Shinelearning.com</a> by writing to us at <a href="mailto:contactus@shinelearning.com" style="color: #2196f3; text-decoration: none;">contactus@shinelearning.com</a>. Please note that such offers / emails are a violation of our Terms and Conditions, and Shine.com does not endorse such communication with candidates. Please <a href="#" style="color: #2196f3; text-decoration: none;">click here</a> if you do not want to receive any further communication from us.
+	    	</span>
+    	</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+{% endspaceless %}

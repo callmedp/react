@@ -1,0 +1,413 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+{% load console_tags %}
+
+{% block title %}
+  <title>Linkedin Profile</title>
+{% endblock title %}
+
+{% block css_block %}
+  {{ block.super }}
+  <!-- Switchery -->
+  <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}"
+  rel="stylesheet" type="text/css">
+  <link href="{% static "/packages/bootstrap-daterangepicker/daterangepicker.css"  %}" 
+  rel="stylesheet" type="text/css">
+  <link href="{% static "/console/css/linkedin/custom.css" %}" 
+  rel="stylesheet" type="text/css">
+
+              
+{% endblock css_block %}
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3></h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <form class="form-horizontal form-label-left" method="POST" action="." 
+        id="linkedin-draft-form" data-parsley-validate="">{% csrf_token %}
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-bookmark"></i>Draft Form</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li>
+                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.candidate_name.id_for_label }}">Candidate Name</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.candidate_name }} 
+                {{ form.candidate_name.errors }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.headline.id_for_label }}">Headline</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.headline }}
+                {{ form.headline.errors }} 
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.summary.id_for_label }}">Summary</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.summary }}
+                {{ form.summary.errors }} 
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.profile_photo.id_for_label }}">Profile Photograph</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.profile_photo }}
+                {{ form.profile_photo.errors }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.recommendation.id_for_label }}">Recommendation</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.recommendation }}
+                {{ form.recommendation.errors }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.follow_company.id_for_label }}">Follow Company</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.follow_company }}
+                {{ form.follow_company.errors }} 
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.join_group.id_for_label }}">Join Groups</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.join_group }}
+                {{ form.join_group.errors }} 
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.public_url.id_for_label }}">Public Url</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.public_url }}
+                {{ form.public_url.errors }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.key_skills.id_for_label }}">Key Skill</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                {{ form.key_skills }}
+                {{ form.key_skills.errors }}
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="x_panel">
+            <div class="x_title">
+              <h2><i class="fa fa-bookmark"></i>Organization Details</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li>
+                  <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">               
+              {{ org_formset.management_form }}
+              {% for form in org_formset.forms %}
+                <div class="item form-group org-add organization_set">
+                {{ form.as_p }}
+                <p style=""><a class="org-delete" href="#">Delete</a></p>
+                </div>
+              {% endfor %}
+              <p><a id="org-add" href="#">Add Another</a></p>     
+            </div>
+          </div>
+          <div class="x_panel">
+            <div class="x_title">
+              <h2><i class="fa fa-bookmark"></i>Education Details</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li>
+                  <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              {{ edu_formset.management_form }}
+              {% for form in edu_formset.forms %}
+                <div class="item form-group edu-add education_set">
+                {{ form.as_p }}
+                <p style=""><a class="edu-delete" href="#">Delete</a></p>
+                </div>
+              {% endfor %}
+              <p><a id="edu-add" href="#">Add Another</a></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
+        </form>              
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+{{ block.super }}
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js">
+  </script>
+  <script type="text/javascript" 
+    src="{% static "packages/bootstrap-daterangepicker/daterangepicker.js" %}">
+  </script>
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" 
+    src="{% static "packages/parsleyjs/parsley.min.js" %}">
+  </script>
+  <!-- jQuery Tags Input -->
+  <script type="text/javascript" 
+    src="{% static "packages/jquery.tagsinput/src/jquery.tagsinput.js" %}">
+  </script>  
+  <!-- Switchery -->
+  <script type="text/javascript" 
+    src="{% static "packages/switchery/dist/switchery.min.js" %}">
+  </script>
+  <script type="text/javascript" 
+    src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}">
+  </script>
+  <script type="text/javascript">
+
+    
+
+    $('.work_from').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      autoUpdateInput: false,
+      locale:{format: 'YYYY-MM-DD'}
+    }, function(chosen_date) {
+      $('.work_from').val(chosen_date.format('YYYY-MM-DD'));
+    });
+
+    $('.work_to').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      autoUpdateInput: false,
+      locale:{format: 'YYYY-MM-DD'}
+    }, function(chosen_date) {
+      $('.work_to').val(chosen_date.format('YYYY-MM-DD'));
+    });
+
+    $('.study_from').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      autoUpdateInput: false,
+      locale:{format: 'YYYY-MM-DD'}
+    }, function(chosen_date) {
+      $('.study_from').val(chosen_date.format('YYYY-MM-DD'));
+    });
+
+    $('.study_to').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      autoUpdateInput: false,
+      locale:{format: 'YYYY-MM-DD'}
+    }, function(chosen_date) {
+      $('.study_to').val(chosen_date.format('YYYY-MM-DD'));
+    });
+
+  </script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+
+    $(function () {
+      $('#linkedin-draft-form').parsley().on('field:validated', function() {
+        
+        var ok = $('.parsley-error').length === 0;
+    })
+    .on('#linkedin-draft-form:submit', function() {
+      return false; // Don't submit form for this demo
+    });
+    });
+
+
+    function updateElementIndex(el, prefix, ndx) {
+      var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+      var replacement = prefix + '-' + ndx + '-';
+      if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,replacement));
+      if (el.id) el.id = el.id.replace(id_regex, replacement);
+      if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+
+    function orgDeleteForm(btn, prefix) {
+      var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+      if (formCount > 1) {
+      // Delete the item/form
+        $(btn).parents('.org-add').remove();
+        var forms = $('.org-add'); // Get all the forms
+        // Update the total number of forms (1 less than before)
+        $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+        var i = 0;
+        // Go through the forms and set their indices, names and IDs
+        for (formCount = forms.length; i < formCount; i++) {
+          $(forms.get(i)).children().children().each(function() {
+            updateElementIndex(this, prefix, i);
+          });
+        }
+      } // End if
+      else {
+        alert("You have to enter at least one form!");
+      }
+      return false;
+    }
+
+    function eduDeleteForm(btn, prefix) {
+      var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+      if (formCount > 1) {
+        // Delete the item/form
+        $(btn).parents('.edu-add').remove();
+        var forms = $('.edu-add'); // Get all the forms
+        // Update the total number of forms (1 less than before)
+        $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+        var i = 0;
+        // Go through the forms and set their indices, names and IDs
+        for (formCount = forms.length; i < formCount; i++) {
+          $(forms.get(i)).children().children().each(function() {
+            updateElementIndex(this, prefix, i);
+          });
+        }
+      } // End if
+      else {
+        alert("You have to enter at least one form!");
+      }
+      return false;
+    }
+
+    function orgAddForm(btn, prefix) {
+      var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+      var row = $('.org-add:first').clone(false).get(0);
+      $(row).removeAttr('id').insertAfter($('.org-add:last')).children('.hidden').removeClass('hidden');
+
+      $(row).children().not(':last').children().each(function() {
+        updateElementIndex(this, prefix, formCount);
+        $(this).val('');
+      });
+
+      $(row).find('.org-delete').click(function() {
+        orgDeleteForm(this, prefix);
+      });
+
+      $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+
+      $('#id_'+prefix+'-' + formCount + '-work_from').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        autoUpdateInput: false,
+        locale:{format: 'YYYY-MM-DD'}
+      }, function(chosen_date) {
+        $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
+      });
+
+      $('#id_'+prefix+'-' + formCount + '-work_to').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        autoUpdateInput: false,
+        locale:{format: 'YYYY-MM-DD'}
+      }, function(chosen_date) {
+        $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
+      });
+
+      return false;
+    }
+
+    function eduAddForm(btn, prefix) {
+      var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+      if (formCount < 10) {
+        var row = $(".edu-add:first").clone(false).get(0);
+        // Insert it after the last form
+        $(row).removeAttr('id').hide().insertAfter(".edu-add:last").slideDown(300);
+        // Remove the bits we don't want in the new row/form
+        // e.g. error messages
+        $(".errorlist", row).remove();
+        $(row).children().removeClass('error');
+        $(row).children().children().each(function() {
+          updateElementIndex(this, prefix, formCount);
+          if ( $(this).attr('type') == 'text' )
+            $(this).val('');
+        });
+        // Add an event handler for the delete item/form link 
+        $(row).find('.edu-delete').click(function() {
+          return eduDeleteForm(this, prefix);
+        });
+        // Update the total form count
+        $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+
+        $('#id_'+prefix+'-' + formCount + '-study_from').daterangepicker({
+          singleDatePicker: true,
+          showDropdowns: true,
+          autoUpdateInput: false,
+          locale:{format: 'YYYY-MM-DD'}
+        }, function(chosen_date) {
+          $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
+        });
+
+        $('#id_'+prefix+'-' + formCount + '-study_to').daterangepicker({
+          singleDatePicker: true,
+          showDropdowns: true,
+          autoUpdateInput: false,
+          locale:{format: 'YYYY-MM-DD'}
+        }, function(chosen_date) {
+          $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));
+        });
+      } // End if
+      else {
+        alert("Sorry, you can only enter a maximum of ten items.");
+      }
+      return false;
+    }
+  // Register the click event handlers
+    $("#org-add").click(function() {
+      return orgAddForm(this, 'from_organization');
+    });
+
+    $("#edu-add").click(function() {
+      return eduAddForm(this, 'from_education');
+    });
+
+    $(".org-delete").click(function() {
+      return orgDeleteForm(this, 'from_organization');
+    });
+
+    $(".edu-delete").click(function() {
+      return eduDeleteForm(this, 'from_education');
+    });
+  });
+</script>
+{% endblock js_block %}

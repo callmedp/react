@@ -1,0 +1,42 @@
+{% if past_interaction.data %}
+<ul class="table-data">
+  <li class="data-heading">
+    <datalist class="col-sm-3">
+      Company
+    </datalist>
+    <datalist class="col-sm-3">
+      Referrer Name
+    </datalist>
+    <datalist class="col-sm-2">
+      Contact Code
+    </datalist>
+    <datalist class="col-sm-2">
+      Status
+    </datalist>
+    <datalist class="col-sm-2">
+      Action
+    </datalist>
+  </li>
+  {% for past in past_interaction.data %}
+  <li>
+    <datalist class="col-sm-3">
+      {{past.company}}
+    </datalist>
+    <datalist class="col-sm-3">
+      {{past.referrerName}}
+    </datalist>
+    <datalist class="col-sm-2">
+      {{past.contactCode}}
+    </datalist>
+    <datalist class="col-sm-2">
+      {{past.status_str}}
+    </datalist>
+    <datalist class="col-sm-2">
+      {% if past.status != '-1' or past.status != -1 %}
+        <a href="{% url "dashboard:dashboard_roundone_result" order_id=past.orderId %}?status={{past.status}}">View Result</a>
+      {% endif %}
+    </datalist>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}

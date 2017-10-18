@@ -1,0 +1,107 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% block title %}Login Shine learning{% endblock %}
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+    {% endcompress %}
+    {% compress css %}
+    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class=" pull-left" id="sidebar-main-trigger" href="/"></a> 
+                
+                <a class="icon-back pull-left" href="/"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+                <!--a class=" pull-left" href="search-listing.html">search</a-->
+
+                
+                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+
+    </header><!-- header ends here -->
+{% endblock header %}
+
+
+{% block container %}
+    <div class="body-wrapper">
+        <div class="tab-container">
+            <ul class="tabs box-panel p-0">
+                <li><a href="{% url 'login' %}" class="current">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+            </ul>
+
+            <!-- Tab content Satrts here -->
+            <div class="content-box mt-20 login-form">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                <form method="post" id="login_form" data-role="form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{field}}
+                            {% for error in  field.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        <p class="c9 pb-0">
+                            <input type="checkbox" id="test10">
+                            <label for="test10">Remember me</label>
+                        </p>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Login</button>
+                        <a href="{% url "users:forgot-html" %}">Forgot Password?</a>
+                    </div>
+
+                    <div class="line_wrap w100fl">
+                        <span>or sign in with</span>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="social-login w100fl text-center">
+                        <a class="fb" onclick="Login();">
+                        <sup class="icon-fb-2"></sup></a>
+                        <a href="{% url 'users:linkedin-code' %}" class="link"><sup class="icon-link-2"></sup></a>
+                        <a class="gp" onclick="glogin()">
+                        <sup class="icon-gp-2"></sup></a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <a href="/contact-us" class="any-query block mt-20 text-center row">Any Query ? We are here to help you..</a>
+                </form>
+            </div><!-- Tab content ends here -->
+        </div><!-- container -->
+    </div>
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
+

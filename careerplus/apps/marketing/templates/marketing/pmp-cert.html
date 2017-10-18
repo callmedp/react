@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <title>Project Management Pro!</title>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+        <link href="{% static "shinelearn/css/marketing/pmp-cert/style_pmp.css" %}" rel="stylesheet">
+        <!--[if IE]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <style>
+            @media screen and (max-height: 1048px){
+                #rc-imageselect, #captcha1 {transform:scale(0.60);-webkit-transform:scale(0.60);transform-origin:0 0;-webkit-transform-origin:0 0;}
+            }
+            .noerror {
+                display: none;
+            }
+        </style>
+        <script type="text/javascript">
+            var recaptcha1;
+            var recaptcha2;
+            function recaptchaCallBack() {
+                if($("#captcha1").length){
+                //Render the recaptcha1 on the element with ID "recaptcha1"
+                recaptcha1 = grecaptcha.render('captcha1', {
+                  'sitekey' : '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV', //Replace this with your Site key
+                  'theme' : 'light'
+                });}};
+            function openPopupRecaptcha() {
+                if($('#recaptcha2').is(':empty')){
+                grecaptcha.render("captcha2", {sitekey: "6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV", theme: "light"});}
+            };
+        </script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallBack&render=explicit" async defer></script>
+
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <a href="/" class="logo sprite"></a>
+                <div style="clear:both">
+                </div>
+            </div>
+            <div class="header_banner">
+                <div class="punchline">
+                    <h1>Buy a PMP certification course and become a Project Management pro!</h1><span>Get a 23% salary hike* as compared to your peers</span>
+                </div>
+            </div>
+            <div class="query">
+                <h2>Need more details?</h2>
+                <p style="padding: 0px 10px;">Our team will assist you with the details of the course and help you take an informed decision.</p>
+                <form id="lead" 
+          action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
+          >
+                    {% csrf_token %}
+                    <input type="text" id="name" name="name" placeholder="Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="60">
+
+                    <input type="email" id="email" name="email" placeholder="yourname@email.com" value="{{request.session.email}}" maxlength="60">
+
+                    <div style="clear:both; display:block;">
+                    <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
+
+                    <input type="mobile" id="mobile" name="number" onblur="leadSubmit();return false;" placeholder="Phone Number" value="{{request.session.mobile_no}}" maxlength="15">
+                    </div>
+
+                    <input id="message" name="msg" type="hidden" value="Project Management pro!">
+
+                    <div style="clear:both; height:53px; overflow:hidden; display:block;">
+                    <div id="captcha1" class="input-field" style="width:45%; margin:0 2% 10px 5%; float:left" >
+                    </div>
+                    <p style="display:none; color:#ff0000;
+                              font-size: 13px;
+                              margin: 0;
+                              padding: 0;
+                              width: 36%;
+                              float: right;
+                              z-index: 5;" id="hiddenrecaptcha"> Captcha Validation is required</p>
+                              </div>
+                    
+                    
+                    <input type="hidden" name="prd" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                    <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+                    <input type="hidden" name="lsource" value="{{ lead_source }}">
+                    <input type="submit" value="Submit" class="submit" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead').submit();return false;" id="submit">
+                </form>
+            </div>
+
+            <div class="marqueebox">
+                <div class="marquee">
+                    <div class="mcontent"><span class="hike sprite"></span><p>Our course can get you up to 23% salary hike as compared to your peers</p></div>
+                    <div class="mcontent"><span class="verified sprite"></span><p>Certifications are offered by global and verified course providers like Vskills, Skillsoft, iACT Global </p></div>
+                    <div class="mcontent"><span class="course sprite"></span><p>Unparallel course content by industry experts and knowledge leaders</p></div>
+                    <div class="mcontent"><span class="expert sprite"></span><p>Both classroom and online courses available </p></div>
+                </div>
+            </div>
+
+            <div class="about"><h3>About Shine Learning</h3>
+                <ul>
+                    <li>Shine Learning is the largest career services marketplace which provides end to end solutions to enhance your career trajectory. </li>
+                    <li>We thrive for the best quality services in the career enhancement industry. </li>
+                    <li>Our services range from resume writing, social media profile enhancement, learning and skill development courses, certifications, free resume formats along with expert career advice. </li>
+                </ul>
+            </div>
+            <div class="course">
+                <h3>Popular Courses</h3>
+                <div class="course1"><img src="{% static "shinelearn/css/marketing/pmp-cert/img2.jpg" %}" alt="Certified Digital Marketing Master Course" width="371" height="158"><h4>PMI Project Management Professional PMP</h4></div>
+
+                <div class="course2"><img src="{% static "shinelearn/css/marketing/pmp-cert/img3.jpg" %}" alt="Vskills Certified facebook apps Developer" width="371" height="170"><h4>Project Management Professional Training</h4></div>
+
+                <div class="course1"><img src="{% static "shinelearn/css/marketing/pmp-cert/img4.jpg" %}" alt="Certified Web Analytics Master course" width="371" height="170"><h4>PMP Certification Classroom Training Program</h4></div>
+
+                <div class="course2"><img src="{% static "shinelearn/css/marketing/pmp-cert/img5.jpg" %}" alt="Vskills Certified SEO Professional" width="371" height="170"><h4>Vskills Certified Project Management Professional</h4></div>
+            </div>
+            <div class="footer"><p>*Disclaimer: "The information mentioned above is based on the internal research by the experts in the relevant domain in HT Media Limited. The said information is merely illustration of probability in increase and no guarantee is being provided by the company for the same"</p></div>
+
+        </div>
+
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+
+        
+        <script type="text/javascript">
+            $(function() {
+              $('a[href*=#]:not([href=#])').click(function() {
+                if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+
+                  var target = $(this.hash);
+                  target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+                  if (target.length) {
+                    $('html,body').animate({
+                      scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                  }
+                }
+              });
+            });
+        </script>
+        <script type="text/javascript">
+        var _gaq = _gaq || [];
+        $.validator.addMethod("lettersonly", function (value, element){
+            return this.optional(element) || /^[a-z\s]*$/i.test(value);
+        }, "Letters only please");
+
+        $.validator.addMethod("defaultInvalid", function (value, element) {
+            return !(element.value == element.defaultValue);
+        }, "This field is required.");
+        $.validator.addMethod("custommobile",
+            function(value, element) {
+                return value.length == 10 ;
+        });
+
+        function leadSubmit() {
+            var form = $('#lead');
+            var action = form.data('non_captcha_action');
+            $.post(action, (form).serialize(), function (data) {
+                }, 'json');
+        }
+
+        $("#lead").validate({
+                submitHandler:function (form) {
+                    
+                    if(grecaptcha.getResponse(recaptcha1) == '') {
+                        $('#hiddenrecaptcha').show();
+                    } else {
+                        $('#hiddenrecaptcha').hide();
+                        var action = $(form).attr('action');
+                        $.post(action, $(form).serialize(), function (data) {
+                            if (data['recaptcha']) {
+                                if (data['status']){
+                                $.each($("#lead"), function (i, e) {
+                                    e.reset();
+                                });
+                                $("#lead label").remove();
+                                grecaptcha.reset(recaptcha1);
+                                var conversion_id = 991709191;
+                                var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                                var ga_code = document.createElement('div');
+                                ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                                document.body.appendChild(ga_code);
+                                window.location.href ='thankyou-for-query'
+                                return false;
+                                    
+                                } else {
+                                    alert("Error! Something went wrong. Please try again");
+                                    grecaptcha.reset(recaptcha1);
+                                    
+                                }
+                        }
+                        else{
+                            alert("Only humans are allowed to submit this form.");
+                            grecaptcha.reset(recaptcha1);
+                        }
+
+                        }, 'json');
+                    }
+
+                },
+                rules:{
+                    number:{
+                        required:true,
+                        custommobile:true,
+                        number:true,
+                    },
+                    email:{
+                        email:true,
+                        required:true,
+
+                    },
+                    name:{
+                        lettersonly:true,
+
+                    },
+                    msg:{
+                        maxlength:500
+                    }
+                },
+                messages:{
+                    number:{
+                       required:"Field is required",
+                       number:"Enter only number",
+                       custommobile: "Please enter 10 digits mobile number",
+                    },
+                    email:{
+                        required:"Field is required"
+                    },
+                    msg:{
+                        maxlength:"No more than 500 characters."
+
+                    }
+                }
+            });
+        </script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['shine._setAccount', 'UA-3537905-1'],['shine._setDomainName', 'none'],['shine._setAllowLinker', true],['shine._trackPageview']);
+            _gaq.push(['resume._setAccount', 'UA-3537905-41'],['resume._setDomainName', 'none'],['resume._setAllowLinker', true],['_setSiteSpeedSampleRate', 10],['resume._trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+
+        <!-- Facebook Pixel Code -->
+
+        <script>
+
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+
+        document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+
+
+        fbq('init', '630068977028888');
+
+        fbq('track', "PageView");</script>
+
+        <noscript><img height="1" width="1" style="display:none"
+
+        src="https://www.facebook.com/tr?id=630068977028888&ev=PageView&noscript=1"
+
+        /></noscript>
+    </body>
+</html>

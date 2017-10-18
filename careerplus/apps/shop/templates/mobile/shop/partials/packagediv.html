@@ -1,0 +1,41 @@
+{% load humanize search_tags %}
+{% if prd_service == 'course' %}
+    <div class="detail-wrap">
+        <div class="provided-by">
+            <div class="media">         
+                <figure class="media-left">
+                  <span><img src="{{prd_vendor_img}}"></span>
+                </figure>
+                <div class="media-body rel pl-5">
+                    <p class="pb-0">Provided by</p>
+                    <a href="#">{{prd_vendor}}</a>
+                    <p class="pb-0">Starting at <strong>Rs. {{start_price|floatformat}}/-</strong></p>
+                </div>  
+            </div>
+        </div>
+        {% if pop %}
+            <div class="select-provider">
+                <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">
+                    Select other provider
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="detail-wrap">
+        <div class="provided-by">
+            <div class="media">
+                <div class="media-body rel">
+                  <p class="pb-0">Experience</p>
+                  {% if prd_exp %}
+                    <a>{{prd_exp|get_choice_display:"EXP_DICT"}}</a>
+                  {% endif %}
+                  <p class="pb-0">Starting at <strong>{{start_price|floatformat}}/-</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="select-provider">
+            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+        </div>
+    </div>
+{% endif %}

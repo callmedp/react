@@ -1,0 +1,94 @@
+{% extends "mobile/basic/base.html" %}
+{% load static thumbnail compress %}
+
+
+{% block title %}Order item detail | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% endcompress %}
+    
+{% endblock css_section %}
+
+{% block header %}
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+            <div class="pull-right">
+                
+               <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+               <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        
+        <h1 class="heading-back w100fl pb-0">Feedback</h1>
+        
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <div class="body-wrapper">
+        <section class="content-box">
+            <h2 class="mb-5">{{oi.product.heading}}
+                {% if oi.product.get_exp_db %}
+                 - {{oi.product.get_exp_db}}
+                {% endif %}</h2>
+            <p class="fs-12 c9">Order ID : {{oi.order.number}}</p>
+            <form role="form" id="feedback-form">{% csrf_token %}
+                <div class="rating-feedback mt-10">
+                    <fieldset class="rate">
+                        <input type="radio" id="rating5" name="rating" value="5" />
+                        <label for="rating5" title="5 stars"></label>
+
+                        <input type="radio" id="rating4" name="rating" value="4" />
+                        <label for="rating4" title="4 stars"></label>
+
+                        <input type="radio" id="rating3" name="rating" value="3" />
+                        <label for="rating3" title="3 stars"></label>
+
+                        <input type="radio" id="rating2" name="rating" value="2" />
+                        <label for="rating2" title="2 stars"></label>
+
+                        <input type="radio" id="rating1" name="rating" value="1" />
+                        <label for="rating1" title="1 star"></label>
+                    </fieldset>
+                    <span><strong id="selected-rating">0</strong>/5</span>
+                    <!--span><strong>3</strong>/5</span-->
+                </div>
+                <span class="error" style="color:red" id="rating-error"></span>
+                <p class="fs-12 c9 mt-10">Slide to rate on scale of 1-5</p>
+
+                <div class="mt-30 feedback-mgs">
+                  <textarea placeholder="Please write your feedback here" class="form-control" id="id_review" name="review"></textarea>
+                  <span class="error" style="color:red"></span>
+                </div>
+                <p class="fs-12 c9 mt-10">Max 100 characters</p>
+                <input type="hidden" name="oi_pk" value="{{oi.pk}}" />
+                <input type="hidden" name="flavour" value="mobile" />
+                <button class="btn btn-slg btn-blue mt-20" id="rating-submit">Submit</button>
+            </form>
+        </section><!-- end of section here -->
+    </div><!-- Body wrapper ends here -->
+
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

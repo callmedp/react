@@ -1,0 +1,18 @@
+{% if fbt %}
+  
+<!-- Frequently bought togeather -->
+  <div class="row">
+    <div class="select-product col-sm-12 col-md-8 mb-40">
+      <h2 class="detail-heading">Frequently bought together</h2>
+        <ul>
+          {% for fbt in fbt_list  %}
+            <li >
+              <label><input class="input" {% if fbt.id in selected_products %}checked{% endif %} name="fbt" type="checkbox" data-id="{{fbt.id}}" data-price="{{fbt.inr_price|floatformat}}" actual-price="{% if fbt.fake_inr_price %} {{fbt.fake_inr_price|floatformat}}{% else %}{{fbt.inr_price|floatformat}}{% endif %}">{{fbt.label}}</label> 
+              <strong>Rs. {{fbt.inr_price|floatformat}}/-</strong>
+            </li>
+          {% endfor %}
+        </ul>
+    </div>
+  </div>
+
+{% endif %}

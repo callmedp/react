@@ -1,0 +1,69 @@
+{% load static %}
+<div class="download-pdf mb-40">
+   {% if download_doc %}
+	  <a id="id_download_button" href="{{download_doc.get_url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
+	    <img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}">
+	    <span class="download-box">
+	      <figure class="download-icon"></figure>
+	      <center>{{heading}}</center>
+	    </span>
+	  </a>
+  {% endif %}
+</div>
+
+<!--download-->
+<div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="id_download_model">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="myModalLabel">Download as PDF</h1>
+      </div>
+        <form role="form" method="post" id="downloadpdf_form" action="{% url "cms:download-pdf" page_obj.pk %}">
+          <div style='display:none'>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="user_name" name="name" aria-describedby="nameHelp" placeholder="Name">
+            <span class="error position-error"></span>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="id_email" name="email" aria-describedby="emailHelp" placeholder="Email">
+            <span class="error position-error"></span>
+          </div>
+          <div class="form-group">
+            <div class="country-code">
+              <div class="custom-select">
+                <select class="form-control" name="country_code">
+                  {% for country in country_choices %}
+                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.1}}</option>
+                  {% endfor %}
+                  <!--option>+91</option>
+                  <option>+91</option-->
+                </select>
+              </div>
+              <input type="text" id="id_mobile" name="mobile_number" class="form-control modal-form-control" placeholder="Mobile">
+              <span class="error position-error"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            
+              
+              <label class="form-check-label">
+                  <input type="checkbox" name="term_condition" class="form-check-input">
+                  By downloading this sample, you hereby accept our <a href="#">Terms & Conditions</a>.
+                  <span class="error position-error"></span>
+              </label>
+              
+          </div>
+          <div style='display:none'>
+            <input type='hidden' id="id_action" name='action_type' />
+          </div>
+          <button type="button" id="id_download" class="btn btn-primary submit">Download</button>
+          <small class="form-text text-muted text-center"><a id="id_skip" href="#" data-toggle="modal" data-dismiss="modal">Skip</a></small>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>  

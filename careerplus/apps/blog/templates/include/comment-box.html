@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="media mb-40">
+<div class="media-left">
+  <a href="#">
+    <img class="media-article" src="{% static 'shinelearn/images/blog/user-pic.jpg' %}" alt="username">
+  </a>
+</div>
+<div class="media-body">
+  <form id="blog-comment-form{{article.id}}" role="form">{% csrf_token %}
+    <div class="form-group">
+      <textarea class="form-control" id="id_comment{{article.id}}" name="message" rows="3" placeholder="write message here..."></textarea>
+      <span class="error"></span>
+      <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
+      <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
+    </div>
+    <input type='button' class="submit-button" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}"  value="Submit">
+  </form>
+</div>
+</div>
+
+<div id="page_comment{{article.id}}">
+  {{ comment_list|safe|default:'' }}
+</div>

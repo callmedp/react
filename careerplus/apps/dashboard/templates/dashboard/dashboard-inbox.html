@@ -1,0 +1,153 @@
+{% extends "basic/base1.html" %}
+{% load static compress %}
+{% spaceless %}
+
+    
+    {% block title %}User Inbox|Shinelearning{% endblock title %} 
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/css" href="{% static "shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
+        {% endcompress %}
+        {% compress css %}
+        <style type="text/css">
+            .error{
+                color: red;
+            }
+        </style>
+        {% endcompress %}
+    {% endblock css_section %}
+    
+    <!-- main section start -->
+    {% block main_container %}
+
+      {% block page_heading %}
+
+       {% block breadcrumb %}
+           <!-- breadcrums -->
+            <section class="container">
+              <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li class="active">Dashboard</li>
+              </ol>  
+            </section>
+       {% endblock breadcrumb %}
+      
+      {% endblock page_heading %}
+
+      {% block main_section %}
+          <section class="container mt-10">
+
+            <!-- page content body start -->
+            <div class="row">
+            
+            {% block upload_box %}
+                {% if pending_resume_items %}
+                    <!-- resume upload box -->
+                    <div class="notification-resume" id="notification-box-id">
+                      To initiate your services. <a role="button" id="upload_resume" class="upload-resume">Upload resume</a>
+                    </div>
+                {% endif %}
+            {% endblock upload_box %}
+
+            {% block left_content %}
+            <!-- left content start -->
+              <div class="col-sm-3 dashboard-tab">
+                <a class="active" href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
+                <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
+                <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
+              {% if roundone_user %}
+                <a href="{% url "dashboard:roundone-dashboard" %}"><span class="referal-icon"></span> Referral</a>
+              {% endif %}
+
+                <div class="please-call">
+                  Please call us at <a href="tel:0124-3955001"><strong>0120-4959420/32</strong></a> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.
+                </div>
+              </div>  
+            <!-- left content end -->
+            {% endblock left_content %}
+
+            {% block right_content %}
+                {% if empty_inbox %}
+                    <!-- right content start -->
+                    <div class="col-sm-9 bdr dashboard-tab-content">
+                        <div class="empty-wallet">
+                            <figure class="empty-cart-pic"></figure>
+                            <article>Start with your first order and earn loyalty points</article>
+                        </div>
+                    </div>
+                    <!-- right content end -->
+                {% else %}
+                    <!-- right content start -->
+                    <div class="col-sm-9 bdr dashboard-tab-content" id="right-content-id">
+
+                      <div class="filter-by">
+                      Filter by
+                        <form role="form" id="order-filter-form">{% csrf_token %}
+                            <div class="form-group custom-select">
+                                <select class="form-control" name="last_month_from" id="lastmonth-id">
+                                  <option value="6">Last six months</option>
+                                  <option value="3">Last three months</option>
+                                </select>
+                            </div>
+                            <div class="form-group custom-select">
+                                <select class="form-control" name="select_type" id="select-type-id">
+                                  <option value="0">All Items</option>
+                                  <option value="1">In Process</option>
+                                  <option value="2">Closed</option>
+                                </select>
+                            </div>
+                        </form>
+                      </div>
+                      <ul class="products-inbox" id="orderitem-inbox-box">
+                           {{inbox_list|safe}}
+                      </ul>
+
+                    </div>
+                    <!-- right content end -->
+                {% endif %}
+            {% endblock right_content %}
+
+            </div>
+            <!-- page content body end -->
+
+        </section>
+        <!-- main section end -->
+      {% endblock main_section %}
+
+      {% block recommended_products %}
+          {% include "shop/partials/recommended_product.html" %}
+      {% endblock recommended_products %}
+
+    <!--Reject Subit Message Modal-->
+    <div class="modal fade bs-example-modal-sm5" id="reject_success_modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+         <div class="register">
+         <div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="myModalLabel">Thank you</h1>
+          </div>
+            <form>
+              <div class="form-group accept-msg" id="reject-message-id">
+                Thank you for your feedback . <br>Our experts will contact you soon. 
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+    {% endblock main_container %}
+
+    {% block js_section %}
+        {{block.super}}
+        {% compress js %}
+        <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+        {% endcompress %}
+    {% endblock js_section %}
+
+    {% block johukum %}
+    {% endblock johukum %}
+{% endspaceless %}

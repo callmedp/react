@@ -1,0 +1,18 @@
+{% if fbt %}
+	<!-- Frequently bought together Satrts here -->
+	<div class="container select-product">
+		<h2>Frequently bought together</h2>
+		<div class="ui-grid-a">
+		{% for fbt in fbt_list  %}
+	        <div class="ui-block-a">
+	        	<input type="checkbox" name="fbt" id="regular{{forloop.counter}}" data-id="{{fbt.id}}" data-price="{{fbt.inr_price|floatformat}}" actual-price="{% if fbt.fake_inr_price %} {{fbt.fake_inr_price|floatformat}}{% else %}{{fbt.inr_price|floatformat}}{% endif %}">
+				<label for="regular{{forloop.counter}}">
+				<p class="pb-5">{{fbt.label}}</p>
+				<strong>Rs. {{fbt.inr_price|floatformat}}/-</strong>
+				</label>
+	        </div><!-- end of label -->
+	    {% endfor %}
+	    </div>
+	<div class="clearfix"></div>    
+	</div><!-- Frequently bought together ends here -->
+{% endif %}

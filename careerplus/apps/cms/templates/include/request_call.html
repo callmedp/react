@@ -1,0 +1,42 @@
+<div class="request-call box-panel mb-40 cleafix">
+    <h2 class="heading-right">request a call</h2>
+      <form class="mt-20" role="form" id="callback_form" >
+        <div style='display:none'>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="name" placeholder="Name">
+          <span class="error position-error"></span>
+        </div>
+        <div class="form-group">
+            <div class="country-code">
+              <div class="custom-select">
+                <select class="form-control" id="call_back_country_code-id" name="country_code">
+                  {% for country in country_choices %}
+                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.1}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <input type="text" id="id_mobile" name="mobile_number" class="form-control modal-form-control" placeholder="Mobile">
+              <span class="error position-error"></span>
+            </div>
+          </div>
+        <!--div class="form-group">
+          <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
+          <span class="error position-error"></span>
+        </div-->
+        <div class="form-group">
+          <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
+          <span class="error position-error"></span>
+        </div>
+        
+      </form>
+      <button type="button" id="id_callback"  class="submit-button">Message</button>
+      <div class="call-service">
+        <strong>
+          <span class="call-service-icon"></span>
+          0124-395 5001
+        </strong>
+        9am to 7pm ist monday-saturday
+      </div>
+</div> 

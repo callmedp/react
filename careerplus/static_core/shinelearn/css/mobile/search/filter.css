@@ -1,0 +1,100 @@
+.cms .tabs li {
+  width: 50%; }
+
+.vertical-tabbing .tab-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -moz-box;
+  display: flex;
+  overflow: scroll;  
+}
+
+/* current element like this */
+/* Tabbing Start From Here */
+.tab-container .tabs li {
+  display: inline-block; }
+  .tab-container .tabs li a {
+    padding: 10px 15px;
+    display: block;
+    font-size: 90%; }
+
+.tab-container .tabs .current {
+  color: #666;
+  border-bottom: 1px solid #6b6b6b; }
+
+.tab-container .tab-content {
+  display: none;
+  padding: 15px; }
+  .tab-container .tab-content .box-panel {
+    margin-bottom: 15px; }
+    .tab-container .tab-content .box-panel .media {
+      border-bottom: 0 none;
+      margin-bottom: 0;
+      padding-bottom: 0; }
+
+.tab-container .tab-content.current {
+  display: inherit; }
+
+.cms .tabs {
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5; }
+  .cms .tabs li {
+    margin: 0 -1px;
+    text-align: center; }
+    .cms .tabs li a {
+      background-color: #e5e5e5;
+      display: block;
+      color: #333; }
+  .cms .tabs .current {
+    background-color: #fff;
+    border-bottom: 0;
+    color: #333; }
+
+.vertical-tabbing {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  height: 100%; }
+  .vertical-tabbing .tab-container {
+    height: 100%;
+    width: 100%; }
+  .vertical-tabbing .tabs {
+    background-color: #f5f5f5;
+    width: 200px; }
+    .vertical-tabbing .tabs li {
+      display: block;
+      width: 100%; }
+      .vertical-tabbing .tabs li a {
+        border-bottom: 1px solid #ebebeb;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        font-size: 1em;
+        color: #666;
+        text-align: left; }
+    .vertical-tabbing .tabs .current {
+      color: #333;
+      border-right: 1px solid #ebebeb;
+      border-left: 2px solid #2f5ea6;
+      border-bottom: 0 none;
+      border-right: 0 none;
+      background-color: #fff;
+      position: relative; }
+  .vertical-tabbing .tab-content {
+    width: 100%; }
+    .vertical-tabbing .tab-content ul {
+      width: 100%; }
+      .vertical-tabbing .tab-content ul li {
+        padding-bottom: 15px; }
+
+.apply-bottom {
+  position: absolute;
+  bottom: 0;
+  z-index: 9;
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px; }

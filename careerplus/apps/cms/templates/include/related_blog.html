@@ -1,0 +1,23 @@
+{% load static thumbnail %}
+
+{% if related_arts %}
+<div class="related box-panel mb-40">
+    <h2 class="heading-right">{{heading}}</h2>
+    {% for art in related_arts %}
+        <div class="media">
+            <a href="{% url 'blog:articles-deatil' art.slug art.pk %}">
+                {% if art.image %}
+                    <div class="media-left">
+                        {% thumbnail art.image "98x64" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                        {% endthumbnail %}
+                    </div>
+                {% endif %}
+                <div class="media-body">
+                    {{art.display_name}}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}

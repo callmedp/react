@@ -1,0 +1,58 @@
+{% load static %}
+{% if products %}
+{% for product in products %}
+    <div class="box row mb-15">
+        <div class="media">
+            <div class="media-left">
+                <a href="javascript:void(0);" class="sigma-pro color1">
+                    <img src="{{ product.pImg}}">
+                </a>
+            </div>
+            <div class="media-body">
+                <p class="pb-0">
+                    <a href="{{site}}{{product.pURL}}">
+                    <strong>{{product.pNm}}</strong></a>
+                </p>
+                <div class="mb-10 c6">
+                    <div class="rating inline-block ml-0 fs-12">
+                        <sup class="fill-star"></sup>
+                        {{product.pARx |floatformat:1}}/5
+                    </div>
+                    <div class="inline-block fs-12">
+                        <figure class="icon-comments"></figure>
+                        <a href="javascript:void(0);">{{product.no_review}}</a>
+                        <figure class="icon-jobs ml-10"></figure>
+                        {% if product.pNJ %}
+                            <strong>{{product.pNJ}}</strong> Jobs
+                        {% endif %}
+                        {% if "true" in product.pCert %}
+                        <figure class="icon-certificate ml-10">
+                        </figure>Certification
+                        {% endif %}
+                    </div>
+                </div><!-- end of icons wrapper -->
+                <p class="pb-5 fs-12 c6">
+                    Providers
+                    <a href="javascript:void(0);" class="tag-bg fs-11 ml-5">
+                    {{product.pPvn}}
+                    </a>
+                </p>
+                <p class="pb-0 fs-12">
+                    Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
+                </p>
+            </div><!-- end of media body -->
+        </div><!-- end of media -->
+    </div><!-- end of box -->
+{% endfor %}
+
+{% endif %}
+{% if products.has_next %}
+  <input type="hidden" name="page" 
+  value="{{products.next_page_number}}" id="page_id">
+  <input type="hidden" name="slug" value="{{slug}}" id="slug_id">
+  <p class="text-right pb-0">
+      <a href="javascript:void(0);" id="product_load_more" 
+      class="load-more loadmore">
+      <strong>LoadMore</strong></a>
+  </p>
+{% endif %}

@@ -1,0 +1,269 @@
+{% load console_tags %}
+<!-- sidebar menu -->
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+  <div class="menu_section">
+    {% if request.user|has_group:PRODUCT_GROUP_LIST %}
+        <h3>Live Catalog</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_category %}
+            <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:category-list' %}">Category</a></li>
+                <li><a href="{% url 'console:category-relation-list' %}">Category Relationship</a></li>
+              </ul>
+            </li>
+          {% endif %}
+          
+          {% if perms.shop.console_change_product %}
+          
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:product-list' %}">Product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+              {% if perms.faq.console_change_faq %}
+                <li><a href="{% url 'console:faq-list' %}">FAQs</a></li>
+              {% endif %}
+              {% if perms.shop.console_change_keyword %}
+                <li><a href="{% url 'console:keyword-list' %}">Keywords</a></li>
+              {% endif %}
+              {% comment %}
+                {% if perms.shop.console_change_attribute %}
+                  <li><a href="{% url 'console:attribute-list' %}">Attributes</a>
+                  </li>
+                {% endif %}
+              {% endcomment %}
+              
+              </ul>
+            </li>
+
+            <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url "console:geo-country" %}">Country</a></li>
+            </ul>
+
+            </li>
+          {% endif %}
+        </ul>
+        <h3>Product Moderation</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+          
+            <li><a><i class="fa fa-book"></i> Product Moderation <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:screenproduct-list' %}">Product Screens</a></li>
+                <li><a href="{% url 'console:screenproduct-moderationlist' %}">Moderation List</a></li>
+                
+                
+              </ul>
+            </li>
+            <li><a><i class="fa fa-book"></i> FAQ Moderation <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                
+                <li><a href="{% url 'console:screenfaq-list' %}">FAQ Screens</a></li>
+                <li><a href="{% url 'console:screenfaq-moderationlist' %}">Moderation List</a></li>
+              
+              </ul>
+            </li>
+            
+          {% endif %}
+        </ul>
+    {% elif request.user|has_group:OPERATION_GROUP_LIST %} 
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:product-list' %}">Product</a></li>
+              </ul>
+            </li>
+            
+          {% endif %}
+        </ul>
+    {% elif request.user|has_group:VENDOR_GROUP_LIST %} 
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          {% if perms.shop.console_change_product %}
+            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:screenproduct-list' %}">Product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+              {% if perms.faq.console_change_faq %}
+                <li><a href="{% url 'console:screenfaq-list' %}">FAQs</a></li>
+              {% endif %}
+              </ul>
+            </li>
+            
+          {% endif %}
+        </ul>
+    {% endif %}
+      <ul class="nav side-menu">
+        
+
+      <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+          <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
+          <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
+          <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
+          <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
+        </ul>
+      </li>
+
+        {% if is_admin %}
+            <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url "console:cms:pages:indexerwidget-list" %}" data-pjax='.right_col'>Indexer Widget</a></li>
+                  <li><a href="{% url "console:cms:pages:widget-list" %}" data-pjax='.right_col'>Widget</a></li>
+                  <li><a href="{% url "console:cms:pages:page-list" %}" data-pjax='.right_col'>Page</a></li>
+                  <li><a href="{% url "console:cms:pages:comment-list" %}" data-pjax='.right_col'>Moderate Comments</a></li>
+                  <li><a href="{% url "console:cms:pages:pagewidget-list" %}" data-pjax='.right_col'>Page Widget</a></li>
+                  <li><a href="{% url "console:cms:pages:pagecounter-list" %}" data-pjax='.right_col'>Page Counter</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa fa-edit"></i> Vendor <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url "console:partner:pages:vendor-list" %}" data-pjax='.right_col'>Vendor</a></li>
+                <li><a href="{% url "console:partner:pages:vendorhierarchy-list" %}" data-pjax='.right_col'>Vendor Hierarchy</a></li>
+              </ul>
+            </li>
+        {% endif %}
+
+        {% if request.user|has_group:REFUND_GROUP_LIST %}
+            <ul class="nav side-menu">
+                <li><a><i class="fa fa-edit"></i> Refund Operation <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    {% if perms.order.can_view_refund_approval_queue %}
+                    <li><a href="{% url 'console:refund-request-approval' %}">Refund Approval</a></li>
+                    {% endif %}
+                    {% if perms.order.can_view_refund_request_queue %}
+                        <li><a href="{% url 'console:refund-request' %}">Refund Requests</a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+            </ul>
+        {% endif %}
+
+      <li>
+      <a>
+        <i class="fa fa-edit"></i>Linkedin Queue<span class="fa fa-chevron-down"></span>
+      </a>
+      <ul class="nav child_menu">
+        {% if perms.order.can_show_linkedin_inbox_queue %}
+            <li>
+              <a href="{% url 'console:linkedin-inbox' %}">
+              Linkedin Inbox</a>
+            </li>
+        {% endif %}
+        {% if perms.order.can_show_linkedin_approval_queue %}
+            <li>
+              <a href="{% url 'console:linkedin-approval' %}">
+              Linkedin Aproval</a>
+            </li>
+        {% endif %}
+        {% if perms.order.can_show_linkedinrejectedbycandidate_queue %}
+            <li>
+              <a href="{% url 'console:linkedin-rejectedbylinkedincandidate' %}">
+              Linkedin Rejected By Candidate</a>
+            </li>
+        {% endif %}
+        {% if perms.order.can_show_linkedinrejectedbyadmin_queue %}
+            <li>
+              <a href="{% url 'console:linkedin-rejectedbylinkedinadmin' %}">
+              Linkedin Rejected By Admin</a>
+            </li>
+        {% endif %}
+      </ul>
+      </li>
+      <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+
+            {% if perms.order.can_show_order_queue %}
+                <li><a href="{% url "console:queue-order" %}">Orders</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_welcome_queue %}
+                <li><a href="{% url "console:queue-welcome" %}">Welcome Call</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_midout_queue %}
+                <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_inbox_queue %}
+                <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_approval_queue %}
+                <li><a href="{% url "console:queue-approval" %}">Approval</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_approved_queue %}
+                <li><a href="{% url "console:queue-approved" %}">Approved</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_rejectedbyadmin_queue %}
+                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_rejectedbycandidate_queue %}
+                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_booster_queue %}
+                <li><a href="{% url "console:queue-booster" %}">Booster</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_domestic_profile_update_queue %}
+                <li><a href="{% url "console:queue-domesticprofileupdate" %}">Domestic Profile Update</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_domestic_profile_approval_queue %}
+                <li><a href="{% url "console:queue-domesticprofileapproval" %}">Domestic Profile Approval</a></li>
+            {% endif %}
+            {% if perms.order.can_show_international_profile_update_queue %}
+                <li><a href="{% url "console:queue-internationalprofileupdate" %}">International Profile Update</a></li>
+            {% endif %}
+            {% if perms.order.can_show_international_profile_approval_queue %}
+                <li><a href="{% url "console:queue-internationalapproval" %}">International Profile Approval</a></li>
+            {% endif %}
+            {% if perms.order.can_show_allocated_queue %}
+                <li><a href="{% url "console:queue-allocated" %}">Allocated</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_closed_oi_queue %}
+                <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
+            {% endif %}
+
+            {% if perms.order.can_show_partner_inbox_queue %}
+            <li>
+                <a href="{% url "console:partner:partnerinbox" %}">Partner Inbox</a>
+            </li>
+            {% endif %}
+
+            {% if perms.order.can_show_hold_orderitem_queue %}
+            <li>
+                <a href="{% url "console:partner:partnerholdqueue" %}">Hold Items</a>
+            </li>
+            {% endif %}
+
+            {% if perms.order.can_show_varification_report_queue %}
+            <li>
+                <a href="{% url "console:partner:varificationreports" %}">Verification Reports</a>
+            </li>
+            {% endif %}
+            
+        </ul>
+      </li>
+    
+  </div>
+
+</div>
+<!-- /sidebar menu -->
+
+              
+            

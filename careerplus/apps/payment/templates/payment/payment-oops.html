@@ -1,0 +1,32 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+
+{% block title %}
+    Shinelearning - Order Status
+{% endblock title %}
+
+
+{% block main_container %}
+    {% block page_heading %}
+    {% endblock page_heading %}
+
+{% endblock main_container %}
+
+
+{% block js_section %}
+  {{block.super}} 
+  <script type="text/javascript">
+        var error = "{{error_type}}";
+        console.log(error);
+        if(error){
+            // Your application has indicated there's an error
+            window.setTimeout(function(){
+                // Move to a new location or you can do something else
+                window.location.href = "/payment/payment-options/";
+            }, 3000);
+        }
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

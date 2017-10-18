@@ -1,0 +1,125 @@
+{% spaceless %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shine Learning</title>
+</head>
+
+<body style="margin: 0; padding: 0;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
+  <tbody>
+    <tr>
+      <td bgcolor="#c7f5ff">
+      	<img src="https://static1.shine.com/shinecp/shinelearn/images/emailers/cart_drop_out.jpg" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
+      	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #18549e; padding: 5px 10px 15px 10px;">
+      		{{subject}}
+      	</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px">
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Hi,</strong>
+      	<span style="color: #666; display: block; font-size: 13px;">Your shopping cart has some shortlisted products. Looks like you could not complete your transaction.</span>
+      </td>
+    </tr>
+    
+    <tr>
+      <td style="padding: 10px;">
+        <strong style="color: #666;">Would you like to buy the product now?</strong>   
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px;">
+        <span style="background: #fffbe9; border-radius: 5px; display: block; padding: 10px; font-size: 14px;">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #333; line-height: 24px;">
+            <tbody>
+              <tr>
+                <td style="font-size: 14px; color: #333; font-weight: bold;">Order Details</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><strong>Subscription</strong></td>
+                <td><strong>Price (in Rs.)</strong></td>
+              </tr>              
+              <tr>
+                <td>{{m_prod.product.name}}</td>
+                <td>{{m_prod.product.get_price}}</td>
+              </tr>
+              <tr>
+                {% for addon in addons %}
+                  <td>{{addon.product.name}}</td>
+                  <td>{{addon.product.get_price}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for var in variations %}
+                  <td>{{var.product.name}}</td>
+                  <td>{{var.product.get_price}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td style="border-top:1px dashed #333; padding:3px 0;"><strong>Total (T)</strong></td>
+                <td style="border-top:1px dashed #333;padding:3px 0;"><strong>
+                {{total}}</strong></td>
+              </tr>
+              <tr>
+                <td style="border-bottom:1px dashed #333; padding:3px 0;"> Discount (if any) 0.00%</td>
+                <td style="border-bottom:1px dashed #333; padding:3px 0;">- 0.00</td>
+              </tr>
+               <tr>
+                <td style="padding-top: 3px; font-size: 14px;"><strong>Net Payable</strong></td>
+                <td style="padding-top: 3px;font-size: 14px;"><strong>{{total}}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </span>  
+      </td>
+    </tr>
+       <tr>
+        <td align="left" valign="top" style="padding:10px;">
+        	<table width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
+  <tbody>
+    <tr>
+      <td align="left" valign="top"><a href="{{autologin}}" style="text-decoration: none; font-size: 14px; background: #3c5b9b; color: #ffffff; display:table; padding: 7px 0px; border-radius: 3px; width: 170px; text-align: center;">Complete your order </a></td>
+    </tr>
+  </tbody>
+</table>
+
+        </td>
+       </tr>
+        <tr>
+      <td style="padding: 10px; font-size: 13px;">
+      Call us at <a href="tel:0124 3955001/02"><strong>0124 3955001/02</strong></a>  
+      </td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px;">
+    		<span style="display: block; font-size: 13px;">*Available between 9am-7pm, Monday to Saturday<br>
+Or  you can reach out to us at <a href="mailto:resumeservices@shine.com" style="color: #2196f3; text-decoration: none;">resumeservices@shine.com</a></span>
+    	</td>
+    </tr>
+    <tr>
+      <td style="padding:10px;">
+        <strong style="display: block; font-weight: normal; font-size: 12px; color: #333333; padding-top: 10px;">
+         Warm Regards, <br>
+         Shine Learning Team
+        </strong>
+      </td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px; border-top: 1px solid #f4f4f4">
+    		<span style="color: #999999; padding-bottom: 5px; display: block; font-size: 11px; line-height: 16px;">
+	    		Please add <a href="mailto:alert@shinelearning.com" style="color: #2196f3; text-decoration: none;">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.
+	    	</span>
+	    	<span style="color: #999999; padding-bottom: 10px; display: block; font-size: 11px; line-height: 16px;">
+	    		<strong style="color: #525252; font-weight: normal;">Security Alert</strong> - In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="#" style="color: #2196f3; text-decoration: none;">Shinelearning.com</a> by writing to us at <a href="mailto:contactus@shinelearning.com" style="color: #2196f3; text-decoration: none;">contactus@shinelearning.com</a>. Please note that such offers / emails are a violation of our Terms and Conditions, and Shine.com does not endorse such communication with candidates. Please <a href="#" style="color: #2196f3; text-decoration: none;">click here</a> if you do not want to receive any further communication from us.
+	    	</span>
+    	</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+{% endspaceless %}
