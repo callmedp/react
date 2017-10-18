@@ -160,16 +160,20 @@
               <p class="pb-0">Account Name : HT Media Limited <br />Account No. : 000705038629</p>
             </div><!-- /.bank detail -->
             <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
-              <div class="form-group">
-                <select class="form-control" id="id_state" name="state" required="" aria-required="true" aria-invalid="true">
+              <div class="form-group {% if state_form.state.errors %}error{% endif %}">
+                <!--select class="form-control {% if state_form.state.errors %}error{% endif %}" id="id_state" name="state" required aria-required="true" aria-invalid="true">
                   <option value="-1" selected="selected">Please select your state</option>
                   <option value="1">Delhi</option><option value="2">Haryana</option>
                   <option value="4">MP</option><option value="3">West Bengal</option>
-                </select>
-                
+                </select-->
+                {{state_form.state}}
+                <p class="error-txt">{{state_form.state.errors.0}}</p>
+
+                <input type="hidden" name="payment_type" value="cash">
+
               </div>
 
-              <a role="button" id="check-sumit-button" class="btn btn-slg btn-orange">Make Payment</a>
+              <button type="submit" class="btn btn-slg btn-orange">Make Payment</a>
             </form>
 
             
