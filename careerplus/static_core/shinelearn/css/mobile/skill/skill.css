@@ -157,15 +157,10 @@
 
       /*.skill-box .skill-provider li a img {
         display: inline-block;
-<<<<<<< Updated upstream
         height: 100%;
         width: auto;
         vertical-align: middle; }
-=======
-        height: auto;
-        width: auto; 
-      }*/
->>>>>>> Stashed changes
+      */
 
 .skill-box .recommd-list li {
   padding-left: 15px;
