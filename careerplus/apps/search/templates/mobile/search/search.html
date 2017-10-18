@@ -7,17 +7,13 @@
     {{ block.super }}
     {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/users/login.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/search/course-listing.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/common/auto-suggest.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/search/filter.css" %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
     {% compress css %}
-    <style type="text/css">
-        .error{
-            color: red;
-        }
-    </style>
     {% endcompress %}
 {% endblock css_section %}
 
@@ -41,8 +37,8 @@
         <div class="clearfix"></div>
         {% if search_type == 'recommended' %}
         <div class="search-tagging mt-10">
-            <span>{{ recmnd_func_area }}</span>
-            <span>{{ recmnd_skills }}</span>
+            <span class="advanced">{{ recmnd_func_area }}</span>
+            <span class="advanced">{{ recmnd_skills }}</span>
             <a href="javascript:void(0)" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
         {% elif search_type == 'simple' %}
@@ -112,6 +108,7 @@
 
 
 </div>
+{% include "shop/partials/call_us.html" %}
 {% endblock container %}
 
 {% block js_section %}

@@ -209,6 +209,7 @@ class SearchBaseView(TemplateView):
             context['price'] = self.request.GET.getlist('fprice')
         context['breadcrumbs'] = self.get_breadcrumbs()
         context['products_found'] = self.found
+        context['show_chat'] = True,
         return context
 
     def build_page(self):
@@ -510,7 +511,7 @@ class RedirectToRecommendationsView(FormView):
         try:
             func_area_obj = FunctionalArea.objects.get(name__iexact=func_area)
             self.request.session.update({'func_area': func_area_obj.id})
-        except:
+        except Exception as e:
             error_log.error('Func Area not found in DB:', func_area)
         skills = form_data['skills'].split(",")
         skills = Skill.objects.filter(name__in=skills)
