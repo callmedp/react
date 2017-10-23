@@ -43,7 +43,8 @@
   width: 18px;
   height: 18px;
   display: block;
-  margin-left: 25px; }
+  margin-left: 25px; 
+}
 
 .icon-close {
   background-position: -124px -175px;
@@ -196,7 +197,7 @@
   display: inline-block; }
 
 .icon-link-2 {
-  background-position: -73px -291px;
+  background-position: -73px -282px;
   width: 21px;
   height: 34px;
   display: inline-block;
