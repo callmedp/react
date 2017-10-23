@@ -4,14 +4,16 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 
 from users.tasks import user_register
-from core.mixins import InvoiceGenerate
-from order.mixins import OrderMixin
+# from core.mixins import InvoiceGenerate
+# from order.mixins import OrderMixin
 from order.tasks import (
     pending_item_email,
     process_mailer,
     payment_pending_mailer,
     payment_realisation_mailer,
+    invoice_generation_order,
 )
+from .tasks import add_reward_point_in_wallet
 
 
 class PaymentMixin(object):
@@ -71,11 +73,13 @@ class PaymentMixin(object):
             if not order.candidate_id:
                 user_register.delay(data={}, order=order.pk)
 
-            if order.status == 1:
-                order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+            # order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+            invoice_generation_order.delay(order_pk=order.pk)
 
-            # add reward_point in wallet
-            OrderMixin().addRewardPointInWallet(order=order)
+            if order.status == 1:
+                # add reward_point in wallet
+                add_reward_point_in_wallet.delay(order_pk=order.pk)
+                # OrderMixin().addRewardPointInWallet(order=order)
 
             try:
                 del request.session['cart_pk']
