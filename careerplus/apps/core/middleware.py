@@ -1,14 +1,19 @@
 # python built-in imports
 import re
 from datetime import datetime
+from django.http import (
+    HttpResponsePermanentRedirect,)
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
+from django_mobile import set_flavour
 
 # django imports
-from django_mobile.middleware import MobileDetectionMiddleware, SetFlavourMiddleware
+from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
+from django.conf import settings
 
 from .utils import set_session_country
+from django.conf import settings
 
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
@@ -19,6 +24,37 @@ class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
         super(UpgradedSetFlavourMiddleware, self).__init__(get_response)
 
 
+class MobileDetectionMiddleware(object):
+    http_accept_regex = re.compile("application/vnd\.wap\.xhtml\+xml", re.IGNORECASE)
+
+    def __init__(self):
+        pass
+
+    def process_request(self, request):
+        is_mobile = False
+
+        # import ipdb;
+        # ipdb.set_trace()
+        try:
+            if request.path_info.index('/m/') == 0:
+                is_mobile = True
+        except ValueError:
+            pass
+
+        if is_mobile:
+            set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
+        else:
+            set_flavour(settings.FLAVOURS[0], request)
+
+    # def process_response(self, request, response):
+    #     import ipdb;ipdb.set_trace()
+        # super(MobileDetectionMiddleware, self).process_response
+        # if request.flavour == 'mobile':
+        #     request.path_info = request.path_info[3:]
+            # import ipdb; ipdb.set_trace()
+        # return response
+
+
 class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddleware):
     """
     Makes middleware django 1.10 compatible
@@ -26,10 +62,6 @@ class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddlewa
     # TODO: Upgrade regex for tablet to be exempted
     def __init__(self, get_response=None):
         super(UpgradedMobileDetectionMiddleware, self).__init__(get_response)
-        user_agents_test_match = r'^(?:%s)' % '|'.join(self.user_agents_test_match)
-        self.user_agents_test_match_regex = re.compile(user_agents_test_match, re.IGNORECASE)
-        self.user_agents_test_search_regex = re.compile(self.user_agents_test_search, re.IGNORECASE)
-        self.user_agents_exception_search_regex = re.compile(self.user_agents_exception_search, re.IGNORECASE)
 
 
 class LearningShineMiddleware(object):
@@ -46,6 +78,7 @@ class LearningShineMiddleware(object):
     def process_request(self, request):
         from core.api_mixin import AdServerShine, AcrossShine
         cpem = request.COOKIES.get('_cpem_', '')
+        cpem_mail = None
 
         try:
             cpem_mail = AcrossShine().decode(cpem)
@@ -82,6 +115,26 @@ class LearningShineMiddleware(object):
                     if minute_diff < 30:
                         if email:
                             cpem_mail = email
-
             except:
                 pass
+
+
+# class LoginMiddleware(object):
+
+#     def __init__(self, get_response):
+#         self.get_response = get_response
+
+#     def __call__(self, request):
+#         # cookies_data = request.COOKIES.get('_em_', '').split('|')
+#         return self.process_request(request)
+
+#     def process_request(self, request):
+#         new_path = settings.LOGIN_URL
+#         cookies_data = request.COOKIES.get('_em_', '').split('|')
+#         if cookies_data[0] and cookies_data[1]:
+#             return self._redirect(request, new_path)
+#             # return HttpResponsePermanentRedirect(settings.LOGIN_URL)
+
+#     def _redirect(self, request, new_path):
+#         newurl = new_path
+#         return HttpResponsePermanentRedirect(newurl)

@@ -161,10 +161,10 @@
             {% elif obj.product.type_flow == 9 %}
                 {% with obj.get_roundone_status as op_status %}
                     {% if op_status == 141 %}
-                        <p><strong>Status:</strong> Your profile to be shared with interviewer is pending - <a href="#">Complete Profile</a></p>
+                        <p><strong>Status:</strong> Your profile to be shared with interviewer is pending - <a href="{% url 'dashboard:dashboard_profile' %}">Complete Profile</a></p>
                     
                     {% elif op_status == 142 %}
-                        <p><strong>Status:</strong>Service is under progress - <a href="#">Edit your profile</a></p>
+                        <p><strong>Status:</strong>Service is under progress - <a href="{% url 'dashboard:dashboard_profile' %}">Edit your profile</a></p>
 
                     {% elif op_status == 143 %}
                         <p><strong>Status:</strong> Service has been expired</p>

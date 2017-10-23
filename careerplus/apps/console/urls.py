@@ -282,6 +282,10 @@ urlpatterns += [
         linkedin_view.ChangeDraftView.as_view(),
         name='change-draft'),
 
+    url(r'^linkedin/create/(?P<oi>\d+)/draft/$',
+        linkedin_view.CreateDrftObject.as_view(),
+        name='create-draft'),
+
     url(r'^linkedin/order/(?P<pk>\d+)/detail/$',
         linkedin_view.LinkedinOrderDetailVeiw.as_view(), name='linkedin-order-detail'),
 

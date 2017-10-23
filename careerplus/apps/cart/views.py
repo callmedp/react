@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.template.response import TemplateResponse
 from django.conf import settings
+from users.forms import (
+    PasswordResetRequestForm,)
 
 from shine.core import ShineCandidateDetail
 from shop.models import Product, ProductClass
@@ -206,6 +208,7 @@ class PaymentLoginView(TemplateView):
         context = super(self.__class__, self).get_context_data(**kwargs)
         context.update({
             "email_exist": False,
+            'reset_form': PasswordResetRequestForm()
         })
         return context
 

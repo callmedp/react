@@ -15,9 +15,14 @@ COMPRESS_OFFLINE = True
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/live_prod',
+        'URL': 'http://172.22.65.36:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
+    'index': {
+        'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
+        'URL': 'http://172.22.65.35:8983/solr/prdt',
+        'INCLUDE_SPELLING': False,
+    }
 }
 
 ####### CCAVENUE SETTINGS ###########################

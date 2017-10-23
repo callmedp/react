@@ -276,15 +276,27 @@
                         </a>
                       </td>
                       {% endif %}
-                      <td>
-                        <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
-                        <button type="button" class="btn btn-success btn-xs">
-                        <i class="fa fa-eye"></i>
-                          Edit
-                          Linkedin
-                          Draft 
-                        </button></a>
-                      </td>
+                      {% if obj.oio_linkedin %}
+                        <td>
+                          <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
+                          <button type="button" class="btn btn-success btn-xs">
+                          <i class="fa fa-eye"></i>
+                            Edit
+                            Linkedin
+                            Draft 
+                          </button></a>
+                        </td>
+                      {% else %}
+                        <td>
+                          <a target="_blank" href="{% url 'console:create-draft' obj.pk %}">
+                          <button type="button" class="btn btn-success btn-xs">
+                          <i class="fa fa-eye"></i>
+                            Edit
+                            Linkedin
+                            Draft 
+                          </button></a>
+                        </td>
+                      {% endif %}
                     {% endif %}
                       <td>
                         <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}

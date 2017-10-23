@@ -49,7 +49,7 @@ def upload_FA(filename):
     csvfile = open(filename)
     mapping_dict = csv.DictReader(csvfile)
     for d in mapping_dict:
-        product = Product.objects.filter(name__iexact=d['PRODUCT NAME(OLD)'])
+        product = Product.objects.filter(cpv_id=d['VARIATION ID(OLD)'])
         if product:
             product = product[0]
             for i in range(1, 4):
@@ -64,14 +64,14 @@ def upload_FA(filename):
                         except Exception as e:
                             print("Failed @ {},{},{},{}".format(product.id, faname, product.name, e))
         else:
-            print('Failed. Product not found @ {}'.format(d['PRODUCT NAME(OLD)']))
+            print('Failed. Product not found @ {},{}'.format(d['PRODUCT NAME(OLD)'], d['VARIATION ID(OLD)']))
 
 def upload_Skill(filename):
     from .models import Skill, Product, ProductSkill
     csvfile = open(filename)
     mapping_dict = csv.DictReader(csvfile)
     for d in mapping_dict:
-        product = Product.objects.filter(name__iexact=d['Product name'])
+        product = Product.objects.filter(name__iexact=d['Variation ID'])
         if product:
             product = product[0]
             for i in range(1, 253):
