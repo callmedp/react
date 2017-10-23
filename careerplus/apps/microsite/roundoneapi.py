@@ -66,8 +66,9 @@ class RoundOneAPI(object):
                 if request and access_token:
                     request.session.update({
                         'roundone_access_token': access_token,
-                        'roundone_token_expiry': json.dumps(datetime.now() +
-                        timedelta(seconds=expires_in), cls=DjangoJSONEncoder)})
+                        'roundone_token_expiry': json.dumps(
+                            datetime.now() + timedelta(
+                                seconds=expires_in), cls=DjangoJSONEncoder)})
                 return access_token
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -85,7 +86,8 @@ class RoundOneAPI(object):
 
             if response.status_code == 200:
                 location_list = response.json()
-                location_json = json.dumps({"location_list": location_list[1: -1]})
+                location_json = json.dumps({
+                    "location_list": location_list[1: -1]})
                 cache.set('roundone_location', location_json, 60 * 60)
                 return json.loads(location_json)
         except Exception as e:
@@ -113,7 +115,7 @@ class RoundOneAPI(object):
                 page = int(request.GET.get('page', 0))
                 if page < 0:
                     page = 0
-                start = rows*page
+                start = rows * page
             except:
                 page = 0
 
@@ -122,18 +124,19 @@ class RoundOneAPI(object):
                 "start": start,
                 "rows": rows,
                 "sort": sort_by,
-                "affiliateName": settings.ROUNDONE_API_DICT.get("affiliateName", 'CP')
+                "affiliateName": settings.ROUNDONE_API_DICT.get(
+                    "affiliateName", 'CP')
             }
-            
+
             location = request.GET.get('loc', '')
             keyword = kwargs.get('keyword', '')
             company_list = request.GET.get('company', '').split(',')
-            
-            location= location if location else kwargs.get('location', '')
+
+            location = location if location else kwargs.get('location', '')
 
             if location and location != "all":
                 post_data.update({"location": location.split(",")})
-            
+
             if keyword and keyword != "all":
                 searchKeyword = keyword.replace("-", " ")[:45]
                 post_data.update({"searchKeyword": searchKeyword})
@@ -149,7 +152,9 @@ class RoundOneAPI(object):
 
             if response.status_code == 200:
                 response_json = response.json()
-                response_json.update({'response': True, 'company_list': company_list})
+                response_json.update({
+                    'response': True,
+                    'company_list': company_list})
                 sortedCompany = request.session.get('sortedCompany', {})
                 companyJobCount = response_json.get('companyJobCount', {})
 
@@ -566,4 +571,8 @@ class RoundOneSEO(object):
         seo_title = self.get_seo_title(title_for=data_for, **context)
         seo_desc = self.get_seo_desc(desc_for=data_for, **context)
         seo_heading = self.get_seo_heading(heading_for=data_for, **context)
-        return {'seo_title': seo_title, 'seo_desc': seo_desc, 'seo_heading': seo_heading}
+        return
+        {
+            'seo_title': seo_title, 'seo_desc': seo_desc,
+            'seo_heading': seo_heading
+        }

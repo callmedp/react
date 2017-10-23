@@ -85,7 +85,7 @@ class Command(BaseCommand):
                 FROM auth_user 
                 LEFT OUTER JOIN cart_userprofile ON ( auth_user.id = cart_userprofile.user_id ) 
                 LEFT OUTER JOIN theme_country ON ( cart_userprofile.country_id = theme_country.id ) 
-                WHERE (auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
+                WHERE  (auth_user.date_joined >= '2016-04-1 00:00:00' AND auth_user.email IS NOT NULL AND cart_userprofile.mobile IS NOT NULL AND NOT (auth_user.email =  '') AND NOT (cart_userprofile.mobile =  '' AND cart_userprofile.mobile IS NOT NULL))
                 ORDER BY auth_user.date_joined DESC
                 """
         df = pd.read_sql(sql, con=db)

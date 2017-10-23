@@ -1,6 +1,6 @@
 import json
 from collections import OrderedDict
-
+import logging
 from django.views.generic import ( View,
     FormView, TemplateView, ListView, DetailView)
 from django.http import (
@@ -279,6 +279,7 @@ class ChangeCategoryView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:category-change', kwargs={'pk': cat}))
             except Exception as e:
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
             return HttpResponseRedirect(
@@ -564,6 +565,8 @@ class ChangeFaqView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:faquestion-change', kwargs={'pk': faq}))
             except Exception as e:
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
@@ -713,6 +716,8 @@ class ChangeKeywordView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:keyword-change', kwargs={'pk': key}))
             except Exception as e:
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
@@ -862,6 +867,8 @@ class ChangeAttributeView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:attribute-change', kwargs={'pk': attr}))
             except Exception as e:
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
             return HttpResponseRedirect(
@@ -1423,6 +1430,8 @@ class ChangeProductView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:product-change', kwargs={'pk': prd}))
             except Exception as e:
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
@@ -1505,6 +1514,8 @@ class OPChangeProductView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:product-changeops', kwargs={'pk': prd}))
             except Exception as e:
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
@@ -1603,6 +1614,8 @@ class ChangeProductVariantView(DetailView):
                 return HttpResponseRedirect(
                     reverse('console:productvariant-change', kwargs={'pk': prd, 'parent': parent}))
             except Exception as e:
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                 return HttpResponseRedirect(
@@ -1674,6 +1687,8 @@ class ActionCategoryView(View, CategoryValidation):
                             data = {'success': 'True',
                                 'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
                 except Exception as e:
+                    logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                     messages.error(request, (
                         ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                     data = {'error': 'True'}
@@ -1776,6 +1791,8 @@ class ActionProductView(View, ProductValidation):
                             data = {'success': 'True',
                                 'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
                 except Exception as e:
+                    logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                     messages.error(request, (
                         ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
                     data = {'error': 'True'}
@@ -1786,6 +1803,8 @@ class ActionProductView(View, ProductValidation):
                     "Invalid Action, Do not have permission!")
             return HttpResponse(json.dumps(data), content_type="application/json")
         except Exception as e:
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         data = {'error': 'True'}
