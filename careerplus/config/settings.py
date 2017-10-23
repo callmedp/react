@@ -274,10 +274,12 @@ CACHES = {
     },
 }
 
+SESSION_CACHE_ALIAS = 'session'
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
 GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
 GOOGLE_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'
 GOOGLE_RECAPTCHA_SECRET = '6LctaRcUAAAAAA93epQV2CjvCHIcKbvlu0ui2K28'
-LOGIN_URL = '/'
 
 
 try:

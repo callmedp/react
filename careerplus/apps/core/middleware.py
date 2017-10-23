@@ -10,6 +10,7 @@ from django_mobile import set_flavour
 # django imports
 from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
+from shine.core import ShineCandidateDetail
 from django.conf import settings
 
 from .utils import set_session_country
@@ -119,22 +120,16 @@ class LearningShineMiddleware(object):
                 pass
 
 
-# class LoginMiddleware(object):
+class LoginMiddleware(object):
 
-#     def __init__(self, get_response):
-#         self.get_response = get_response
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-#     def __call__(self, request):
-#         # cookies_data = request.COOKIES.get('_em_', '').split('|')
-#         return self.process_request(request)
-
-#     def process_request(self, request):
-#         new_path = settings.LOGIN_URL
-#         cookies_data = request.COOKIES.get('_em_', '').split('|')
-#         if cookies_data[0] and cookies_data[1]:
-#             return self._redirect(request, new_path)
-#             # return HttpResponsePermanentRedirect(settings.LOGIN_URL)
-
-#     def _redirect(self, request, new_path):
-#         newurl = new_path
-#         return HttpResponsePermanentRedirect(newurl)
+    def __call__(self, request):
+        cookies_data = request.COOKIES.get('_em_', '').split('|')
+        resp_status = ShineCandidateDetail().get_status_detail(
+            email=cookies_data[0], shine_id=None, token=None)
+        if resp_status:
+            request.session.update(resp_status)
+        response = self.get_response(request)
+        return response
