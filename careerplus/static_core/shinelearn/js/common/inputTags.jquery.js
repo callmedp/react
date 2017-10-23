@@ -121,7 +121,7 @@
                 self.ELEMENT_CLASS = self.DEFAULT_CLASS + '-' + self.UNIQID;
                 self.LIST_CLASS = self.DEFAULT_CLASS + '-list';
                 self.ITEM_CLASS = self.DEFAULT_CLASS + '-item';
-                self.ITEM_CONTENT = '<span class="value" title="Cliquez pour éditer">%s</span><i class="close-item">&times</i>';
+                self.ITEM_CONTENT = '<span class="value">%s</span><i class="close-item">&times</i>';
                 self.FIELD_CLASS = self.DEFAULT_CLASS + '-field';
                 self.ERROR_CLASS = self.DEFAULT_CLASS + '-error';
                 self.ERROR_CONTENT = '<p class="' + self.ERROR_CLASS + '">%s</p>';
@@ -225,18 +225,14 @@
                         var value = self.$input.val().trim();
 
                         if ($.inArray(key, self.keys) < 0) {
-                            //debugger;
                            if (self._autocomplete()._isSet()) {
-                               //debugger;
                                 self.options.autocomplete['values'] = $.grep(self.options.autocomplete['actualValues'], function(v) {
                                      return v.toLowerCase().indexOf(value.toLowerCase()) >= 0;
                                  });
-                               //debugger;
                                  self._autocomplete()._build();
                                  if (self.options.autocomplete['values'].length){
                                      self._autocomplete()._show();
                                  }
-                               //debugger;
 
                              }
                             return;
@@ -416,7 +412,6 @@
                 self.ismaxLength = function(){
                     if(self.tags.length >= self.options.max) {
                         self.$input.hide();
-                        return;
                     } else {
                         self.$input.show();
                     }
@@ -510,7 +505,6 @@
                                 if ($(e.target).hasClass('is-disabled')) {
                                     return false;
                                 }
-
                                 self.$input.addClass('is-autocomplete').val($(this).text());
                                 self._autocomplete()._hide();
                                 self._bindEvent('autocompleteTagSelect');
@@ -521,11 +515,9 @@
                             });
                         },
                         _show: function () {
-                            //debugger;
                             if (!self._autocomplete()._isSet()) {
                                 return false;
                             }
-                            //debugger;
 
                             self.$autocomplete
                                 .css({
@@ -533,12 +525,11 @@
                                     'minWidth': self.$input.width()
                                 })
                                 .insertAfter(self.$input);
-                            //debugger;
                             setTimeout(function () {
                                 self._autocomplete()._bindClick();
                                 self.$autocomplete.addClass('is-active');
                             }, 100);
-                            //debugger;
+
                         },
                         _hide: function () {
                             self.$autocomplete.removeClass('is-active');
@@ -573,8 +564,11 @@
 
                         self._bindEvent('focus');
 
+
                         if (self._autocomplete()._isSet() && !self.$input.hasClass('is-autocomplete')  && !self.$input.hasClass('is-edit')) {
-                            self._autocomplete()._show();
+                            // if(self.tags.length < self.options.max) {
+                                self._autocomplete()._show();
+                            // }
                         }
                     });
                 };

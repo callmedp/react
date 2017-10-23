@@ -547,19 +547,21 @@ $(document).ready(function() {
                         $('#id-cart-message').text(info);
                         $('#cart-counter-id').addClass('cart-counter');
                         $('#cart-counter-id').text(json.cart_count);
-                        // alert("product added in cart successfully");
+                        if (window.CURRENT_FLAVOUR == 'mobile'){
+                            alert("Product added successfully in cart.");
+                        }
                     }
 
                     else if (json.status == -1){
-                        alert("Something went wrong, Please try again.")
+                        alert("Something went wrong, Please try again.");
                     }
 
                 },
                 failure: function(response){
-                    alert("Something went wrong, Please try again")
+                    alert("Something went wrong, Please try again");
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    alert("Something went wrong, Please try again")
+                    alert("Something went wrong, Please try again");
                 }
             });
         }

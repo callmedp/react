@@ -925,6 +925,20 @@ span.twitter-typeahead {
     background-color: #fff !important
 }
 
+
+.alert-error {
+    color:red;
+}
+
+.alert-error input{
+    color:red;
+    border: 1px red solid;
+}
+
+.alert-error p{
+    color:red;
+}
+
 .error .error-txt {
     font-size: 80%;
     padding: 2px 5px;

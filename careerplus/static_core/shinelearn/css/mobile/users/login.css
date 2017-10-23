@@ -334,5 +334,16 @@ button {
   display: block;
   padding-bottom: 0; }
 
+.error .mgs {
+  font-size: 85%;
+  padding-top: 3px;
+  color: #f34a38;
+  display: block;
+  padding-bottom: 0; }
+
+.mgs {
+  display: none;
+}
+
 .error-txt {
   display: none; }

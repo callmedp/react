@@ -362,6 +362,7 @@
   display: block;
   font-size: 12px;
   color: #666;
+  text-align: center;
 }
 .notification-resume .resume-writing strong {
   display: block;
@@ -371,6 +372,7 @@
   width: 100%;
   clear: both;
   overflow: hidden;
+  text-align: center;
 }
 .notification-resume .resume-writing .input-file {
   border-bottom: 1px solid #e1e1e1;
@@ -379,7 +381,9 @@
   height: 30px;
   line-height: 16px;
   cursor: pointer;
-  margin-bottom: 15px;
+}
+.notification-resume .resume-writing .input-file a input {
+  height: 30px;
 }
 .notification-resume .resume-writing .choose-file {
   color: #3f5f94;
@@ -389,6 +393,7 @@
   position: relative;
   z-index: -1;
   margin-top: 5px;
+  font-weight: 400;
 }
 .notification-resume .resume-writing .upload-file {
   top: -17px;
@@ -406,6 +411,13 @@
 }
 .notification-resume .resume-writing .use-shine label input {
   margin-right: 5px;
+}
+.notification-resume .resume-writing .file-box {
+  display: block;
+}
+.notification-resume .checkbox-box {
+  text-align: left;
+  padding-left: 25%;
 }
 
 .filter-by {

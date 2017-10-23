@@ -230,10 +230,10 @@ class OrderItem(AbstractAutoDate):
     last_oi_status = models.PositiveIntegerField(
         _("Last Operation Status"), default=0, choices=OI_OPS_STATUS)
     oi_resume = models.FileField(
-        max_length=255, upload_to='uploads/resumes/',
+        max_length=255, upload_to='shinelearning/resumes/',
         null=True, blank=True, default='')
     oi_draft = models.FileField(
-        max_length=255, upload_to='uploads/resumes/', null=True, blank=True)
+        max_length=255, upload_to='shinelearning/resumes/', null=True, blank=True)
     draft_counter = models.PositiveIntegerField(default=0)
     tat_date = models.DateTimeField(null=True, blank=True)
 
@@ -413,10 +413,10 @@ class OrderItemOperation(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
     linkedin = models.ForeignKey(Draft, null=True, blank=True)
     oi_resume = models.FileField(
-        max_length=255, upload_to='uploads/resumes/', null=True, blank=True)
+        max_length=255, upload_to='shinelearning/resumes/', null=True, blank=True)
 
     oi_draft = models.FileField(
-        max_length=255, upload_to='uploads/resumes/', null=True, blank=True)
+        max_length=255, upload_to='shinelearning/resumes/', null=True, blank=True)
     draft_counter = models.PositiveIntegerField(default=0)
     oi_status = models.PositiveIntegerField(
         _("Operation Status"), default=0, choices=OI_OPS_STATUS)

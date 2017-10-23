@@ -299,8 +299,8 @@ class Command(BaseCommand):
                 data_tup = (
                         str(row['added_on']) if row['added_on'] == row['added_on'] else None,
                         str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
-                        row['resume'] if row['resume'] and row['resume'] == row['resume'] else None,
-                        row['resume'] if row['resume'] and row['resume'] == row['resume'] else None,
+                        '/sumo_plus_resumeservices/resume_mount/ResumeServices' + row['resume'] if row['resume'] and row['resume'] == row['resume'] else None,
+                        '/sumo_plus_resumeservices/resume_mount/ResumeServices' + row['resume'] if row['resume'] and row['resume'] == row['resume'] else None,
                         counter,
                         oi_status,
                         last_oi_status,

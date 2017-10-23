@@ -13,7 +13,7 @@
 .suggest-list li span,
 .level-control:after,
 .payment-summary .list-item li .item:before,
-.search-icon-tab {
+.search-icon-tab, .icon-loc, .mail-iconStrock {
   background-image: url("../../../images/mobile/common/sprites.svg"); }
 
 

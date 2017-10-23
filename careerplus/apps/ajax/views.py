@@ -24,8 +24,12 @@ from core.tasks import upload_resume_to_shine
 from console.mixins import ActionUserMixin
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
-from order.mixins import OrderMixin
+
+# from order.mixins import OrderMixin
+
 from order.tasks import pending_item_email, process_mailer
+from payment.tasks import add_reward_point_in_wallet
+
 from .functions import draft_upload_mail, roundone_product
 
 
@@ -571,14 +575,16 @@ class MarkedPaidOrderView(View):
 
                 data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
                 # add reward_point in wallet
-                OrderMixin().addRewardPointInWallet(order=obj)
+                add_reward_point_in_wallet.delay(order_pk=obj.pk)
+                # OrderMixin().addRewardPointInWallet(order=obj)
+
                 # pending item email send
                 pending_item_email.apply_async((obj.pk,), countdown=900)
 
                 # send email through process mailers
                 process_mailer.apply_async((obj.pk,), countdown=900)
 
-                #roundone order
+                # roundone order
                 roundone_product(order=obj)
 
             except Exception as e:

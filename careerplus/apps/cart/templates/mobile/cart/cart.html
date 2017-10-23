@@ -26,12 +26,12 @@
         <!-- header menu Icon Starts here -->
         <div class="main-menu w100fl">
             <div class="pull-left">
-                <a class="icon-back pull-left"  href="#"  onclick="goBack()"></a> 
+                <a class="icon-back pull-left" role="button" onclick="goBack()"></a> 
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
                 
-                <a class=" pull-left" href="#">search</a>
+                <!--a class=" pull-left" href="#">search</a-->
                 
                 <a class=" pull-left" href="{% url "cart:cart-product-list" %}">cart</a>
             </div><!-- / Right side Icon ends here -->
@@ -58,7 +58,7 @@
                     {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
                         {% if item.product_class == 'course' and variations %}
                             <li class="box row">
-                                <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                                 <div class="table{% if not item.is_available %} disbale{% endif %}">
                                     <div class="table-cell">
                                         <strong class="c6">{{item.name}}</strong>
@@ -99,7 +99,7 @@
                                     <div class="table">
                                         <div class="table-cell">
                                             <div class="">
-                                                <form role="form" id="delivery-option-form{{variations.0.id}}">{% csrf_token %}
+                                                <!--form role="form" id="delivery-option-form{{variations.0.id}}">{% csrf_token %} -->
                                                     <select id="delivery-option{{variations.0.id}}" onchange="deliveryOptionUpdate('{{variations.0.id}}')" name="delivery_type">
                                                         {% for d_obj in delivery_types %}
                                                             <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.0.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
@@ -111,7 +111,7 @@
                                                         <option>DTDC</option-->
                                                     </select>
                                                     <input type="hidden" name="lineid" value="{{variations.0.id}}" />
-                                                </form>
+                                                <!--/form-->
                                             </div>
                                         </div><!-- /.table cell -->
 
@@ -127,7 +127,7 @@
                                     <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
 
                                     <div class="table-cell text-right">
-                                        <button class="btn btn-sm btn-outline mt-20" onclick="removeFromCartMobile('{{item.id}}')">Remove</button>
+                                        <button type="button" class="btn btn-sm btn-outline mt-20" onclick="removeFromCartMobile('{{item.id}}')">Remove</button>
                                     </div><!-- /.table cell -->
                                 </div><!-- /.table -->
                                 </form>
@@ -136,7 +136,7 @@
                         {% else %}
 
                             <li class="box row">
-                                <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                                
                                 <div class="table{% if not item.is_available %} disbale{% endif %}">
                                     <div class="table-cell">
@@ -191,7 +191,7 @@
                                     <div class="table">
                                         <div class="table-cell">
                                             <div class="">
-                                                <form role="form" id="delivery-option-form{{item.id}}">{% csrf_token %}
+                                                <!--form role="form" id="delivery-option-form{{item.id}}">{% csrf_token %} -->
                                                     <select id="delivery-option{{item.id}}" onchange="deliveryOptionUpdate('{{item.id}}')" name="delivery_type">
                                                         {% for d_obj in delivery_types %}
                                                             <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == item.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
@@ -203,7 +203,7 @@
                                                         <option>DTDC</option-->
                                                     </select>
                                                     <input type="hidden" name="lineid" value="{{item.id}}" />
-                                                </form>
+                                                <!--/form-->
                                             </div>
                                         </div><!-- /.table cell -->
 
@@ -220,7 +220,7 @@
                                      <input type="hidden" name="product_reference" value="{{item.reference}}">
 
                                     <div class="table-cell text-right">
-                                        <button class="btn btn-sm btn-outline mt-20" onclick="removeFromCartMobile('{{item.id}}')">Remove</button>
+                                        <button type="button" class="btn btn-sm btn-outline mt-20" onclick="removeFromCartMobile('{{item.id}}')">Remove</button>
                                     </div><!-- /.table cell -->
                                 </div><!-- /.table -->
                               </form>
@@ -336,7 +336,7 @@
 
                 {% endcomment %}
 
-                <li class="text-center"><img src="images/secure-payment.jpg"></li>
+                <li class="text-center"><img src="{% static "shinelearn/images/mobile/common/secure-payment.jpg" %}"></li>
             </ul><!-- /.ul -->
         </div><!-- Tab content ends here -->
 

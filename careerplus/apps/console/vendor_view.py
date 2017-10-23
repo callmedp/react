@@ -1,4 +1,5 @@
 import json
+import logging
 
 from collections import OrderedDict
 
@@ -132,6 +133,8 @@ class ChangeScreenFaqView(DetailView):
             except Exception as e:
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 return HttpResponseRedirect(
                     reverse('console:screenfaq-change', kwargs={'pk': faq}))
         return HttpResponseBadRequest()
@@ -820,6 +823,8 @@ class ChangeScreenProductView(DetailView):
             except Exception as e:
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 return HttpResponseRedirect(
                     reverse('console:screenproduct-change', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
@@ -944,6 +949,8 @@ class AddScreenProductVariantView(DetailView):
             except Exception as e:
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 return HttpResponseRedirect(
                     reverse('console:screenproductvariant-add', kwargs={'pk': prd}))
         return HttpResponseBadRequest()
