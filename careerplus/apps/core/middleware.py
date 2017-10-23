@@ -1,6 +1,8 @@
 # python built-in imports
 import re
 from datetime import datetime
+from django.http import (
+    HttpResponseRedirect,)
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
 
@@ -9,6 +11,7 @@ from django_mobile.middleware import MobileDetectionMiddleware, SetFlavourMiddle
 from django.utils.deprecation import MiddlewareMixin
 
 from .utils import set_session_country
+from django.conf import settings
 
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
@@ -46,6 +49,7 @@ class LearningShineMiddleware(object):
     def process_request(self, request):
         from core.api_mixin import AdServerShine, AcrossShine
         cpem = request.COOKIES.get('_cpem_', '')
+        cpem_mail = None
 
         try:
             cpem_mail = AcrossShine().decode(cpem)
@@ -82,6 +86,20 @@ class LearningShineMiddleware(object):
                     if minute_diff < 30:
                         if email:
                             cpem_mail = email
-
             except:
                 pass
+
+
+# class LoginMiddleware(object):
+
+#     def __init__(self, get_response):
+#         self.get_response = get_response
+
+#     def __call__(self, request):
+#         response = request.COOKIES.get('_em_', '').split('|')
+#         return self.process_response(request, response)
+
+#     def process_response(self, request, response):
+#         cookies_data = response
+#         if cookies_data[0] and cookies_data[1]:
+#             return HttpResponseRedirect(settings.LOGIN_URL)

@@ -149,7 +149,7 @@ class OrganizationForm(forms.ModelForm):
           widget=forms.DateInput(attrs={'class': 'form-control work_to'}))
 
     org_current = forms.BooleanField(label=("Current Organization"),
-        widget=forms.CheckboxInput(attrs={'class': 'checkbox'}),
+        widget=forms.CheckboxInput(attrs={'class': 'checkbox current_org'}),
         initial=False, required=False)
 
     class Meta:
@@ -237,7 +237,7 @@ class EducationForm(forms.ModelForm):
           widget=forms.DateInput(attrs={'class': 'form-control study_to'}))
 
     edu_current = forms.BooleanField(label=("Current Education"),
-        widget=forms.CheckboxInput(attrs={'class':'checkbox'}),
+        widget=forms.CheckboxInput(attrs={'class': 'checkbox current_edu'}),
         initial=False, required=False)
 
     class Meta:
