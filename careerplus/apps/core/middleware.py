@@ -2,7 +2,7 @@
 import re
 from datetime import datetime
 from django.http import (
-    HttpResponseRedirect,)
+    HttpResponsePermanentRedirect,)
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
 from django_mobile import set_flavour
@@ -125,10 +125,16 @@ class LearningShineMiddleware(object):
 #         self.get_response = get_response
 
 #     def __call__(self, request):
-#         response = request.COOKIES.get('_em_', '').split('|')
-#         return self.process_response(request, response)
+#         # cookies_data = request.COOKIES.get('_em_', '').split('|')
+#         return self.process_request(request)
 
-#     def process_response(self, request, response):
-#         cookies_data = response
+#     def process_request(self, request):
+#         new_path = settings.LOGIN_URL
+#         cookies_data = request.COOKIES.get('_em_', '').split('|')
 #         if cookies_data[0] and cookies_data[1]:
-#             return HttpResponseRedirect(settings.LOGIN_URL)
+#             return self._redirect(request, new_path)
+#             # return HttpResponsePermanentRedirect(settings.LOGIN_URL)
+
+#     def _redirect(self, request, new_path):
+#         newurl = new_path
+#         return HttpResponsePermanentRedirect(newurl)
