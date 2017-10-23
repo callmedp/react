@@ -1087,3 +1087,41 @@ class ProfileCredentialDownload(View):
                 return HttpResponseForbidden()
         except:
             return HttpResponseForbidden()
+
+
+class CreateDrftObject(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            oi = kwargs.get('oi', '')
+            oi_items = OrderItem.objects.filter(oi=oi)
+            for oi_item in oi_items:
+                order_item = oi_item
+                last_oi_status = order_item.oi_status
+                draft_obj = Draft.objects.create()
+                org_obj = Organization()
+                org_obj.draft = draft_obj
+                org_obj.save()
+
+                edu_obj = Education()
+                edu_obj.draft = draft_obj
+                edu_obj.save()
+
+                quiz_rsp = QuizResponse()
+                quiz_rsp.oi = order_item
+                quiz_rsp.save()
+
+                order_item.counselling_form_status = 49
+                order_item.oio_linkedin = draft_obj
+                order_item.save()
+                order_item.orderitemoperation_set.create(
+                    oi_status=order_item.oi_status,
+                    last_oi_status=last_oi_status,
+                )
+                return HttpResponseRedirect(
+                    reverse(
+                        'console:change-draft',
+                        kwargs={'pk': oi_item.oio_linkedin.pk}))
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "%s - %s" % (str(oi), str(e)))
