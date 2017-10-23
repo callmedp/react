@@ -13,6 +13,15 @@ from payment.models import PaymentTxn
 from core.mixins import InvoiceGenerate
 
 
+@task(name="invoice_generation_order")
+def invoice_generation_order(order_pk=None):
+    try:
+        order = Order.objects.get(pk=order_pk)
+        InvoiceGenerate().save_order_invoice_pdf(order=order)
+    except Exception as e:
+        logging.getLogger('error_log').error("%s" % (str(e)))
+
+
 @task(name="pending_item_email")
 def pending_item_email(pk=None):
     order = None

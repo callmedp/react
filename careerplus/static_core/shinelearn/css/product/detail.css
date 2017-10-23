@@ -1164,6 +1164,10 @@ header {
   background: none !important;
 }
 
+.panel-title > a.disabled:hover {
+    cursor: default !important;
+}
+
 .panel-title > a.disabled:after {
   content: "";
   background: none !important;
