@@ -705,6 +705,7 @@ label:hover ~ label {
     -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    height: 121px;
 }
 .popular-courses li .media-body {
     text-align: left;
@@ -938,3 +939,27 @@ span.twitter-typeahead {
     color:red;
 }
 
+.error .error-txt {
+    font-size: 80%;
+    padding: 2px 5px;
+    color: #fff;
+    display: inline-block;
+    padding-bottom: 0;
+    background-color: #d55d5a;
+    border-radius: 3px;
+    margin-top: 3px;
+}
+
+.error span.twitter-typeahead {
+    background-color: #ffeeee !important;
+}
+
+.error .form-control::placeholder {
+    color: #d56b6b !important;
+}
+
+
+
+.error-txt {
+    display: none;
+}
