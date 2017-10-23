@@ -1,5 +1,6 @@
 Email,ShineID,Mobile,Country_Code,C_ID,RError,LError
-ashishthakare050@gmail.com,59ebfc41eb64ef0972deebdd,8878129060,,,No Error,No Error
+nasimsnk007@gmail.com,59edc32ce839207f0bbe0141,01744926301,,,No Error,No Error
+ompalsinghchokker@gmail,59ed8ec7e839203da2de7fcd,8859692345,,,{'email': ['Enter a valid email address.']},No Error
 vishalbhor94@gmail,59ed88fe8f6428732626cd63,9665471690,,,{'email': ['Enter a valid email address.']},No Error
 ervin.martins@gmail.com,,789862118,27.0,,{'non_field_errors': ['Invalid country code and mobile number combination']},[]
 Yadavgautam9621@gmail,59ece1308f6428487d65d87b,8004283319,,,{'email': ['Enter a valid email address.']},No Error
