@@ -192,7 +192,9 @@ class LogoutApiView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         request.session.flush()
-        return HttpResponseRedirect(reverse('homepage'))
+        response = HttpResponseRedirect(reverse('homepage'))
+        response.delete_cookie('_em_', domain='.shine.com')
+        return response
 
 
 class DownloadBoosterResume(View):
