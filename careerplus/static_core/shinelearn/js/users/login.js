@@ -51,7 +51,7 @@ window.fbAsyncInit = function() {
     function glogin() 
     {
         var myParams = {
-            'clientid' : '284765467291-lo164ec1u4pcnhtrbicird7tsdt553sm.apps.googleusercontent.com',
+            'clientid' : '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
             'cookiepolicy' : 'single_host_origin',
             'callback' : 'loginCallback', //callback function
             'approvalprompt':'force',
@@ -65,7 +65,7 @@ window.fbAsyncInit = function() {
         gapi.load('auth2', function(){
             /* Retrieve the singleton for the GoogleAuth library and set up the client.*/
             auth2 = gapi.auth2.init({
-                client_id: '284765467291-lo164ec1u4pcnhtrbicird7tsdt553sm.apps.googleusercontent.com',
+                client_id: '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
                 cookiepolicy: 'single_host_origin',
                 /* Request scopes in addition to 'profile' and 'email'*/
                 scope: 'profile email'

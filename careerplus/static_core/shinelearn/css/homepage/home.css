@@ -30,7 +30,7 @@ body {
     top: 20%;
   }
 }
-.home-header .carousel-caption strong {
+.home-header .carousel-caption h1, .home-header .carousel-caption strong {
   font-size: 42px;
   display: block;
   font-weight: 400;
@@ -39,7 +39,7 @@ body {
   margin-top: 0;
 }
 @media (max-width: 991px) {
-  .home-header .carousel-caption strong {
+  .home-header .carousel-caption h1, .home-header .carousel-caption strong {
     font-size: 32px;
     line-height: 35px;
     margin-bottom: 10px;
@@ -392,6 +392,7 @@ body {
   color: #3f5f94;
   font-size: 15px;
   font-weight: 600;
+  line-height: 18px;
 }
 .job-assistance .listing li .rating-review-box {
   display: inline-block;

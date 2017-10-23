@@ -54,7 +54,7 @@
                     {% if prd_num_jobs %}
                         <li>
                             <figure class="icon-bag"></figure>
-                            <strong>{{prd_num_jobs}}</strong>
+                            <strong>{{prd_num_jobs}} Jobs</strong>
                         </li>
                     {% endif %}
                     <li>
@@ -175,28 +175,31 @@
       </div>
     </div><!-- Other packages ends here -->
     {% endif %}
-    <!-- Select countries (optional) start here -->
-    <div class="sidebar" id="sidebar-countries">
-        <div class="right-navbar packages pt-0">
-            <ul class="underline">
-            {% for country in var_list %}
-                <li id="element_checked">
-                    <input {% if country.id in selected_products %}checked{% endif %}
-                    value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
-                    <label for="{{country.label}} ">
-                        <p class="pb-0" id="text_val">{{country.label}}</p>
-                    </label>
-                </li>
-            {% endfor %}
-            </ul>
-            <div class="bottom-btn">
-                <a href="#" class="btn-slg btn-blue btn-round w100fl text-center" 
-                id="done_click">
-                    DONE
-                </a>
+
+    {% if prd_service == 'resume' and var_list %}
+        <!-- Select countries (optional) start here -->
+        <div class="sidebar" id="sidebar-countries">
+            <div class="right-navbar packages pt-0">
+                <ul class="underline">
+                {% for country in var_list %}
+                    <li id="element_checked">
+                        <input {% if country.id in selected_products %}checked{% endif %}
+                        value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
+                        <label for="{{country.label}} ">
+                            <p class="pb-0" id="text_val">{{country.label}}</p>
+                        </label>
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="bottom-btn">
+                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center" 
+                    id="done_click">
+                        DONE
+                    </a>
+                </div>
             </div>
-        </div>
-    </div><!-- Select countries (optional) ends here -->
+        </div><!-- Select countries (optional) ends here -->
+    {% endif %}
     <!-- leadform start here -->
     <!-- call us and chat widget starts here -->
     {% block call_us %}
@@ -207,8 +210,8 @@
 {% block js_section %}
     {{block.super}}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}

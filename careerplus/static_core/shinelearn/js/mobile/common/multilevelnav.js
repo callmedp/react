@@ -70,11 +70,13 @@
 
         $('.js_sidebar_filter').simplerSidebar({
             opener: '.js_filters_trigger',
+            quitter: ".js_close_filter",
             animation: {
                 easing: "easeOutQuint"
             },
             sidebar: {
-                align: 'right'
+                align: 'right',
+                closingLinks: '.js_close_filter'
             }
         });
 
