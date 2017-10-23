@@ -981,7 +981,7 @@ class ChangeProductView(DetailView):
             form=ProductFAQForm,
             can_delete=False,
             formset=FAQInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
+            max_num=50, validate_max=True)
         if self.object:
             prdfaq_formset = ProductFAQFormSet(
                 instance=self.get_object(),
@@ -994,7 +994,7 @@ class ChangeProductView(DetailView):
             form=ProductChapterForm,
             can_delete=False,
             formset=ChapterInlineFormSet, extra=1,
-            max_num=20, validate_max=True)
+            max_num=50, validate_max=True)
         if self.object:
             prdchapter_formset = ProductChapterFormSet(
                 instance=self.get_object(),
@@ -1235,7 +1235,7 @@ class ChangeProductView(DetailView):
                             form=ProductFAQForm,
                             can_delete=False,
                             formset=FAQInlineFormSet, extra=0,
-                            max_num=20, validate_max=True)
+                            max_num=50, validate_max=True)
                         formset = ProductFAQFormSet(
                             request.POST, instance=obj,
                             form_kwargs={'object': obj,
@@ -1392,7 +1392,7 @@ class ChangeProductView(DetailView):
                             form=ProductChapterForm,
                             can_delete=False,
                             formset=ChapterInlineFormSet, extra=1,
-                            max_num=20, validate_max=True)
+                            max_num=50, validate_max=True)
                         formset = ProductChapterFormSet(
                             request.POST, instance=obj,
                             form_kwargs={'object': obj},)
