@@ -139,6 +139,8 @@ TEMPLATES = [
 
 # For django-mobile compatiility
 TEMPLATE_LOADERS = TEMPLATES[0]['OPTIONS']['loaders']
+DEFAULT_MOBILE_FLAVOUR = 'mobile'
+FLAVOURS = ('full', 'mobile')
 
 WSGI_APPLICATION = 'careerplus.wsgi.application'
 
