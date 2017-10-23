@@ -1,14 +1,4 @@
-var cartScroller = function() {
-      var item = $('.price-box'),
-      height = item.height();
-      $(window).scroll(function(){
-          if(item.offset().top + height > $('.recomend-product-bg').offset().top - 50) {
-            item.css({'visibility':'hidden'})
-          } else {
-            item.css({'visibility':'visible'});
-          }
-      });
-    }
+
 $(function() {
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
@@ -127,6 +117,5 @@ $(function() {
         $('.about-course-links a').removeClass('active');
         $(this).addClass('active');
       });
-    cartScroller();
 
 });

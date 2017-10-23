@@ -95,7 +95,7 @@
 		    </div>
 
 		    <!-- Career Outcomes -->
-		    <div class="career-outcomes mb-40">
+		    <div class="career-outcomes">
 		    	<h2>Career Outcomes</h2>
 		        <ul class="box-panel">
 		            {% for career_outcome in career_outcomes %}
@@ -326,5 +326,6 @@
     {% compress js %}
     <script src="{% static 'console/js/jquery.validate.js' %}"></script>
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/scroller.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}

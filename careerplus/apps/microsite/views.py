@@ -2,18 +2,15 @@ import logging
 import json
 import re
 from django.views.generic import TemplateView, View
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.http import Http404
 from django.utils.text import slugify
 from django.urls import reverse
 from django.utils import timezone
-from datetime import datetime
-
 from .roundoneapi import RoundOneAPI, RoundOneSEO
 from users.forms import (
     ModalLoginApiForm,
     ModalRegistrationApiForm,
-    SetConfirmPasswordForm,
     PasswordResetRequestForm
 )
 
@@ -41,7 +38,8 @@ class PartnerHomeView(TemplateView):
 
             testimonial_qs = PartnerTestimonial.objects.filter(
                 microsite=microsite, active=True)
-            faq_qs = PartnerFaq.objects.filter(microsite=microsite, active=True)
+            faq_qs = PartnerFaq.objects.filter(
+                microsite=microsite, active=True)
 
             context.update({
                 "faq_qs": faq_qs, "testimonial_qs": testimonial_qs,
@@ -94,7 +92,8 @@ class PartnerListView(TemplateView):
     def get_partner_context(self, **kwargs):
         context = {}
         try:
-            search_response = RoundOneAPI().get_search_response(self.request, **kwargs)
+            search_response = RoundOneAPI().get_search_response(
+                self.request, **kwargs)
             jsondict = RoundOneAPI().remove_html_tags(search_response)
             context.update({'search_result': jsondict})
             keyword = kwargs.get('keyword', '')
@@ -110,14 +109,16 @@ class PartnerListView(TemplateView):
                 context.update({"initial_location": str(initial_location)})
 
             clean_keyword = initial_keyword or keyword
-            clean_location = ', '.join(initial_location) or kwargs.get('location', '')
+            clean_location = ', '.join(initial_location) or kwargs.get(
+                'location', '')
 
             context.update({
-               'clean_keyword': clean_keyword,
-               'clean_location': clean_location
+                'clean_keyword': clean_keyword,
+                'clean_location': clean_location
             })
 
-            context.update(RoundOneSEO().get_seo_data(data_for="listing", **context))
+            context.update(RoundOneSEO().get_seo_data(
+                data_for="listing", **context))
             context.update(RoundOneAPI().get_location_list(**kwargs))
             context.update(**kwargs)
             if self.request.session.get('candidate_id', ''):
@@ -176,7 +177,8 @@ class PartnerDetailView(TemplateView):
     def get_partner_context(self, **kwargs):
         context = {}
         try:
-            detail_response = RoundOneAPI().get_job_detail(self.request, **kwargs)
+            detail_response = RoundOneAPI().get_job_detail(
+                self.request, **kwargs)
             data = detail_response.get("data")
             if data:
                 jd = data.get("jobDescription")
@@ -187,7 +189,8 @@ class PartnerDetailView(TemplateView):
 
             try:
                 jobTitle = detail_response.get('data').get('jobTitle')
-                breadcrumb_location = slugify(detail_response.get('data').get('location'))
+                breadcrumb_location = slugify(detail_response.get('data').get(
+                    'location'))
                 context.update({'breadcrumb_location': breadcrumb_location})
             except Exception as e:
                 jobTitle = kwargs.get("job_title", "Job Referral")
@@ -208,12 +211,15 @@ class PartnerDetailView(TemplateView):
 
             if context.get('jobTitle') and context.get('breadcrumb_location'):
                 breadcrumbs.append({
-                    "url": '/partner/roundone/all-jobs-in-'+context.get('breadcrumb_location')+'',
-                    "name": "All Jobs in "+context.get('breadcrumb_location')+"",
+                    "url": '/partner/roundone/all-jobs-in-' + context.get(
+                        'breadcrumb_location') + '',
+                    "name": "All Jobs in " + context.get(
+                        'breadcrumb_location') + "",
                 })
                 breadcrumbs.append({
                     "url": None,
-                    "name": context.get('jobTitle')+"-"+context.get('breadcrumb_location'),
+                    "name": context.get('jobTitle') + "-" + context.get(
+                        'breadcrumb_location'),
                 })
 
             seo_data = RoundOneSEO().get_seo_data(data_for="detail", **context)
@@ -267,8 +273,9 @@ class GetReferenceView(View, RoundOneAPI):
                         status = response_json.get("status")
                         if status and status == "1" or status == "0":
                             return HttpResponse(json.dumps(
-                                {'status': True, 'response': True,
-                                'message': response_json.get('msg')}))
+                                {
+                                    'status': True, 'response': True,
+                                    'message': response_json.get('msg')}))
                         elif status == "-1":
                             try:
                                 return HttpResponse(json.dumps(
