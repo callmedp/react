@@ -29,10 +29,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careerplus',
-        'USER': 'root',
-        'PASSWORD': 'mysql@321',
+        'USER': 'carrerplus',
+        'PASSWORD': 'permitted@321',
         'HOST': '172.22.65.153',
-        'PORT': '',
+        'PORT': '3306',
     }
 }
 

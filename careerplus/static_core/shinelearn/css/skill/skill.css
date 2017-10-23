@@ -278,5 +278,7 @@
 }
 
 .scroll {
+  margin-bottom: -50px;
+  padding-top: 90px;
   border-top: 10px solid transparent;
 }

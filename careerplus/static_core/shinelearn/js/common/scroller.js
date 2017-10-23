@@ -2,7 +2,7 @@ var Scroller = function(itm,className) {
         this.item = itm;
         this.parentItem = this.item.parent();
         this.className = className || '.cls_scroller';
-    }
+    };
 
     Scroller.prototype = {
       constructor : Scroller,

@@ -963,6 +963,11 @@ class Product(AbstractProduct, ModelMeta):
             self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):
+        if self.pk:
+            if self.heading:
+                return self.heading + ' - (' +str(self.pk) + ')'
+            else:
+                return self.name + ' - (' +str(self.pk) + ')'
         return self.name
 
     def save(self, *args, **kwargs):
@@ -1526,8 +1531,13 @@ class ProductScreen(AbstractProduct):
 
 
     def __str__(self):
+        if self.pk:
+            if self.heading:
+                return self.heading + ' - (' +str(self.pk) + ')'
+            else:
+                return self.name + ' - (' +str(self.pk) + ')'
         return self.name
-    
+
     def create_product(self):
         if not self.product:
             if self.name and self.product_class:
