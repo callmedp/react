@@ -52,6 +52,14 @@
 .dashboard-tab .please-call strong {
   font-weight: 600;
 }
+.dashboard-tab .please-call .view-my-profile {
+  border: 1px solid #e1e1e1;
+  display: block;
+  padding: 10px;
+  border-radius: 2px;
+  margin: 10px 0 25px 0;
+  text-align: center;
+}
 
 .dashboard-tab-content {
   padding: 30px;
