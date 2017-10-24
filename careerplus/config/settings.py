@@ -61,6 +61,7 @@ else:
 INTERNAL_IPS = ('127.0.0.1',)
 
 SITE_DOMAIN = '127.0.0.1:8000'
+MOBILE_SITE_DOMAIN = 'm.learn.shine.com:8007'
 SITE_PROTOCOL = 'http'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
@@ -273,6 +274,9 @@ CACHES = {
         }
     },
 }
+
+SESSION_CACHE_ALIAS = 'session'
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
 GOOGLE_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'

@@ -2,7 +2,7 @@
 import re
 from datetime import datetime
 from django.http import (
-    HttpResponseRedirect,)
+    HttpResponsePermanentRedirect,)
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
 from django_mobile import set_flavour
@@ -10,6 +10,7 @@ from django_mobile import set_flavour
 # django imports
 from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
+from shine.core import ShineCandidateDetail
 from django.conf import settings
 
 from .utils import set_session_country
@@ -33,26 +34,13 @@ class MobileDetectionMiddleware(object):
     def process_request(self, request):
         is_mobile = False
 
-        # import ipdb;
-        # ipdb.set_trace()
-        try:
-            if request.path_info.index('/m/') == 0:
-                is_mobile = True
-        except ValueError:
-            pass
+        if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
+            is_mobile = True
 
         if is_mobile:
             set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
         else:
             set_flavour(settings.FLAVOURS[0], request)
-
-    # def process_response(self, request, response):
-    #     import ipdb;ipdb.set_trace()
-        # super(MobileDetectionMiddleware, self).process_response
-        # if request.flavour == 'mobile':
-        #     request.path_info = request.path_info[3:]
-            # import ipdb; ipdb.set_trace()
-        # return response
 
 
 class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddleware):
@@ -119,16 +107,16 @@ class LearningShineMiddleware(object):
                 pass
 
 
-# class LoginMiddleware(object):
+class LoginMiddleware(object):
 
-#     def __init__(self, get_response):
-#         self.get_response = get_response
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-#     def __call__(self, request):
-#         response = request.COOKIES.get('_em_', '').split('|')
-#         return self.process_response(request, response)
-
-#     def process_response(self, request, response):
-#         cookies_data = response
-#         if cookies_data[0] and cookies_data[1]:
-#             return HttpResponseRedirect(settings.LOGIN_URL)
+    def __call__(self, request):
+        cookies_data = request.COOKIES.get('_em_', '').split('|')
+        resp_status = ShineCandidateDetail().get_status_detail(
+            email=cookies_data[0], shine_id=None, token=None)
+        if resp_status:
+            request.session.update(resp_status)
+        response = self.get_response(request)
+        return response

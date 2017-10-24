@@ -318,6 +318,7 @@
       $(row).children().not(':last').children().each(function() {
         updateElementIndex(this, prefix, formCount);
         $(this).val('');
+        $(this).prop('checked', false);
       });
 
       $(row).find('.org-delete').click(function() {
@@ -359,8 +360,8 @@
         $(row).children().removeClass('error');
         $(row).children().children().each(function() {
           updateElementIndex(this, prefix, formCount);
-          if ( $(this).attr('type') == 'text' )
-            $(this).val('');
+          $(this).val('');
+          $(this).prop('checked', false);
         });
         // Add an event handler for the delete item/form link 
         $(row).find('.edu-delete').click(function() {
@@ -407,6 +408,15 @@
 
     $(".edu-delete").click(function() {
       return eduDeleteForm(this, 'from_education');
+    });
+    // $(".current_org").click(function() {
+    //   if ($('#current_org').is(':checked'))
+    //   {
+    //     $(this).closest(".work_to");
+    //   }
+    // });
+    $(':checkbox').click(function() {
+      $('.work_to').attr('disabled', this.checked)
     });
   });
 </script>
