@@ -950,3 +950,13 @@ article ol {
 
 .error-txt {
   display: none; }
+
+
+  .fl100 {
+    float: left;
+    width: 100%;
+  }
+
+  .brd-bottom {
+    border-bottom: 1px solid #efefef;
+  }
