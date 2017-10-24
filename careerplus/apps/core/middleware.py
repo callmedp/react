@@ -42,14 +42,6 @@ class MobileDetectionMiddleware(object):
         else:
             set_flavour(settings.FLAVOURS[0], request)
 
-    # def process_response(self, request, response):
-    #     import ipdb;ipdb.set_trace()
-        # super(MobileDetectionMiddleware, self).process_response
-        # if request.flavour == 'mobile':
-        #     request.path_info = request.path_info[3:]
-            # import ipdb; ipdb.set_trace()
-        # return response
-
 
 class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddleware):
     """
