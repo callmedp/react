@@ -246,54 +246,6 @@ button {
   -webkit-border-radius: 0;
   border-radius: 0; }
 
-/* Call us CSS */
-.call-us .ui-grid-a {
-  width: 100%;
-  margin: 0; }
-
-.call-us .ui-block-a {
-  background-color: #3f8bff;
-  font-size: 1em; }
-  .call-us .ui-block-a span {
-    background-position: -47px -216px;
-    width: 16px;
-    height: 12px;
-    display: inline-block;
-    margin-right: 5px;
-    position: relative;
-    top: 1px; }
-
-.call-us .ui-block-b {
-  background-color: #5b9cff; }
-  .call-us .ui-block-b span {
-    background-position: 0 -215px;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    margin-right: 5px;
-    position: relative;
-    top: 3px; }
-
-.call-us .ui-block-c {
-  background-color: #3f8bff; }
-  .call-us .ui-block-c span {
-    background-position: -22px -216px;
-    width: 20px;
-    height: 15px;
-    display: inline-block;
-    margin-right: 5px;
-    position: relative;
-    top: 3px; }
-
-.call-us .ui-block-a, .call-us .ui-block-b, .call-us .ui-block-c {
-  padding: 15px 10px;
-  color: #fff;
-  height: 50px;
-  float: left; }
-
-.block-3 .ui-block-a, .block-3 .ui-block-b, .block-3 .ui-block-c {
-  width: 33.33%; }
-
 .detail-wrap {
   position: relative; }
   .detail-wrap .provided-by {
