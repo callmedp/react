@@ -7,7 +7,12 @@
 }
 .skill-header .skill-caption {
   color: #fff;
-  margin: 0 0 4% 0;
+  margin: 0 20% 4% 0;
+}
+@media (max-width: 1190px) {
+  .skill-header .skill-caption {
+    margin: 0 0 4% 0;
+  }
 }
 .skill-header .skill-caption h1 {
   font-size: 50px;
@@ -278,7 +283,11 @@
 }
 
 .scroll {
-  margin-bottom: -50px;
-  padding-top: 90px;
+  margin-bottom: -10px;
+  padding-top: 85px;
   border-top: 10px solid transparent;
+}
+
+footer {
+  margin-top: 100px;
 }
