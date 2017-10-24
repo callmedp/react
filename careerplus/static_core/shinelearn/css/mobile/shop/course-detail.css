@@ -276,7 +276,9 @@ button {
           opacity: 1;
           position: relative;
           width: 100%;
-          height: auto; }
+          height: auto; 
+          z-index: 10;
+        }
     .detail-wrap .provided-by:after {
       display: block;
       width: 8px;
