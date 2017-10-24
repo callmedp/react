@@ -6,6 +6,7 @@ STATIC_URL = 'https://origin-static3.shine.com/static/'
 MEDIA_URL = 'https://origin-static3.shine.com/'
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
+MOBILE_SITE_DOMAIN = 'm.learning.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)

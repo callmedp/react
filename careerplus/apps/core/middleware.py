@@ -34,13 +34,8 @@ class MobileDetectionMiddleware(object):
     def process_request(self, request):
         is_mobile = False
 
-        # import ipdb;
-        # ipdb.set_trace()
-        try:
-            if request.path_info.index('/m/') == 0:
-                is_mobile = True
-        except ValueError:
-            pass
+        if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
+            is_mobile = True
 
         if is_mobile:
             set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
