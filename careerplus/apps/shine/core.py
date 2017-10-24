@@ -129,7 +129,7 @@ class ShineCandidateDetail(ShineToken):
                 if status_response.status_code == 200 and status_response.json():
                     return status_response.json()
             elif email:
-                headers = self.get_api_headers()
+                headers = self.get_api_headers(token=None)
                 shine_id = self.get_shine_id(email=email, headers=headers)
                 if shine_id:
                     status_url = settings.SHINE_SITE +\

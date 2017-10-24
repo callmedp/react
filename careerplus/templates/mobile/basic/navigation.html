@@ -6,7 +6,7 @@
                 <div class="user_details">
                     <div class="media">
                         <div class="media-left">
-                            <span><img src="{% static 'shinelearn/images/mobile/common/user.jpg' %}"></span>
+                            <span><img src="{% static 'shinelearn/images/user-loggedin.jpg' %}"></span>
                         </div>
                         <div class="media-body rel">
                             <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>

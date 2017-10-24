@@ -2,22 +2,35 @@ from .settings import *
 
 DEBUG = False
 IS_LIVE = True
-STATIC_URL = 'https://origin-static3.shine.com/'
+STATIC_URL = 'https://origin-static3.shine.com/static/'
+MEDIA_URL = 'https://origin-static3.shine.com/'
 ########## DOMAIN SETTINGS ######################
-MAIN_DOMAIN_PREFIX = 'http://learning1.shine.com'
-SITE_DOMAIN = 'learning1.shine.com'
-SITE_PROTOCOL = 'http'
+SITE_DOMAIN = 'learning.shine.com'
+SITE_PROTOCOL = 'https'
+MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
+MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+SHINE_API_USER = 'scpapiuser@gmail.com'
+SHINE_API_USER_PWD = 'tarun@123'
+SHINE_API_TIMEOUT = 60
 SHINE_SITE = 'https://www.shine.com'
-SHINE_API_URL = 'https://shine.com/api/v2'
-COMPRESS_ENABLED = True
+SHINE_API_URL = 'https://mapi.shine.com/api/v2'
+CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
+CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
+
+COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = True
 
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/live_prod',
+        'URL': 'http://172.22.65.36:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
+    'index': {
+        'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
+        'URL': 'http://172.22.65.35:8983/solr/prdt',
+        'INCLUDE_SPELLING': False,
+    }
 }
 
 ####### CCAVENUE SETTINGS ###########################
@@ -69,4 +82,5 @@ CACHES = {
         }
     },
 }
+
 
