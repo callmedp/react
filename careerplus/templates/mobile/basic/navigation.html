@@ -6,7 +6,7 @@
                 <div class="user_details">
                     <div class="media">
                         <div class="media-left">
-                            <span><img src="{% static 'shinelearn/images/mobile/common/user.jpg' %}"></span>
+                            <span><img src="{% static 'shinelearn/images/user-loggedin.jpg' %}"></span>
                         </div>
                         <div class="media-body rel">
                             <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>
@@ -187,14 +187,18 @@
                     <li><a href="{% url "dashboard:dashboard-mywallet" %}"><span class="icon-dashboard"></span>My Wallet</a></li>
                 {% endif %}
                 {% endcomment %}
+
+                <li><a href="{% url "blog:blog-landing"%}">Blog</a></li>
+                <li><a href="/about-us">About us</a></li>
+                <li><a href="/contact-us">Contact us</a></li>
             </ul>
         </nav><!-- Main Menu list Ends here -->
-        <nav class="borderBottom-0">
+       <!-- <nav class="borderBottom-0">
             <ul class="sb-menu">
                 <li><a href="{% url "blog:blog-landing"%}">Blog</a></li>
                 <li><a href="/about-us">About us</a></li>
                 <li><a href="/contact-us">Contact us</a></li>
             </ul>
-        </nav><!-- secondary Menu list Ends here -->
+        </nav> secondary Menu list Ends here -->
     </div>
 </div><!-- #main-sidebar .main-sidebar .main-sidebar-left -->
