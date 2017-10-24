@@ -133,7 +133,7 @@
                         <li><a class="text-center" href="tel:0124-3955001"><strong>Call us:</strong>0124 - 3955001 / 02</a></li>
                      </ul>
                   </li>
-                  <li><a href="https://learning.shine.com/cart/"><span class="cart-icon"><span class="cart-counter" id="cart-counter-id">1</span></span></a></li>
+                  <li><a href="https://learning.shine.com/cart/"><span class="cart-icon"><span class="cart-counter" id="cart-counter-id">0</span></span></a></li>
                   <li><a href="https://learning.shine.com/login/" ><span class="login-btn">Login</span></a></li>
                </ul>
             </div>
@@ -917,7 +917,7 @@
     if ($q.val()) {
         $q.closest('div').removeClass('error');
         $q.closest('div').find('.error-txt').html();
-        location.href = 'https:learning.shine.com/search/results/?q='+encodeURI($q.val());
+        location.href = 'https://learning.shine.com/search/results/?q='+encodeURI($q.val());
     }
     else {
         $q.closest('div').addClass('error');

@@ -3,6 +3,7 @@ from .settings import *
 DEBUG = False
 IS_LIVE = True
 STATIC_URL = 'https://origin-static3.shine.com/static/'
+MEDIA_URL = 'https://origin-static3.shine.com/'
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 SITE_PROTOCOL = 'https'
