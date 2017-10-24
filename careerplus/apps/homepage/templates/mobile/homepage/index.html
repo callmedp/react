@@ -65,8 +65,8 @@
                            autocomplete="off" value="{{ recmnd_func_area }}" id="tags11" >
                     <input class="form-control bdr2" name="skills" placeholder="Skills" type="text"
                            autocomplete="off" value="{{ recmnd_skills }}" id="tags21">
-                    <span class="error-txt pull-left js_area_error" style="color:red"></span>
-                    <span class="error-txt pull-left js_skill_error" style="color:red"></span>
+                    <span class="error-txt pull-left js_area_error"></span>
+                    <span class="error-txt pull-left js_skill_error"></span>
                     <button type="submit" class="custom-search-btn search-icon-tab js_advance_search"></button>
               </form>
         </div>
@@ -141,20 +141,20 @@
         <p class="c6 mb-10">Browse the most popular and new courses!</p>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'it-software-certification' 5 %}#courses1">
+                <a href="/courses/banking-and-finance/20/#courses1">
                     <div class="media-body">
-                        <p class="title">Banking &amp; Finance</p>
+                        <p class="title">Finance</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/course-logo1.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}">
                         </div>
                     </div>                
                 </a>
             </div>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'operations' 5 %}#courses2">
+                <a href="/courses/operation-management/19/#courses2">
                     <div class="media-body">
                         <p class="title">Operations</p>
                     </div>                
@@ -167,20 +167,20 @@
             </div>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'finance' 5 %}#courses3">
+                <a href="/courses/it-information-technology/it-language/80/#courses3">
                     <div class="media-body">
-                        <p class="title">Finance</p>
+                        <p class="title">Information Technology</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/course-logo3.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/it.png' %}">
                         </div>
                     </div>                
                 </a>
             </div>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'human-resource' 5 %}#courses4">
+                <a href="/courses/hr-human-resource/25/#courses4">
                     <div class="media-body">
                         <p class="title">Human Resources</p>
                     </div>                

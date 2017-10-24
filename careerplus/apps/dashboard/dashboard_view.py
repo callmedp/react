@@ -386,6 +386,7 @@ class DashboardFeedbackView(TemplateView):
 
 
 class DashboardRejectService(View):
+    
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
         oi_pk = request.POST.get('oi_pk', None)

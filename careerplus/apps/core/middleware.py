@@ -34,26 +34,13 @@ class MobileDetectionMiddleware(object):
     def process_request(self, request):
         is_mobile = False
 
-        # import ipdb;
-        # ipdb.set_trace()
-        try:
-            if request.path_info.index('/m/') == 0:
-                is_mobile = True
-        except ValueError:
-            pass
+        if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
+            is_mobile = True
 
         if is_mobile:
             set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
         else:
             set_flavour(settings.FLAVOURS[0], request)
-
-    # def process_response(self, request, response):
-    #     import ipdb;ipdb.set_trace()
-        # super(MobileDetectionMiddleware, self).process_response
-        # if request.flavour == 'mobile':
-        #     request.path_info = request.path_info[3:]
-            # import ipdb; ipdb.set_trace()
-        # return response
 
 
 class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddleware):

@@ -349,7 +349,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def redirect_if_necessary(self, current_path, product):
         if self._enforce_paths:
             expected_path = product.pURL
-            if (expected_path != urlquote(current_path) and expected_path != urlquote(current_path[2:])):
+            if expected_path != urlquote(current_path):
                 return HttpResponsePermanentRedirect(expected_path)
 
     # def send_signal(self, request, response, product):

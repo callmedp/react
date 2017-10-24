@@ -140,7 +140,7 @@ class BlogDetailView(DetailView, BlogMixin):
 
     def redirect_if_necessary(self, current_path, article):
         expected_path = article.get_absolute_url()
-        if (expected_path != urlquote(current_path) and expected_path != urlquote(current_path[2:])):
+        if expected_path != urlquote(current_path):
             return HttpResponsePermanentRedirect(expected_path)
         return None
 
