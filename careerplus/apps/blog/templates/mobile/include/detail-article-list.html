@@ -2,24 +2,24 @@
 
 
 {% if main_article %}
-    <div class="clearfix border-bottom pb-10 mb-10 fs-13">
-        <span class="view-forward">
+    <div class="clearfix border-bottom pb-10 mb-10 fs-13 fl100">
+        <span class="editor pull-left mt-5">{{main_article.created_by.name|truncatechars:"15"}}, {{main_article.publish_date.date}}</span>
+        <span class="view-forward pull-right">
           <figure class="icon-chat-sm"></figure> <a role="button"> {{main_article.comment_moderated}} Comments</a> 
           <figure class="icon-view icon-grey-view ml-10"></figure> {{main_article.no_views}}
         </span>
-        <span class="editor">{{main_article.created_by.name}}, {{main_article.publish_date.date}}</span>
     </div>
 {% endif %}
 {% for article in page_obj %}
-    <article>
+    <article class="pb-20 brd-bottom">
         {% if not main_article %}
             <h1>{{article.display_name}}</h1>
-            <div class="clearfix border-bottom pb-10 mb-10 fs-13">
-                <span class="view-forward">
+            <div class="clearfix border-bottom pb-10 mb-10 fs-13 fl100">
+                <span class="editor pull-left mt-5">{{article.created_by.name|truncatechars:"15"}}, {{article.publish_date.date}}</span>
+                <span class="view-forward pull-right">
                   <figure class="icon-chat-sm"></figure> <a href="#"> {{article.comment_moderated}} Comments</a> 
                   <figure class="icon-view icon-grey-view ml-10"></figure> 21
                 </span>
-                <span class="editor">{{article.created_by.name}}, {{article.publish_date.date}}</span>
             </div>
         {% endif %}
         {{article.content|safe}}

@@ -45,7 +45,7 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
-        if (expected_path != urlquote(current_path) and expected_path != urlquote(current_path[2:])):
+        if expected_path != urlquote(current_path):
             return HttpResponsePermanentRedirect(expected_path)
         return None
 

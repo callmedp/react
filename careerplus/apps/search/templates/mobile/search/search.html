@@ -54,23 +54,22 @@
 
 {% block container %}
     <div class="body-wrapper ">
-<div class="content-box pt-5">
+<div class="content-box pt-0">
   <div class="container pt-0 js_listing">
 
     <div class="row enrol-now box pt-5 pb-5" id="hide-second">
-    <div class="content-box">
 
-    <h2 class="pt-5 filter-pd">
-    {% if products_found %}
-        {% if search_type == 'recommended' %}{{ paginator.count }} recommended products
-            {% elif search_type == 'simple' %}{{ paginator.count }} products found
-        {% elif search_type == 'func_area' %}{{ func_area_name|title }} Courses{% endif %}
-    {% else %}
-        No products found. Have a look at our most popular products.
-    {% endif %}
-        {% if products_found and page.object_list|length > 0 %}<a href="javascript:void(0)" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
-    </h2>
-</div></div>
+        <h2 class="pt-5 filter-pd">
+        {% if products_found %}
+            {% if search_type == 'recommended' %}{{ paginator.count }} recommended products
+                {% elif search_type == 'simple' %}{{ paginator.count }} products found
+            {% elif search_type == 'func_area' %}{{ func_area_name|title }} Courses{% endif %}
+        {% else %}
+            No products found. Have a look at our most popular products.
+        {% endif %}
+            {% if products_found and page.object_list|length > 0 %}<a href="javascript:void(0)" class="icon-filter-white pull-right sidebar-secondary-trigger js_filters_trigger"></a>{% endif %}
+        </h2>
+    </div>
     
     {% include 'mobile/search/ajax/search_listing.html' %}
 
