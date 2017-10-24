@@ -83,8 +83,8 @@
           <div class="blog-author fs-11">
             <span class="editor">{% if obj.created_by and  obj.created_by.name %}{{obj.created_by.name}}, {% endif %}{{obj.publish_date.date}}</span>
             <span class="view-forward">
-              <figure class="icon-forward"></figure> {{obj.comment_moderated}} 
               <figure class="icon-view icon-grey-view ml-10"></figure> {{obj.no_views}}
+              <figure class="icon-forward"></figure> {{obj.comment_moderated}} 
             </span>
           </div>
         </div>
