@@ -816,6 +816,7 @@ label:hover ~ label {
     display: inline-block;
     vertical-align: bottom;
     text-align: left;
+    line-height: 1.2;
 }
 .course-new .media .img-box {
     display: block;
@@ -948,7 +949,7 @@ span.twitter-typeahead {
 }
 
 .error .error-txt {
-    font-size: 75%;
+    font-size: 9px;
     padding: 2px 5px;
     color: #fff;
     display: inline-block;
