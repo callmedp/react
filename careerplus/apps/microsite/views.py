@@ -268,10 +268,9 @@ class GetReferenceView(View, RoundOneAPI):
                                     'redirect_url': roundone_source}))
                     response_json = self.post_referral_request(
                         request, job_params)
-
                     if response_json.get("response"):
                         status = response_json.get("status")
-                        if status and status == "1" or status == "0":
+                        if status == "1" or status == "0":
                             return HttpResponse(json.dumps(
                                 {
                                     'status': True, 'response': True,
