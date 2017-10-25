@@ -7,7 +7,6 @@ from .tasks import post_psedu_lead
 
 # Register your models here.
 def lead_creted_on_crm(modeladmin, request, queryset):
-
     for query in queryset:
         query_dict = {}
         try:
@@ -18,7 +17,7 @@ def lead_creted_on_crm(modeladmin, request, queryset):
                 'country_code': usr_query.country.phone,
                 'mobile': usr_query.phn_number,
                 'message': usr_query.message,
-                'source': usr_query.sourse,
+                'source': usr_query.source,
                 'lsource': usr_query.lead_source,
                 'product': usr_query.product,
                 'medium': usr_query.medium,

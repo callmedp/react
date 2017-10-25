@@ -1212,6 +1212,51 @@
   border-top: 1px solid #e1e1e1;
   display: table;
 }
+.profile-data .resume-file-input {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  max-width: 80%;
+  height: 35px;
+}
+.profile-data .resume-file-input .input-file {
+  position: relative;
+  overflow: hidden;
+  height: 35px;
+  line-height: 16px;
+  cursor: pointer;
+}
+.profile-data .resume-file-input .input-file a input {
+  height: 35px;
+  font-size: 12px;
+}
+.profile-data .resume-file-input .choose-file {
+  color: #3f5f94;
+  font-size: 12px;
+  display: block;
+  text-align: center;
+  position: relative;
+  z-index: -1;
+  font-weight: 400;
+}
+.profile-data .resume-file-input .upload-file {
+  top: -17px;
+  position: relative;
+  width: 100%;
+  float: left;
+  font-size: 12px;
+}
+.profile-data .resume-file-input .blue-button {
+  margin: 5px 0 0 -10px;
+  color: #fff;
+  padding: 5px 15px;
+}
+.profile-data .default-resume {
+  color: #999;
+  font-size: 11px;
+  display: block;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
 
 /*--------------profile page css end-------------*/
 .empty-wallet {
