@@ -187,12 +187,12 @@ class ActionUserMixin(object):
                             "subject": "Your developed document has been shared with our expert",
                             "type_flow": oi.product.type_flow,
                             'delivery_service': oi.delivery_service,
-                            'delivery_service_slug': oi.delivery_service.slug,
-                            'delivery_service_name': oi.delivery_service.name,
+                            'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
+                            'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if oi.delivery_service:
-                            if oi.delivery_service == 'super-express':
+                            if oi.delivery_service.name == 'super-express':
                                 try:
                                     SendSMS().send(sms_type=mail_type, data=email_data)
                                 except Exception as e:
