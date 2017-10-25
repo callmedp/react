@@ -94,8 +94,8 @@ class PartnerListView(TemplateView):
         try:
             search_response = RoundOneAPI().get_search_response(
                 self.request, **kwargs)
-            jsondict = RoundOneAPI().remove_html_tags(search_response)
-            context.update({'search_result': jsondict})
+            # jsondict = RoundOneAPI().remove_html_tags(search_response)
+            context.update({'search_result': search_response})
             keyword = kwargs.get('keyword', '')
             location = self.request.GET.get('loc', '').split(',')
             initial_keyword = ""
@@ -116,9 +116,9 @@ class PartnerListView(TemplateView):
                 'clean_keyword': clean_keyword,
                 'clean_location': clean_location
             })
-
-            context.update(RoundOneSEO().get_seo_data(
-                data_for="listing", **context))
+            seo_data = RoundOneSEO().get_seo_data(
+                data_for="listing", **context)
+            context.update(seo_data)
             context.update(RoundOneAPI().get_location_list(**kwargs))
             context.update(**kwargs)
             if self.request.session.get('candidate_id', ''):
@@ -285,13 +285,19 @@ class GetReferenceView(View, RoundOneAPI):
                                 return HttpResponse(json.dumps(
                                     {'status': True, 'response': False,
                                      'message': response_json.get('msg')}))
-                    return HttpResponse(json.dumps(
-                        {'status': False, 'message': "facing some technical issues. please try later"}))
+                    return HttpResponse(
+                        json.dumps({
+                            'status': False,
+                            'message': "Roundone facing some technical issues. Please try later"
+                        }))
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return HttpResponse(
-            json.dumps({'status': False, 'message': 'facing some technical issues. please try later'}))
+            json.dumps({
+                'status': False,
+                'message': 'Roundone facing some technical issues. Please try later'
+            }))
 
 
 class RedirectProfileView(View):
@@ -328,7 +334,7 @@ class SaveJobView(View, RoundOneAPI):
                 return HttpResponse(
                     json.dumps(
                         {'status': True, 'response': False,
-                         'message': "Something went wrong."}))
+                         'message': "Roundone facing some technical issues. Please try later"}))
 
         return HttpResponse(json.dumps({
-            'status': False, 'message': 'Something went wrong.'}))
+            'status': False, 'message': 'Roundone facing some technical issues. Please try later'}))

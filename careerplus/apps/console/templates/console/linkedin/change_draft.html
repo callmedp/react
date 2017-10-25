@@ -409,14 +409,14 @@
     $(".edu-delete").click(function() {
       return eduDeleteForm(this, 'from_education');
     });
-    // $(".current_org").click(function() {
-    //   if ($('#current_org').is(':checked'))
-    //   {
-    //     $(this).closest(".work_to");
-    //   }
-    // });
-    $(':checkbox').click(function() {
+    $('.current_org').click(function() {
       $('.work_to').attr('disabled', this.checked)
+       $('.work_to').prop('required',false);
+    });
+
+    $('.current_edu').click(function() {
+      $('.study_to').attr('disabled', this.checked)
+       $('.study_to').prop('required',false);
     });
   });
 </script>
