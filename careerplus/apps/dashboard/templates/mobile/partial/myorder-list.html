@@ -22,7 +22,7 @@
                     {% for obj in orderitems %}
                         <tr>
                             <td>
-                                <a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.name}}
+                                <a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.heading}}
                                     {% if obj.product.get_exp_db %}
                                      - {{obj.product.get_exp_db}}
                                     {% endif %}

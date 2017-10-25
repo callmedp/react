@@ -74,11 +74,11 @@
                 <li>
                   <datalist class="col-sm-6">
                     {% if obj.product.type_flow == 12 and obj.parent %}
-                        <strong><a>{{obj.parent.product.name}}: {{obj.product.name}}</a></strong>
+                        <strong><a>{{obj.parent.product.heading}}: {{obj.product.heading}}</a></strong>
                     {% else %}
                         <strong>
                           <a>
-                            {{obj.product.name}}
+                            {{obj.product.heading}}
                             {% if obj.product.get_exp_db %}
                              - {{obj.product.get_exp_db}}
                             {% endif %}

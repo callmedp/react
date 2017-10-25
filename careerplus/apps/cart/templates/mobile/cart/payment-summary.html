@@ -1,7 +1,6 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress search_tags %}
 {% load thumbnail %}
-{% load static compress %}
 
 
 {% block canonical_url %}
@@ -74,7 +73,7 @@
                     <div class="w100fl">
                       <span class="item">
                         <strong class="block">{{item.name}}</strong>
-                        <span class="fs-12">{% if item.experience %}{{item.experience}}{% endif %}</span>
+                        <span class="fs-12">{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}</span>
                       </span>
                       <span class="price bold">
                         Rs. {{variations.0.price}}/-
@@ -105,7 +104,7 @@
                     <div class="w100fl">
                       <span class="item">
                         <strong class="block">{{item.name}}</strong>
-                        <span class="fs-12">{% if item.experience %}{{item.experience}}{% endif %}</span>
+                        <span class="fs-12">{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}</span>
                       </span>
                       <span class="price bold">
                         Rs. {{item.price}}/-
