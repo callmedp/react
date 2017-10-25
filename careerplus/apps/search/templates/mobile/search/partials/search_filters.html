@@ -26,9 +26,6 @@
             {% if facets.fields.pCL|length %}
                 <li><a href="#" data-tab="tab-2">Course Level</a></li>
             {% endif %}
-            {% if facets.fields.pAR|length %}
-                <li><a href="#" data-tab="tab-3">Review</a></li>
-            {% endif %}
             {% if facets.fields.pDM|length %}
                 <li><a href="#" data-tab="tab-4">Duration</a></li>
             {% endif %}
@@ -37,6 +34,9 @@
             {% endif %}
             {% if facets.fields.pStM|length %}
                 <li><a href="#" data-tab="tab-6">Study Mode</a></li>
+            {% endif %}
+            {% if facets.fields.pAR|length %}
+                <li><a href="#" data-tab="tab-3">Review</a></li>
             {% endif %}
             {% if facets.fields.pPinr|length %}
                 <li><a href="#" data-tab="tab-7">Price</a></li>
@@ -84,19 +84,6 @@
                         </li>
                     {% endfor %}
                 {% endif %}
-            </ul>
-            </div><!-- Tab content ends here -->
-            {% endif %}
-            {% if facets.fields.pAR|length %}
-            <div id="tab-3" class="tab-content">
-            <ul>
-                {% for i in '54321' %}
-                <li>
-                <input name="frating" type="checkbox" id="test3{{ forloop.counter }}" {% if i in rating %}checked="checked"{% endif %}
-                            {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
-                <label for="test3{{ forloop.counter }}" {% if facets.fields.pAR|length == 1 %}class="c9"{% endif %}>{{ i }} Star {% for facet in facets.fields.pAR%}{% if facet.0 == i %}({{facet.1|intcomma}}){% endif %}{% endfor %}</label>
-                </li>
-                {% endfor %}
             </ul>
             </div><!-- Tab content ends here -->
             {% endif %}
@@ -164,6 +151,19 @@
                         </li>
                     {% endfor %}
                 {% endif %}
+            </ul>
+            </div><!-- Tab content ends here -->
+            {% endif %}
+            {% if facets.fields.pAR|length %}
+            <div id="tab-3" class="tab-content">
+            <ul>
+                {% for i in '54321' %}
+                <li>
+                <input name="frating" type="checkbox" id="test3{{ forloop.counter }}" {% if i in rating %}checked="checked"{% endif %}
+                            {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
+                <label for="test3{{ forloop.counter }}" {% if facets.fields.pAR|length == 1 %}class="c9"{% endif %}>{{ i }} Star {% for facet in facets.fields.pAR%}{% if facet.0 == i %}({{facet.1|intcomma}}){% endif %}{% endfor %}</label>
+                </li>
+                {% endfor %}
             </ul>
             </div><!-- Tab content ends here -->
             {% endif %}
