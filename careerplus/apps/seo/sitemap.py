@@ -13,11 +13,11 @@ class CustomSitemap(Sitemap):
     def _urls(self, page, protocol, domain):
         urls = super(CustomSitemap, self)._urls(page, protocol, domain)
         for url in urls:
-            url['loc_mobile'] = "%s://%s%s" % (protocol, settings.MOBILE_SITE_DOMAIN, self.__get('location', url['item']))
+            url['loc_mobile'] = "%s://%s%s" % (protocol, settings.MOBILE_SITE_DOMAIN, self.location)
         return urls
 
 
-class CourseSitemap(Sitemap):
+class CourseSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 
@@ -38,7 +38,7 @@ class CourseSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class SkillSitemap(Sitemap):
+class SkillSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['daily', 'daily'])
 
 
@@ -52,7 +52,7 @@ class SkillSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class CategorySitemap(Sitemap):
+class CategorySitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['daily', 'daily'])
 
 
@@ -66,7 +66,7 @@ class CategorySitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class ServiceSitemap(Sitemap):
+class ServiceSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 
@@ -84,7 +84,7 @@ class ServiceSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class CMSSitemap(Sitemap):
+class CMSSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
     def priority(self, item):
@@ -97,7 +97,7 @@ class CMSSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class ArticleSitemap(Sitemap):
+class ArticleSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 
@@ -111,7 +111,7 @@ class ArticleSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class ArticleCategorySitemap(Sitemap):
+class ArticleCategorySitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 
