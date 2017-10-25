@@ -299,7 +299,7 @@ class ApproveByAdminDraft(View):
                     to_emails = [obj.order.email]
                     token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
                     mail_type = 'DRAFT_UPLOAD'
-                    data = {}
+                    # data = {}
                     data.update({
                         "draft_level": obj.draft_counter,
                         "first_name": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
