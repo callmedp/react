@@ -1071,11 +1071,6 @@ class Product(AbstractProduct, ModelMeta):
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                try:
-                    return dict(getattr(choices, choice))[int(value) if value.isdigit() else value]
-                except:
-                    return 'Others'
-
                 return '%s -  for %s -  Online Services  Learning.Shine' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
