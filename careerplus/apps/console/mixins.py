@@ -1,7 +1,11 @@
 import logging
+import time
+import os
+import mimetypes
+from random import random
 
 from django.utils import timezone
-
+from django.conf import settings
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
@@ -258,6 +262,27 @@ class ActionUserMixin(object):
         oi_draft = data.get('oi_draft', '')
         message_dict = {'display_message': "", }
         if oi and oi_draft and user and user.is_active:
+            try:
+                order = oi.order
+                file = oi_draft
+                filename = os.path.splitext(file.name)
+                extention = filename[len(filename)-1] if len(
+                    filename) > 1 else ''
+                file_name = 'draftupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
+                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                full_path = '%s/' % str(order.pk)
+                if not os.path.exists(settings.RESUME_DIR + full_path):
+                    os.makedirs(settings.RESUME_DIR +  full_path)
+                dest = open(
+                    settings.RESUME_DIR + full_path + file_name, 'wb')
+                for chunk in file.chunks():
+                    dest.write(chunk)
+                dest.close()
+                oi_draft = full_path + file_name 
+            except Exception as e:
+                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                raise 
+            
             if oi.product.type_flow in [2, 10]:
                 last_oi_status = oi.last_oi_status
                 oi.oi_status = 4  # closed orderitem

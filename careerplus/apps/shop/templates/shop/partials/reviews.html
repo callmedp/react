@@ -34,7 +34,7 @@
           {% endfor %}
           {% if prd_review_list.has_next %}
             
-            <a style="cursor:pointer;text-decoration:none;" onclick="LoadMoreProductReview({{product.id}})" class="load-more" id="loadmorereviewbtn"> Load more</a>
+            <a style="cursor:pointer;text-decoration:none;" data-product="{{product.id}}" class="load-more review-load-more" id="loadmorereviewbtn"> Load more</a>
           {% endif %}
 {% if prd_rv_page == 1 %}
 

@@ -204,10 +204,10 @@
                                       <td>
                                       {% if op.oi_resume %}
                                               <strong>Candidate Resume:</strong></br>
-                                              <a href="{{op.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                              <a href="{% url "console:queue-resume-download" %}?path={{op.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
                                       {% elif op.oi_draft %}
                                               <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
-                                              <a href="{{op.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                              <a href="{% url "console:queue-resume-download" %}?path={{op.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
                                       {% elif op.linkedin %}
                                           <strong>Candidate Draft</strong></br>
                                           <a href="{% url "linkedin-draf-download" obj.pk obj.oio_linkedin.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>

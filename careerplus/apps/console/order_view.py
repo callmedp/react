@@ -2,10 +2,11 @@ import json
 import csv
 import datetime
 import logging
+import mimetypes
 import textwrap
 
 from io import StringIO
-
+from wsgiref.util import FileWrapper
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -20,7 +21,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from geolocation.models import Country
-from order.models import Order, OrderItem, InternationalProfileCredential
+from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
 from shop.models import DeliveryService
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
@@ -2152,3 +2153,24 @@ class AssignmentOrderItemView(View):
 
         messages.add_message(request, messages.ERROR, "Please select valid assignment.")
         return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+
+@Decorate(stop_browser_cache())
+@method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+class ConsoleResumeDownloadView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            file = request.GET.get('path', None)
+            next_url = request.GET.get('next', None)
+            if file:  
+                file_path = settings.RESUME_DIR + file
+                fsock = FileWrapper(open(file_path, 'rb'))
+                filename = file.split('/')[-1]
+                response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                return response
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+                       
+        return HttpResponseRedirect(next_url)

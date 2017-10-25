@@ -53,7 +53,7 @@
                 <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
                     <div class="latest-resume selected" id="upload-resume-box">
                         <figure></figure>
-                        <a href="#">Upload</a> new resume
+                        <a href="javascript:void();">Upload</a> new resume
                         <input type="file" name="resume_file">
                         <span class="db">or</span>
                         fill this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and upload
