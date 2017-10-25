@@ -209,10 +209,10 @@ class ThankYouView(TemplateView):
             order = Order.objects.get(pk=order_pk)
         except:
             return HttpResponseRedirect(reverse('payment:thank-you'))
-        
+        file = request.FILES.get('resume_file', '')
+                
         if action_type == 'upload_resume' and order_pk and file:
             try:
-                file = request.FILES.get('resume_file', '')
                 filename = os.path.splitext(file.name)
                 extention = filename[len(filename)-1] if len(
                     filename) > 1 else ''
