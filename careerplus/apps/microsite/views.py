@@ -2,11 +2,11 @@ import logging
 import json
 import re
 from django.views.generic import TemplateView, View
-from django.http import HttpResponse
-from django.http import Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.utils.text import slugify
 from django.urls import reverse
 from django.utils import timezone
+from django.conf import settings
 from .roundoneapi import RoundOneAPI, RoundOneSEO
 from users.forms import (
     ModalLoginApiForm,
@@ -15,6 +15,7 @@ from users.forms import (
 )
 
 from .models import MicroSite, PartnerTestimonial, PartnerFaq
+from shop.models import Product
 from cart.models import Subscription
 
 
@@ -48,8 +49,14 @@ class PartnerHomeView(TemplateView):
                 'flag': flag_status
             })
 
+            if partner == 'roundone':
+                product = Product.objects.filter(id=settings.ROUNDONE_PRODUCT_ID)
+                if len(product):
+                    context['product'] = product[0]
+
             context.update(RoundOneAPI().get_location_list(**kwargs))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             raise Http404()
 
         return context
@@ -246,12 +253,10 @@ class GetReferenceView(View, RoundOneAPI):
                         "roundone_job_params", "").split('-')
                     roundone_source = request.session.get("roundone_source")
                     origin = request.POST.get("origin")
-
                     if roundone_job_params and roundone_source:
 
                         redirect_response = self.post_referral_request(
                             request, roundone_job_params)
-
                         if redirect_response.get("response"):
                             if redirect_response.get("status") == "-1":
                                 return HttpResponse(json.dumps({
@@ -276,27 +281,15 @@ class GetReferenceView(View, RoundOneAPI):
                                     'status': True, 'response': True,
                                     'message': response_json.get('msg')}))
                         elif status == "-1":
-                            try:
-                                return HttpResponse(json.dumps(
-                                    {'status': True, 'response': False,
-                                     'message': response_json.get('msg')}))
-                            except:
-                                return HttpResponse(json.dumps(
-                                    {'status': True, 'response': False,
-                                     'message': response_json.get('msg')}))
-                    return HttpResponse(
-                        json.dumps({
-                            'status': False,
-                            'message': "Roundone facing some technical issues. Please try later"
-                        }))
-
+                            return HttpResponse(json.dumps(
+                                {'status': True, 'response': False,
+                                 'message': response_json.get('msg')}))
+                    return HttpResponse(json.dumps(
+                        {'status': False, 'message': "Roundone is facing some technical issues. Please try later"}))
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return HttpResponse(
-            json.dumps({
-                'status': False,
-                'message': 'Roundone facing some technical issues. Please try later'
-            }))
+            json.dumps({'status': False, 'message': 'Roundone is facing some technical issues. Please try later'}))
 
 
 class RedirectProfileView(View):
@@ -315,13 +308,10 @@ class RedirectProfileView(View):
 
 
 class SaveJobView(View, RoundOneAPI):
-    def get(self, request, *args, **kwargs):
-        return super(GetReferenceView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if 'candidate_id' in request.session:
             if self.is_premium_user(request):
-
                 job_params = request.POST.get('job_params', '')
                 kwargs.update({'job_params': job_params})
                 response_json = self.save_job(request, **kwargs)
@@ -333,7 +323,5 @@ class SaveJobView(View, RoundOneAPI):
                 return HttpResponse(
                     json.dumps(
                         {'status': True, 'response': False,
-                         'message': "Roundone facing some technical issues. Please try later"}))
-
-        return HttpResponse(json.dumps({
-            'status': False, 'message': 'Roundone facing some technical issues. Please try later'}))
+                        'message': "Roundone is experiencing some technical issues. Please try again later"}))
+        return HttpResponseRedirect(reverse('users:login'))
