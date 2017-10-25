@@ -94,7 +94,7 @@ class HomePageView(TemplateView):
             if candidate_id:
                 candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
                 if candidate_detail:
-                    func_area = candidate_detail.get('jobs')[0].get("sub_field", "") \
+                    func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
                         if len(candidate_detail.get('jobs', [])) else ''
                     func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
                     if func_area_obj:

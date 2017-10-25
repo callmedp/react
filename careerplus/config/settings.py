@@ -61,7 +61,7 @@ else:
 INTERNAL_IPS = ('127.0.0.1',)
 
 SITE_DOMAIN = '127.0.0.1:8000'
-MOBILE_SITE_DOMAIN = 'm.learn.shine.com:8007'
+MOBILE_SITE_DOMAIN = 'm-learn.shine.com:8007'
 SITE_PROTOCOL = 'http'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)

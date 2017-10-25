@@ -1141,7 +1141,7 @@ header {
   content: "";
 }
 
-.call1 h1 {
+.call1 .modal-title {
   font-size: 20px;
   color: #666;
   display: block;

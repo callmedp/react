@@ -29,11 +29,11 @@
             {{ref.position}}, {{ref.department}}
             {% endwith %}
             </datatlist>
-            <a class="get-refferd" onclick="onClickGetReference({{job.jobId}});">
+            <a href="javascript:void(0);" class="get-refferd" onclick="onClickGetReference({{job.jobId}});">
             Get Referred</a>
             <a href="{{detail_url}}" class="view-job">View job description</a>
             <div class="saved-today">
-              Saved today | <a class="delete-icon" onclick="onClickDeleteJob({{job.jobId}})"></a>
+              Saved today | <a href="javascript:void(0);" class="delete-icon" onclick="onClickDeleteJob({{job.jobId}})"></a>
             </div>
             <form id="id_{{job.jobId}}">
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token_value}}">
