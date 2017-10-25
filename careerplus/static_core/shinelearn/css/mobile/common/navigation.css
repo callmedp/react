@@ -180,13 +180,15 @@ nav {
 .icon-sample {
   background-position: -192px -150px; }
 
-.sidebar {
+.sidebar, 
+.sidebar-filter {
   position: fixed;
   top: 56px;
   bottom: 0;
   width: 300px;
   background-color: #fff; 
   z-index: 999999999 !important;
+  right: -300px;
 }
 
 #sidebar-main {
