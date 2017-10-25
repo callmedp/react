@@ -20,7 +20,7 @@
         </div>
       <!-- breadcrums -->
         <ol class="breadcrumb mt-30">
-          <li><a href="#">Home</a></li>
+          <li><a href="/">Home</a></li>
           <li class="active">Profile</li>
         </ol>
         <div class="feedback-heading">
@@ -107,9 +107,10 @@
                                 <div class="skill-name"> 
                                     {{skill.value}}
                                 </div>
+                                <!--
                                 <div class="skill-time">
                                     {{skill.years_of_experience}} years
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                       {% endfor %}                      
@@ -183,6 +184,7 @@
                           <div class="col-sm-9 col-md-9 mb-10" data-role="inputSelect" data-editable data-type="yrs">
                             <input class="pro-input2" type="text" 
                             name="skill" value="{{skill.value}}">
+                            <!--
                             <select class="pro-select2" name="level_id">
                             {% for year in years %}
                               {% if year == skill.years_of_experience %}
@@ -192,6 +194,7 @@
                               {% endif %}
                             {% endfor %}
                             </select>
+                            -->
                             <a href="#" class="removeElement">Remove</a>
                           </div>
                         </div>
