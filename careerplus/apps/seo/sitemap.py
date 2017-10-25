@@ -1,18 +1,31 @@
 import datetime
 import random
 from django.contrib.sitemaps import Sitemap
+from django.conf import settings
 
 from shop.models import Product, Category
 from cms.models import Page
 from blog.models import Blog, Category as BlogCategory
 
 
-class CourseSitemap(Sitemap):
+class CustomSitemap(Sitemap):
+
+    def _urls(self, page, protocol, domain):
+        urls = super(CustomSitemap, self)._urls(page, protocol, domain)
+        for url in urls:
+            url['loc_mobile'] = "%s://%s%s" % (protocol, settings.MOBILE_SITE_DOMAIN, self.location)
+        return urls
+
+
+class CourseSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 
     def location(self,item):
         return item.get_url(relative=True)
+
+    def mobile_loc(self, item):
+        return item.get_mob_url(relative=True)
     
     def priority(self, item):
         return 0.8
@@ -25,7 +38,7 @@ class CourseSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class SkillSitemap(Sitemap):
+class SkillSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['daily', 'daily'])
 
 
@@ -39,7 +52,7 @@ class SkillSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class CategorySitemap(Sitemap):
+class CategorySitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['daily', 'daily'])
 
 
@@ -53,7 +66,7 @@ class CategorySitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class ServiceSitemap(Sitemap):
+class ServiceSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 
@@ -71,7 +84,7 @@ class ServiceSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class CMSSitemap(Sitemap):
+class CMSSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
     def priority(self, item):
@@ -84,7 +97,7 @@ class CMSSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class ArticleSitemap(Sitemap):
+class ArticleSitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 
@@ -98,7 +111,7 @@ class ArticleSitemap(Sitemap):
         return datetime.date.today() - datetime.timedelta(1)
 
 
-class ArticleCategorySitemap(Sitemap):
+class ArticleCategorySitemap(CustomSitemap):
     changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
 
 

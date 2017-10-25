@@ -522,6 +522,11 @@ function onClickDeleteJob(idx){
         $("#form_roundone_personal").show();
         $("#detail_roundone_personal").hide();
     });
+    
+    $(".js_edit_education_btn").on("click", function(){
+        $("#form_edit_education").show();
+        $("#div_education").hide();
+    });
 
     $("#cancel_roundone_personal").on("click", function(){
         // $("#form_roundone_personal").hide();
@@ -616,56 +621,56 @@ function onClickDeleteJob(idx){
 
     $("#form_edit_education").validate({
         errorClass: "roundone-error",
-        rules:{
-            institute: {
-                required: true,
-                minlength: 2,
-                maxlength: 40
-            },
-            degree: {
-                required: true,
-                minlength: 2,
-                maxlength: 40
-            },
-            major: {
-                required: true,
-                minlength: 2,
-                maxlength: 40
-            },
-            year: {
-                required: true,
-                number: true,
-                minlength: 4,
-                maxlength: 4
-            },
-            marks:{
-                required: true,
-                validmarks: true
-            }
-        },
-        messages: {
-            institute: {
-                required: "Please enter  institute name",
-                minlength: "At least 2 character",
-                maxlength: "At most 40 character"
-            },
-            degree: {
-                required: "Please enter degree name",
-                minlength: "At least 2 character",
-                maxlength: "At most 40 character"
-            },
-            major: {
-                required: "This is required",
-                minlength: "At least 2 character",
-                maxlength: "At most 40 character"
-            },
-            year: {
-                required: "Please enter year of passing",
-                number: "Only digits",
-                minlength: "At least 4 digits",
-                maxlength: "At most 4 digits"
-            }
-        },
+        // rules:{
+        //     institute: {
+        //         required: true,
+        //         minlength: 2,
+        //         maxlength: 40
+        //     },
+        //     degree: {
+        //         required: true,
+        //         minlength: 2,
+        //         maxlength: 40
+        //     },
+        //     major: {
+        //         required: true,
+        //         minlength: 2,
+        //         maxlength: 40
+        //     },
+        //     year: {
+        //         required: true,
+        //         number: true,
+        //         minlength: 4,
+        //         maxlength: 4
+        //     },
+        //     marks:{
+        //         required: true,
+        //         validmarks: true
+        //     }
+        // },
+        // messages: {
+        //     institute: {
+        //         required: "Please enter  institute name",
+        //         minlength: "At least 2 character",
+        //         maxlength: "At most 40 character"
+        //     },
+        //     degree: {
+        //         required: "Please enter degree name",
+        //         minlength: "At least 2 character",
+        //         maxlength: "At most 40 character"
+        //     },
+        //     major: {
+        //         required: "This is required",
+        //         minlength: "At least 2 character",
+        //         maxlength: "At most 40 character"
+        //     },
+        //     year: {
+        //         required: "Please enter year of passing",
+        //         number: "Only digits",
+        //         minlength: "At least 4 digits",
+        //         maxlength: "At most 4 digits"
+        //     }
+        // },
         submitHandler: function(form){
             ajaxurl = $("input[name=post_education]").val();
             roundone_edit(form, ajaxurl);

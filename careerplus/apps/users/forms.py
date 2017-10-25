@@ -112,7 +112,7 @@ class ModalRegistrationApiForm(RegistrationForm):
 
 class PasswordResetRequestForm(forms.Form):
     email = forms.CharField(max_length=50, validators=[validate_email],widget=forms.TextInput(
-        attrs={"placeholder":"Enter the Email Id which you are registered on Shine.com", 'class': 'form-control'}))
+        attrs={"placeholder":"Email ID", 'class': 'form-control'}))
 
 
 class SetConfirmPasswordForm(forms.Form):

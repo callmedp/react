@@ -17,6 +17,10 @@ a, a:hover, a:focus {
   text-decoration: none;
 }
 
+b {
+  font-weight: 600;
+}
+
 h1 {
   font-size: 30px;
 }
@@ -454,6 +458,12 @@ footer .footer-links span {
   background-color: #fff;
   font-family: "Open Sans", sans-serif;
   padding: 20px;
+}
+.register .modal-title {
+  font-size: 20px;
+  color: #666;
+  display: block;
+  margin-bottom: 20px;
 }
 .register h1 {
   font-size: 20px;
@@ -1945,6 +1955,7 @@ footer .footer-links span {
   color: #3f5f94;
   font-size: 15px;
   font-weight: 600;
+  line-height: 19px;
 }
 .listing .rating-review-box {
   display: block;
