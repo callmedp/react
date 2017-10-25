@@ -209,28 +209,27 @@ class ThankYouView(TemplateView):
             order = Order.objects.get(pk=order_pk)
         except:
             return HttpResponseRedirect(reverse('payment:thank-you'))
-        try:
-            file = request.FILES.get('resume_file', '')
-            filename = os.path.splitext(file.name)
-            extention = filename[len(filename)-1] if len(
-                filename) > 1 else ''
-            file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
-                + '_' + timezone.now().strftime('%Y%m%d') + extention
-            full_path = '%s/' % str(order.pk)
-            if not os.path.exists(settings.RESUME_DIR + full_path):
-                os.makedirs(settings.RESUME_DIR +  full_path)
-            dest = open(
-                settings.RESUME_DIR + full_path + file_name, 'wb')
-            for chunk in file.chunks():
-                dest.write(chunk)
-            dest.close()
-        
-        except Exception as e:
-            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
-            return HttpResponseRedirect(reverse('payment:thank-you'))
         
         if action_type == 'upload_resume' and order_pk and file:
-
+            try:
+                file = request.FILES.get('resume_file', '')
+                filename = os.path.splitext(file.name)
+                extention = filename[len(filename)-1] if len(
+                    filename) > 1 else ''
+                file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
+                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                full_path = '%s/' % str(order.pk)
+                if not os.path.exists(settings.RESUME_DIR + full_path):
+                    os.makedirs(settings.RESUME_DIR +  full_path)
+                dest = open(
+                    settings.RESUME_DIR + full_path + file_name, 'wb')
+                for chunk in file.chunks():
+                    dest.write(chunk)
+                dest.close()
+            except Exception as e:
+                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                return HttpResponseRedirect(reverse('payment:thank-you'))
+            
             order = Order.objects.get(pk=order_pk)
             pending_resumes = order.orderitems.filter(order__status__in=[0, 1], no_process=False, oi_status=2)
             
@@ -264,10 +263,24 @@ class ThankYouView(TemplateView):
                 default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
                 file_name = request.session.get('shine_resume_name', default_name)
                 resume_extn = request.session.get('resume_extn', '')
-                file_name = file_name + '.' + resume_extn
-
+                try:
+                    file = ContentFile(response.content)
+                    file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
+                        + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
+                    full_path = '%s/' % str(order.pk)
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR +  full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                except Exception as e:
+                    logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                    return HttpResponseRedirect(reverse('payment:thank-you'))
+                
                 for obj in pending_resumes:
-                    obj.oi_resume.save(file_name, ContentFile(response.content))
+                    obj.oi_resume = full_path + file_name
                     last_oi_status = obj.oi_status
                     obj.oi_status = 5
                     obj.last_oi_status = 13
