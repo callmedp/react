@@ -1,10 +1,20 @@
 import datetime
 import random
 from django.contrib.sitemaps import Sitemap
+from django.conf import settings
 
 from shop.models import Product, Category
 from cms.models import Page
 from blog.models import Blog, Category as BlogCategory
+
+
+class CustomSitemap(Sitemap):
+
+    def _urls(self, page, protocol, domain):
+        urls = super(CustomSitemap, self)._urls(page, protocol, domain)
+        for url in urls:
+            url['loc_mobile'] = "%s://%s%s" % (protocol, settings.MOBILE_SITE_DOMAIN, self.__get('location', url['item']))
+        return urls
 
 
 class CourseSitemap(Sitemap):
@@ -13,6 +23,9 @@ class CourseSitemap(Sitemap):
 
     def location(self,item):
         return item.get_url(relative=True)
+
+    def mobile_loc(self, item):
+        return item.get_mob_url(relative=True)
     
     def priority(self, item):
         return 0.8
