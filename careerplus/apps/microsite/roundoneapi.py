@@ -538,11 +538,11 @@ class RoundOneSEO(object):
             elif title_for == "listing":
                 return "{clean_keyword} Jobs in {clean_location} - {clean_keyword} Jobs".format(**context)
             elif title_for == "detail":
-                return "{jobTitle} - Careerplus.shine.com".format(**context)
+                return "{jobTitle} - learning1.shine.com".format(**context)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return "Shine - CV | Resume Format | Curriculum Vitae | Cover Letter | Resume Samples"
-    
+
     def get_seo_desc(self, desc_for, **context):
         try:
             if desc_for == "home":
@@ -550,7 +550,7 @@ class RoundOneSEO(object):
             elif desc_for == "listing":
                 return "Find List of Jobs available in {clean_keyword} - {clean_keyword} Jobs from Top Companies, Explore {clean_keyword} Jobs for Freshers & Experienced, Find New {clean_keyword} Jobs Online".format(**context)
             elif desc_for == "detail":
-                return "Apply to {jobTitle} Jobs Online on Careerplus.shine.com".format(**context)
+                return "Apply to {jobTitle} Jobs Online on learning1.shine.com".format(**context)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return ""
@@ -571,8 +571,4 @@ class RoundOneSEO(object):
         seo_title = self.get_seo_title(title_for=data_for, **context)
         seo_desc = self.get_seo_desc(desc_for=data_for, **context)
         seo_heading = self.get_seo_heading(heading_for=data_for, **context)
-        return
-        {
-            'seo_title': seo_title, 'seo_desc': seo_desc,
-            'seo_heading': seo_heading
-        }
+        return {'seo_title': seo_title, 'seo_desc': seo_desc, 'seo_heading': seo_heading}
