@@ -275,7 +275,7 @@
 
                       <td>Draft Level {% if obj.draft_counter|add:"1" == max_limit_draft %}Final{% else %}{{obj.draft_counter|add:"1"}} {% endif %}</td>
 
-                      <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
+                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
 
                       <td>
                         <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}

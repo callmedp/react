@@ -1,6 +1,9 @@
- var processing = false;
+
+
+$(document).ready(function () {
+    var processing = false;
   
-function LoadMoreProductReview(pv_id) {
+    function LoadMoreProductReview(pv_id) {
       if (processing) {
           return false;
       }
@@ -42,9 +45,11 @@ function LoadMoreProductReview(pv_id) {
       }
     };
 
-
-$(document).ready(function () {
-
+    $(document).on("click", ".review-load-more", function() {
+   
+           LoadMoreProductReview($(this).attr('data-product'));
+      });
+    
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
         if(country_code == '91'){

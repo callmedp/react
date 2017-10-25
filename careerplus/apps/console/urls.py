@@ -171,6 +171,8 @@ urlpatterns += [
 
 
 urlpatterns += [
+    url(r'^queue/resumedownload/$',
+        order_view.ConsoleResumeDownloadView.as_view(), name='queue-resume-download'),
     url(r'^queue/orders/$',
         order_view.OrderListView.as_view(), name='queue-order'),
     url(r'^queue/welcomecall/$',

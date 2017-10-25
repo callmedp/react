@@ -91,6 +91,10 @@ urlpatterns += [
         dashboard_view.DashboardInvoiceDownload.as_view(),
         name='dashboard-invoicedownload'),
 
+    url(r'^order-resumedownload/(?P<pk>[\d]+)/$',
+        dashboard_view.DashboardResumeDownload.as_view(),
+        name='dashboard-resumedownload'),
+
     url(r'^downloadquestionnaire/$',
         dashboard_view.DownloadQuestionnaireView.as_view(),
         name='dashboard-downloadquestionnaire'),
