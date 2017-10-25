@@ -134,13 +134,15 @@ function GetReference(idx){
         success: function(response){
             hideLoader();
             result = JSON.parse(response);
-            if(result.status){
+            if(result.status)
+            {
                 if(result.redirect && result.redirect_url.length > 0) 
                 {
                     window.location.href = result.redirect_url;
                 }
                 else if(!result.response)
                 {
+                    $("#api_rsp").modal('hide');
                     showErrorModal(result.message, "", "Complete Profile", "", "/dashboard/roundone/profile/");
                 }
                 else
@@ -150,6 +152,7 @@ function GetReference(idx){
             }
             else
             {
+                $("#api_rsp").modal('hide');
                 showErrorModal(result.message, "Ok", "Cancel");
             }
         },

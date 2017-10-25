@@ -24,11 +24,9 @@ def lead_creted_on_crm(modeladmin, request, queryset):
                 'medium': usr_query.medium,
                 'path': usr_query.path,
             })
-            if not usr_query.lead_created:
-                usr_query.lead_created = True
-                usr_query.save()
-                post_psedu_lead.delay(query_dict)
-                messages.add_message(request, messages.SUCCESS, "lead created")
+            query_dict.update({'queryid': query.id})
+            post_psedu_lead.delay(query_dict)
+            messages.add_message(request, messages.SUCCESS, "lead created")
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
 lead_creted_on_crm.short_description = 'create lead on crm'
