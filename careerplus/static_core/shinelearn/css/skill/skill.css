@@ -149,25 +149,25 @@
   line-height: 28px;
 }
 .market-growth .media {
-  margin: 0 5px 15px 5px;
-  border-bottom: none;
-  padding-bottom: 0;
-}
-.market-growth .media:first-child {
   border-bottom: 1px solid #f5f5f5;
   margin-top: 15px;
   padding-bottom: 15px;
+}
+.market-growth .media:last-child {
+  margin: 15px 5px 15px 5px;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 .market-growth .job-require {
   font-size: 14px;
   padding: 15px;
 }
 .market-growth .job-require strong {
-  font-size: 22px;
+  font-size: 18px;
   color: #666;
   display: block;
-  font-weight: 300;
-  line-height: 24px;
+  font-weight: 400;
+  line-height: 22px;
   margin-bottom: 12px;
 }
 
@@ -283,8 +283,8 @@
 }
 
 .scroll {
-  margin-bottom: -10px;
-  padding-top: 85px;
+  margin-bottom: -30px;
+  padding-top: 100px;
   border-top: 10px solid transparent;
 }
 
