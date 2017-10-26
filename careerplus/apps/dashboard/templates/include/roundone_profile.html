@@ -678,29 +678,33 @@
         </li>
         <li>
             <div class="col-sm-12 gap-bottom">
-                <h2 class="profile-head" data-id="resume">Resume</h2> 
-                <div class="row mt-10">
-                    <div class="col-sm-12">
-                      {% if resumes %}
-                        <div class="alert alert-resume"><a href="#">{{resumes}}</a>
-                        <div class="pull-right resume-close"><a href="#">X</a></div></div>
-                      {% else %}
-                        <div class="alert alert-resume"><a href="#"></a>
-                        <div class="pull-right resume-close"><a href="#">X</a></div>
-                      {% endif %} 
+              <h2 class="profile-head">Resume</h2>
+              <div class="row mt-10">
+                <div class="col-sm-12">
+                {% if resumes %}
+                  <span class="default-resume">{{resumes}}</span>
+                {% endif %}
+                  <form class="resume-file-input" id="resume_form" method="post" data-url='{% url "dashboard:post_shine_detail" %}' enctype="multipart/form-data">
+                    <div style="display:none">
+                      <input type="hidden" name="csrfmiddlewaretoken" 
+                      value="{{csrf_token_value}}">
                     </div>
+                    <div class="error-profile">  
+                      <div class="input-file">
+                        <a class='' href='javascript:void;'>
+                          <input maxlength="200" type="file" style='position:absolute;z-index:2;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="resume" size="30"  onchange='$("#upload-file-info").html($(this).val());' 
+                          id="inputfile">
+                          <span class="choose-file">Add Resume</span>
+                        </a>
+                        <span class="upload-file" id="upload-file-info"></span>
+                      </div>
+                      <span class="error-txt" id="error_id"></span>
+                    </div>
+                    <input type="hidden" name="edit_type" value="uploadresume">
+                    <button type="submit" class="blue-button">Submit</button>
+                  </form>
                 </div>
-                <form id="resume_form" method="post" data-url='{% url "dashboard:post_shine_detail" %}' enctype="multipart/form-data">
-                <div style="display:none">
-                    <input type="hidden" name="csrfmiddlewaretoken" 
-                    value="{{csrf_token_value}}">
-                  </div>
-                  <div class="col-sm-12">
-                      <input type="file" name="resume"><br>
-                      <button type="submit">Update</button>
-                  </div>
-                  <input type="hidden" name="edit_type" value="uploadresume">
-                </form>               
+              </div>
             </div>
         </li>
     </ul>

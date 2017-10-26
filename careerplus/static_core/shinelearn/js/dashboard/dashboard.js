@@ -804,35 +804,49 @@ function onClickDeleteJob(idx){
                 failure: function(response){
                     alert("Error while updating resume, Please retry");
                 },
-                complete: function(response){
-                    if(response.status)
+                complete: function(result){
+                    var rsp =  $.parseJSON(result.responseText);
+                    if(rsp.status)
                     {
                         alert("Resume Updated successfully");
+                        $('#upload-file-info').html('');
+                        $("#error_id").html(rsp.msg.non_field_errors).hide();
+                        window.location.reload();
+                    }
+                    else if(rsp.status == false)
+                    {
+                        $("#error_id").html(rsp.msg.non_field_errors).show();
                     }
                     else
                     {
-                        alert("Resume not Updated");
+                        alert('Resume is not updated')
                     }
                 }
             });
         },
-        highlight:function(el){
-            switch(el.type)
-            {   
-                default:
-                    $(el).addClass('redborder');
-                    break;
-            }
-        },
-        unhighlight:function(el){
-            switch(el.type)
+        // highlight:function(el, error){
+        //     switch(el.type)
+        //     {   
+        //         default:
+        //             error.appendTo(".error-txt");
+        //             break;
+        //     }
+        // },
+        // unhighlight:function(el){
+        //     switch(el.type)
+        //     {
+        //         default:
+        //             $(el).removeClass('redborder');
+        //             break;
+        //     }
+        // },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "resume")
             {
-                default:
-                    $(el).removeClass('redborder');
-                    break;
-            }
-        },
-    })
+                error.appendTo(".error-txt");
+            }           
+        }
+    });
 
 
 function roundone_edit(form, ajaxurl){

@@ -66,4 +66,17 @@ class ShineUserDetail(object):
             resume_file = {}
         return resume_file
 
-
+    def update_resume_in_session(self, request, file_dict):
+        try:
+            ff = file_dict.get('resume_file').name
+            files = ff.split('.')
+            if request.session.get('candidate_profile'):
+                candidate_profile = request.session.get('candidate_profile', '')
+                resume_data = candidate_profile.get('resumes', '')
+                for data in resume_data:
+                    if data.get('is_default') == 1:
+                        data.update({
+                            'resume_name': files[0], 'extension': files[1]
+                        })
+        except:
+            pass
