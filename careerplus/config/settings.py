@@ -161,9 +161,11 @@ SHINE_API_USER_PWD = 'tarun@123'
 
 
 # Use for CRM Lead
+CRM_LEAD_URL = 'http://172.22.65.32:8003'
+CRM_LEAD_TOKEN = '73f53cf358b94156feb49d034081ed507334e02a',
 SHINECPCRM_DICT = {
-    'base_url': 'http://172.22.65.32:8003',
-    'token': '73f53cf358b94156feb49d034081ed507334e02a',
+    'base_url': CRM_LEAD_URL,
+    'token': CRM_LEAD_TOKEN,
     'psuedo_lead_url': '/api/pseudo-leads/',
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
@@ -199,11 +201,11 @@ EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
 # Linkedin Cridential
-CLIENT_ID = "757gbstpwa6dqp"
-CLIENT_SECRET = "creqezZ0kPJnJWRk"
-REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
+CLIENT_ID = "815g8q57sg0q6q"
+CLIENT_SECRET = "NljH5Pdr6e80MTuR"
+REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 STATE = "9899002507upender"
-SCOPE = 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo'
+SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 

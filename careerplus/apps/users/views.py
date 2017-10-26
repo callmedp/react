@@ -291,6 +291,7 @@ class ForgotHtmlView(TemplateView):
         context = super(ForgotHtmlView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         context.update({
+            'next_url' : self.request.META.get('HTTP_REFERER', None),
             'messages': alert,
             "reset_form": PasswordResetRequestForm()
         })
@@ -300,6 +301,7 @@ class ForgotHtmlView(TemplateView):
 class ForgotPasswordEmailView(View):
 
     def post(self, request, *args, **kwargs):
+
         if request.is_ajax():
             email = request.POST.get('email')
             user_exist = RegistrationLoginApi.check_email_exist(email)
@@ -310,11 +312,11 @@ class ForgotPasswordEmailView(View):
                 'email': email,
                 'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
             })
-
+            next1 = request.POST.get('next', '')
             if user_exist.get('exists', ''):
                 # task call for email
                 send_email_task.delay(to_emails, mail_type, email_dict, status=None, oi=None)
-                return HttpResponse(json.dumps({'exist': True}), content_type="application/json")
+                return HttpResponse(json.dumps({'exist': True, 'next': next1}), content_type="application/json")
 
             elif not user_exist.get('exists', ''):
                 return HttpResponse(json.dumps({'notexist': True}), content_type="application/json")

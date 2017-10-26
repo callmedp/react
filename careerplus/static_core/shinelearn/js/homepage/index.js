@@ -1,12 +1,12 @@
 function redirectToSearch(e) {
     var $q = $('#id_q');
     if ($q.val()) {
-        $q.closest('div').removeClass('error');
+        $q.closest('div').removeClass('error-search');
         $q.closest('div').find('.error-txt').html();
         location.href = '/search/results/?q='+encodeURI($q.val());
     }
     else {
-        $q.closest('div').addClass('error');
+        $q.closest('div').addClass('error-search');
         $q.closest('div').find('.error-txt').html('Please enter a query');
         return false;
     }

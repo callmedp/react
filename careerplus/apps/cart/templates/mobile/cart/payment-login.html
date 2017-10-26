@@ -65,8 +65,7 @@
                     <p class="error-txt"></p>
                   </div>
                     <p class="form-text text-muted">
-                      <a href="javascript:void(0)" id="modalforgot">
-                      Forgot Password?</a>
+                      <a href="{% url "users:forgot-html" %}">Forgot Password?</a>
                    </p>
               {% else %}
                   <div class="form-group {% if email_error %}error{% endif %}">
@@ -88,31 +87,6 @@
             </div><!-- call us and chat widget ends here -->
         </form>
     </div>
-<!-- forgot password box -->
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="forgot_div">
-  <div class="modal-dialog modal-sm modal-custom" role="document">
-    <div class="modal-content">
-        <div class="register">
-            <div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <span class="modal-title" id="myModalLabel">Forgot Password</span>
-            </div>
-            <div id="msg_for_user"></div>
-            <form method="post" id="forgot_form" 
-            action="{% url "users:forgot-email-sent" %}">
-            {% csrf_token %}
-                {% for field in reset_form %}
-                    <div class="form-group {% if field.errors %}error{% endif %}">
-                        {{field}}
-                        {% for error in  field.errors %}{{ error }}{% endfor %}
-                    </div>
-                {% endfor %}
-              <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
-            </form>
-        </div>
-    </div>
-  </div>
-</div>
 
 {% endblock container %}
 
@@ -122,7 +96,7 @@
 
     {% compress js %}
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
-        <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
     {% endcompress %}
 
     {% block johukum %}

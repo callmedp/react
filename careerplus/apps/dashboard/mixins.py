@@ -6,6 +6,7 @@ import json
 from django.conf import settings
 from shine.core import ShineCandidateDetail
 from microsite.roundoneapi import RoundOneAPI
+from microsite.common import ShineUserDetail
 
 
 class RoundOneMixin(RoundOneAPI):
@@ -90,7 +91,7 @@ class RoundOneMixin(RoundOneAPI):
                     if response_json.get("response"):
                         request.session.update({
                             "roundone_profile": roundone_profile})
-                        return True, response_json.get("msg")
+                        return response_json.get("status"), response_json.get("msg")
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
@@ -168,7 +169,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
 
     def update_candidate_personal(self, shine_id=None, user_access_token=None,
                               client_token=None, data={}, type_of=None, token=None):
-        error_msg = "Personal Details can not be updated"
+        error_msg = "Personal Details not updated"
         personal_response = None
         try:
             if not client_token:
@@ -206,6 +207,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
 
                     if personal_response.status_code in [200, 201] and status:
                         return True, ""
+
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         if personal_response and personal_response.json():
@@ -458,7 +460,12 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     resume_response = requests.post(
                         resume_url, files=files, data=resume_data,
                         headers=request_header)
-                if resume_response.status_code in [201, 200]:
-                    return True, ""
+                    if resume_response.status_code in [201, 200]:
+                        ShineUserDetail().update_resume_in_session(
+                            self.request, files)
+                        return True, ""
+                    elif resume_response.status_code not in [201, 200]:
+                        json_rsp = resume_response.json()
+                        return False, json_rsp
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

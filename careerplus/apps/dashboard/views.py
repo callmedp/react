@@ -247,6 +247,7 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
         try:
             request = self.request
             shine_profile = request.session.get('candidate_profile', '')
+            import ipdb;ipdb.set_trace()
             if not shine_profile:
                 email = request.session.get('email', '')
                 if email:
@@ -258,9 +259,13 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
                 else:
                     shine_profile = {}
             personal_detail = self.get_shine_user_profile_detail(request)
+            ipdb.set_trace()
             education_detail = shine_profile.get('education', '')
+            ipdb.set_trace()
             experience_detail = shine_profile.get('jobs', '')
+            ipdb.set_trace()
             total_exp = shine_profile.get('total_experience', '')
+            ipdb.set_trace()
             resumes = self.get_resume_file(request)
             skill_detail = self.get_skills(request)
             context.update({
@@ -284,6 +289,8 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
         return context
 
     def get(self, request, *args, **kwargs):
+        if not request.session.get('candidate_id'):
+            return HttpResponseRedirect('/login/?next=/dashboard/roundone/profile/')
         return super(DashboardMyProfileView, self).get(request, *args, **kwargs)
 
 
@@ -337,13 +344,15 @@ class UpdateShineProfileView(UpdateShineProfileMixin, View):
 
                     elif edit_for == "uploadresume":
                         update_status, update_msg = self.upload_resume(
-                            shine_id=shine_id, 
+                            shine_id=shine_id,
                             user_access_token=user_access_token,
                             client_token=client_token, data=request.FILES,
                             type_of='edit', token=None)
 
                     if update_status:
                         return HttpResponse(json.dumps({'status': True, "msg": update_msg}))
+                    else:
+                        return HttpResponse(json.dumps({'status': False, "msg": update_msg}))
         except Exception as e:
             logging.getLogger("error_log").error(str(e))
 

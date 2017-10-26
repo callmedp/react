@@ -43,8 +43,11 @@
         <section class="content-box">
             <div class="mb-10 c6">
                 <div class="rating inline-block ml-0 fs-12">
-                  <sup class="fill-star"></sup>
+                  {% if prd_num_rating %}<sup class="fill-star"></sup>
                   {{prd_rating}}/5
+                    {% else %}
+                  <p class="fs-11">Be the <br />first to rate</p>
+                    {% endif %}
                 </div><!-- end of star rating -->
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
