@@ -100,22 +100,22 @@ jQuery(document).ready(function($) {
             $tags2 = $('#tags2');
             if (!$tags1.val()){
                 flag1 = false;
-                $tags1.closest('div').addClass('error');
+                $tags1.closest('div').addClass('error-search');
                 $tags1.siblings('.error-txt').html('Please choose a functional area.');
             }
             else {
                 flag1 = true;
-                $tags1.closest('div').removeClass('error');
+                $tags1.closest('div').removeClass('error-search');
                 $tags1.siblings('.error-txt').html('');
             }
             if (!$tags2.val()){
                 flag2 = false;
-                $tags2.closest('div').addClass('error');
+                $tags2.closest('div').addClass('error-search');
                 $tags2.siblings('.error-txt').html('Please choose a skill.');
             }
             else {
                 flag2 = true;
-                $tags2.closest('div').removeClass('error');
+                $tags2.closest('div').removeClass('error-search');
                 $tags2.siblings('.error-txt').html('');
             }
             if (flag2 && flag1) {
