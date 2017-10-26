@@ -147,27 +147,28 @@
         After your call, referrers will provide written feedback on strengths, weaknesses and referral result.
       </li>
     </ul>
-    {% if request.session.candidate_id and flag %}
+{#    {% if request.session.candidate_id and flag %}#}
+{#    <div class="col-sm-5 col-md-4">#}
+{#      <div class="rotate">#}
+{#        <div class="job-referrals-banner">#}
+{#          Round One#}
+{#          <strong>job referral</strong>#}
+{#          <span>Rs.4500/-</span>#}
+{#          <a role="button" class="enrol-now-button" prod-id="819">Buy now</a>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+    {% if product %}
+    {% if request.session.candidate_id %}
     <div class="col-sm-5 col-md-4">
       <div class="rotate">
         <div class="job-referrals-banner">
           Round One
           <strong>job referral</strong>
-          <span>Rs.4500/-</span>
-          <a role="button" class="enrol-now-button" prod-id="819">Buy now</a>
+          <span>Rs.{{ product.inr_price|floatformat }}/-</span>
+          <a role="button" class="enrol-now-button" prod-id="{{ product.id }}">Buy now</a>
         </div>
       </div>
-    </div>
-    {% elif request.session.candidate_id %}
-    <div class="col-sm-5 col-md-4">
-      <div class="rotate">
-        <div class="job-referrals-banner">
-          Round One
-          <strong>job referral</strong>
-          <span>Rs.4500/-</span>
-          <a role="button" class="enrol-now-button" prod-id="819">Buy now</a>
-        </div>
-      </div>      
     </div>
     {% else %}
     <div class="col-sm-5 col-md-4">
@@ -175,12 +176,13 @@
         <div class="job-referrals-banner">
           Round One
           <strong>job referral</strong>
-          <span>Rs.2999/-</span>
+          <span>Rs.{{ product.inr_price|floatformat }}/-</span>
           <a role='button' data-toggle="modal" data-target=".bs-example-modal-sm">
           Buy now</a>
         </div>
       </div>      
     </div>
+    {% endif %}
     {% endif %}
     </section>
 

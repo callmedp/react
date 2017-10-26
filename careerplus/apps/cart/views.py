@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.views.generic import TemplateView, View, UpdateView
 from django.forms.forms import NON_FIELD_ERRORS
 from django.http import HttpResponseForbidden, HttpResponse,\
-    HttpResponseRedirect, Http404, HttpResponsePermanentRedirect
+    HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.core.validators import validate_email
 from django.views.decorators.csrf import csrf_exempt
@@ -69,7 +69,6 @@ class AddToCartView(View, CartMixin):
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
             prod_id = request.POST.get('prod_id')
-
             try:
                 product = Product.objects.get(id=prod_id)  # not filter on active because product is coming from solr 
                 addons = request.POST.getlist('addons[]')
@@ -120,6 +119,7 @@ class RemoveFromCartView(View, CartMixin):
 
             except Exception as e:
                 data['error_message'] = str(e)
+                logging.getLogger('error_log').error("%s " % str(e))
 
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -226,16 +226,17 @@ class PaymentShippingView(UpdateView, CartMixin):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if not cart_pk:
-            return HttpResponsePermanentRedirect(reverse('homepage'))
+            return HttpResponseRedirect(reverse('homepage'))
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
-        except:
-            return HttpResponsePermanentRedirect(reverse('homepage'))
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            return HttpResponseRedirect(reverse('homepage'))
 
         if cart_obj and not (cart_obj.email or self.request.session.get('candidate_id')):
-            return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
+            return HttpResponseRedirect(reverse('cart:payment-login'))
         elif not cart_obj:
-            return HttpResponsePermanentRedirect(reverse('homepage'))
+            return HttpResponseRedirect(reverse('homepage'))
         return None
 
     def get_form_kwargs(self, **kwargs):
@@ -329,8 +330,9 @@ class PaymentShippingView(UpdateView, CartMixin):
                 valid_form = self.form_valid(form)
                 return valid_form
             except Exception as e:
-                non_field_error = 'Persional detail not updated. due to %s' % (str(e))
+                non_field_error = 'Personal detail not updated due to %s' % (str(e))
                 form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
+                logging.getLogger('error_log').error("%s " % str(e))
                 return self.form_invalid(form)
         return self.form_invalid(form)
 
@@ -351,16 +353,17 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
                 cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
                 if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
-                    return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
+                    return HttpResponseRedirect(reverse('cart:payment-shipping'))
 
                 elif not self.cart_obj.lineitems.all().exists() or not cart_dict.get('total_amount'):
-                    return HttpResponsePermanentRedirect(reverse('homepage'))
+                    return HttpResponseRedirect(reverse('homepage'))
 
-            except:
-                return HttpResponsePermanentRedirect(reverse('homepage'))
+            except Exception as e:
+                logging.getLogger('error_log').error("%s " % str(e))
+                return HttpResponseRedirect(reverse('homepage'))
 
         if not self.cart_obj:
-            return HttpResponsePermanentRedirect(reverse('homepage'))
+            return HttpResponseRedirect(reverse('homepage'))
 
         return None
 
@@ -375,7 +378,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
         wal_txn, wal_total, wal_point = None, None, None
-
         if cart_obj:
             wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
             cart_coupon = cart_obj.coupon

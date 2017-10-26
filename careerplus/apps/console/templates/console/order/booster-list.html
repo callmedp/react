@@ -199,7 +199,7 @@
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>
-                          ] {% if obj.parent and obj.is_variation %}
+                          {% if obj.parent and obj.is_variation %}
                               {{obj.parent.product.get_name}}:</br>
                             {% endif %}
                                 {{obj.product.get_name}}<br/>

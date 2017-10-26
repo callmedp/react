@@ -1,7 +1,7 @@
 {% load static %}
 {% for obj in orderitems %}
         <li class="col-sm-12">
-            <h2>{{obj.product.name}}
+            <h2>{{obj.product.heading}}
                 {% if obj.product.get_exp_db %}
                  - {{obj.product.get_exp_db}}
                 {% endif %}
