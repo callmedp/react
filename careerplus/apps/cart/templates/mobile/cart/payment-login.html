@@ -64,6 +64,9 @@
                     <input type="password" name="password" required class="form-control" placeholder="Password">
                     <p class="error-txt"></p>
                   </div>
+                    <p class="form-text text-muted">
+                      <a href="{% url "users:forgot-html" %}">Forgot Password?</a>
+                   </p>
               {% else %}
                   <div class="form-group {% if email_error %}error{% endif %}">
                     <input type="email" name="email" class="form-control" placeholder="Enter your email id">
@@ -93,6 +96,7 @@
 
     {% compress js %}
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
     {% endcompress %}
 
     {% block johukum %}

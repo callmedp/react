@@ -605,3 +605,8 @@
 .error input {
   border-bottom: 1px solid transparent !important;
 }
+
+.cls_scroller.pr.scroll_mg {
+  background: #fff;
+  padding-top: 30px;
+}

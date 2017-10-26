@@ -18,7 +18,7 @@
                 <span class="editor pull-left mt-5">{{article.created_by.name|truncatechars:"15"}}, {{article.publish_date.date}}</span>
                 <span class="view-forward pull-right">
                   <figure class="icon-chat-sm"></figure> <a href="#"> {{article.comment_moderated}} Comments</a> 
-                  <figure class="icon-view icon-grey-view ml-10"></figure> 21
+                  <figure class="icon-view icon-grey-view ml-10"></figure> {{article.no_views}}
                 </span>
             </div>
         {% endif %}

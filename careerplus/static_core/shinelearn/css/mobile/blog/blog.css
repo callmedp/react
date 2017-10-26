@@ -298,9 +298,19 @@ button {
     height: 177px;
     width: 280px;
     background-color: #777777;
-    position: relative; }
-    .trending-articles li a {
-      display: block; }
+    position: relative; 
+    overflow: hidden;
+  }
+  .trending-articles li a {
+    display: block; 
+  }
+
+  .trending-articles li a img {
+    max-width: 110%;
+    width: 110%;
+    height: auto;
+  }
+
       .trending-articles li a h2 {
         color: #fff;
         font-size: 80%;

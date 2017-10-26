@@ -10,6 +10,7 @@ from django.core.cache import cache
 from datetime import datetime, timedelta
 from collections import OrderedDict
 from itertools import islice
+import ast
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
@@ -35,12 +36,13 @@ class RoundOneAPI(object):
                 if access_token and token_expiry and datetime.now() < datetime.strptime(json.loads(token_expiry), "%Y-%m-%dT%H:%M:%S.%f"):
                     return access_token
             try:
-                password = Subscription.objects.get(
+                roundone_order = Subscription.objects.get(
                     candidateid=request.session['candidate_id']
                 )
+                password = ast.literal_eval(roundone_order.remark)
+                password = password['pass']
             except:
                 password = settings.ROUNDONE_DEFAULT_PASSWORD
-
             post_url = settings.ROUNDONE_API_DICT.get("oauth_url")
             
             post_data = {
@@ -50,7 +52,7 @@ class RoundOneAPI(object):
                 "affiliateName": settings.ROUNDONE_API_DICT.get(
                     "affiliateName", 'CP'),
                 "username": email,
-                "password": password.candidateid if password.candidateid else password,
+                "password": password.candidateid if hasattr(password, 'candidateid') else password,
             }
 
             headers = {'content-type': 'application/json'}
@@ -195,7 +197,6 @@ class RoundOneAPI(object):
             hmac_value = hmac.new(bytearray(api_secret_key.encode('utf-8')), data_str.encode('utf-8'), hashlib.sha1).hexdigest()
             data_dict.update({"hash": hmac_value})
             response = requests.get(url, params=data_dict, timeout=settings.ROUNDONE_API_TIMEOUT)
-
             if response.status_code == 200:
                 response_json = response.json()
                 if response_json.get('status') == "1":
@@ -401,23 +402,18 @@ class RoundOneAPI(object):
     def is_premium_user(self, request=None):
         try:
             url = settings.ROUNDONE_API_DICT.get("is_premium_url")
-
             if 'candidate_id' in request.session:
                 userEmail = request.session.get('email', '')
             else:
                 return False
-
             access_token = self.get_roundone_access_token(userEmail, request)
-
-            if len(access_token) > 0:
+            if access_token:
                 params = {
                     "userEmail": userEmail,
                     "access_token": access_token
                 }
-
                 response = requests.get(
                     url, params=params, timeout=settings.ROUNDONE_API_TIMEOUT)
-
                 if response and response.status_code == 200 and\
                    response.json():
                     response_json = response.json()
@@ -426,7 +422,6 @@ class RoundOneAPI(object):
                         return True
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-
         return False
 
     def save_job(self, request=None, **kwargs):
@@ -538,11 +533,11 @@ class RoundOneSEO(object):
             elif title_for == "listing":
                 return "{clean_keyword} Jobs in {clean_location} - {clean_keyword} Jobs".format(**context)
             elif title_for == "detail":
-                return "{jobTitle} - Careerplus.shine.com".format(**context)
+                return "{jobTitle} - learning1.shine.com".format(**context)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return "Shine - CV | Resume Format | Curriculum Vitae | Cover Letter | Resume Samples"
-    
+
     def get_seo_desc(self, desc_for, **context):
         try:
             if desc_for == "home":
@@ -550,7 +545,7 @@ class RoundOneSEO(object):
             elif desc_for == "listing":
                 return "Find List of Jobs available in {clean_keyword} - {clean_keyword} Jobs from Top Companies, Explore {clean_keyword} Jobs for Freshers & Experienced, Find New {clean_keyword} Jobs Online".format(**context)
             elif desc_for == "detail":
-                return "Apply to {jobTitle} Jobs Online on Careerplus.shine.com".format(**context)
+                return "Apply to {jobTitle} Jobs Online on learning1.shine.com".format(**context)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return ""
@@ -571,8 +566,7 @@ class RoundOneSEO(object):
         seo_title = self.get_seo_title(title_for=data_for, **context)
         seo_desc = self.get_seo_desc(desc_for=data_for, **context)
         seo_heading = self.get_seo_heading(heading_for=data_for, **context)
-        return
-        {
+        return {
             'seo_title': seo_title, 'seo_desc': seo_desc,
             'seo_heading': seo_heading
         }

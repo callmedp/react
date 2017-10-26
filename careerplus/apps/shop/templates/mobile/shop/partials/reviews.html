@@ -21,7 +21,7 @@
                     {% endfor %}
                         <p>{{review.content|safe}}.</p>
                         <p class="fs-12 c9 pb-0">
-                            {{review.user_name}}, {{review.created|date:"M d, Y" }}
+                            By {% if review.user_name %} {{review.user_name}} {% else %} anonymous {% endif %}, {{review.created|date:"M d, Y"}} 
                         </p>
                     </div>
                 </li>

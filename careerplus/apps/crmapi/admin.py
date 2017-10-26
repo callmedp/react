@@ -7,7 +7,6 @@ from .tasks import post_psedu_lead
 
 # Register your models here.
 def lead_creted_on_crm(modeladmin, request, queryset):
-
     for query in queryset:
         query_dict = {}
         try:
@@ -18,17 +17,15 @@ def lead_creted_on_crm(modeladmin, request, queryset):
                 'country_code': usr_query.country.phone,
                 'mobile': usr_query.phn_number,
                 'message': usr_query.message,
-                'source': usr_query.sourse,
+                'source': usr_query.source,
                 'lsource': usr_query.lead_source,
                 'product': usr_query.product,
                 'medium': usr_query.medium,
                 'path': usr_query.path,
             })
-            if not usr_query.lead_created:
-                usr_query.lead_created = True
-                usr_query.save()
-                post_psedu_lead.delay(query_dict)
-                messages.add_message(request, messages.SUCCESS, "lead created")
+            query_dict.update({'queryid': query.id})
+            post_psedu_lead.delay(query_dict)
+            messages.add_message(request, messages.SUCCESS, "lead created")
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
 lead_creted_on_crm.short_description = 'create lead on crm'

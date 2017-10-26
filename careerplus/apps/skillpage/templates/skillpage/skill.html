@@ -75,8 +75,12 @@
 			<div class="about-course-links mb-40 cls_scroller pr">
 	        	<a title="About course" class="active" href="#">About course</a> 
 	        	<a title="Importance in Market" href="#market">Importance in Market</a>
+	        	{% if products %}
 	        	<a title="Courses" href="#programs">Courses</a>
-	        	<a title="Reviews" href="#reviews">Reviews</a>
+	        	{% endif %}
+	        	{% if page_reviews %}
+	        		<a title="Reviews" href="#reviews">Reviews</a>
+	        	{% endif %}
 	        </div>
 
 		    <div class="about-course-text mb-40">
@@ -151,6 +155,7 @@
 			</div>
 
 		    <!-- certification programs listing -->
+		    {% if products %}
 		    <div id="programs" class="listing-box mb-40 scroll">
 		    	<h2>{{category_obj.name}} Programs</h2>
 		    	<ul class="listing1" id="product_list">
@@ -224,6 +229,7 @@
 				    {% endif %}
 		      	</ul>
 		    </div>
+		    {% endif %}
 		    <!-- Reviews -->
 		    {% if page_reviews %}
 		    <div id="reviews" class="reviews mb-40 scroll">

@@ -212,10 +212,13 @@ function cartScroller() {
   var item = $('.price-box'),
   height = item.height();
   $(window).scroll(function(){
-      if(item.offset().top + height > $('.recomend-product-bg').offset().top - 50) {
-        item.css({'visibility':'hidden'})
-      } else {
-        item.css({'visibility':'visible'});
+      var $recommendProductDiv = $('.recomend-product-bg');
+      if ($recommendProductDiv.length && item.length) {
+          if (item.offset().top + height > $recommendProductDiv.offset().top - 50) {
+              item.css({'visibility': 'hidden'})
+          } else {
+              item.css({'visibility': 'visible'});
+          }
       }
   });
 }

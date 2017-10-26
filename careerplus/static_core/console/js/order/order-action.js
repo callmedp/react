@@ -10,7 +10,7 @@ function clickMarkPaidButton(order_id, ){
 };
 
 
-function markPaidOrder(order_id, ){
+function markPaidOrder(order_id){
     if (order_id){
         var formData = $('#order-paid-form' + order_id).serialize();
         $.ajax({
@@ -35,4 +35,4 @@ function markPaidOrder(order_id, ){
             }
         });
     }
-};
+}
