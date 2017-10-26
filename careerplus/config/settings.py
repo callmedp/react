@@ -201,11 +201,11 @@ EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
 # Linkedin Cridential
-CLIENT_ID = "757gbstpwa6dqp"
-CLIENT_SECRET = "creqezZ0kPJnJWRk"
-REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
+CLIENT_ID = "815g8q57sg0q6q"
+CLIENT_SECRET = "NljH5Pdr6e80MTuR"
+REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 STATE = "9899002507upender"
-SCOPE = 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo'
+SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 

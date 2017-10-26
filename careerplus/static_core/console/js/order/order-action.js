@@ -1,4 +1,4 @@
-function clickMarkPaidButton(order_id, ){
+function clickMarkPaidButton(order_id){
     if (order_id){
         $('#order-paid-form' + order_id).parsley().validate();
         if ($('#order-paid-form' + order_id).parsley().isValid()){
@@ -7,7 +7,7 @@ function clickMarkPaidButton(order_id, ){
             $('#paidmodal' + order_id).modal("show");
         }
     }
-};
+}
 
 
 function markPaidOrder(order_id){
