@@ -74,6 +74,7 @@
                         
                     <li>
                       <div class="rating-review-box">
+                      {% if prd_num_rating %}
                         {% for star in prd_rating_star %}
                           {% if star == '*' %}
                             <figure class="full-star"></figure>
@@ -84,11 +85,14 @@
                           {% endif %}
                         {% endfor %}  
                         <strong>{{prd_rating}}/5</strong>ratings
+                      {% else %}
+                          Be the first to rate
+                      {% endif %}
                       </div> 
                     </li>
                     
                     <li>
-                     <a href="javascript:void(0);">
+                     <a href="#review">
                       <figure class="review-icon"></figure>
                       <span><strong class="anchor-color">&nbsp;{{prd_num_rating}}</strong>&nbsp;reviews</span>
                      </a> 
