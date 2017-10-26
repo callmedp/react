@@ -153,7 +153,7 @@
               {% if cart_coupon %}
                 <div id="showCoupon" >
                   <div class="form-group">
-                    <input id="discount_code" type="text" value="Coupon {{coupon.code}} is applied!" name="code" maxlength="15">
+                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15">
                     <span class="error-txt" id="discount-alert"></span>
                     <button type="button" onclick="JSRemoveDiscount();">Remove</button>
                   </div>

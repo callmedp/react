@@ -23,6 +23,7 @@
             }
             .error-txt{
                 color:red;
+                font-size: 12px;
             }
         </style>
         {% endcompress %}
@@ -141,64 +142,69 @@
             {% endif %}
           {% endwith %}
           {% endfor %}
-
           {% if cart_coupon %}
-              <div id="showCoupon" class="loyalty-points">
-                  <div class="input-group">
-                    <input id="discount_code" type="text" class="form-control fs-12" value="Coupon {{coupon.code}} is applied!" name="code" maxlength="15">
-                    <span class="error-txt" id="discount-alert"></span>
+                <div  id="showCoupon" class="loyalty-points">
+                  <div class="input-group mb-0">
+                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" class="form-control fs-12">
+                    <span class="input-group-btn">
+                      <button class="btn btn-blue" type="button" onclick="JSRemoveDiscount();" >Remove</button>
+                    </span>
+                  </div><!-- /input-group -->
+                  <p class="error-txt" id="discount-alert"> </p>
+                </div>
+             {% elif cart_wallet %}
+                <div id="shineCredit" class="loyalty-points">
+                  <div class="input-group mb-0">
+                    <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" class="form-control fs-12">
 
                     <span class="input-group-btn">
-                    <button class="btn btn-blue" type="button" onclick="JSRemoveDiscount();">Remove</button>
+                      <button class="btn btn-blue" type="button" onclick="JSRemovePoint();">Remove</button>
                     </span>
-                  </div>
-              </div>
-          {% elif cart_wallet %}
-              <div id="shineCredit" class="loyalty-points">
-                <div class="input-group">
-                  <input id="loyalty_point" type="text" class="form-control fs-12" placeholder="{{wallet_point}} loyalty points redeemed!">
-                  <span class="error-txt" id="point-alert" ></span>
-                  <span class="input-group-btn">
-                    <button class="btn btn-blue" type="button" onclick="JSRemovePoint();">Remove</button>
-                  </span>
-                </div>
-              </div>
-          {% else %}
-              <p class="mt-15 mb-10"><a href="javascript:void(0)" onclick="toggler('showCoupon');">Apply Coupon</a> <span class="side-spacer">or</span><a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a></p>
-          {% endif %}
+                  </div><!-- /input-group -->
+                  <p class="error-txt" id="point-alert">Required</p>
+                </div><!-- loyalty ends here -->
 
-          {% comment %}
-          <p class="mt-15 mb-10"><a href="#">Apply coupon</a> <span class="side-spacer">or</span><a href="#">Redeem Shine credit</a></p>
-          {% endcomment %}
+              {% else %}
+                <a href="javascript:void(0)" onclick="toggler('showCoupon');">Apply coupon</a>
+                {% if wallet %}
+                  or
+                  <a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a>
+                  
+                {% endif %}
+                  <form action="." id="discountForm">
+                    <div  id="showCoupon" class="loyalty-points hidden-div">
+                      <div class="input-group mb-0">
+                        <input id="discount_code" type="text" placeholder="Enter discount code" name="code" maxlength="15" class="form-control fs-12">
+                        <span class="input-group-btn">
+                          <button class="btn btn-blue" type="button" onclick="JSApplyDiscount();" >Apply</button>
+                        </span>
+                      </div><!-- /input-group -->
+                      <p class="error-txt" id="discount-alert"> </p>
+                    </div>
+                  </form>
+                {% if wallet %}
+                  
+                  <form action="." id="walletForm">
+                    <div id="shineCredit" class="loyalty-points hidden-div">
+                      <div class="input-group mb-0">
+                        <input id="loyalty_point" type="text"placeholder="You have {{wallet_total}} shine loyalty points." min="0" max="{{wallet_total}}" name="point" class="form-control fs-12">
 
-          <!-- loyalty points starts here -->
-          <form action="." id="discountForm">
-              <div class="loyalty-points hidden-div" id="showCoupon">
-                <div class="input-group">
-                  <input id="discount_code" type="text" class="form-control fs-12" placeholder="Enter Discount code" name="code" maxlength="15">
-                  <span class="input-group-btn">
-                    <button class="btn btn-blue" type="button" onclick="JSApplyDiscount();">Apply</button>
-                  </span>
-                </div><!-- /input-group -->
-              </div><!-- loyalty ends here -->
-              <span class="error-txt" id="discount-alert"></span>
-          </form>
+                        <span class="input-group-btn">
+                          <button class="btn btn-blue" type="button" onclick="JSApplyPoint();">Redeem</button>
+                        </span>
+                      </div><!-- /input-group -->
+                      <p class="error-txt" id="point-alert">Required</p>
+                    </div><!-- loyalty ends here -->
 
-          {% if wallet %}
-          <form action="." id="walletForm">
-              <div class="loyalty-points hidden-div"  id="shineCredit">
-                You have {{wallet_total}} shine loyalty points.
-                <div class="input-group">
-                  <input class="form-control fs-12" id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
-                  <span class="input-group-btn">
-                    <button class="btn btn-blue" type="button"  onclick="JSApplyPoint();">Redeem</button>
-                  </span>
-                </div><!-- /input-group -->
-              </div><!-- loyalty ends here -->
-              <span class="error-txt" id="point-alert" ></span>
-          </form>
-          {% endif %}
+                    
+                  </form>
+                {% endif %}
+                
+              {% endif %}
+              
 
+          
+          
            <!-- Total amount starts here -->
         <div class="total-amount w100fl mt-15">
           <!-- Item wrap -->
