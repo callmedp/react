@@ -337,13 +337,15 @@ class UpdateShineProfileView(UpdateShineProfileMixin, View):
 
                     elif edit_for == "uploadresume":
                         update_status, update_msg = self.upload_resume(
-                            shine_id=shine_id, 
+                            shine_id=shine_id,
                             user_access_token=user_access_token,
                             client_token=client_token, data=request.FILES,
                             type_of='edit', token=None)
 
                     if update_status:
                         return HttpResponse(json.dumps({'status': True, "msg": update_msg}))
+                    else:
+                        return HttpResponse(json.dumps({'status': False, "msg": update_msg}))
         except Exception as e:
             logging.getLogger("error_log").error(str(e))
 

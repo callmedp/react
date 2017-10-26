@@ -1246,7 +1246,7 @@
   font-size: 12px;
 }
 .profile-data .resume-file-input .blue-button {
-  margin: 5px 0 0 -10px;
+  margin: 15px 0 0 -10px;
   color: #fff;
   padding: 5px 15px;
 }
@@ -1604,4 +1604,20 @@ input:checked + label:hover, input:checked ~ label:hover,
 input:checked ~ label:hover ~ label,
 label:hover ~ input:checked ~ label {
   color: #3f5f94;
+}
+
+.error-profile {
+  position: relative;
+}
+.error-profile input {
+  border-bottom: 1px solid #ff0000 !important;
+}
+.error-profile .error-txt {
+  display: block;
+  color: #ff0000;
+  font-size: 11px;
+  position: absolute;
+  left: -8px;
+  bottom: -3px;
+  z-index: 9;
 }
