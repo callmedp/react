@@ -523,6 +523,16 @@ class RoundOneAPI(object):
             json_rsp.update({'jobDescription': text.replace("\n\n\n", "")})
         return json_dict
 
+    def roundone_message(self, response_json):
+        rsp = response_json.get('msg')
+        if isinstance(rsp, dict):
+            keys = list(rsp.keys())[0]
+            msg = rsp[keys][0]
+            return msg
+        elif isinstance(rsp, str):
+            return rsp
+
+
 
 class RoundOneSEO(object):
 

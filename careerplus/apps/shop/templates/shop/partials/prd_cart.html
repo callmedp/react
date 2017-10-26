@@ -13,7 +13,7 @@
   <div class="box-panel enrol-cart">
      <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
-     {{sqs.pPinb|floatformat}} {% endif %}/-</strong>
+     {{sqs.pPinb|floatformat}} {% endif %}/- <small>(+taxes)</small></strong>
 
     
     {% if selected_var or sqs.pPfinb %}
