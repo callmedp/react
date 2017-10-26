@@ -91,7 +91,7 @@ class RoundOneMixin(RoundOneAPI):
                     if response_json.get("response"):
                         request.session.update({
                             "roundone_profile": roundone_profile})
-                        return True, response_json.get("msg")
+                        return response_json.get("status"), response_json.get("msg")
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
@@ -169,7 +169,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
 
     def update_candidate_personal(self, shine_id=None, user_access_token=None,
                               client_token=None, data={}, type_of=None, token=None):
-        error_msg = "Personal Details can not be updated"
+        error_msg = "Personal Details not updated"
         personal_response = None
         try:
             if not client_token:
@@ -207,6 +207,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
 
                     if personal_response.status_code in [200, 201] and status:
                         return True, ""
+
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         if personal_response and personal_response.json():
