@@ -199,7 +199,7 @@
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>
-                          ] {% if obj.parent and obj.is_variation %}
+                          {% if obj.parent and obj.is_variation %}
                               {{obj.parent.product.get_name}}:</br>
                             {% endif %}
                                 {{obj.product.get_name}}<br/>
@@ -221,7 +221,7 @@
                            <a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a></td>
                            {% endif %}
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>
-                      <td><a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploded Draft</button></a></td>
+                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploded Draft</button></a></td>
                       <td>{{obj.get_oi_status}}</td>
                       <td>
                           <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}

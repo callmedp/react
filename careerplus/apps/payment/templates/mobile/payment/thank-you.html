@@ -118,7 +118,7 @@
     {% endif %}
 
   <!-- subscribed widgets Satrts here -->
-  <div class="box payment-summary row w-auto mt-20">
+  <div class="box payment-summary w-auto mt-20">
     <p class="semi-bold">You have subscribed to the following services</p>
 
     {% for item in orderitems %}
@@ -153,7 +153,7 @@
                   <div class="w100fl">
                     <span class="item">
                       <strong class="block">{{oi.product.get_name}}</strong>
-                      <span class="fs-12">{% if oi.product.experience %}{{oi.product.get_exp}}{% endif %}</span>
+                      
                     </span>
                   </div>
 

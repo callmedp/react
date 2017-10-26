@@ -6,6 +6,7 @@ import json
 from django.conf import settings
 from shine.core import ShineCandidateDetail
 from microsite.roundoneapi import RoundOneAPI
+from microsite.common import ShineUserDetail
 
 
 class RoundOneMixin(RoundOneAPI):
@@ -458,7 +459,12 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     resume_response = requests.post(
                         resume_url, files=files, data=resume_data,
                         headers=request_header)
-                if resume_response.status_code in [201, 200]:
-                    return True, ""
+                    if resume_response.status_code in [201, 200]:
+                        ShineUserDetail().update_resume_in_session(
+                            self.request, files)
+                        return True, ""
+                    elif resume_response.status_code not in [201, 200]:
+                        json_rsp = resume_response.json()
+                        return False, json_rsp
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

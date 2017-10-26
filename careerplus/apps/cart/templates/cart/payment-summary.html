@@ -1,5 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static compress %}
+{% load static compress search_tags %}
 
 {% block meta_html %}
     {{block.super}}
@@ -85,7 +85,7 @@
 
               {% if item.product_class == 'course' and variations and item.is_available and variations.0.is_available %}
                     <li>
-                        <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience}}{% endif %}
+                        <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
                         </span>
                         <strong class="col-sm-4 col-md-3">Rs. {{variations.0.price}}/-</strong>
                     </li>
@@ -106,7 +106,7 @@
 
               {% elif item.is_available %}
                   <li>
-                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience}}{% endif %}
+                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
                     </span>
                     <strong class="col-sm-4 col-md-3">Rs. {{item.price}}/-</strong>
                   </li>
@@ -153,7 +153,7 @@
               {% if cart_coupon %}
                 <div id="showCoupon" >
                   <div class="form-group">
-                    <input id="discount_code" type="text" value="Coupon {{coupon.code}} is applied!" name="code" maxlength="15">
+                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15">
                     <span class="error-txt" id="discount-alert"></span>
                     <button type="button" onclick="JSRemoveDiscount();">Remove</button>
                   </div>

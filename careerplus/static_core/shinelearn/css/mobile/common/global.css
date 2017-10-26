@@ -367,7 +367,7 @@ footer {
     height: 1px; }
 
 .w-auto {
-  width: auto; }
+  width: auto !important; }
 
 .btn-blue {
   background-color: #2f5ea6;

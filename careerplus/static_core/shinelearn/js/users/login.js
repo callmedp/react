@@ -146,8 +146,9 @@ $(document).ready(function() {
                 success: function(json) {
                     $("#forgot_form")[0].reset();
                     if (json.exist == true){
-                        $("#msg_for_user").html("Link has been sent to your registered email id").show();
-                        $('#forgot_div').modal('show');
+                        alert('Link has been sent to your registered email id');
+                        // $("#msg_for_user").html("Link has been sent to your registered email id").show();
+                        // $('#forgot_div').modal('show');
                     }
                     else if (json.notexist == true){
                         $("#msg_for_user").html("your email does not exist on shine learning").show();

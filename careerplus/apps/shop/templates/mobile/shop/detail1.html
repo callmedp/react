@@ -45,6 +45,7 @@
                 <div class="rating inline-block ml-0 fs-12">
                   <sup class="fill-star"></sup>
                   {{prd_rating}}/5
+                  <!-- <p class="fs-11"><a href="#">Be the <br />first to rate</a></p> -->
                 </div><!-- end of star rating -->
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
@@ -59,9 +60,9 @@
                     {% endif %}
                     <li>
                         <figure class="icon-jobs"></figure>
-                        <a href="javascript:void(0);" class="bold">
+                        <strong>
                             {{prd_num_bought}}
-                        </a> bought
+                        </strong> bought
                     </li>
                     {% if prd_cert %}
                         <li>

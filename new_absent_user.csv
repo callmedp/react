@@ -1,5 +1,21 @@
 Email,ShineID,Mobile,Country_Code,C_ID,RError,LError
-Harshilthakkar208@gmail.com,59edde308f6428239367e715,7575832985,,,No Error,No Error
+kapil1420@gmail.com,59df0797d6a4923ff4fad2e9,7014451239,,,No Error,No Error
+a@gmail,59f17685e8392041e3c0dd8c,3216548712,,,{'email': ['Enter a valid email address.']},No Error
+Laxmanupadhyay1111@gmail,59f155798f642840b81a0ed8,7310401818,,,{'email': ['Enter a valid email address.']},No Error
+paikidda@gmail.com,,162021647,60.0,,{'non_field_errors': ['Invalid country code and mobile number combination']},[]
+jeyamathi030588@gmail,59f0548ee839207c451c8fb8,9791741753,,,{'email': ['Enter a valid email address.']},No Error
+pankaj02021996@gmail,59f0367b8f64281d797bfe4c,9818072738,,,{'email': ['Enter a valid email address.']},No Error
+sahilkoundal09@gmail,59f02c978f64281d797bfe45,8728964316,,,{'email': ['Enter a valid email address.']},No Error
+govindraja1571995@gm,59f01bcf8f642812511f5bb7,8057030412,,,{'email': ['Enter a valid email address.']},No Error
+chandrasekharbandela1533@gmail,59f008c48f64283abdabf956,9100720538,,,{'email': ['Enter a valid email address.']},No Error
+Kamblem116@gmail,59efe7b28f6428263e61b306,9975891275,,,{'email': ['Enter a valid email address.']},No Error
+Smtkrds2@gmail,59ef63508f642874dcfddab8,7722051929,,,{'email': ['Enter a valid email address.']},No Error
+shashankkumar8545@gmail,59ef49bce839204ae8c4b5c1,8545932262,,,{'email': ['Enter a valid email address.']},No Error
+Twinky8126@gmail. com,59ef311b8f64287c3400fba9,9456720181,,,{'email': ['Enter a valid email address.']},No Error
+atulpanchal1982@gmail,59eefd09e8392021da30c49d,7900124954,,,{'email': ['Enter a valid email address.']},No Error
+rathodshiva1696@gmail,59eefcc2e839201b6d213582,8308328359,,,{'email': ['Enter a valid email address.']},No Error
+Gregory.C.Luther@gmail.com,59eee7478f64282ca23a4fdf,978570266,,,{'non_field_errors': ['Invalid country code and mobile number combination']},[]
+singhnayalhemant@gmail,59eece4b8f64282cef628153,9675043093,,,{'email': ['Enter a valid email address.']},No Error
 Pankajkumarnawali@gmail,59edc863e83920798e49636e,9784821094,,,{'email': ['Enter a valid email address.']},No Error
 ompalsinghchokker@gmail,59ed8ec7e839203da2de7fcd,8859692345,,,{'email': ['Enter a valid email address.']},No Error
 vishalbhor94@gmail,59ed88fe8f6428732626cd63,9665471690,,,{'email': ['Enter a valid email address.']},No Error

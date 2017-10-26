@@ -142,7 +142,7 @@ ROUNDONE_API_DICT = {
     'interaction_result_url': ROUNDONE_API_BASEURL + "/applicant/view-interaction-result",
     'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
 }
-
+ROUNDONE_PRODUCT_ID = 2129
 
 ####### CCAVENUE SETTINGS ###########################
 CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
