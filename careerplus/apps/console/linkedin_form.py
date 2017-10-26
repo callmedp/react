@@ -163,7 +163,8 @@ class OrganizationForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'required':'required'})
         self.fields['org_desc'].widget.attrs.update({'required':'required'})
         self.fields['work_from'].widget.attrs.update({'required':'required'})
-        self.fields['work_to'].widget.attrs.update({'required':'required'})
+        self.fields['work_to'].required = False
+        # self.fields['work_to'].widget.attrs.update({'required':'required'})
         # self.fields['org_current'].widget.attrs.update({'required':'required'})
 
     def clean_org_name(self):
@@ -190,14 +191,14 @@ class OrganizationForm(forms.ModelForm):
             raise forms.ValidationError("This field is required.")
         return work_from
 
-    def clean_work_to(self):
-        work_from = self.cleaned_data.get("work_from", '')
-        work_to = self.cleaned_data.get('work_to', '')
-        if work_to is None:
-            raise forms.ValidationError("This field is required.")
-        elif work_to < work_from:
-            raise forms.ValidationError("End date should be greater than from date.")
-        return work_to
+    # def clean_work_to(self):
+    #     work_from = self.cleaned_data.get("work_from", '')
+    #     work_to = self.cleaned_data.get('work_to', '')
+    #     if work_to is None:
+    #         raise forms.ValidationError("This field is required.")
+    #     elif work_to < work_from:
+    #         raise forms.ValidationError("End date should be greater than from date.")
+    #     return work_to
 
     # def clean_org_current(self):
     #     org_current = self.cleaned_data.get('org_current', '')
@@ -225,7 +226,7 @@ class EducationForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control'}))
 
-    level = forms.ChoiceField(choices = LEVEL, 
+    level = forms.ChoiceField(choices=LEVEL, 
         widget=forms.Select(attrs={'class': 'form-control'}))
 
     edu_desc = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'form-control'}))
@@ -252,7 +253,8 @@ class EducationForm(forms.ModelForm):
         self.fields['level'].widget.attrs.update({'required':'required'})
         self.fields['edu_desc'].widget.attrs.update({'required':'required'})
         self.fields['study_from'].widget.attrs.update({'required':'required'})
-        self.fields['study_to'].widget.attrs.update({'required':'required'})
+        self.fields['study_to'].required = False
+        # self.fields['study_to'].widget.attrs.update({'required':'required'})
         # self.fields['edu_current'].widget.attrs.update({'required':'required'})
 
     def clean_school_name(self):
@@ -291,14 +293,14 @@ class EducationForm(forms.ModelForm):
             raise forms.ValidationError("This field is required.")
         return study_from
 
-    def clean_study_to(self):
-        study_from = self.cleaned_data.get("study_from", '')
-        study_to = self.cleaned_data.get('study_to', '')
-        if study_to is None:
-            raise forms.ValidationError("This field is required.")
-        elif study_to < study_from:
-            raise forms.ValidationError("End date should be greater than start date.")
-        return study_to
+    # def clean_study_to(self):
+    #     study_from = self.cleaned_data.get("study_from", '')
+    #     study_to = self.cleaned_data.get('study_to', '')
+    #     if study_to is None:
+    #         raise forms.ValidationError("This field is required.")
+    #     elif study_to < study_from:
+    #         raise forms.ValidationError("End date should be greater than start date.")
+    #     return study_to
 
     # def clean_edu_current(self):
     #     edu_current = self.cleaned_data.get('edu_current', '')
