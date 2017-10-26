@@ -1,9 +1,12 @@
 {% extends "basic/base1.html" %}
 {% load static meta compress %}
 
-{% block django_meta %}
-    {% include 'meta/meta.html' %}
-{% endblock django_meta %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% endif %}
+{% endblock title %}
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
 
 {% block canonical_url %}
        <link rel="canonical" href="{{canonical_url}}">
@@ -32,15 +35,20 @@
             {% endblock breadcrumbs %}
             
             {% block product_header %}
-              <div class="course-caption col-sm-8 no-pad">
+              <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
                 <div class="course-caption-img">
                   <figure style="background-color:#fff;">
-                    <img src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
+                    <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
                   </figure>
                 </div>
 
                 <div class="course-caption-content">
-                  <h1>{{prd_H1}}</h1>
+                  <h1 itemprop="name">{{prd_H1}}</h1>
+                  <div itemprop="aggregateRating"
+                itemscope itemtype="http://schema.org/AggregateRating">
+                <meta itemprop="ratingValue" content="{{prd_rating}}">
+                <meta itemprop="reviewCount" content="{{prd_num_rating}}">
+          </div>
 
                   {% include "shop/partials/packagediv.html" %}
                 </div>
@@ -64,16 +72,16 @@
           <div class="row detail-box bt-none">
 
             <!-- sticky sub header 1 -->
-            <div class="course-caption-bottom cls_scroller">
+            <div class="course-caption-bottom cls_scroller" >
               <div class="container">
                 <div class="visible-onscroll hidden cls_scroller_hiddenDiv">
                   <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
                 </div>
 
-                  <ul>
+                  <ul >
                         
                     <li>
-                      <div class="rating-review-box">
+                      <div class="rating-review-box" >
                         {% for star in prd_rating_star %}
                           {% if star == '*' %}
                             <figure class="full-star"></figure>
@@ -83,14 +91,14 @@
                             <figure class="blank-star"></figure>
                           {% endif %}
                         {% endfor %}  
-                        <strong>{{prd_rating}}/5</strong>ratings
+                        <strong >{{prd_rating}}/5</strong>ratings
                       </div> 
                     </li>
                     
                     <li>
                      <a href="javascript:void(0);">
                       <figure class="review-icon"></figure>
-                      <span><strong class="anchor-color">&nbsp;{{prd_num_rating}}</strong>&nbsp;reviews</span>
+                      <span>&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews</span>
                      </a> 
                     </li>
                     <li>
@@ -300,8 +308,9 @@
 
 
 {% block js_section %}
+
   {{block.super}}
-  {% compress js %}
+       {% compress js %}
      
   <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
   <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>

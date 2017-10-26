@@ -57,7 +57,7 @@ class CategorySitemap(CustomSitemap):
 
 
     def priority(self, item):
-        return 0.9
+        return 0.7
 
     def items(self):
         return Category.objects.filter(active=True)
@@ -67,7 +67,7 @@ class CategorySitemap(CustomSitemap):
 
 
 class ServiceSitemap(CustomSitemap):
-    changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
 
 
     def location(self,item):
@@ -102,7 +102,7 @@ class ArticleSitemap(CustomSitemap):
 
 
     def priority(self, item):
-        return 0.9
+        return 0.5
 
     def items(self):
         return Blog.objects.filter(status=1)
@@ -112,11 +112,11 @@ class ArticleSitemap(CustomSitemap):
 
 
 class ArticleCategorySitemap(CustomSitemap):
-    changefreq = lambda x, y: random.choice(['weekly', 'weekly'])
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
 
 
     def priority(self, item):
-        return 0.9
+        return 0.8
 
     def items(self):
         return BlogCategory.objects.filter(is_active=True)

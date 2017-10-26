@@ -76,15 +76,15 @@ META_USE_OG_PROPERTIES = True
 META_USE_TWITTER_PROPERTIES = False
 META_USE_GOOGLEPLUS_PROPERTIES = True
 META_FB_TYPE = 'Website'
-META_FB_APPID = '1482454715170390'
-META_FB_PROFILE_ID = '11111111111111'
-META_FB_PUBLISHER = 'https://facebook.com/foo.blag'
-META_FB_AUTHOR_URL = 'https://facebook.com/foo.blag'
+# META_FB_APPID = '1482454715170390'
+META_FB_PROFILE_ID = '282244838633660'
+# META_FB_PUBLISHER = 'https://facebook.com/foo.blag'
+# META_FB_AUTHOR_URL = 'https://facebook.com/foo.blag'
 # META_TWITTER_TYPE = 'summary_large_image'
 # META_TWITTER_SITE = '@FooBlag'
 # META_TWITTER_AUTHOR = '@FooBlag'
 META_GPLUS_TYPE = 'Website'
-META_GPLUS_AUTHOR = '+FooBar'
+# META_GPLUS_AUTHOR = '+FooBar'
 
 ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
 

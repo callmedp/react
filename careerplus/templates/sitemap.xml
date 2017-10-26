@@ -8,8 +8,8 @@
           <loc>https://learning.shine.com/article/</loc>
           <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="{{url.loc_mobile}}" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
-          <changefreq>weekly</changefreq>
-          <priority>0.9</priority>
+          <changefreq>daily</changefreq>
+          <priority>0.8</priority>
          </url>
   {% endif %}   
   {% for url in urlset %}
