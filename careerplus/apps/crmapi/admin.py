@@ -34,7 +34,7 @@ lead_creted_on_crm.short_description = 'create lead on crm'
 class UserQuriesAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'name', 'phn_number', 'email', 'message',
-        'product', 'created',
+        'product', 'lead_created',
         'lead_source', 'source'
     )
     ordering = ['-created']

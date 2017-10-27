@@ -6,7 +6,7 @@ STATIC_URL = 'https://origin-static3.shine.com/static/'
 MEDIA_URL = 'https://origin-static3.shine.com/'
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
-MOBILE_SITE_DOMAIN = 'm-learning.shine.com'
+MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
@@ -18,7 +18,7 @@ SHINE_API_URL = 'https://mapi.shine.com/api/v2'
 CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
 CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
 
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

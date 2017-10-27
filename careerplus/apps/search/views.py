@@ -15,7 +15,7 @@ from django.http import QueryDict, Http404
 from django.core.paginator import Paginator, InvalidPage
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse_lazy, resolve, reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.utils.http import urlencode, urlquote_plus
 
@@ -478,12 +478,19 @@ class FuncAreaPageView(SearchBaseView):
         request_get.update(self.request.GET)
         request_get.update(self.request.POST)
         self.request_get = request_get
-        self.func_area = Category.objects.filter(id=self.kwargs['pk'])
+        self.func_area = Category.objects.filter(id=self.kwargs['pk'], type_level=2)
         context = super(FuncAreaPageView, self).get_extra_context()
         if self.func_area:
-            context['func_area_name'] = self.func_area[0].name
+            context['func_area_name'] = self.func_area[0].heading
+            context['func_area_title'] = self.func_area[0].title
+            
+            context['meta'] = self.func_area[0].as_meta(self.request)
+            context['canonical_url'] = self.func_area[0].get_canonical_url()
+        else:
+            raise Http404
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "func_area"})
+
         return context
 
     def prepare_track(self, page):
