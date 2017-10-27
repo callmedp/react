@@ -1,11 +1,11 @@
 {% extends "basic/base1.html" %}
-{% load static thumbnail compress %}
+{% load static meta thumbnail compress %}
 
-{% block title %}Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning{% endblock title %}
-    {% block meta_html %}
-        {{block.super}}
-        <meta name="description" content="Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses">
-    {% endblock meta_html %}
+{% block title %}Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning {% endblock title %}
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{% endblock django_meta %}
+
     
 {% block css_section %}
     {{block.super}}
@@ -80,7 +80,7 @@
                         <div class="item {% if forloop.first %}active{% endif %}">
                       <ul class="listing col-sm-4">
                         <li>
-                          <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
+                          <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
                                 <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:40 }}</h3>
@@ -107,7 +107,7 @@
                         <div class="item {% if forloop.first %}active{% endif %}">
                       <ul class="listing col-sm-4">
                         <li>
-                          <a title="{{ product.pTt }}" class="box-panel" href="{{ product.pURL }}">
+                          <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
                             <div class="media">
                               <div class="media-body">
                                 <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
@@ -186,7 +186,7 @@
                             <ul class="listing">
                                 {% for tprd in course.tprds %}
                                 <li class="col-sm-6 col-md-4">
-                                    <a title="{{tprd.pTt}}" class="box-panel" href="{{tprd.pURL}}">
+                                    <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}">
                                         <div class="media">
                                             <div class="media-body">
                                                 <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
@@ -227,7 +227,7 @@
                     <ul class="listing">
                         {% for tprd in job_asst_services %}
                         <li>
-                            <a title="{{tprd.pTt}}" class="box-panel" href="{{tprd.pURL}}">
+                            <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}">
                                 <figure class="media-object">
                                     <img class="img-responsive" src="{{ tprd.pImg}}" width="200" height="125" alt="{{tprd.pImA}}">
                                 </figure>
