@@ -67,8 +67,8 @@ $(document).ready(function () {
                     required: true,
                     number: true,
                     indiaMobile: true,
-                    minlength: 4,
-                    maxlength: 15
+                    // minlength: 4,
+                    maxlength: 10
                 },
                 message:{
                   required: true,
@@ -84,8 +84,8 @@ $(document).ready(function () {
                 required: "Mobile Number is Mandatory",
                 number: "Enter only number",
                 indiaMobile: "Please enter 10 digits only",
-                maxlength: "Please enter less than 16 digits",
-                minlength: "Please enter atleast 4 digits"
+                maxlength: "Please enter 10 digits",
+                // minlength: "Please enter atleast 4 digits"
             },
             
         },

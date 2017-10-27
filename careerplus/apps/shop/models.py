@@ -121,8 +121,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     
     _metadata_default = ModelMeta._metadata_default.copy()
-    _metadata_default['locale'] = 'dummy_locale'
-
+    
     _metadata = {
         'title': 'title',
         'description': 'get_description',
@@ -130,7 +129,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         'keywords': 'get_keywords',
         'published_time': 'created',
         'modified_time': 'modified',
-        'url': 'get_full_url',
+        'url': 'get_absolute_url',
     }
 
     class Meta:
@@ -932,8 +931,7 @@ class Product(AbstractProduct, ModelMeta):
     browsable = BrowsableProductManager()
 
     _metadata_default = ModelMeta._metadata_default.copy()
-    _metadata_default['locale'] = 'dummy_locale'
-
+    
     _metadata = {
         'title': 'title',
         'description': 'meta_desc',
@@ -941,7 +939,7 @@ class Product(AbstractProduct, ModelMeta):
         'keywords': 'meta_keywords',
         'published_time': 'created',
         'modified_time': 'modified',
-        'url': 'get_absolute_url',
+        'url': 'get_canonical_url',
     }
 
     class Meta:
@@ -1056,22 +1054,22 @@ class Product(AbstractProduct, ModelMeta):
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return '%s  for %s' % (
+                return '%s for %s' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
 
-        return ''
+        return self.name
 
     def get_title(self):
         if self.is_course:
-            return '%s Certification Course INR %s  Learning.Shine' % (
+            return '%s Certification Course INR %s  - Shine Learning.' % (
                 self.name,
                 str(round(self.inr_price, 0)),
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return '%s -  for %s -  Online Services  Learning.Shine' % (
+                return '%s for %s - Online Services  - Shine Learning.' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )            
@@ -1079,12 +1077,12 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_meta_desc(self):
         if self.is_course:
-            return '%s - Get Online Access, Supports from Experts, Study Materials, course module, fee structure and other details at Learning.Shine' % (
+            return '%s - Get Online Access, Supports from Experts, Study Materials, Course Module, Fee Structure and other details at Shine Learning.' % (
                 self.name,
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
+                return 'Online %s Services for %s. Get expert advice & tips for %s at Shine Learning.' % (
                         self.category_main.name,
                         EXP_DICT.get(self.get_exp(), ''),
                         self.category_main.name,
