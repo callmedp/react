@@ -34,15 +34,14 @@ class SkillPageView(DetailView, SkillPageMixin):
             queryset = self.get_queryset()
 
         if pk is not None:
-            queryset = queryset.prefetch_related('categoryproducts').filter(pk=pk, active=True, is_skill=True)
+            queryset = queryset.prefetch_related('categoryproducts').filter(pk=pk, active=True, is_skill=True, type_level__in=[3,4])
         elif slug is not None:
-            queryset = queryset.prefetch_related('categoryproducts').filter(slug=slug, active=True, is_skill=True)
-        try:
-            obj = queryset.get()
-        except:
+            queryset = queryset.prefetch_related('categoryproducts').filter(slug=slug, active=True, is_skill=True, type_level__in=[3,4])
+        if queryset:
+            return queryset[0]
+        else:
             raise Http404
-        return obj
-
+        
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
         if expected_path != urlquote(current_path):
