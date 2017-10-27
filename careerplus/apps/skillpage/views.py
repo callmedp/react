@@ -67,6 +67,9 @@ class SkillPageView(DetailView, SkillPageMixin):
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
         top_3_prod, top_4_vendors = None, None
+        prd_list = []
+        prd_text = None
+        meta_desc = None
         try:
             products = SQS().filter(pCtg=self.pk)
             prod_id_list = [pv.id for pv in products]
@@ -76,6 +79,8 @@ class SkillPageView(DetailView, SkillPageMixin):
             if not len(prod_id_list):
                 raise Http404
             top_3_prod = products[:3]
+            for tp_prod in top_3_prod:
+                prd_list.append(tp_prod.pNm)
             top_4_vendors = Vendor.objects.filter(id__in=vendor_list)[:4] if len(vendor_list) >= 4 else Vendor.objects.filter(id__in=vendor_list)
         except:
             pass
@@ -105,7 +110,15 @@ class SkillPageView(DetailView, SkillPageMixin):
             page_reviews = prod_review.page(1)
         except EmptyPage:
             page_reviews = prod_review.page(prod_review.num_pages)
+
+        if prd_list:
+            prd_text = ' , '.join(prd_list)
+        if self.object.name and prd_text:
+            meta_desc = "Get online certification in '" + self.object.name + "'. Check discounted price and offers on short term professional courses like '" + prd_text + "' & more"
         context['meta'] = self.object.as_meta(self.request)
+        meta_dict = context['meta'].__dict__
+        meta_dict['description'] = meta_desc
+        meta_dict['og_description'] = meta_desc
         context.update({
             "api_data": api_data,
             "career_outcomes": career_outcomes,
