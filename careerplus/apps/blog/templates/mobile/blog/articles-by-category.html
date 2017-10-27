@@ -2,16 +2,25 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block django_meta %}
-   {% include 'meta/meta.html' %}
-{% endblock django_meta %}
+{% block meta_html %}
+        {{block.super}}
+        {% if recent_page.has_previous %}
+            <link rel="prev" href={%if recent_page.previous_page_number == 1 %}{{request.path}}{%else%}"?page={{ recent_page.previous_page_number }}"{%endif%}>
+        {% endif %}
+        {% if recent_page.has_next %}
+            <link rel="next" href="?page={{ recent_page.next_page_number }}">
+        {%endif%}
+    {%  endblock meta_html %}
+    {% block django_meta %}
+      {% include 'meta/meta.html' %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ category.get_absolute_url }}">
+    {% endblock canonical_url %}
 
-{% block canonical_url %}
-    <link rel="canonical" href="{{ category.get_absolute_url }}">
-{% endblock canonical_url %}
-
-{% block title %}{{category.name}} Career Articles | Shinelearning{% endblock %}
-
+    {% block title %}
+       {{category.name}} – Career Articles @ Learning.Shine
+    {% endblock title %}
 {% block css_section %}
     {{ block.super }}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">

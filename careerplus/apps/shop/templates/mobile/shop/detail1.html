@@ -1,7 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
 {% load humanize search_tags compress %}
-{% block title %}{% endblock title%}
 {% block css_section %}
 {{ block.super }}
     {% compress css %}
@@ -11,6 +10,17 @@
     <link href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
     {% endcompress css %}
 {% endblock css_section %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+
 
 {% block header %}
     <header class="w100fl he-auto">

@@ -35,7 +35,6 @@ class MobileDetectionMiddleware(object):
         is_mobile = False
         if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
             is_mobile = True
-
         if is_mobile:
             set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
         else:
