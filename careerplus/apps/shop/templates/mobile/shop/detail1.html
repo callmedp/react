@@ -42,17 +42,20 @@
     <div class="body-wrapper">
         <section class="content-box">
             <div class="mb-10 c6">
+                {% if prd_num_rating %}
                 <div class="rating inline-block ml-0 fs-12">
-                  {% if prd_num_rating %}<sup class="fill-star"></sup>
+                  <sup class="fill-star"></sup>
                   {{prd_rating}}/5
-                    {% else %}
-                  <p class="fs-11">Be the <br />first to rate</p>
-                    {% endif %}
                 </div><!-- end of star rating -->
+                {% endif %}
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
                         <figure class="icon-comments"></figure>
+                        {% if prd_num_rating %}
                         <a href="javascript:void(0);">{{prd_num_rating}}</a>
+                        {% else %}
+                        <p class="fs-11">Be the first to review</p>
+                        {% endif %}
                     </li>
                     {% if prd_num_jobs %}
                         <li>
@@ -87,7 +90,7 @@
                   }
             </style>
             <p class="more">
-                {{prd_about|safe}}...
+                {{prd_about|safe}}
             </p>
             <!--<p><a href="#">know more</a></p>-->
         {% endif %}

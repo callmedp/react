@@ -43,7 +43,7 @@
 					{% endif %}
 
 					{% if top_3_prod.1 %}    
-						<a href="{{top_3_prod.1.pURL}}">{{top_3_prod.1.pNm}}</a>  |  
+						<a href="{{top_3_prod.1.pURL}}">{{top_3_prod.1.pNm}}</a> | 
 					{% endif %}
 
 					{% if top_3_prod.2 %}
@@ -76,14 +76,14 @@
 	<!-- left content start -->
 		<div class="col-md-9 col-sm-12 cls_scroller_parent">
 
-			<div class="about-course-links mb-40 cls_scroller pr">
-	        	<a title="About course" class="active" href="#">About course</a> 
-	        	<a title="Importance in Market" href="#market">Importance in Market</a>
+			<div class="about-course-links mb-40 cls_scroller pr cls_scroll_tab">
+	        	<a title="About course" class="active cls_tab_child" href="#">About course</a> 
+	        	<a title="Importance in Market" class="cls_tab_child" href="#market">Importance in Market</a>
 	        	{% if products %}
-	        	<a title="Courses" href="#programs">Courses</a>
+	        	<a title="Courses" class="cls_tab_child" href="#programs">Courses</a>
 	        	{% endif %}
 	        	{% if page_reviews %}
-	        		<a title="Reviews" href="#reviews">Reviews</a>
+	        		<a title="Reviews" class="cls_tab_child" href="#reviews">Reviews</a>
 	        	{% endif %}
 	        </div>
 
