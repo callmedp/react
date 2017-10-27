@@ -18,7 +18,7 @@ SHINE_API_URL = 'https://mapi.shine.com/api/v2'
 CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
 CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
 
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -85,5 +85,11 @@ CACHES = {
         }
     },
 }
+
+ADMINS = [
+    '123snig@gmail.com',
+    'snig_b@yahoo.com'
+    'snigdha.batra@hindustantimes.com'
+]
 
 ROUNDONE_PRODUCT_ID = 2129
