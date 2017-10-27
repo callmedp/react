@@ -319,6 +319,7 @@
         updateElementIndex(this, prefix, formCount);
         $(this).val('');
         $(this).prop('checked', false);
+        $(this).prop('disabled', false);
       });
 
       $(row).find('.org-delete').click(function() {
@@ -361,7 +362,8 @@
         $(row).children().children().each(function() {
           updateElementIndex(this, prefix, formCount);
           $(this).val('');
-          $(this).prop('checked', false);
+          $(this).attr('checked', false);
+          $(this).attr("disabled", false);
         });
         // Add an event handler for the delete item/form link 
         $(row).find('.edu-delete').click(function() {

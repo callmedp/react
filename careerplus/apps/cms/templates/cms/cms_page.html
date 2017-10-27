@@ -1,15 +1,15 @@
 {% extends "basic/base.html" %}
 {% load static humanize compress %}
-    {% block meta_html %}
-        {{block.super}}
-        {% include 'meta/meta.html' %}
-    {%  endblock meta_html %}
-    {% block canonical %}
-        <link rel="canonical" href="{{ page_obj.get_absolute_url }}">
-    {% endblock canonical %}
+    {% block django_meta %}
+      {% include 'meta/meta.html' %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+    {% endblock canonical_url %}
 
     {% block title %}
-    CMS - Shine Learning
+    {{page_obj.get_title}}
     {% endblock title %}
     
     {% block css_section %}
@@ -24,6 +24,9 @@
     <section class="container">
         <ol class="breadcrumb">
             <li><a href='/'>Home</a></li>
+            {% if page_obj.parent %}
+            <li><a href='{{page_obj.parent.get_absolute_url}}'>{{page_obj.parent.get_display_name}}</a></li>
+            {% endif %}
             <li class="active">{{page_heading}}</li>
         </ol>
     </section>
@@ -79,7 +82,7 @@
                        <input type='button' class="submit-button" id="comment_submit" value="Submit">
                        
                    {% else %}
-                       <input type='button' class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm" value="Submit">
+                       <input type='button' class="submit-button" data-toggle="modal" id="cmssubmit" value="Submit">
                    {% endif %}
                   </form>
                 </div>
@@ -108,7 +111,7 @@
     <!-- main section end -->
 <!--modals-->
 <!--login-->
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
+<div class="modal fade bs-example-modal-sm login_div" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
      <div class="register">
@@ -147,7 +150,7 @@
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
             <a class="gplus" href="glogin()"></a>
           </div>
-          <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+          <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target="" data-dismiss="modal" id="cms-register-submit">Register Now</a></small>
         </form>
 
       </div>
@@ -156,7 +159,7 @@
 </div>  
 
 <!--signup-->
-<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal fade bs-example-modal-sm2 cms-register-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
      <div class="register">
@@ -172,12 +175,12 @@
             {{ registerform.email }}
             <span class="error-txt">{{ registerform.email.errors.0 }}</span>
           </div>
+          <div id="user_email"></div>
           <div class="form-group {% if registerform.email.errors %}error{% endif %}">
             {{ registerform.raw_password }}
             <span class="error-txt">{{ registerform.raw_password.errors.0 }}</span>
           </div>
-
-          
+          <div id="raw_psd"></div>
           <div class="form-group {% if registerform.cell_phone.errors or registerform.country_code.errors %}error{% endif %}">
             <div class="country-code">
               <div class="custom-select">
@@ -192,8 +195,8 @@
                    {% endif %}
               </span>
             </div>
-            
           </div>
+          <div id="cell_phone"></div>
           <div class="form-group">
             {{registerform.vendor_id }}
           </div>
@@ -203,6 +206,7 @@
               I agree to Terms & conditions
             </label>
           </div>
+          <div id="terms"></div>
           <button type="button" id="register-button" class="btn btn-primary submit">Register</button>
           <div class="social-login">
             <span>or Register with</span>

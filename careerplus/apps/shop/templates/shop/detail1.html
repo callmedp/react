@@ -4,14 +4,15 @@
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% endif %}
 {% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
         {% block django_meta %}
             {% include 'meta/meta.html' %}
         {% endblock django_meta %}
-
-{% block canonical_url %}
-       <link rel="canonical" href="{{canonical_url}}">
-{% endblock canonical_url %}
-    
+ 
 {% block css_section %}
     {{block.super}}
     {% compress css %}
@@ -47,7 +48,11 @@
                   <div itemprop="aggregateRating"
                 itemscope itemtype="http://schema.org/AggregateRating">
                 <meta itemprop="ratingValue" content="{{prd_rating}}">
-                <meta itemprop="reviewCount" content="{{prd_num_rating}}">
+                <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
+                {{prd_num_rating}}
+                {% else %}
+                  1      
+                {% endif %}">
           </div>
 
                   {% include "shop/partials/packagediv.html" %}
@@ -79,10 +84,10 @@
                 </div>
 
                   <ul >
-                        
+                    {% if prd_num_rating %}
                     <li>
                       <div class="rating-review-box">
-                      {% if prd_num_rating %}
+
                         {% for star in prd_rating_star %}
                           {% if star == '*' %}
                             <figure class="full-star"></figure>
@@ -93,16 +98,13 @@
                           {% endif %}
                         {% endfor %}  
                         <strong>{{prd_rating}}/5</strong>ratings
-                      {% else %}
-                          Be the first to rate
-                      {% endif %}
                       </div> 
                     </li>
-                    
+                    {% endif %}
                     <li>
                      <a href="#review">
                       <figure class="review-icon"></figure>
-                      <span>&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews</span>
+                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews{% else %}Be the first to review{% endif %}</span>
                      </a> 
                     </li>
                     <li>
@@ -177,25 +179,25 @@
               <div class="row detail-course-links cls_scroller pr">
               <!-- sticky sub header 2 -->
                 <div class="container">
-                  <div class="col-sm-12 col-md-8 about-tab">
+                  <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
                   {% if prd_desc %}
-                    <a title="About product" class="active" href="#course">About product</a>
+                    <a title="About product" class="active cls_tab_child" href="#course">About product</a>
                   {% endif %}
                   {% if prd_uget %}
-                    <a title="What’ll you get" href="#get">What’ll you get</a>
+                    <a title="What’ll you get" class="cls_tab_child" href="#get">What’ll you get</a>
                   {% endif %}
                   {% if prd_service == 'course' and chapter_list %}
-                    <a title="Program structure" href="#programs">Program structure</a>
+                    <a title="Program structure" class="cls_tab_child" href="#programs">Program structure</a>
                   {% endif %}
                   {% if sqs.pTF != 8 %}
-                    <a title="How to begin" href="#delivery">How to begin</a>
+                    <a title="How to begin" class="cls_tab_child" href="#delivery">How to begin</a>
                   {% endif %}
                      
                   {% if prd_faq %}
-                    <a title="FAQs" href="#faq">FAQs</a>  
+                    <a title="FAQs" class="cls_tab_child" href="#faq">FAQs</a>  
                   {% endif %}
                   {% if prd_review_list %}
-                    <a title="Review" href="#review">Review</a> 
+                    <a title="Review" class="cls_tab_child" href="#review">Review</a> 
                   {% endif %}
                   </div>
                 </div>

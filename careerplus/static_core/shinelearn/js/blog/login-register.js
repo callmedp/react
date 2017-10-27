@@ -159,5 +159,23 @@ $().ready(function() {
         }
     });
 
+    $('#cms-register-submit').click(function() {
+        $('.cms-register-modal').modal('show');
+        $("label#id_email-error.error").remove();
+        $("label#id_raw_password-error.error").remove();
+        $("label#id_cell_phone-error.error").remove();
+        $("label#term_conditions-error.error").remove();
+    });
+
+    $('#cmssubmit').click(function() {
+        $('.login_div').modal('show');
+        $("label#id_email-error.error").remove();
+        $("label#id_password-error.error").remove();
+    });
+    $('#modalforgot').click(function() {
+        $('#forgot_div').modal('show');
+        $("label#id_email-error.error").remove();
+        $("#msg_for_user").hide();
+    });
 
 });

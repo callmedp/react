@@ -13,7 +13,7 @@ def post_psedu_lead(query_dict):
     headers = {}
     lead = {}
     headers['content-type'] = 'application/json'
-    headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')
+    headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')[0]
     post_url = settings.SHINECPCRM_DICT.get('base_url') + \
         settings.SHINECPCRM_DICT.get('psuedo_lead_url')
 
