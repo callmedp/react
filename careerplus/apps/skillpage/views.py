@@ -106,6 +106,8 @@ class SkillPageView(DetailView, SkillPageMixin):
         except EmptyPage:
             page_reviews = prod_review.page(prod_review.num_pages)
         context['meta'] = self.object.as_meta(self.request)
+        context['canonical_url'] = self.object.get_canonical_url()
+        
         context.update({
             "api_data": api_data,
             "career_outcomes": career_outcomes,

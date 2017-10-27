@@ -1,12 +1,11 @@
 {% extends "basic/base.html" %}
 {% load static humanize thumbnail compress %}
-    {% block meta_html %}
-        {{block.super}}
+    {% block django_meta %}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_html %}
-
+    {%  endblock django_meta %}
     {% block canonical_url %}
-        <link rel="canonical" href="{{ object.get_absolute_url }}">
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
     {% endblock canonical_url %}
 
     {% block title %}
@@ -201,7 +200,7 @@
      <div class="register">
      <div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Register</h1>
+        <span class="modal-title" id="myModalLabel">Register</span>
         <label id="non-field-error-register" class="error"></label>
       </div>
 
@@ -261,7 +260,7 @@
      <div class="register">
      <div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+        <span class="modal-title" id="myModalLabel">Forgot Password</span>
       </div>
       <div id="msg_for_user"></div>
         <form method="post" id="forgot_form" 

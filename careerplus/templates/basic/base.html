@@ -9,12 +9,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="/media/static/shinelearn/images/fav_icon.png">
-        {% block django_meta %}
-          
-        {% endblock django_meta %}
-   {% block canonical_url %}
-         <link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock canonical_url %}
-  {% endblock meta_html %}
+        
+    {% endblock meta_html %}
+    {% block django_meta %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+    {% endblock canonical_url %}
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}Shine Learning{%endblock title%}</title>
 
