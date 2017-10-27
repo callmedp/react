@@ -25,7 +25,7 @@ from console.decorators import (
 from cart.mixins import CartMixin
 from core.library.haystack.query import SQS
 from search.helpers import get_recommendations
-
+from search.choices import STUDY_MODE
 from .models import Product
 from review.models import Review
 from crmapi.models import UserQuries
@@ -230,7 +230,7 @@ class ProductInformationMixin(object):
                 siblingproduct__active=True).order_by('-siblingproduct__sort_order')
             return {'country_variation_list': service_list}
 
-    def solar_product_variation(self, product):
+    def var_list(self, product):
         course_variation_list = json.loads(product.pVrs)
         return course_variation_list
 
@@ -325,7 +325,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 selected_var = None
             ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
-
+            
         else:
             ctx.update(json.loads(self.sqs.pPOP))
             pvrs_data = json.loads(self.sqs.pVrs)
@@ -345,6 +345,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx['canonical_url'] = self.product_obj.get_canonical_url()
         ctx['show_chat']=True
         return ctx
+
 
     def redirect_if_necessary(self, current_path, product):
         if self._enforce_paths:

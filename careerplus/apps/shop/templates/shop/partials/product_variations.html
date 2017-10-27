@@ -3,7 +3,18 @@
 
 
   {% if variation %}
-    
+          <script type="application/ld+json">
+            {
+            "@context": "http://schema.org/",
+            "@type": "Course",
+            "name": "{{prd_H1}}",
+            "description": "{{prd_about}}",
+            "provider": {
+                "@type": "Organization",
+                "name": "Shine Learning"
+              }
+            }
+        </script>
     <div class="row">
       <div class="table-responsive study-mode col-sm-12 col-md-8 mb-40">
         <h2 class="detail-heading">Study mode and Duration</h2>

@@ -32,7 +32,7 @@
                            {% if art %}
                             <div class="item {% if forloop.counter == 1 %} active {% endif %}">
                               <div class="col-sm-4">
-                                <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
+                                <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
                                  {% if art.image %}
                                   {% thumbnail art.image "360x271" crop="center" as im %}
                                     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">

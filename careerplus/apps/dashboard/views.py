@@ -284,6 +284,8 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
         return context
 
     def get(self, request, *args, **kwargs):
+        if not request.session.get('candidate_id'):
+            return HttpResponseRedirect('/login/?next=/dashboard/roundone/profile/')
         return super(DashboardMyProfileView, self).get(request, *args, **kwargs)
 
 

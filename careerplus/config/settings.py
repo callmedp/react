@@ -76,15 +76,15 @@ META_USE_OG_PROPERTIES = True
 META_USE_TWITTER_PROPERTIES = False
 META_USE_GOOGLEPLUS_PROPERTIES = True
 META_FB_TYPE = 'Website'
-META_FB_APPID = '1482454715170390'
-META_FB_PROFILE_ID = '11111111111111'
-META_FB_PUBLISHER = 'https://facebook.com/foo.blag'
-META_FB_AUTHOR_URL = 'https://facebook.com/foo.blag'
+# META_FB_APPID = '1482454715170390'
+META_FB_PROFILE_ID = '282244838633660'
+# META_FB_PUBLISHER = 'https://facebook.com/foo.blag'
+# META_FB_AUTHOR_URL = 'https://facebook.com/foo.blag'
 # META_TWITTER_TYPE = 'summary_large_image'
 # META_TWITTER_SITE = '@FooBlag'
 # META_TWITTER_AUTHOR = '@FooBlag'
 META_GPLUS_TYPE = 'Website'
-META_GPLUS_AUTHOR = '+FooBar'
+# META_GPLUS_AUTHOR = '+FooBar'
 
 ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
 
@@ -161,9 +161,11 @@ SHINE_API_USER_PWD = 'tarun@123'
 
 
 # Use for CRM Lead
+CRM_LEAD_URL = 'http://172.22.65.32:8003'
+CRM_LEAD_TOKEN = '73f53cf358b94156feb49d034081ed507334e02a',
 SHINECPCRM_DICT = {
-    'base_url': 'http://172.22.65.32:8003',
-    'token': '73f53cf358b94156feb49d034081ed507334e02a',
+    'base_url': CRM_LEAD_URL,
+    'token': CRM_LEAD_TOKEN,
     'psuedo_lead_url': '/api/pseudo-leads/',
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
@@ -199,11 +201,11 @@ EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
 # Linkedin Cridential
-CLIENT_ID = "757gbstpwa6dqp"
-CLIENT_SECRET = "creqezZ0kPJnJWRk"
-REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
+CLIENT_ID = "815g8q57sg0q6q"
+CLIENT_SECRET = "NljH5Pdr6e80MTuR"
+REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 STATE = "9899002507upender"
-SCOPE = 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo'
+SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 

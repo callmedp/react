@@ -628,24 +628,17 @@
 .icon-resume {
   width: 30px;
   height: 40px;
-  background-position: -108px -299px;
+  background-position: -108px -298px;
   display: inline-block;
 }
 
-
-.icon-certificate {
+.icon-certificateBig {
   width: 31px;
   height: 40px;
   background-position: -143px -298px;
   display: inline-block;
 }
 
-.icon-certificate {
-  width: 31px;
-  height: 40px;
-  background-position: -143px -298px;
-  display: inline-block;
-}
 
 .icon-linkpro {
   width: 31px;
@@ -655,16 +648,16 @@
 }
 
 .icon-freeRes {
-  width: 32px;
-  height: 30px;
-  background-position: -213px -299px;
+  width: 39px;
+  height: 39px;
+  background-position: -212px -299px;
   display: inline-block;
 }
 
-.icon-freeRes {
+.icon-careerAd {
   width: 31px;
   height: 40px;
-  background-position: -249px -296px;
+  background-position: -257px -298px;
   display: inline-block;
 }
 

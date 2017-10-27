@@ -40,3 +40,6 @@ except:
 
 ##### ROUNDONE
 ROUNDONE_PRODUCT_ID = 2129
+
+### LINKEDIN SETTINGS
+REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)

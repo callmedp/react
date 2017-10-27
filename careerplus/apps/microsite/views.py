@@ -101,8 +101,8 @@ class PartnerListView(TemplateView):
         try:
             search_response = RoundOneAPI().get_search_response(
                 self.request, **kwargs)
-            # jsondict = RoundOneAPI().remove_html_tags(search_response)
-            context.update({'search_result': search_response})
+            jsondict = RoundOneAPI().remove_html_tags(search_response)
+            context.update({'search_result': jsondict})
             keyword = kwargs.get('keyword', '')
             location = self.request.GET.get('loc', '').split(',')
             initial_keyword = ""
@@ -281,9 +281,10 @@ class GetReferenceView(View, RoundOneAPI):
                                     'status': True, 'response': True,
                                     'message': response_json.get('msg')}))
                         elif status == "-1":
+                            msg = self.roundone_message(response_json)
                             return HttpResponse(json.dumps(
                                 {'status': True, 'response': False,
-                                 'message': response_json.get('msg')}))
+                                 'message': msg}))
                     return HttpResponse(json.dumps(
                         {'status': False, 'message': "Roundone is facing some technical issues. Please try later"}))
         except Exception as e:

@@ -922,7 +922,7 @@ footer .footer-links span {
 }
 
 .anchor-color {
-  color: #3f5f94;
+  color: #3f5f94 !important;
 }
 
 .find-jobs-btn {

@@ -113,7 +113,10 @@
   width: 100%; 
 }
 
-.testimonials .slick-dots {
+
+
+.testimonials .slick-dots,
+.review-slide .slick-dots {
   position: relative !important;
   bottom: 0;
 }
