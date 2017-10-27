@@ -157,9 +157,19 @@ $(document).ready(function () {
           $(this).prev().toggle();
           return false;
       });
+
       $('.about-tab a').click(function(){
         $('.about-tab a').removeClass('active');
         $(this).addClass('active');
+      });
+
+      $('.cls_scroll_tab').click(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var target = $(e.target);
+        if(target.hasClass('cls_tab_child')){
+          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
+        }
       });
         
   });

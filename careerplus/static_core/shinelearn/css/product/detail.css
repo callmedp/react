@@ -1107,7 +1107,7 @@ header {
 
 .scroll {
   margin-top: -50px;
-  padding-top: 70px;
+  padding-top: 50px;
 }
 
 /*sticky menu css*/
@@ -1142,7 +1142,7 @@ header {
 }
 
 #faq:before, #review:before, #delivery:before, #programs:before, #get:before, #course:before {
-  padding-top: 70px;
+  padding-top: 50px;
   display: block;
   content: "";
 }

@@ -113,9 +113,19 @@ $(function() {
         }); 
   
     });
+
     $('.about-course-links a').click(function(){
         $('.about-course-links a').removeClass('active');
         $(this).addClass('active');
+      });
+
+    $('.cls_scroll_tab').click(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var target = $(e.target);
+        if(target.hasClass('cls_tab_child')){
+          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
+        }
       });
 
 });

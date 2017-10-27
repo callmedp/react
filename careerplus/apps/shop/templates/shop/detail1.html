@@ -174,25 +174,25 @@
               <div class="row detail-course-links cls_scroller pr">
               <!-- sticky sub header 2 -->
                 <div class="container">
-                  <div class="col-sm-12 col-md-8 about-tab">
+                  <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
                   {% if prd_desc %}
-                    <a title="About product" class="active" href="#course">About product</a>
+                    <a title="About product" class="active cls_tab_child" href="#course">About product</a>
                   {% endif %}
                   {% if prd_uget %}
-                    <a title="What’ll you get" href="#get">What’ll you get</a>
+                    <a title="What’ll you get" class="cls_tab_child" href="#get">What’ll you get</a>
                   {% endif %}
                   {% if prd_service == 'course' and chapter_list %}
-                    <a title="Program structure" href="#programs">Program structure</a>
+                    <a title="Program structure" class="cls_tab_child" href="#programs">Program structure</a>
                   {% endif %}
                   {% if sqs.pTF != 8 %}
-                    <a title="How to begin" href="#delivery">How to begin</a>
+                    <a title="How to begin" class="cls_tab_child" href="#delivery">How to begin</a>
                   {% endif %}
                      
                   {% if prd_faq %}
-                    <a title="FAQs" href="#faq">FAQs</a>  
+                    <a title="FAQs" class="cls_tab_child" href="#faq">FAQs</a>  
                   {% endif %}
                   {% if prd_review_list %}
-                    <a title="Review" href="#review">Review</a> 
+                    <a title="Review" class="cls_tab_child" href="#review">Review</a> 
                   {% endif %}
                   </div>
                 </div>
