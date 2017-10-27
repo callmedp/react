@@ -6,7 +6,7 @@ from search.views import FuncAreaPageView
 # from .adminview import SkillAddFormView, SkillListView, SkillUpdateView
 
 urlpatterns = [
-    url(r'^(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$', 
+    url(r'^(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
     url(
     	r'^(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$',
