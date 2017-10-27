@@ -86,4 +86,10 @@ CACHES = {
     },
 }
 
+ADMINS = [
+    '123snig@gmail.com',
+    'snig_b@yahoo.com'
+    'snigdha.batra@hindustantimes.com'
+]
+
 ROUNDONE_PRODUCT_ID = 2129

@@ -247,7 +247,6 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
         try:
             request = self.request
             shine_profile = request.session.get('candidate_profile', '')
-            import ipdb;ipdb.set_trace()
             if not shine_profile:
                 email = request.session.get('email', '')
                 if email:
@@ -259,13 +258,9 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
                 else:
                     shine_profile = {}
             personal_detail = self.get_shine_user_profile_detail(request)
-            ipdb.set_trace()
             education_detail = shine_profile.get('education', '')
-            ipdb.set_trace()
             experience_detail = shine_profile.get('jobs', '')
-            ipdb.set_trace()
             total_exp = shine_profile.get('total_experience', '')
-            ipdb.set_trace()
             resumes = self.get_resume_file(request)
             skill_detail = self.get_skills(request)
             context.update({
