@@ -305,9 +305,9 @@ button {
     display: block; 
   }
 
-  .trending-articles li a img {
-    max-width: 110%;
-    width: 110%;
+  .trending-articles li img {
+    max-width: 120%;
+    width: 120%;
     height: auto;
   }
 

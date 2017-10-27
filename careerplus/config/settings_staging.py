@@ -3,7 +3,7 @@ from .settings import *
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning1.shine.com'
-MOBILE_SITE_DOMAIN = 'm-learning1.shine.com'
+MOBILE_SITE_DOMAIN = 'mlearning1.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
