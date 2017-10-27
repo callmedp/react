@@ -1,7 +1,23 @@
 {% extends "mobile/basic/base.html" %}
 {% load static custom_filters compress %}
 
-{% block title %}Search Listing | Shinelearning{% endblock %}
+{% if search_type == "func_area" %}
+    {% block django_meta %}
+    {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+    {% endblock canonical_url %}
+{% endif %}
+
+{% block title %}
+{% if search_type == "func_area" %}
+{{func_area_title}}
+{% else %}
+Search Result Page - Shine Learning
+{% endif %}
+{% endblock title %}
 
 {% block css_section %}
     {{ block.super }}

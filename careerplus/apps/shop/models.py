@@ -357,6 +357,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         else:
             return 'No'
 
+    def get_canonical_url(self):
+        return self.get_absolute_url()
+
 
 class CategoryRelationship(AbstractAutoDate):
     related_from = models.ForeignKey(
@@ -1063,7 +1066,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_title(self):
         if self.is_course:
-            return '%s Certification Course INR %s  - Shine Learning.' % (
+            return '%s Certification Course INR (%s)  - Shine Learning.' % (
                 self.name,
                 str(round(self.inr_price, 0)),
             )

@@ -160,40 +160,44 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
     expiry_date = models.DateTimeField(null=True, blank=True)
 
     _metadata_default = ModelMeta._metadata_default.copy()
-    _metadata_default['locale'] = 'dummy_locale'
-
+    
     _metadata = {
         'title': 'get_title',
-        'description': 'get_keywords',
+        'description': 'get_description',
         'og_description': 'get_description',
-        'keywords': 'get_keywords',
         'published_time': 'publish_date',
         'modified_time': 'last_modified_on',
         'url': 'get_full_url'
     }
 
     def __str__(self):
-        return 'Page #' + str(self.id) + ' - ' + str(self.name if isinstance(self.name, str) else '')
+        return self.get_display_name
 
     def get_title(self):
-        title = self.title
-        if not self.title:
-            title = self.name
-        return title.strip()
-
+        name = self.name
+        if self.parent:
+            parent = self.parent.name
+            return '{0} for {1} - Download Online - Shine Learning'.format(parent, name)
+        return 'Free {0} - Download Online - Shine Learning'.format(name)
+        
     @property
     def get_display_name(self):
-        if self.heading:
-            return self.heading
-        return self.name
-
+        name = self.name
+        if self.parent:
+            parent = self.parent.name
+            return '{0} for {1}'.format(parent, name)
+        return name
+    
     def get_keywords(self):
         return self.meta_keywords.strip().split(",")
 
     def get_description(self):
-        description = self.meta_desc
-        return description.strip()
-
+        name = self.name
+        if self.parent:
+            parent = self.parent.name
+            return 'Free {0} for {1} - Get Online {0} recommended by experts for {1}. Download {0} samples in pdf or word doc'.format(parent,name)
+        return 'Free {0} Online - Get {0} recommended by experts for experienced professionals or freshers. Download {0} samples in pdf or word doc'.format(name)
+        
     def get_full_url(self):
         return self.build_absolute_uri(self.get_absolute_url())
 

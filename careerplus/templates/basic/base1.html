@@ -9,15 +9,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="/media/static/shinelearn/images/fav_icon.png">
-        
-        {% block canonical_url %}
-          <link rel="canonical" href="{{ request.build_absolute_uri }}">
-       {% endblock canonical_url %}
-    
     {% endblock meta_html %}
     {% block django_meta %}
-          
     {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="{{ request.build_absolute_uri }}">
+   {% endblock canonical_url %}
         
     <title> {% block title %}Shine Learning{% endblock title %}</title>
     

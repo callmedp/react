@@ -1,7 +1,7 @@
 {% load static sekizai_tags compress %}
 {% spaceless %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
 
     <head>
     {% block head %}
@@ -10,15 +10,15 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width shrink-to-fit=no, initial-scale=1.0, user-scalable=0">
 {#        <meta name="viewport" content="width=device-width ">#}
-        {% block django_meta %}
-        {% endblock django_meta %}
+        
     {% endblock meta_html %}
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>{% block title %}Shine Learning{%endblock title%}</title>
-
-       {% block canonical_url %}
-            <link rel="canonical" href="{{ request.build_absolute_uri }}">
-       {% endblock canonical_url %}
+    {% block django_meta %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="{{ request.build_absolute_uri }}">
+   {% endblock canonical_url %}
+        
+    <title> {% block title %}Shine Learning{% endblock title %}</title>
     
     {% block css_section %}
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>

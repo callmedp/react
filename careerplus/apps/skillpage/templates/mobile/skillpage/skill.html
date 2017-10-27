@@ -1,8 +1,15 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
-{% block title %}
-    Skill - Shine Learning
-{% endblock %}
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
+{% block title %}   
+    {{category_obj.name|title}} Certification ({{ products.paginator.count }} Professional Courses) - ShineLearning
+{% endblock title %}
 {% block css_section %}
 {{ block.super }}
     {% compress css %}

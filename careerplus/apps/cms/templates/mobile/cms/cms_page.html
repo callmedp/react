@@ -1,15 +1,15 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
-{% block title %}CMS | listing Shine learning{% endblock %}
+    {% block django_meta %}
+      {% include 'meta/meta.html' %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+    {% endblock canonical_url %}
 
-{% block meta_html %}
-        {{block.super}}
-        {% include 'meta/meta.html' %}
-{%  endblock meta_html %}
-
-{% block canonical_url %}
-    <link rel="canonical" href="{{ page_obj.get_absolute_url }}">
-{% endblock canonical_url %}
+    {% block title %}
+    {{page_obj.get_title}}
+    {% endblock title %}
 
 {% block css_section %}
 {{ block.super }}
