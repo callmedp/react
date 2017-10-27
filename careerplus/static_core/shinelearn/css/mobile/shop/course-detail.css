@@ -295,9 +295,10 @@ button {
     padding-left: 15px;
     position: relative;
     width: 35%; }
+
     .detail-wrap .select-provider .form-control {
-      -webkit-border-radius: 0;
-      border-radius: 0;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
       background-image: url("../../../images/mobile/common/dropdown-black.svg");
       background-color: #fff;
       position: absolute;
@@ -306,10 +307,13 @@ button {
       top: 16px;
       font-size: 12px;
       color: #333;
-      background-position: right 0;
+      background-position: right 5px;
       background-repeat: no-repeat;
       line-height: 25px;
-      overflow: hidden; }
+      overflow: hidden; 
+      border: 0 none;
+    }
+
       @media (max-width: 320px) {
         .detail-wrap .select-provider .form-control {
           padding-right: 15px; } }
