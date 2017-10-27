@@ -48,5 +48,6 @@ def common_context_processor(request):
         "DEPARTMENT_HEAD_GROUP_LIST": settings.DEPARTMENT_HEAD_GROUP_LIST,
         "FINANCE_GROUP_LIST": settings.FINANCE_GROUP_LIST,
         "roundone_user": roundone_user,
+        "IS_LIVE": settings.IS_LIVE
     })
     return context
