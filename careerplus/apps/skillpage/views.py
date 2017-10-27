@@ -114,7 +114,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         if prd_list:
             prd_text = ' , '.join(prd_list)
         if self.object.name and prd_text:
-            meta_desc = "Get online certification in '" + self.object.name + "'. Check discounted price and offers on short term professional courses like '" + prd_text + "' & more"
+            meta_desc = "Get online certification in {}. Check discounted price and offers on short term professional courses like {} and more".format(self.object.name, prd_text)
         context['meta'] = self.object.as_meta(self.request)
         meta_dict = context['meta'].__dict__
         meta_dict['description'] = meta_desc
