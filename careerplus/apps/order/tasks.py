@@ -44,6 +44,7 @@ def pending_item_email(pk=None):
                 'user': oi.order.first_name,
                 'type_flow': oi.product.type_flow,
                 'product_name': oi.product.name,
+                'product_url': oi.product.get_url(),
                 'mobile': oi.order.mobile,
             })
             email_sets = list(oi.emailorderitemoperation_set.all().values_list(
@@ -263,6 +264,9 @@ def process_mailer(pk=None):
                     'username': oi.order.first_name,
                     'type_flow': oi.product.type_flow,
                     'pk': oi.pk,
+                    'product_name': oi.product.name,
+                    'product_url': oi.product.get_url(),
+                    'vendor_name': oi.product.vendor.name,
                     'email': oi.order.email,
                     'candidateid': oi.order.email,
                 })
@@ -439,7 +443,7 @@ def payment_pending_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        raise e
+        logging.getLogger('email_log').error("%s - %s" % (str(order), str(e)))
     try:
         pymt_objs = PaymentTxn.objects.filter(
             order=order, payment_mode__in=[1, 4])
@@ -474,7 +478,7 @@ def payment_pending_mailer(pk=None):
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        raise e
+        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
 
 @task(name="payment_realisation_mailer")
