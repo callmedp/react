@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from meta.models import ModelMeta
@@ -246,7 +247,7 @@ class Document(models.Model):
     def get_url(self):
         if self.doc:
             filename = self.doc.name
-            url = '/download/' + filename
+            url = settings.DOWNLOAD_URL + filename
             return url
 
 
