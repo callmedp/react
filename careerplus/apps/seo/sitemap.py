@@ -44,7 +44,7 @@ class SkillSitemap(CustomSitemap):
         return 0.9
 
     def items(self):
-        return Category.objects.filter(is_skill=True, active=True)
+        return Category.objects.filter(is_skill=True, active=True, type_level__in=[3,4])
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)

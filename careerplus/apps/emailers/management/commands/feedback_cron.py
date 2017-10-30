@@ -1,7 +1,6 @@
-import logging
-
 from django.core.management.base import BaseCommand
 from emailers.feedback import feedback_emailer
+
 
 class Command(BaseCommand):
     """
