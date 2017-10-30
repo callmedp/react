@@ -253,6 +253,7 @@ class ApproveByAdminDraft(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
+                        'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
                     })
 
@@ -266,7 +267,6 @@ class ApproveByAdminDraft(View):
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-                    
                     obj.orderitemoperation_set.create(
                         oi_draft=obj.oi_draft,
                         draft_counter=obj.draft_counter,
@@ -306,6 +306,7 @@ class ApproveByAdminDraft(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
+                        'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
 
@@ -447,6 +448,7 @@ class ApproveDraftByLinkedinAdmin(View):
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
+                        'mobile': obj.order.mobile,
                         'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
                     })
 

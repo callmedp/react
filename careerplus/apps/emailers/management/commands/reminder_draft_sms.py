@@ -23,7 +23,9 @@ class Command(BaseCommand):
 def draft_reminder_sms():
     try:
         orderitems = OrderItem.objects.filter(
-            oi_status__in=[24, 46], product__type_flow__in=[1, 12, 13, 8]).select_related('order', 'product')
+            oi_status__in=[24, 46],
+            product__type_flow__in=[1, 12, 13, 8]).select_related(
+            'order', 'product')
         for oi in orderitems:
             if not oi.approved_on:
                 oi.approved_on = timezone.now()
@@ -35,11 +37,13 @@ def draft_reminder_sms():
             if today_date >= approved_date + datetime.timedelta(days=2):
                 data.update({
                     "user": oi.order.first_name,
+                    'mobile': oi.order.mobile,
                 })
                 try:
                     SendSMS().send(sms_type=mail_type, data=data)
                 except Exception as e:
-                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    logging.getLogger('sms_log').error(
+                        "%s - %s" % (str(mail_type), str(e)))
 
                 last_oi_status = oi.oi_status
                 oi.oi_status = 4
