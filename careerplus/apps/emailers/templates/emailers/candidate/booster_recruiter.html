@@ -42,7 +42,7 @@ If you have any suitable openings, you may contact the candidates directly on th
     </tr>
     {% for key, value in data.iteritems %}
     <tr>
-      <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px; border-bottom: solid 1px #fff; border-right: solid 1px #fff;"><a href="mailto:Abc@gmail.co" style="color: #2196f3; text-decoration: none;">
+      <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px; border-bottom: solid 1px #fff; border-right: solid 1px #fff;"><a href="{{ key }}" style="color: #2196f3; text-decoration: none;">
       {{key}}</a></td>
       <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px;border-bottom: solid 1px #fff;"><a href="{{value}}" target="" get="_blank" style="color: #2196f3; text-decoration: none;">Download</a></td>
     </tr>

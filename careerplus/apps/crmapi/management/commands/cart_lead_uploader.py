@@ -33,7 +33,7 @@ def upload_cart_leads():
     for cart_obj in cart_objs:
         try:
             lead = {}
-            name = cart_obj.first_name + ' ' + cart_obj.last_name
+            name = "{} {}".format(cart_obj.first_name, cart_obj.last_name)
             mobile = cart_obj.mobile
             if cart_obj.country_code:
                 country_code = cart_obj.country_code
@@ -47,7 +47,7 @@ def upload_cart_leads():
             lead["email"] = str(cart_obj.email)
             lead["country_code"] = str(country_code)
             lead["mobile"] = str(mobile)
-            lead["message"] = 'total amount' + ' ' + str(amount_payable)
+            lead["message"] = 'total amount {}'.format(str(amount_payable))
             lead["status"] = 0
             lead["source"] = str('Cart Leads')
             lead["lsource"] = int(16)
@@ -68,5 +68,5 @@ def upload_cart_leads():
                 print (str(count) + ' Leads Updated')
             except Exception as e:
                 logging.getLogger('error_log').error("%s" % str(e))
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Error in cart lead cron : %s" % str(e))

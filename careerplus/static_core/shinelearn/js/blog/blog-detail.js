@@ -112,6 +112,7 @@ $(function(){
                         success: function(html) {
                             $("#load_more").remove();
                             $('#related-container').append(html);
+                            ga('send', 'pageview');
                         },
                         failure: function(response){
                             alert("Something went wrong.")

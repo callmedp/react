@@ -13,7 +13,7 @@ from emailers.sms import SendSMS
 class Command(BaseCommand):
     def handle(self, *args, **options):
         booster()
-        print ("Booster mail send to recruter.")
+        print ("Booster mail send to recruiter.")
 
 
 def booster():
@@ -45,7 +45,6 @@ def booster():
             download_link = resumevar
             recruiter_data.update({
                 email: download_link,
-                'to_emails': email,
             })
 
             try:
@@ -67,14 +66,14 @@ def booster():
 
             except Exception as e:
                 logging.getLogger('cron_log').error("%s" % (str(e)))
-                print (str(e))
         else:
             continue
     try:
         # send mail to rectuter
-        if 92 not in email_sets:
-            mail_type = 'BOOSTER_RECRUITER'
-            send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
+        recruiters = settings.BOOSTER_RECRUITERS
+        mail_type = 'BOOSTER_RECRUITER'
+        send_email_task.delay(recruiters, mail_type, recruiter_data)
+        for oi in booster_ois:
+            oi.emailorderitemoperation_set.create(email_oi_status=92)
     except Exception as e:
         logging.getLogger('cron_log').error("%s" % (str(e)))
-        print (str(e))

@@ -9,8 +9,9 @@ def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None):
         SendMail().send(to_emails, mail_type, email_dict)
         if oi:
             from order.models import OrderItem
-            obj = OrderItem.objects.get(pk=oi)
-            obj.emailorderitemoperation_set.create(email_oi_status=status)
+            obj = OrderItem.objects.filter(pk__in=oi)
+            for order in obj:
+                order.emailorderitemoperation_set.create(email_oi_status=status)
     except Exception as e:
         logging.getLogger('email_log').error(
             "%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))

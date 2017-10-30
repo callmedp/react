@@ -141,7 +141,7 @@ class SearchBaseView(TemplateView):
                     for var in variations['var_list']:
                         continue_flag = 0
                         for att in requested_filters:
-                            if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
+                            if not (self.request.GET[att].lower() == str(var.get(filter_mapping[att], '')).lower()):
                                 continue_flag = 1
                                 break
                         if continue_flag:

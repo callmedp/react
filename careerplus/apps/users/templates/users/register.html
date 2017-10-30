@@ -56,14 +56,16 @@
                 <div class="form-group {% if form.email.errors %}error{% endif %}">
                     {{ form.email }}
                     <span class="error-txt" style="bottom:-25px">{{ form.email.errors }}</span>
+                    <div id="user_email"></div>
                 </div>
-                <div id="user_email"></div>
+                
                 <div class="form-group {% if form.email.errors %}error{% endif %}">
                     {{ form.raw_password }}
                     <span class="error-txt" style="bottom:-25px">{{ form.raw_password.errors }}
                     </span>
+                    <div id="raw_psd"></div>
                 </div>
-                <div id="raw_psd"></div>
+                
                 <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
                     <div class="country-code">
                         <div class="custom-select">
@@ -73,8 +75,9 @@
                         <span class="error-txt" style="bottom:-33px">{{form.cell_phone.errors}}
                         </span>
                     </div>
+                    <div id="cell_phone"></div>
                 </div>
-                <div id="cell_phone"></div>
+                
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input"

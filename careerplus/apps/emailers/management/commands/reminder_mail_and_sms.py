@@ -44,6 +44,7 @@ def draft_reminder_mail():
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
+                        'mobile': oi.order.mobile,
                     })
                     send_email_task.delay(to_emails, mail_type, data, status=26, oi=oi.pk)
                     try:
@@ -61,6 +62,7 @@ def draft_reminder_mail():
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
+                        'mobile': oi.order.mobile,
                     })
                     send_email_task.delay(to_emails, mail_type, data, status=26, oi=oi.pk)
                     try:
@@ -77,6 +79,7 @@ def draft_reminder_mail():
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
+                        'mobile': oi.order.mobile,
                     })
                     send_email_task.delay(to_emails, mail_type, data, status=26, oi=oi.pk)             
                     try:
@@ -92,6 +95,7 @@ def draft_reminder_mail():
                         "subject": 'Closing your '+oi.product.name+' service',
                         "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                         'draft_added':oi.draft_added_on,
+                        'mobile': oi.order.mobile,
                     })
                     if len(email_sets) == 0:
                         send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=oi.pk)
@@ -120,6 +124,7 @@ def draft_reminder_mail():
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
+                        'mobile': oi.order.mobile,
                     })
                     send_email_task.delay(to_emails, mail_type, email_dict, status=27, oi=oi.pk)
                     try:
@@ -136,6 +141,7 @@ def draft_reminder_mail():
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
+                        'mobile': oi.order.mobile,
                     })
                     send_email_task.delay(to_emails, mail_type, email_dict, status=27, oi=oi.pk)
                     try:
@@ -151,6 +157,7 @@ def draft_reminder_mail():
                         "subject": 'Closing your '+oi.product.name+' service',
                         "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                         'draft_added':oi.draft_added_on,
+                        'mobile': oi.order.mobile,
                     })
 
                     try:

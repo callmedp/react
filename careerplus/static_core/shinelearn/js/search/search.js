@@ -25,6 +25,7 @@ function paginate() {
         var $this = $(this),
             $pageNo = $('#id_page'),
             $formFacets = $('#form_facets');
+        ga('send', 'pageview');
         $pageNo.val(parseInt($pageNo.val()) + 1);
         var formData = $formFacets.serialize();
         

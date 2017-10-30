@@ -4,6 +4,9 @@ DEBUG = False
 IS_LIVE = True
 STATIC_URL = 'https://origin-static3.shine.com/static/'
 MEDIA_URL = 'https://origin-static3.shine.com/'
+DOWNLOAD_URL = 'https://origin-static3.shine.com/resume/'
+DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'resume')
+RESUME_DIR = '/shineresume/ResumeServices/'
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
@@ -93,3 +96,16 @@ ADMINS = [
 ]
 
 ROUNDONE_PRODUCT_ID = 2129
+
+
+#### LEAD CRONS
+SHINECPCRM_DICT = {
+    'base_url': 'http://shinecpcrm.shine.com',
+    'token': '73f53cf358b94156feb49d034081ed507334e02a',
+    'psuedo_lead_url': '/api/pseudo-leads/',
+    'timeout': 8,
+    'update_products_url': '/product/update_sale_product/',
+    'update_cartleads_url': '/api/update-cartleads/',
+    'ad_server_url': '/api/mobile-version-leads/'
+}
+
