@@ -93,7 +93,7 @@ def draft_reminder_mail():
                         "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                         'draft_added':oi.draft_added_on,
                     })
-                    if len(email_sets) == 0 and len(sms_sets) == 0:
+                    if len(email_sets) == 0:
                         send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=oi.pk)
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
