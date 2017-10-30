@@ -862,6 +862,11 @@ footer .footer-links span {
   z-index: 9;
 }
 
+.form-group label.error {
+  font-weight: 400;
+  font-size: 11px;
+}
+
 /*---------button css---------*/
 .login-btn {
   border-radius: 2px;
