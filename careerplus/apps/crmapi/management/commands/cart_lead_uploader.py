@@ -68,5 +68,5 @@ def upload_cart_leads():
                 print (str(count) + ' Leads Updated')
             except Exception as e:
                 logging.getLogger('error_log').error("%s" % str(e))
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Error in cart lead cron : %s" % str(e))
