@@ -62,12 +62,12 @@ class LearningShineMiddleware(object):
     def process_request(self, request):
         from core.api_mixin import AdServerShine, AcrossShine
         cpem = request.COOKIES.get('_cpem_', '')
-        cpem_mail = None
 
         try:
             cpem_mail = AcrossShine().decode(cpem)
         except:
             cpem_mail = None
+
         ad_content = request.GET.get('ad_content', '')
         if ad_content:
             ad_content = ad_content
