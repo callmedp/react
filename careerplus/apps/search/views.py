@@ -141,7 +141,7 @@ class SearchBaseView(TemplateView):
                     for var in variations['var_list']:
                         continue_flag = 0
                         for att in requested_filters:
-                            if not (self.request.GET[att].lower() == var[filter_mapping[att]].lower()):
+                            if not (self.request.GET[att].lower() == var.get(filter_mapping[att], '').lower()):
                                 continue_flag = 1
                                 break
                         if continue_flag:
@@ -478,7 +478,7 @@ class FuncAreaPageView(SearchBaseView):
         request_get.update(self.request.GET)
         request_get.update(self.request.POST)
         self.request_get = request_get
-        self.func_area = Category.objects.filter(id=self.kwargs['pk'], type_level=2)
+        self.func_area = Category.objects.filter(id=self.kwargs['pk'], type_level__in=[2, 3])
         context = super(FuncAreaPageView, self).get_extra_context()
         if self.func_area:
             context['func_area_name'] = self.func_area[0].heading

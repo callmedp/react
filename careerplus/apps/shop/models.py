@@ -189,15 +189,19 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
-        if self.is_skill:
-            parent = self.get_parent()
-            if parent:
+        if self.type_level in [3, 4]:
+            if self.is_skill:
+                parent = self.get_parent()[0].slug if self.get_parent() else None
                 return reverse('skillpage:skill-page-listing',
-                    kwargs={'fa_slug': parent[0].slug,'skill_slug': self.slug, 'pk': self.pk})
+                    kwargs={'fa_slug': parent,'skill_slug': self.slug, 'pk': self.pk})
+            elif self.type_level == 3:
+                return reverse('skillpage:func_area_results',
+                    kwargs={'fa_slug': self.slug, 'pk': self.pk})    
             return ''
-        else:
+        elif self.type_level == 2:
             return reverse('skillpage:func_area_results',
                 kwargs={'fa_slug': self.slug, 'pk': self.pk})
+        return ''
 
     def add_relationship(self, category):
         relationship, created = CategoryRelationship.objects.get_or_create(
