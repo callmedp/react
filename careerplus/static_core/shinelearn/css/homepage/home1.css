@@ -155,9 +155,15 @@ body {
   position: relative;
   width: 100%;
 }
+.home-search-box .home-search .form-group input::placeholder {
+  color: #999;
+}
 .home-search-box .home-advanced-search {
   position: relative;
   width: 100%;
+}
+.home-search-box .home-advanced-search input::placeholder {
+  color: #999;
 }
 @media (max-width: 991px) {
   .home-search-box .home-advanced-search input {
