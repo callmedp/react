@@ -1,7 +1,7 @@
 import logging
 from django.contrib import admin
 from django.contrib import messages
-from .models import UserQuries
+from .models import UserQuries, AdServerLead
 from .tasks import post_psedu_lead
 
 
@@ -42,4 +42,15 @@ class UserQuriesAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
+class AdServerLeadAdmin(admin.ModelAdmin):
+    list_display = (
+        'id', 'email', 'country_code', 'mobile', 'source',
+        'url', 'created',
+        'inactive', 'added_on'
+    )
+    ordering = ['-added_on']
+    list_per_page = 20
+
+
 admin.site.register(UserQuries, UserQuriesAdmin)
+admin.site.register(AdServerLead, AdServerLeadAdmin)
