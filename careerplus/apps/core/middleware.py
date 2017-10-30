@@ -1,8 +1,7 @@
 # python built-in imports
+import logging
 import re
 from datetime import datetime
-from django.http import (
-    HttpResponsePermanentRedirect,)
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
 from django_mobile import set_flavour
@@ -12,9 +11,7 @@ from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
 from shine.core import ShineCandidateDetail
 from django.conf import settings
-
 from .utils import set_session_country
-from django.conf import settings
 
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
@@ -26,7 +23,8 @@ class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
 
 
 class MobileDetectionMiddleware(object):
-    http_accept_regex = re.compile("application/vnd\.wap\.xhtml\+xml", re.IGNORECASE)
+    http_accept_regex = re.compile(
+        "application/vnd\.wap\.xhtml\+xml", re.IGNORECASE)
 
     def __init__(self):
         pass
@@ -35,7 +33,7 @@ class MobileDetectionMiddleware(object):
         is_mobile = False
         if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
             is_mobile = True
-
+        
         if is_mobile:
             set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
         else:
@@ -65,19 +63,20 @@ class LearningShineMiddleware(object):
     def process_request(self, request):
         from core.api_mixin import AdServerShine, AcrossShine
         cpem = request.COOKIES.get('_cpem_', '')
-        cpem_mail = None
 
         try:
             cpem_mail = AcrossShine().decode(cpem)
         except:
             cpem_mail = None
+
         ad_content = request.GET.get('ad_content', '')
         if ad_content:
             ad_content = ad_content
             request.session['_adserver_'] = ad_content
         if request.session.get('_adserver_', None):
             try:
-                decoded_ad = AdServerShine().decode(request.session.get('_adserver_', None))
+                decoded_ad = AdServerShine().decode(request.session.get(
+                    '_adserver_', None))
                 if decoded_ad:
                     email = decoded_ad[1]
                     mobile = decoded_ad[2]
@@ -87,8 +86,10 @@ class LearningShineMiddleware(object):
                     except:
                         url = ''
                     try:
-                        timestamp_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
-                        timestamp_obj = timezone.make_aware(timestamp_obj, timezone.get_current_timezone())
+                        timestamp_obj = datetime.strptime(
+                            timestamp, "%Y-%m-%d %H:%M:%S")
+                        timestamp_obj = timezone.make_aware(
+                            timestamp_obj, timezone.get_current_timezone())
                     except:
                         timestamp_obj = timezone.now()
                     timediff = timezone.now() - timestamp_obj
@@ -102,8 +103,8 @@ class LearningShineMiddleware(object):
                     if minute_diff < 30:
                         if email:
                             cpem_mail = email
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
 
 
 class LoginMiddleware(object):

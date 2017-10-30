@@ -1,10 +1,14 @@
 {% extends "basic/base.html" %}
 {% load static compress %}
 
-{% block meta_html %}
-        {{block.super}}
-        {% include 'meta/meta.html' %}
-{%  endblock meta_html %}
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
 {% block title %}	
 	{{category_obj.name|title}} Certification ({{ products.paginator.count }} Professional Courses) - ShineLearning
 {% endblock title %}
@@ -32,7 +36,7 @@
                 {% endfor %}
             </ol>
 			<div class="skill-caption">
-				<h1>{{category_obj.name|title}} Certification Programs</h1>
+				<h1>{{category_obj.name|title}} Courses & Certifications</h1>
 					<strong>
 					{% if top_3_prod.0 %}
 					    <a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a> | 

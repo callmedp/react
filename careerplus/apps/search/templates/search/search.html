@@ -11,7 +11,24 @@
     <link type="text/css" href="{% static '/shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
-{% block title %}Search Result Page - Shine Learning{% endblock title %}
+
+{% if search_type == "func_area" %}
+    {% block django_meta %}
+    {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+    {% endblock canonical_url %}
+{% endif %}
+
+{% block title %}
+{% if search_type == "func_area" %}
+{{func_area_title}}
+{% else %}
+Search Result Page - Shine Learning
+{% endif %}
+{% endblock title %}
 
 {% block main_container %}
     {% block page_heading %}
@@ -52,7 +69,7 @@
                             </form>
                         </div>
                         {% elif search_type == 'func_area' %}
-                            <h1>{{ func_area_name|title }} Courses</h1>
+                            <h1>{{ func_area_name|title }}</h1>
                         {% endif %}
                     </div>
                 {% endblock product_header %}

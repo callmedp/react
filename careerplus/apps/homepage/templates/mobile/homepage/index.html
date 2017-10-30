@@ -11,6 +11,13 @@
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+{% endblock canonical_url %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{% endblock django_meta %}
 
 {% block container %}
     
@@ -42,7 +49,11 @@
         <div class="tab-search">
           <ul class="tabs">
             <li><a href="javascript:void(0)" class="current" data-tab="tab-1">Search</a></li>
+            {% comment %}
+                
             <li><a href="javascript:void(0)" data-tab="tab-2">Advanced Search</a></li>
+            {% endcomment %}
+            
           </ul>
 
         <!-- Tab content Satrts here -->
@@ -57,6 +68,8 @@
         </div><!-- Tab content ends here -->
 
         <!-- Tab content Satrts here -->
+        {% comment %}
+            
         <div id="tab-2" class="tab-content row">
           <div class="custom-advnaced-search">
               <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
@@ -72,6 +85,8 @@
         </div>
         <div class="clearfix"></div>   
         </div><!-- Tab content ends here -->
+        {% endcomment %}
+        
       </div><!-- search Tab container -->
      
 

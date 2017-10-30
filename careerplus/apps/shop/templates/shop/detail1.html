@@ -4,14 +4,15 @@
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% endif %}
 {% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
         {% block django_meta %}
             {% include 'meta/meta.html' %}
         {% endblock django_meta %}
-
-{% block canonical_url %}
-       <link rel="canonical" href="{{canonical_url}}">
-{% endblock canonical_url %}
-    
+ 
 {% block css_section %}
     {{block.super}}
     {% compress css %}
@@ -47,7 +48,11 @@
                   <div itemprop="aggregateRating"
                 itemscope itemtype="http://schema.org/AggregateRating">
                 <meta itemprop="ratingValue" content="{{prd_rating}}">
-                <meta itemprop="reviewCount" content="{{prd_num_rating}}">
+                <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
+                {{prd_num_rating}}
+                {% else %}
+                  1      
+                {% endif %}">
           </div>
 
                   {% include "shop/partials/packagediv.html" %}
@@ -99,7 +104,7 @@
                     <li>
                      <a href="#review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews{% else %}Be the first to rate{% endif %}</span>
+                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews{% else %}Be the first to review{% endif %}</span>
                      </a> 
                     </li>
                     <li>

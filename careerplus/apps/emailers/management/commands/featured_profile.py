@@ -5,7 +5,6 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from order.models import OrderItem, Order
-from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from users.tasks import user_register
@@ -68,23 +67,28 @@ def featured_updated():
                     # Send mail and sms with subject line as Your Profile updated
                     try:
                         mail_type = "FEATURED_PROFILE_UPDATED"
-                        email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                        email_sets = list(
+                            obj.emailorderitemoperation_set.all().values_list(
+                                'email_oi_status', flat=True).distinct())
                         to_emails = [obj.order.email]
                         data = {}
                         data.update({
                             "subject": 'Your Featured Profile Is Updated',
-                            "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                            "username": obj.order.first_name,
                         })
 
                         if 72 not in email_sets:
-                            send_email_task.delay(to_emails, mail_type, data, status=72, oi=obj.pk)
+                            send_email_task.delay(
+                                to_emails, mail_type, data,
+                                status=72, oi=obj.pk)
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
                         logging.getLogger('cron_log').error("%s" % (str(e)))
             except Exception as e:
                 logging.getLogger('cron_log').error("%s" % (str(e)))
 
-    out_str = out_str = '%s profile featured out of %s' % (featured_count, featured_orderitems.count())
+    out_str = out_str = '%s profile featured out of %s' % (
+        featured_count, featured_orderitems.count())
 
     print (out_str)
 
@@ -152,6 +156,7 @@ def unfeature():
                 logging.getLogger('cron_log').error("%s" % (str(e)))
                 print (str(e))
 
-    out_str = '%s profile expired out of %s featured items' % (unfeature_count, featured_orderitems.count())
+    out_str = '%s profile expired out of %s featured items' % (
+        unfeature_count, featured_orderitems.count())
 
     print (out_str)

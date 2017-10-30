@@ -1,15 +1,15 @@
 {% extends "basic/base.html" %}
 {% load static humanize compress %}
-    {% block meta_html %}
-        {{block.super}}
-        {% include 'meta/meta.html' %}
-    {%  endblock meta_html %}
-    {% block canonical %}
-        <link rel="canonical" href="{{ page_obj.get_absolute_url }}">
-    {% endblock canonical %}
+    {% block django_meta %}
+      {% include 'meta/meta.html' %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+    {% endblock canonical_url %}
 
     {% block title %}
-    CMS - Shine Learning
+    {{page_obj.get_title}}
     {% endblock title %}
     
     {% block css_section %}
@@ -24,6 +24,9 @@
     <section class="container">
         <ol class="breadcrumb">
             <li><a href='/'>Home</a></li>
+            {% if page_obj.parent %}
+            <li><a href='{{page_obj.parent.get_absolute_url}}'>{{page_obj.parent.get_display_name}}</a></li>
+            {% endif %}
             <li class="active">{{page_heading}}</li>
         </ol>
     </section>

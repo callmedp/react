@@ -30,7 +30,7 @@
                      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hamburber-icon"></span>All Courses</a>
                      <div class="dropdown-menu courses-tabs">
                         <ul class="nav nav-tabs" role="tablist">
-                           <li role="presentation" class="active"><a href="https://learning.shine.com/courses/law-courses/23/#courses1" aria-controls="courses1" role="tab">Law Courses</a></li>
+                           <li role="presentation" class="active"><a href="https://learning.shine.com/courses/law/23/#courses1" aria-controls="courses1" role="tab">Law Courses</a></li>
                            <li role="presentation"><a href="https://learning.shine.com/courses/management/27/#courses2" aria-controls="courses2" role="tab">Management</a></li>
                            <li role="presentation"><a href="https://learning.shine.com/courses/hr-human-resource/25/#courses3" aria-controls="courses3" role="tab">Human Resources</a></li>
                            <li role="presentation"><a href="https://learning.shine.com/courses/personal-development/21/#courses4" aria-controls="courses4" role="tab">Personal Development</a></li>
@@ -43,10 +43,10 @@
                         <div class="tab-content">
                            <div role="tabpanel" class="tab-pane active" id="courses1">
                               <ul>
-                                 <li><a href="https://learning.shine.com/courses/law-courses/company-law/111/">Company Law</a></li>
-                                 <li><a href="https://learning.shine.com/courses/law-courses/cyber-law/107/">Cyber Law</a></li>
-                                 <li><a href="https://learning.shine.com/courses/law-courses/criminal-law/108/">Criminal Law</a></li>
-                                 <li><a href="https://learning.shine.com/courses/law-courses/23/">View all products</a></li>
+                                 <li><a href="https://learning.shine.com/courses/law/company-law/111/">Company Law</a></li>
+                                 <li><a href="https://learning.shine.com/courses/law/cyber-law/107/">Cyber Law</a></li>
+                                 <li><a href="https://learning.shine.com/courses/law/criminal-law/108/">Criminal Law</a></li>
+                                 <li><a href="https://learning.shine.com/courses/law/23/">View all products</a></li>
                               </ul>
                            </div>
                            <div role="tabpanel" class="tab-pane" id="courses2">
@@ -166,7 +166,11 @@
          <section class="home-search-box search-mg">
             <ul class="nav search-tabs" role="tablist">
                <li role="presentation" class="active"><a href="#home-search" aria-controls="home-search" role="tab" data-toggle="tab">Search</a></li>
+               {% comment %}
+                  
+               
                <li role="presentation"><a href="#home-advanced-search" aria-controls="home-advanced-search" role="tab" data-toggle="tab">Advanced search</a></li>
+               {% endcomment %}
             </ul>
             <div class="tab-content form-inline">
                <div role="tabpanel" class="tab-pane home-search active" id="home-search">
@@ -181,6 +185,8 @@
                      required=""><span class="error-txt"></span></div>
                   <button type="submit" onclick="redirectToSearch()" class="find-jobs-btn btn"></button>
                </div>
+               {% comment %}
+                  
                <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">
                   <form id="advance-search-form" class="form-inline js_advance_search_form" method="post" action="https://learning.shine.com/search/redirect-to-recommendations/">
                      <input type='hidden' name='csrfmiddlewaretoken' value='PBsxXa3N9TY79AxbAoiDQ9IaapfYgLjroxAmh6If7UU2mBdDXxGU2XVjhLTJZaCH' />
@@ -189,6 +195,8 @@
                      <button type="submit" id="advance-search-button" class="find-jobs-btn btn js_advance_search"></button>
                   </form>
                </div>
+               {% endcomment %}
+               
             </div>
          </section>
          <!-- product carousel -->
@@ -681,7 +689,7 @@
                            </a>
                         </li>
                      </ul>
-                     <a title="View all" href="https://learning.shine.com/courses/law-courses/23/" class="view-all">View all</a>
+                     <a title="View all" href="https://learning.shine.com/courses/law/23/" class="view-all">View all</a>
                   </div>
                   <div role="tabpanel" class="tab-pane " id="message">
                      <ul class="listing">
@@ -946,6 +954,16 @@
          $('#carousel-example-generic1').carousel({
              interval: 100000
          })
+      </script>
+      <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-3537905-1', 'auto');
+          ga('send', 'pageview');
+          ga('create', 'UA-3537905-52', 'auto');
+          ga('send', 'pageview');
       </script>
    </body>
 </html>

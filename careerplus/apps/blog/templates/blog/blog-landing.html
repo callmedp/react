@@ -1,14 +1,14 @@
 {% extends "basic/base.html" %}
 {% load static humanize thumbnail compress %}
-    {% block meta_html %}
-        {{block.super}}
+    {% block django_meta %}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_html %}
-
+    {%  endblock django_meta %}
     {% block canonical_url %}
-        <link rel="canonical" href="{{ request.build_absolute_uri }}">
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
     {% endblock canonical_url %}
 
+    
     {% block title %}
        Career Guidance & Advice – Articles @ Learning.Shine
     {% endblock title %}

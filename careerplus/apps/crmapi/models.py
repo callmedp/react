@@ -51,15 +51,17 @@ SOURCE_CHOICE = (
 
 class AdServerLead(models.Model):
     email = models.EmailField(max_length=255, null=True, blank=True)
-    country_code = models.CharField(max_length=10, verbose_name='Country Code', default='91')
+    country_code = models.CharField(
+        max_length=10, verbose_name='Country Code', default='91')
     mobile = models.CharField(max_length=15, verbose_name='Mobile')
     timestamp = models.DateTimeField(null=True, blank=True)
-    source = models.PositiveSmallIntegerField(choices=SOURCE_CHOICE, default=21)
+    source = models.PositiveSmallIntegerField(
+        choices=SOURCE_CHOICE, default=21)
     url = models.CharField(max_length=800, null=True, blank=True)
     created = models.BooleanField(default=False)
     inactive = models.BooleanField(default=False)
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
-    def __unicode__(self):
-        return self.mobile + ' ' + str(self.timestamp.date())
+    def __str__(self):
+        return str(self.mobile) + ' ' + str(self.timestamp.date())

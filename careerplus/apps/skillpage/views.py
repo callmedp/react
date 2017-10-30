@@ -34,15 +34,14 @@ class SkillPageView(DetailView, SkillPageMixin):
             queryset = self.get_queryset()
 
         if pk is not None:
-            queryset = queryset.prefetch_related('categoryproducts').filter(pk=pk, active=True, is_skill=True)
+            queryset = queryset.prefetch_related('categoryproducts').filter(pk=pk, active=True, is_skill=True, type_level__in=[3,4])
         elif slug is not None:
-            queryset = queryset.prefetch_related('categoryproducts').filter(slug=slug, active=True, is_skill=True)
-        try:
-            obj = queryset.get()
-        except:
+            queryset = queryset.prefetch_related('categoryproducts').filter(slug=slug, active=True, is_skill=True, type_level__in=[3,4])
+        if queryset:
+            return queryset[0]
+        else:
             raise Http404
-        return obj
-
+        
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
         if expected_path != urlquote(current_path):
@@ -114,8 +113,9 @@ class SkillPageView(DetailView, SkillPageMixin):
         if prd_list:
             prd_text = ' , '.join(prd_list)
         if self.object.name and prd_text:
-            meta_desc = "Get online certification in '" + self.object.name + "'. Check discounted price and offers on short term professional courses like '" + prd_text + "' & more"
+            meta_desc = "Get online certification in {}. Check discounted price and offers on short term professional courses like {} and more".format(self.object.name, prd_text)
         context['meta'] = self.object.as_meta(self.request)
+        context['canonical_url'] = self.object.get_canonical_url()
         meta_dict = context['meta'].__dict__
         meta_dict['description'] = meta_desc
         meta_dict['og_description'] = meta_desc
