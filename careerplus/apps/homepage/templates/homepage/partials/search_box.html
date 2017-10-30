@@ -3,9 +3,13 @@
         <li role="presentation" class="active">
             <a href="#home-search" aria-controls="home-search" role="tab" data-toggle="tab">Search</a>
         </li>
+        {% comment %}
+            
         <li role="presentation">
             <a href="#home-advanced-search" aria-controls="home-advanced-search" role="tab" data-toggle="tab">Advanced search</a>
         </li>
+        {% endcomment %}
+        
     </ul>
 
 
@@ -26,6 +30,8 @@
 
                 <button type="submit" onclick="redirectToSearch()" class="find-jobs-btn btn"></button>
             </div>
+            {% comment %}
+                
             <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">
                 <form id="advance-search-form" class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
                     {% csrf_token %}
@@ -41,6 +47,8 @@
                 <button type="submit" id="advance-search-button" class="find-jobs-btn btn js_advance_search"></button>
                 </form>
             </div>
+            {% endcomment %}
+            
         </div>
 
 </section>
