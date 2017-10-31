@@ -24,7 +24,33 @@
     <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
-    
+
+{% block banner_ads %}
+    {{ block.super }}
+    <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+    <script>
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+    </script>
+
+    <script>
+    googletag.cmd.push(function() {
+    googletag.defineSlot('/1198510/ShineLearning_300x250_mobile', [300, 250], 'div-gpt-ad-1509425171014-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+    });
+    </script>
+{% endblock %}
+
+{% block banner_ads_bottom %}
+    {{ block.super }}
+    <!-- /1198510/ShineLearning_300x250_mobile -->
+    <div id='div-gpt-ad-1509425171014-0'>
+    <script>
+    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509425171014-0'); });
+    </script>
+    </div>
+{% endblock %}
 
 {% block main_container %}
     {% block page_heading %}
@@ -120,10 +146,14 @@
                               <div class="media-body">
                                 <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
                                 <div class="rating-review-box">
-                                    <figure class="full-star"></figure>
+                                    {% if product.pRC %}<figure class="full-star"></figure>
                                     <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
+                                    {% else %}
+                                        {{ product.pBC|default:"10" }} people bought
+                                    {% endif %}
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
+
 
                               </div>
                               <div class="media-left">
@@ -199,8 +229,11 @@
                                             <div class="media-body">
                                                 <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
                                                 <div class="rating-review-box">
-                                                    <figure class="full-star"></figure>
-                                                    <strong>{{tprd.pARx}}<small>/5</small></strong>
+                                                    {% if product.pRC %}<figure class="full-star"></figure>
+                                                    <strong>{{tprd.pARx|floatformat}}<small>/5</small></strong>
+                                                    {% else %}
+                                                        {{ tprd.pBC|default:"10" }} people bought
+                                                    {% endif %}
                                                     <span class="jobs-available"><strong>{{tprd.pNJ}}</strong> jobs available</span>
                                                 </div>
                                             </div>
@@ -242,8 +275,8 @@
                                 <div class="caption">
                                     <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:25}}</h3>
                                     <div class="rating-review-box">
-                                        <figure class="full-star"></figure>
-                                        <strong>{{tprd.pARx}}<small>/5</small></strong>
+                                        {% if tprd.pRC %}<figure class="full-star"></figure>
+                                        <strong>{{tprd.pARx}}<small>/5</small></strong>{% endif %}
                                         <span class="jobs-available"><strong>{{tprd.pBC}}</strong> people bought</span>
                                     </div>
                                 </div>

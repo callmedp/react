@@ -29,6 +29,7 @@
         <link href="{% static 'shinelearn/css/mobile/common/images.css' %}" rel="stylesheet" >
         {% endcompress %}
     {% endblock css_section %}
+    {% block banner_ads %}{% endblock banner_ads %}
     {% endblock head %}
 {% endspaceless %}
     {% render_block "custom_css" %}
@@ -126,6 +127,7 @@
 {% endspaceless %}
     {% render_block "custom_js" %}
 {% spaceless %}
+    {% block banner_ads_bottom %}{% endblock banner_ads_bottom %}
     </body>
 </html>
 {% endspaceless %}

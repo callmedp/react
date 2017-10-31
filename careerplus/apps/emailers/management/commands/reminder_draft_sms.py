@@ -47,15 +47,15 @@ def draft_reminder_sms():
                     logging.getLogger('sms_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
-                last_oi_status = oi.oi_status
-                oi.oi_status = 4
-                oi.last_oi_status = last_oi_status
-                oi.closed_on = timezone.now()
-                oi.save()
-                oi.orderitemoperation_set.create(
-                    oi_status=oi.oi_status,
-                    last_oi_status=oi.last_oi_status,
-                    assigned_to=oi.assigned_to)
+                # last_oi_status = oi.oi_status
+                # oi.oi_status = 4
+                # oi.last_oi_status = last_oi_status
+                # oi.closed_on = timezone.now()
+                # oi.save()
+                # oi.orderitemoperation_set.create(
+                #     oi_status=oi.oi_status,
+                #     last_oi_status=oi.last_oi_status,
+                #     assigned_to=oi.assigned_to)
                 print(str(count) + ' SMS Sent')
 
     except Exception as e:

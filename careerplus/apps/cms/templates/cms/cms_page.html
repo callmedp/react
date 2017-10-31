@@ -27,7 +27,7 @@
             {% if page_obj.parent %}
             <li><a href='{{page_obj.parent.get_absolute_url}}'>{{page_obj.parent.get_display_name}}</a></li>
             {% endif %}
-            <li class="active">{{page_heading}}</li>
+            <li class="active">{{page_obj.name}}</li>
         </ol>
     </section>
    {% endblock breadcrumb %}

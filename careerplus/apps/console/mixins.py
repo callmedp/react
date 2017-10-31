@@ -40,12 +40,6 @@ class ActionUserMixin(object):
             except Exception as e:
                 logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
-            if obj.delivery_service.name == 'SuperExpress':
-                try:
-                    SendSMS().send(sms_type=mail_type, data=email_data)
-                except Exception as e:
-                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
             obj.orderitemoperation_set.create(
                 oi_status=1,
                 last_oi_status=obj.oi_status,
@@ -82,13 +76,15 @@ class ActionUserMixin(object):
                     'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
                     'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                 })
-                self.product_flow_wise_mail(orderitem_obj=obj, to_emails=to_emails, mail_type=mail_type, data=email_data)
-                try:
-                    SendSMS().send(sms_type=mail_type, data=email_data)
-                except Exception as e:
-                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                # sms to writer in case of express and super express delivery
+                self.product_flow_wise_mail(
+                    orderitem_obj=obj, to_emails=to_emails,
+                    mail_type=mail_type, data=email_data)
+                if obj.delivery_service and obj.delivery_service.slug == 'super-express':
+                    try:
+                        SendSMS().send(sms_type=mail_type, data=email_data)
+                    except Exception as e:
+                        logging.getLogger('sms_log').error(
+                            "%s - %s" % (str(mail_type), str(e)))
 
                 addons = []
                 variations = []
@@ -159,7 +155,7 @@ class ActionUserMixin(object):
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if oi.delivery_service:
-                            if oi.delivery_service.name == 'super-express':
+                            if oi.delivery_service.slug == 'super-express':
                                 try:
                                     SendSMS().send(sms_type=mail_type, data=email_data)
                                 except Exception as e:
@@ -196,7 +192,7 @@ class ActionUserMixin(object):
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if oi.delivery_service:
-                            if oi.delivery_service.name == 'super-express':
+                            if oi.delivery_service.slug == 'super-express':
                                 try:
                                     SendSMS().send(sms_type=mail_type, data=email_data)
                                 except Exception as e:
@@ -229,11 +225,13 @@ class ActionUserMixin(object):
                             "oi": oi,
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
-                        if obj.delivery_service.name == 'SuperExpress':
+                        if obj.delivery_service and obj.delivery_service.slug == 'super-express':
                             try:
-                                SendSMS().send(sms_type=mail_type, data=email_data)
+                                SendSMS().send(
+                                    sms_type=mail_type, data=email_data)
                             except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                logging.getLogger('sms_log').error(
+                                    "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
 
@@ -410,7 +408,7 @@ class ActionUserMixin(object):
         else:
             message_dict['display_message'] = 'User is not active or draft or orderitem obj not found'
         return message_dict
-    
+
     def product_flow_wise_mail(self, orderitem_obj=None, to_emails=[], mail_type=None, data={}):
         email_sets = list(orderitem_obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
         if orderitem_obj.product.type_flow == 1 and 28 not in email_sets:             

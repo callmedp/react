@@ -361,7 +361,6 @@ class RejectByAdminDraft(View):
                     added_by=request.user)
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
-                
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -444,7 +443,7 @@ class ApproveDraftByLinkedinAdmin(View):
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "first_name": obj.order.first_name,
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,

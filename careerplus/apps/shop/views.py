@@ -1,4 +1,5 @@
 import json
+import logging
 from collections import OrderedDict
 from decimal import Decimal
 from django.core.paginator import Paginator
@@ -325,12 +326,33 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 selected_var = None
             ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
-            
+            ctx['canonical_url'] = self.product_obj.get_canonical_url()
         else:
+            if ctx.get('prd_exp', None) in ['EP', 'FP']: 
+                pPOP = json.loads(self.sqs.pPOP)
+                pid = None
+                for pop in pPOP.get('pop_list'):
+                    if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
+                        pid = pop.get('id')
+                        break
+                    elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
+                        pid = pop.get('id')
+                        break
+                try:
+                    if pid:
+                        pid = Product.objects.get(pk=pid)
+                        ctx['canonical_url'] = pid.get_canonical_url()
+                    else:
+                        ctx['canonical_url'] = self.product_obj.get_canonical_url()        
+                except:
+                    ctx['canonical_url'] = self.product_obj.get_canonical_url()
+                    logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
+            else:
+                ctx['canonical_url'] = self.product_obj.get_canonical_url()
             ctx.update(json.loads(self.sqs.pPOP))
             pvrs_data = json.loads(self.sqs.pVrs)
             ctx.update(pvrs_data)
-
+            
         if self.is_combos(self.sqs):
             ctx.update(json.loads(self.sqs.pCmbs))
 
@@ -342,7 +364,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = self.product_obj.as_meta(self.request)
-        ctx['canonical_url'] = self.product_obj.get_canonical_url()
         ctx['show_chat']=True
         return ctx
 

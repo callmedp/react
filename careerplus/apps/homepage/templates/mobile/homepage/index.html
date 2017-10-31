@@ -11,6 +11,32 @@
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
+
+{% block banner_ads %}
+    {{ block.super }}
+    <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+    <script>
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+    </script>
+
+    <script>
+    googletag.cmd.push(function() {
+    googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+    });
+    </script>
+{% endblock %}
+{% block banner_ads_bottom %}
+    {{ block.super }}
+    <!-- /1198510/ShineLearning_1x1_desktop -->
+    <div id='div-gpt-ad-1509431221932-0'>
+    <script>
+    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });
+    </script>
+    </div>
+{% endblock %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 {% endblock canonical_url %}

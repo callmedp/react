@@ -9,7 +9,7 @@ def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None):
         SendMail().send(to_emails, mail_type, email_dict)
         if oi:
             from order.models import OrderItem
-            obj = OrderItem.objects.filter(pk__in=oi)
+            obj = OrderItem.objects.filter(pk=oi)
             for order in obj:
                 order.emailorderitemoperation_set.create(email_oi_status=status)
     except Exception as e:
