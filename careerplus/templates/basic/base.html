@@ -36,6 +36,7 @@
         <![endif]-->
 
     {% endblock css_section %}
+    {% block banner_ads %}{% endblock %}
    </head>
    {{ JS_SETTINGS|safe }}
 {% endblock head %} 
@@ -106,6 +107,7 @@
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
 {% endblock johukum %}
+{% block banner_ads_bottom %}{% endblock banner_ads_bottom %}
 </body>
 </html>
 {% endspaceless %}
