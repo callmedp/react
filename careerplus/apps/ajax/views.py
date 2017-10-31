@@ -302,7 +302,7 @@ class ApproveByAdminDraft(View):
                     # data = {}
                     data.update({
                         "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "first_name": obj.order.first_name,
                         "email": obj.order.email,
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
