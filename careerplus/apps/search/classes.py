@@ -82,7 +82,7 @@ class BaseSearch(object):
 
     needed_params_options = {}
 
-    sort_mapping = {'sort': {'1': '-pCD', '2': '-pAR'}}
+    sort_mapping = {'sort': {'1': '-pCD', '2': '-pARx'}}
 
     query_param_name = 'q'
 

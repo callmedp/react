@@ -113,11 +113,16 @@ class InternationalProfileCredentialAdmin(admin.ModelAdmin):
     extra = 0
     raw_id_fields = ('oi', 'country')
 
+
+class EmailOrderItemOperationAdmin(admin.ModelAdmin):
+    list_display = ['oi', 'email_oi_status', 'draft_counter']
+    search_fields = ('oi__id',)
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(OrderItemOperation, OrderItemOperationAdmin)
 admin.site.register(RefundRequest, RefundRequestAdmin)
-admin.site.register(EmailOrderItemOperation)
+admin.site.register(EmailOrderItemOperation, EmailOrderItemOperationAdmin)
 admin.site.register(SmsOrderItemOperation)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(

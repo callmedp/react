@@ -1851,7 +1851,7 @@ class ActionOrderItemView(View):
                         "email": oi.order.email,
                         "mobile": oi.order.mobile,
                         'subject': 'Your resume has been shared with relevant consultants',
-                        "user_name": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        "username": oi.order.first_name,
                     })
 
                     if oi.oi_draft:
@@ -1859,7 +1859,7 @@ class ActionOrderItemView(View):
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
                         resumevar = textwrap.fill(resumevar, width=80)
 
-                        link_title = candidate_data.get('user_name') if candidate_data.get('user_name') else candidate_data.get('email')
+                        link_title = candidate_data.get('username') if candidate_data.get('username') else candidate_data.get('email')
                         download_link = resumevar
                         recruiter_data.update({
                             "link_title": link_title,
@@ -1870,14 +1870,20 @@ class ActionOrderItemView(View):
                             # send mail to rectuter
                             if 92 not in email_sets:
                                 mail_type = 'BOOSTER_RECRUITER'
-                                send_email_task.delay(to_emails, mail_type, recruiter_data, status=92, oi=oi.pk)
+                                send_email_task.delay(
+                                    to_emails, mail_type, recruiter_data,
+                                    status=92, oi=oi.pk)
                             # send mail to candidate
                             if 93 not in email_sets:
                                 mail_type = 'BOOSTER_CANDIDATE'
-                                send_email_task.delay(to_emails, mail_type, candidate_data, status=93, oi=oi.pk)
+                                send_email_task.delay(
+                                    to_emails, mail_type,
+                                    candidate_data, status=93, oi=oi.pk)
 
                             # send sms to candidate
-                            SendSMS().send(sms_type="BOOSTER_CANDIDATE", data=candidate_data)
+                            SendSMS().send(
+                                sms_type="BOOSTER_CANDIDATE",
+                                data=candidate_data)
                             last_oi_status = oi.oi_status
                             oi.oi_status = 62
                             oi.last_oi_status = last_oi_status
@@ -2163,7 +2169,7 @@ class ConsoleResumeDownloadView(View):
         try:
             file = request.GET.get('path', None)
             next_url = request.GET.get('next', None)
-            if file:  
+            if file:
                 file_path = settings.RESUME_DIR + file
                 fsock = FileWrapper(open(file_path, 'rb'))
                 filename = file.split('/')[-1]

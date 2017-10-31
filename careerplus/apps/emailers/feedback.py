@@ -28,6 +28,9 @@ def feedback_emailer():
                 data_dict['autologin'] = "%s://%s/autologin/%s/?next=dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token.decode())
+                data_dict['order_detail'] = "%s://%s/autologin/%s/?next=/dashboard/myorder/" % (
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                    token.decode())
                 html = render_to_string(
                     'emailers/candidate/feedback.html', data_dict)
                 headers_dict = {'Reply-To': settings.REPLY_TO}

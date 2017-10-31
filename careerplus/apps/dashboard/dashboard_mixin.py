@@ -119,28 +119,30 @@ class DashboardInfo(object):
             list_ids = data.get('list_ids', [])
             if file and list_ids:
                 pending_resumes = OrderItem.objects.filter(order__status=1, id__in=list_ids, order__candidate_id=candidate_id, no_process=False, oi_status=2)
+                path_dict = {}
                 for obj in pending_resumes:
-
                     try:
                         order = obj.order
-                        filename = os.path.splitext(file.name)
-                        extention = filename[len(filename) - 1] if len(
-                            filename) > 1 else ''
-                        file_name = 'resumeupload_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
-                            + '_' + timezone.now().strftime('%Y%m%d') + extention
-                        full_path = '%s/' % str(order.pk)
-                        if not os.path.exists(settings.RESUME_DIR + full_path):
-                            os.makedirs(settings.RESUME_DIR + full_path)
-                        dest = open(
-                            settings.RESUME_DIR + full_path + file_name, 'wb')
-                        for chunk in file.chunks():
-                            dest.write(chunk)
-                        dest.close()
+                        if not path_dict.get(order.pk):
+                            filename = os.path.splitext(file.name)
+                            extention = filename[len(filename) - 1] if len(
+                                filename) > 1 else ''
+                            file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
+                                + '_' + timezone.now().strftime('%Y%m%d') + extention
+                            full_path = '%s/' % str(order.pk)
+                            if not os.path.exists(settings.RESUME_DIR + full_path):
+                                os.makedirs(settings.RESUME_DIR + full_path)
+                            dest = open(
+                                settings.RESUME_DIR + full_path + file_name, 'wb')
+                            for chunk in file.chunks():
+                                dest.write(chunk)
+                            dest.close()
+                            path_dict[order.pk] = full_path + file_name
                     except Exception as e:
                         logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                         continue
 
-                    obj.oi_resume = full_path + file_name
+                    obj.oi_resume = path_dict[order.pk]
                     last_oi_status = obj.oi_status
                     obj.oi_status = 5
                     obj.last_oi_status = 3
