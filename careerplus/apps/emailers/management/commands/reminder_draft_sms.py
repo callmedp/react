@@ -23,8 +23,12 @@ class Command(BaseCommand):
 def draft_reminder_sms():
     try:
         orderitems = OrderItem.objects.filter(
-            oi_status__in=[24, 46], product__type_flow__in=[1, 12, 13, 8]).select_related('order', 'product')
+            oi_status__in=[24, 46],
+            product__type_flow__in=[1, 12, 13, 8]).select_related(
+            'order', 'product')
+        count = 0
         for oi in orderitems:
+            count += 1
             if not oi.approved_on:
                 oi.approved_on = timezone.now()
                 oi.save()
@@ -35,11 +39,13 @@ def draft_reminder_sms():
             if today_date >= approved_date + datetime.timedelta(days=2):
                 data.update({
                     "user": oi.order.first_name,
+                    'mobile': oi.order.mobile,
                 })
                 try:
                     SendSMS().send(sms_type=mail_type, data=data)
                 except Exception as e:
-                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    logging.getLogger('sms_log').error(
+                        "%s - %s" % (str(mail_type), str(e)))
 
                 last_oi_status = oi.oi_status
                 oi.oi_status = 4
@@ -50,7 +56,8 @@ def draft_reminder_sms():
                     oi_status=oi.oi_status,
                     last_oi_status=oi.last_oi_status,
                     assigned_to=oi.assigned_to)
+                print(str(count) + ' SMS Sent')
 
     except Exception as e:
-        logging.getLogger('email_log').error("%s - %s" % (
+        logging.getLogger('sms_log').error("%s - %s" % (
             "Reminder mail cron", str(e)))

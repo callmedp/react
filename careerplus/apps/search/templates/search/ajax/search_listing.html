@@ -17,10 +17,14 @@
             <h3 class="listing-heading">{{ result.pHd|default:result.pNm }}</h3>
 
             <div class="rating-review-box">
+                {% if result.pRC %}
                 {% for star in result.pStar %}
                 <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
                 {% endfor %}
-                <strong>{{ result.pARx|floatformat }}/5</strong>{% if result.pRC %} | {{ result.pRC }} ratings{% endif %}
+                <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
+                {% else %}
+                    {{ result.pBC|default:"10" }} people bought
+                {% endif %}
             </div>
 
             <div class="providers">
