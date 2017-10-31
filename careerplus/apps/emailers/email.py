@@ -20,6 +20,14 @@ class SendMail():
             # cc = ['upenders379@gmail.com']
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
         emsg.content_subtype = "html"
+        if attachments:
+            try:
+                emsg.attach(
+                    filename=attachments[0], content=attachments[1],
+                    mimetype=mimetype)
+            except Exception as e:
+                logging.getLogger('email_log').error(
+                    "%s - %s" % (str(to), str(e)))
         emsg.send()
 
     def render_template(self, template, context):

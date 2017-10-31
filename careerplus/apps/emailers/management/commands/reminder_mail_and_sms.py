@@ -33,7 +33,7 @@ def draft_reminder_mail():
             approved_date = oi.approved_on.date()
             today_date = timezone.now().date()
             draft_level = oi.draft_counter
-            if oi.product.type_flow == 1:
+            if oi.product.type_flow in [1, 12, 13]:
                 email_sets = oi.emailorderitemoperation_set.filter(email_oi_status=26) if draft_level == 1 else oi.emailorderitemoperation_set.filter(email_oi_status=27)           
                 if draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=8) and len(email_sets) == 0:
                     to_emails = [oi.order.email]
