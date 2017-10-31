@@ -289,7 +289,7 @@ class ThankYouView(TemplateView):
                             + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                         full_path = '%s/' % str(order.pk)
                         if not os.path.exists(settings.RESUME_DIR + full_path):
-                            os.makedirs(settings.RESUME_DIR +  full_path)
+                            os.makedirs(settings.RESUME_DIR + full_path)
                         dest = open(
                             settings.RESUME_DIR + full_path + file_name, 'wb')
                         for chunk in file.chunks():
