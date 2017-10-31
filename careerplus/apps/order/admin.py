@@ -12,23 +12,28 @@ from payment.models import PaymentTxn
 class CouponOrderInline(admin.TabularInline):
     model = CouponOrder
     extra = 0
+    fields = ('coupon',)
     raw_id_fields = ('coupon',)
 
 
 class WalletOrderInline(admin.TabularInline):
     model = WalletTransaction
     extra = 0
+    fields = ('wallet', 'cart',)
     raw_id_fields = ('wallet', 'cart',)
 
 
 class TxnOrderInline(admin.TabularInline):
     model = PaymentTxn
+    fields = ('cart',)
     raw_id_fields = ('cart',)
     extra = 0
 
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
+    fields = ('parent', 'partner', 'product', 'delivery_service',
+        'assigned_to', 'assigned_by',)
     raw_id_fields = ('parent', 'partner', 'product', 'delivery_service',
         'assigned_to', 'assigned_by',)
     extra = 0
@@ -45,6 +50,8 @@ class OrderAdmin(admin.ModelAdmin):
 
 class OrderItemOperationInline(admin.TabularInline):
     model = OrderItemOperation
+    fields = ('oi_resume', 'oi_draft', 'draft_counter', 'oi_status',
+        'last_oi_status', 'assigned_to', 'added_by')
     readonly_fields = ('oi_resume', 'oi_draft', 'draft_counter', 'oi_status',
         'last_oi_status', 'assigned_to', 'added_by')
     raw_id_fields = ('oi',)

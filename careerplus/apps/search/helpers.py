@@ -358,7 +358,7 @@ def get_recommendations(func_area, skills, results=None):
     ids += list(func_area_prods.difference(products_fa_and_skill))
     if ids:
         if not results:
-            results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm')
+            results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm pBC pRC')
         results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
     else:
         results = EmptySearchQuerySet()
