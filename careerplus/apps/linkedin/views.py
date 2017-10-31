@@ -56,6 +56,8 @@ class AutoLoginView(View):
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
+                elif candidateid and next1 == "/dashboard/myorder/":
+                    return HttpResponseRedirect(next1)
 
                 return HttpResponseRedirect('/?login_attempt=fail')
         return HttpResponseRedirect('/?login_attempt=fail')
