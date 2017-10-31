@@ -4,7 +4,7 @@ from emailers.feedback import feedback_emailer
 
 class Command(BaseCommand):
     """
-        Daily Cron for draft reminder mail/Sms
+        Daily Cron for feedback after close orderitem send mail
     """
 
     def __init__(self, *args, **kwargs):
