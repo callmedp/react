@@ -7,6 +7,7 @@ from shop.models import Product, Category
 from cms.models import Page
 from blog.models import Blog, Category as BlogCategory
 
+EXCULDE_CATEGORY = [247, 176, 170, 145, 139, 87, 147, 132, 76, 73, 69, 65, 61]
 
 class CustomSitemap(Sitemap):
 
@@ -58,7 +59,7 @@ class CategorySitemap(CustomSitemap):
         return 0.7
 
     def items(self):
-        return Category.objects.filter(active=True, type_level=2, is_skill=False)
+        return Category.objects.filter(active=True, type_level=2, is_skill=False).exclude(pk__in=EXCULDE_CATEGORY)
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
