@@ -90,8 +90,11 @@
                               <div class="media-body">
                                 <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:40 }}</h3>
                                 <div class="rating-review-box">
-                                    <figure class="full-star"></figure>
+                                    {% if product.pRC %}<figure class="full-star"></figure>
                                     <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
+                                    {% else %}
+                                        {{ product.pBC|default:"10" }} people bought
+                                    {% endif %}
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
 
