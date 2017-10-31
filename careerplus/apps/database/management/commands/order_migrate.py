@@ -159,7 +159,7 @@ class Command(BaseCommand):
         
         for i, row in order_df.iterrows():
             if row['C_ID'] and row['C_ID'] == row['C_ID']:
-                invoice_file = row['invoice_file'] if row['invoice_file'] and row['invoice_file'] == row['invoice_file'] else None,
+                invoice_file = row['invoice_file'] if row['invoice_file'] and row['invoice_file'] == row['invoice_file'] else None
                 invoice_file = invoice_file.split('/')[-1] if invoice_file else None       
                 data_tup = (
                         str(row['added_on']) if row['added_on'] == row['added_on'] else None,
