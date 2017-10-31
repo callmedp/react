@@ -40,13 +40,13 @@ $(function() {
             
         },
         highlight:function(element, errorClass) {
-            $(element).siblings('.error').removeClass('hide_error'); 
+            $(element).siblings('.error-txt').removeClass('hide_error'); 
         },
         unhighlight:function(element, errorClass) {
-            $(element).siblings('.error').addClass('hide_error');    
+            $(element).siblings('.error-txt').addClass('hide_error');    
         },
         errorPlacement: function(error, element){
-            $(element).siblings('.error').html(error.text());
+            $(element).siblings('.error-txt').html(error.text());
         } 
 	});
 
