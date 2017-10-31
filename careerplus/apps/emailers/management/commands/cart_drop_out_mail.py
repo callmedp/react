@@ -25,6 +25,7 @@ def get_last_cart_item():
     try:
         mail_type = 'CART_DROP_OUT'
         cart_objs = Cart.objects.filter(status__in=[2, 3]).exclude(owner_id=None)
+        count = 0
         for cart_obj in cart_objs:
             crt_obj = cart_obj
             data = {}
@@ -74,7 +75,9 @@ def get_last_cart_item():
 
                 try:
                     SendMail().send(to_email, mail_type, data)
+                    count += 1
                 except Exception as e:
                     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_email), str(mail_type), str(e)))
     except Exception as e:
         logging.getLogger('error_log').error(str(e))
+    print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
