@@ -118,33 +118,18 @@ def draft_reminder_mail():
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
 
-                elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=29):
+                elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=29) and len(email_sets) == 3:
                     to_emails = [oi.order.email]
                     mail_type = 'WRITING_SERVICE_CLOSED'
                     email_dict = {}
                     email_dict.update({
                         "subject": 'Closing your ' + oi.product.name + ' service',
-                        "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
                         'mobile': oi.order.mobile,
                         'upload_url': "%s/autologin/%s/?next=dashboard" % (
                             settings.SITE_DOMAIN, token.decode()),
                     })
-                    if len(email_sets) == 0:
-                        send_email_task.delay(
-                            to_emails, mail_type, email_dict, status=9,
-                            oi=oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=4)
-                            print(str(count) + ' Service closed SMS Sent')
-                        except Exception as e:
-                            logging.getLogger('sms_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
-
                     last_oi_status = oi.oi_status
                     oi.oi_status = 4
                     oi.last_oi_status = last_oi_status
@@ -154,6 +139,19 @@ def draft_reminder_mail():
                         oi_status=oi.oi_status,
                         last_oi_status=oi.last_oi_status,
                         assigned_to=oi.assigned_to)
+                    send_email_task.delay(
+                        to_emails, mail_type, email_dict, status=9,
+                        oi=oi.pk)
+                    try:
+                        urlshortener = create_short_url(login_url=data)
+                        data.update({'url': urlshortener.get('url')})
+                        SendSMS().send(sms_type=mail_type, data=data)
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=4)
+                        print(str(count) + ' Service closed SMS Sent')
+                    except Exception as e:
+                        logging.getLogger('sms_log').error(
+                            "%s - %s" % (str(mail_type), str(e)))
 
                 elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=4) and len(email_sets) == 0:
                     to_emails = [oi.order.email]
@@ -165,7 +163,7 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         "candidateid": oi.order.candidate_id,
                         'mobile': oi.order.mobile,
-                        'days':7,
+                        'days': 7,
                         'upload_url': "%s/autologin/%s/?next=dashboard" % (
                             settings.SITE_DOMAIN, token.decode()),
                     })
@@ -204,13 +202,13 @@ def draft_reminder_mail():
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
 
-                elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=10):
+                elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=10) and len(email_sets) == 2:
                     to_emails = [oi.order.email]
                     mail_type = 'WRITING_SERVICE_CLOSED'
                     email_dict = {}
                     email_dict.update({
                         "subject": 'Closing your ' + oi.product.name + ' service',
-                        "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                        "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
                         'mobile': oi.order.mobile,
                         'upload_url': "%s/autologin/%s/?next=dashboard" % (
