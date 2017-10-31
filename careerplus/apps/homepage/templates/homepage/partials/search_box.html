@@ -1,9 +1,10 @@
 <section class="home-search-box {% if not request.session.candidate_id %}search-mg{% endif %}">
     <ul class="nav search-tabs" role="tablist">
+        {% comment %}
+        
         <li role="presentation" class="active">
             <a href="#home-search" aria-controls="home-search" role="tab" data-toggle="tab">Search</a>
         </li>
-        {% comment %}
             
         <li role="presentation">
             <a href="#home-advanced-search" aria-controls="home-advanced-search" role="tab" data-toggle="tab">Advanced search</a>
