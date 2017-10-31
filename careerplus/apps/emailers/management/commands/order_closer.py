@@ -23,4 +23,4 @@ def close_order():
             od.save()
             closed_order += 1
 
-    print (closed_order, "orders are closed out of", paid_orders.count())
+    print(closed_order, "orders are closed out of", paid_orders.count())

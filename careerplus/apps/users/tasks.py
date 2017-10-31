@@ -42,7 +42,7 @@ def user_register(data={}, order=None):
         else:
             candidate_id = user_resp.get('id')
             # send mail to new user with user_id and password
-            to_emails = data.get('email')
+            to_emails = [data.get('email')]
             mail_type = "AUTO_REGISTER"
             email_data = {}
             email_data.update({

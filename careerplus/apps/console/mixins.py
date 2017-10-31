@@ -240,23 +240,41 @@ class ActionUserMixin(object):
     def upload_candidate_resume(self, oi=None, data={}, user=None):
         oi_resume = data.get('candidate_resume', '')
         if oi and oi_resume:
-            oi.oi_resume = oi_resume
-            last_oi_status = oi.oi_status
-            oi.oi_status = 5
-            oi.last_oi_status = 3
-            oi.save()
-            oi.orderitemoperation_set.create(
-                oi_status=3,
-                oi_resume=oi.oi_resume,
-                last_oi_status=last_oi_status,
-                assigned_to=oi.assigned_to,
-                added_by=user)
+            try:
+                order = oi.order
+                filename = os.path.splitext(oi_resume.name)
+                extention = filename[len(filename) - 1] if len(
+                    filename) > 1 else ''
+                file_name = 'resumeupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
+                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                full_path = '%s/' % str(order.pk)
+                if not os.path.exists(settings.RESUME_DIR + full_path):
+                    os.makedirs(settings.RESUME_DIR + full_path)
+                dest = open(
+                    settings.RESUME_DIR + full_path + file_name, 'wb')
+                for chunk in oi_resume.chunks():
+                    dest.write(chunk)
+                dest.close()
 
-            oi.orderitemoperation_set.create(
-                oi_status=oi.oi_status,
-                last_oi_status=oi.last_oi_status,
-                assigned_to=oi.assigned_to,
-                added_by=user)
+                oi.oi_resume = full_path + file_name
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.last_oi_status = 3
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=3,
+                    oi_resume=oi.oi_resume,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to,
+                    added_by=user)
+
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    assigned_to=oi.assigned_to,
+                    added_by=user)
+            except Exception as e:
+                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
 
     def upload_draft_orderitem(self, oi=None, data={}, user=None):
         oi_draft = data.get('oi_draft', '')
