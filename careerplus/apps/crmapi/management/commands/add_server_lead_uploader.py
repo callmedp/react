@@ -41,7 +41,7 @@ def upload_addserver_leads():
         created=False, inactive=False, timestamp__lte=threshold_time)
     headers = {}
     headers['content-type'] = 'application/json'
-    headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')[0]
+    headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')
     post_url = settings.SHINECPCRM_DICT.get('base_url') + \
         settings.SHINECPCRM_DICT.get('ad_server_url')
     count = 0

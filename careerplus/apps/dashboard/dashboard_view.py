@@ -74,8 +74,7 @@ class DashboardView(TemplateView):
         })
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
-            self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg pBC'))
+            self.request.session.get('skills', None))
 
         if rcourses:
             rcourses = rcourses[:6]
