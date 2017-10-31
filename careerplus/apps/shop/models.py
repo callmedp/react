@@ -1064,7 +1064,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_title(self):
         if self.is_course:
-            return '%s Certification Course INR (%s)  - Shine Learning.' % (
+            return '%s Certification Course (INR %s)  - Shine Learning.' % (
                 self.name,
                 str(round(self.inr_price, 0)),
             )
