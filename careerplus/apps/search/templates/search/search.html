@@ -43,20 +43,20 @@ Search Result Page - Shine Learning
                 {% block product_header %}
                     <div class="search-caption">
                         {% if search_type == 'recommended' %}
-                        <div class="home-advanced-search">
-                            <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
-                                {% csrf_token %}
-                                <div class="form-group advanced_functional">
-                                    <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">
-                                    <span class="error-txt" style="display:block;color:red"></span>
-                                </div>
-                                <div class="form-group form-group1">
-                                    <input class="" value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">
-                                    <span class="error-txt" style="display: block;color:red"></span>
-                                </div>
-                                <button type="submit" class="find-jobs-btn btn js_advance_search"></button>
-                            </form>
-                        </div>
+{#                        <div class="home-advanced-search">#}
+{#                            <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">#}
+{#                                {% csrf_token %}#}
+{#                                <div class="form-group advanced_functional">#}
+{#                                    <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">#}
+{#                                    <span class="error-txt" style="display:block;color:red"></span>#}
+{#                                </div>#}
+{#                                <div class="form-group form-group1">#}
+{#                                    <input class="" value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">#}
+{#                                    <span class="error-txt" style="display: block;color:red"></span>#}
+{#                                </div>#}
+{#                                <button type="submit" class="find-jobs-btn btn js_advance_search"></button>#}
+{#                            </form>#}
+{#                        </div>#}
                         {% elif search_type == 'simple' %}
                         <div class="search-box">
                             <form class="form-inline" id="search_form" data-role="form">
