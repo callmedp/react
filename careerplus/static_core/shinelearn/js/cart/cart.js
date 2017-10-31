@@ -96,6 +96,7 @@ function update_variation_price(req_price, actual_price){
 }
 
 function updateCheckedPrice(this_obj){
+            
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
@@ -142,6 +143,7 @@ function updateCheckedPrice(this_obj){
 }
 
 function updateUnCheckedPrice(this_obj){
+    
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
@@ -222,7 +224,6 @@ function cartScroller() {
       }
   });
 }
-
 
 $(document).ready(function() {
 
@@ -649,4 +650,25 @@ $(document).ready(function() {
     });
 
     cartScroller();
+       $('.js-check').each(function(){
+            if($(this).is(':checked')){
+                $(this).closest('.parent-check').addClass('selected');
+            }
+            else{
+                $(this).closest('.parent-check').removeClass('selected');   
+            }
+            }); 
+    
+    $(document).on('change', '.js-check', function() {
+        if($(this).is(':checked')){
+            $(this).closest('.parent-check').addClass('selected');
+
+        }
+        else{
+            $(this).closest('.parent-check').removeClass('selected');   
+        }
+    });
+
+
+
 });

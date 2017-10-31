@@ -3,13 +3,12 @@ import logging
 from collections import OrderedDict
 from decimal import Decimal
 from django.core.paginator import Paginator
-from django.http import (
-    HttpResponseRedirect, Http404,
+from django.http import (Http404,
     HttpResponse,
     HttpResponseForbidden,
     HttpResponsePermanentRedirect,
 )
-
+from django.urls import reverse
 from django.utils.http import urlquote
 from django.views.generic import (
     ListView,
@@ -63,11 +62,18 @@ class ProductInformationMixin(object):
                             'label': parent[0].name,
                             'url': parent[0].get_absolute_url(),
                             'active': True}))
-            breadcrumbs.append(
-                OrderedDict({
-                    'label': category.name,
-                    'url': category.get_absolute_url(),
+            if product.is_service or product.is_writing:
+                breadcrumbs.append(
+                    OrderedDict({
+                        'label': category.name,
+                        'url': reverse('func_area_results', kwargs={'fa_slug':category.slug, 'pk': category.id}),
                     'active': True}))
+            else:
+                breadcrumbs.append(
+                    OrderedDict({
+                        'label': category.name,
+                        'url': category.get_absolute_url(),
+                        'active': True}))
         breadcrumbs.append(
             OrderedDict({
                 'label': product.name,
