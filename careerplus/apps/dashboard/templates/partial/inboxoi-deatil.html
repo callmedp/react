@@ -5,7 +5,7 @@
 <ul class="products-inbox">
     
     <li class="col-sm-12">
-        <h2>{{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
+        <h2>{{oi.product.get_name}}{% if oi.product.get_exp_db %} - {{oi.product.get_exp_db}}{% endif %}</h2>
         <span class="transaction">Order ID : {{oi.order.number}}</span>
         <ul class="view-comments-links col-sm-7 col-md-8">
             <li>View details</li>
@@ -66,7 +66,7 @@
                               <input maxlength="200" type="file" id="reject-file-id" name="reject_file" style='position:absolute;z-index:1;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:#333;' size="30"  onchange='$("#upload-file-info1").html($(this).val());'>
                                <span class="choose-file">Browse</span>
                           </a>
-                          <span class="upload-file" id="upload-file-info"></span>
+                          <span class="upload-file" id="upload-file-info1"></span>
                         </div>
                       </div>
                       <div class="form-group text-center">

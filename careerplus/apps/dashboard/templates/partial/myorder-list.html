@@ -78,7 +78,7 @@
                     {% else %}
                         <strong>
                           <a>
-                            {{obj.product.heading}}
+                            {{obj.product.get_name}}
                             {% if obj.product.get_exp_db %}
                              - {{obj.product.get_exp_db}}
                             {% endif %}

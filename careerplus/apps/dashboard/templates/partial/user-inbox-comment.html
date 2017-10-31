@@ -5,7 +5,7 @@
 
 <ul class="products-inbox">
   <li class="col-sm-12">
-    <h2>{{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
+    <h2>{{oi.product.get_name}}{% if oi.product.get_exp_db %} - {{oi.product.get_exp_db}}{% endif %}</h2>
     <span class="transaction">Order ID : {{oi.order.number}}</span>
     <ul class="view-comments-links col-sm-7 col-md-8">
       <li><a role="button" onclick="viewDetailOrderitem('{{oi.pk}}',)">View details</a></li>
@@ -15,7 +15,7 @@
     <form class="comment-form" role="form" id="user-comment-form"> {% csrf_token %}
       <label>Comments</label>
       <textarea class="form-control" id="id_comment" required name="comment" rows="4"></textarea>
-      <span class="error"></span>
+      <span class="error" style="color:red"></span>
       <input type="hidden" name="oi_pk" value="{{oi.pk}}" />
       <button type="button" class="blue-button pull-right" id="comment_submit_button">Submit</button>
     </form>

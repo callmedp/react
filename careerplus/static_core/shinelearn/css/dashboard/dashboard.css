@@ -1446,7 +1446,7 @@
   text-align: right;
 }
 .reject-msg .input-file .upload-file {
-  top: 0;
+  top: -14px;
   position: relative;
   width: 230px;
   float: left;

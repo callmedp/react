@@ -83,7 +83,7 @@ class SendSMS(object):
             self.process(send_dict, data)
 
         elif sms_type == "COURSE_CLOSER_MAIL":
-            template_name = data.get('template_name', 'course_closer.html')
+            template_name = data.get('template_name', 'course-closer.html')
             send_dict['template'] = 'sms/' + template_name
             self.process(send_dict, data)
 

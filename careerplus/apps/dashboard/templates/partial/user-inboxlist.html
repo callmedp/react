@@ -1,7 +1,7 @@
 {% load static %}
 {% for obj in orderitems %}
         <li class="col-sm-12">
-            <h2>{{obj.product.heading}}
+            <h2>{{obj.product.get_name}}
                 {% if obj.product.get_exp_db %}
                  - {{obj.product.get_exp_db}}
                 {% endif %}
@@ -247,7 +247,7 @@
                               <input maxlength="200" type="file" id="reject-file-id" name="reject_file" style='position:absolute;z-index:1;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:#333;' size="30"  onchange='$("#upload-file-info1").html($(this).val());'>
                                <span class="choose-file">Browse</span>
                           </a>
-                          <span class="upload-file" id="upload-file-info"></span>
+                          <span class="upload-file" id="upload-file-info1"></span>
                         </div>
                       </div>
                       <div class="form-group text-center">

@@ -40,7 +40,7 @@
 {% block container %}
     <div class="body-wrapper">
         <section class="content-box">
-            <h2 class="mb-5">{{oi.product.heading}}
+            <h2 class="mb-5">{{oi.product.get_name}}
                 {% if oi.product.get_exp_db %}
                  - {{oi.product.get_exp_db}}
                 {% endif %}</h2>
