@@ -286,7 +286,7 @@ datalist {
   float: none;
   padding: 15px 0 10px 15px;
   vertical-align: top;
-  min-width: 180px;
+  min-width: 210px;
 }
 @media (max-width: 1023px) {
   .format-dropdown .nav-tabs {

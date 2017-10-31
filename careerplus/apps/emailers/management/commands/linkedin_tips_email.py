@@ -16,6 +16,7 @@ def send_linkedin_tips():
 
     orderitems = OrderItem.objects.filter(
         order__status=1, product__type_flow=8).select_related('order')
+    count1 = count2 = count3 = count4 = count5 = count6 = 0
     for oi in orderitems:
         try:
             context_dict = {}
@@ -31,30 +32,42 @@ def send_linkedin_tips():
                 context_dict['subject'] = subject
                 html = render_to_string("emailers/candidate/linkedin_tip1.html", context_dict)
                 send_email_for_base_task.delay(subject, html, to=[oi.order.email], headers=headers, oi=oi.pk, status=109)
+                count1 += 1
+                print("{} tip1 mail sent".format(str(count1)))
             elif 109 in email_sets:
                 subject = "Connect with more and more people"
                 context_dict['subject'] = "Connect with more and more people"
                 html = render_to_string("emailers/candidate/linkedin_tip2.html", context_dict)
                 send_email_for_base_task.delay(subject, html, to=[oi.order.email], headers=headers, oi=oi.pk, status=110)
+                count2 += 1
+                print("{} tip2 mail sent".format(str(count2)))
             elif 110 in email_sets:
                 subject = "Customize your LinkedIn URL"
                 context_dict['subject'] = "Customize your LinkedIn URL"
                 html = render_to_string("emailers/candidate/linkedin_tip3.html", context_dict)
                 send_email_for_base_task.delay(subject, html, to=[oi.order.email], headers=headers, oi=oi.pk, status=111)
+                count3 += 1
+                print("{} tip3 mail sent".format(str(count3)))
             elif 111 in email_sets:
                 subject = "Importance of joining groups on LinkedIn"
                 context_dict['subject'] = "Importance of joining groups on Linkedin"
                 html = render_to_string("emailers/candidate/linkedin_tip4.html", context_dict)
                 send_email_for_base_task.delay(subject, html, to=[oi.order.email], headers=headers, oi=oi.pk, status=112)
+                count4 += 1
+                print("{} tip4 mail sent".format(str(count4)))
             elif 112 in email_sets:
                 subject = "Will you trust a profile without a profile picture?"
                 context_dict['subject'] = "Will you trust a profile without a profile picture?"
                 html = render_to_string("emailers/candidate/linkedin_tip5.html", context_dict)
                 send_email_for_base_task.delay(subject, html, to=[oi.order.email], headers=headers, oi=oi.pk, status=113)
+                count5 += 1
+                print("{} tip5 mail sent".format(str(count5)))
             elif 113 in email_sets:
                 subject = "You like writing?"
                 context_dict['subject'] = "You like writing?"
                 html = render_to_string("emailers/candidate/linkedin_tip6.html", context_dict)
                 send_email_for_base_task.delay(subject, html, to=[oi.order.email], headers=headers, oi=oi.pk, status=114)
+                print("{} tip6 mail sent".format(str(count6)))
         except Exception as e:
             logging.getLogger('email_log').error("%s - %s" % (str(oi.id), str(e)))
+        print("{} of {} tip mails sent".format(count1+count2+count3+count4+count5+count6, orderitems.count()))

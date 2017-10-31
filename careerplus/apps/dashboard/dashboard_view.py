@@ -96,14 +96,33 @@ class DashboardView(TemplateView):
                 if response.status_code == 200:
                     default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
                     file_name = request.session.get('shine_resume_name', default_name)
-                    file_name = file_name + '.' + resume_extn
+                    # file_name = file_name + '.' + resume_extn
 
                     order_items = OrderItem.objects.filter(
                         order__status=1,
                         id__in=list_ids, order__candidate_id=candidate_id,
                         no_process=False, oi_status=2)
+
                     for obj in order_items:
-                        obj.oi_resume.save(file_name, ContentFile(response.content))
+                        try:
+                            order = obj.order
+                            file = ContentFile(response.content)
+                            file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
+                                + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
+                            full_path = '%s/' % str(order.pk)
+                            if not os.path.exists(settings.RESUME_DIR + full_path):
+                                os.makedirs(settings.RESUME_DIR +  full_path)
+                            dest = open(
+                                settings.RESUME_DIR + full_path + file_name, 'wb')
+                            for chunk in file.chunks():
+                                dest.write(chunk)
+                            dest.close()
+                        except Exception as e:
+                            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                            continue
+
+                        # obj.oi_resume.save(file_name, ContentFile(response.content))
+                        obj.oi_resume = full_path + file_name
                         last_oi_status = obj.oi_status
                         obj.oi_status = 5
                         obj.last_oi_status = 13
