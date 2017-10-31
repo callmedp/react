@@ -493,7 +493,10 @@ class EmailOrderItemOperation(AbstractAutoDate):
     draft_counter = models.PositiveIntegerField(default=0)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
+
+    def __str__(self):
+        return str(self.oi)
 
 
 class SmsOrderItemOperation(AbstractAutoDate):
@@ -504,6 +507,7 @@ class SmsOrderItemOperation(AbstractAutoDate):
 
     class Meta:
         ordering = ['created']
+
 
 class CouponOrder(AbstractAutoDate):
     order = models.ForeignKey(Order)

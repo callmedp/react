@@ -111,7 +111,7 @@ def draft_reminder_mail_for_linkedin():
                     logging.getLogger('sms_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
-            elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=29):
+            elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=29) and len(email_sets) == 3:
                 to_emails = [oi.order.email]
                 mail_type = 'WRITING_SERVICE_CLOSED'
                 email_dict = {}
@@ -193,7 +193,7 @@ def draft_reminder_mail_for_linkedin():
                     logging.getLogger('sms_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
-            elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=10):
+            elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=10) and len(email_sets) == 2:
                 to_emails = [oi.order.email]
                 mail_type = 'WRITING_SERVICE_CLOSED'
                 email_dict = {}

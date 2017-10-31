@@ -48,13 +48,14 @@ def close_order_report():
         send_dict['from_email'] = settings.CONSULTANTS_EMAIL
         file_name = "%s.csv" % (
             'ORDER_CLOSER_REPORT_' + timezone.now().strftime("%Y-%m-%d "))
-        SendMail().base_send_mail(
-            subject="ORDER_CLOSER_REPORT_",
-            body=send_dict.get('body'), to=send_dict.get('to'),
-            cc=send_dict.get('cc'),
-            from_email=send_dict.get('from_email', None),
-            attachments=[file_name, csvfile.getvalue(), 'text/csv'],
-            mimetype='text/csv')
+        if csvfile.getvalue():
+            SendMail().base_send_mail(
+                subject="ORDER_CLOSER_REPORT_",
+                body=send_dict.get('body'), to=send_dict.get('to'),
+                cc=send_dict.get('cc'),
+                from_email=send_dict.get('from_email', None),
+                attachments=[file_name, csvfile.getvalue(), 'text/csv'],
+                mimetype='text/csv')
         print (closed_order, "orders are closed out of", paid_orders.count())
     except Exception as e:
         raise e
