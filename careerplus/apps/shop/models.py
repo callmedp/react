@@ -2116,7 +2116,7 @@ class ScreenChapter(AbstractAutoDate):
 
 class DeliveryService(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
-        _('Delivery Service Name'), max_length=200,
+        _('Name'), max_length=200,
         help_text=_('Name will be unique to decide slug'))
 
     slug = models.CharField(
@@ -2144,6 +2144,10 @@ class DeliveryService(AbstractAutoDate, AbstractSEO):
 
     def __str__(self):
         return self.name
+
+    @property
+    def display_name(self):
+        return self.heading if self.heading else self.name
 
     def get_price(self, *args, **kwargs):
         

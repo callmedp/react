@@ -2,7 +2,7 @@
 
 {% for obj in orderitems %}
     <div class="box row mb-30">
-        <p class="fs-16 pb-5"><a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.heading}}
+        <p class="fs-16 pb-5"><a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.get_name}}
             {% if obj.product.get_exp_db %}
              - {{obj.product.get_exp_db}}
             {% endif %}

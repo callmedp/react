@@ -10,8 +10,18 @@
         {% compress css %}
         <link type="text/css" href="{% static "shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
         {% endcompress %}
+
         {% compress css %}
+            <style>
+              .reject-msg .input-file .upload-file {
+                top: -14px !important;
+                position: relative;
+                width: 230px;
+                float: left;
+              }
+            </style>
         {% endcompress %}
+
     {% endblock css_section %}
     
     <!-- main section start -->
