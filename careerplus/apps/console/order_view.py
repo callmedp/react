@@ -1842,6 +1842,7 @@ class ActionOrderItemView(View):
                 days = 7
                 candidate_data = {}
                 recruiter_data = {}
+                candidate_list = []
                 mail_send = 0
 
                 for oi in booster_ois:
@@ -1862,10 +1863,12 @@ class ActionOrderItemView(View):
 
                         link_title = candidate_data.get('username') if candidate_data.get('username') else candidate_data.get('email')
                         download_link = resumevar
-                        recruiter_data.update({
-                            link_title: download_link,
+                        data_dict = {}
+                        data_dict.update({
+                            "title": link_title,
+                            "download_link": download_link,
                         })
-
+                        candidate_list.append(data_dict)
                         try:
                             # send mail to candidate
                             if 93 not in email_sets:
@@ -1896,13 +1899,18 @@ class ActionOrderItemView(View):
                         continue
 
                 try:
+                    recruiter_data.update({
+                        "data": candidate_list,
+                    })
                     # send mail to rectuter
                     recruiters = settings.BOOSTER_RECRUITERS
                     mail_type = 'BOOSTER_RECRUITER'
                     if recruiter_data:
-                        send_email_task.delay(recruiters, mail_type, recruiter_data)
+                        SendMail().send(recruiters, mail_type, recruiter_data)
+                        # send_email_task(recruiters, mail_type, recruiter_data)
                         for oi in booster_ois:
-                            oi.emailorderitemoperation_set.create(email_oi_status=92)
+                            oi.emailorderitemoperation_set.create(
+                                email_oi_status=92)
                 except Exception as e:
                     logging.getLogger('cron_log').error("%s" % (str(e)))
 
