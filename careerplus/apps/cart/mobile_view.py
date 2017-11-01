@@ -50,28 +50,6 @@ class RemoveFromCartMobileView(View, CartMixin):
                 else:
                     data['error_message'] = 'this cart item alredy removed.'
 
-                # if not self.request.session.get('cart_pk'):
-                #     self.getCartObject()
-
-                # cart_pk = self.request.session.get('cart_pk')
-                # if cart_pk:
-                #     cart_obj = Cart.objects.get(pk=cart_pk)
-                #     line_obj = cart_obj.lineitems.get(reference=reference)
-                #     if line_obj.parent_deleted:
-                #         parent = line_obj.parent
-                #         childs = cart_obj.lineitems.filter(
-                #             parent=parent, parent_deleted=True)
-                #         if childs.count() > 1:
-                #             line_obj.delete()
-                #         else:
-                #             parent.delete()
-                #     else:
-                #         line_obj.delete()
-
-                #     data['status'] = 1
-                # else:
-                #     data['error_message'] = 'this cart item alredy removed.'
-
             except Exception as e:
                 data['error_message'] = str(e)
 

@@ -39,10 +39,17 @@ body {
   margin-bottom: 20px;
   margin-top: 0;
 }
-@media (max-width: 991px) {
+@media (max-width: 1190px) {
   .home-header .carousel-caption h1, .home-header .carousel-caption strong {
     font-size: 32px;
     line-height: 35px;
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 991px) {
+  .home-header .carousel-caption h1, .home-header .carousel-caption strong {
+    font-size: 25px;
+    line-height: 30px;
     margin-bottom: 10px;
   }
 }
@@ -334,6 +341,9 @@ body {
 .our-courses .listing {
   overflow: hidden;
 }
+.our-courses .listing .media .jobs-available strong {
+  margin-left: 0;
+}
 
 .job-assistance {
   padding-top: 60px;
@@ -410,6 +420,7 @@ body {
 .job-assistance .listing li .rating-review-box strong {
   font-weight: 600;
   display: inline-block;
+  margin-left: 0;
 }
 .job-assistance .listing li .rating-review-box .jobs-available {
   font-size: 12px;
@@ -548,9 +559,12 @@ body {
 }
 @media (max-width: 991px) {
   .product-carousel-box .product-carousel .listing .media .media-left figure {
-    width: 90px;
-    height: 90px;
+    width: 85px;
+    height: 85px;
   }
+}
+.product-carousel-box .product-carousel .listing .media .jobs-available strong {
+  margin-left: 0;
 }
 .product-carousel-box .carousel-control {
   width: 6%;

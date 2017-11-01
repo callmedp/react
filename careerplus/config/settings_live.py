@@ -7,6 +7,7 @@ MEDIA_URL = 'https://origin-static3.shine.com/'
 DOWNLOAD_URL = 'https://origin-static3.shine.com/download/'
 DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'download')
 RESUME_DIR = '/shineresume/ResumeServices/'
+
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning.shine.com'

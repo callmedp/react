@@ -1,16 +1,50 @@
 {% extends "basic/base1.html" %}
 {% load static %}
+{% load static humanize compress %}
 
 {% block title %}
-    Shinelearning - Order Status
+    Oops Payment - Order Status
 {% endblock title %}
 
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
 
-{% block main_container %}
-    {% block page_heading %}
-    {% endblock page_heading %}
 
-{% endblock main_container %}
+{% block container %}
+
+<!-- main section start -->
+<section class="container mt-53 bdr pd-40">
+
+    <!-- page content body start -->
+    <div class="row">
+
+    <!-- left content start -->
+    <div class="col-sm-7">
+
+        <div class="text-center payment-done">
+            <figure class="cancel-icon"></figure>
+
+            <h1>Your payment could not get through.</h1>
+
+            <article>Your transaction ID is <strong>{{txn_id}}</strong></article>
+            <article>In case further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+        </div>
+
+    </div>    
+    <!-- left content end -->
+
+    </div>
+    <!-- page content body end -->
+
+</section>
+<!-- main section end -->
+    
+
+{% endblock container %}
 
 
 {% block js_section %}

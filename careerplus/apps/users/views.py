@@ -290,8 +290,11 @@ class ForgotHtmlView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ForgotHtmlView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
+        next_url = self.request.META.get('HTTP_REFERER', None)
+        if next_url:
+            next_url = next_url + '?email=' + self.request.GET.get('email', '')
         context.update({
-            'next_url' : self.request.META.get('HTTP_REFERER', None),
+            'next_url': next_url,
             'messages': alert,
             "reset_form": PasswordResetRequestForm()
         })
