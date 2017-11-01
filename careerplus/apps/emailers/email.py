@@ -162,7 +162,7 @@ class SendMail():
 
         elif mail_type == "FEATURED_PROFILE_UPDATED":
             send_dict['subject'] = data.get('subject', "Your Featured Profile Is Updated")
-            template_name = data.get('template_name', 'featured_profile.html')
+            template_name = data.get('template_name', 'feature_profile.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}

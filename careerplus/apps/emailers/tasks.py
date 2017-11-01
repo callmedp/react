@@ -30,4 +30,4 @@ def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=No
             obj.emailorderitemoperation_set.create(email_oi_status=status)
     except Exception as e:
         logging.getLogger('email_log').error(
-            "%s - %s - %s" % (str(to), str(e)))
+            "%s - %s" % (str(to), str(e)))
