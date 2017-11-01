@@ -56,7 +56,6 @@ function giveFeedbackOrderitem(oi_pk) {
 
 function rejectService(oi_pk) {
     $("#reject-modal" + oi_pk).modal("show");
-
     $(document).on('click', '#reject-submit-button' + oi_pk, function () {
         $("#reject-form-id" + oi_pk).validate({
             rules: {
@@ -67,16 +66,28 @@ function rejectService(oi_pk) {
                         else
                             return false;
                     },
-                } ,
+                },
 
                 reject_file: {
                     extn: true,
                 }
             },
+
             messages: {
                 comment: 'This field is required',
                 reject_file: 'only pdf, doc and docx formats are allowed',
             },
+
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('error')
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('error')
+            },
+            errorPlacement: function(error, element){
+                $(element).closest('.form-group').find(".error-txt").html(error.text());
+            },
+            
             submitHandler: function(form) {                
                 return false;
             },

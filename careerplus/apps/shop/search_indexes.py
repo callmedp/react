@@ -265,7 +265,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             else:
                 CERT.append(obj.get_cert())
             return list(set(CERT))
-        return []
+        return [0]
 
     def prepare_pStM(self, obj):
         if obj.is_course:
