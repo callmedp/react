@@ -132,6 +132,11 @@ class PaymentLoginView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id')
+        cart_pk = request.session.get('cart_pk')
+        try:
+            self.cart_obj = Cart.objects.get(pk=cart_pk)
+        except:
+            return HttpResponseRedirect(reverse('homepage'))
         if candidate_id:
             return HttpResponseRedirect(reverse('cart:payment-shipping'))
         return super(self.__class__, self).get(request, *args, **kwargs)
@@ -165,6 +170,11 @@ class PaymentLoginView(TemplateView):
                     if login_resp['response'] == 'login_user':
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
                         self.request.session.update(resp_status)
+                        cart_pk = self.request.session.get('cart_pk')
+                        if cart_pk:
+                            cart_obj = Cart.objects.get(pk=cart_pk)
+                            cart_obj.email = email
+                            cart_obj.save()
                         if remember_me:
                             self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
                         return HttpResponseRedirect(reverse('cart:payment-shipping'))
@@ -179,6 +189,11 @@ class PaymentLoginView(TemplateView):
 
                 elif user_exist.get('exists'):
                     context = self.get_context_data()
+                    cart_pk = self.request.session.get('cart_pk')
+                    if cart_pk:
+                        cart_obj = Cart.objects.get(pk=cart_pk)
+                        cart_obj.email = email
+                        cart_obj.save()
                     context.update({
                         'email': email,
                         'email_exist': True})
@@ -206,10 +221,17 @@ class PaymentLoginView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        email = self.request.GET.get('email', '')
         context.update({
             "email_exist": False,
             'reset_form': PasswordResetRequestForm()
         })
+
+        cart_pk = self.request.session.get('cart_pk')  # required for calling self.get_context_data()
+        cart_obj = Cart.objects.get(pk=cart_pk)
+        if cart_obj.email == email:
+            context['email_exist'] = True
+            context.update({'email': email, })
         return context
 
 
