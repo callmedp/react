@@ -11,7 +11,7 @@ from linkedin.models import Draft
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
-    TYPE_REFUND
+    TYPE_REFUND, OI_SMS_STATUS
 from .functions import get_upload_path_order_invoice
 
 
@@ -504,7 +504,7 @@ class EmailOrderItemOperation(AbstractAutoDate):
 class SmsOrderItemOperation(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem)
     sms_oi_status = models.PositiveIntegerField(
-        _("SMS Operation Status"), default=0, choices=OI_EMAIL_STATUS)
+        _("SMS Operation Status"), default=0, choices=OI_SMS_STATUS)
     draft_counter = models.PositiveIntegerField(default=0)
     status = models.PositiveIntegerField(default=0)
     to_mobile = models.CharField(max_length=15, null=True, blank=True,)

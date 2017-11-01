@@ -116,14 +116,19 @@ class InternationalProfileCredentialAdmin(admin.ModelAdmin):
 
 class EmailOrderItemOperationAdmin(admin.ModelAdmin):
     list_display = ['oi', 'email_oi_status', 'draft_counter', 'to_email', 'status']
-    search_fields = ('oi__id',)
+    search_fields = ('oi__id', 'to_email')
+
+
+class SmsOrderItemOperationAdmin(admin.ModelAdmin):
+    list_display = ['oi', 'sms_oi_status', 'draft_counter', 'to_mobile', 'status']
+    search_fields = ('oi__id', 'to_mobile')
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(OrderItemOperation, OrderItemOperationAdmin)
 admin.site.register(RefundRequest, RefundRequestAdmin)
 admin.site.register(EmailOrderItemOperation, EmailOrderItemOperationAdmin)
-admin.site.register(SmsOrderItemOperation)
+admin.site.register(SmsOrderItemOperation, SmsOrderItemOperationAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(
     InternationalProfileCredential,
