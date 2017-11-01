@@ -36,17 +36,19 @@ If you have any suitable openings, you may contact the candidates directly on th
     	<td style="padding:10px;">
     		<table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="background-color: #fffbe9; border:solid 1px #fff; font-size: 13px; color: #333;">
   <tbody>
-  <tr>
+    <tr>
       <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px; border-bottom: solid 1px #fff; border-right: solid 1px #fff;">Candidate</td>
       <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px;border-bottom: solid 1px #fff;">Download resume</td>
     </tr>
-    {% for key, value in data.iteritems %}
     <tr>
-      <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px; border-bottom: solid 1px #fff; border-right: solid 1px #fff;"><a href="{{ key }}" style="color: #2196f3; text-decoration: none;">
-      {{key}}</a></td>
-      <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px;border-bottom: solid 1px #fff;"><a href="{{value}}" target="" get="_blank" style="color: #2196f3; text-decoration: none;">Download</a></td>
+    {% with data_item=data.data %}
+      {% for data_dict in data_item %}
+          <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px; border-bottom: solid 1px #fff; border-right: solid 1px #fff;"><a href="{{ data_dict.title }}" style="color: #2196f3; text-decoration: none;">
+          {{key}}</a></td>
+          <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px;border-bottom: solid 1px #fff;"><a href="{{data_dict.download_link}}" target="" get="_blank" style="color: #2196f3; text-decoration: none;">Download</a></td>
+      {% endfor %}
+    {% endwith %}
     </tr>
-    {% endfor %}
   </tbody>
 </table>
 
