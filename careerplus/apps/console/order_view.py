@@ -2169,7 +2169,7 @@ class ConsoleResumeDownloadView(View):
         try:
             file = request.GET.get('path', None)
             next_url = request.GET.get('next', None)
-            if file:  
+            if file:
                 file_path = settings.RESUME_DIR + file
                 fsock = FileWrapper(open(file_path, 'rb'))
                 filename = file.split('/')[-1]

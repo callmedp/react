@@ -7,9 +7,16 @@ class CartAdmin(admin.ModelAdmin):
         'date_frozen', 'date_closed']
     list_filter = ('status', )
 
+    search_fields = ('id', 'owner_id', 'owner_email', 'session_id')
+    filter_horizontal = ()
+
 
 class LineitemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'cart', 'parent', 'type_item', 'product', 'quantity', 'reference', 'price_excl_tax', 'price_incl_tax', 'no_process', 'parent_deleted']
+    list_display = ['id', 'cart', 'parent', 'type_item', 'product', 'quantity',
+        'reference', 'price_excl_tax', 'price_incl_tax',
+        'no_process', 'parent_deleted']
+    search_fields = ('id', 'reference', 'cart__owner_email', 'cart__owner_id')
+    raw_id_fields = ('cart', )
 
 
 admin.site.register(Cart, CartAdmin)
