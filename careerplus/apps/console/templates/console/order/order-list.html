@@ -146,6 +146,8 @@
                     <th class="column-title">Transactions</th>
                     <th class="column-title">Currency</th>
                     <th class="column-title">Amount Payable</th>
+                    <th class="column-title">Gross Amount(excl tax. and excl. dis)</th>
+                    <th class="column-title">Agent ID</th>
                     <th class="column-title">Order Status</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Added On</th>
@@ -170,6 +172,8 @@
                       </td>
                       <td>{% if obj.currency %}{{obj.currency}}{% else %}Rs.{% endif %}</td>
                       <td>{{obj.total_incl_tax}}</td>
+                      <td>{{obj.total_excl_tax}}</td>
+                      <td>{% if obj.crm_sales_id %}{{obj.crm_sales_id}}{% endif %}</td>
                       <td>{{obj.get_status}}
                         {% if obj.status == 0 and perms.order.can_mark_order_as_paid %}
                             <form autocomplete="off" role="form" method="post" id="order-paid-form{{obj.id}}">{% csrf_token %}
