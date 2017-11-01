@@ -23,7 +23,7 @@
                 {% endfor %}
                 <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
                 {% else %}
-                    {{ result.pBC|default:"10" }} people bought
+                    <strong>{{ result.pBC|default:"10" }}</strong> people bought
                 {% endif %}
             </div>
 

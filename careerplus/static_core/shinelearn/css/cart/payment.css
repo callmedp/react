@@ -618,6 +618,9 @@
   color: #999;
   padding: 0 20px 0 0;
 }
+.payment-done h1 {
+  line-height: 38px;
+}
 @media (max-width: 991px) {
   .payment-done {
     padding: 0 10px 20px 10px;

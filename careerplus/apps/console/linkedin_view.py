@@ -113,10 +113,10 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             mail_type = 'ALLOCATED_TO_WRITER'
                             data = {}
                             data.update({
-                                "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                                "username": obj.order.first_name if obj.order.first_name else 'User',
                                 "writer_name": writer.name,
                                 "writer_email": writer.email,
-                                "subject": "Your developed document has been shared with our expert",
+                                "subject": "Your service has been initiated",
                             })
 
                             if 101 not in email_sets:
@@ -721,11 +721,12 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         exclude_list = []
         for oi in q1:
             closed_ois = oi.order.orderitems.filter(product__type_flow=12, oi_status=4, no_process=False)
-            if closed_ois.exists():
+            open_ois = oi.order.orderitems.filter(product__type_flow=12, no_process=False)
+            if closed_ois.count() == open_ois.count():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = last_oi_status
-                oi.oi_draft = closed_ois[0].oi_draft
+                oi.oi_resume = closed_ois[0].oi_draft
                 oi.draft_counter += 1
                 oi.draft_added_on = timezone.now()
                 oi.save()
@@ -1035,7 +1036,7 @@ class InterNationalAssignmentOrderItemView(View):
                     data.update({
                         "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                         "writer_name": assign_to.name,
-                        "subject": "Your developed document has been shared with our expert",
+                        "subject": "Your service has been initiated",
                         "writer_email": assign_to.email,
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'

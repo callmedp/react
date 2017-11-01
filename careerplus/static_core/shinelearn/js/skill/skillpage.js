@@ -40,9 +40,11 @@ $(function() {
             
         },
         highlight:function(element, errorClass) {
+            $(element).parents('.form-group').addClass('error');
             $(element).siblings('.error-txt').removeClass('hide_error'); 
         },
         unhighlight:function(element, errorClass) {
+            $(element).parents('.form-group').removeClass('error');
             $(element).siblings('.error-txt').addClass('hide_error');    
         },
         errorPlacement: function(error, element){
