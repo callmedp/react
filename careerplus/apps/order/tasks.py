@@ -362,7 +362,8 @@ def process_mailer(pk=None):
                 elif oi.product.type_flow == 12:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_DOMAIN, settings.SITE_DOMAIN,
+                            token.decode()),
                     })
                     if 145 not in email_sets and 145 not in sms_sets:
                         send_email(to_emails, mail_type, data, 145, oi.pk)
