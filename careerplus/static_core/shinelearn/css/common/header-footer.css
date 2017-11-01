@@ -2096,6 +2096,7 @@ footer .footer-links span {
 }
 .listing .rating-review-box strong {
   font-weight: 600;
+  margin-left: 5px;
 }
 @media (max-width: 991px) {
   .listing .rating-review-box strong {
