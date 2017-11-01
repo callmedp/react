@@ -264,11 +264,6 @@ def process_mailer(pk=None):
         orderitems = order.orderitems.filter(no_process=False).select_related(
             'order', 'product', 'partner')
         for oi in orderitems:
-            data = {}
-            to_emails = [oi.order.email]
-            mail_type = "PROCESS_MAILERS"
-            data['subject'] = 'Your service details related to order <' + str(oi.order.id) + '>'
-            data['username'] = oi.order.first_name,
             token = AutoLogin().encode(
                 oi.order.email, oi.order.candidate_id, days=None)
             try:
