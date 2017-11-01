@@ -1,9 +1,4 @@
 User-agent: *
-Disallow: /
-
-
-{% comment %}
-User-agent: *
 Disallow: /media/
 Disallow: /search/
 Disallow: /admin/
@@ -15,4 +10,3 @@ sitemap: https://learning.shine.com/certification_course_sitemap.xml
 sitemap: https://learning.shine.com/article_sitemap.xml
 sitemap: https://learning.shine.com/cms_sitemap.xml
 sitemap: https://learning.shine.com/job_services_sitemap.xml
-{% endcomment %}
