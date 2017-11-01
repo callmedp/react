@@ -300,7 +300,11 @@ header {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: visible;
 }
-
+.select-product ul li:hover .selected, .select-product ul li:focus .selected, .select-product ul li:visited .selected, .select-product ul li.selected .selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
+}
 .select-product ul li strong {
   font-size: 15px;
   font-weight: 600;
@@ -340,6 +344,16 @@ header {
   background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: visible;
+}
+.select-country ul li:hover .selected, .select-country ul li:focus .selected, .select-country ul li:visited .select-country ul li.selected .selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+.select-country ul li.selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 .select-country ul li label {
   font-weight: 300;

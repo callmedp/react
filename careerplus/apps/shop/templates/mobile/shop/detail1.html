@@ -9,6 +9,15 @@
     <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
     <link href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
     {% endcompress css %}
+
+    {% compress css %}
+        <style>
+            a[disabled], a[disabled]:hover {
+               pointer-events: none;
+               color: #e1e1e1;
+            }
+        </style>
+    {% endcompress css %}
 {% endblock css_section %}
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% endif %}

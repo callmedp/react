@@ -32,7 +32,21 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    {% block banner_ads %}{% endblock banner_ads %}
+    {% block banner_ads %}
+        <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+        <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+        </script>
+
+        <script>
+        googletag.cmd.push(function() {
+        googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+        });
+        </script>
+    {% endblock banner_ads %}
    </head>
   {{ JS_SETTINGS|safe }}
 
@@ -123,7 +137,14 @@
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
     {% endblock johukum %}
-    {% block banner_ads_bottom %}{% endblock banner_ads_bottom %}
+    {% block banner_ads_bottom %}
+        <!-- /1198510/ShineLearning_1x1_desktop -->
+        <div id='div-gpt-ad-1509431221932-0'>
+        <script>
+        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });
+        </script>
+        </div>
+    {% endblock banner_ads_bottom %}
   </body>
 </html>
 {% endspaceless %}
