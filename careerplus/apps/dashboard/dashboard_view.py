@@ -523,7 +523,7 @@ class DashboardAcceptService(View):
                             'mobile': oi.order.mobile,
                         })
 
-                        if oi.product.type_flow == 1 and (9 not in email_sets and 9 not in sms_sets):
+                        if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):
                             send_email_task.delay(
                                 to_emails, mail_type, email_dict,
                                 status=9, oi=oi.pk)
@@ -537,7 +537,7 @@ class DashboardAcceptService(View):
                                 logging.getLogger('sms_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
-                        elif oi.product.type_flow == 8 and (9 not in email_sets and 9 not in sms_sets):
+                        elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
                             send_email_task.delay(
                                 to_emails, mail_type, email_dict,
                                 status=9, oi=oi.pk)
