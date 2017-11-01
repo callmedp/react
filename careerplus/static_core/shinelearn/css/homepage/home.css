@@ -433,6 +433,7 @@ body {
 }
 .job-assistance .listing li .rating-review-box .jobs-available strong {
   font-weight: 600;
+  margin-left: 5px;
 }
 @media (max-width: 991px) {
   .job-assistance .listing li:last-child {
