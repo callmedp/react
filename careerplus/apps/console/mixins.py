@@ -30,7 +30,7 @@ class ActionUserMixin(object):
                 "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                 "writer_name": assigned_to.name,
                 "writer_email": assigned_to.email,
-                "subject": "Your developed document has been shared with our expert",
+                "subject": "Your service has been initiated",
                 "oi": obj,
 
             })
@@ -70,7 +70,7 @@ class ActionUserMixin(object):
                     "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
                     "writer_name": assigned_to.name,
                     "writer_email": assigned_to.email,
-                    "subject": "Your developed document has been shared with our expert",
+                    "subject": "Your service has been initiated",
                     "type_flow": obj.product.type_flow,
                     'delivery_service': obj.delivery_service,
                     'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
@@ -147,7 +147,7 @@ class ActionUserMixin(object):
                             "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
-                            "subject": "Your developed document has been shared with our expert",
+                            "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
                             'delivery_service': oi.delivery_service,
                             'delivery_service_slug':oi.delivery_service.slug if oi.delivery_service else '',
@@ -184,7 +184,7 @@ class ActionUserMixin(object):
                             "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
-                            "subject": "Your developed document has been shared with our expert",
+                            "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
                             'delivery_service': oi.delivery_service,
                             'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
@@ -221,7 +221,7 @@ class ActionUserMixin(object):
                             "username": obj.order.first_name + ' ' + obj.order.last_name,
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
-                            "subject": "Your developed document has been shared with our expert",
+                            "subject": "Your service has been initiated",
                             "oi": oi,
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)

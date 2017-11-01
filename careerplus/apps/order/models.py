@@ -498,7 +498,7 @@ class EmailOrderItemOperation(AbstractAutoDate):
         ordering = ['-created']
 
     def __str__(self):
-        return str(self.oi) + '-' + str(self.to_email)
+        return '{}-{}'.format(str(self.oi), self.to_email)
 
 
 class SmsOrderItemOperation(AbstractAutoDate):
