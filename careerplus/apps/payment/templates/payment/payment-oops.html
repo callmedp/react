@@ -1,9 +1,17 @@
 {% extends "basic/base1.html" %}
 {% load static %}
+{% load static humanize compress %}
 
 {% block title %}
     Shinelearning - Order Status
 {% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
 
 
 {% block container %}
@@ -41,7 +49,7 @@
 
 {% block js_section %}
   {{block.super}} 
-  <script type="text/javascript">
+  <!--script type="text/javascript">
         var error = "{{error_type}}";
         console.log(error);
         if(error){
@@ -51,7 +59,7 @@
                 window.location.href = "/payment/payment-options/";
             }, 3000);
         }
-    </script>
+    </script-->
 {% endblock js_section %}
 
 {% block johukum %}
