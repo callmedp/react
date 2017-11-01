@@ -92,7 +92,7 @@
                                     {% if product.pRC %}<figure class="full-star"></figure>
                                     <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
                                     {% else %}
-                                        {{ product.pBC|default:"10" }} people bought
+                                        <strong>{{ product.pBC|default:"10" }}</strong> people bought
                                     {% endif %}
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
@@ -122,7 +122,7 @@
                                     {% if product.pRC %}<figure class="full-star"></figure>
                                     <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
                                     {% else %}
-                                        {{ product.pBC|default:"10" }} people bought
+                                        <strong>{{ product.pBC|default:"10" }}</strong> people bought
                                     {% endif %}
                                     <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
                                 </div>
@@ -205,7 +205,7 @@
                                                     {% if product.pRC %}<figure class="full-star"></figure>
                                                     <strong>{{tprd.pARx|floatformat}}<small>/5</small></strong>
                                                     {% else %}
-                                                        {{ tprd.pBC|default:"10" }} people bought
+                                                        <strong>{{ tprd.pBC|default:"10" }}</strong> people bought
                                                     {% endif %}
                                                     <span class="jobs-available"><strong>{{tprd.pNJ}}</strong> jobs available</span>
                                                 </div>
