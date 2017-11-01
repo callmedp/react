@@ -967,7 +967,7 @@ class ProfileUpdationView(DetailView):
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse(
                 'console:international_profile_update',
-                kwargs={'pk': int(selected_id[0])}))
+                kwargs={'pk': kwargs.get('pk')}))
 
         elif update_sub == "1":
             try:

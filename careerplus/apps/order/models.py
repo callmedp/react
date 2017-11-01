@@ -491,12 +491,14 @@ class EmailOrderItemOperation(AbstractAutoDate):
     email_oi_status = models.PositiveIntegerField(
         _("Email Operation Status"), default=0, choices=OI_EMAIL_STATUS)
     draft_counter = models.PositiveIntegerField(default=0)
+    status = models.PositiveIntegerField(default=0)
+    to_email = models.CharField(_('To Email'), max_length=100, null=True, blank=True)
 
     class Meta:
         ordering = ['-created']
 
     def __str__(self):
-        return str(self.oi)
+        return str(self.oi) + '-' + self.to_email
 
 
 class SmsOrderItemOperation(AbstractAutoDate):
@@ -504,9 +506,14 @@ class SmsOrderItemOperation(AbstractAutoDate):
     sms_oi_status = models.PositiveIntegerField(
         _("SMS Operation Status"), default=0, choices=OI_EMAIL_STATUS)
     draft_counter = models.PositiveIntegerField(default=0)
+    status = models.PositiveIntegerField(default=0)
+    to_mobile = models.CharField(max_length=15, null=True, blank=True,)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
+
+    def __str__(self):
+        return str(self.oi) + '-' + self.to_mobile
 
 
 class CouponOrder(AbstractAutoDate):
