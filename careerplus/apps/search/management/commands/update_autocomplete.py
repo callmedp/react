@@ -34,5 +34,5 @@ def update_search_autocomplete():
     products = Product.objects.filter(active=True, is_indexable=True)
     redis_conn.delete('product_set')
     for product in products:
-        redis_conn.sadd('product_set', product.name)
+        redis_conn.sadd('product_set', product.heading)
     print('{} products added'.format(products.count()))

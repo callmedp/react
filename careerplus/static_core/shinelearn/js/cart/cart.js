@@ -490,6 +490,9 @@ $(document).ready(function() {
 
 
     $('#add-to-cart').click(function() {
+
+        $('#add-to-cart').attr('disabled', true);
+
         var prod_id = $('#add-to-cart').attr('prod-id');
         // required options ie. for countries and product varification
 
@@ -545,7 +548,6 @@ $(document).ready(function() {
                 data: data,
                 dataType: 'json',
                 success: function(json) {
-
                     if (json.status == 1){
                         var info = 'Added to cart. You have '+ json.cart_count + ' products in cart.'
                         $('#id-cart-message').text(info);
@@ -559,13 +561,16 @@ $(document).ready(function() {
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
                     }
+                    $('#add-to-cart').attr('disabled', false);
 
                 },
                 failure: function(response){
                     alert("Something went wrong, Please try again");
+                    $('#add-to-cart').attr('disabled', false);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong, Please try again");
+                    $('#add-to-cart').attr('disabled', false);
                 }
             });
         }
