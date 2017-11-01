@@ -1,6 +1,7 @@
 import datetime
 import base64
-
+import os
+from django.conf import settings
 from decimal import Decimal, ROUND_HALF_DOWN
 from Crypto.Cipher import XOR
 
@@ -237,15 +238,28 @@ class InvoiceGenerate(object):
             # return http_response
 
     def save_order_invoice_pdf(self, order=None):
-        if order:
-            context_dict = self.get_invoice_data(order=order)
-            pdf_file = self.generate_pdf(
-                context_dict=context_dict,
-                template_src='invoice/invoice-product.html')
-            file_name = 'invoice-' + str(order.number) + '-'\
-                + timezone.now().strftime('%d%m%Y') + '.pdf'
-            order.invoice = SimpleUploadedFile(
-                file_name, pdf_file,
-                content_type='application/pdf')
-            order.save()
-            return order
+        try:
+            if order:
+                context_dict = self.get_invoice_data(order=order)
+                pdf_file = self.generate_pdf(
+                    context_dict=context_dict,
+                    template_src='invoice/invoice-product.html')
+                full_path = 'order/%s/' % str(order.pk)
+                file_name = 'invoice-' + str(order.number) + '-'\
+                    + timezone.now().strftime('%Y%m%d') + '.pdf'
+                if not os.path.exists(settings.INVOICE_DIR + full_path):
+                    os.makedirs(settings.INVOICE_DIR +  full_path)
+                dest = open(
+                    settings.INVOICE_DIR + full_path + file_name, 'wb')
+                pdf_file = SimpleUploadedFile(
+                    file_name, pdf_file,
+                    content_type='application/pdf')
+                for chunk in pdf_file.chunks():
+                    dest.write(chunk)
+                dest.close()
+                order.invoice = full_path + file_name
+                order.save()
+                return order, order.invoice
+        except Exception as e:
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+        return None, None

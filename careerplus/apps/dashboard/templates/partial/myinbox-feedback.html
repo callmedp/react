@@ -4,7 +4,7 @@
 
 <ul class="products-inbox">
   <li class="col-sm-12">
-    <h2>{{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</h2>
+    <h2>{{oi.product.get_name}}{% if oi.product.get_exp_db %} - {{oi.product.get_exp_db}}{% endif %}</h2>
     <span class="transaction">Order ID : {{oi.order.number}}</span>
     <div class="hr mt-20"></div>
     <form role="form" id="feedback-form">{% csrf_token %}

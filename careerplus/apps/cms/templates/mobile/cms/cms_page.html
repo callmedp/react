@@ -1,15 +1,15 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
-{% block title %}CMS | listing Shine learning{% endblock %}
+    {% block django_meta %}
+      {% include 'meta/meta.html' %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+    {% endblock canonical_url %}
 
-{% block meta_html %}
-        {{block.super}}
-        {% include 'meta/meta.html' %}
-{%  endblock meta_html %}
-
-{% block canonical_url %}
-    <link rel="canonical" href="{{ page_obj.get_absolute_url }}">
-{% endblock canonical_url %}
+    {% block title %}
+    {{page_obj.get_title}}
+    {% endblock title %}
 
 {% block css_section %}
 {{ block.super }}
@@ -23,6 +23,8 @@
 {% endblock css_section %}
 <!-- {% block back_icon %}<img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">{% endblock back_icon %} -->
 
+{% block banner_ads %}{% endblock banner_ads %}
+{% block banner_ads_bottom %}{% endblock banner_ads_bottom %}
 {% block header %}
     <!--h1 class="heading-back w100fl pb-0">
     Resume format for freshers</h1-->

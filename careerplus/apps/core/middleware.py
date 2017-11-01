@@ -1,13 +1,16 @@
 # python built-in imports
+import logging
 import re
 from datetime import datetime
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
+from django_mobile import set_flavour
 
 # django imports
-from django_mobile.middleware import MobileDetectionMiddleware, SetFlavourMiddleware
+from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
-
+from shine.core import ShineCandidateDetail
+from django.conf import settings
 from .utils import set_session_country
 
 
@@ -19,6 +22,24 @@ class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
         super(UpgradedSetFlavourMiddleware, self).__init__(get_response)
 
 
+class MobileDetectionMiddleware(object):
+    http_accept_regex = re.compile(
+        "application/vnd\.wap\.xhtml\+xml", re.IGNORECASE)
+
+    def __init__(self):
+        pass
+
+    def process_request(self, request):
+        is_mobile = False
+        if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
+            is_mobile = True
+        
+        if is_mobile:
+            set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
+        else:
+            set_flavour(settings.FLAVOURS[0], request)
+
+
 class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddleware):
     """
     Makes middleware django 1.10 compatible
@@ -26,10 +47,6 @@ class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddlewa
     # TODO: Upgrade regex for tablet to be exempted
     def __init__(self, get_response=None):
         super(UpgradedMobileDetectionMiddleware, self).__init__(get_response)
-        user_agents_test_match = r'^(?:%s)' % '|'.join(self.user_agents_test_match)
-        self.user_agents_test_match_regex = re.compile(user_agents_test_match, re.IGNORECASE)
-        self.user_agents_test_search_regex = re.compile(self.user_agents_test_search, re.IGNORECASE)
-        self.user_agents_exception_search_regex = re.compile(self.user_agents_exception_search, re.IGNORECASE)
 
 
 class LearningShineMiddleware(object):
@@ -51,13 +68,15 @@ class LearningShineMiddleware(object):
             cpem_mail = AcrossShine().decode(cpem)
         except:
             cpem_mail = None
+
         ad_content = request.GET.get('ad_content', '')
         if ad_content:
             ad_content = ad_content
             request.session['_adserver_'] = ad_content
         if request.session.get('_adserver_', None):
             try:
-                decoded_ad = AdServerShine().decode(request.session.get('_adserver_', None))
+                decoded_ad = AdServerShine().decode(request.session.get(
+                    '_adserver_', None))
                 if decoded_ad:
                     email = decoded_ad[1]
                     mobile = decoded_ad[2]
@@ -67,8 +86,10 @@ class LearningShineMiddleware(object):
                     except:
                         url = ''
                     try:
-                        timestamp_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
-                        timestamp_obj = timezone.make_aware(timestamp_obj, timezone.get_current_timezone())
+                        timestamp_obj = datetime.strptime(
+                            timestamp, "%Y-%m-%d %H:%M:%S")
+                        timestamp_obj = timezone.make_aware(
+                            timestamp_obj, timezone.get_current_timezone())
                     except:
                         timestamp_obj = timezone.now()
                     timediff = timezone.now() - timestamp_obj
@@ -82,6 +103,20 @@ class LearningShineMiddleware(object):
                     if minute_diff < 30:
                         if email:
                             cpem_mail = email
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
 
-            except:
-                pass
+
+class LoginMiddleware(object):
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        cookies_data = request.COOKIES.get('_em_', '').split('|')
+        resp_status = ShineCandidateDetail().get_status_detail(
+            email=cookies_data[0], shine_id=None, token=None)
+        if resp_status:
+            request.session.update(resp_status)
+        response = self.get_response(request)
+        return response

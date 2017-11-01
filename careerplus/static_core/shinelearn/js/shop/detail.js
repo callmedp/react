@@ -1,6 +1,6 @@
 
-$(document).ready(function () {
 
+$(document).ready(function () {
     var processing = false;
   
     function LoadMoreProductReview(pv_id) {
@@ -45,6 +45,10 @@ $(document).ready(function () {
       }
     };
 
+    $(document).on("click", ".review-load-more", function() {
+   
+           LoadMoreProductReview($(this).attr('data-product'));
+      });
     
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
@@ -63,8 +67,8 @@ $(document).ready(function () {
                     required: true,
                     number: true,
                     indiaMobile: true,
-                    minlength: 4,
-                    maxlength: 15
+                    // minlength: 4,
+                    maxlength: 10
                 },
                 message:{
                   required: true,
@@ -80,8 +84,8 @@ $(document).ready(function () {
                 required: "Mobile Number is Mandatory",
                 number: "Enter only number",
                 indiaMobile: "Please enter 10 digits only",
-                maxlength: "Please enter less than 16 digits",
-                minlength: "Please enter atleast 4 digits"
+                maxlength: "Please enter 10 digits",
+                // minlength: "Please enter atleast 4 digits"
             },
             
         },
@@ -153,9 +157,19 @@ $(document).ready(function () {
           $(this).prev().toggle();
           return false;
       });
+
       $('.about-tab a').click(function(){
         $('.about-tab a').removeClass('active');
         $(this).addClass('active');
+      });
+
+      $('.cls_scroll_tab').click(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var target = $(e.target);
+        if(target.hasClass('cls_tab_child')){
+          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
+        }
       });
         
   });

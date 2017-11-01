@@ -1,4 +1,4 @@
-function clickMarkPaidButton(order_id, ){
+function clickMarkPaidButton(order_id){
     if (order_id){
         $('#order-paid-form' + order_id).parsley().validate();
         if ($('#order-paid-form' + order_id).parsley().isValid()){
@@ -7,10 +7,10 @@ function clickMarkPaidButton(order_id, ){
             $('#paidmodal' + order_id).modal("show");
         }
     }
-};
+}
 
 
-function markPaidOrder(order_id, ){
+function markPaidOrder(order_id){
     if (order_id){
         var formData = $('#order-paid-form' + order_id).serialize();
         $.ajax({
@@ -35,4 +35,4 @@ function markPaidOrder(order_id, ){
             }
         });
     }
-};
+}

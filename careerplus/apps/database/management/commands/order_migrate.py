@@ -159,6 +159,8 @@ class Command(BaseCommand):
         
         for i, row in order_df.iterrows():
             if row['C_ID'] and row['C_ID'] == row['C_ID']:
+                invoice_file = row['invoice_file'] if row['invoice_file'] and row['invoice_file'] == row['invoice_file'] else None
+                invoice_file = invoice_file.split('/')[-1] if invoice_file else None       
                 data_tup = (
                         str(row['added_on']) if row['added_on'] == row['added_on'] else None,
                         str(row['modified_on']) if row['modified_on'] == row['modified_on'] else None,
@@ -175,7 +177,7 @@ class Command(BaseCommand):
                         str(row['code2']) if row['code2'] and row['code2'] == row['code2'] else None,
                         str(row['order_mobile']) if row['order_mobile'] and row['order_mobile'] == row['order_mobile'] else None,
                         int(row['country_obj']) if row['country_obj'] and row['country_obj'] == row['country_obj'] else None,
-                        row['invoice_file'] if row['invoice_file'] and row['invoice_file'] == row['invoice_file'] else None,
+                        invoice_file,
                         str(row['payment_date']) if row['payment_date'] and row['payment_date'] == row['payment_date'] else None,
                         str(dict(row.to_dict())),
                         row['id'],

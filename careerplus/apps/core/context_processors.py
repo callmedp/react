@@ -33,6 +33,7 @@ def common_context_processor(request):
     
     context.update({
         "SITE_DOMAIN": settings.SITE_DOMAIN,
+        "MOBILE_SITE_DOMAIN": settings.MOBILE_SITE_DOMAIN,
         "SITE_PROTOCOL": settings.SITE_PROTOCOL,
         "cart_count": cart_count,
         "PRODUCT_GROUP_LIST": settings.PRODUCT_GROUP_LIST,
@@ -47,5 +48,6 @@ def common_context_processor(request):
         "DEPARTMENT_HEAD_GROUP_LIST": settings.DEPARTMENT_HEAD_GROUP_LIST,
         "FINANCE_GROUP_LIST": settings.FINANCE_GROUP_LIST,
         "roundone_user": roundone_user,
+        "IS_LIVE": settings.IS_LIVE
     })
     return context

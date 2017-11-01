@@ -71,7 +71,7 @@
                                       <form id="delivery-option-form{{variations.0.id}}">{% csrf_token %}
                                         <select class="form-control" id="delivery-option{{variations.0.id}}" name="delivery_type" onchange="deliveryOptionUpdate('{{variations.0.id}}')">
                                             {% for d_obj in delivery_types %}
-                                                <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.0.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                                <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == variations.0.delivery_obj %}selected{% endif %}>{{d_obj.display_name}}</option>
                                             {% endfor %}
                                         </select>
                                         <input type="hidden" name="lineid" value="{{variations.0.id}}" />
@@ -142,7 +142,7 @@
                                         <form id="delivery-option-form{{item.id}}">{% csrf_token %}
                                             <select class="form-control" id="delivery-option{{item.id}}" onchange="deliveryOptionUpdate('{{item.id}}')" name="delivery_type">
                                                 {% for d_obj in delivery_types %}
-                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == item.delivery_obj %}selected{% endif %}>{{d_obj.name}}</option>
+                                                    <option value="{{d_obj.id}}" delivery-price="{{d_obj.get_price}}" {% if d_obj == item.delivery_obj %}selected{% endif %}>{{d_obj.display_name}}</option>
                                                 {% endfor %}
                                             </select>
                                             <input type="hidden" name="lineid" value="{{item.id}}" />

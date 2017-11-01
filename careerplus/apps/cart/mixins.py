@@ -431,9 +431,12 @@ class CartMixin(object):
                 amount_after_discount = total_amount - coupon_amount
                 amount_after_discount = amount_after_discount - redeemed_reward_point
                 tax_amount = Decimal(0)
-                if cart_obj.country.phone == '91':
-                    tax_amount = (amount_after_discount * tax_rate_per) / 100
-                    tax_amount = InvoiceGenerate().get_quantize(tax_amount)
+                try:
+                    if cart_obj.country.phone == '91':
+                        tax_amount = (amount_after_discount * tax_rate_per) / 100
+                        tax_amount = InvoiceGenerate().get_quantize(tax_amount)
+                except Exception as e:
+                    logging.getLogger('error_log').error("Cart object has no country attached:", str(e))
                 total_payable_amount = amount_after_discount + tax_amount
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -576,7 +579,7 @@ class CartMixin(object):
             if cart_pk:
 
                 course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
-                cart_obj = Cart.objects.get(pk=cart_pk)
+                cart_obj = Cart.objects.get(pk=cart_pk, status__in=[0, 2])
                 total_count += cart_obj.lineitems.all().count()
                 total_count -= cart_obj.lineitems.filter(
                     parent=None, product__product_class__in=course_classes,

@@ -24,6 +24,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+  text-shadow: none;
 }
 @media (max-width: 991px) {
   .home-header .carousel-caption {
@@ -154,9 +155,15 @@ body {
   position: relative;
   width: 100%;
 }
+.home-search-box .home-search .form-group input::placeholder {
+  color: #999;
+}
 .home-search-box .home-advanced-search {
   position: relative;
   width: 100%;
+}
+.home-search-box .home-advanced-search input::placeholder {
+  color: #999;
 }
 @media (max-width: 991px) {
   .home-search-box .home-advanced-search input {
@@ -401,7 +408,7 @@ body {
   color: #3f5f94;
   font-size: 15px;
   font-weight: 600;
-  line-height: 18px;
+  line-height: 19px;
 }
 .job-assistance .listing li .rating-review-box {
   display: inline-block;

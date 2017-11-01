@@ -13,7 +13,7 @@
   <div class="box-panel enrol-cart">
      <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
-     {{sqs.pPinb|floatformat}} {% endif %}/-</strong>
+     {{sqs.pPinb|floatformat}} {% endif %}/- <small>(+taxes)</small></strong>
 
     
     {% if selected_var or sqs.pPfinb %}
@@ -31,9 +31,9 @@
     {% endif %}
     <span class="clearfix db"></span>
 
-    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enrol now</a>
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enrol now</a>
 
-    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}">Add to cart</a>
+    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Add to cart</a>
 
     <div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div>
 

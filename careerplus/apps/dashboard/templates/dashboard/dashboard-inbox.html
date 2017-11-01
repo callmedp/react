@@ -10,8 +10,18 @@
         {% compress css %}
         <link type="text/css" href="{% static "shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
         {% endcompress %}
+
         {% compress css %}
+            <style>
+              .reject-msg .input-file .upload-file {
+                top: -14px !important;
+                position: relative;
+                width: 230px;
+                float: left;
+              }
+            </style>
         {% endcompress %}
+
     {% endblock css_section %}
     
     <!-- main section start -->
@@ -122,7 +132,7 @@
          <div class="register">
          <div>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h1 class="modal-title" id="myModalLabel">Thank you</h1>
+            <span class="modal-title" id="myModalLabel">Thank you</span>
           </div>
             <form>
               <div class="form-group accept-msg" id="reject-message-id">

@@ -77,7 +77,7 @@ function showErrorModal(message, accept, reject, accept_nav, reject_nav, onclose
 
     // clicking accept
     $("#id_error_accept").on("click", function(){
-        $("#id_error_modal").hide();
+        $("#api_rsp_error").hide();
         if(accept_nav && accept_nav.length > 0){
             this_url = window.location.href;
             if(this_url == accept_nav){
@@ -86,11 +86,15 @@ function showErrorModal(message, accept, reject, accept_nav, reject_nav, onclose
                 window.location.href = accept_nav;
             }
         }
+        else
+        {
+          window.location.reload();  
+        }
     });
 
     // clicking accept
     $("#id_error_reject").on("click", function(){
-        $("#id_error_modal").hide();
+        $("#id_error_modal").modal('hide');
         if(reject_nav && reject_nav.length > 0){
             this_url = window.location.href;
             if(this_url == reject_nav){
@@ -134,14 +138,21 @@ function GetReference(idx){
         success: function(response){
             hideLoader();
             result = JSON.parse(response);
-            if(result.status){
+            if(result.status)
+            {
                 if(result.redirect && result.redirect_url.length > 0) 
                 {
                     window.location.href = result.redirect_url;
                 }
-                else if(!result.response)
+                else if(result.response == false)
                 {
-                    showErrorModal(result.message, "", "Complete Profile", "", "/dashboard/roundone/profile/");
+                    $("#api_rsp").modal('hide');
+                    showErrorModal(result.message, "Ok");
+                }
+                else if(result.response == false && result.message == "Education incomplete")
+                {
+                   $("#api_rsp").modal('hide');
+                   showErrorModal(result.message, "", "Complete Profile", "", "/dashboard/roundone/profile/");
                 }
                 else
                 {
@@ -150,6 +161,7 @@ function GetReference(idx){
             }
             else
             {
+                $("#api_rsp").modal('hide');
                 showErrorModal(result.message, "Ok", "Cancel");
             }
         },

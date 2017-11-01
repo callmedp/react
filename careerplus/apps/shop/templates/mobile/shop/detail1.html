@@ -1,7 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
 {% load humanize search_tags compress %}
-{% block title %}{% endblock %}
 {% block css_section %}
 {{ block.super }}
     {% compress css %}
@@ -10,7 +9,27 @@
     <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
     <link href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
     {% endcompress css %}
+
+    {% compress css %}
+        <style>
+            a[disabled], a[disabled]:hover {
+               pointer-events: none;
+               color: #e1e1e1;
+            }
+        </style>
+    {% endcompress css %}
 {% endblock css_section %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+
 
 {% block header %}
     <header class="w100fl he-auto">
@@ -42,15 +61,20 @@
     <div class="body-wrapper">
         <section class="content-box">
             <div class="mb-10 c6">
+                {% if prd_num_rating %}
                 <div class="rating inline-block ml-0 fs-12">
                   <sup class="fill-star"></sup>
                   {{prd_rating}}/5
-                  <!-- <p class="fs-11"><a href="#">Be the <br />first to rate</a></p> -->
                 </div><!-- end of star rating -->
+                {% endif %}
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
                         <figure class="icon-comments"></figure>
+                        {% if prd_num_rating %}
                         <a href="javascript:void(0);">{{prd_num_rating}}</a>
+                        {% else %}
+                        <p class="fs-11">Be the first to review</p>
+                        {% endif %}
                     </li>
                     {% if prd_num_jobs %}
                         <li>
@@ -60,9 +84,9 @@
                     {% endif %}
                     <li>
                         <figure class="icon-jobs"></figure>
-                        <a href="javascript:void(0);" class="bold">
+                        <strong>
                             {{prd_num_bought}}
-                        </a> bought
+                        </strong> bought
                     </li>
                     {% if prd_cert %}
                         <li>
@@ -85,7 +109,7 @@
                   }
             </style>
             <p class="more">
-                {{prd_about|safe}}...
+                {{prd_about|safe}}
             </p>
             <!--<p><a href="#">know more</a></p>-->
         {% endif %}
@@ -146,7 +170,7 @@
                     <li>
                         <a href="{{provider.url}}" for="test1">
                             <span>
-                                <img src="{{provider.vendor.image.url}}">
+                                <img src="{{provider.vendor.image.url}}" style="z-index: 10;">
                                 {{provider.vendor}}
                             </span>
                         </a>

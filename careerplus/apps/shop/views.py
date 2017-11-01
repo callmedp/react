@@ -1,14 +1,14 @@
 import json
+import logging
 from collections import OrderedDict
 from decimal import Decimal
 from django.core.paginator import Paginator
-from django.http import (
-    HttpResponseRedirect, Http404,
+from django.http import (Http404,
     HttpResponse,
     HttpResponseForbidden,
     HttpResponsePermanentRedirect,
 )
-
+from django.urls import reverse
 from django.utils.http import urlquote
 from django.views.generic import (
     ListView,
@@ -25,7 +25,7 @@ from console.decorators import (
 from cart.mixins import CartMixin
 from core.library.haystack.query import SQS
 from search.helpers import get_recommendations
-
+from search.choices import STUDY_MODE
 from .models import Product
 from review.models import Review
 from crmapi.models import UserQuries
@@ -62,11 +62,18 @@ class ProductInformationMixin(object):
                             'label': parent[0].name,
                             'url': parent[0].get_absolute_url(),
                             'active': True}))
-            breadcrumbs.append(
-                OrderedDict({
-                    'label': category.name,
-                    'url': category.get_absolute_url(),
+            if product.is_service or product.is_writing:
+                breadcrumbs.append(
+                    OrderedDict({
+                        'label': category.name,
+                        'url': reverse('func_area_results', kwargs={'fa_slug':category.slug, 'pk': category.id}),
                     'active': True}))
+            else:
+                breadcrumbs.append(
+                    OrderedDict({
+                        'label': category.name,
+                        'url': category.get_absolute_url(),
+                        'active': True}))
         breadcrumbs.append(
             OrderedDict({
                 'label': product.name,
@@ -230,7 +237,7 @@ class ProductInformationMixin(object):
                 siblingproduct__active=True).order_by('-siblingproduct__sort_order')
             return {'country_variation_list': service_list}
 
-    def solar_product_variation(self, product):
+    def var_list(self, product):
         course_variation_list = json.loads(product.pVrs)
         return course_variation_list
 
@@ -325,12 +332,33 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 selected_var = None
             ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
-
+            ctx['canonical_url'] = self.product_obj.get_canonical_url()
         else:
+            if ctx.get('prd_exp', None) in ['EP', 'FP']: 
+                pPOP = json.loads(self.sqs.pPOP)
+                pid = None
+                for pop in pPOP.get('pop_list'):
+                    if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
+                        pid = pop.get('id')
+                        break
+                    elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
+                        pid = pop.get('id')
+                        break
+                try:
+                    if pid:
+                        pid = Product.objects.get(pk=pid)
+                        ctx['canonical_url'] = pid.get_canonical_url()
+                    else:
+                        ctx['canonical_url'] = self.product_obj.get_canonical_url()        
+                except:
+                    ctx['canonical_url'] = self.product_obj.get_canonical_url()
+                    logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
+            else:
+                ctx['canonical_url'] = self.product_obj.get_canonical_url()
             ctx.update(json.loads(self.sqs.pPOP))
             pvrs_data = json.loads(self.sqs.pVrs)
             ctx.update(pvrs_data)
-
+            
         if self.is_combos(self.sqs):
             ctx.update(json.loads(self.sqs.pCmbs))
 
@@ -342,9 +370,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = self.product_obj.as_meta(self.request)
-        ctx['canonical_url'] = self.product_obj.get_canonical_url()
         ctx['show_chat']=True
         return ctx
+
 
     def redirect_if_necessary(self, current_path, product):
         if self._enforce_paths:

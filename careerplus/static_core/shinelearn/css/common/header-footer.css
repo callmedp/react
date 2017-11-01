@@ -17,6 +17,10 @@ a, a:hover, a:focus {
   text-decoration: none;
 }
 
+b {
+  font-weight: 600;
+}
+
 h1 {
   font-size: 30px;
 }
@@ -266,6 +270,108 @@ datalist {
   font-weight: 400;
 }
 
+.format-dropdown .format-tabs {
+  padding: 0 !important;
+}
+.format-dropdown .dropdown-menu {
+  min-width: 500px;
+}
+@media (max-width: 1023px) {
+  .format-dropdown .dropdown-menu {
+    min-width: 300px;
+  }
+}
+.format-dropdown .nav-tabs {
+  display: table-cell;
+  float: none;
+  padding: 15px 0 10px 15px;
+  vertical-align: top;
+  min-width: 210px;
+}
+@media (max-width: 1023px) {
+  .format-dropdown .nav-tabs {
+    min-width: 130px;
+  }
+}
+.format-dropdown .nav-tabs li {
+  float: none;
+  padding: 8px 10px;
+  margin-right: 0;
+  margin-bottom: 0;
+  border: none;
+}
+.format-dropdown .nav-tabs li.active {
+  border: none;
+  background-color: #ebebeb;
+}
+.format-dropdown .nav-tabs li.active a {
+  background-color: #ebebeb;
+  border-radius: 0;
+  border: none;
+}
+.format-dropdown .nav-tabs li.active a:focus {
+  background: transparent;
+}
+.format-dropdown .nav-tabs li.active:hover, .format-dropdown .nav-tabs li.active:focus {
+  padding: 8px 10px;
+}
+.format-dropdown .nav-tabs li a {
+  color: #666;
+  font-size: 13px;
+  padding: 0;
+  border: none;
+}
+.format-dropdown .nav-tabs li a:hover {
+  cursor: pointer;
+  padding: 0;
+  border: none;
+}
+.format-dropdown .nav-tabs li a:focus {
+  background: transparent;
+}
+.format-dropdown .tab-content {
+  display: table-cell;
+  background-color: #ebebeb;
+  padding-right: 10px;
+  padding-left: 15px;
+  min-width: 300px;
+  position: relative;
+}
+@media (max-width: 1023px) {
+  .format-dropdown .tab-content {
+    min-width: 250px;
+  }
+}
+.format-dropdown .tab-content ul {
+  list-style-type: none;
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+.format-dropdown .tab-content ul li {
+  display: block;
+  padding: 8px 10px 8px 10px;
+}
+.format-dropdown .tab-content ul li:last-child {
+  border-top: 1px solid #ddd;
+  position: absolute;
+  left: 25px;
+  bottom: 10px;
+  width: 88%;
+  padding-left: 0;
+}
+.format-dropdown .tab-content ul li:last-child a {
+  color: #3f5f94;
+  padding: 10px 10px 10px 0;
+}
+.format-dropdown .tab-content ul li a {
+  color: #666;
+  font-size: 13px;
+  line-height: 20px;
+}
+.format-dropdown .tab-content ul li a:hover {
+  font-weight: 400;
+}
+
 .loggedin-user {
   position: relative;
   margin-right: 8px;
@@ -454,6 +560,12 @@ footer .footer-links span {
   background-color: #fff;
   font-family: "Open Sans", sans-serif;
   padding: 20px;
+}
+.register .modal-title {
+  font-size: 20px;
+  color: #666;
+  display: block;
+  margin-bottom: 20px;
 }
 .register h1 {
   font-size: 20px;
@@ -817,6 +929,23 @@ footer .footer-links span {
   z-index: 9;
 }
 
+.error-search {
+  position: relative;
+}
+.error-search .error-txt {
+  display: block;
+  color: #fff;
+  background: #ff0000;
+  font-size: 11px;
+  position: absolute;
+  left: 1px;
+  bottom: -12px;
+  z-index: 9;
+  padding: 0 5px;
+  border-radius: 2px;
+  line-height: 15px;
+}
+
 .error-center {
   position: relative;
   clear: both;
@@ -833,6 +962,11 @@ footer .footer-links span {
   right: 0;
   bottom: -3px;
   z-index: 9;
+}
+
+.form-group label.error {
+  font-weight: 400;
+  font-size: 11px;
 }
 
 /*---------button css---------*/
@@ -895,7 +1029,7 @@ footer .footer-links span {
 }
 
 .anchor-color {
-  color: #3f5f94;
+  color: #3f5f94 !important;
 }
 
 .find-jobs-btn {
@@ -1945,6 +2079,7 @@ footer .footer-links span {
   color: #3f5f94;
   font-size: 15px;
   font-weight: 600;
+  line-height: 19px;
 }
 .listing .rating-review-box {
   display: block;

@@ -13,9 +13,9 @@
 {% endif %}
           
           {% for review in prd_review_list %}
-            <li class="box-panel">
-              <span class="review-heading">{{review.get_remarks}}</span>
-              <div class="rating-review-box">
+            <li class="box-panel" >
+              <span class="review-heading" >{{review.get_remarks}}</span>
+              <div class="rating-review-box" >
                   {% for star in review.get_ratings %}
                     {% if star == "*" %}
                       <figure class="full-star"></figure>
@@ -26,15 +26,16 @@
                     {% endif %}
                   {% endfor %}
                   
-                  <strong>{{review.average_rating|floatformat:"1"}}/5</strong>
+                  <strong><span >{{review.average_rating|floatformat:"1"}}</span>/<span >5</span></strong>
               </div>
-              <article>{{review.content|safe}}</article>
-              <span class="editor">By <a>{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</a>, {{review.created|date:"M d, Y" }}</span>
+              <article >{{review.content|safe}}</article>
+              <span class="editor">By <a ><span >{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</span></a>, <span >{{review.created|date:"M d, Y" }}</span></span>
+              
             </li>
           {% endfor %}
           {% if prd_review_list.has_next %}
             
-            <a style="cursor:pointer;text-decoration:none;" onclick="LoadMoreProductReview({{product.id}})" class="load-more" id="loadmorereviewbtn"> Load more</a>
+            <a style="cursor:pointer;text-decoration:none;" data-product="{{product.id}}" class="load-more review-load-more" id="loadmorereviewbtn"> Load more</a>
           {% endif %}
 {% if prd_rv_page == 1 %}
 

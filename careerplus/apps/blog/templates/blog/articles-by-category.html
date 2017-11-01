@@ -2,11 +2,19 @@
 {% load static humanize thumbnail compress %}
     {% block meta_html %}
         {{block.super}}
-        {% include 'meta/meta.html' %}
+        {% if recent_page.has_previous %}
+            <link rel="prev" href={%if recent_page.previous_page_number == 1 %}{{request.path}}{%else%}"?page={{ recent_page.previous_page_number }}"{%endif%}>
+        {% endif %}
+        {% if recent_page.has_next %}
+            <link rel="next" href="?page={{ recent_page.next_page_number }}">
+        {%endif%}
     {%  endblock meta_html %}
-
+    {% block django_meta %}
+      {% include 'meta/meta.html' %}
+    {% endblock django_meta %}
     {% block canonical_url %}
-        <link rel="canonical" href="{{ category.get_absolute_url }}">
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ category.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ category.get_absolute_url }}">
     {% endblock canonical_url %}
 
     {% block title %}
@@ -272,7 +280,7 @@
 
             {% for art in pop_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
@@ -295,7 +303,7 @@
 
             {% for art in recent_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}

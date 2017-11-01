@@ -19,6 +19,7 @@ $(document).ready(function() {
 					success: function(html) {
 						$("#load_more").remove();
 						$('#category_container').append(html);
+						ga('send', 'pageview');
 						//$('#loading').hide();
 					},
 					failure: function(response){

@@ -121,8 +121,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     
     _metadata_default = ModelMeta._metadata_default.copy()
-    _metadata_default['locale'] = 'dummy_locale'
-
+    
     _metadata = {
         'title': 'title',
         'description': 'get_description',
@@ -130,7 +129,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         'keywords': 'get_keywords',
         'published_time': 'created',
         'modified_time': 'modified',
-        'url': 'get_full_url',
+        'url': 'get_absolute_url',
     }
 
     class Meta:
@@ -190,15 +189,19 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
-        if self.is_skill:
-            parent = self.get_parent()
-            if parent:
+        if self.type_level in [3, 4]:
+            if self.is_skill:
+                parent = self.get_parent()[0].slug if self.get_parent() else None
                 return reverse('skillpage:skill-page-listing',
-                    kwargs={'fa_slug': parent[0].slug,'skill_slug': self.slug, 'pk': self.pk})
+                    kwargs={'fa_slug': parent,'skill_slug': self.slug, 'pk': self.pk})
+            elif self.type_level == 3:
+                return reverse('skillpage:func_area_results',
+                    kwargs={'fa_slug': self.slug, 'pk': self.pk})    
             return ''
-        else:
+        elif self.type_level == 2:
             return reverse('skillpage:func_area_results',
                 kwargs={'fa_slug': self.slug, 'pk': self.pk})
+        return ''
 
     def add_relationship(self, category):
         relationship, created = CategoryRelationship.objects.get_or_create(
@@ -357,6 +360,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             return 'Yes'
         else:
             return 'No'
+
+    def get_canonical_url(self):
+        return self.get_absolute_url()
 
 
 class CategoryRelationship(AbstractAutoDate):
@@ -519,7 +525,6 @@ class Attribute(AbstractAutoDate):
 
     value = property(_get_value, _set_value)
 
-    
     def __str__(self):
         return self.name
 
@@ -534,9 +539,6 @@ class Attribute(AbstractAutoDate):
     @property
     def is_file(self):
         return self.type_attribute in [self.FILE, self.IMAGE]
-
-    def __str__(self):
-        return self.name
 
     def save_screen_value(self, productscreen, value):
 
@@ -579,7 +581,6 @@ class Attribute(AbstractAutoDate):
                 value_obj.value = value
                 value_obj.save()
 
-    
     def validate_value(self, value):
         validator = getattr(self, '_validate_%s' % self.type_attribute)
         validator(value)
@@ -625,7 +626,6 @@ class Attribute(AbstractAutoDate):
                 value_obj.value = value
                 value_obj.save()
 
-    
     def _validate_text(self, value):
         from django.utils import six
         if not isinstance(value, six.string_types):
@@ -734,7 +734,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     upc = models.CharField(
         _('Universal Product Code'), max_length=100,
         help_text=_('To be filled by vendor'))
-    
+
     banner = models.ImageField(
         _('Banner'), upload_to=get_upload_path_product_banner,
         blank=True, null=True)
@@ -750,7 +750,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Image Alt'), blank=True, max_length=100)
     video_url = models.CharField(
         _('Video Url'), blank=True, max_length=200)
-    
+
     email_cc = RichTextField(
         verbose_name=_('Email CC'), blank=True, default='')
     about = RichTextField(
@@ -765,7 +765,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         verbose_name=_('Welcome Call Description'), blank=True, default='')
     prg_structure = RichTextField(
         verbose_name=_('Program Structure'), blank=True, default='')
-    
+
     inr_price = models.DecimalField(
         _('INR Price'),
         max_digits=12, decimal_places=2,
@@ -798,7 +798,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Fake GBP Price'),
         max_digits=12, decimal_places=2,
         default=0.0) 
-    
+
     class Meta:
         abstract = True
 
@@ -888,7 +888,7 @@ class Product(AbstractProduct, ModelMeta):
         through_fields=('father', 'children'),
         verbose_name=_('Child Product'),
         symmetrical=False, blank=True)
-    
+
     vendor = models.ForeignKey(
         'partner.Vendor', related_name='productvendor', blank=True,
         null=True, verbose_name=_("Product Vendor"))
@@ -919,10 +919,9 @@ class Product(AbstractProduct, ModelMeta):
     archive_json = models.TextField(
         _('Archive JSON'),
         blank=True,
-        editable=False
-        )
+        editable=False)
     cp_page_view = models.IntegerField(
-        _('CP Page View'),default= 0)
+        _('CP Page View'), default=0)
     active = models.BooleanField(default=False)
     is_indexable = models.BooleanField(default=False)
 
@@ -932,7 +931,6 @@ class Product(AbstractProduct, ModelMeta):
     browsable = BrowsableProductManager()
 
     _metadata_default = ModelMeta._metadata_default.copy()
-    _metadata_default['locale'] = 'dummy_locale'
 
     _metadata = {
         'title': 'title',
@@ -941,7 +939,7 @@ class Product(AbstractProduct, ModelMeta):
         'keywords': 'meta_keywords',
         'published_time': 'created',
         'modified_time': 'modified',
-        'url': 'get_absolute_url',
+        'url': 'get_canonical_url',
     }
 
     class Meta:
@@ -965,14 +963,14 @@ class Product(AbstractProduct, ModelMeta):
     def __str__(self):
         if self.pk:
             if self.heading:
-                return self.heading + ' - (' +str(self.pk) + ')'
+                return self.heading + ' - (' + str(self.pk) + ')'
             else:
-                return self.name + ' - (' +str(self.pk) + ')'
+                return self.name + ' - (' + str(self.pk) + ')'
         return self.name
 
     def save(self, *args, **kwargs):
         if self.pk:
-            if self.name:    
+            if self.name:
                 if not self.heading:
                     self.heading = self.get_heading()
                 if not self.title:
@@ -1030,6 +1028,7 @@ class Product(AbstractProduct, ModelMeta):
             return True
         else:
             return False
+
     @property
     def is_writing(self):
         if self.product_class and self.product_class.slug in settings.WRITING_SLUG:
@@ -1056,45 +1055,39 @@ class Product(AbstractProduct, ModelMeta):
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return '%s  for %s' % (
+                return '%s for %s' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
 
-        return ''
+        return self.name
 
     def get_title(self):
         if self.is_course:
-            return '%s Certification Course INR %s  Learning.Shine' % (
+            return '%s Certification Course (INR %s)  - Shine Learning.' % (
                 self.name,
                 str(round(self.inr_price, 0)),
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                try:
-                    return dict(getattr(choices, choice))[int(value) if value.isdigit() else value]
-                except:
-                    return 'Others'
-
-                return '%s -  for %s -  Online Services  Learning.Shine' % (
+                return '%s for %s - Online Services  - Shine Learning.' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
-                )            
+                )
         return ''
 
     def get_meta_desc(self):
         if self.is_course:
-            return '%s - Get Online Access, Supports from Experts, Study Materials, course module, fee structure and other details at Learning.Shine' % (
+            return '%s - Get Online Access, Supports from Experts, Study Materials, Course Module, Fee Structure and other details at Shine Learning.' % (
                 self.name,
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return 'Online %s - Services for %s. Get expert advice & tips for %s at learning.shine' % (
+                return 'Online %s Services for %s. Get expert advice & tips for %s at Shine Learning.' % (
                         self.category_main.name,
                         EXP_DICT.get(self.get_exp(), ''),
                         self.category_main.name,
-                    )            
-        
+                    )
         return ''
 
     def get_icon_url(self, relative=False):
@@ -1105,7 +1098,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_image_url(self, relative=False):
         if self.image:
             return self.get_full_url(url=self.image.url) if not relative else self.image.url
-        return '/media/attachment/default_product_image.jpg'
+        return settings.MEDIA_URL + 'attachment/default_product_image.jpg'
     
     def get_url(self, relative=False):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
@@ -1160,6 +1153,7 @@ class Product(AbstractProduct, ModelMeta):
             return 5
         else:
             return 2.5
+
     def get_screen(self):
         if self.screenproduct.all().exists():
             return self.screenproduct.all()[0]
@@ -1180,7 +1174,7 @@ class Product(AbstractProduct, ModelMeta):
         return self.name
 
     def get_price(self):
-        
+
         if self.inr_price:
             return round(self.inr_price, 0)
         return Decimal(0)
@@ -1278,19 +1272,23 @@ class Product(AbstractProduct, ModelMeta):
             if category:
                 if self.is_course:
                     pop_list = category.get_products().filter(
-                        type_product__in=[0,1,3,5]).exclude(vendor=self.vendor).distinct()
+                        type_product__in=[0, 1, 3, 5]).exclude(
+                        vendor=self.vendor).distinct()
                     return pop_list
                 elif self.is_writing or self.is_service:
                     pop_list = category.get_products().filter(
-                        type_product__in=[0,1,3,5]).exclude(pk=self.pk).distinct()
+                        type_product__in=[0, 1, 3, 5]).exclude(
+                        pk=self.pk).distinct()
                     return pop_list
             return []
         else:
             return []
 
     def get_delivery_types(self):
-        delivery_objs = self.productextrainfo_set.filter(info_type='delivery_service')
-        delivery_obj_ids = list(delivery_objs.all().values_list('object_id', flat=True))
+        delivery_objs = self.productextrainfo_set.filter(
+            info_type='delivery_service')
+        delivery_obj_ids = list(delivery_objs.all().values_list(
+            'object_id', flat=True))
 
         delivery_services = DeliveryService.objects.filter(
             id__in=delivery_obj_ids, active=True)
@@ -1320,11 +1318,13 @@ class Product(AbstractProduct, ModelMeta):
     def get_exp_db(self):
         # return display value
         if self.is_writing:
-            return choices.EXP_DICT.get(getattr(self.attr, R_ATTR_DICT.get('EXP')).code) \
+            return choices.EXP_DICT.get(getattr(
+                self.attr, R_ATTR_DICT.get('EXP')).code) \
                 if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
                 else ''
         elif self.is_service:
-            return choices.EXP_DICT.get(getattr(self.attr, S_ATTR_DICT.get('EXP')).code) \
+            return choices.EXP_DICT.get(getattr(
+                self.attr, S_ATTR_DICT.get('EXP')).code) \
                 if getattr(self.attr, S_ATTR_DICT.get('EXP'), None) \
                 else ''
         else:
@@ -1342,7 +1342,8 @@ class Product(AbstractProduct, ModelMeta):
     def get_studymode_db(self):
         # return display value
         if self.is_course:
-            return choices.STUDY_MODE.get(getattr(self.attr, C_ATTR_DICT.get('SM')).code)\
+            return choices.STUDY_MODE.get(getattr(
+                self.attr, C_ATTR_DICT.get('SM')).code)\
                 if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
                 else ''
         else:
@@ -1377,7 +1378,8 @@ class Product(AbstractProduct, ModelMeta):
     def get_coursetype_db(self):
         # return dispaly value
         if self.is_course:
-            return choices.COURSE_TYPE_DICT.get(getattr(self.attr, C_ATTR_DICT.get('CT')).code) \
+            return choices.COURSE_TYPE_DICT.get(getattr(
+                self.attr, C_ATTR_DICT.get('CT')).code) \
                 if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
                 else ''
         else:
@@ -1454,6 +1456,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_canonical_url(self):
         return self.get_absolute_url()
 
+
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(
         ProductClass,
@@ -1470,7 +1473,7 @@ class ProductScreen(AbstractProduct):
         null=True)
     comment = RichTextField(
         verbose_name=_('Comments'), blank=True, default='')
-    
+
     STATUS_CHOICES = (
         (6, _('Reverted')),
         (5, _('Rejected')),
@@ -1512,7 +1515,7 @@ class ProductScreen(AbstractProduct):
         through='ProductAttributeScreen',
         through_fields=('product', 'attribute'),
         blank=True)
-    
+
     class Meta:
         verbose_name = _('Product Screen')
         verbose_name_plural = _('Product Screens ')
@@ -1529,13 +1532,12 @@ class ProductScreen(AbstractProduct):
         if getattr(self, 'attr', None):
             self.attr.save_screen()
 
-
     def __str__(self):
         if self.pk:
             if self.heading:
-                return self.heading + ' - (' +str(self.pk) + ')'
+                return self.heading + ' - (' + str(self.pk) + ')'
             else:
-                return self.name + ' - (' +str(self.pk) + ')'
+                return self.name + ' - (' + str(self.pk) + ')'
         return self.name
 
     def create_product(self):
@@ -1560,7 +1562,6 @@ class ProductScreen(AbstractProduct):
                     sibling=variant,)
                 return True
         return False
-
 
     @property
     def get_status(self):
@@ -1657,7 +1658,7 @@ class VariationProductScreen(AbstractAutoDate):
     sort_order = models.PositiveIntegerField(
         _('Sort Order'), default=1)
     active = models.BooleanField(default=True)
-    
+
     def __str__(self):
         return _("%(pri)s to '%(sec)s'") % {
             'pri': self.main,
@@ -1667,6 +1668,7 @@ class VariationProductScreen(AbstractAutoDate):
         unique_together = ('main', 'sibling')
         verbose_name = _('Product Screen Variation')
         verbose_name_plural = _('Product Screen Variations')
+
 
 class RelatedProduct(AbstractAutoDate):
     primary = models.ForeignKey(
@@ -1797,7 +1799,6 @@ class ProductAttribute(AbstractAutoDate):
 
     value = property(_get_value, _set_value)
 
-
     def __str__(self):
         return _("%(product)s to '%(attribute)s'") % {
             'product': self.product,
@@ -1891,7 +1892,6 @@ class ProductAttributeScreen(AbstractAutoDate):
         setattr(self, 'value_%s' % self.attribute.type_attribute, new_value)
 
     value = property(_get_value, _set_value)
-
 
     def __str__(self):
         return _("%(product)s to '%(attribute)s'") % {
@@ -2012,7 +2012,7 @@ class Chapter(AbstractAutoDate):
     heading = models.CharField(_('chapter'), max_length=255)
     answer = RichTextField(
         verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
-    
+
     ordering = models.PositiveSmallIntegerField(
         _('ordering'), default=1,
         help_text=_(u'An integer used to order the chapter \
@@ -2027,7 +2027,7 @@ class Chapter(AbstractAutoDate):
         Product,
         related_name='chapter_product',
         null=True, blank=True)
-    
+
     class Meta:
         ordering = ['ordering']
         verbose_name = _('Chapter')
@@ -2036,11 +2036,11 @@ class Chapter(AbstractAutoDate):
             ("console_add_chapter", "Can Add Product Chapter From Console"),
             ("console_change_chapter", "Can Change Product Chapter From Console"),
             ("console_moderate_chapter", "Can Moderate Product Chapter From Console"),
-            )
-    
+        )
+
     def __str__(self):
         return (self.heading[:75] + '...') if len(self.heading) > 75 else self.heading
-    
+
     def get_screen(self):
         if self.orig_ch.exists():
             return self.orig_ch.all()[0]
@@ -2059,7 +2059,7 @@ class Chapter(AbstractAutoDate):
                     chapter=self)
                 return schapter
         return self.get_screen()
-    
+
 
 class ScreenChapter(AbstractAutoDate):
     STATUS_CHOICES = (
@@ -2070,7 +2070,7 @@ class ScreenChapter(AbstractAutoDate):
     heading = models.CharField(_('chapter'), max_length=255)
     answer = RichTextField(
         verbose_name=_('answer'), blank=True, help_text=_('The answer text.'))
-    
+
     ordering = models.PositiveSmallIntegerField(
         _('ordering'), default=1,
         help_text=_(u'An integer used to order the chapter \
@@ -2081,7 +2081,7 @@ class ScreenChapter(AbstractAutoDate):
         default=False,
         help_text=_("Only questions with 'Active' will be "
                     "displayed."))
-    
+
     product = models.ForeignKey(
         ProductScreen,
         related_name='chapter_product',
@@ -2095,10 +2095,10 @@ class ScreenChapter(AbstractAutoDate):
         ordering = ['ordering']
         verbose_name = _('Screen Chapter')
         verbose_name_plural = _('Screen Chapters')
-    
+
     def __str__(self):
         return (self.heading[:75] + '...') if len(self.heading) > 75 else self.heading
-    
+
     def create_chapter(self):
         if not self.chapter:
             if self.heading and self.product:
@@ -2116,7 +2116,7 @@ class ScreenChapter(AbstractAutoDate):
 
 class DeliveryService(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
-        _('Delivery Service Name'), max_length=200,
+        _('Name'), max_length=200,
         help_text=_('Name will be unique to decide slug'))
 
     slug = models.CharField(
@@ -2144,6 +2144,10 @@ class DeliveryService(AbstractAutoDate, AbstractSEO):
 
     def __str__(self):
         return self.name
+
+    @property
+    def display_name(self):
+        return self.heading if self.heading else self.name
 
     def get_price(self, *args, **kwargs):
         
@@ -2241,5 +2245,3 @@ class ProductSkill(AbstractAutoDate):
         unique_together = ('product', 'skill')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
-
-

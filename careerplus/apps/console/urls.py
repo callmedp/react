@@ -171,6 +171,8 @@ urlpatterns += [
 
 
 urlpatterns += [
+    url(r'^queue/resumedownload/$',
+        order_view.ConsoleResumeDownloadView.as_view(), name='queue-resume-download'),
     url(r'^queue/orders/$',
         order_view.OrderListView.as_view(), name='queue-order'),
     url(r'^queue/welcomecall/$',
@@ -281,6 +283,10 @@ urlpatterns += [
     url(r'^linkedin/change-draft/(?P<pk>\d+)/draft/$',
         linkedin_view.ChangeDraftView.as_view(),
         name='change-draft'),
+
+    url(r'^linkedin/create/(?P<oi>\d+)/draft/$',
+        linkedin_view.CreateDrftObject.as_view(),
+        name='create-draft'),
 
     url(r'^linkedin/order/(?P<pk>\d+)/detail/$',
         linkedin_view.LinkedinOrderDetailVeiw.as_view(), name='linkedin-order-detail'),

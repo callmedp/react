@@ -1,12 +1,11 @@
 {% extends "basic/base.html" %}
 {% load static humanize thumbnail compress %}
-    {% block meta_html %}
-        {{block.super}}
+    {% block django_meta %}
         {% include 'meta/meta.html' %}
-    {%  endblock meta_html %}
-
+    {%  endblock django_meta %}
     {% block canonical_url %}
-        <link rel="canonical" href="{{ object.get_absolute_url }}">
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
     {% endblock canonical_url %}
 
     {% block title %}
@@ -91,7 +90,7 @@
           <div role="tabpanel" class="tab-pane active" id="popular">
             {% for art in pop_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
@@ -113,7 +112,7 @@
           <div role="tabpanel" class="tab-pane" id="recent">
             {% for art in recent_articles %}
             <div class="media">
-              <a href="{% url "blog:articles-deatil" art.slug art.pk %}">
+              <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
                 {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
@@ -148,13 +147,13 @@
 
 <!--modals-->
 <!--login-->
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
+<div class="modal fade bs-example-modal-sm login-div" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
      <div class="register">
      <div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Login</h1>
+        <span class="modal-title" id="myModalLabel">Login</span>
         <label id="non-field-error" class="error"></label>
       </div>
 
@@ -201,7 +200,7 @@
      <div class="register">
      <div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Register</h1>
+        <span class="modal-title" id="myModalLabel">Register</span>
         <label id="non-field-error-register" class="error"></label>
       </div>
 
@@ -247,7 +246,7 @@
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
             <a class="gplus" href="glogin()"></a>
           </div>
-          <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm" data-dismiss="modal">Login Now</a></small>
+          <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".login-div" data-dismiss="modal">Login Now</a></small>
         </form>
 
       </div>
@@ -261,7 +260,7 @@
      <div class="register">
      <div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+        <span class="modal-title" id="myModalLabel">Forgot Password</span>
       </div>
       <div id="msg_for_user"></div>
         <form method="post" id="forgot_form" 

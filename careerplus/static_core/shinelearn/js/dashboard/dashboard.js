@@ -56,7 +56,6 @@ function giveFeedbackOrderitem(oi_pk) {
 
 function rejectService(oi_pk) {
     $("#reject-modal" + oi_pk).modal("show");
-
     $(document).on('click', '#reject-submit-button' + oi_pk, function () {
         $("#reject-form-id" + oi_pk).validate({
             rules: {
@@ -67,16 +66,28 @@ function rejectService(oi_pk) {
                         else
                             return false;
                     },
-                } ,
+                },
 
                 reject_file: {
                     extn: true,
                 }
             },
+
             messages: {
                 comment: 'This field is required',
                 reject_file: 'only pdf, doc and docx formats are allowed',
             },
+
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('error')
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('error')
+            },
+            errorPlacement: function(error, element){
+                $(element).closest('.form-group').find(".error-txt").html(error.text());
+            },
+            
             submitHandler: function(form) {                
                 return false;
             },
@@ -522,6 +533,11 @@ function onClickDeleteJob(idx){
         $("#form_roundone_personal").show();
         $("#detail_roundone_personal").hide();
     });
+    
+    $(".js_edit_education_btn").on("click", function(){
+        $("#form_edit_education").show();
+        $("#div_education").hide();
+    });
 
     $("#cancel_roundone_personal").on("click", function(){
         // $("#form_roundone_personal").hide();
@@ -616,56 +632,56 @@ function onClickDeleteJob(idx){
 
     $("#form_edit_education").validate({
         errorClass: "roundone-error",
-        rules:{
-            institute: {
-                required: true,
-                minlength: 2,
-                maxlength: 40
-            },
-            degree: {
-                required: true,
-                minlength: 2,
-                maxlength: 40
-            },
-            major: {
-                required: true,
-                minlength: 2,
-                maxlength: 40
-            },
-            year: {
-                required: true,
-                number: true,
-                minlength: 4,
-                maxlength: 4
-            },
-            marks:{
-                required: true,
-                validmarks: true
-            }
-        },
-        messages: {
-            institute: {
-                required: "Please enter  institute name",
-                minlength: "At least 2 character",
-                maxlength: "At most 40 character"
-            },
-            degree: {
-                required: "Please enter degree name",
-                minlength: "At least 2 character",
-                maxlength: "At most 40 character"
-            },
-            major: {
-                required: "This is required",
-                minlength: "At least 2 character",
-                maxlength: "At most 40 character"
-            },
-            year: {
-                required: "Please enter year of passing",
-                number: "Only digits",
-                minlength: "At least 4 digits",
-                maxlength: "At most 4 digits"
-            }
-        },
+        // rules:{
+        //     institute: {
+        //         required: true,
+        //         minlength: 2,
+        //         maxlength: 40
+        //     },
+        //     degree: {
+        //         required: true,
+        //         minlength: 2,
+        //         maxlength: 40
+        //     },
+        //     major: {
+        //         required: true,
+        //         minlength: 2,
+        //         maxlength: 40
+        //     },
+        //     year: {
+        //         required: true,
+        //         number: true,
+        //         minlength: 4,
+        //         maxlength: 4
+        //     },
+        //     marks:{
+        //         required: true,
+        //         validmarks: true
+        //     }
+        // },
+        // messages: {
+        //     institute: {
+        //         required: "Please enter  institute name",
+        //         minlength: "At least 2 character",
+        //         maxlength: "At most 40 character"
+        //     },
+        //     degree: {
+        //         required: "Please enter degree name",
+        //         minlength: "At least 2 character",
+        //         maxlength: "At most 40 character"
+        //     },
+        //     major: {
+        //         required: "This is required",
+        //         minlength: "At least 2 character",
+        //         maxlength: "At most 40 character"
+        //     },
+        //     year: {
+        //         required: "Please enter year of passing",
+        //         number: "Only digits",
+        //         minlength: "At least 4 digits",
+        //         maxlength: "At most 4 digits"
+        //     }
+        // },
         submitHandler: function(form){
             ajaxurl = $("input[name=post_education]").val();
             roundone_edit(form, ajaxurl);
@@ -799,35 +815,49 @@ function onClickDeleteJob(idx){
                 failure: function(response){
                     alert("Error while updating resume, Please retry");
                 },
-                complete: function(response){
-                    if(response.status)
+                complete: function(result){
+                    var rsp =  $.parseJSON(result.responseText);
+                    if(rsp.status)
                     {
                         alert("Resume Updated successfully");
+                        $('#upload-file-info').html('');
+                        $("#error_id").html(rsp.msg.non_field_errors).hide();
+                        window.location.reload();
+                    }
+                    else if(rsp.status == false)
+                    {
+                        $("#error_id").html(rsp.msg.non_field_errors).show();
                     }
                     else
                     {
-                        alert("Resume not Updated");
+                        alert('Resume is not updated')
                     }
                 }
             });
         },
-        highlight:function(el){
-            switch(el.type)
-            {   
-                default:
-                    $(el).addClass('redborder');
-                    break;
-            }
-        },
-        unhighlight:function(el){
-            switch(el.type)
+        // highlight:function(el, error){
+        //     switch(el.type)
+        //     {   
+        //         default:
+        //             error.appendTo(".error-txt");
+        //             break;
+        //     }
+        // },
+        // unhighlight:function(el){
+        //     switch(el.type)
+        //     {
+        //         default:
+        //             $(el).removeClass('redborder');
+        //             break;
+        //     }
+        // },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "resume")
             {
-                default:
-                    $(el).removeClass('redborder');
-                    break;
-            }
-        },
-    })
+                error.appendTo(".error-txt");
+            }           
+        }
+    });
 
 
 function roundone_edit(form, ajaxurl){

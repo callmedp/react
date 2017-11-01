@@ -20,6 +20,14 @@ class SendMail():
             # cc = ['upenders379@gmail.com']
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
         emsg.content_subtype = "html"
+        if attachments:
+            try:
+                emsg.attach(
+                    filename=attachments[0], content=attachments[1],
+                    mimetype=mimetype)
+            except Exception as e:
+                logging.getLogger('email_log').error(
+                    "%s - %s" % (str(to), str(e)))
         emsg.send()
 
     def render_template(self, template, context):
@@ -32,7 +40,7 @@ class SendMail():
             logging.getLogger('email_log').error("%s - %s" % (str(to), str(e)))
 
         self.base_send_mail(subject=send_dict.get('subject', 'Shinelearning'), body=body, to=to, from_email=send_dict.get('from_email', settings.DEFAULT_FROM_EMAIL), headers=send_dict.get('header', None), cc=send_dict.get('cc_list', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
-                
+
     def send(self, to=None, mail_type=None, data={}):
         send_dict = {}
 
@@ -51,10 +59,6 @@ class SendMail():
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             self.process(to, send_dict, data)
-            
-        elif str(mail_type) == "2":
-            send_dict['subject'] = "Linkedin Profile"
-            send_dict['template'] = 'emailers/payment_confirm.html'
 
         elif mail_type == "PROCESS_MAILERS":
             send_dict['subject'] = data.get('subject', '')

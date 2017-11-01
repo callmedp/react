@@ -1,16 +1,14 @@
 {% load static %}
-{% if products %}
 {% for product in products %}
     <div class="box row mb-15">
         <div class="media">
             <div class="media-left">
-                <a href="javascript:void(0);" class="sigma-pro color1">
+                <a href="javascript:void(0);" class="sigma-pro">
                     <img src="{{ product.pImg}}">
                 </a>
             </div>
             <div class="media-body">
-                <p class="pb-0">
-                    <a href="{{site}}{{product.pURL}}">
+                <p class="pb-0"><a href="{{site}}{{product.pURL}}">
                     <strong>{{product.pNm}}</strong></a>
                 </p>
                 <div class="mb-10 c6">
@@ -44,15 +42,17 @@
         </div><!-- end of media -->
     </div><!-- end of box -->
 {% endfor %}
-
-{% endif %}
 {% if products.has_next %}
-  <input type="hidden" name="page" 
-  value="{{products.next_page_number}}" id="page_id">
-  <input type="hidden" name="slug" value="{{slug}}" id="slug_id">
-  <p class="text-right pb-0">
-      <a href="javascript:void(0);" id="product_load_more" 
-      class="load-more loadmore">
-      <strong>LoadMore</strong></a>
-  </p>
+    <p class="text-right pb-0">
+        <a href="javascript:void(0);" id="product_load_more"
+        class="load-more loadmore">
+        <strong>Load More</strong></a>
+    </p>
+    <div id="prod_load_more">
+        {% if products.has_next %}
+            <input type="hidden" name="page"
+            value="{{products.next_page_number}}" id="page_id">
+            <input type="hidden" name="slug" value="{{category_obj.pk}}" id="slug_id">
+        {% endif %}
+    </div>
 {% endif %}

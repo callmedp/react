@@ -34,7 +34,7 @@ class BaseSearch(object):
               "pPvn", "pCmbs", "pVrs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
               "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb",
               "pPinb", "pPfinb", "pPusb", "pPfusb", "pPaeb", "pPfaeb", "pPgbb", "pPfgbb",
-              "pPc", "pFA", "pNm"]
+              "pPc", "pFA", "pNm", "pBC"]
 
     similar_fields = []
 
@@ -44,8 +44,8 @@ class BaseSearch(object):
         'facet': 'on',
         'facet.mincount': '1',
         'facet.sort': 'index',
-        'qf': 'text pNm^10 pFA^6 pCtg^4 pMtD^2 pMK^2 pCC^2 pAb^1',
-        'pf': 'pNm^10 pFA^4 pCtg^4 pMtD^2 pMK^2 pPCC^2 pAb^1',
+        'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1',
+        'pf': 'pHd^10 pFA^4 pCtg^4 pMtD^2 pMK^2 pPCC^2 pAb^1',
         'pf2': 'pFA^6 pCtg^4 pPCC^2',
         'ps2': 1,
         'tie': 1,
@@ -82,7 +82,7 @@ class BaseSearch(object):
 
     needed_params_options = {}
 
-    sort_mapping = {'sort': {'1': '-pCD', '2': '-pAR'}}
+    sort_mapping = {'sort': {'1': '-pCD', '2': '-pARx'}}
 
     query_param_name = 'q'
 

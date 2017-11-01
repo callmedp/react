@@ -96,6 +96,7 @@ function update_variation_price(req_price, actual_price){
 }
 
 function updateCheckedPrice(this_obj){
+            
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
@@ -142,6 +143,7 @@ function updateCheckedPrice(this_obj){
 }
 
 function updateUnCheckedPrice(this_obj){
+    
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
@@ -212,14 +214,16 @@ function cartScroller() {
   var item = $('.price-box'),
   height = item.height();
   $(window).scroll(function(){
-      if(item.offset().top + height > $('.recomend-product-bg').offset().top - 50) {
-        item.css({'visibility':'hidden'})
-      } else {
-        item.css({'visibility':'visible'});
+      var $recommendProductDiv = $('.recomend-product-bg');
+      if ($recommendProductDiv.length && item.length) {
+          if (item.offset().top + height > $recommendProductDiv.offset().top - 50) {
+              item.css({'visibility': 'hidden'})
+          } else {
+              item.css({'visibility': 'visible'});
+          }
       }
   });
 }
-
 
 $(document).ready(function() {
 
@@ -486,6 +490,9 @@ $(document).ready(function() {
 
 
     $('#add-to-cart').click(function() {
+
+        $('#add-to-cart').attr('disabled', true);
+
         var prod_id = $('#add-to-cart').attr('prod-id');
         // required options ie. for countries and product varification
 
@@ -541,7 +548,6 @@ $(document).ready(function() {
                 data: data,
                 dataType: 'json',
                 success: function(json) {
-
                     if (json.status == 1){
                         var info = 'Added to cart. You have '+ json.cart_count + ' products in cart.'
                         $('#id-cart-message').text(info);
@@ -555,13 +561,16 @@ $(document).ready(function() {
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
                     }
+                    $('#add-to-cart').attr('disabled', false);
 
                 },
                 failure: function(response){
                     alert("Something went wrong, Please try again");
+                    $('#add-to-cart').attr('disabled', false);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong, Please try again");
+                    $('#add-to-cart').attr('disabled', false);
                 }
             });
         }
@@ -646,4 +655,25 @@ $(document).ready(function() {
     });
 
     cartScroller();
+       $('.js-check').each(function(){
+            if($(this).is(':checked')){
+                $(this).closest('.parent-check').addClass('selected');
+            }
+            else{
+                $(this).closest('.parent-check').removeClass('selected');   
+            }
+            }); 
+    
+    $(document).on('change', '.js-check', function() {
+        if($(this).is(':checked')){
+            $(this).closest('.parent-check').addClass('selected');
+
+        }
+        else{
+            $(this).closest('.parent-check').removeClass('selected');   
+        }
+    });
+
+
+
 });

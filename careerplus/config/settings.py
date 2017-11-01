@@ -61,6 +61,7 @@ else:
 INTERNAL_IPS = ('127.0.0.1',)
 
 SITE_DOMAIN = '127.0.0.1:8000'
+MOBILE_SITE_DOMAIN = 'm-learn.shine.com:8007'
 SITE_PROTOCOL = 'http'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
@@ -75,15 +76,15 @@ META_USE_OG_PROPERTIES = True
 META_USE_TWITTER_PROPERTIES = False
 META_USE_GOOGLEPLUS_PROPERTIES = True
 META_FB_TYPE = 'Website'
-META_FB_APPID = '1482454715170390'
-META_FB_PROFILE_ID = '11111111111111'
-META_FB_PUBLISHER = 'https://facebook.com/foo.blag'
-META_FB_AUTHOR_URL = 'https://facebook.com/foo.blag'
+# META_FB_APPID = '1482454715170390'
+META_FB_PROFILE_ID = '282244838633660'
+# META_FB_PUBLISHER = 'https://facebook.com/foo.blag'
+# META_FB_AUTHOR_URL = 'https://facebook.com/foo.blag'
 # META_TWITTER_TYPE = 'summary_large_image'
 # META_TWITTER_SITE = '@FooBlag'
 # META_TWITTER_AUTHOR = '@FooBlag'
 META_GPLUS_TYPE = 'Website'
-META_GPLUS_AUTHOR = '+FooBar'
+# META_GPLUS_AUTHOR = '+FooBar'
 
 ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
 
@@ -141,7 +142,7 @@ ROUNDONE_API_DICT = {
     'interaction_result_url': ROUNDONE_API_BASEURL + "/applicant/view-interaction-result",
     'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
 }
-
+ROUNDONE_PRODUCT_ID = 2129
 
 ####### CCAVENUE SETTINGS ###########################
 CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
@@ -160,9 +161,11 @@ SHINE_API_USER_PWD = 'tarun@123'
 
 
 # Use for CRM Lead
+CRM_LEAD_URL = 'http://172.22.65.32:8003'
+CRM_LEAD_TOKEN = '73f53cf358b94156feb49d034081ed507334e02a'
 SHINECPCRM_DICT = {
-    'base_url': 'http://172.22.65.32:8003',
-    'token': '73f53cf358b94156feb49d034081ed507334e02a',
+    'base_url': CRM_LEAD_URL,
+    'token': CRM_LEAD_TOKEN,
     'psuedo_lead_url': '/api/pseudo-leads/',
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
@@ -198,28 +201,15 @@ EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
 # Linkedin Cridential
-CLIENT_ID = "757gbstpwa6dqp"
-CLIENT_SECRET = "creqezZ0kPJnJWRk"
-REDIRECT_URI = 'https://sumosc.shine.com/linkedin/login'
+CLIENT_ID = "815g8q57sg0q6q"
+CLIENT_SECRET = "NljH5Pdr6e80MTuR"
+REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 STATE = "9899002507upender"
-SCOPE = 'r_emailaddress r_fullprofile r_basicprofile r_contactinfo'
+SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
-VENDOR_GROUP_LIST = ['VENDOR']
-PRODUCT_GROUP_LIST = ['PRODUCT']
-OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
-SEO_GROUP_LIST = ['SEO']
-WRITING_GROUP_LIST = ['WRITER']
 
-# Refund Application level
-OPS_GROUP_LIST = ['OPERATION']
-OPS_HEAD_GROUP_LIST = ['OPS_HEAD']
-BUSINESS_HEAD_GROUP_LIST = ['BUSINESS_HEAD']
-DEPARTMENT_HEAD_GROUP_LIST = ['DEPARTMENT_HEAD']
-FINANCE_GROUP_LIST = ['FINANCE']
-BUSINESS_APPROVAL_LIMIT = 25000  # refund
-REFUND_GROUP_LIST = OPS_GROUP_LIST + OPS_HEAD_GROUP_LIST + BUSINESS_HEAD_GROUP_LIST + DEPARTMENT_HEAD_GROUP_LIST + FINANCE_GROUP_LIST
 
 CELERY_IMPORTS = (
     'emailers.tasks',
@@ -273,6 +263,9 @@ CACHES = {
         }
     },
 }
+
+SESSION_CACHE_ALIAS = 'session'
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
 GOOGLE_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'

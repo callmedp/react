@@ -721,11 +721,12 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         exclude_list = []
         for oi in q1:
             closed_ois = oi.order.orderitems.filter(product__type_flow=12, oi_status=4, no_process=False)
-            if closed_ois.exists():
+            open_ois = oi.order.orderitems.filter(product__type_flow=12, no_process=False)
+            if closed_ois.count() == open_ois.count():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = last_oi_status
-                oi.oi_draft = closed_ois[0].oi_draft
+                oi.oi_resume = closed_ois[0].oi_draft
                 oi.draft_counter += 1
                 oi.draft_added_on = timezone.now()
                 oi.save()
@@ -967,7 +968,7 @@ class ProfileUpdationView(DetailView):
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse(
                 'console:international_profile_update',
-                kwargs={'pk': int(selected_id[0])}))
+                kwargs={'pk': kwargs.get('pk')}))
 
         elif update_sub == "1":
             try:
@@ -1087,3 +1088,41 @@ class ProfileCredentialDownload(View):
                 return HttpResponseForbidden()
         except:
             return HttpResponseForbidden()
+
+
+class CreateDrftObject(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            oi = kwargs.get('oi', '')
+            oi_items = OrderItem.objects.filter(oi=oi)
+            for oi_item in oi_items:
+                order_item = oi_item
+                last_oi_status = order_item.oi_status
+                draft_obj = Draft.objects.create()
+                org_obj = Organization()
+                org_obj.draft = draft_obj
+                org_obj.save()
+
+                edu_obj = Education()
+                edu_obj.draft = draft_obj
+                edu_obj.save()
+
+                quiz_rsp = QuizResponse()
+                quiz_rsp.oi = order_item
+                quiz_rsp.save()
+
+                order_item.counselling_form_status = 49
+                order_item.oio_linkedin = draft_obj
+                order_item.save()
+                order_item.orderitemoperation_set.create(
+                    oi_status=order_item.oi_status,
+                    last_oi_status=last_oi_status,
+                )
+                return HttpResponseRedirect(
+                    reverse(
+                        'console:change-draft',
+                        kwargs={'pk': oi_item.oio_linkedin.pk}))
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "%s - %s" % (str(oi), str(e)))

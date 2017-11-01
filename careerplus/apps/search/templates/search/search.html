@@ -11,7 +11,24 @@
     <link type="text/css" href="{% static '/shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
-{% block title %}Search Result Page - Shine Learning{% endblock title %}
+
+{% if search_type == "func_area" %}
+    {% block django_meta %}
+    {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+    {% endblock canonical_url %}
+{% endif %}
+
+{% block title %}
+{% if search_type == "func_area" %}
+{{func_area_title}}
+{% else %}
+Search Result Page - Shine Learning
+{% endif %}
+{% endblock title %}
 
 {% block main_container %}
     {% block page_heading %}
@@ -26,20 +43,20 @@
                 {% block product_header %}
                     <div class="search-caption">
                         {% if search_type == 'recommended' %}
-                        <div class="home-advanced-search">
-                            <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
-                                {% csrf_token %}
-                                <div class="form-group advanced_functional">
-                                    <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">
-                                    <span class="error-txt" style="display:block;color:red"></span>
-                                </div>
-                                <div class="form-group form-group1">
-                                    <input class="" value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">
-                                    <span class="error-txt" style="display: block;color:red"></span>
-                                </div>
-                                <button type="submit" class="find-jobs-btn btn js_advance_search"></button>
-                            </form>
-                        </div>
+{#                        <div class="home-advanced-search">#}
+{#                            <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">#}
+{#                                {% csrf_token %}#}
+{#                                <div class="form-group advanced_functional">#}
+{#                                    <input class="" value="{{ recmnd_func_area }}" name="area" type="text"  id="id_area">#}
+{#                                    <span class="error-txt" style="display:block;color:red"></span>#}
+{#                                </div>#}
+{#                                <div class="form-group form-group1">#}
+{#                                    <input class="" value="{{ recmnd_skills }}" name="skills" type="text"  id="id_skills">#}
+{#                                    <span class="error-txt" style="display: block;color:red"></span>#}
+{#                                </div>#}
+{#                                <button type="submit" class="find-jobs-btn btn js_advance_search"></button>#}
+{#                            </form>#}
+{#                        </div>#}
                         {% elif search_type == 'simple' %}
                         <div class="search-box">
                             <form class="form-inline" id="search_form" data-role="form">
@@ -52,7 +69,7 @@
                             </form>
                         </div>
                         {% elif search_type == 'func_area' %}
-                            <h1>{{ func_area_name|title }} Courses</h1>
+                            <h1>{{ func_area_name|title }}</h1>
                         {% endif %}
                     </div>
                 {% endblock product_header %}

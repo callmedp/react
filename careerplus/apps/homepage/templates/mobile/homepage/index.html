@@ -12,6 +12,14 @@
     {% endcompress %}
 {% endblock css_section %}
 
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+{% endblock canonical_url %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{% endblock django_meta %}
+
 {% block container %}
     
 <div class="body-wrapper">
@@ -41,8 +49,13 @@
         <!-- search tab container starts here -->
         <div class="tab-search">
           <ul class="tabs">
+            {% comment %}
+            
             <li><a href="javascript:void(0)" class="current" data-tab="tab-1">Search</a></li>
+                
             <li><a href="javascript:void(0)" data-tab="tab-2">Advanced Search</a></li>
+            {% endcomment %}
+            
           </ul>
 
         <!-- Tab content Satrts here -->
@@ -57,6 +70,8 @@
         </div><!-- Tab content ends here -->
 
         <!-- Tab content Satrts here -->
+        {% comment %}
+            
         <div id="tab-2" class="tab-content row">
           <div class="custom-advnaced-search">
               <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
@@ -72,6 +87,8 @@
         </div>
         <div class="clearfix"></div>   
         </div><!-- Tab content ends here -->
+        {% endcomment %}
+        
       </div><!-- search Tab container -->
      
 
@@ -92,8 +109,11 @@
                                     <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
-                                        <sup class="fill-star"></sup>
+                                        {% if product.pRC %}<sup class="fill-star"></sup>
                                         <strong>{{product.pARx|floatformat}}</strong>/5
+                                        {% else %}
+                                        {{ product.pBC|default:"10" }} people bought
+                                        {% endif %}
                                     </div><!-- end of star rating -->
                                     <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
                                     
@@ -141,9 +161,9 @@
         <p class="c6 mb-10">Browse the most popular and new courses!</p>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'it-software-certification' 5 %}#courses1">
+                <a href="/courses/banking-and-finance/20/#courses1">
                     <div class="media-body">
-                        <p class="title">Banking &amp; Finance</p>
+                        <p class="title">Finance</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
@@ -154,7 +174,7 @@
             </div>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'operations' 5 %}#courses2">
+                <a href="/courses/operation-management/19/#courses2">
                     <div class="media-body">
                         <p class="title">Operations</p>
                     </div>                
@@ -167,7 +187,7 @@
             </div>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'finance' 5 %}#courses3">
+                <a href="/courses/it-information-technology/it-language/80/#courses3">
                     <div class="media-body">
                         <p class="title">Information Technology</p>
                     </div>                
@@ -180,7 +200,7 @@
             </div>
             
             <div class="media">
-                <a href="{% url 'skillpage:func_area_results' 'human-resource' 5 %}#courses4">
+                <a href="/courses/hr-human-resource/25/#courses4">
                     <div class="media-body">
                         <p class="title">Human Resources</p>
                     </div>                
@@ -247,7 +267,7 @@
     <div class="text-center how-it-works mb-20">
         <h2>How it Works</h2>
         <ul>
-            <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" class="img-responsive"></figure> Explore 600+ courses with reviews and ratings from fellow learners</li>
+            <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
             <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}" class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
             <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
         </ul>

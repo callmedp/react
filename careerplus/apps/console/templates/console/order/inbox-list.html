@@ -260,7 +260,7 @@
 
                        {% if perms.order.can_view_extra_field_inbox %}
                            
-                             <td> {% if obj.oi_resume %}<a href="{{obj.oi_resume.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a>{% endif %}</td>
+                             <td> {% if obj.oi_resume %}<a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a>{% endif %}</td>
                            <td>
                             <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                                 {{draft_form.file}}

@@ -12,14 +12,28 @@ from search.helpers import get_recommendations
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
 from geolocation.models import Country
+from meta.views import MetadataMixin
 
 from .models import TopTrending, Testimonial
 
 redis_conn = get_redis_connection("search_lookup")
 
 
-class HomePageView(TemplateView):
+class HomePageView(TemplateView, MetadataMixin):
     template_name = 'homepage/index.html'
+    use_title_tag = False
+    use_og = True
+    use_twitter = False
+    
+    def get_meta_title(self, context):
+        return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
+
+    def get_meta_description(self, context):
+        return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
+    
+    def get_meta_url(self, context):
+        return 'https://learning.shine.com'
+        
 
     def get_job_assistance_services(self):
         job_services = []
@@ -57,7 +71,7 @@ class HomePageView(TemplateView):
         else:
             show_pcourses = True
         if show_pcourses:
-            pcourses = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:9]
+            pcourses = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm pBC pRC').order_by('-pBC')[:9]
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']
@@ -84,7 +98,7 @@ class HomePageView(TemplateView):
         return {"testimonials": testimonials}
 
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
+        context = super(HomePageView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id')
         candidate_detail = None
         session_fa = self.request.session.get('func_area')
@@ -94,7 +108,7 @@ class HomePageView(TemplateView):
             if candidate_id:
                 candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
                 if candidate_detail:
-                    func_area = candidate_detail.get('jobs')[0].get("sub_field", "") \
+                    func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
                         if len(candidate_detail.get('jobs', [])) else ''
                     func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
                     if func_area_obj:
@@ -131,6 +145,7 @@ class HomePageView(TemplateView):
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         context.update(self.get_testimonials())
+        context['meta'] = self.get_meta()
         return context
 
 

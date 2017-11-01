@@ -24,6 +24,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+  text-shadow: none;
 }
 @media (max-width: 991px) {
   .home-header .carousel-caption {
@@ -153,6 +154,9 @@ body {
   width: 600px;
   vertical-align: top;
 }
+.home-search-box .home-search .form-group input::placeholder {
+  color: #999;
+}
 .home-search-box .home-advanced-search {
   position: relative;
   width: 1000px;
@@ -174,6 +178,9 @@ body {
     width: 380px;
   }
 }
+.home-search-box .home-advanced-search .form-group input::placeholder {
+  color: #999;
+}
 @media (max-width: 991px) {
   .home-search-box .home-advanced-search .form-group input {
     padding: 10px 5px;
@@ -192,7 +199,7 @@ body {
 }
 .home-search-box .find-jobs-btn {
   border-radius: 5px;
-  height: 64px;
+  height: 62px;
   width: 65px;
   padding: 0;
   text-transform: uppercase;
@@ -201,6 +208,7 @@ body {
   position: relative;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
   vertical-align: top;
+  margin-top: 1px;
 }
 .home-search-box .find-jobs-btn:after {
   content: '';
@@ -392,7 +400,7 @@ body {
   color: #3f5f94;
   font-size: 15px;
   font-weight: 600;
-  line-height: 18px;
+  line-height: 19px;
 }
 .job-assistance .listing li .rating-review-box {
   display: inline-block;

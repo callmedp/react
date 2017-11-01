@@ -5,7 +5,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.conf import settings
 from celery.decorators import task
-from .models import AdServerLead
+from .models import AdServerLead, UserQuries
 
 
 @task(name="post_psedu_lead")
@@ -13,7 +13,7 @@ def post_psedu_lead(query_dict):
     headers = {}
     lead = {}
     headers['content-type'] = 'application/json'
-    headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')
+    headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')[0]
     post_url = settings.SHINECPCRM_DICT.get('base_url') + \
         settings.SHINECPCRM_DICT.get('psuedo_lead_url')
 
@@ -27,18 +27,21 @@ def post_psedu_lead(query_dict):
     lead["product"] = str(query_dict.get('product', ''))
     lead["medium"] = int(query_dict.get('medium', 0))
     try:
-        rsp = requests.post(
-            post_url,
-            data=json.dumps(lead),
-            headers=headers,
-            timeout=settings.SHINECPCRM_DICT.get('timeout'))
-        if rsp.status_code == 201:
-            logging.getLogger('error_log').error("%s" % str(rsp.json()))
+        usr_query = UserQuries.objects.get(
+            id=query_dict.get('queryid', ''))
+        if not usr_query.lead_created:
+            rsp = requests.post(
+                post_url, data=json.dumps(lead),
+                headers=headers,
+                timeout=settings.SHINECPCRM_DICT.get('timeout'))
+            if rsp.status_code == 201:
+                usr_query.lead_created = True
+                usr_query.save()
+                logging.getLogger('error_log').error("%s" % str(rsp.json()))
+            elif rsp.status_code != 201:
+                logging.getLogger('error_log').error("%s" % str(rsp.json()))
     except Exception as e:
         logging.getLogger('error_log').error("%s" % str(e))
-    else:
-        if rsp.status_code != 201:
-            logging.getLogger('error_log').error("%s" % str(rsp.json()))
 
 
 @task()

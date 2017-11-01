@@ -1,6 +1,10 @@
 import json
-import logging
 import mimetypes
+import logging
+import time
+import os
+import mimetypes
+from random import random
 
 from wsgiref.util import FileWrapper
 
@@ -70,8 +74,7 @@ class DashboardView(TemplateView):
         })
         rcourses = get_recommendations(
             self.request.session.get('func_area', None),
-            self.request.session.get('skills', None),
-            SQS().only('pTt pURL pHd pAR pNJ pImA pImg pBC'))
+            self.request.session.get('skills', None))
 
         if rcourses:
             rcourses = rcourses[:6]
@@ -93,14 +96,33 @@ class DashboardView(TemplateView):
                 if response.status_code == 200:
                     default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
                     file_name = request.session.get('shine_resume_name', default_name)
-                    file_name = file_name + '.' + resume_extn
+                    # file_name = file_name + '.' + resume_extn
 
                     order_items = OrderItem.objects.filter(
                         order__status=1,
                         id__in=list_ids, order__candidate_id=candidate_id,
                         no_process=False, oi_status=2)
+
                     for obj in order_items:
-                        obj.oi_resume.save(file_name, ContentFile(response.content))
+                        try:
+                            order = obj.order
+                            file = ContentFile(response.content)
+                            file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
+                                + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
+                            full_path = '%s/' % str(order.pk)
+                            if not os.path.exists(settings.RESUME_DIR + full_path):
+                                os.makedirs(settings.RESUME_DIR +  full_path)
+                            dest = open(
+                                settings.RESUME_DIR + full_path + file_name, 'wb')
+                            for chunk in file.chunks():
+                                dest.write(chunk)
+                            dest.close()
+                        except Exception as e:
+                            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                            continue
+
+                        # obj.oi_resume.save(file_name, ContentFile(response.content))
+                        obj.oi_resume = full_path + file_name
                         last_oi_status = obj.oi_status
                         obj.oi_status = 5
                         obj.last_oi_status = 13
@@ -386,6 +408,7 @@ class DashboardFeedbackView(TemplateView):
 
 
 class DashboardRejectService(View):
+    
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
         oi_pk = request.POST.get('oi_pk', None)
@@ -399,6 +422,27 @@ class DashboardRejectService(View):
                 oi = OrderItem.objects.get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     if oi.oi_status in [24, 46]:
+                        if reject_file:    
+                            try:
+                                order = oi.order
+                                file = reject_file
+                                filename = os.path.splitext(file.name)
+                                extention = filename[len(filename)-1] if len(
+                                    filename) > 1 else ''
+                                file_name = 'draftreject_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
+                                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                                full_path = '%s/' % str(order.pk)
+                                if not os.path.exists(settings.RESUME_DIR + full_path):
+                                    os.makedirs(settings.RESUME_DIR +  full_path)
+                                dest = open(
+                                    settings.RESUME_DIR + full_path + file_name, 'wb')
+                                for chunk in file.chunks():
+                                    dest.write(chunk)
+                                dest.close()
+                                reject_file = full_path + file_name 
+                            except Exception as e:
+                                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                                raise 
                         last_oi_status = oi.oi_status
                         if oi.oi_status == 24:
                             oi.oi_status = 26
@@ -592,27 +636,27 @@ class DashboardNotificationBoxView(TemplateView):
         return context
 
 
-class DashboardInvoiceDownload(View):
+# class DashboardInvoiceDownload(View):
 
-    def post(self, request, *args, **kwargs):
-        candidate_id = request.session.get('candidate_id', None)
-        email = request.session.get('email', None)
-        try:
-            order_pk = request.POST.get('order_pk', None)
-            order = Order.objects.get(pk=order_pk)
-            if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
-                if order.invoice:
-                    invoice = order.invoice
-                else:
-                    order = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                    invoice = order.invoice
-                filename = invoice.name.split('/')[-1]
-                response = HttpResponse(invoice, content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename=%s' % filename
-                return response
-        except:
-            raise Exception("Invoice not found.")
-        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
+#     def post(self, request, *args, **kwargs):
+#         candidate_id = request.session.get('candidate_id', None)
+#         email = request.session.get('email', None)
+#         try:
+#             order_pk = request.POST.get('order_pk', None)
+#             order = Order.objects.get(pk=order_pk)
+#             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
+#                 if order.invoice:
+#                     invoice = order.invoice
+#                 else:
+#                     order = InvoiceGenerate().save_order_invoice_pdf(order=order)
+#                     invoice = order.invoice
+#                 filename = invoice.name.split('/')[-1]
+#                 response = HttpResponse(invoice, content_type='application/pdf')
+#                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
+#                 return response
+#         except:
+#             raise Exception("Invoice not found.")
+#         return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
 class DownloadQuestionnaireView(View):
@@ -659,3 +703,54 @@ class DashboardMyWalletView(TemplateView):
             rcourses = rcourses[:6]
             context['recommended_products'] = rcourses
         return context
+
+
+class DashboardInvoiceDownload(View):
+
+    def post(self, request, *args, **kwargs):
+        candidate_id = request.session.get('candidate_id', None)
+        email = request.session.get('email', None)
+        try:
+            order_pk = request.POST.get('order_pk', None)
+            order = Order.objects.get(pk=order_pk)
+            if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
+                if order.invoice:
+                    invoice = order.invoice
+                else:
+                    order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                if invoice:  
+                    file_path = settings.INVOICE_DIR + invoice.name
+                    fsock = FileWrapper(open(file_path, 'rb'))
+                    filename = invoice.name.split('/')[-1]
+                    response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
+                    response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                    return response
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+                        
+        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
+
+
+class DashboardResumeDownload(View):
+
+    def get(self, request, *args, **kwargs):
+        candidate_id = request.session.get('candidate_id', None)
+        email = request.session.get('email', None)
+            
+        try:
+            order_pk = kwargs.get('pk', None)
+            order = Order.objects.get(pk=order_pk)
+            if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
+                file = request.GET.get('path', None)
+                if file:  
+                    file_path = settings.RESUME_DIR + file
+                    fsock = FileWrapper(open(file_path, 'rb'))
+                    filename = file.split('/')[-1]
+                    response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
+                    response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                    return response
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+                        
+        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
+

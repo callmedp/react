@@ -124,19 +124,18 @@ margin-bottom: 7px;
   margin-right:10px; 
 }
 
-.followus li span {
+.followus li a {
   width: 34px;
   height: 25px;
   display: block;
   margin:-10px auto; 
-  cursor: pointer;
 
 }
 
 .followus li.face { background: #3b5896; }
-.followus li.face span { background:  url(../../images/sprite.png)  -183px -441px;
+.followus li.face a { background:  url(../../images/sprite.png)  -183px -441px;
  }
 
 .followus li.google { background: #f34a38; }
-.followus li.google span { background:  url(../../images/sprite.png)  -218px -441px;
+.followus li.google a { background:  url(../../images/sprite.png)  -218px -441px;
  }

@@ -30,6 +30,7 @@ from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView
 from users.views import LinkedinCallbackView
+from search.views import FuncAreaPageView
 from blog import views as blog_view
 
 from django.conf.urls import (
@@ -84,6 +85,8 @@ urlpatterns += [
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
+    url(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
+        FuncAreaPageView.as_view(), name='func_area_results'),
     
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
@@ -101,7 +104,6 @@ urlpatterns += [
     url(r'^user/', include('users.urls', namespace='users')),
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^article/', include('blog.urls', namespace='blog')),
-    url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^cart/', include('cart.urls', namespace='cart')),
     url(r'^order/', include('order.urls', namespace='order')),
     url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
@@ -159,3 +161,12 @@ if settings.DEBUG:
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+
+
+import logging
+from sorl.thumbnail.log import ThumbnailLogHandler
+
+
+handler = ThumbnailLogHandler()
+handler.setLevel(logging.ERROR)
+logging.getLogger('sorl.thumbnail').addHandler(handler)

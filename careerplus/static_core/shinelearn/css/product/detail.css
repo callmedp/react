@@ -252,12 +252,12 @@ header {
 }
 .study-mode tbody tr:hover, .study-mode tbody tr:focus, .study-mode tbody tr:visited, .study-mode tbody tr.selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   border: none;
 }
 .study-mode tbody tr:hover .selected, .study-mode tbody tr:focus .selected, .study-mode tbody tr:visited .selected, .study-mode tbody tr.selected .selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   border: none;
 }
 .study-mode tbody tr td {
@@ -297,8 +297,13 @@ header {
 }
 .select-product ul li:hover, .select-product ul li:focus, .select-product ul li:visited, .select-product ul li.selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: visible;
+}
+.select-product ul li:hover .selected, .select-product ul li:focus .selected, .select-product ul li:visited .selected, .select-product ul li.selected .selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 .select-product ul li strong {
   font-size: 15px;
@@ -337,8 +342,18 @@ header {
 }
 .select-country ul li:hover, .select-country ul li:focus, .select-country ul li:visited .select-country ul li.selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: visible;
+}
+.select-country ul li:hover .selected, .select-country ul li:focus .selected, .select-country ul li:visited .select-country ul li.selected .selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+.select-country ul li.selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 .select-country ul li label {
   font-weight: 300;
@@ -369,7 +384,7 @@ header {
   padding: 10px 15px;
   font-size: 11px;
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   color: #999;
   margin: 5px;
 }
@@ -381,6 +396,7 @@ header {
 
 .program-structure .panel-group {
   padding-left: 0;
+  list-style-type: none;
 }
 .program-structure .panel-body strong, .program-structure .panel-body b {
   font-weight: 600;
@@ -473,7 +489,7 @@ header {
 }
 
 .reviews .write-review {
-  top: 75px;
+  top: 145px;
   right: 15px;
 }
 
@@ -559,6 +575,11 @@ header {
   color: #333;
   font-weight: 400;
   line-height: 36px;
+}
+.enrol-cart strong small {
+  font-size: 12px;
+  color: #999;
+  font-weight: 400;
 }
 .enrol-cart strike {
   font-size: 15px;
@@ -1101,7 +1122,7 @@ header {
 
 .scroll {
   margin-top: -50px;
-  padding-top: 60px;
+  padding-top: 50px;
 }
 
 /*sticky menu css*/
@@ -1136,12 +1157,12 @@ header {
 }
 
 #faq:before, #review:before, #delivery:before, #programs:before, #get:before, #course:before {
-  padding-top: 60px;
+  padding-top: 50px;
   display: block;
   content: "";
 }
 
-.call1 h1 {
+.call1 .modal-title {
   font-size: 20px;
   color: #666;
   display: block;

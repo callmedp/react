@@ -25,6 +25,7 @@ function paginate() {
         var $this = $(this),
             $pageNo = $('#id_page'),
             $formFacets = $('#form_facets');
+        ga('send', 'pageview');
         $pageNo.val(parseInt($pageNo.val()) + 1);
         var formData = $formFacets.serialize();
         
@@ -84,7 +85,7 @@ var Scroller = function(itm,className) {
 
         if(windowTop >= parentDivTop && windowTop < (that.item.closest('.cls_scroller_parent').height() + parentDivTop)) {
           that.item.css({
-            'top': (windowTop - parentDivTop) + 75
+            'top': (windowTop - parentDivTop) + 53
           })
           that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
 

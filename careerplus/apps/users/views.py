@@ -192,7 +192,9 @@ class LogoutApiView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         request.session.flush()
-        return HttpResponseRedirect(reverse('homepage'))
+        response = HttpResponseRedirect(reverse('homepage'))
+        response.delete_cookie('_em_', domain='.shine.com')
+        return response
 
 
 class DownloadBoosterResume(View):
@@ -288,7 +290,11 @@ class ForgotHtmlView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ForgotHtmlView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
+        next_url = self.request.META.get('HTTP_REFERER', None)
+        if next_url:
+            next_url = next_url + '?email=' + self.request.GET.get('email', '')
         context.update({
+            'next_url': next_url,
             'messages': alert,
             "reset_form": PasswordResetRequestForm()
         })
@@ -298,6 +304,7 @@ class ForgotHtmlView(TemplateView):
 class ForgotPasswordEmailView(View):
 
     def post(self, request, *args, **kwargs):
+
         if request.is_ajax():
             email = request.POST.get('email')
             user_exist = RegistrationLoginApi.check_email_exist(email)
@@ -308,11 +315,11 @@ class ForgotPasswordEmailView(View):
                 'email': email,
                 'site': 'http://' + settings.SITE_DOMAIN + settings.STATIC_URL
             })
-
+            next1 = request.POST.get('next', '')
             if user_exist.get('exists', ''):
                 # task call for email
                 send_email_task.delay(to_emails, mail_type, email_dict, status=None, oi=None)
-                return HttpResponse(json.dumps({'exist': True}), content_type="application/json")
+                return HttpResponse(json.dumps({'exist': True, 'next': next1}), content_type="application/json")
 
             elif not user_exist.get('exists', ''):
                 return HttpResponse(json.dumps({'notexist': True}), content_type="application/json")

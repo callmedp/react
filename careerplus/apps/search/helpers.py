@@ -96,8 +96,11 @@ def clean_list_fields(param):
             val = set(val)
             cln_list = []
             for v in list(val - invalid_keyword):
+                if key == 'fcert' and v == 'true':
+                    v = '1'
                 cln_list.append("{}{}".format(prefix, v))
             param.setlist(key, cln_list)
+
     return param
 
 
@@ -358,8 +361,9 @@ def get_recommendations(func_area, skills, results=None):
     ids += list(func_area_prods.difference(products_fa_and_skill))
     if ids:
         if not results:
-            results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm')
+            results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm pBC pRC')
         results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
     else:
         results = EmptySearchQuerySet()
     return results
+

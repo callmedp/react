@@ -141,10 +141,10 @@
               {% for form in org_formset.forms %}
                 <div class="item form-group org-add organization_set">
                 {{ form.as_p }}
-                <p style=""><a class="org-delete" href="#">Delete</a></p>
+                <p style=""><a class="org-delete" href="javascript:void(0)">Delete</a></p>
                 </div>
               {% endfor %}
-              <p><a id="org-add" href="#">Add Another</a></p>     
+              <p><a id="org-add" href="javascript:void(0)">Add Another</a></p>     
             </div>
           </div>
           <div class="x_panel">
@@ -165,7 +165,7 @@
                 <p style=""><a class="edu-delete" href="#">Delete</a></p>
                 </div>
               {% endfor %}
-              <p><a id="edu-add" href="#">Add Another</a></p>
+              <p><a id="edu-add" href="javascript:void(0)">Add Another</a></p>
             </div>
           </div>
           <div class="form-group">
@@ -318,6 +318,8 @@
       $(row).children().not(':last').children().each(function() {
         updateElementIndex(this, prefix, formCount);
         $(this).val('');
+        $(this).prop('checked', false);
+        $(this).prop('disabled', false);
       });
 
       $(row).find('.org-delete').click(function() {
@@ -359,8 +361,9 @@
         $(row).children().removeClass('error');
         $(row).children().children().each(function() {
           updateElementIndex(this, prefix, formCount);
-          if ( $(this).attr('type') == 'text' )
-            $(this).val('');
+          $(this).val('');
+          $(this).attr('checked', false);
+          $(this).attr("disabled", false);
         });
         // Add an event handler for the delete item/form link 
         $(row).find('.edu-delete').click(function() {
@@ -407,6 +410,15 @@
 
     $(".edu-delete").click(function() {
       return eduDeleteForm(this, 'from_education');
+    });
+    $('.current_org').click(function() {
+      $('.work_to').attr('disabled', this.checked)
+       $('.work_to').prop('required',false);
+    });
+
+    $('.current_edu').click(function() {
+      $('.study_to').attr('disabled', this.checked)
+       $('.study_to').prop('required',false);
     });
   });
 </script>

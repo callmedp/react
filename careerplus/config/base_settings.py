@@ -16,6 +16,9 @@ import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+
+
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 
@@ -108,6 +111,7 @@ MIDDLEWARE = [
     'core.middleware.UpgradedMobileDetectionMiddleware',
     'core.middleware.UpgradedSetFlavourMiddleware',
     'core.middleware.LearningShineMiddleware',
+    'core.middleware.LoginMiddleware',
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -139,6 +143,8 @@ TEMPLATES = [
 
 # For django-mobile compatiility
 TEMPLATE_LOADERS = TEMPLATES[0]['OPTIONS']['loaders']
+DEFAULT_MOBILE_FLAVOUR = 'mobile'
+FLAVOURS = ('full', 'mobile')
 
 WSGI_APPLICATION = 'careerplus.wsgi.application'
 
@@ -191,6 +197,10 @@ STATIC_URL = '/media/static/'
 
 DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
 DOWNLOAD_URL = '/download/'
+
+INVOICE_DIR = os.path.join(BASE_DIR, 'media/invoice/')
+RESUME_DIR = os.path.join(BASE_DIR, 'media/resume/')
+
 
 REST_FRAMEWORK = {
     # authentication permission
@@ -477,3 +487,19 @@ G_RECAPTCHA_SECRET = '6LctaRcUAAAAAA93epQV2CjvCHIcKbvlu0ui2K28'
 
 ###### SSL Settings ##########
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# group list
+VENDOR_GROUP_LIST = ['VENDOR', 'STUDY_MATE']
+PRODUCT_GROUP_LIST = ['PRODUCT']
+OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
+SEO_GROUP_LIST = ['SEO']
+WRITING_GROUP_LIST = ['WRITER', 'WRITER_HEAD']
+
+# Refund Application level
+OPS_GROUP_LIST = ['OPERATION']
+OPS_HEAD_GROUP_LIST = ['OPS_HEAD']
+BUSINESS_HEAD_GROUP_LIST = ['BUSINESS_HEAD']
+DEPARTMENT_HEAD_GROUP_LIST = ['DEPARTMENT_HEAD']
+FINANCE_GROUP_LIST = ['FINANCE']
+BUSINESS_APPROVAL_LIMIT = 25000  # refund
+REFUND_GROUP_LIST = OPS_GROUP_LIST + OPS_HEAD_GROUP_LIST + BUSINESS_HEAD_GROUP_LIST + DEPARTMENT_HEAD_GROUP_LIST + FINANCE_GROUP_LIST

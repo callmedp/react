@@ -46,7 +46,7 @@
 <div class="body-wrapper">
     <div class="content-box pt-0">
         <div class="box row">
-            <h2 class="mb-5">{{oi.product.heading}}{% if oi.product.get_exp_db %}
+            <h2 class="mb-5">{{oi.product.get_name}}{% if oi.product.get_exp_db %}
              - {{oi.product.get_exp_db}}
             {% endif %}</h2>
             <p class="pb-0 c6">Order ID : {{oi.order.number}}</p>
