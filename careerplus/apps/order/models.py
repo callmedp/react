@@ -498,7 +498,7 @@ class EmailOrderItemOperation(AbstractAutoDate):
         ordering = ['-created']
 
     def __str__(self):
-        return str(self.oi) + '-' + self.to_email
+        return str(self.oi) + '-' + str(self.to_email)
 
 
 class SmsOrderItemOperation(AbstractAutoDate):
@@ -513,7 +513,7 @@ class SmsOrderItemOperation(AbstractAutoDate):
         ordering = ['-created']
 
     def __str__(self):
-        return str(self.oi) + '-' + self.to_mobile
+        return str(self.oi) + '-' + str(self.to_mobile)
 
 
 class CouponOrder(AbstractAutoDate):

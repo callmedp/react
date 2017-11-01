@@ -115,7 +115,7 @@ class InternationalProfileCredentialAdmin(admin.ModelAdmin):
 
 
 class EmailOrderItemOperationAdmin(admin.ModelAdmin):
-    list_display = ['oi', 'email_oi_status', 'draft_counter']
+    list_display = ['oi', 'email_oi_status', 'draft_counter', 'to_email', 'status']
     search_fields = ('oi__id',)
 
 admin.site.register(Order, OrderAdmin)

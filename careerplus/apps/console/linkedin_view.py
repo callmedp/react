@@ -721,11 +721,12 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         exclude_list = []
         for oi in q1:
             closed_ois = oi.order.orderitems.filter(product__type_flow=12, oi_status=4, no_process=False)
-            if closed_ois.exists():
+            open_ois = oi.order.orderitems.filter(product__type_flow=12, no_process=False)
+            if closed_ois.count() == open_ois.count():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = last_oi_status
-                oi.oi_draft = closed_ois[0].oi_draft
+                oi.oi_resume = closed_ois[0].oi_draft
                 oi.draft_counter += 1
                 oi.draft_added_on = timezone.now()
                 oi.save()
