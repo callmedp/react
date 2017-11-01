@@ -26,7 +26,7 @@ class Command(BaseCommand):
         sql = """
             SELECT coupon_coupon.code, coupon_coupon.user, coupon_coupon.discount, coupon_coupon.flat_discount, coupon_coupon.added_on, coupon_coupon.valid_from, coupon_coupon.valid_to, coupon_coupon.description, coupon_coupon.consumed_by_id, coupon_coupon.for_user_id, coupon_coupon.type, coupon_coupon.active, coupon_coupon.max_allowed_usage, coupon_coupon.usage_count, coupon_coupon.product_id, coupon_coupon.productvariation_id, coupon_coupon.category_id, coupon_coupon.multipleproduct_ids, coupon_coupon.for_order_id 
             FROM coupon_coupon 
-            WHERE (coupon_coupon.active = True  AND coupon_coupon.valid_to >= '2017-10-15 00:00:00'  AND coupon_coupon.valid_from <= '2017-10-15 00:00:00' ) ORDER BY coupon_coupon.added_on DESC
+            WHERE (coupon_coupon.active = True  AND coupon_coupon.valid_to >= '2017-11-01 00:00:00'  AND coupon_coupon.valid_from <= '2017-10-15 00:00:00' ) ORDER BY coupon_coupon.added_on DESC
             """
         cursor.execute(sql,{})
 
