@@ -216,7 +216,9 @@ def draft_reminder_mail():
                     })
 
                     try:
-                        SendMail().send(to_emails, mail_type, email_dict)
+                        send_email_task.delay(
+                            to_emails, mail_type, email_dict,
+                            status=9, oi=oi.pk)
                         print(str(count) + ' Service closed Email Sent')
                     except Exception as e:
                         logging.getLogger('email_log').error(

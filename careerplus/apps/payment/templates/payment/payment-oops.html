@@ -1,9 +1,17 @@
 {% extends "basic/base1.html" %}
 {% load static %}
+{% load static humanize compress %}
 
 {% block title %}
-    Shinelearning - Order Status
+    Oops Payment - Order Status
 {% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
 
 
 {% block container %}
