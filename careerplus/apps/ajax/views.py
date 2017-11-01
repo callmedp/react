@@ -328,6 +328,20 @@ class ApproveByAdminDraft(View):
 
                         # sync resume on shine
                         upload_resume_to_shine(oi_pk=obj.pk)
+                        to_emails = [obj.order.email]
+                        mail_type = 'WRITING_SERVICE_CLOSED'
+                        email_dict = {}
+                        email_dict.update({
+                            "subject": 'Closing your ' + obj.product.name + ' service',
+                            "username": obj.order.first_name,
+                            'draft_added': obj.draft_added_on,
+                            'mobile': obj.order.mobile,
+                            'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                                settings.SITE_DOMAIN, token.decode()),
+                        })
+                        send_email_task.delay(
+                            to_emails, mail_type, email_dict, status=9,
+                            oi=obj.pk)
                     else:
                         obj.orderitemoperation_set.create(
                             oi_draft=obj.oi_draft,
@@ -338,8 +352,8 @@ class ApproveByAdminDraft(View):
                             added_by=request.user)
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
-                
-            return HttpResponse(json.dumps(data), content_type="application/json")
+            return HttpResponse(
+                json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
 
