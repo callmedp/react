@@ -126,9 +126,9 @@ def draft_reminder_mail_for_linkedin():
                 send_email_task.delay(
                     to_emails, mail_type, email_dict, status=25, oi=oi.pk)
                 try:
-                    urlshortener = create_short_url(login_url=data)
+                    urlshortener = create_short_url(login_url=email_dict)
                     data.update({'url': urlshortener.get('url')})
-                    SendSMS().send(sms_type=mail_type, data=data)
+                    SendSMS().send(sms_type=mail_type, data=email_dict)
                     print(str(count) + ' linekdin Service closed SMS & Email Sent')
                 except Exception as e:
                     logging.getLogger('sms_log').error(
@@ -214,7 +214,7 @@ def draft_reminder_mail_for_linkedin():
                         "%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
 
                 try:
-                    SendSMS().send(sms_type=mail_type, data=data)
+                    SendSMS().send(sms_type=mail_type, data=email_dict)
                     print(str(count) + ' Service closed SMS Sent')
                 except Exception as e:
                     logging.getLogger('sms_log').error(

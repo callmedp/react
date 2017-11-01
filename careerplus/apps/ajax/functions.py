@@ -18,7 +18,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=22)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=22,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -29,7 +32,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=23)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=23,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -40,7 +46,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=24)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=24,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -52,7 +61,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=142)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=142,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -63,7 +75,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=143)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=143,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -74,7 +89,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=144)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=144,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -86,7 +104,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=152)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=152,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -97,7 +118,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=153)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=153,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -108,7 +132,10 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                 urlshortener = create_short_url(login_url=email_dict)
                 email_dict.update({'url': urlshortener.get('url')})
                 SendSMS().send(sms_type=mail_type, data=email_dict)
-                oi.smsorderitemoperation_set.create(sms_oi_status=154)
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=154,
+                    to_mobile=email_dict.get('mobile'),
+                    status=1)
             except Exception as e:
                 logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
     else:

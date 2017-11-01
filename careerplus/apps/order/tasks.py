@@ -65,7 +65,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=21)
+                                sms_oi_status=21,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -83,7 +85,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=41)
+                                sms_oi_status=41,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -101,7 +105,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=61)
+                                sms_oi_status=61,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error("%s - %s" % (
                                 str(mail_type), str(e)))
@@ -119,7 +125,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=71)
+                                sms_oi_status=71,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -137,7 +145,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=91)
+                                sms_oi_status=91,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -155,7 +165,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=141)
+                                sms_oi_status=141,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -173,7 +185,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=151)
+                                sms_oi_status=151,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -191,7 +205,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=108)
+                                sms_oi_status=108,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -208,7 +224,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=121)
+                                sms_oi_status=121,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -224,7 +242,9 @@ def pending_item_email(pk=None):
                             data.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=131)
+                                sms_oi_status=131,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -264,11 +284,13 @@ def process_mailer(pk=None):
                     'username': oi.order.first_name,
                     'type_flow': oi.product.type_flow,
                     'pk': oi.pk,
+                    'oi': oi,
                     'product_name': oi.product.name,
                     'product_url': oi.product.get_url(),
                     'vendor_name': oi.product.vendor.name,
                     'email': oi.order.email,
                     'candidateid': oi.order.email,
+                    'mobile': oi.order.mobile,
                 })
                 if oi.product.type_flow == 1:
                     data.update({
@@ -281,7 +303,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=25)
+                                sms_oi_status=25,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -297,7 +321,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=44)
+                                sms_oi_status=44,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -313,7 +339,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=64)
+                                sms_oi_status=64,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -329,7 +357,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=74)
+                                sms_oi_status=74,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -344,7 +374,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=145)
+                                sms_oi_status=145,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -360,7 +392,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=155)
+                                sms_oi_status=155,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -376,7 +410,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=94)
+                                sms_oi_status=94,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -387,7 +423,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=161)
+                                sms_oi_status=161,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -398,7 +436,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=171)
+                                sms_oi_status=171,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -414,7 +454,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=105)
+                                sms_oi_status=105,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -429,7 +471,9 @@ def process_mailer(pk=None):
                         try:
                             SendSMS().send(sms_type=mail_type, data=data)
                             oi.smsorderitemoperation_set.create(
-                                sms_oi_status=122)
+                                sms_oi_status=122,
+                                to_mobile=data.get('mobile'),
+                                status=1)
                         except Exception as e:
                             logging.getLogger('sms_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
@@ -473,7 +517,10 @@ def payment_pending_mailer(pk=None):
                     send_email(to_emails, mail_type, data, status=1, oi=oi.pk)
                     try:
                         SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(sms_oi_status=1)
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=1,
+                            to_mobile=data.get('mobile'),
+                            status=1)
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
@@ -542,7 +589,10 @@ def service_initiation(pk=None):
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(sms_oi_status=162)
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=162,
+                            to_mobile=data.get('mobile'),
+                            status=1)
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
@@ -551,7 +601,10 @@ def service_initiation(pk=None):
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(sms_oi_status=172)
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=172,
+                            to_mobile=data.get('mobile'),
+                            status=1)
                     except Exception as e:
                         logging.getLogger('sms_log').error("%s - %s" % (
                             str(sms_type), str(e)))
@@ -560,7 +613,10 @@ def service_initiation(pk=None):
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(sms_oi_status=133)
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=133,
+                            to_mobile=data.get('mobile'),
+                            status=1)
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(sms_type), str(e)))

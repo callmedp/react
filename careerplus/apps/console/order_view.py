@@ -30,6 +30,7 @@ from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
+from order.functions import send_email
 
 from .decorators import (
     Decorate,
@@ -1862,17 +1863,10 @@ class ActionOrderItemView(View):
                         link_title = candidate_data.get('username') if candidate_data.get('username') else candidate_data.get('email')
                         download_link = resumevar
                         recruiter_data.update({
-                            "link_title": link_title,
-                            "download_link": download_link,
+                            link_title: download_link,
                         })
 
                         try:
-                            # send mail to rectuter
-                            if 92 not in email_sets:
-                                mail_type = 'BOOSTER_RECRUITER'
-                                send_email_task.delay(
-                                    to_emails, mail_type, recruiter_data,
-                                    status=92, oi=oi.pk)
                             # send mail to candidate
                             if 93 not in email_sets:
                                 mail_type = 'BOOSTER_CANDIDATE'
@@ -1880,7 +1874,6 @@ class ActionOrderItemView(View):
                                     to_emails, mail_type,
                                     candidate_data, status=93, oi=oi.pk)
 
-                            # send sms to candidate
                             SendSMS().send(
                                 sms_type="BOOSTER_CANDIDATE",
                                 data=candidate_data)
@@ -1901,6 +1894,17 @@ class ActionOrderItemView(View):
                             messages.add_message(request, messages.ERROR, error_message)
                     else:
                         continue
+
+                try:
+                    # send mail to rectuter
+                    recruiters = settings.BOOSTER_RECRUITERS
+                    mail_type = 'BOOSTER_RECRUITER'
+                    if recruiter_data:
+                        send_email_task.delay(recruiters, mail_type, recruiter_data)
+                        for oi in booster_ois:
+                            oi.emailorderitemoperation_set.create(email_oi_status=92)
+                except Exception as e:
+                    logging.getLogger('cron_log').error("%s" % (str(e)))
 
                 success_message = "%s Mail sent Successfully." % (str(mail_send))
                 messages.add_message(request, messages.SUCCESS, success_message)
@@ -1997,7 +2001,7 @@ class ActionOrderItemView(View):
                         last_oi_status=obj.last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
-                    
+
                     # mail to user about writer information
                     profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
                     country_obj = Country.objects.get(pk=profile_obj.object_id)
@@ -2013,11 +2017,12 @@ class ActionOrderItemView(View):
                     })
                     mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
                     if 62 not in email_sets:
-                        send_email_task.delay(to_emails, mail_type, data, status=62, oi=obj.pk)
+                        send_email(to_emails, mail_type, data, status=62, oi=obj.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                        logging.getLogger('sms_log').error(
+                            "%s - %s" % (str(mail_type), str(e)))
 
                 msg = str(approval) + ' orderitems approved.'
                 messages.add_message(request, messages.SUCCESS, msg)
