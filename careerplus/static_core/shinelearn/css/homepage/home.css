@@ -341,6 +341,9 @@ body {
 .our-courses .listing {
   overflow: hidden;
 }
+.our-courses .listing .media .jobs-available strong {
+  margin-left: 0;
+}
 
 .job-assistance {
   padding-top: 60px;
@@ -417,6 +420,7 @@ body {
 .job-assistance .listing li .rating-review-box strong {
   font-weight: 600;
   display: inline-block;
+  margin-left: 0;
 }
 .job-assistance .listing li .rating-review-box .jobs-available {
   font-size: 12px;
@@ -558,6 +562,9 @@ body {
     width: 85px;
     height: 85px;
   }
+}
+.product-carousel-box .product-carousel .listing .media .jobs-available strong {
+  margin-left: 0;
 }
 .product-carousel-box .carousel-control {
   width: 6%;
