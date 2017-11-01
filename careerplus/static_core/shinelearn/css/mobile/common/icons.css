@@ -661,4 +661,11 @@
   display: inline-block;
 }
 
+.icon-payment-failure {
+  width: 47px;
+  height: 40px;
+  background-position: -291px -306px;
+  display: inline-block;
+}
+
 
