@@ -173,7 +173,7 @@ class SendMail():
 
         elif mail_type == "COURSE_CLOSER_MAIL":
             send_dict['subject'] = data.get('subject', "Your service(s) has been initiated")
-            template_name = data.get('template_name', 'course_closer.html')
+            template_name = data.get('template_name', 'course_closure.html')
             send_dict['template'] = 'emailers/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
