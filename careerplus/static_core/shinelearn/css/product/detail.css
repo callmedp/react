@@ -252,12 +252,12 @@ header {
 }
 .study-mode tbody tr:hover, .study-mode tbody tr:focus, .study-mode tbody tr:visited, .study-mode tbody tr.selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   border: none;
 }
 .study-mode tbody tr:hover .selected, .study-mode tbody tr:focus .selected, .study-mode tbody tr:visited .selected, .study-mode tbody tr.selected .selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   border: none;
 }
 .study-mode tbody tr td {
@@ -297,10 +297,14 @@ header {
 }
 .select-product ul li:hover, .select-product ul li:focus, .select-product ul li:visited, .select-product ul li.selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: visible;
 }
-
+.select-product ul li:hover .selected, .select-product ul li:focus .selected, .select-product ul li:visited .selected, .select-product ul li.selected .selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
+}
 .select-product ul li strong {
   font-size: 15px;
   font-weight: 600;
@@ -338,8 +342,18 @@ header {
 }
 .select-country ul li:hover, .select-country ul li:focus, .select-country ul li:visited .select-country ul li.selected {
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   overflow: visible;
+}
+.select-country ul li:hover .selected, .select-country ul li:focus .selected, .select-country ul li:visited .select-country ul li.selected .selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+.select-country ul li.selected {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 .select-country ul li label {
   font-weight: 300;
@@ -370,7 +384,7 @@ header {
   padding: 10px 15px;
   font-size: 11px;
   background-color: #fff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   color: #999;
   margin: 5px;
 }

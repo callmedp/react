@@ -25,33 +25,6 @@
     {% endcompress %}
 {% endblock css_section %}
 
-{% block banner_ads %}
-    {{ block.super }}
-    <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
-    <script>
-    var googletag = googletag || {};
-    googletag.cmd = googletag.cmd || [];
-    </script>
-
-    <script>
-    googletag.cmd.push(function() {
-    googletag.defineSlot('/1198510/ShineLearning_300x250_mobile', [300, 250], 'div-gpt-ad-1509425171014-0').addService(googletag.pubads());
-    googletag.pubads().enableSingleRequest();
-    googletag.enableServices();
-    });
-    </script>
-{% endblock %}
-
-{% block banner_ads_bottom %}
-    {{ block.super }}
-    <!-- /1198510/ShineLearning_300x250_mobile -->
-    <div id='div-gpt-ad-1509425171014-0'>
-    <script>
-    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509425171014-0'); });
-    </script>
-    </div>
-{% endblock %}
-
 {% block main_container %}
     {% block page_heading %}
 
