@@ -11,6 +11,7 @@ RESUME_DIR = '/shineresume/ResumeServices/'
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
+SITEMAP_CACHING_TIME = 86400
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
