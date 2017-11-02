@@ -4,8 +4,6 @@ from .celery import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 IS_LIVE = False
-CELERY_ALWAYS_EAGER = True
-CELERY_RESULT_BACKEND = 'redis'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
