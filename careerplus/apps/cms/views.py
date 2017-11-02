@@ -103,8 +103,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
     def get_context_data(self, **kwargs):
         context = super(CMSPageView, self).get_context_data(**kwargs)
         page_obj = self.get_object()
-        left_widgets = page_obj.pagewidget_set.filter(section='left').select_related('widget')
-        right_widgets = page_obj.pagewidget_set.filter(section='right').select_related('widget')
+        left_widgets = page_obj.pagewidget_set.filter(section='left', widget__is_active=True).select_related('widget')
+        right_widgets = page_obj.pagewidget_set.filter(section='right', widget__is_active=True).select_related('widget')
         context['left_widgets'] = ''
         context['right_widgets'] = ''
         context['page_obj'] = page_obj

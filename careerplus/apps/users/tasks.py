@@ -46,7 +46,7 @@ def user_register(data={}, order=None):
             mail_type = "AUTO_REGISTER"
             email_data = {}
             email_data.update({
-                "subject": 'Your login credential on shinelearning.shine.com',
+                "subject": 'Your login credentials on learning.shine.com',
                 "name": data.get('name'),
                 "mobile": data.get('cell_phone'),
                 "email": data.get('email'),

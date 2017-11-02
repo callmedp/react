@@ -2175,7 +2175,7 @@ class AssignmentOrderItemView(View):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/', raise_exception=True), name='dispatch')
 class ConsoleResumeDownloadView(View):
 
     def get(self, request, *args, **kwargs):

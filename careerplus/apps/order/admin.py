@@ -71,7 +71,7 @@ class OrderItemAdmin(admin.ModelAdmin):
         'is_combo', 'no_process', 'is_variation', 'oi_status', 'draft_counter']
     inlines = [OrderItemOperationInline, ]
     raw_id_fields = ('order', 'parent', 'product', 'partner', 'oio_linkedin')
-    
+
     list_filter = ('oi_status', 'partner')
     search_fields = ('order__number', 'id',
         'order__candidate_id', 'order__email', 'partner__name')
@@ -116,11 +116,13 @@ class InternationalProfileCredentialAdmin(admin.ModelAdmin):
 
 class EmailOrderItemOperationAdmin(admin.ModelAdmin):
     list_display = ['oi', 'email_oi_status', 'draft_counter', 'to_email', 'status']
+    raw_id_fields = ('oi', )
     search_fields = ('oi__id', 'to_email')
 
 
 class SmsOrderItemOperationAdmin(admin.ModelAdmin):
     list_display = ['oi', 'sms_oi_status', 'draft_counter', 'to_mobile', 'status']
+    raw_id_fields = ('oi', )
     search_fields = ('oi__id', 'to_mobile')
 
 admin.site.register(Order, OrderAdmin)

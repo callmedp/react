@@ -423,11 +423,13 @@ class CartMixin(object):
                 elif coupon_obj and coupon_obj.coupon_type == 'percent':
                     coupon_amount = (total_amount * coupon_obj.value) / 100
                     coupon_amount = InvoiceGenerate().get_quantize(coupon_amount)
-
                 elif wal_txn.exists():
                     wal_txn = wal_txn[0]
                     redeemed_reward_point = wal_txn.point_value
 
+                if coupon_amount >= total_amount:
+                    coupon_amount = total_amount
+                
                 amount_after_discount = total_amount - coupon_amount
                 amount_after_discount = amount_after_discount - redeemed_reward_point
                 tax_amount = Decimal(0)
