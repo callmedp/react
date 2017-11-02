@@ -122,5 +122,5 @@ jQuery(document).ready(function($) {
                 $(".js_advance_search_form").submit();
             }
     });
- 
+    $('.tt-query').css('background-color','#fff');
 });
