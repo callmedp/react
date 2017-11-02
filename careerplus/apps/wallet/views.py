@@ -11,7 +11,6 @@ from .models import (
 from cart.mixins import CartMixin
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 
-
 class CsrfExemptSessionAuthentication(SessionAuthentication):
 
     def enforce_csrf(self, request):
@@ -74,6 +73,10 @@ class WalletRedeemView(APIView, CartMixin):
                     {'success': 0,
                      'error': 'Redeem Point should be positive, Cannot Redeem!.'
                      }, status=400, content_type='application/json')
+            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+            total_amount = cart_dict.get('total_amount')
+            if point >= total_amount:
+                point = total_amount
             points = wal_obj.point.filter(status=1).order_by('created')
             total = Decimal(0)
             for pts in points:
