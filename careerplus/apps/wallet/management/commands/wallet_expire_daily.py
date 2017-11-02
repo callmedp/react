@@ -26,12 +26,12 @@ class Command(BaseCommand):
                 total += pt.current
             points.update(status=3)
             txn = WalletTransaction.objects.create(
-                wallet=wallet,
+                wallet=wall,
                 txn_type=4,
                 status=1,
                 notes='expired from cron',
                 point_value=total,
-                current_value=wallet.get_current_amount()
+                current_value=wall.get_current_amount()
                 )
             for pt in points:
                 PointTransaction.objects.create(
