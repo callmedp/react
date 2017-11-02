@@ -232,13 +232,13 @@
          <!-- search box -->
          <section class="home-search-box search-mg">
             <ul class="nav search-tabs" role="tablist">
-               {% comment %}
+
                <li role="presentation" class="active"><a href="#home-search" aria-controls="home-search" role="tab" data-toggle="tab">Search</a></li>
                
-                  
+                  <!--
                
                <li role="presentation"><a href="#home-advanced-search" aria-controls="home-advanced-search" role="tab" data-toggle="tab">Advanced search</a></li>
-               {% endcomment %}
+              -->
             </ul>
             <div class="tab-content form-inline">
                <div role="tabpanel" class="tab-pane home-search active" id="home-search">
@@ -253,7 +253,7 @@
                      required=""><span class="error-txt"></span></div>
                   <button type="submit" onclick="redirectToSearch()" class="find-jobs-btn btn"></button>
                </div>
-               {% comment %}
+               <!--
                   
                <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">
                   <form id="advance-search-form" class="form-inline js_advance_search_form" method="post" action="https://learning.shine.com/search/redirect-to-recommendations/">
@@ -263,7 +263,7 @@
                      <button type="submit" id="advance-search-button" class="find-jobs-btn btn js_advance_search"></button>
                   </form>
                </div>
-               {% endcomment %}
+               -->
                
             </div>
          </section>
