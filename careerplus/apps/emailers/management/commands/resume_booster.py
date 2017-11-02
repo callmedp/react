@@ -25,6 +25,8 @@ def booster():
     days = 7
     candidate_data = {}
     recruiter_data = {}
+    recruiter_data = {}
+    candidate_list = []
 
     for oi in booster_ois:
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
@@ -43,11 +45,14 @@ def booster():
                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)
 
-            email = candidate_data.get('email') if candidate_data.get('email') else ''
+            link_title = candidate_data.get('email') if candidate_data.get('email') else ''
             download_link = resumevar
-            recruiter_data.update({
-                email: download_link,
+            data_dict = {}
+            data_dict.update({
+                "title": link_title,
+                "download_link": download_link,
             })
+            candidate_list.append(data_dict)
 
             try:
                 # send mail to candidate
@@ -77,6 +82,7 @@ def booster():
         # send mail to rectuter
         recruiters = settings.BOOSTER_RECRUITERS
         mail_type = 'BOOSTER_RECRUITER'
+        recruiter_data.update({"data": candidate_list})
         if recruiter_data:
             send_email_task.delay(recruiters, mail_type, recruiter_data)
             for oi in booster_ois:
