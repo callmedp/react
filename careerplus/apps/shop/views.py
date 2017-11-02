@@ -396,9 +396,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             self.product_obj = Product.objects.get(pk=pk)
             if self.product_obj.is_virtual:
                 raise Http404
-            if self.product.var_child:
+            if self.product_obj.var_child:
                 raise Http404
-            if not self.product.active:
+            if not self.product_obj.active:
                 raise Http404
         except Exception as e:
             raise Http404
