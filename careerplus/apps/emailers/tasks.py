@@ -27,7 +27,10 @@ def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=No
         if oi:
             from order.models import OrderItem
             obj = OrderItem.objects.get(pk=oi)
-            obj.emailorderitemoperation_set.create(email_oi_status=status)
+            to = to[0] if to else obj.order.email
+            obj.emailorderitemoperation_set.create(
+                email_oi_status=status,
+                to_email=to, status=1)
     except Exception as e:
         logging.getLogger('email_log').error(
             "%s - %s" % (str(to), str(e)))

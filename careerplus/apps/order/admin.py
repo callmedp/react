@@ -71,7 +71,7 @@ class OrderItemAdmin(admin.ModelAdmin):
         'is_combo', 'no_process', 'is_variation', 'oi_status', 'draft_counter']
     inlines = [OrderItemOperationInline, ]
     raw_id_fields = ('order', 'parent', 'product', 'partner', 'oio_linkedin')
-    
+
     list_filter = ('oi_status', 'partner')
     search_fields = ('order__number', 'id',
         'order__candidate_id', 'order__email', 'partner__name')
