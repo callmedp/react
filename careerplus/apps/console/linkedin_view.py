@@ -408,10 +408,20 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByAdminView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=47, product__type_flow=8)
+        queryset = queryset.filter(
+            order__status=1, no_process=False, oi_status=47,
+            product__type_flow=8)
+        user = self.request.user
+        if user.has_perm('order.can_view_all_rejectedbyadmin_list'):
+            pass
+        elif user.has_perm('order.can_view_only_assigned_rejectedbyadmin_list'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
@@ -511,11 +521,20 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinRejectedByCandidateView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=48, product__type_flow__in=[8])
+        queryset = queryset.filter(
+            order__status=1, oi_status=48, product__type_flow=8)
+        user = self.request.user
+        if user.has_perm('order.can_view_all_rejectedbycandidate_list'):
+            pass
+        elif user.has_perm('order.can_view_only_assigned_rejectedbycandidate_list'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
 
         try:
             if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
                     Q(product__name__icontains=self.query) |
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
