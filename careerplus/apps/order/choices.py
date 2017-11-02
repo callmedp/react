@@ -113,7 +113,6 @@ OI_USER_STATUS = (
     (30, 'Feature profile updated'),
 
     # for linkedin flow8 41 - 60
-    (43, 'Linkedin Draft Create'),
     (44, 'Linkedin Draft Created'),
     (45, 'Linkedin Pending Approval'),
     (46, 'Document is Ready'),

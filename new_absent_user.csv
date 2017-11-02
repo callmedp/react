@@ -1,4 +1,16 @@
 Email,ShineID,Mobile,Country_Code,C_ID,RError,LError
+swapnilkakade88@gmail.com,5358fc34b8c5ac13222a00bb,8169231769,,,No Error,No Error
+rajan.sdhivya@gmail.com,,82328303,65.0,,{'non_field_errors': ['Invalid country code and mobile number combination']},[]
+niranjan.nv12@gmailcom,59f88715e839200ca1ff5730,9652061022,,,{'email': ['Enter a valid email address.']},No Error
+deep44444akash@gmail,59f875a0e8392026920327b1,8447791488,,,{'email': ['Enter a valid email address.']},No Error
+ry976815@gmai,59f871ede8392026920327ae,9120252483,,,{'email': ['Enter a valid email address.']},No Error
+Undale@123,59f8672c8f6428521daae70b,8421310742,,,{'email': ['Enter a valid email address.']},No Error
+m.mohit15@yahoo.com,,8960305863,91.0,,No Error,No Error
+kishorkumarkhan1996@gmail,59f80781e83920491c7c79b6,7373570884,,,{'email': ['Enter a valid email address.']},No Error
+harrygbetuwa@gmailcom,59f7ae9d8f64287fe2cd5ed6,76969128,,,{'email': ['Enter a valid email address.']},No Error
+sadiyashaikh@gmailcom,59f7277b8f6428784652b733,9167942438,,,{'email': ['Enter a valid email address.']},No Error
+sonukumarram577@gmail,59f7222f8f6428784652b72e,7488578735,,,{'email': ['Enter a valid email address.']},No Error
+jagrajkumar1122@gmai,59f70ebc8f642843a99a5339,8825342409,,,{'email': ['Enter a valid email address.']},No Error
 aa4800376@gmail.com,59f705c28f642843a99a5338,9719594896,,,No Error,No Error
 levireuben1997@gmail,59f61d428f64281485d30872,9626277595,,,{'email': ['Enter a valid email address.']},No Error
 .kjhjbkjb@gmai.com,59f5ef6b8f64281485d30862,5432113456,,,{'email': ['Enter a valid email address.']},No Error
