@@ -1,8 +1,11 @@
-from django.views.generic import View, TemplateView
+from django.views.generic import View, TemplateView, FormView
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
+
+from .forms import PasswordResetRequestForm, SetConfirmPasswordForm
 
 
 class ConsoleDashboardView(TemplateView):
@@ -61,3 +64,71 @@ class ConsoleLogoutView(View):
     def get(self, request):
         logout(request)
         return HttpResponseRedirect(reverse_lazy('console:login'))
+
+
+class ConsoleForgotPasswordView(FormView):
+    template_name = "console/forget_password.html"
+    form_class = PasswordResetRequestForm
+    success_url = '/console/forgot-password/'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data["email"]
+            try:
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                user = User.objects.get(email=data)
+                email_dict = {
+                'subject': "User Reset Password",
+                'from': settings.DEFAULT_FROM_EMAIL,
+                'to': [user.email],
+                'email_type': 6,
+                'email': user.email,
+                'domain': request.META['HTTP_HOST'],
+                'site_name': 'Careerplus Sales CRM',
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'username': user.email,
+                'token': default_token_generator.make_token(user),
+                'protocol': 'http://',
+                }
+                send_email_change_user_password.delay(email_dict)
+                result = self.form_valid(form)
+                messages.success(request, 'An email has been sent to ' + data + ". Please check its inbox to continue reseting password.")
+                return result
+            except:
+                result = self.form_invalid(form)
+                messages.error(request, 'No user is associated with this email address')
+                return result
+        return self.form_invalid(form)
+
+
+class ConsolePasswordResetView(FormView):
+    template_name = "console/reset_password.html"
+    success_url = '/console/'
+    form_class = SetConfirmPasswordForm
+
+    def post(self, request, uidb64=None, token=None, *arg, **kwargs):
+        form = self.form_class(request.POST)
+        assert uidb64 is not None and token is not None  # checked by URLconf
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+
+        try:
+            uid = urlsafe_base64_decode(uidb64)
+            user = User._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and default_token_generator.check_token(user, token):
+            if form.is_valid():
+                new_password = form.cleaned_data['new_password2']
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password has been reset.')
+                return self.form_valid(form)
+            else:
+                messages.error(request, 'Password reset has not been unsuccessful.')
+                return self.form_invalid(form)
+        else:
+            messages.error(request, 'The reset password link is no longer valid.')
+            return self.form_invalid(form)

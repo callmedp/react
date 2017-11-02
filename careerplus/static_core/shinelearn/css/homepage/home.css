@@ -338,9 +338,6 @@ body {
   cursor: pointer;
   background: transparent;
 }
-.our-courses .listing {
-  overflow: hidden;
-}
 .our-courses .listing .media .jobs-available strong {
   margin-left: 0;
 }
@@ -387,7 +384,7 @@ body {
   overflow: hidden;
 }
 .job-assistance .listing li a:hover {
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 .job-assistance .listing li a.box-panel {
   min-height: 225px;
@@ -556,7 +553,7 @@ body {
   margin-bottom: 0;
 }
 .product-carousel-box .product-carousel .listing li a:hover {
-  box-shadow: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 @media (max-width: 991px) {
   .product-carousel-box .product-carousel .listing .media .media-left figure {
@@ -566,6 +563,9 @@ body {
 }
 .product-carousel-box .product-carousel .listing .media .jobs-available strong {
   margin-left: 0;
+}
+.product-carousel-box .product-carousel .carousel-inner {
+  overflow: visible;
 }
 .product-carousel-box .carousel-control {
   width: 6%;
