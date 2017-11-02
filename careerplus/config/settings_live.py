@@ -7,6 +7,7 @@ MEDIA_URL = 'https://origin-static3.shine.com/'
 DOWNLOAD_URL = 'https://origin-static3.shine.com/download/'
 DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'download')
 RESUME_DIR = '/shineresume/ResumeServices/'
+
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
@@ -42,6 +43,11 @@ HAYSTACK_CONNECTIONS = {
 ####### CCAVENUE SETTINGS ###########################
 CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC48XECC'
 CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
+
+##### CCAVENUE MOBILE SETTINGS ###########
+CCAVENUE_MOBILE_ACCESS_CODE = 'AVYX74EK04AB49XYBA'
+CCAVENUE_MOBILE_WORKING_KEY = 'A5BD19BE780D68E36598D8FB051CF66C'
+
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
 DATABASES = {

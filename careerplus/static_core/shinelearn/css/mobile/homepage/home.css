@@ -665,7 +665,7 @@ label:hover ~ label {
 }
 .home-banner li .slide-caption {
     position: absolute;
-    top: 30%;
+    top: 40%;
     left: 0;
     right: 0;
 }

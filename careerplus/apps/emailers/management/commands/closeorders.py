@@ -48,7 +48,7 @@ def close_order_report():
         send_dict['from_email'] = settings.CONSULTANTS_EMAIL
         file_name = "%s.csv" % (
             'ORDER_CLOSER_REPORT_' + timezone.now().strftime("%Y-%m-%d "))
-        if csvfile.getvalue():
+        if closed_order:
             SendMail().base_send_mail(
                 subject="ORDER_CLOSER_REPORT_",
                 body=send_dict.get('body'), to=send_dict.get('to'),

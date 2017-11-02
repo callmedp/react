@@ -508,37 +508,48 @@ class DashboardAcceptService(View):
                         data['display_message'] = "You Accept draft successfully"
 
                         to_emails = [oi.order.email]
-                        email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
-                        sms_sets = list(oi.smsorderitemoperation_set.all().values_list('sms_oi_status',flat=True).distinct())
+                        email_sets = list(
+                            oi.emailorderitemoperation_set.all().values_list(
+                                'email_oi_status', flat=True).distinct())
+                        sms_sets = list(
+                            oi.smsorderitemoperation_set.all().values_list(
+                                'sms_oi_status', flat=True).distinct())
                         mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
                             "subject": 'Closing your ' + oi.product.name + ' service',
-                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                            "username": oi.order.first_name,
                             'draft_added': oi.draft_added_on,
+                            'mobile': oi.order.mobile,
                         })
 
-                        if oi.product.type_flow == 1 and (9 not in email_sets and 9 not in sms_sets):
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=oi.pk)
+                        if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):
+                            send_email_task.delay(
+                                to_emails, mail_type, email_dict,
+                                status=9, oi=oi.pk)
                             try:
                                 SendSMS().send(sms_type=mail_type, data=data)
-                                oi.smsorderitemoperation_set.create(sms_oi_status=4)
+                                oi.smsorderitemoperation_set.create(
+                                    sms_oi_status=4,
+                                    to_mobile=email_dict.get('mobile'),
+                                    status=1)
                             except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                logging.getLogger('sms_log').error(
+                                    "%s - %s" % (str(mail_type), str(e)))
 
-                        elif oi.product.type_flow == 8 and (9 not in email_sets and 9 not in sms_sets):
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=9, oi=obj.pk)
+                        elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
+                            send_email_task.delay(
+                                to_emails, mail_type, email_dict,
+                                status=9, oi=oi.pk)
                             try:
                                 SendSMS().send(sms_type=mail_type, data=data)
-                                oi.smsorderitemoperation_set.create(sms_oi_status=4)
+                                oi.smsorderitemoperation_set.create(
+                                    sms_oi_status=4,
+                                    to_mobile=email_dict.get('mobile'),
+                                    status=1)
                             except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-                        
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=data)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
+                                logging.getLogger('sms_log').error(
+                                    "%s - %s" % (str(mail_type), str(e)))
                     else:
                         data['display_message'] = "please do valid action only"
             except:

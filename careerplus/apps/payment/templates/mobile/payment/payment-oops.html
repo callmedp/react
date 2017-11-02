@@ -1,0 +1,102 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load static compress %}
+
+
+{% block canonical_url %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock canonical_url %}
+
+{% block title %}OOps Payment | Shinelearning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+        <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
+        <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css %}
+        <style>
+           .error{
+/*            color:red;
+*/            font-size: 85%;
+            padding-top: 3px;
+            color: #f34a38;
+            display: block;
+            padding-bottom: 0;
+           }
+
+           .hide-p{
+              display: none;
+           }
+
+        </style>
+    {% endcompress %}
+    
+{% endblock css_section %}
+
+{% block header %}
+
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">
+    
+      <!-- header menu Icon Starts here -->
+      <div class="main-menu w100fl">
+          <div class="pull-left">
+              
+              <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
+
+              
+              <a class="icon-back pull-left" href="/"></a> 
+          </div><!-- / Left side Icon ends here -->
+
+      </div><!-- header menu Icon ends here -->
+
+  </header><!-- header ends here -->
+
+{% endblock header %}
+
+{% block container %}
+
+<div class="body-wrapper ">
+
+  <!-- Tab content Satrts here -->
+  <div class="content-box mt-20">
+    <div class="text-center mt-20">
+      <span class="icon-payment-failure"></span>
+      <p class="fs-22 mt-20">Your payment could not get through.</p>
+      <p>Your transaction ID is <strong>{{txn_id}}</strong></p>
+
+      <p class="c9 mt-20">In case further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></p>
+    </div>
+    <!-- <a href="{% url "dashboard:dashboard" %}" class="btn btn-blue w100 mt-20">Go to dashboard</a> -->
+    {% endif %}
+  <div class="clearfix"></div>
+</div><!-- Tab content ends here -->
+
+</div>
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+
+    {% compress js %}
+      <script type="text/javascript">
+          var error = "{{error_type}}";
+          console.log(error);
+          if(error){
+              // Your application has indicated there's an error
+              window.setTimeout(function(){
+                  // Move to a new location or you can do something else
+                  window.location.href = "/payment/payment-options/";
+              }, 3000);
+          }
+      </script>
+    {% endcompress %}
+
+    {% block johukum %}
+    {% endblock johukum %}
+{% endblock js_section %}
