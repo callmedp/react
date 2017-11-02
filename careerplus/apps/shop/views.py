@@ -393,14 +393,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
         try:
-            self.product_obj = Product.objects.get(pk=pk)
-            if self.product_obj.is_virtual:
-                raise Http404
-            if self.product_obj.var_child:
-                raise Http404
-            if not self.product_obj.active:
-                raise Http404
+            self.product_obj = Product.browsable.get(pk=pk)
         except Exception as e:
+            logging.getLogger('error_log').error("404 on product detail.ID:{}".format(pk))
             raise Http404
 
         try:
@@ -409,6 +404,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             if not self.sqs:
                 raise Http404
         except Exception as e:
+            logging.getLogger('error_log').error("SQS query error on product detail.ID:{}".format(pk))
             raise Http404
 
         if self.product_obj:

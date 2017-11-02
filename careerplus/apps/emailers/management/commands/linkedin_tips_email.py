@@ -3,7 +3,7 @@ import logging
 from django.template.loader import render_to_string
 from django.conf import settings
 from order.models import OrderItem
-from emailers.tasks import send_email_for_base_task
+from order.functions import send_email_from_base
 
 
 class Command(BaseCommand):
@@ -13,7 +13,6 @@ class Command(BaseCommand):
 
 def send_linkedin_tips():
     ''' tip emailers for linkedin '''
-
     orderitems = OrderItem.objects.filter(
         order__status=1, product__type_flow=8).select_related('order')
     count1 = count2 = count3 = count4 = count5 = count6 = 0
@@ -31,7 +30,7 @@ def send_linkedin_tips():
                 context_dict['subject'] = subject
                 html = render_to_string(
                     "emailers/candidate/linkedin_tip1.html", context_dict)
-                send_email_for_base_task.delay(
+                send_email_from_base(
                     subject, html, to=[oi.order.email], headers=headers,
                     oi=oi.pk, status=109)
                 count1 += 1
@@ -41,7 +40,7 @@ def send_linkedin_tips():
                 context_dict['subject'] = "Connect with more and more people"
                 html = render_to_string(
                     "emailers/candidate/linkedin_tip2.html", context_dict)
-                send_email_for_base_task.delay(
+                send_email_from_base(
                     subject, html,
                     to=[oi.order.email], headers=headers,
                     oi=oi.pk, status=110)
@@ -52,7 +51,7 @@ def send_linkedin_tips():
                 context_dict['subject'] = "Customize your LinkedIn URL"
                 html = render_to_string(
                     "emailers/candidate/linkedin_tip3.html", context_dict)
-                send_email_for_base_task.delay(
+                send_email_from_base(
                     subject, html,
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=111)
@@ -63,7 +62,7 @@ def send_linkedin_tips():
                 context_dict['subject'] = "Importance of joining groups on Linkedin"
                 html = render_to_string(
                     "emailers/candidate/linkedin_tip4.html", context_dict)
-                send_email_for_base_task.delay(
+                send_email_from_base(
                     subject, html,
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=112)
@@ -74,7 +73,7 @@ def send_linkedin_tips():
                 context_dict['subject'] = "Will you trust a profile without a profile picture?"
                 html = render_to_string(
                     "emailers/candidate/linkedin_tip5.html", context_dict)
-                send_email_for_base_task.delay(
+                send_email_from_base(
                     subject, html,
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=113)
@@ -85,7 +84,7 @@ def send_linkedin_tips():
                 context_dict['subject'] = "You like writing?"
                 html = render_to_string(
                     "emailers/candidate/linkedin_tip6.html", context_dict)
-                send_email_for_base_task.delay(
+                send_email_from_base(
                     subject, html,
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=114)
