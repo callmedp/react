@@ -81,7 +81,7 @@ class RegistrationLoginApi(object):
             if response.status_code == 200:
                 response_json = response.json()
 
-            if response.status_code:
+            elif response.status_code:
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
         except Exception as e:

@@ -481,9 +481,9 @@ CHARS_TO_REMOVE = ['/', "'", "(", ")", "!", "~", "`", "@", "#", "$", "%", "&" ]
 ############################################
 
 # google captcha settings
-G_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
-G_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'
-G_RECAPTCHA_SECRET = '6LctaRcUAAAAAA93epQV2CjvCHIcKbvlu0ui2K28'
+GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
+GOOGLE_RECAPTCHA_KEY = '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY'
+GOOGLE_RECAPTCHA_SECRET = '6Lfa5zYUAAAAAAke3_HJ7XgC3Voxbdn1bscy878R'
 
 ###### SSL Settings ##########
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

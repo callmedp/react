@@ -441,6 +441,9 @@ class PaymentSummaryView(TemplateView, CartMixin):
                         wal_obj = None
             elif cart_obj.owner_id:
                 wal_obj, created = Wallet.objects.get_or_create(owner=cart_obj.owner_id)
+                if cart_obj.owner_email:
+                    wal_obj.owner_email = cart_obj.owner_email
+                    wal_obj.save()  
                 wal_total = wal_obj.get_current_amount()
                 if wal_total <= Decimal(0):
                     wal_obj = None

@@ -2,6 +2,7 @@ from django.db import models
 from order.models import OrderItem
 # Create your models here.
 
+
 class QuizResponse(models.Model):
     """QuizResponse Sent with Linked In"""
     oi = models.OneToOneField(OrderItem, default=None, null=True)
@@ -18,3 +19,6 @@ class QuizResponse(models.Model):
     anser4 = models.CharField(max_length=500, verbose_name='Answer4', blank=True)
     question5 = models.CharField(max_length=500, blank=True, verbose_name=('Question5'))
     anser5 = models.CharField(max_length=500, verbose_name='Answer5', blank=True)
+
+    def __str__(self):
+        return '{}'.format(str(self.oi))
