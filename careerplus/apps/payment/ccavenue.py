@@ -33,8 +33,12 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         res_dict['merchant_id'] = '392'
         res_dict['integration_type'] = 'iframe_normal'
         res_dict['language'] = 'EN'
-        res_dict['accesscode'] = settings.CCAVENUE_ACCESS_CODE
-        res_dict['workingkey'] = settings.CCAVENUE_WORKING_KEY
+        if self.request.flavour == 'mobile':
+            res_dict['accesscode'] = settings.CCAVENUE_MOBILE_ACCESS_CODE
+            res_dict['workingkey'] = settings.CCAVENUE_MOBILE_WORKING_KEY
+        else:
+            res_dict['accesscode'] = settings.CCAVENUE_ACCESS_CODE
+            res_dict['workingkey'] = settings.CCAVENUE_WORKING_KEY
         res_dict['url'] = settings.CCAVENUE_URL
 
         # if settings.DEBUG:
