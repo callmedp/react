@@ -178,6 +178,11 @@ def pending_item_email(pk=None):
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
+                    data.update({
+                        'upload_url': "%s://%s/autologin/%s/?next=/linkedin/counselling-form/%s/" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                            token.decode(), oi.pk)
+                    })
                     if 151 not in email_sets and 151 not in sms_sets:
                         send_email(to_emails, mail_type, data, 151, oi.pk)
                         try:
@@ -194,9 +199,9 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 8:
                     data.update({
-                        'counselling_form': "%s://%s/linkdin/counsellingform/%s" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/linkedin/counselling-form/%s/" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            oi.pk)
+                            token.decode(), oi.pk)
                     })
                     if 108 not in email_sets and 108 not in sms_sets:
                         send_email(to_emails, mail_type, data, 108, oi.pk)
@@ -214,8 +219,9 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 9:
                     data.update({
-                        'complete_profile': "%s://%s/dashboard/roundone/profile/" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                            token.decode())
                     })
                     if 121 not in email_sets and 121 not in sms_sets:
                         send_email(to_emails, mail_type, data, 121, oi.pk)
@@ -275,7 +281,7 @@ def process_mailer(pk=None):
                 mail_type = "PROCESS_MAILERS"
                 data = {}
                 data.update({
-                    'subject': 'Your service details related to order ' + str(oi.order.id) + '',
+                    'subject': 'Your service details related to order <' + str(oi.order.id) + '>',
                     'username': oi.order.first_name,
                     'type_flow': oi.product.type_flow,
                     'pk': oi.pk,
