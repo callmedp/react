@@ -84,7 +84,7 @@ META_FB_PROFILE_ID = '282244838633660'
 META_GPLUS_TYPE = 'Website'
 # META_GPLUS_AUTHOR = '+FooBar'
 
-ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
+ROUNDONE_DEFAULT_CP_EMAIL = "learning@shine.com"
 
 if DEBUG or not IS_LIVE:
     ROUNDONE_API_BASEURL = "http://api.roundone.asia"
@@ -182,7 +182,7 @@ SHINECPCRM_DICT = {
 
 # VARIABLE FOR SENDING RESUME SERVICES MAILS
 CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
-CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
+CONSULTANTS_EMAIL = 'Shine.com <learning@shine.com>'
 REPLY_TO = 'resume@shine.com'
 
 EMAIL_HOST = '172.22.65.188'
