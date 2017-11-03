@@ -266,8 +266,8 @@ SESSION_CACHE_ALIAS = 'session'
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
-GOOGLE_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'
-GOOGLE_RECAPTCHA_SECRET = '6LctaRcUAAAAAA93epQV2CjvCHIcKbvlu0ui2K28'
+GOOGLE_RECAPTCHA_KEY = '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY'
+GOOGLE_RECAPTCHA_SECRET = '6Lfa5zYUAAAAAAke3_HJ7XgC3Voxbdn1bscy878R'
 
 
 try:

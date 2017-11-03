@@ -1,6 +1,18 @@
 {% load humanize search_tags %}
 {% if prd_service == 'course' %}
     {% if variation %}
+        <script type="application/ld+json">
+            {
+            "@context": "http://schema.org/",
+            "@type": "Course",
+            "name": "{{prd_H1}}",
+            "description": "{{prd_about}}",
+            "provider": {
+                "@type": "Organization",
+                "name": "Shine Learning"
+              }
+            }
+        </script>
         <div class="container select-product course">
             <h2>Choose study mode and duration</h2>
                 <div class="ui-grid-a">

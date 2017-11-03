@@ -27,8 +27,101 @@
     <!-- other package end -->
   {% endif %}
 
-{% else %}
+{% elif product.pk == 1941 %}
   <!-- main package start -->
+    <div class="main-package">
+    <div class="main-package-content">
+      <span>Duration</span>
+        <strong>30 days</strong>
+      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
+    </div>
+
+    <div class="main-package-arrow"></div>
+  </div>
+  <!-- main package start end-->
+  
+    <!-- other package start -->
+    <div class="other-package-box">
+      <span>Other durations</span>
+      <a href="/services/profile-update/featured-profile-10/pd-1939" class="other-package">
+        <p>
+          Duration
+          <strong>90 days</strong>
+        </p>
+      </a>
+      <a href="/services/profile-update/featured-profile-8/pd-1942" class="other-package">
+        <p>
+          Duration
+          <strong>180 days</strong>
+        </p>
+      </a>
+    </div>
+    <!-- other package end -->
+{% elif product.pk == 1939 %}
+  <!-- main package start -->
+    <div class="main-package">
+    <div class="main-package-content">
+      <span>Duration</span>
+        <strong>90 days</strong>
+      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
+    </div>
+
+    <div class="main-package-arrow"></div>
+  </div>
+  <!-- main package start end-->
+  
+    <!-- other package start -->
+    <div class="other-package-box">
+      <span>Other durations</span>
+      <a href="/services/profile-update/featured-profile-9/pd-1941" class="other-package">
+        <p>
+          Duration
+          <strong>30 days</strong>
+        </p>
+      </a>
+      <a href="/services/profile-update/featured-profile-8/pd-1942" class="other-package">
+        <p>
+          Duration
+          <strong>180 days</strong>
+        </p>
+      </a>
+    </div>
+    <!-- other package end -->
+  
+{% elif product.pk == 1942 %}
+  <!-- main package start -->
+    <div class="main-package">
+    <div class="main-package-content">
+      <span>Duration</span>
+        <strong>180 days</strong>
+      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
+    </div>
+
+    <div class="main-package-arrow"></div>
+  </div>
+  <!-- main package start end-->
+  
+    <!-- other package start -->
+    <div class="other-package-box">
+      <span>Other packages</span>
+      <a href="/services/profile-update/featured-profile-9/pd-1941" class="other-package">
+        <p>
+          Duration
+          <strong>30 days</strong>
+        </p>
+      </a>
+      <a href="/services/profile-update/featured-profile-10/pd-1939" class="other-package">
+        <p>
+          Duration
+          <strong>90 days</strong>
+        </p>
+      </a>
+    </div>
+    <!-- other package end -->
+  
+  
+{% else %}
+    
   <div class="main-package">
     <div class="main-package-content">
       <span>Experience</span>

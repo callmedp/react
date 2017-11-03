@@ -275,7 +275,7 @@ def process_mailer(pk=None):
                 mail_type = "PROCESS_MAILERS"
                 data = {}
                 data.update({
-                    'subject': 'Your service details related to order <' + str(oi.order.id) + '>',
+                    'subject': 'Your service details related to order ' + str(oi.order.id) + '',
                     'username': oi.order.first_name,
                     'type_flow': oi.product.type_flow,
                     'pk': oi.pk,
