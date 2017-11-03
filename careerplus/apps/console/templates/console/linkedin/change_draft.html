@@ -210,17 +210,24 @@
     $('.work_from').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
+      startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
       autoUpdateInput: false,
-      locale:{format: 'YYYY-MM-DD'}
+      // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
       $('.work_from').val(chosen_date.format('YYYY-MM-DD'));
     });
 
+
     $('.work_to').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
+      startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
       autoUpdateInput: false,
-      locale:{format: 'YYYY-MM-DD'}
+      // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
       $('.work_to').val(chosen_date.format('YYYY-MM-DD'));
     });
@@ -228,8 +235,11 @@
     $('.study_from').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
+      startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
       autoUpdateInput: false,
-      locale:{format: 'YYYY-MM-DD'}
+      // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
       $('.study_from').val(chosen_date.format('YYYY-MM-DD'));
     });
@@ -237,8 +247,11 @@
     $('.study_to').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
+      startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
       autoUpdateInput: false,
-      locale:{format: 'YYYY-MM-DD'}
+      // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
       $('.study_to').val(chosen_date.format('YYYY-MM-DD'));
     });
@@ -332,6 +345,9 @@
         singleDatePicker: true,
         showDropdowns: true,
         autoUpdateInput: false,
+        startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
         locale:{format: 'YYYY-MM-DD'}
       }, function(chosen_date) {
         $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
@@ -341,7 +357,10 @@
         singleDatePicker: true,
         showDropdowns: true,
         autoUpdateInput: false,
-        locale:{format: 'YYYY-MM-DD'}
+        startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
+        // locale:{format: 'YYYY-MM-DD'}
       }, function(chosen_date) {
         $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
       });
@@ -376,7 +395,10 @@
           singleDatePicker: true,
           showDropdowns: true,
           autoUpdateInput: false,
-          locale:{format: 'YYYY-MM-DD'}
+          startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
+          // locale:{format: 'YYYY-MM-DD'}
         }, function(chosen_date) {
           $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
         });
@@ -385,7 +407,10 @@
           singleDatePicker: true,
           showDropdowns: true,
           autoUpdateInput: false,
-          locale:{format: 'YYYY-MM-DD'}
+          startDate:'01/01/1960',
+      endDate:'12/31/2017',
+      maxDate:'12/31/2017',
+          // locale:{format: 'YYYY-MM-DD'}
         }, function(chosen_date) {
           $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));
         });

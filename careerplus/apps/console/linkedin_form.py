@@ -21,35 +21,35 @@ class DraftForm(forms.ModelForm):
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     headline = forms.CharField(
-        label=("Headline*:"), max_length=85,
+        label=("Headline*:"), max_length=120,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    summary = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'form-control'}))
+    summary = forms.CharField(max_length=2000, widget=forms.Textarea(attrs={'class':'form-control'}))
 
-    profile_photo = forms.CharField(label=("Profile Photo"), max_length=85,
+    profile_photo = forms.CharField(label=("Profile Photo"), max_length=2000,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    recommendation = forms.CharField(label=("Recommendations"), max_length=85,
+    recommendation = forms.CharField(label=("Recommendations"), max_length=2000,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    follow_company = forms.CharField(label=("Follow companies"), max_length=85,
+    follow_company = forms.CharField(label=("Follow companies"), max_length=2000,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    join_group = forms.CharField(label=("Join Group"), max_length=85,
+    join_group = forms.CharField(label=("Join Group"), max_length=2000,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    public_url = forms.CharField(label=("Public Url"), max_length=85,
+    public_url = forms.CharField(label=("Public Url"), max_length=2000,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     key_skills = forms.CharField(label=("Key Skills"),
-        help_text='comma separated skills, e.g. java, python; ...', 
-        max_length=500,
+        help_text='comma separated skills, e.g. java, python; ...',
+        max_length=2000,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
