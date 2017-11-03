@@ -35,6 +35,21 @@ class PaymentMixin(object):
         if payment_type == "CASH":
             return_parameter = reverse('payment:thank-you')
 
+        elif payment_type == "PAID FREE":
+            payment_date = datetime.now()
+            payment_mode = 11
+
+            order.status = 1
+            order.payment_date = payment_date
+            order.save()
+
+            txn_obj.status = 1
+            txn_obj.payment_mode = payment_mode
+            txn_obj.payment_date = payment_date
+            txn_obj.save()
+
+            return_parameter = reverse('payment:thank-you')
+
         elif payment_type == "CCAVENUE":
             payment_date = datetime.now()
             payment_mode = 7
