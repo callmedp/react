@@ -205,14 +205,14 @@
   </script>
   <script type="text/javascript">
 
-    
+    var d = new Date();
+    var todayDate = '' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
 
     $('.work_from').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
       startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      maxDate:todayDate,
       autoUpdateInput: false,
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
@@ -224,9 +224,8 @@
       singleDatePicker: true,
       showDropdowns: true,
       startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
-      autoUpdateInput: false,
+      maxDate:todayDate,
+      autoUpdateInput: false
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
       $('.work_to').val(chosen_date.format('YYYY-MM-DD'));
@@ -236,8 +235,7 @@
       singleDatePicker: true,
       showDropdowns: true,
       startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      maxDate:todayDate,
       autoUpdateInput: false,
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
@@ -248,8 +246,7 @@
       singleDatePicker: true,
       showDropdowns: true,
       startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      maxDate:todayDate,
       autoUpdateInput: false,
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
@@ -346,8 +343,7 @@
         showDropdowns: true,
         autoUpdateInput: false,
         startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      maxDate:todayDate,
         locale:{format: 'YYYY-MM-DD'}
       }, function(chosen_date) {
         $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
@@ -358,8 +354,7 @@
         showDropdowns: true,
         autoUpdateInput: false,
         startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      maxDate:todayDate,
         // locale:{format: 'YYYY-MM-DD'}
       }, function(chosen_date) {
         $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
@@ -396,8 +391,7 @@
           showDropdowns: true,
           autoUpdateInput: false,
           startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      maxDate:todayDate,
           // locale:{format: 'YYYY-MM-DD'}
         }, function(chosen_date) {
           $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
@@ -408,8 +402,7 @@
           showDropdowns: true,
           autoUpdateInput: false,
           startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      maxDate:todayDate,
           // locale:{format: 'YYYY-MM-DD'}
         }, function(chosen_date) {
           $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));
