@@ -57,7 +57,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
     def createOrder(self, cart_obj):
         candidate_id = self.request.session.get('candidate_id')
-        if cart_obj:
+        if cart_obj and cart_obj.status not in [1, 5, 6]:
             order = Order.objects.create(date_placed=timezone.now())
             order.number = 'CP' + str(order.pk)
             if candidate_id:
@@ -89,6 +89,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             tax_dict = json.dumps(tax_dict)
             order.tax_config = tax_dict
             order.total_excl_tax = total_amount  # before discount amount and before tax
+            if total_payable_amount <= 0:
+                total_payable_amount = Decimal(0)
             order.total_incl_tax = total_payable_amount  # payable amount including tax and excluding discount
             order.save()
 

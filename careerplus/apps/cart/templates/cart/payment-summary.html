@@ -237,7 +237,7 @@
         <!-- Make payment -->
         <span class="col-sm-8 col-md-9"></span>
         <span class="col-sm-4 col-md-3 continue">
-          <a href="{% url "payment:payment-option" %}"><button type="button">Make payment</button></a>
+          <a href="{% url "payment:payment-option" %}"><button type="button" id="payment-summary-continue-id">Make payment</button></a>
           <figure class="secure-payment-icon"></figure>
           <span>100% Secure Payment</span>
         </span>
@@ -255,7 +255,8 @@
 {% block js_section %}
    {{ block.super }}
     {% compress js %}
-    <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+    <script type="text/javascript" src="{% static "shinelearn/js/cart/payment-summary.js" %}">
+    </script>
     {% endcompress %}
 {% endblock js_section %}
 

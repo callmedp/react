@@ -725,11 +725,11 @@ class DashboardInvoiceDownload(View):
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
-                if order.invoice:
-                    invoice = order.invoice
-                else:
-                    order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                if invoice:  
+                # if order.invoice:
+                #     invoice = order.invoice
+                # else:
+                order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                if invoice:
                     file_path = settings.INVOICE_DIR + invoice.name
                     fsock = FileWrapper(open(file_path, 'rb'))
                     filename = invoice.name.split('/')[-1]
@@ -738,7 +738,7 @@ class DashboardInvoiceDownload(View):
                     return response
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-                        
+
         return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
