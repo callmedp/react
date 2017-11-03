@@ -210,3 +210,12 @@ function JSRemovePoint() {
   });
 
 };
+
+
+$(document).ready(function() {
+
+  $('#payment-summary-continue-id').click(function() {
+    $('#payment-summary-continue-id').attr('disabled', true);
+  });
+
+});
