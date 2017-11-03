@@ -116,6 +116,8 @@ class SkillPageView(DetailView, SkillPageMixin):
             meta_desc = "Get online certification in {}. Check discounted price and offers on short term professional courses like {} and more".format(self.object.name, prd_text)
         context['meta'] = self.object.as_meta(self.request)
         context['canonical_url'] = self.object.get_canonical_url()
+        context['meta']._url = context.get('canonical_url', '')
+        
         meta_dict = context['meta'].__dict__
         meta_dict['description'] = meta_desc
         meta_dict['og_description'] = meta_desc

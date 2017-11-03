@@ -32,34 +32,19 @@ class AutoLoginView(View):
             next1 = request.GET.get('next') or '/'
             email, candidateid, valid = AutoLogin().decode(token)
             if valid:
-                if candidateid and next1 == 'dashboard':
+                if candidateid:
                     try:
                         resp_status = ShineCandidateDetail().get_status_detail(
                             email=None, shine_id=candidateid)
                         request.session.update(resp_status)
                         if resp_status:
-                            return HttpResponseRedirect('/dashboard/')
+                            return HttpResponseRedirect(next1)
                         else:
-                            return HttpResponseRedirect('/?login_attempt=fail')
+                            return HttpResponseRedirect('/?autologin_attempt=fail')
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
-                elif candidateid and next1 == 'payment':
-                    try:
-                        resp_status = ShineCandidateDetail().get_status_detail(
-                            email=None, shine_id=candidateid)
-                        request.session.update(resp_status)
-                        if resp_status:
-                            return HttpResponseRedirect(reverse('cart:payment-summary'))
-                        else:
-                            return HttpResponseRedirect('/?login_attempt=fail')
-                    except Exception as e:
-                        logging.getLogger('error_log').error(
-                            "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
-                elif candidateid and next1 == "/dashboard/myorder/":
-                    return HttpResponseRedirect(next1)
-
-                return HttpResponseRedirect('/?login_attempt=fail')
+                return HttpResponseRedirect('/?autologin_attempt=fail')
         return HttpResponseRedirect('/?login_attempt=fail')
 
 
@@ -134,7 +119,7 @@ class CounsellingSubmit(TemplateView):
 
 class CounsellingForm(TemplateView):
     template_name = "linkedin/dashboard_counselling_form.html"
-    
+
     def get(self, request, *args, **kwargs):
         return super(CounsellingForm, self).get(request, *args, **kwargs)
 
@@ -354,7 +339,6 @@ class DraftDownloadView(View):
                         current_edu = current_edu[0]
                     if current_org:
                         current_org = current_org[0]
-            
                     if draft.profile_photo:
                         flag2 = True
                     if draft.public_url:
