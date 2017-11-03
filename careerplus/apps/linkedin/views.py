@@ -119,7 +119,7 @@ class CounsellingSubmit(TemplateView):
 
 class CounsellingForm(TemplateView):
     template_name = "linkedin/dashboard_counselling_form.html"
-    
+
     def get(self, request, *args, **kwargs):
         return super(CounsellingForm, self).get(request, *args, **kwargs)
 
@@ -339,7 +339,6 @@ class DraftDownloadView(View):
                         current_edu = current_edu[0]
                     if current_org:
                         current_org = current_org[0]
-            
                     if draft.profile_photo:
                         flag2 = True
                     if draft.public_url:
