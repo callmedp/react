@@ -41,10 +41,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 return HttpResponsePermanentRedirect(reverse('homepage'))
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
-                if not cart_dict.get('total_amount'):
-                    return HttpResponsePermanentRedirect(reverse('homepage'))
-                elif not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
+                if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
                     return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
             except:
                 return HttpResponsePermanentRedirect(reverse('homepage'))
@@ -61,6 +58,35 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         redirect = self.redirect_if_necessary()
         if redirect:
             return redirect
+
+        payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
+
+        total_payable_amount = payment_dict.get('total_payable_amount')
+        if total_payable_amount <= 0:
+            order = self.createOrder(self.cart_obj)
+            self.closeCartObject(self.cart_obj)
+            if order:
+                txn = 'CP%d%s' % (order.pk, int(time.time()))
+                pay_txn = PaymentTxn.objects.create(
+                    txn=txn,
+                    order=order,
+                    cart=self.cart_obj,
+                    status=0,
+                    payment_mode=11,
+                    currency=order.currency,
+                    txn_amount=order.total_incl_tax,
+                )
+                payment_type = "PAID FREE"
+                return_parameter = self.process_payment_method(
+                    payment_type, request, pay_txn)
+                try:
+                    del request.session['cart_pk']
+                    del request.session['checkout_type']
+                    request.session.modified = True
+                except:
+                    pass
+                return HttpResponseRedirect(return_parameter)
+
         return super(PaymentOptionView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -232,9 +258,8 @@ class ThankYouView(TemplateView):
             
             order = Order.objects.get(pk=order_pk)
             pending_resumes = order.orderitems.filter(order__status__in=[0, 1], no_process=False, oi_status=2)
-            
             for obj in pending_resumes:
-                
+
                 obj.oi_resume = full_path + file_name
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5

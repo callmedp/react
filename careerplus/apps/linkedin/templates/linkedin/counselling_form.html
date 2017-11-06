@@ -42,7 +42,7 @@
          	style="width: 150px;float: left;" value="save">Save</button>
             {% if not flag  %}
                  <button type="submit" name="submit" class="grp-button grp-default js-submit" 
-                 style="width: 150px;float: right;background-image: linear-gradient(#FF8D00,#FF2300);" value="submit">Submit</button>
+                 style="width: 150px;float: right;background-image: linear-gradient(#FF8D00,#FF2300);" value="submit" id="admin-counselling-form">Submit</button>
             {% endif %}                   
 	<!--<button type="submit">submit</button>-->
 	</form>
@@ -54,29 +54,31 @@
 
 	<script type="text/javascript">
 	$().ready(function() {
-		var element = 'submit-error';
-    	$("#counselling_form").validate({
-        	submitHandler: function(form) {
-        		form.submit();
-        },
-        rules: {
-            q1:{ required:true,},
-            q2: { required:true,},
-            q3:{ required:true,},
-            q4: { required:true,},
-            q5:{ required:true,},        
-        },
-        messages:{
-            q1:{ required:"This field is required",},
-            q2:{ required:"This field is required",},
-            q3:{ required:"This field is required",},
-            q4:{ required:"This field is required",},
-            q5:{ required:"This field is required",},   
-        },
-        errorPlacement: function(error, element) {
-            element.siblings(".submit-error").text('This field is required');
-        }
-    });
+		$('#admin-counselling-form').click(function() {
+			var element = 'submit-error';
+	    	$("#counselling_form").validate({
+	        	submitHandler: function(form) {
+	        		form.submit();
+	        },
+	        rules: {
+	            q1:{ required:true,},
+	            q2: { required:true,},
+	            q3:{ required:true,},
+	            q4: { required:true,},
+	            q5:{ required:true,},        
+	        },
+	        messages:{
+	            q1:{ required:"This field is required",},
+	            q2:{ required:"This field is required",},
+	            q3:{ required:"This field is required",},
+	            q4:{ required:"This field is required",},
+	            q5:{ required:"This field is required",},   
+	        },
+	        errorPlacement: function(error, element) {
+	            element.siblings(".submit-error").text('This field is required');
+	        }
+	    });
+	});
 });
 </script>
 </html>

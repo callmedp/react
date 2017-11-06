@@ -729,7 +729,7 @@ class DashboardInvoiceDownload(View):
                     invoice = order.invoice
                 else:
                     order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
-                if invoice:  
+                if invoice:
                     file_path = settings.INVOICE_DIR + invoice.name
                     fsock = FileWrapper(open(file_path, 'rb'))
                     filename = invoice.name.split('/')[-1]
@@ -738,7 +738,7 @@ class DashboardInvoiceDownload(View):
                     return response
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-                        
+
         return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 

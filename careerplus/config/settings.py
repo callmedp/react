@@ -84,7 +84,7 @@ META_FB_PROFILE_ID = '282244838633660'
 META_GPLUS_TYPE = 'Website'
 # META_GPLUS_AUTHOR = '+FooBar'
 
-ROUNDONE_DEFAULT_CP_EMAIL = "careerplus@shine.com"
+ROUNDONE_DEFAULT_CP_EMAIL = "learning@shine.com"
 
 if DEBUG or not IS_LIVE:
     ROUNDONE_API_BASEURL = "http://api.roundone.asia"
@@ -182,7 +182,7 @@ SHINECPCRM_DICT = {
 
 # VARIABLE FOR SENDING RESUME SERVICES MAILS
 CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
-CONSULTANTS_EMAIL = 'Shine.com <careerplus@shine.com>'
+CONSULTANTS_EMAIL = 'Shine.com <learning@shine.com>'
 REPLY_TO = 'resume@shine.com'
 
 EMAIL_HOST = '172.22.65.188'
@@ -266,8 +266,8 @@ SESSION_CACHE_ALIAS = 'session'
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
-GOOGLE_RECAPTCHA_KEY = '6LctaRcUAAAAAE2bPKxpP5z_5ju9sRXBQMxtaIjV'
-GOOGLE_RECAPTCHA_SECRET = '6LctaRcUAAAAAA93epQV2CjvCHIcKbvlu0ui2K28'
+GOOGLE_RECAPTCHA_KEY = '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY'
+GOOGLE_RECAPTCHA_SECRET = '6Lfa5zYUAAAAAAke3_HJ7XgC3Voxbdn1bscy878R'
 
 
 try:

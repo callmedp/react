@@ -1,6 +1,8 @@
 import datetime
 import base64
 import os
+import logging
+
 from django.conf import settings
 from decimal import Decimal, ROUND_HALF_DOWN
 from Crypto.Cipher import XOR
@@ -55,6 +57,8 @@ class TokenGeneration(object):
     def decode(self, token):
         token = base64.urlsafe_b64decode(str(token))
         ciph = XOR.new(settings.ENCODE_SALT)
+        import logging
+        logging.getLogger('error_log').error("token:{},{}".format(ciph.decrypt(token), ciph.decrypt(token).encode('utf-8')))
         inp_str = ciph.decrypt(token).decode()
         inp_list = inp_str.split('|')
         email = inp_list[1]
@@ -195,8 +199,7 @@ class InvoiceGenerate(object):
 
             tax_amount = total_payable_amount - total_amount_after_discount
 
-            tax_rate_per = (tax_amount * 100) / total_amount_after_discount
-            tax_rate_per = self.get_quantize(tax_rate_per)
+            tax_rate_per = settings.TAX_RATE_PERCENTAGE
 
             # tax in percentage
             invoice_data.update(self.getTaxAmountByPart(

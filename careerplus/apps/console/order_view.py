@@ -1906,8 +1906,8 @@ class ActionOrderItemView(View):
                     recruiters = settings.BOOSTER_RECRUITERS
                     mail_type = 'BOOSTER_RECRUITER'
                     if recruiter_data:
-                        SendMail().send(recruiters, mail_type, recruiter_data)
-                        # send_email_task(recruiters, mail_type, recruiter_data)
+                        send_email_task.delay(
+                            recruiters, mail_type, recruiter_data)
                         for oi in booster_ois:
                             oi.emailorderitemoperation_set.create(
                                 email_oi_status=92)

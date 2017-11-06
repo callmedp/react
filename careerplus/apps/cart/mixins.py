@@ -429,9 +429,18 @@ class CartMixin(object):
 
                 if coupon_amount >= total_amount:
                     coupon_amount = total_amount
-                
-                amount_after_discount = total_amount - coupon_amount
-                amount_after_discount = amount_after_discount - redeemed_reward_point
+
+                if redeemed_reward_point >= total_amount:
+                    redeemed_reward_point = total_amount
+
+                amount_after_discount = total_amount
+
+                if coupon_amount:
+                    amount_after_discount = amount_after_discount - coupon_amount
+
+                elif redeemed_reward_point:
+                    amount_after_discount = amount_after_discount - redeemed_reward_point
+
                 tax_amount = Decimal(0)
                 try:
                     if cart_obj.country.phone == '91':
@@ -581,11 +590,13 @@ class CartMixin(object):
             if cart_pk:
 
                 course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
-                cart_obj = Cart.objects.get(pk=cart_pk, status__in=[0, 2])
-                total_count += cart_obj.lineitems.all().count()
-                total_count -= cart_obj.lineitems.filter(
-                    parent=None, product__product_class__in=course_classes,
-                    no_process=True).count()
+
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                if cart_obj.status in [0, 2]:
+                    total_count += cart_obj.lineitems.all().count()
+                    total_count -= cart_obj.lineitems.filter(
+                        parent=None, product__product_class__in=course_classes,
+                        no_process=True).count()
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))

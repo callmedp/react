@@ -115,7 +115,7 @@ urlpatterns += [
     url(r'^search/', include('search.urls', namespace='search')),
     url(r'^partner/', include('partner.urls')),
     url(r'^partner/', include('microsite.urls')),
-    url(r'^linkdin/', include('linkedin.urls')),
+    url(r'^linkedin/', include('linkedin.urls')),
     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
     url(r'^login/$', LoginApiView.as_view(), name='login'),
     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),

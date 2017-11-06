@@ -117,3 +117,5 @@ SHINECPCRM_DICT = {
     'ad_server_url': '/api/mobile-version-leads/'
 }
 
+### LINKEDIN SETTINGS
+REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
