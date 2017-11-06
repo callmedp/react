@@ -134,7 +134,7 @@ class Widget(AbstractCommonModel):
 class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
     name = models.CharField(
         max_length=255, null=False, blank=False,
-        verbose_name="Name", help_text='The H1 heading for the page.')
+        verbose_name="Name", help_text='name for slug change')
 
     parent = models.ForeignKey(
         "self", verbose_name="Parent",
@@ -167,6 +167,7 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
         'description': 'get_description',
         'og_description': 'get_description',
         'published_time': 'publish_date',
+        'keywords': 'get_keywords',
         'modified_time': 'last_modified_on',
         'url': 'get_full_url'
     }
@@ -175,29 +176,37 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
         return self.get_display_name
 
     def get_title(self):
-        name = self.name
-        if self.parent:
-            parent = self.parent.name
-            return '{0} for {1} - Download Online - Shine Learning'.format(parent, name)
-        return 'Free {0} - Download Online - Shine Learning'.format(name)
+        if not self.title.strip():
+            name = self.get_display_name
+            if self.parent:
+                parent = self.parent.get_display_name
+                return '{0} for {1} - Download Online - Shine Learning'.format(parent, name)
+            return 'Free {0} - Download Online - Shine Learning'.format(name)
+        return self.title
         
     @property
     def get_display_name(self):
-        name = self.name
-        if self.parent:
+        if self.heading:
+            return self.heading
+        elif self.parent:
+            name = self.name
             parent = self.parent.name
             return '{0} for {1}'.format(parent, name)
-        return name
+        return self.name
     
     def get_keywords(self):
+        if not self.meta_keywords:
+            return settings.META_DEFAULT_KEYWORDS
         return self.meta_keywords.strip().split(",")
 
     def get_description(self):
-        name = self.name
-        if self.parent:
-            parent = self.parent.name
-            return 'Free {0} for {1} - Get Online {0} recommended by experts for {1}. Download {0} samples in pdf or word doc'.format(parent,name)
-        return 'Free {0} Online - Get {0} recommended by experts for experienced professionals or freshers. Download {0} samples in pdf or word doc'.format(name)
+        if not self.meta_desc.strip():
+            name = self.name
+            if self.parent:
+                parent = self.parent.name
+                return 'Free {0} for {1} - Get Online {0} recommended by experts for {1}. Download {0} samples in pdf or word doc'.format(parent,name)
+            return 'Free {0} Online - Get {0} recommended by experts for experienced professionals or freshers. Download {0} samples in pdf or word doc'.format(name)
+        return self.meta_desc
         
     def get_full_url(self):
         return self.build_absolute_uri(self.get_absolute_url())
@@ -206,6 +215,18 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
         if self.parent:
             return reverse('cms:page', kwargs={'parent_slug': self.parent.slug, 'child_slug':self.slug, 'pk': self.pk})
         return reverse('cms:page', kwargs={'slug': self.slug, 'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        if not self.title:
+            self.title = self.get_title()
+        if not self.meta_desc:
+            self.meta_desc = self.get_description()
+        if not self.meta_keywords:
+            kw = ','.join(self.get_keywords())
+            self.meta_keywords = kw
+        if not self.heading:
+            self.heading = self.get_display_name
+        super(Page, self).save(*args, **kwargs)
 
 
 class PageWidget(AbstractCommonModel):

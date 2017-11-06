@@ -40,12 +40,12 @@ class AutoLoginView(View):
                         if resp_status:
                             return HttpResponseRedirect(next1)
                         else:
-                            return HttpResponseRedirect('/?autologin_attempt=fail')
+                            return HttpResponseRedirect('/login/')
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
-                return HttpResponseRedirect('/?autologin_attempt=fail')
-        return HttpResponseRedirect('/?login_attempt=fail')
+                return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/login/')
 
 
 class CounsellingSubmit(TemplateView):

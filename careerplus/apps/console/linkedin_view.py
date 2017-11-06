@@ -254,9 +254,15 @@ class ChangeDraftView(DetailView):
             self.object = self.get_object()
             ord_obj = OrderItem.objects.get(oio_linkedin=self.object)
             q_resp = QuizResponse.objects.get(oi=ord_obj)
+            org_obj = Organization.objects.filter(draft=self.objects)
+            edu_obj = Education.objects.filter(draft=self.objects)
+            if not org_obj.count():
+                Organization.objects.create(draft=self.objects)
+            if not edu_obj.count():
+                Education.objects.create(draft=self.objects)
             if not q_resp.submitted:
                 messages.error(self.request, "First Submit Councelling Form")
-                return HttpResponseRedirect(reverse('console:linkedin-inbox')) 
+                return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
         except Exception as e:
             pass

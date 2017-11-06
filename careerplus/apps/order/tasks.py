@@ -55,7 +55,7 @@ def pending_item_email(pk=None):
                 if oi.product.type_flow == 1:
                     if 21 not in email_sets and 21 not in sms_sets:
                         data.update({
-                            'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                                 token.decode())
                         })
@@ -74,7 +74,7 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 3:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
@@ -94,7 +94,7 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 4:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
@@ -114,7 +114,7 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 5:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
@@ -134,7 +134,7 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 7:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
@@ -154,7 +154,7 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 12:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
@@ -174,7 +174,7 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 13:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
@@ -295,7 +295,7 @@ def process_mailer(pk=None):
                 })
                 if oi.product.type_flow == 1:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode()),
                     })
@@ -313,7 +313,7 @@ def process_mailer(pk=None):
 
                 elif oi.product.type_flow == 3:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode()),
                     })
@@ -331,7 +331,7 @@ def process_mailer(pk=None):
 
                 elif oi.product.type_flow == 4:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode()),
                     })
@@ -349,7 +349,7 @@ def process_mailer(pk=None):
 
                 elif oi.product.type_flow == 5:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode()),
                     })
@@ -367,7 +367,7 @@ def process_mailer(pk=None):
 
                 elif oi.product.type_flow == 12:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_DOMAIN, settings.SITE_DOMAIN,
                             token.decode()),
                     })
@@ -385,7 +385,7 @@ def process_mailer(pk=None):
 
                 elif oi.product.type_flow == 13:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode()),
                     })
@@ -403,7 +403,7 @@ def process_mailer(pk=None):
 
                 elif oi.product.type_flow == 7:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode()),
                     })
@@ -580,7 +580,7 @@ def service_initiation(pk=None):
                 sms_type = "SERVICE_INITIATION"
                 data.update({
                     'mobile': oi.order.mobile,
-                    'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                         token.decode()),
                 })

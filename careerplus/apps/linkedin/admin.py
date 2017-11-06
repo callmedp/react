@@ -1,5 +1,7 @@
 from django.contrib import admin
 from linkedin.models import Organization, Draft, Education
+from order.models import OrderItem
+from django.utils import timezone
 
 
 # Register your models here.
@@ -16,7 +18,31 @@ class EducationInline(admin.TabularInline):
 class DraftAdmin(admin.ModelAdmin):
     model = Draft
     list_display = ['pk', 'get_order', 'candidate_info']
+    search_fields = ('id',)
     inlines = [OrganizationInline, EducationInline]
+
+    # def save_model(self, request, obj, form, change):
+    #     try:
+    #         ord_obj = OrderItem.objects.get(oio_linkedin=obj)
+    #         last_status = ord_obj.oi_status
+    #         ord_obj.oi_status = 45  # pending Approval
+    #         ord_obj.last_oi_status = last_status
+    #         ord_obj.draft_added_on = timezone.now()
+    #         ord_obj.save()
+    #         ord_obj.orderitemoperation_set.create(
+    #             linkedin=obj,
+    #             draft_counter=ord_obj.draft_counter + 1,
+    #             oi_status=44,
+    #             last_oi_status=last_status,
+    #             assigned_to=ord_obj.assigned_to,
+    #             added_by=request.user)
+    #         ord_obj.orderitemoperation_set.create(
+    #             oi_status=ord_obj.oi_status,
+    #             last_oi_status=44,
+    #             assigned_to=ord_obj.assigned_to,
+    #             added_by=request.user)
+    #     except:
+    #         pass
 
     def queryset(self, request):
         qs = super(DraftAdmin, self).queryset(request)
