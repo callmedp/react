@@ -50,7 +50,7 @@ def draft_reminder_mail_for_linkedin():
                     "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 22,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_DOMAIN, token.decode()),
                 })
                 send_email_task.delay(
@@ -76,7 +76,7 @@ def draft_reminder_mail_for_linkedin():
                     "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 15,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_DOMAIN, token.decode()),
                 })
                 send_email_task.delay(to_emails, mail_type, data, status=106, oi=oi.pk)
@@ -97,7 +97,7 @@ def draft_reminder_mail_for_linkedin():
                     "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 7,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_DOMAIN, token.decode()),
                 })
                 send_email_task.delay(
@@ -120,7 +120,7 @@ def draft_reminder_mail_for_linkedin():
                     "username": oi.order.first_name,
                     'draft_added': oi.draft_added_on,
                     'mobile': oi.order.mobile,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_DOMAIN, token.decode()),
                 })
                 send_email_task.delay(
@@ -155,7 +155,7 @@ def draft_reminder_mail_for_linkedin():
                     "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 7,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_DOMAIN, token.decode()),
                 })
                 send_email_task.delay(
@@ -179,7 +179,7 @@ def draft_reminder_mail_for_linkedin():
                     "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 3,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_DOMAIN, token.decode()),
                 })
                 send_email_task.delay(
@@ -202,7 +202,7 @@ def draft_reminder_mail_for_linkedin():
                     "username": oi.order.first_name,
                     'draft_added': oi.draft_added_on,
                     'mobile': oi.order.mobile,
-                    'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                    'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_DOMAIN, token.decode()),
                 })
 
