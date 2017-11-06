@@ -5,7 +5,6 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.conf import settings
 from order.models import OrderItem
-from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from linkedin.autologin import AutoLogin

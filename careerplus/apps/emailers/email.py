@@ -214,7 +214,7 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "CART_DROP_OUT":
-            send_dict['subject'] = "Product is ready to checkout"
+            send_dict['subject'] = data.get('subject', "")
             send_dict['template'] = 'emailers/candidate/cart_drop_out.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
