@@ -79,7 +79,7 @@ def get_last_cart_item():
                         to_email.append(json_data['email'])
                     token = AutoLogin().encode(
                         m_prod.cart.email, m_prod.cart.owner_id, days=None)
-                    data['autologin'] = "{}://{}/autologin/{}/?next=payment".format(
+                    data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
                         settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                         token.decode())
                     try:
