@@ -91,54 +91,52 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
-            try:
-                data = {"display_message": ''}
-                orderitem_list = request.POST.getlist('selected_id[]', [])
-                writer_pk = int(request.POST.get('action_type', '0'))
-                orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
-                if writer_pk == 0:
-                    messages.add_message(request, messages.ERROR, 'Please select valid action first')
-                else:
-                    User = get_user_model()
-                    try:
-                        writer = User.objects.get(pk=writer_pk)
-                        for obj in orderitem_objs:
-                            email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
-                            obj.assigned_to = writer
-                            obj.assigned_by = request.user
-                            obj.save()
+            data = {"display_message": ''}
+            orderitem_list = request.POST.getlist('selected_id[]', [])
+            writer_pk = int(request.POST.get('action_type', '0'))
+            orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
+            if writer_pk == 0:
+                messages.add_message(request, messages.ERROR, 'Please select valid action first')
+            else:
+                User = get_user_model()
+                try:
+                    writer = User.objects.get(pk=writer_pk)
+                    for obj in orderitem_objs:
+                        email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                        obj.assigned_to = writer
+                        obj.assigned_by = request.user
+                        obj.save()
 
-                            # mail to user about writer information
-                            to_emails = [obj.order.email]
-                            mail_type = 'ALLOCATED_TO_WRITER'
-                            data = {}
-                            data.update({
-                                "username": obj.order.first_name if obj.order.first_name else 'User',
-                                "writer_name": writer.name,
-                                "writer_email": writer.email,
-                                "subject": "Your service has been initiated",
-                            })
+                        # mail to user about writer information
+                        to_emails = [obj.order.email]
+                        mail_type = 'ALLOCATED_TO_WRITER'
+                        data = {}
+                        data.update({
+                            "username": obj.order.first_name if obj.order.first_name else 'User',
+                            "writer_name": writer.name,
+                            "writer_email": writer.email,
+                            "subject": "Your service has been initiated",
+                        })
 
-                            if 101 not in email_sets:
-                                send_email_task.delay(to_emails, mail_type, data, status=101, oi=obj.pk)
-                            if obj.delivery_service:
-                                if obj.delivery_service.slug == 'super-express':
-                                    try:
-                                        SendSMS().send(sms_type=mail_type, data=data)
-                                    except Exception as e:
-                                        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                        if 101 not in email_sets:
+                            send_email_task.delay(to_emails, mail_type, data, status=101, oi=obj.pk)
+                        if obj.delivery_service:
+                            if obj.delivery_service.slug == 'super-express':
+                                try:
+                                    SendSMS().send(sms_type=mail_type, data=data)
+                                except Exception as e:
+                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
-                            obj.orderitemoperation_set.create(
-                                oi_status=1,
-                                last_oi_status=obj.oi_status,
-                                assigned_to=obj.assigned_to,
-                                added_by=request.user,
-                            )
-                        data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
-                    except Exception as e:
-                        data['display_message'] = str(e)
-            except Exception as e:
-                data['display_message'] = str(e)
+                        obj.orderitemoperation_set.create(
+                            oi_status=1,
+                            last_oi_status=obj.oi_status,
+                            assigned_to=obj.assigned_to,
+                            added_by=request.user,
+                        )
+                    data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
+                except Exception as e:
+                    logging.getLogger('error_log').error("Linkedin Queue:",str(e))
+                    data['display_message'] = str(e)
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -154,15 +152,13 @@ class LinkedinQueueView(ListView, PaginationMixin):
             queryset = queryset.filter(assigned_to=user)
         else:
             queryset = queryset.none()
-        try:
-            if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
-        except:
-            pass
+        if self.query:
+            queryset = queryset.filter(Q(id__icontains=self.query) |
+                Q(product__name__icontains=self.query) |
+                Q(order__number__icontains=self.query) |
+                Q(order__mobile__icontains=self.query) |
+                Q(order__email__icontains=self.query))
+
 
         try:
             if self.modified:
@@ -175,20 +171,15 @@ class LinkedinQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("date ranges:",str(e))
 
-        try:
-            if self.writer:
-                queryset = queryset.filter(assigned_to=self.writer)
-        except:
-            pass
+        if self.writer:
+            queryset = queryset.filter(assigned_to=self.writer)
 
-        try:
-            if self.draft_level != -1:
-                queryset = queryset.filter(draft_counter=self.draft_level)
-        except:
-            pass
+
+        if self.draft_level != -1:
+            queryset = queryset.filter(draft_counter=self.draft_level)
 
         try:
             if self.delivery_type:
@@ -200,8 +191,9 @@ class LinkedinQueueView(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery type:",str(e))
+
 
         return queryset.select_related('order', 'product', 'delivery_service').order_by('-modified')
 
@@ -243,29 +235,25 @@ class ChangeDraftView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         return super(ChangeDraftView, self).dispatch(request, *args, **kwargs)
 
-    def get_object(self, queryset=None):
-        if hasattr(self, 'object'):
-            return self.object
-        else:
-            return super(ChangeDraftView, self).get_object(queryset)
-
     def get(self, request, *args, **kwargs):
         try:
             self.object = self.get_object()
             ord_obj = OrderItem.objects.get(oio_linkedin=self.object)
             q_resp = QuizResponse.objects.get(oi=ord_obj)
-            org_obj = Organization.objects.filter(draft=self.objects)
-            edu_obj = Education.objects.filter(draft=self.objects)
+            org_obj = Organization.objects.filter(draft=self.object)
+            edu_obj = Education.objects.filter(draft=self.object)
             if not org_obj.count():
-                Organization.objects.create(draft=self.objects)
+                Organization.objects.create(draft=self.object)
             if not edu_obj.count():
-                Education.objects.create(draft=self.objects)
+                Education.objects.create(draft=self.object)
             if not q_resp.submitted:
                 messages.error(self.request, "First Submit Councelling Form")
+                context = self.get_context_data(object=self.object)
                 return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
         except Exception as e:
-            pass
+            logging.getLogger('error_log').error("Change draft:",str(e))
+
         return super(ChangeDraftView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -354,13 +342,15 @@ class ChangeDraftView(DetailView):
                 context['form'] = draft_form
                 context['org_formset'] = org_formset
                 context['edu_formset'] = edu_formset
-                messages.error(self.request, "Draft is not Saved successfully", 'error')
+                messages.error(self.request, "Draft not saved successfully", 'error')
                 return render(request, self.template_name, context)
 
             else:
-                messages.error(self.request, "Draft not exist with this order" 'error')
+                context = super(ChangeDraftView, self).get_context_data(**kwargs)
+                messages.error(self.request, "Draft does not exist with this order", 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
+            logging.getLogger('error_log').error("Post draft:",str(e))
             messages.add_message(request, messages.ERROR, str(e))
             return render(request, self.template_name, context)
 
@@ -424,16 +414,14 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
             queryset = queryset.filter(assigned_to=user)
         else:
             queryset = queryset.none()
-        try:
-            if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
-        except:
-            pass
+
+        if self.query:
+            queryset = queryset.filter(
+                Q(id__icontains=self.query) |
+                Q(product__name__icontains=self.query) |
+                Q(order__number__icontains=self.query) |
+                Q(order__mobile__icontains=self.query) |
+                Q(order__email__icontains=self.query))
 
         try:
             if self.modified:
@@ -446,25 +434,20 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery date:",str(e))
+
+        if self.writer:
+            queryset = queryset.filter(
+                assigned_to=self.writer)
+
+        if self.draft_level != -1:
+            queryset = queryset.filter(
+                draft_counter=self.draft_level)
+
 
         try:
-            if self.writer:
-                queryset = queryset.filter(
-                    assigned_to=self.writer)
-        except:
-            pass
-
-        try:
-            if self.draft_level != -1:
-                queryset = queryset.filter(
-                    draft_counter=self.draft_level)
-        except:
-            pass
-
-        try:
-            if self.delivery_typ:
+            if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
                 if delivery_obj.slug == 'normal':
                     queryset = queryset.filter(
@@ -473,8 +456,9 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery type:", str(e))
+
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
@@ -537,16 +521,14 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         else:
             queryset = queryset.none()
 
-        try:
-            if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
-        except:
-            pass
+        if self.query:
+            queryset = queryset.filter(
+                Q(id__icontains=self.query) |
+                Q(product__name__icontains=self.query) |
+                Q(order__number__icontains=self.query) |
+                Q(order__mobile__icontains=self.query) |
+                Q(order__email__icontains=self.query))
+
 
         try:
             if self.modified:
@@ -559,22 +541,16 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery date:", str(e))
 
-        try:
-            if self.writer:
-                queryset = queryset.filter(
-                    assigned_to=self.writer)
-        except:
-            pass
+        if self.writer:
+            queryset = queryset.filter(
+                assigned_to=self.writer)
 
-        try:
-            if self.draft_level != -1:
-                queryset = queryset.filter(
-                    draft_counter=self.draft_level)
-        except:
-            pass
+        if self.draft_level != -1:
+            queryset = queryset.filter(
+                draft_counter=self.draft_level)
 
         try:
             if self.delivery_type:
@@ -586,8 +562,8 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery type:", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -597,13 +573,13 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
     template_name = 'console/linkedin/linkedin-approval-list.html'
     model = OrderItem
     http_method_names = [u'get', u'post']
-
-    def __init__(self):
-        self.page = 1
-        self.paginated_by = 50
-        self.query = ''
-        self.modified, self.draft_level = '', -1
-        self.writer, self.delivery_type = '', ''
+    page = 1
+    paginated_by = 50
+    query = ''
+    modified = ''
+    draft_level = -1
+    writer = ''
+    delivery_type = ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -644,16 +620,14 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(LinkedinApprovalVeiw, self).get_queryset()
         queryset = queryset.filter(order__status=1, oi_status=45, product__type_flow__in=[8]).exclude(oi_status=9)
-        try:
-            if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
-        except:
-            pass
+        if self.query:
+            queryset = queryset.filter(
+                Q(id__icontains=self.query) |
+                Q(product__name__icontains=self.query) |
+                Q(order__number__icontains=self.query) |
+                Q(order__mobile__icontains=self.query) |
+                Q(order__email__icontains=self.query))
+
 
         try:
             if self.modified:
@@ -666,22 +640,16 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery date:", str(e))
 
-        try:
-            if self.writer:
-                queryset = queryset.filter(
-                    assigned_to=self.writer)
-        except:
-            pass
+        if self.writer:
+            queryset = queryset.filter(
+                assigned_to=self.writer)
 
-        try:
-            if self.draft_level != -1:
-                queryset = queryset.filter(
-                    draft_counter=self.draft_level)
-        except:
-            pass
+        if self.draft_level != -1:
+            queryset = queryset.filter(
+                draft_counter=self.draft_level)
 
         try:
             if self.delivery_type:
@@ -693,8 +661,8 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
                 else:
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery type:", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -704,12 +672,11 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     template_name = 'console/order/international-profile-update-list.html'
     model = OrderItem
     http_method_names = [u'get', u'post']
-
-    def __init__(self):
-        self.page = 1
-        self.paginated_by = 20
-        self.query = ''
-        self.payment_date, self.modified = '', ''
+    page = 1
+    paginate_by = 20
+    query = ''
+    payment_date = ''
+    modified = ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -775,15 +742,13 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         else:
             queryset = queryset.none()
 
-        try:
-            if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
-        except:
-            pass
+        if self.query:
+            queryset = queryset.filter(Q(id__icontains=self.query) |
+                Q(product__name__icontains=self.query) |
+                Q(order__number__icontains=self.query) |
+                Q(order__mobile__icontains=self.query) |
+                Q(order__email__icontains=self.query))
+
 
         try:
             if self.payment_date:
@@ -796,8 +761,9 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Payment date:", str(e))
+
 
 
         try:
@@ -811,7 +777,8 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("date:", str(e))
             pass
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
@@ -859,15 +826,12 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
         queryset = super(InterNationalApprovalQueue, self).get_queryset()
         queryset = queryset.filter(order__status=1, product__type_flow=4, oi_status=23, no_process=False)
 
-        try:
-            if self.query:
-                queryset = queryset.filter(Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
-        except:
-            pass
+        if self.query:
+            queryset = queryset.filter(Q(id__icontains=self.query) |
+                Q(product__name__icontains=self.query) |
+                Q(order__number__icontains=self.query) |
+                Q(order__mobile__icontains=self.query) |
+                Q(order__email__icontains=self.query))
 
         try:
             if self.payment_date:
@@ -880,9 +844,8 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
-            pass
-
+        except Exception as e:
+            logging.getLogger('error_log').error("Payment type:", str(e))
 
         try:
             if self.modified:
@@ -895,8 +858,9 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Delivery date:", str(e))
+
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
@@ -990,6 +954,7 @@ class ProfileUpdationView(DetailView):
                 msg = str(approval) + ' orderitems send for approval.'
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
+                logging.getLogger('error_log').error("Internationa Profile:",str(e))
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse(
                 'console:international_profile_update',
@@ -1084,6 +1049,7 @@ class InterNationalAssignmentOrderItemView(View):
                 messages.add_message(request, messages.SUCCESS, display_message)
                 return HttpResponseRedirect(reverse('console:queue-' + queue_name))
             except Exception as e:
+                logging.getLogger('error_log').error("INternational assignment:",str(e))
                 messages.add_message(request, messages.ERROR, str(e))
                 return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
@@ -1095,24 +1061,23 @@ class ProfileCredentialDownload(View):
 
     def get(self, request, *args, **kwargs):
         oi = kwargs.get('oi', '')
+        profile_credentials = InternationalProfileCredential.objects.filter(oi=oi)
         try:
-            profile_credentials = InternationalProfileCredential.objects.filter(oi=oi)
-            try:
-                context_dict = {
-                    'pagesize': 'A4',
-                    'profile_credentials': profile_credentials,
-                }
-                template = get_template('console/order/profile-update-credentials.html')
-                context = Context(context_dict)
-                html = template.render(context)
-                pdf_file = HTML(string=html).write_pdf()
-                http_response = HttpResponse(pdf_file, content_type='application/pdf')
-                http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
-                return http_response
-            except:
-                return HttpResponseForbidden()
-        except:
+            context_dict = {
+                'pagesize': 'A4',
+                'profile_credentials': profile_credentials,
+            }
+            template = get_template('console/order/profile-update-credentials.html')
+            context = Context(context_dict)
+            html = template.render(context)
+            pdf_file = HTML(string=html).write_pdf()
+            http_response = HttpResponse(pdf_file, content_type='application/pdf')
+            http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
+            return http_response
+        except Exception as e:
+            logging.getLogger('error_log').error("Profile download:",str(e))
             return HttpResponseForbidden()
+
 
 
 class CreateDrftObject(TemplateView):
