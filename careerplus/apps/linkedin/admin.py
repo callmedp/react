@@ -1,6 +1,5 @@
 from django.contrib import admin
 from linkedin.models import Organization, Draft, Education
-from order.models import OrderItem
 
 
 # Register your models here.
