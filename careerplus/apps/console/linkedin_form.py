@@ -161,8 +161,6 @@ class OrganizationForm(forms.ModelForm):
         # there's a `fields` property now
         self.fields['org_name'].widget.attrs.update({'required':'required'})
         self.fields['title'].widget.attrs.update({'required':'required'})
-        self.fields['org_desc'].widget.attrs.update({'required':'required'})
-        self.fields['work_from'].widget.attrs.update({'required':'required'})
         self.fields['work_to'].required = False
         # self.fields['work_to'].widget.attrs.update({'required':'required'})
         # self.fields['org_current'].widget.attrs.update({'required':'required'})
@@ -251,8 +249,6 @@ class EducationForm(forms.ModelForm):
         self.fields['degree'].widget.attrs.update({'required':'required'})
         self.fields['field'].widget.attrs.update({'required':'required'})
         self.fields['level'].widget.attrs.update({'required':'required'})
-        self.fields['edu_desc'].widget.attrs.update({'required':'required'})
-        self.fields['study_from'].widget.attrs.update({'required':'required'})
         self.fields['study_to'].required = False
         # self.fields['study_to'].widget.attrs.update({'required':'required'})
         # self.fields['edu_current'].widget.attrs.update({'required':'required'})
