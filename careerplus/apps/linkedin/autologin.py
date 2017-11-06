@@ -15,7 +15,6 @@ class AutoLogin(object):
             **{'email': email, 'candidateid': candidateid, 'dt':key_expires.strftime(settings.TOKEN_DT_FORMAT), 'salt': settings.ENCODE_SALT})
         b = bytes(inp_str, 'utf-8')
         ciph = XOR.new(settings.ENCODE_SALT)
-
         return base64.b64encode(ciph.encrypt(b))
 
     def decode(self, token):

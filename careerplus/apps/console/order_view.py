@@ -2120,7 +2120,7 @@ class ActionOrderItemView(View):
                         'username': order.first_name if order.first_name else order.candidate_id,
                         'type_flow': oi.product.type_flow,
                         'product_name': oi.product.name,
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)

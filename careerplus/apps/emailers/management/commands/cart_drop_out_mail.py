@@ -38,8 +38,12 @@ def get_last_cart_item():
                 m_prod = m_prod[0] if len(m_prod) else None
                 if m_prod:
                     data['m_prod'] = m_prod
-                    data['addons'] = crt_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related('product')
-                    data['variations'] = crt_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+                    data['addons'] = crt_obj.lineitems.filter(
+                        parent=m_prod,
+                        parent_deleted=False).select_related('product')
+                    data['variations'] = crt_obj.lineitems.filter(
+                        parent=m_prod,
+                        parent_deleted=True).select_related('product')
                     last_cart_items.append(data)
                     for last_cart_item in last_cart_items:
                         parent_li = last_cart_item.get('m_prod')
@@ -65,20 +69,26 @@ def get_last_cart_item():
                             li.save()
                             total_price += li.price_incl_tax
                     data['total'] = round(total_price, 2)
-                    data['subject'] = 'Product is ready to checkout'
+                    data['subject'] = '{} is ready to checkout'.format(
+                        m_prod.product.name)
                     if m_prod.cart.email and m_prod.cart.owner_id:
                         to_email.append(m_prod.cart.email)
                     else:
                         json_data = ShineCandidateDetail().get_status_detail(
                             email=None, shine_id=m_prod.cart.owner_id)
                         to_email.append(json_data['email'])
-                    token = AutoLogin().encode(m_prod.cart.email, m_prod.cart.owner_id, days=None)
-                    data['autologin'] = "%s://%s/autologin/%s/?next=payment" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+                    token = AutoLogin().encode(
+                        m_prod.cart.email, m_prod.cart.owner_id, days=None)
+                    data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                        token.decode())
                     try:
                         SendMail().send(to_email, mail_type, data)
                         count += 1
                     except Exception as e:
-                        logging.getLogger('email_log').error("%s - %s - %s" % (str(to_email), str(mail_type), str(e)))
+                        logging.getLogger('email_log').error(
+                            "{}-{}-{}".format(
+                                str(to_email), str(mail_type), str(e)))
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
