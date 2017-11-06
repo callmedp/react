@@ -205,14 +205,16 @@
   </script>
   <script type="text/javascript">
 
-    
+    var d1 = new Date();
+    var mm = d1.getMonth()+1;
+    var d2 = d1.getFullYear()+'-'+mm+'-'+d1.getDate();
 
     $('.work_from').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
-      startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      startDate:'01-01-1960',
+      endDate:'12-31-2017',
+      maxDate:'12-31-2017',
       autoUpdateInput: false,
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
@@ -223,9 +225,9 @@
     $('.work_to').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
-      startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      startDate:'01-01-1960',
+      endDate:'12-31-2017',
+      maxDate:'12-31-2017',
       autoUpdateInput: false,
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
@@ -235,9 +237,9 @@
     $('.study_from').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
-      startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      startDate:'01-01-1960',
+      endDate:'12-31-2017',
+      maxDate:'12-31-2017',
       autoUpdateInput: false,
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
@@ -247,9 +249,9 @@
     $('.study_to').daterangepicker({
       singleDatePicker: true,
       showDropdowns: true,
-      startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+      startDate:'01-01-1960',
+      endDate:'12-31-2017',
+      maxDate:'12-31-2017',
       autoUpdateInput: false,
       // locale:{format: 'YYYY-MM-DD'}
     }, function(chosen_date) {
@@ -333,6 +335,8 @@
         $(this).val('');
         $(this).prop('checked', false);
         $(this).prop('disabled', false);
+        $(this).removeClass("work_from");
+        $(this).removeClass("work_to");
       });
 
       $(row).find('.org-delete').click(function() {
@@ -345,9 +349,9 @@
         singleDatePicker: true,
         showDropdowns: true,
         autoUpdateInput: false,
-        startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+        startDate:'01-01-1960',
+        endDate:'12-31-2017',
+        maxDate:'12-31-2017',
         locale:{format: 'YYYY-MM-DD'}
       }, function(chosen_date) {
         $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
@@ -357,9 +361,9 @@
         singleDatePicker: true,
         showDropdowns: true,
         autoUpdateInput: false,
-        startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+        startDate:'01-01-1960',
+        endDate:'12-31-2017',
+        maxDate:'12-31-2017',
         // locale:{format: 'YYYY-MM-DD'}
       }, function(chosen_date) {
         $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
@@ -383,6 +387,8 @@
           $(this).val('');
           $(this).attr('checked', false);
           $(this).attr("disabled", false);
+          $(this).removeClass("study_from");
+          $(this).removeClass("study_to");
         });
         // Add an event handler for the delete item/form link 
         $(row).find('.edu-delete').click(function() {
@@ -395,9 +401,9 @@
           singleDatePicker: true,
           showDropdowns: true,
           autoUpdateInput: false,
-          startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+          startDate:'01-01-1960',
+          endDate:'12-31-2017',
+          maxDate:'12-31-2017',
           // locale:{format: 'YYYY-MM-DD'}
         }, function(chosen_date) {
           $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
@@ -407,9 +413,9 @@
           singleDatePicker: true,
           showDropdowns: true,
           autoUpdateInput: false,
-          startDate:'01/01/1960',
-      endDate:'12/31/2017',
-      maxDate:'12/31/2017',
+          startDate:'01-01-1960',
+          endDate:'12-31-2017',
+          maxDate:'12-31-2017',
           // locale:{format: 'YYYY-MM-DD'}
         }, function(chosen_date) {
           $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));

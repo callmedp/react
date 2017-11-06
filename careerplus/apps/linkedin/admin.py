@@ -1,5 +1,6 @@
 from django.contrib import admin
 from linkedin.models import Organization, Draft, Education
+from order.models import OrderItem
 
 
 # Register your models here.
@@ -16,6 +17,7 @@ class EducationInline(admin.TabularInline):
 class DraftAdmin(admin.ModelAdmin):
     model = Draft
     list_display = ['pk', 'get_order', 'candidate_info']
+    search_fields = ('id',)
     inlines = [OrganizationInline, EducationInline]
 
     def queryset(self, request):
