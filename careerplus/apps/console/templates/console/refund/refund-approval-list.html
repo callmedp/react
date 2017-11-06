@@ -149,7 +149,7 @@
                   {% for obj in page %}
                     <tr class="even pointer">
                       <td>{{obj.order.number}}</td>
-                      <td>{{obj.currency}}</td>
+                      <td>{{obj.get_currency}}</td>
                       <td>{{obj.refund_amount}}</td>
                       <td>{{obj.get_status}}</td>
                       <td><a target="_blank" href="{% url "console:refundrequest-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Request Details</button></a></td>

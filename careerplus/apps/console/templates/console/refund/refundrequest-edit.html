@@ -198,7 +198,7 @@
                <p>Change:</p>
             {% endif %}
             <input type="file" name="attach_file"><br/>
-            <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}}</span><br/><br/>
+            <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}}</span> ({{order.get_currency}})<br/><br/>
             <button type="button" id="raise-request-submit-id" class="btn btn-success">Save Refund Request</button><br/>
             <span class="error"></span>
             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="confirmModal">

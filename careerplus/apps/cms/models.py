@@ -186,12 +186,13 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
         
     @property
     def get_display_name(self):
-        return self.heading if self.heading else self.name
-        # name = self.name
-        # if self.parent:
-        #     parent = self.parent.name
-        #     return '{0} for {1}'.format(parent, name)
-        # return name
+        if self.heading:
+            return self.heading
+        elif self.parent:
+            name = self.name
+            parent = self.parent.name
+            return '{0} for {1}'.format(parent, name)
+        return self.name
     
     def get_keywords(self):
         if not self.meta_keywords:
