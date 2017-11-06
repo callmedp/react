@@ -276,6 +276,7 @@ $(document).ready(function(){
 	    $(".item-checked:checked").each(function() {
 	    	checked_flag = true;
 	    });
+        
 	    if (checked_flag){
 	    	var custom_validate = totalRefundAmount();
 			var $refund_request_form = $('#refund-request-form');
