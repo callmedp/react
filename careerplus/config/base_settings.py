@@ -280,7 +280,7 @@ CITIES_LIGHT_APP_NAME = 'geolocation'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
 # encode decode constants
 TOKEN_DT_FORMAT = '%Y%m%d%H%M%S'
-LOGIN_TOKEN_EXPIRY = 30
+LOGIN_TOKEN_EXPIRY = 15
 EMAIL_SMS_TOKEN_EXPIRY = 7
 ENCODE_SALT = 'xfxa'
 
