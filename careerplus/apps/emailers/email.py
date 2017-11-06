@@ -65,7 +65,7 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/process_mailers.html'
             if data.get('oi').product.type_flow == [1, 3]:
                 token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('pk', ''))
-                send_dict['upload_url'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+                send_dict['upload_url'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             elif data.get('oi').product.type_flow == 8:
                 send_dict['counselling_form'] = "%s://%s/linkedin/counsellingform/%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, data.get('pk'))
             elif data.get('oi').product.type_flow == 9:
@@ -102,7 +102,7 @@ class SendMail():
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('day', ''))
-            data['upload_url'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+            data['upload_url'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
