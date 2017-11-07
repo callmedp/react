@@ -44,21 +44,33 @@
                 <td><strong>Price (in Rs.)</strong></td>
               </tr>              
               <tr>
-                <td>{{m_prod.product.name}}</td>
-                <td>{{m_prod.product.get_price}}</td>
+                <td>
+                  {% if m_prod.product.heading %}
+                      {{m_prod.product.heading}}
+                  {% else %}
+                      {{m_prod.product.name}}
+                  {% endif %}
+                </td>
+                {% if not addon and not variations %}
+                  <td>{{m_prod.product.get_price}}</td>
+                {% endif %}
               </tr>
-              <tr>
-                {% for addon in addons %}
-                  <td>{{addon.product.name}}</td>
-                  <td>{{addon.product.get_price}}</td>
-                {% endfor %}
-              </tr>
-              <tr>
-                {% for var in variations %}
-                  <td>{{var.product.name}}</td>
-                  <td>{{var.product.get_price}}</td>
-                {% endfor %}
-              </tr>
+              {% if addons %}
+                <tr>
+                  {% for addon in addons %}
+                    <td>{{addon.product.name}}</td>
+                    <td>{{addon.product.get_price}}</td>
+                  {% endfor %}
+                </tr>
+              {% endif %}
+              {% if variations %}
+                <tr>
+                  {% for var in variations %}
+                    <td>{{var.product.name}}</td>
+                    <td>{{var.product.get_price}}</td>
+                  {% endfor %}
+                </tr>
+              {% endif %}
               <tr>
                 <td style="border-top:1px dashed #333; padding:3px 0;"><strong>Total (T)</strong></td>
                 <td style="border-top:1px dashed #333;padding:3px 0;"><strong>
