@@ -422,6 +422,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
         return super(RefundRequestEditView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+
         selected_items = request.POST.getlist('item_name', [])
         attached_file = request.FILES.get('attach_file', '')
         message = request.POST.get('message', '').strip()
@@ -458,11 +459,13 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 self.request,
                 messages.ERROR, "message is required")
             valid = False
+
         elif not selected_items and valid:
             valid = False
             messages.add_message(
                 self.request, messages.ERROR,
                 "Atleast one item required to update refund request")
+
         elif valid and orderitems.filter(id__in=selected_items).count() != len(selected_items):
             messages.add_message(
                 request, messages.ERROR,
@@ -625,6 +628,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
         context.update({
             "messages": alert,
         })
+
         if order.status in [1, 3] and refund_obj.status in [0, 1, 9]:
             orderitems = self.get_order_item_list(order=order)
             refunditems = refund_obj.refunditem_set.all()
@@ -661,7 +665,6 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                             "refund_item": refund_item,
                         }
                         refundedit_items.append(data_dict)
- 
                 else:
                     if oi.pk in refunditems_ois:
                         refund_item = refunditems.get(oi=oi)
@@ -698,11 +701,19 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                         }
                         refundedit_items.append(data_dict)
 
+            cancel_permission = False
+
+            if has_group(user=self.request.user, grp_list=settings.OPS_HEAD_GROUP_LIST):
+                cancel_permission = True
+            elif has_group(user=self.request.user, grp_list=settings.OPS_GROUP_LIST):
+                cancel_permission = True
+
             context.update({
                 "order": order,
                 "refunditems": refunditems,
                 "refund_obj": refund_obj,
                 "refundedit_items": refundedit_items,
+                "cancel_permission": cancel_permission,
             })
             context.update({
                 "type_refund_dict": OrderedDict(TYPE_REFUND),
@@ -768,7 +779,7 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
                 request, messages.ERROR,
                 "Please select valid items to refund")
             valid = False
-        elif valid and selected_items and order.status == 1:
+        elif valid and selected_items and order.status in [1, 3]:
             for item_id in selected_items:
                 oi = orderitems.get(id=item_id)
                 payment_type = 'type-payment' + str(item_id)
@@ -1213,6 +1224,71 @@ class ApproveRefundRequestView(View, RefundInfoMixin):
                     'Refund Request %s Approved Successfully.' % (refund_obj.order.number))
 
                 return HttpResponseRedirect(reverse('console:refund-request-approval'))
+
+        except Exception as e:
+            messages.add_message(
+                request, messages.ERROR,
+                str(e))
+        return HttpResponseRedirect(reverse('console:refund-request'))
+
+
+class CancelRefundRequestView(View, RefundInfoMixin):
+    def post(self, request, *args, **kwargs):
+        try:
+            message = request.POST.get('message', '').strip()
+            refund_pk = request.POST.get('refund_pk', None)
+            if message and refund_pk:
+                refund_obj = RefundRequest.objects.get(
+                    pk=refund_pk, status__in=[0, 1, 9])
+                user = request.user
+                order = refund_obj.order
+                grp_list = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST
+                if has_group(user=user, grp_list=grp_list):
+                    refund_items = refund_obj.refunditem_set.all()
+                    excluded_items = list(refund_items.all().values_list('oi', flat=True))
+                    excluded_ois = order.orderitems.filter(id__in=excluded_items)
+                    # refund_items.all().delete()
+                    for oi in excluded_ois:
+                        if oi.oi_status == 161:
+                            last_oi_status = oi.oi_status
+                            oi.oi_status = oi.last_oi_status
+                            oi.last_oi_status = last_oi_status
+                            oi.save()
+
+                        if oi.is_combo and not oi.parent:
+                            combos = oi.order.orderitems.filter(
+                                parent=oi, is_combo=True)
+                            for combo in combos:
+                                if combo.oi_status == 161:
+                                    last_oi_status = combo.oi_status
+                                    combo.oi_status = combo.last_oi_status
+                                    combo.last_oi_status = last_oi_status
+                                    combo.save()
+
+                    last_status = refund_obj.status
+                    refund_obj.status = 13
+                    refund_obj.last_status = last_status
+                    refund_obj.save()
+                    refund_obj.refundoperation_set.create(
+                        status=refund_obj.status,
+                        last_status=refund_obj.last_status,
+                        message=message,
+                        added_by=request.user,
+                    )
+
+                else:
+                    raise PermissionDenied
+
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'Refund Request %s Canceled Successfully.' % (refund_obj.order.number))
+
+                return HttpResponseRedirect(reverse('console:refund-request'))
+            else:
+                messages.add_message(
+                    request, messages.ERROR,
+                    'cancel message is required')
+                return HttpResponseRedirect(reverse('console:refundrequest-edit'))
 
         except Exception as e:
             messages.add_message(
