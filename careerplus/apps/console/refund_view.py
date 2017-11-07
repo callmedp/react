@@ -82,7 +82,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
         self.query = request.GET.get('query', '')
         self.created = request.GET.get('created', '')
         try:
-            self.status = request.GET.get('status', -1)
+            self.status = int(request.GET.get('status', -1))
         except:
             self.status = -1
         return super(RefundRequestApprovalView, self).get(request, args, **kwargs)
@@ -115,7 +115,6 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
         user = self.request.user
         if user.is_superuser:
             pass
-
         elif has_group(user=user, grp_list=settings.OPS_HEAD_GROUP_LIST):
             queryset = queryset.filter(status=1)
 
@@ -509,6 +508,12 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                         oi.oi_status = oi.last_oi_status
                         oi.last_oi_status = last_oi_status
                         oi.save()
+                        oi.orderitemoperation_set.create(
+                            oi_status=oi.oi_status,
+                            last_oi_status=oi.last_oi_status,
+                            assigned_to=oi.assigned_to,
+                            added_by=request.user
+                        )
 
                     if oi.is_combo and not oi.parent:
                         combos = oi.order.orderitems.filter(
@@ -519,6 +524,13 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                                 combo.oi_status = combo.last_oi_status
                                 combo.last_oi_status = last_oi_status
                                 combo.save()
+
+                                combo.orderitemoperation_set.create(
+                                    oi_status=combo.oi_status,
+                                    last_oi_status=combo.last_oi_status,
+                                    assigned_to=combo.assigned_to,
+                                    added_by=request.user
+                                )
 
                 total_refund = Decimal(0)
                 for item_id in selected_items:
@@ -1255,6 +1267,13 @@ class CancelRefundRequestView(View, RefundInfoMixin):
                             oi.last_oi_status = last_oi_status
                             oi.save()
 
+                            oi.orderitemoperation_set.create(
+                                oi_status=oi.oi_status,
+                                last_oi_status=oi.last_oi_status,
+                                assigned_to=oi.assigned_to,
+                                added_by=request.user
+                            )
+
                         if oi.is_combo and not oi.parent:
                             combos = oi.order.orderitems.filter(
                                 parent=oi, is_combo=True)
@@ -1264,6 +1283,12 @@ class CancelRefundRequestView(View, RefundInfoMixin):
                                     combo.oi_status = combo.last_oi_status
                                     combo.last_oi_status = last_oi_status
                                     combo.save()
+                                    combo.orderitemoperation_set.create(
+                                        oi_status=combo.oi_status,
+                                        last_oi_status=combo.last_oi_status,
+                                        assigned_to=combo.assigned_to,
+                                        added_by=request.user
+                                    )
 
                     last_status = refund_obj.status
                     refund_obj.status = 13

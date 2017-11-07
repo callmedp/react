@@ -19,6 +19,7 @@ from coupon.models import Coupon
 # from order.mixins import OrderMixin
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
+from geolocation.models import Country
 from order.tasks import (
     pending_item_email,
     process_mailer,
@@ -62,6 +63,12 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     msg = 'candidate_id is required.'
                     flag = False
 
+                if country_code:
+                    try:
+                        country_obj = Country.objects.get(phone=country_code)
+                    except:
+                        country_obj = Country.objects.get(phone=91)
+
                 if flag:
                     percentage_discount = 0
                     tax_rate_per = int(request.data.get('tax_rate_per', 0))
@@ -79,6 +86,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     order.tax_config = str(request.data.get('tax_config', {}))
                     order.status = 1
                     order.site = 1
+                    order.country = country_obj
                     order.total_excl_tax = request.data.get('total_excl_tax_excl_discount', 0)
                     order.total_incl_tax = request.data.get('total_payable_amount', 0)
                     crm_lead_id = request.data.get('crm_lead_id', '')
