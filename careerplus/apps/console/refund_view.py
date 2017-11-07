@@ -912,12 +912,11 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
         if self.query:
             try:
                 order = Order.objects.get(number=self.query, status__in=[1, 3])
-            except Exception as e:
-                messages.add_message(self.request, messages.ERROR, str(e))
+            except:
                 messages.add_message(
                     self.request,
                     messages.ERROR,
-                    'Order is not found from this query.'
+                    'Order not found.'
                 )
 
         context.update({

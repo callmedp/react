@@ -16,7 +16,7 @@ class SendMail():
             subject = "Test Mail " + subject
             to = ['kharbpriya5@gmail.com']
             cc = ['upender.singh@hindustantimes.com']
-            bcc = []
+            bcc = ['123snig@gmail.com']
             # cc = ['upenders379@gmail.com']
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
         emsg.content_subtype = "html"
