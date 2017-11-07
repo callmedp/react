@@ -554,9 +554,12 @@ def payment_realisation_mailer(pk=None):
                 })
                 try:
                     SendMail().send(to_emails, mail_type, invoice_data)
+                    logging.getLogger('email_log').error(
+                        "payment realisation mail send to %s - %s - %s" % (
+                            str(to_emails), str(mail_type), str(e)))
                 except Exception as e:
                     logging.getLogger('email_log').error(
-                        "payment pending %s - %s - %s" % (
+                        "payment realisation %s - %s - %s" % (
                             str(to_emails), str(mail_type), str(e)))
     except Exception as e:
         raise e

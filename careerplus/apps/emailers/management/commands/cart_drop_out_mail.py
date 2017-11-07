@@ -77,7 +77,12 @@ def get_last_cart_item():
                     else:
                         json_data = ShineCandidateDetail().get_status_detail(
                             email=None, shine_id=m_prod.cart.owner_id)
-                        to_email.append(json_data['email'])
+                        if json_data:
+                            to_email.append(json_data['email'])
+                        else:
+                            logging.getLogger('error_log').error("Error in getting"
+                                                                 "response from Shine for id:", m_prod.cart.owner_id)
+                            continue
                     token = AutoLogin().encode(
                         m_prod.cart.email, m_prod.cart.owner_id, days=None)
                     data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
