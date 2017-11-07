@@ -190,14 +190,14 @@ class ProductModeration(object):
         try:
             if request and request.user:
                 if product:
+                    if not product.heading:
+                        messages.error(request, "Product Heading is required")
+                        return test_pass
                     if not product.name:
                         messages.error(request, "Product Name is required")
                         return test_pass
                     if not product.product_class:
                         messages.error(request, "Product Class is required")
-                        return test_pass
-                    if not product.upc:
-                        messages.error(request, "UPC is required")
                         return test_pass
                     if not product.inr_price:
                         messages.error(request, "INR Price is required")
@@ -206,12 +206,12 @@ class ProductModeration(object):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
                     if product.type_product in [0,1,3,5]:
-                        if not product.chapter_product.filter(status=True):
-                            messages.error(request, "Product has no active chapter")
-                            return test_pass
-                    
+                        if product.is_course:
+                            if not product.chapter_product.filter(status=True):
+                                messages.error(request, "Product has no active chapter")
+                                return test_pass
                     if request.user.groups.filter(name='Product').exists() or request.user.is_superuser:
-                        diction = [0,1, 3, 4, 5]
+                        diction = [0, 1, 3, 4, 5]
                     else:
                         diction = [0, 1]
                     if product.type_product in diction:
@@ -257,9 +257,6 @@ class ProductModeration(object):
                                 return test_pass
                             if not sibling.name:
                                 messages.error(request, "Variation" + str(sibling) +" Name is required")
-                                return test_pass
-                            if not sibling.upc:
-                                messages.error(request, "Variation" + str(sibling) +" UPC is required")
                                 return test_pass
                             if not sibling.inr_price:
                                 messages.error(request, "Variation" + str(sibling) +" INR Price is required")
@@ -893,15 +890,15 @@ class ProductValidation(object):
                     if not product.vendor:
                         messages.error(request, "Product Vendor is Required")
                         return test_pass
-
+                    if not product.heading:
+                        messages.error(request, "Product Heading is required")
+                        return test_pass
+                    
                     if not product.name:
                         messages.error(request, "Product Name is required")
                         return test_pass
                     if not product.product_class:
                         messages.error(request, "Product Class is required")
-                        return test_pass
-                    if not product.upc:
-                        messages.error(request, "UPC is required")
                         return test_pass
                     if not product.type_flow:
                         messages.error(request, "Product Flow is required")
@@ -923,9 +920,10 @@ class ProductValidation(object):
                         return test_pass
                     
                     if product.type_product in [0,1,3,5]:
-                        if not product.chapter_product.filter(status=True):
-                            messages.error(request, "Product has no active chapter")
-                            return test_pass
+                        if product.is_course:
+                            if not product.chapter_product.filter(status=True):
+                                messages.error(request, "Product has no active chapter")
+                                return test_pass
                     
 
                     if product.type_product in [0, 1, 3, 4]:
