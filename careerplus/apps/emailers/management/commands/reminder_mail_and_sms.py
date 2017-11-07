@@ -120,8 +120,8 @@ def draft_reminder_mail():
                 elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=29) and len(email_sets) == 3:
                     to_emails = [oi.order.email]
                     mail_type = 'WRITING_SERVICE_CLOSED'
-                    email_dict = {}
-                    email_dict.update({
+                    data = {}
+                    data.update({
                         "subject": 'Closing your ' + oi.product.name + ' service',
                         "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
@@ -139,10 +139,10 @@ def draft_reminder_mail():
                         last_oi_status=oi.last_oi_status,
                         assigned_to=oi.assigned_to)
                     send_email_task.delay(
-                        to_emails, mail_type, email_dict, status=9,
+                        to_emails, mail_type, data, status=9,
                         oi=oi.pk)
                     try:
-                        urlshortener = create_short_url(login_url=email_dict)
+                        urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=mail_type, data=data)
                         oi.smsorderitemoperation_set.create(
@@ -167,7 +167,7 @@ def draft_reminder_mail():
                             settings.SITE_DOMAIN, token.decode()),
                     })
                     send_email_task.delay(
-                        to_emails, mail_type, email_dict, status=27, oi=oi.pk)
+                        to_emails, mail_type, data, status=27, oi=oi.pk)
                     try:
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
@@ -191,7 +191,7 @@ def draft_reminder_mail():
                             settings.SITE_DOMAIN, token.decode()),
                     })
                     send_email_task.delay(
-                        to_emails, mail_type, email_dict, status=27, oi=oi.pk)
+                        to_emails, mail_type, data, status=27, oi=oi.pk)
                     try:
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
@@ -204,8 +204,8 @@ def draft_reminder_mail():
                 elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=10) and len(email_sets) == 2:
                     to_emails = [oi.order.email]
                     mail_type = 'WRITING_SERVICE_CLOSED'
-                    email_dict = {}
-                    email_dict.update({
+                    data = {}
+                    data.update({
                         "subject": 'Closing your ' + oi.product.name + ' service',
                         "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
@@ -216,7 +216,7 @@ def draft_reminder_mail():
 
                     try:
                         send_email_task.delay(
-                            to_emails, mail_type, email_dict,
+                            to_emails, mail_type, data,
                             status=9, oi=oi.pk)
                         print(str(count) + ' Service closed Email Sent')
                     except Exception as e:
@@ -225,9 +225,9 @@ def draft_reminder_mail():
                                 str(to_emails), str(e), str(mail_type)))
 
                     try:
-                        urlshortener = create_short_url(login_url=email_dict)
+                        urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
-                        SendSMS().send(sms_type=mail_type, data=email_dict)
+                        SendSMS().send(sms_type=mail_type, data=data)
                         print(str(count) + ' Service closed SMS Sent')
                     except Exception as e:
                         logging.getLogger('sms_log').error(
