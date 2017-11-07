@@ -116,7 +116,7 @@ $(function(){
 });
 
 
-function redirectToShineProfile(oi_id, ){
+function redirectToShineProfile(oi_id){
     if (oi_id){
         var formData = $('#redirecShineForm' + oi_id).serialize();
         $.ajax({

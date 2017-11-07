@@ -143,10 +143,10 @@ class OrganizationForm(forms.ModelForm):
     org_desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
     
     work_from = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control work_from'}))
+          widget=forms.DateInput(attrs={'class': 'form-control work_from'}, format='%m/%d/%Y'))
 
     work_to = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control work_to'}))
+          widget=forms.DateInput(attrs={'class': 'form-control work_to'}, format='%m/%d/%Y'))
 
     org_current = forms.BooleanField(label=("Current Organization"),
         widget=forms.CheckboxInput(attrs={'class': 'checkbox current_org'}),
@@ -161,8 +161,6 @@ class OrganizationForm(forms.ModelForm):
         # there's a `fields` property now
         self.fields['org_name'].widget.attrs.update({'required':'required'})
         self.fields['title'].widget.attrs.update({'required':'required'})
-        self.fields['org_desc'].widget.attrs.update({'required':'required'})
-        self.fields['work_from'].widget.attrs.update({'required':'required'})
         self.fields['work_to'].required = False
         # self.fields['work_to'].widget.attrs.update({'required':'required'})
         # self.fields['org_current'].widget.attrs.update({'required':'required'})
@@ -232,10 +230,10 @@ class EducationForm(forms.ModelForm):
     edu_desc = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'form-control'}))
     
     study_from = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control study_from'}))
+          widget=forms.DateInput(attrs={'class': 'form-control study_from'}, format='%m/%d/%Y'))
 
     study_to = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control study_to'}))
+          widget=forms.DateInput(attrs={'class': 'form-control study_to'}, format='%m/%d/%Y'))
 
     edu_current = forms.BooleanField(label=("Current Education"),
         widget=forms.CheckboxInput(attrs={'class': 'checkbox current_edu'}),
@@ -251,8 +249,6 @@ class EducationForm(forms.ModelForm):
         self.fields['degree'].widget.attrs.update({'required':'required'})
         self.fields['field'].widget.attrs.update({'required':'required'})
         self.fields['level'].widget.attrs.update({'required':'required'})
-        self.fields['edu_desc'].widget.attrs.update({'required':'required'})
-        self.fields['study_from'].widget.attrs.update({'required':'required'})
         self.fields['study_to'].required = False
         # self.fields['study_to'].widget.attrs.update({'required':'required'})
         # self.fields['edu_current'].widget.attrs.update({'required':'required'})
