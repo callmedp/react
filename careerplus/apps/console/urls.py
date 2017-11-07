@@ -274,6 +274,10 @@ urlpatterns += [
         refund_view.ApproveRefundRequestView.as_view(),
         name='refundrequest-approve'),
 
+    url(r'^refund/cancel-refundrequest/',
+        refund_view.CancelRefundRequestView.as_view(),
+        name='refundrequest-cancel'),
+
 ]
 
 from . import linkedin_view

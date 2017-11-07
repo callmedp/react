@@ -143,6 +143,14 @@ class LinkedinQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
         queryset = queryset.filter(order__status=1, no_process=False, product__type_flow=8).exclude(oi_status__in=[4,45,46,47,48, 161, 162, 163])
+        for query in queryset:
+            try:
+                query.quizresponse
+            except Exception as e:
+                quiz_resp = QuizResponse()
+                quiz_resp.oi = query
+                quiz_resp.save()
+                logging.getLogger('error_log').error("%s" % (str(e)))
         user = self.request.user
         if user.is_superuser:
             pass
@@ -673,7 +681,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     model = OrderItem
     http_method_names = [u'get', u'post']
     page = 1
-    paginate_by = 20
+    paginated_by = 20
     query = ''
     payment_date = ''
     modified = ''

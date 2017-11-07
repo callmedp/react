@@ -242,12 +242,11 @@ function changeRefundAmount(item_id){
 function rejectRequestAction(request_id){
     if (request_id){
         var $rejectmodal = $('#reject-modal' + request_id);
+        $('#reject-request-form' + request_id)[0].reset();
         $rejectmodal.modal('show');
-        //$("#reject-confirm-button" + request_id).prop('disabled', false);
 
         $("#reject-confirm-button" + request_id).on("click", function() {
             $('#reject-request-form' + request_id).submit();
-            //$("#reject-confirm-button" + request_id).prop('disabled', true);
         });
     }
 }
@@ -255,11 +254,25 @@ function rejectRequestAction(request_id){
 function approveRequestAction(request_id){
     if (request_id){
         var $approvemodal = $('#approve-modal' + request_id);
+        $('#approve-request-form' + request_id)[0].reset();
         $approvemodal.modal('show');
         //$("#approve-confirm-button" + request_id).prop('disabled', false);
 
         $("#approve-confirm-button" + request_id).on("click", function() {
             $('#approve-request-form' + request_id).submit();
+            //$("#approve-confirm-button" + request_id).prop('disabled', true);
+        });
+    }
+}
+
+function cancelRequestAction(request_id){
+    if (request_id){
+        var $cancelmodal = $('#cancel-modal' + request_id);
+        $('#cancel-request-form' + request_id)[0].reset();
+        $cancelmodal.modal('show');
+        //$("#approve-confirm-button" + request_id).prop('disabled', false);
+        $("#cancel-confirm-button" + request_id).on("click", function() {
+            $('#cancel-request-form' + request_id).submit();
             //$("#approve-confirm-button" + request_id).prop('disabled', true);
         });
     }
@@ -273,6 +286,7 @@ $(document).ready(function(){
 
 	$("#raise-request-submit-id").on("click", function() {
 		var checked_flag = false;
+
 	    $(".item-checked:checked").each(function() {
 	    	checked_flag = true;
 	    });

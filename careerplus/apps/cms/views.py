@@ -23,6 +23,7 @@ from users.forms import (
 )
 from .models import Page, Comment
 from .mixins import UploadInFile, LoadMoreMixin
+from crmapi.models import UserQuries
 
 
 class CMSPageView(DetailView, LoadMoreMixin):
@@ -193,22 +194,29 @@ class LeadManagementView(View, UploadInFile):
 
             data_dict = {
                 "name": name,
-                "country_code": country_obj.phone,
-                "mobile": mobile,
+                "country": country_obj,
+                "phn_number": mobile,
                 "email": email,
                 "message": message,
                 "path": path,
-                "term_condition": term_condition
+                'lead_source': 7,
             }
+            query_obj = UserQuries(**data_dict)
+            query_obj.save()
+            data_dict.update({
+                'term_condition': term_condition,
+                "country": country_obj.phone,
+            })
             self.write_in_file(data_dict=data_dict)
             data = {"status": 1, }
-            return HttpResponse(json.dumps(data), content_type="application/json")
+            return HttpResponse(
+                json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
 
 class DownloadPdfView(View, UploadInFile):
     http_method_names = [u'post', ]
-    
+
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         page_obj = None

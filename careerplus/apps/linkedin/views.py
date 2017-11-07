@@ -18,6 +18,7 @@ from shine.core import ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from .utills import ques_dict
 from order.models import OrderItem
+from quizs.models import QuizResponse
 
 
 class AutoLoginView(View):
@@ -60,8 +61,14 @@ class CounsellingSubmit(TemplateView):
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
         except:
             orderitem = None
+        try:
+            quiz_resp = orderitem.quizresponse
+        except Exception as e:
+            quiz_resp = QuizResponse()
+            quiz_resp.oi = orderitem
+            quiz_resp.save()
+            logging.getLogger('error_log').error("%s" % (str(e)))
 
-        quiz_resp = orderitem.quizresponse
         context = {
             'ques_dict': ques_dict,
             'quiz_resp': quiz_resp if quiz_resp else None,
@@ -130,7 +137,14 @@ class CounsellingForm(TemplateView):
         except:
             orderitem = None
 
-        quiz_resp = orderitem.quizresponse
+        try:
+            quiz_resp = orderitem.quizresponse
+        except Exception as e:
+            quiz_resp = QuizResponse()
+            quiz_resp.oi = orderitem
+            quiz_resp.save()
+            logging.getLogger('error_log').error("%s" % (str(e)))
+
         context = {
             'ques_dict': ques_dict,
             'quiz_resp': quiz_resp if quiz_resp else None,

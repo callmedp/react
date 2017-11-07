@@ -211,7 +211,7 @@
                       <h4 class="modal-title" id="myModalLabel">Edit Refund Request</h4>
                     </div>
                     <div class="modal-body" id="myModalbody">
-                      Are you sure to change the raised refund request on order number {{order.number}} and send for approval?
+                      Are you sure to change the raised refund request on order number {{order.number}}?
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
@@ -221,6 +221,9 @@
                   </div>
                 </div>
             </div>
+            {% if cancel_permission %}
+                  <button type="button" onclick="cancelRequestAction('{{refund_obj.pk}}')" class="btn btn-danger btn-xs"><i class="fa fa-close"></i>Cancel Refund Request</button>
+            {% endif %}
             </form>
           </div>
         </div>
@@ -230,6 +233,39 @@
   </div>
 </div>
 <!-- /page content -->
+
+
+<!-- cancel modal-->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="cancel-modal{{refund_obj.pk}}">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel2">Action on refund request (order no. {{refund_obj.order.number}})</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure to cancel refund request?
+          <form class="form-group" method="POST" action="{% url "console:refundrequest-cancel" %}" id="cancel-request-form{{refund_obj.pk}}" data-parsley-validate>{% csrf_token %}
+           <div style="display:none">
+            <input type="hide" name="refund_pk" value="{{refund_obj.pk}}">
+           </div>
+           <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-maxlength="300"
+           placeholder="type cancel reason here.." 
+           data-parsley-validation-threshold="10">
+           </textarea>
+              
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" id="cancel-confirm-button{{refund_obj.pk}}" class="btn btn-primary">Yes</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- /modals -->
 
 
 {% endblock pagecontent %}

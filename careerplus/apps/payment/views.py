@@ -290,7 +290,7 @@ class ThankYouView(TemplateView):
                 resume_extn = request.session.get('resume_extn', '')
                 try:
                     file = ContentFile(response.content)
-                    file_name = 'resumeupload_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
+                    file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
                         + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                     full_path = '%s/' % str(order.pk)
                     if not os.path.exists(settings.RESUME_DIR + full_path):
