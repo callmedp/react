@@ -323,7 +323,7 @@ class RefundRequestDetail(DetailView, RefundInfoMixin):
 
                     order = refund_obj.order
                     if refund_obj.refund_mode == 'neft':
-                        payment_mode = 10,
+                        payment_mode = 10
                     else:
                         payment_mode = 4
                     order.ordertxns.create(
@@ -1003,7 +1003,7 @@ class ValidateCheckedItems(View):
             try:
                 var_list = []
                 addon_list = []
-                oi = OrderItem.objects.get(id=item_id, order__status=1)
+                oi = OrderItem.objects.get(id=item_id, order__status__in=[1, 3])
                 if not oi.parent:
                     variations = oi.order.orderitems.filter(
                         parent=oi, is_variation=True)
@@ -1054,7 +1054,7 @@ class ValidateUnCheckedItems(View):
             try:
                 var_list = []
                 addon_list = []
-                oi = OrderItem.objects.get(id=item_id, order__status=1)
+                oi = OrderItem.objects.get(id=item_id, order__status__in=[1, 3])
                 if not oi.parent:
                     variations = oi.order.orderitems.filter(
                         parent=oi, is_variation=True)
