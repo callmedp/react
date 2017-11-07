@@ -23,7 +23,8 @@ class Command(BaseCommand):
 
 def get_last_cart_item():
     mail_type = 'CART_DROP_OUT'
-    cart_objs = Cart.objects.filter(status=2).exclude(owner_id=None)
+    cart_objs = Cart.objects.filter(status=2, owner_id__isnull=False).exclude(
+        owner_id__exact='')
     count = 0
     for cart_obj in cart_objs:
         try:
