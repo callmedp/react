@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
 def get_last_cart_item():
     mail_type = 'CART_DROP_OUT'
-    cart_objs = Cart.objects.filter(status__in=[2, 3]).exclude(owner_id=None)
+    cart_objs = Cart.objects.filter(status=2).exclude(owner_id=None)
     count = 0
     for cart_obj in cart_objs:
         try:
@@ -33,7 +33,7 @@ def get_last_cart_item():
             to_email = []
             total_price = Decimal(0)
             if crt_obj:
-                m_prod = crt_obj.lineitems.filter(parent=None).select_related(
+                m_prod = crt_obj.lineitems.filter(parent=None, send_email=False).select_related(
                     'product', 'product__vendor').order_by('-created')
                 m_prod = m_prod[0] if len(m_prod) else None
                 if m_prod:
@@ -84,6 +84,8 @@ def get_last_cart_item():
                         token.decode())
                     try:
                         SendMail().send(to_email, mail_type, data)
+                        m_prod.send_email = True
+                        m_prod.save()
                         count += 1
                     except Exception as e:
                         logging.getLogger('email_log').error(
