@@ -673,7 +673,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     model = OrderItem
     http_method_names = [u'get', u'post']
     page = 1
-    paginate_by = 20
+    paginated_by = 20
     query = ''
     payment_date = ''
     modified = ''
