@@ -254,7 +254,7 @@ class ApproveByAdminDraft(View):
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
                         'mobile': obj.order.mobile,
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -307,7 +307,7 @@ class ApproveByAdminDraft(View):
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
                         'mobile': obj.order.mobile,
-                        'upload_url': "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
 
                     draft_upload_mail(oi=obj, to_emails=to_emails, mail_type=mail_type, email_dict=data)
@@ -336,7 +336,7 @@ class ApproveByAdminDraft(View):
                             "username": obj.order.first_name,
                             'draft_added': obj.draft_added_on,
                             'mobile': obj.order.mobile,
-                            'upload_url': "%s/autologin/%s/?next=dashboard" % (
+                            'upload_url': "%s/autologin/%s/?next=/dashboard" % (
                                 settings.SITE_DOMAIN, token.decode()),
                         })
                         send_email_task.delay(
@@ -462,7 +462,7 @@ class ApproveDraftByLinkedinAdmin(View):
                         "candidateid": obj.order.candidate_id,
                         "order_id": obj.order.id,
                         'mobile': obj.order.mobile,
-                        'upload_url': "%s/autologin/%s/?next=dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (settings.SITE_DOMAIN, token.decode()),
                     })
 
                     if obj.draft_counter == 1:

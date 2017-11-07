@@ -175,7 +175,7 @@
                       <td>{{order.mobile}}</td>
                       <td>{{order.first_name}} {{order.last_name}}</td>
                       <td>{{order.get_status}}</td>
-                      <td>{{order.currency}}</td>
+                      <td>{{order.get_currency}}</td>
                       <td>{{order.payment_date}}</td>
                       <td><a target="_blank" href="{% url "console:order-detail" order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
                       <td></td>

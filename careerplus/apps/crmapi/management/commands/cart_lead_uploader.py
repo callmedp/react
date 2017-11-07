@@ -22,8 +22,10 @@ class Command(BaseCommand):
 
 
 def upload_cart_leads():
-    cart_objs = Cart.objects.filter(status__in=[2, 3]).exclude(
-        owner_id=None, lead_archive=True)
+    cart_objs = Cart.objects.filter(
+        status__in=[2, 3],
+        owner_id__isnull=False,
+        lead_archive=False).exclude(owner_id__exact='')
     headers = {}
     headers['content-type'] = 'application/json'
     headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')

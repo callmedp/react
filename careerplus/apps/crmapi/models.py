@@ -9,6 +9,7 @@ LEAD_LOCATION = (
     (2, 'Detail Page'),
     (3, 'Contact Us Page'),
     (6, 'Marketing'),
+    (7, 'CMS Page'),
 )
 
 DEVICE = ((0, 'Desktop'), (1, 'Mobile'))

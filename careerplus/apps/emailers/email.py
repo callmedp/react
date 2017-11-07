@@ -16,7 +16,7 @@ class SendMail():
             subject = "Test Mail " + subject
             to = ['kharbpriya5@gmail.com']
             cc = ['upender.singh@hindustantimes.com']
-            bcc = []
+            bcc = ['123snig@gmail.com']
             # cc = ['upenders379@gmail.com']
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
         emsg.content_subtype = "html"
@@ -65,7 +65,7 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/process_mailers.html'
             if data.get('oi').product.type_flow == [1, 3]:
                 token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('pk', ''))
-                send_dict['upload_url'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+                send_dict['upload_url'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             elif data.get('oi').product.type_flow == 8:
                 send_dict['counselling_form'] = "%s://%s/linkedin/counsellingform/%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, data.get('pk'))
             elif data.get('oi').product.type_flow == 9:
@@ -102,7 +102,7 @@ class SendMail():
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('day', ''))
-            data['upload_url'] = "%s://%s/autologin/%s/?next=dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+            data['upload_url'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             self.process(to, send_dict, data)
 
@@ -214,7 +214,7 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "CART_DROP_OUT":
-            send_dict['subject'] = "PMI Agile is ready to checkout"
+            send_dict['subject'] = data.get('subject', "")
             send_dict['template'] = 'emailers/candidate/cart_drop_out.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}

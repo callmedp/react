@@ -190,6 +190,9 @@
                             {% if obj.product.get_duration_db %}
                                 <strong>Duration:</strong> {{obj.product.get_duration_db}}
                             {% endif %}
+                            {% if obj.partner %}
+                              <strong>Partner:</strong> {{obj.partner}}
+                            {% endif %}
 
                           </td>
                           <td>{{obj.get_oi_status}}</td>
