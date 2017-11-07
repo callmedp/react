@@ -105,7 +105,7 @@ class InvoiceGenerate(object):
         }
         if order:
             # tax in percentage
-            if order.country.phone == '91' and order.state.lower() == 'haryana':
+            if order.country.phone == '91' and order.state and order.state.lower() == 'haryana':
                 sgst = round((tax_rate_per / 2), 0)
                 cgst = round((tax_rate_per / 2), 0)
                 igst = 0
