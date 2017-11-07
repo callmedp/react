@@ -177,17 +177,17 @@ class OrganizationForm(forms.ModelForm):
             raise forms.ValidationError("This field is required.")
         return title
 
-    def clean_org_desc(self):
-        org_desc = self.cleaned_data.get('org_desc', '')
-        if org_desc == '':
-            raise forms.ValidationError("This field is required.")
-        return org_desc
+    # def clean_org_desc(self):
+    #     org_desc = self.cleaned_data.get('org_desc', '')
+    #     if org_desc == '':
+    #         raise forms.ValidationError("This field is required.")
+    #     return org_desc
 
-    def clean_work_from(self):
-        work_from = self.cleaned_data.get('work_from', '')
-        if work_from is None:
-            raise forms.ValidationError("This field is required.")
-        return work_from
+    # def clean_work_from(self):
+    #     work_from = self.cleaned_data.get('work_from', '')
+    #     if work_from is None:
+    #         raise forms.ValidationError("This field is required.")
+    #     return work_from
 
     # def clean_work_to(self):
     #     work_from = self.cleaned_data.get("work_from", '')
@@ -277,17 +277,17 @@ class EducationForm(forms.ModelForm):
             raise forms.ValidationError("This field is required.")
         return level
 
-    def clean_edu_desc(self):
-        edu_desc = self.cleaned_data.get('edu_desc', '')
-        if edu_desc == '':
-            raise forms.ValidationError("This field is required.")
-        return edu_desc
+    # def clean_edu_desc(self):
+    #     edu_desc = self.cleaned_data.get('edu_desc', '')
+    #     if edu_desc == '':
+    #         raise forms.ValidationError("This field is required.")
+    #     return edu_desc
 
-    def clean_study_from(self):
-        study_from = self.cleaned_data.get('study_from', '')
-        if study_from is None:
-            raise forms.ValidationError("This field is required.")
-        return study_from
+    # def clean_study_from(self):
+    #     study_from = self.cleaned_data.get('study_from', '')
+    #     if study_from is None:
+    #         raise forms.ValidationError("This field is required.")
+    #     return study_from
 
     # def clean_study_to(self):
     #     study_from = self.cleaned_data.get("study_from", '')
