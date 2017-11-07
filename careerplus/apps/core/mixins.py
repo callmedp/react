@@ -57,8 +57,6 @@ class TokenGeneration(object):
     def decode(self, token):
         token = base64.urlsafe_b64decode(str(token))
         ciph = XOR.new(settings.ENCODE_SALT)
-        import logging
-        logging.getLogger('error_log').error("token:{},{}".format(ciph.decrypt(token), ciph.decrypt(token).encode('utf-8')))
         inp_str = ciph.decrypt(token).decode()
         inp_list = inp_str.split('|')
         email = inp_list[1]
