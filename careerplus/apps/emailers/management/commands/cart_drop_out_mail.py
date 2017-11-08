@@ -26,6 +26,7 @@ def get_last_cart_item():
     cart_objs = Cart.objects.filter(status=2, owner_id__isnull=False).exclude(
         owner_id__exact='')
     count = 0
+    import ipdb; ipdb.set_trace()
     for cart_obj in cart_objs:
         try:
             crt_obj = cart_obj
@@ -82,7 +83,6 @@ def get_last_cart_item():
                         else:
                             logging.getLogger('error_log').error("Error in getting"
                                                                  "response from Shine for id:", m_prod.cart.owner_id)
-                            continue
                     token = AutoLogin().encode(
                         m_prod.cart.email, m_prod.cart.owner_id, days=None)
                     data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
@@ -99,4 +99,5 @@ def get_last_cart_item():
                                 str(to_email), str(mail_type), str(e)))
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
+            continue
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
