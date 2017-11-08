@@ -96,7 +96,7 @@
                       <td>{{order.mobile}}</td>
                       <td>{{order.first_name}} {{order.last_name}}</td>
                       <td>{{order.get_status}}</td>
-                      <td>{{order.currency}}</td>
+                      <td>{{order.get_currency}}</td>
                       <td>{{order.payment_date}}</td>
                       <td><a target="_blank" href="{% url "console:order-detail" order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
                       <td></td>
@@ -199,7 +199,11 @@
             {% endif %}
             <input type="file" name="attach_file"><br/>
             <span><strong>Total Refundable Amount: </strong></span><span id="total-refundable-amount-id" total-refund="{{refund_obj.refund_amount}}">{{refund_obj.refund_amount}}</span> ({{order.get_currency}})<br/><br/>
-            <button type="button" id="raise-request-submit-id" class="btn btn-success">Save Refund Request</button><br/>
+            <button type="button" id="raise-request-submit-id" class="btn btn-success">Save Refund Request</button>
+            {% if cancel_permission %}
+                  <button type="button" onclick="cancelRequestAction('{{refund_obj.pk}}')" class="btn btn-danger"><i class="fa fa-close"></i>Cancel Refund Request</button>
+            {% endif %}
+            <br/>
             <span class="error"></span>
             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="confirmModal">
                 <div class="modal-dialog modal-lg">
@@ -230,6 +234,39 @@
   </div>
 </div>
 <!-- /page content -->
+
+
+<!-- cancel modal-->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="cancel-modal{{refund_obj.pk}}">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel2">Action on refund request (order no. {{refund_obj.order.number}})</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure to cancel refund request?
+          <form class="form-group" method="POST" action="{% url "console:refundrequest-cancel" %}" id="cancel-request-form{{refund_obj.pk}}" data-parsley-validate>{% csrf_token %}
+           <div style="display:none">
+            <input type="hide" name="refund_pk" value="{{refund_obj.pk}}">
+           </div>
+           <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-maxlength="300"
+           placeholder="type cancel reason here.." 
+           data-parsley-validation-threshold="10">
+           </textarea>
+              
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" id="cancel-confirm-button{{refund_obj.pk}}" class="btn btn-primary">Yes</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- /modals -->
 
 
 {% endblock pagecontent %}

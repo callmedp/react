@@ -265,6 +265,19 @@ function approveRequestAction(request_id){
     }
 }
 
+function cancelRequestAction(request_id){
+    if (request_id){
+        var $cancelmodal = $('#cancel-modal' + request_id);
+        $('#cancel-request-form' + request_id)[0].reset();
+        $cancelmodal.modal('show');
+        //$("#approve-confirm-button" + request_id).prop('disabled', false);
+        $("#cancel-confirm-button" + request_id).on("click", function() {
+            $('#cancel-request-form' + request_id).submit();
+            //$("#approve-confirm-button" + request_id).prop('disabled', true);
+        });
+    }
+}
+
 
 $(document).ready(function(){
 	// $(".refund-amount").on("change paste keyup", function() {
@@ -273,6 +286,7 @@ $(document).ready(function(){
 
 	$("#raise-request-submit-id").on("click", function() {
 		var checked_flag = false;
+
 	    $(".item-checked:checked").each(function() {
 	    	checked_flag = true;
 	    });
