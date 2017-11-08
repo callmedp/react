@@ -11,7 +11,6 @@ from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
 from shine.core import ShineCandidateDetail
 from django.conf import settings
-from .utils import set_session_country
 
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
@@ -53,29 +52,15 @@ class LearningShineMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        from users.mixins import UserMixin
-        country_obj = UserMixin().get_client_country(request)
-        set_session_country(country_obj, request)
-        response = self.get_response(request)
-        return response
-
-    def process_request(self, request):
-        from core.api_mixin import AdServerShine, AcrossShine
-        cpem = request.COOKIES.get('_cpem_', '')
-
-        try:
-            cpem_mail = AcrossShine().decode(cpem)
-        except:
-            cpem_mail = None
-
+        from core.api_mixin import AdServerShine
         ad_content = request.GET.get('ad_content', '')
         if ad_content:
             ad_content = ad_content
             request.session['_adserver_'] = ad_content
         if request.session.get('_adserver_', None):
             try:
-                decoded_ad = AdServerShine().decode(request.session.get(
-                    '_adserver_', None))
+                decoded_ad = AdServerShine().decode(
+                    request.session.get('_adserver_'))
                 if decoded_ad:
                     email = decoded_ad[1]
                     mobile = decoded_ad[2]
@@ -91,17 +76,12 @@ class LearningShineMiddleware(object):
                             timestamp_obj, timezone.get_current_timezone())
                     except:
                         timestamp_obj = timezone.now()
-                    timediff = timezone.now() - timestamp_obj
-                    minute_diff = timediff.seconds / 60
                     addAdServerLead.delay({
                         'email': email,
                         'mobile': mobile,
                         'timestamp': timestamp,
                         'url': url
                     })
-                    if minute_diff < 30:
-                        if email:
-                            cpem_mail = email
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
 
