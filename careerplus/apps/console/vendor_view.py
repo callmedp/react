@@ -1080,6 +1080,9 @@ class ChangeScreenProductVariantView(DetailView):
             except Exception as e:
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+
+                logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
                 return HttpResponseRedirect(
                     reverse('console:screenproductvariant-change', kwargs={'pk': prd, 'parent': parent}))
         return HttpResponseBadRequest()
@@ -1158,6 +1161,8 @@ class ActionScreenFaqView(View):
         except Exception as e:
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -1267,5 +1272,7 @@ class ActionScreenProductView(View, ProductModeration):
         except Exception as e:
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")

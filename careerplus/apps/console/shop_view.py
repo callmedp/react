@@ -1701,6 +1701,8 @@ class ActionCategoryView(View, CategoryValidation):
         except Exception as e:
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
 
