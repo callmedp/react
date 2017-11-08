@@ -5,12 +5,12 @@ from django.views.generic import View, DetailView
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse,\
     HttpResponseForbidden, HttpResponsePermanentRedirect
-from django.urls import reverse
 from django.http import Http404
 from django.utils import timezone
 from django.conf import settings
 from django.utils.http import urlquote
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.middleware.csrf import get_token
 
@@ -183,7 +183,7 @@ class LeadManagementView(View, UploadInFile):
             email = request.POST.get('email', '').strip()
             country_code = request.POST.get('country_code')
             mobile = request.POST.get('mobile_number', '').strip()
-            message = request.POST.get('message', '').strip()
+            message = request.POST.get('message_box', '').strip()
             term_condition = request.POST.get('term_condition')
             path = request.path
 
@@ -215,12 +215,14 @@ class LeadManagementView(View, UploadInFile):
 
 
 class DownloadPdfView(View, UploadInFile):
-    http_method_names = [u'post', ]
 
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         page_obj = None
-        action_type = int(request.POST.get('action_type', '0'))
+        try:
+            action_type = int(request.POST.get('action_type', '0'))
+        except:
+            action_type = 0
         name = request.POST.get('name', '').strip()
         email = request.POST.get('email', '').strip()
         country_code = request.POST.get('country_code')
@@ -228,7 +230,7 @@ class DownloadPdfView(View, UploadInFile):
         message = request.POST.get('message', '').strip()
         term_condition = request.POST.get('term_condition')
         try:
-            country_obj = Country.objects.get(id=country_code)
+            country_obj = Country.objects.get(phone=country_code)
         except:
             country_obj = Country.objects.get(phone='91')
         path = request.path
@@ -277,3 +279,7 @@ class DownloadPdfView(View, UploadInFile):
         except Exception:
             raise Http404
         return HttpResponseRedirect(page_obj.get_absolute_url())
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DownloadPdfView, self).dispatch(request, *args, **kwargs)
