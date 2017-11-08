@@ -791,5 +791,5 @@ BOOSTER_RECRUITERS = [
 'abhishek.singh@evolvexl.com',
 'abhay_rr@hotmail.com',
 'aakkam_06@dataone.in',
-'3rdeyeitjobs@3rdeyeconsultants.com',
+'3rdeyeitjobs@3rdeyeconsultants.com'
 ]
