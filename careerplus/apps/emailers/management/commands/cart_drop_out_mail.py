@@ -26,7 +26,6 @@ def get_last_cart_item():
     cart_objs = Cart.objects.filter(status=2, owner_id__isnull=False).exclude(
         owner_id__exact='')
     count = 0
-    import ipdb; ipdb.set_trace()
     for cart_obj in cart_objs:
         try:
             crt_obj = cart_obj
