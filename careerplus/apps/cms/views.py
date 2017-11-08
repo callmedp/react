@@ -236,14 +236,19 @@ class DownloadPdfView(View, UploadInFile):
         if action_type == 1:
             data_dict = {
                 "name": name,
-                "country_code": country_obj.phone,
-                "mobile": mobile,
+                "country": country_obj,
+                "phn_number": mobile,
                 "email": email,
                 "message": message,
                 "path": path,
-                "term_condition": term_condition
             }
             if mobile:
+                query_obj = UserQuries(**data_dict)
+                query_obj.save()
+                data_dict.update({
+                    'term_condition': term_condition,
+                    "country": country_obj.phone,
+                })
                 self.write_in_file(data_dict=data_dict)
 
         elif action_type == 2:
@@ -256,16 +261,19 @@ class DownloadPdfView(View, UploadInFile):
 
                 data_dict = {
                     "name": request.session.get('full_name'),
-                    "country_code": country_obj.phone,
-                    "mobile": request.session.get('mobile_no'),
+                    "country": country_obj,
+                    "phn_number": request.session.get('mobile_no'),
                     "email": request.session.get('email'),
                     "path": path,
                 }
+                query_obj = UserQuries(**data_dict)
+                query_obj.save()
+                data_dict.update({
+                    "country": country_obj.phone,
+                })
                 self.write_in_file(data_dict=data_dict)
-
         try:
             page_obj = Page.objects.get(pk=pk, is_active=True)
         except Exception:
             raise Http404
         return HttpResponseRedirect(page_obj.get_absolute_url())
-
