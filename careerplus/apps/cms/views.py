@@ -9,8 +9,6 @@ from django.http import Http404
 from django.utils import timezone
 from django.conf import settings
 from django.utils.http import urlquote
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.middleware.csrf import get_token
 
@@ -229,11 +227,11 @@ class DownloadPdfView(View, UploadInFile):
         mobile = request.POST.get('mobile_number', '').strip()
         message = request.POST.get('message', '').strip()
         term_condition = request.POST.get('term_condition')
+        path = request.POST.get('path', '')
         try:
             country_obj = Country.objects.get(phone=country_code)
         except:
             country_obj = Country.objects.get(phone='91')
-        path = request.path
 
         if action_type == 1:
             data_dict = {
@@ -270,7 +268,3 @@ class DownloadPdfView(View, UploadInFile):
         except Exception:
             raise Http404
         return HttpResponseRedirect(page_obj.get_absolute_url())
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(DownloadPdfView, self).dispatch(request, *args, **kwargs)

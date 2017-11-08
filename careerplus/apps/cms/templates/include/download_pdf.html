@@ -21,9 +21,10 @@
         <span class="modal-title" id="myModalLabel">Download as PDF</span>
       </div>
         <form role="form" method="post" id="downloadpdf_form" action="{% url "cms:download-pdf" page_obj.pk %}">
-          <div style='display:none'>
+          <!--div style='display:none'>
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
-          </div>
+          </div-->
+          {% csrf_token %}
           <div class="form-group">
             <input type="text" class="form-control" id="user_name" name="name" aria-describedby="nameHelp" placeholder="Name">
             <span class="error position-error"></span>
@@ -58,7 +59,8 @@
               
           </div>
           <div style='display:none'>
-            <input type='hidden' id="id_action" name='action_type' value="1" />
+            <input type='hidden' id="id_action" name='action_type'/>
+            <input type='hidden' name='path' value="{{request.path}}" />
           </div>
           <button type="button" id="id_download" class="btn btn-primary submit">Download</button>
           <small class="form-text text-muted text-center"><a id="id_skip" href="#" data-toggle="modal" data-dismiss="modal">Skip</a></small>
