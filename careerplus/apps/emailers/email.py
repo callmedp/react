@@ -64,6 +64,7 @@ class SendMail():
             send_dict['subject'] = data.get('subject', '')
             send_dict['template'] = 'emailers/candidate/process_mailers.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
         elif mail_type == "ALLOCATED_TO_WRITER":
@@ -94,12 +95,14 @@ class SendMail():
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('day', ''))
             data['upload_url'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
         elif mail_type == "REMINDER":
             send_dict['template'] = 'emailers/candidate/draft_reminder.html'
             send_dict['subject'] = "Reminder:Your developed document has been uploaded"
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
         elif mail_type == "WRITING_SERVICE_CLOSED":
@@ -118,6 +121,7 @@ class SendMail():
             template_name = data.get('template_name', 'pending_item.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
         elif mail_type == "RESUME_CRITIQUE_CLOSED":
@@ -126,6 +130,7 @@ class SendMail():
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
             data['autologin'] = "%s://%s/autologin/%s/" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
         elif mail_type == "BOOSTER_RECRUITER":
@@ -201,6 +206,7 @@ class SendMail():
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)
             data['reset_url'] = "%s://%s/user/update/password/?token=%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
         elif mail_type == "CART_DROP_OUT":
@@ -208,6 +214,7 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/cart_drop_out.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
         elif mail_type == "SHINE_PAYMENT_CONFIRMATION":
@@ -215,4 +222,5 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/payment_realisation.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
