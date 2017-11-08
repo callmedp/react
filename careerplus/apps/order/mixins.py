@@ -23,6 +23,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
         if order and order.candidate_id and order.status == 1:
             wal_obj, created = Wallet.objects.get_or_create(
                 owner=order.candidate_id)
+            wal_obj.owner_email = order.email
+            wal_obj.save()
             # reward point 10% of payable amount
             reward_point = (order.total_incl_tax * 10) / 100
             reward_point = round(reward_point, 0)

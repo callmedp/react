@@ -90,15 +90,15 @@ $(document).ready(function() {
 
 
     $(document).on('click', '#id_download', function(event) {
-        event.preventDefault();
+        // event.preventDefault();
         $("#id_action").val(1);  //action on download button
         var $pdfForm = $("#downloadpdf_form");
         if ($pdfForm.valid()) {
             var href = $('#id_download_button').attr('href');
-            window.open(href, '_blank');
             $pdfForm.submit();
             $pdfForm[0].reset();
             $('#id_download_model').modal('toggle');
+            window.open(href, '_blank');
         }
     });
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
         var $pdfForm = $("#downloadpdf_form");
         $("#id_action").val(0);   // action on skip button
         $pdfForm.submit();
-        $pdfForm[0].reset();
+        // $pdfForm[0].reset();
         var href = $('#id_download_button').attr('href');
         window.open(href, '_blank'); 
     });

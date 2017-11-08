@@ -1,5 +1,6 @@
 import logging
 import datetime
+from decimal import Decimal
 
 from django.utils import timezone
 
@@ -98,32 +99,38 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     order.sales_user_info = sales_user_info
                     order.save()
                     coupon_amount = request.data.get('coupon', 0)
-                    coupon_obj = Coupon.objects.create_coupon(
-                        coupon_type='flat',
-                        value=coupon_amount,
-                        valid_until=None,
-                        prefix="crm",
-                        campaign=None,
-                        user_limit=1
-                    )
+                    if coupon_amount > 0:
+                        coupon_obj = Coupon.objects.create_coupon(
+                            coupon_type='flat',
+                            value=coupon_amount,
+                            valid_until=None,
+                            prefix="crm",
+                            campaign=None,
+                            user_limit=1
+                        )
 
-                    coupon_obj.min_purchase = coupon_amount
-                    coupon_obj.max_deduction = coupon_amount
-                    coupon_obj.valid_from = timezone.now()
-                    coupon_obj.valid_until = timezone.now()
-                    coupon_obj.active = False
-                    coupon_obj.save()
+                        coupon_obj.min_purchase = coupon_amount
+                        coupon_obj.max_deduction = coupon_amount
+                        coupon_obj.valid_from = timezone.now()
+                        coupon_obj.valid_until = timezone.now()
+                        coupon_obj.active = False
+                        coupon_obj.save()
 
-                    coupon_obj.users.create(
-                        user=email,
-                        redeemed_at=timezone.now()
-                    )
+                        coupon_obj.users.create(
+                            user=email,
+                            redeemed_at=timezone.now()
+                        )
 
-                    order.couponorder_set.create(
-                        coupon=coupon_obj,
-                        coupon_code=coupon_obj.code,
-                        value=coupon_amount
-                    )
+                        order.couponorder_set.create(
+                            coupon=coupon_obj,
+                            coupon_code=coupon_obj.code,
+                            value=coupon_amount
+                        )
+
+                        total_discount = coupon_amount
+                        total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
+
+                        percentage_discount = (total_discount * 100) / total_amount_before_discount
 
                     for data in item_list:
                         parent_id = data.get('id')

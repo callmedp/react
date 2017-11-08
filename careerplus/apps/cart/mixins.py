@@ -443,9 +443,10 @@ class CartMixin(object):
 
                 tax_amount = Decimal(0)
                 try:
-                    if cart_obj.country.phone == '91':
+                    if cart_obj.country and cart_obj.country.phone == '91':
                         tax_amount = (amount_after_discount * tax_rate_per) / 100
                         tax_amount = InvoiceGenerate().get_quantize(tax_amount)
+
                 except Exception as e:
                     logging.getLogger('error_log').error("Cart object has no country attached:", str(e))
                 total_payable_amount = amount_after_discount + tax_amount
