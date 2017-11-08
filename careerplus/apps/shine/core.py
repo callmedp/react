@@ -52,7 +52,7 @@ class ShineRequestHeader(object):
 
 class ShineCandidateDetail(ShineToken):
 
-    def get_api_headers(self, token):
+    def get_api_headers(self, token=None):
         try:
             client_token = self.get_client_token()
             if client_token and not token:
