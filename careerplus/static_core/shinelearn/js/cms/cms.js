@@ -91,6 +91,7 @@ $(document).ready(function() {
 
     $(document).on('click', '#id_download', function(event) {
         // event.preventDefault();
+        MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'success'); 
         $("#id_action").val(1);  //action on download button
         var $pdfForm = $("#downloadpdf_form");
         if ($pdfForm.valid()) {
@@ -103,6 +104,7 @@ $(document).ready(function() {
     });
 
     $("#id_skip").click(function(){
+        MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'skip'); 
         var $pdfForm = $("#downloadpdf_form");
         $("#id_action").val(0);   // action on skip button
         $pdfForm.submit();
@@ -250,11 +252,13 @@ $(document).ready(function() {
                 data : formData,
                 success: function(data, textStatus, jqXHR)
                 {
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
                     alert('Your Query Submitted Successfully.');
                     $('#callback_form')[0].reset();
                 },
                 error: function (jqXHR, textStatus, errorThrown)
                 {
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure'); 
                     alert('Something went wrong. Try again later.');
                 }
             });
