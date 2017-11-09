@@ -293,7 +293,7 @@ def process_mailer(pk=None):
                     'candidateid': oi.order.email,
                     'mobile': oi.order.mobile,
                 })
-                if oi.product.type_flow == 1:
+                if oi.product.type_flow in [1, 12, 13]:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
