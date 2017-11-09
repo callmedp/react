@@ -27,7 +27,7 @@ class Command(BaseCommand):
         headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')
         post_url = settings.SHINECPCRM_DICT.get('base_url') + \
             settings.SHINECPCRM_DICT.get('update_products_url')
-        queryset_list = Product.browsable.filter()
+        queryset_list = Product.objects.all()
         count = 0
         for que in queryset_list:
             data_dict = CRMProductSerializer(que).data
