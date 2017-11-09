@@ -791,5 +791,48 @@ BOOSTER_RECRUITERS = [
 'abhishek.singh@evolvexl.com',
 'abhay_rr@hotmail.com',
 'aakkam_06@dataone.in',
-'3rdeyeitjobs@3rdeyeconsultants.com',
+'3rdeyeitjobs@3rdeyeconsultants.com'
 ]
+
+###### ROUNDONE SETTING ###############################
+
+ROUNDONE_API_BASEURL = "http://api.roundone.in"  # This is the live api
+ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in"
+ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
+ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
+ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
+ROUNDONE_CP_CLIENT_SECRET = 'c&OMxZ^0T*6qvyi0e3lU9OjWc!(%Wp+'
+ROUNDONE_ENCODING_KEY = '#r0und0n3k3y'
+ROUNDONE_ENCODING_SALT = '#r0und0n354l7'
+ROUNDONE_DEFAULT_PASSWORD = 'cp@roundone'
+ROUNDONE_API_TIMEOUT = 60
+
+ROUNDONE_API_DICT = {
+    'amount': 1999,
+    'organisationId': 11,
+    'affiliateName': 'CP',
+    'client_id': ROUNDONE_CP_CLIENT_ID,
+    'client_secret': ROUNDONE_CP_CLIENT_SECRET,
+    'order_secret_key': ROUNDONE_ORDER_SECRET_KEY,
+    'jobdetail_secret_key': ROUNDONE_JOBDETAIL_SECRET_KEY,
+    'location_url': ROUNDONE_API_BASEURL + "/applicant/location-list",
+    'order_save_url': ROUNDONE_API_BASEURL_ORDER + "/api/careerplus/save",
+    'job_search_url': ROUNDONE_API_BASEURL + "/applicant/search",
+    'oauth_url': ROUNDONE_API_BASEURL + "/oauth-token",
+    'job_detail_url': ROUNDONE_API_BASEURL + "/applicant/job-details",
+    'is_premium_url': ROUNDONE_API_BASEURL + "/applicant/is-premium",
+    'save_job_url': ROUNDONE_API_BASEURL + "/applicant/save-jobs",
+    'get_profile_url': ROUNDONE_API_BASEURL + "/applicant/get-profile",
+    'post_profile_url': ROUNDONE_API_BASEURL + "/applicant/post-profile",
+    'submit_resume': ROUNDONE_API_BASEURL + "/applicant/submit-resume",
+    'referral_request_url': ROUNDONE_API_BASEURL + "/applicant/referral-request",
+    'referral_status_url': ROUNDONE_API_BASEURL + "/applicant/referral-status",
+    'referral_confirm_url': ROUNDONE_API_BASEURL + "/applicant/confirm-interaction",
+    'upcoming_interaction_url': ROUNDONE_API_BASEURL + "/applicant/upcoming-interactions",
+    'past_interaction_url': ROUNDONE_API_BASEURL + "/applicant/past-interactions",
+    'saved_history_url': ROUNDONE_API_BASEURL + "/applicant/get-saved-jobs",
+    'delete_job_url': ROUNDONE_API_BASEURL + "/applicant/delete-saved-job",
+    'feedback_submit_url': ROUNDONE_API_BASEURL + "/applicant/submit-feedback",
+    'interaction_result_url': ROUNDONE_API_BASEURL + "/applicant/view-interaction-result",
+    'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
+}

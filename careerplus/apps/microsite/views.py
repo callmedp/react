@@ -90,6 +90,9 @@ class PartnerListView(TemplateView):
                 "flag": flag_status,
                 "reset_form": PasswordResetRequestForm()
             })
+            product = Product.objects.filter(id=settings.ROUNDONE_PRODUCT_ID)
+            if len(product):
+                context['product'] = product[0]
 
         return context
 

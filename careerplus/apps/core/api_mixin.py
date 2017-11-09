@@ -213,10 +213,10 @@ class AdServerShine(object):
 
     def decode(self, encoded_str):
         if encoded_str:
-            import urllib
-            token = urllib.unquote(encoded_str).decode('utf8')
+            import urllib.parse
+            token = urllib.parse.unquote(encoded_str)
             xor_cipher = XOR.new(settings.MOBILE_ADSERVER_ENCODE_KEY)
-            inp_str = xor_cipher.decrypt(token)
+            inp_str = xor_cipher.decrypt(token).decode("utf-8")
             inp_list = inp_str.split('|')
             if inp_list and len(inp_list) > 1 and inp_list[0] == settings.MOBILE_ADSERVER_ENCODE_KEY:
                 return inp_list

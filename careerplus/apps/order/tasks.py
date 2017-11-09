@@ -293,7 +293,7 @@ def process_mailer(pk=None):
                     'candidateid': oi.order.email,
                     'mobile': oi.order.mobile,
                 })
-                if oi.product.type_flow == 1:
+                if oi.product.type_flow in [1, 12, 13]:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
@@ -555,8 +555,8 @@ def payment_realisation_mailer(pk=None):
                 try:
                     SendMail().send(to_emails, mail_type, invoice_data)
                     logging.getLogger('email_log').error(
-                        "payment realisation mail send to %s - %s - %s" % (
-                            str(to_emails), str(mail_type), str(e)))
+                        "payment realisation mail send to %s - %s" % (
+                            str(to_emails), str(mail_type)))
                 except Exception as e:
                     logging.getLogger('email_log').error(
                         "payment realisation %s - %s - %s" % (
