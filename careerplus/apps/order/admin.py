@@ -74,7 +74,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 
     list_filter = ('oi_status', 'partner')
     search_fields = ('order__number', 'id',
-        'order__candidate_id', 'order__email', 'partner__name')
+        'order__candidate_id', 'order__email', 'partner__name', 'product__name')
 
 
 class RefundItemInline(admin.TabularInline):
