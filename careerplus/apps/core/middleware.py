@@ -1,6 +1,7 @@
 # python built-in imports
 import logging
 import re
+import urllib.parse
 from datetime import datetime
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
@@ -57,11 +58,17 @@ class LearningShineMiddleware(object):
     def __call__(self, request):
         country_obj = UserMixin().get_client_country(request)
         set_session_country(country_obj, request)
-
         ad_content = request.GET.get('ad_content', '')
         if ad_content:
             ad_content = ad_content
             request.session['_adserver_'] = ad_content
+        elif ad_content == '':
+            full_url = request.build_absolute_uri()
+            decode_url = urllib.parse.unquote(full_url)
+            query = urllib.parse.urlsplit(decode_url).query
+            dict_data = dict(urllib.parse.parse_qsl(query))
+            request.session['_adserver_'] = dict_data.get('ad_content')
+
         if request.session.get('_adserver_', None):
             try:
                 decoded_ad = AdServerShine().decode(
