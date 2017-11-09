@@ -38,9 +38,12 @@ $(document).ready(function() {
         return true;
     });
 
-    var $pdfForm = $("#downloadpdf_form");
-    $pdfForm.validate({
 
+    $(document).on('click', '#id_download', function(event) {
+        // event.preventDefault();
+
+        var $pdfForm = $("#downloadpdf_form");
+        $pdfForm.validate({
             rules:{
                 name:{
                     required: true,
@@ -88,12 +91,9 @@ $(document).ready(function() {
             errorPlacement: errorPlacement
         });
 
-
-    $(document).on('click', '#id_download', function(event) {
-        // event.preventDefault();
         $("#id_action").val(1);  //action on download button
-        var $pdfForm = $("#downloadpdf_form");
-        if ($pdfForm.valid()) {
+/*        var $pdfForm = $("#downloadpdf_form");
+*/        if ($pdfForm.valid()) {
             var href = $('#id_download_button').attr('href');
             $pdfForm.submit();
             $pdfForm[0].reset();
@@ -106,7 +106,7 @@ $(document).ready(function() {
         var $pdfForm = $("#downloadpdf_form");
         $("#id_action").val(0);   // action on skip button
         $pdfForm.submit();
-        // $pdfForm[0].reset();
+        $pdfForm[0].reset();
         var href = $('#id_download_button').attr('href');
         window.open(href, '_blank'); 
     });
