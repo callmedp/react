@@ -11,8 +11,8 @@
 
 {% block css_section %}
     {{block.super}}
-    {% compress css %}
     <link href="{% static "shinelearn/css/bootstrap-datepicker.min.css" %}" rel="stylesheet">
+    {% compress css %}
     <link type="text/css" href="{% static "shinelearn/css/cart/payment.css" %}" rel="stylesheet">
     {% endcompress %}
     {% compress css %}
@@ -246,8 +246,8 @@
 
 {% block js_section %}
     {{ block.super }}
-    {% compress js %}
     <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+    {% compress js %}
     <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
