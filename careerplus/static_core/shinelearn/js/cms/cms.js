@@ -38,56 +38,6 @@ $(document).ready(function() {
         return true;
     });
 
-    // var $pdfForm = $("#downloadpdf_form");
-    // $pdfForm.validate({
-
-    //         rules:{
-    //             name:{
-    //                 required: true,
-    //                 maxlength: 100
-    //             },
-    //             email:{
-    //                 required: false,
-    //                 maxlength: 100
-    //             },
-    //             mobile_number:{
-    //                 required: true,
-    //                 digits: true,
-    //                 indiaMobile: true,
-    //                 minlength: 4,
-    //                 maxlength: 15,
-    //             },
-    //             term_condition:{
-    //                 required: true
-    //             }
-
-    //         },
-    //         messages:{
-    //             name:{
-    //                 required: "Name is mandatory",
-    //                 maxlength: "Maximum 100 characters."
-    //             },
-    //             email:{
-    //                 maxlength: "At most 100 characters"
-    //             },
-    //             mobile_number:{
-    //                 required: "Mobile Number is Mandatory",
-    //                 digits: "Enter only digits",
-    //                 indiaMobile: "Please enter 10 digits only",
-    //                 minlength: "Please enter atleast 4 digits",
-    //                 maxlength: "Please enter less than 16 digits",
-                   
-    //             },
-    //             term_condition: {
-    //                 required: "Please accept our Terms & Conditions"
-    //             }
-
-    //         },
-    //         highlight: highlightError,
-    //         unhighlight: unhighlightError,
-    //         errorPlacement: errorPlacement
-    //     });
-
 
     $(document).on('click', '#id_download', function(event) {
         // event.preventDefault();
