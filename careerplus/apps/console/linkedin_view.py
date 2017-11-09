@@ -1093,7 +1093,7 @@ class CreateDrftObject(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             oi = kwargs.get('oi', '')
-            oi_items = OrderItem.objects.filter(oi=oi)
+            oi_items = OrderItem.objects.filter(pk=oi)
             for oi_item in oi_items:
                 order_item = oi_item
                 last_oi_status = order_item.oi_status
@@ -1124,3 +1124,7 @@ class CreateDrftObject(TemplateView):
         except Exception as e:
             logging.getLogger('error_log').error(
                 "%s - %s" % (str(oi), str(e)))
+            messages.add_message(request, messages.ERROR, "Error occurred. Please contact Tech")
+        return HttpResponseRedirect(
+            reverse('console:linkedin-inbox')
+        )

@@ -763,5 +763,5 @@ class DashboardResumeDownload(View):
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
                         
-        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
+        return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
