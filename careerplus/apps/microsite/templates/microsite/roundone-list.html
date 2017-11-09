@@ -173,7 +173,7 @@
             onclick="onClickGetReference({{job.jobId}});">Get Referred</a>
           {% elif request.session.candidate_id %}
             <a role="button" class="get-refferd pull-right enrol-now-button" 
-            prod-id="819">Get Referred</a>
+            prod-id="{{ product.id }}">Get Referred</a>
           {% else %}
             <a href="javascript:void(0)" class="get-refferd pull-right" 
             data-toggle="modal" data-target=".logindiv">Get Referred</a>
