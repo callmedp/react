@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from celery.decorators import task
 from cart.models import Subscription
 from order.models import Order
+from shop.models import Product
 
 
 @task(name="post_roundone_order")
@@ -22,6 +23,9 @@ def post_roundone_order(data_dict):
             roundone_order, created = Subscription.objects.get_or_create(
                 candidateid=candidateid, order=ord_obj)
             if roundone_order.status != 1:
+                product = Product.objects.filter(
+                    id=settings.ROUNDONE_PRODUCT_ID)
+                prd_amount = product[0] if product else None
                 roundone_api_dict = settings.ROUNDONE_API_DICT
                 data_str = ''
                 api_secret_key = roundone_api_dict.get('order_secret_key')
@@ -35,7 +39,7 @@ def post_roundone_order(data_dict):
                     'emailId': ord_obj.email,
                     'name': ord_obj.first_name,
                     'mobile': ord_obj.mobile,
-                    'amount': roundone_api_dict.get('amount', 1999),
+                    'amount': prd_amount.inr_price,
                     'orderId': ord_obj.id,
                     'transactionId': ord_obj.number,
                     'billingDate': billingDate,
