@@ -207,10 +207,9 @@
 
 {% block js_section %}
     {{block.super}}
-
+    <script src="{% static "shinelearn/js/common/bootstrap.min.js" %}"></script>
+    <script src="{% static "shinelearn/js/common/bootstrap-datepicker.min.js" %}"></script>
     {% compress js %}
-        <script src="{% static "shinelearn/js/common/bootstrap.min.js" %}"></script>
-        <script src="{% static "shinelearn/js/common/bootstrap-datepicker.min.js" %}"></script>
         <script src="{% static "shinelearn/js/payment/payment.js" %}"></script>
     {% endcompress %}
 

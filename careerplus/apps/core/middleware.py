@@ -1,6 +1,7 @@
 # python built-in imports
 import logging
 import re
+import urllib.parse
 from datetime import datetime
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
@@ -11,6 +12,8 @@ from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
 from shine.core import ShineCandidateDetail
 from django.conf import settings
+from users.mixins import UserMixin
+from core.api_mixin import AdServerShine
 from .utils import set_session_country
 
 
@@ -53,29 +56,23 @@ class LearningShineMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        from users.mixins import UserMixin
         country_obj = UserMixin().get_client_country(request)
         set_session_country(country_obj, request)
-        response = self.get_response(request)
-        return response
-
-    def process_request(self, request):
-        from core.api_mixin import AdServerShine, AcrossShine
-        cpem = request.COOKIES.get('_cpem_', '')
-
-        try:
-            cpem_mail = AcrossShine().decode(cpem)
-        except:
-            cpem_mail = None
-
         ad_content = request.GET.get('ad_content', '')
         if ad_content:
             ad_content = ad_content
             request.session['_adserver_'] = ad_content
+        elif ad_content == '':
+            full_url = request.build_absolute_uri()
+            decode_url = urllib.parse.unquote(full_url)
+            query = urllib.parse.urlsplit(decode_url).query
+            dict_data = dict(urllib.parse.parse_qsl(query))
+            request.session['_adserver_'] = dict_data.get('ad_content')
+
         if request.session.get('_adserver_', None):
             try:
-                decoded_ad = AdServerShine().decode(request.session.get(
-                    '_adserver_', None))
+                decoded_ad = AdServerShine().decode(
+                    request.session.get('_adserver_'))
                 if decoded_ad:
                     email = decoded_ad[1]
                     mobile = decoded_ad[2]
@@ -91,19 +88,16 @@ class LearningShineMiddleware(object):
                             timestamp_obj, timezone.get_current_timezone())
                     except:
                         timestamp_obj = timezone.now()
-                    timediff = timezone.now() - timestamp_obj
-                    minute_diff = timediff.seconds / 60
                     addAdServerLead.delay({
                         'email': email,
                         'mobile': mobile,
                         'timestamp': timestamp,
                         'url': url
                     })
-                    if minute_diff < 30:
-                        if email:
-                            cpem_mail = email
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
+        response = self.get_response(request)
+        return response
 
 
 class LoginMiddleware(object):

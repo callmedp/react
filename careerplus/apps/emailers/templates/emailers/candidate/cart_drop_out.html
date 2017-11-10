@@ -56,20 +56,20 @@
                 {% endif %}
               </tr>
               {% if addons %}
-                <tr>
-                  {% for addon in addons %}
-                    <td>{{addon.product.name}}</td>
-                    <td>{{addon.product.get_price}}</td>
-                  {% endfor %}
-                </tr>
+                {% for addon in addons %}
+                  <tr>
+                      <td>{{addon.product.name}}</td>
+                      <td>{{addon.product.get_price}}</td>
+                  </tr>
+                {% endfor %}
               {% endif %}
               {% if variations %}
-                <tr>
-                  {% for var in variations %}
-                    <td>{{var.product.name}}</td>
-                    <td>{{var.product.get_price}}</td>
-                  {% endfor %}
-                </tr>
+                {% for var in variations %}
+                  <tr>
+                      <td>{{var.product.name}}</td>
+                      <td>{{var.product.get_price}}</td>
+                  </tr>
+                {% endfor %}
               {% endif %}
               <tr>
                 <td style="border-top:1px dashed #333; padding:3px 0;"><strong>Total (T)</strong></td>

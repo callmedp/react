@@ -15,9 +15,13 @@
 {% block css_section %}
     {{block.super}}
     {% if request.session.candidate_id %}
+    {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/homepage/home1.css' %}" rel="stylesheet">
+    {% endcompress %}
     {% else %}
+    {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
+    {% endcompress %}
     {% endif %}
     {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
@@ -310,8 +314,8 @@
 
 {% block js_section %}
     {{block.super}}
-    {% compress js %}
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    {% compress js %}
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     {% endcompress %}

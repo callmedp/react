@@ -61,7 +61,8 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
             pass
         else:
             vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
-            queryset = queryset.filter(partner__in=vendor_employee_list)
+            queryset = queryset.filter(Q(partner__in=vendor_employee_list) |
+                Q(product__vendor__in=vendor_employee_list))
 
         try:
             if self.query:
@@ -150,7 +151,8 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
             pass
         else:
             vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
-            queryset = queryset.filter(partner__in=vendor_employee_list)
+            queryset = queryset.filter(Q(partner__in=vendor_employee_list) |
+                Q(product__vendor__in=vendor_employee_list))
 
         try:
             if self.query:
@@ -239,7 +241,8 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
             pass
         else:
             vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
-            queryset = queryset.filter(partner__in=vendor_employee_list)
+            queryset = queryset.filter(Q(partner__in=vendor_employee_list) |
+                Q(product__vendor__in=vendor_employee_list))
 
         try:
             if self.query:
