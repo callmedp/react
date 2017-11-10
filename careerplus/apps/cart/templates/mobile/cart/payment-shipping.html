@@ -16,6 +16,8 @@
         <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
         <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
         <link href="{% static "shinelearn/css/mobile/users/login.css" %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css inline %}
         <style type="text/css">
             .error{
                 color:red;
@@ -150,8 +152,8 @@
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
     {% compress js %}
+    <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
     {% endcompress %}
     

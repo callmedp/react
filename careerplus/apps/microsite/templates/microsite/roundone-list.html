@@ -12,12 +12,12 @@
     
     {% block css_section %}
         {{block.super}}
-        {% compress css %}
         <style type="text/css">
         .error {
             color: red;
         }
         </style>
+        {% compress css %}
         <link type="text/css" href="{% static 'shinelearn/css/microsite/roundone.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/microsite/multiple-select.css' %}" rel="stylesheet">
         {% endcompress %}

@@ -314,8 +314,8 @@
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     {% compress js %}
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     {% endcompress %}
@@ -328,7 +328,7 @@
             local: {{ search_context|safe }}
         });
     </script>
-    {% compress js %}
+    {% compress js inline %}
     <script>
         $('#myCarousel1').carousel({
             interval: false
