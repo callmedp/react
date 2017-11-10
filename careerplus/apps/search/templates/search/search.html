@@ -126,10 +126,10 @@ Search Result Page - Shine Learning
 {% block js_section %}
     {{block.super}}
     <!-- Include all compiled plugins (below), or include individual files as needed -->
+    {% compress js %}
     <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
-    {% compress js %}
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
     {% endcompress %}

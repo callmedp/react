@@ -100,8 +100,8 @@
 {% endblock container %}
 {% block js_section %}
     {{ block.super }}
-    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
     {% compress js %}
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/dashboard/counselling.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}

@@ -20,7 +20,7 @@
         <link href="{% static "shinelearn/css/mobile/common/smk-accordion.css" %}" rel="stylesheet">
     {% endcompress %}
 
-    {% compress css %}
+    {% compress css inline %}
         <style type="text/css">
             .error{
                 color:red;
@@ -207,13 +207,13 @@
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static "shinelearn/js/common/bootstrap.min.js" %}"></script>
-    <script src="{% static "shinelearn/js/common/bootstrap-datepicker.min.js" %}"></script>
     {% compress js %}
+        <script src="{% static "shinelearn/js/common/bootstrap.min.js" %}"></script>
+        <script src="{% static "shinelearn/js/common/bootstrap-datepicker.min.js" %}"></script>
         <script src="{% static "shinelearn/js/payment/payment.js" %}"></script>
     {% endcompress %}
 
-    {% compress js %}
+    {% compress js inline %}
         <script>
            jQuery(document).ready(function($){ 
               $(".accordion_example1").smk_Accordion({
