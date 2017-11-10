@@ -1254,14 +1254,17 @@ class Product(AbstractProduct, ModelMeta):
     def get_fbts(self):
         if self.type_product in [0, 1, 3, 5]:
             return self.related.filter(
-                secondaryproduct__active=True, active=True).order_by('-secondaryproduct__sort_order')
+                secondaryproduct__active=True,
+                secondaryproduct__is_indexable=True,
+                active=True).order_by('-secondaryproduct__sort_order')
         else:
             return []
 
     def get_combos(self):
         if self.type_product == 3:
             return self.childs.filter(
-                active=True, childrenproduct__active=True).order_by('-childrenproduct__sort_order')
+                active=True,
+                childrenproduct__active=True).order_by('-childrenproduct__sort_order')
         else:
             return []
 
@@ -1272,12 +1275,14 @@ class Product(AbstractProduct, ModelMeta):
             if category:
                 if self.is_course:
                     pop_list = category.get_products().filter(
-                        type_product__in=[0, 1, 3, 5]).exclude(
+                        type_product__in=[0, 1, 3, 5],
+                        is_indexable=True).exclude(
                         vendor=self.vendor).distinct()
                     return pop_list
                 elif self.is_writing or self.is_service:
                     pop_list = category.get_products().filter(
-                        type_product__in=[0, 1, 3, 5]).exclude(
+                        type_product__in=[0, 1, 3, 5],
+                        is_indexable=True).exclude(
                         pk=self.pk).distinct()
                     return pop_list
             return []
