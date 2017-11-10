@@ -1255,7 +1255,7 @@ class Product(AbstractProduct, ModelMeta):
         if self.type_product in [0, 1, 3, 5]:
             return self.related.filter(
                 secondaryproduct__active=True,
-                secondaryproduct__is_indexable=True,
+                is_indexable=True,
                 active=True).order_by('-secondaryproduct__sort_order')
         else:
             return []
