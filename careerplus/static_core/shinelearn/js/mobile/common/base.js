@@ -32,6 +32,11 @@ $(document).ready(function() {
 	    $("#close").css("display", "table-cell");
 	    $("#list").slideToggle("fast");
 	});
+
+	$("a[href^='tel']").on("click",function(){
+	    MyGA.SendEvent('Callback', 'Call Interactions', 'General Enquiry', 'success');
+	});
+
 	
 
 	$(".home-slider").slick({
