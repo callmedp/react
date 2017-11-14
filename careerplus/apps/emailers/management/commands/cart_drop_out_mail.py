@@ -70,8 +70,9 @@ def get_last_cart_item():
                             li.save()
                             total_price += li.price_incl_tax
                     data['total'] = round(total_price, 2)
+                    product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
                     data['subject'] = '{} is ready to checkout'.format(
-                        m_prod.product.name)
+                        product_name)
                     if m_prod.cart.email and m_prod.cart.owner_id:
                         to_email.append(m_prod.cart.email)
                     else:

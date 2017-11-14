@@ -289,11 +289,14 @@ class GetReferenceView(View, RoundOneAPI):
                                 {'status': True, 'response': False,
                                  'message': msg}))
                     return HttpResponse(json.dumps(
-                        {'status': False, 'message': "Roundone is facing some technical issues. Please try later"}))
+                        {'status': False, 'message': "Sorry! Something went wrong. "
+                                                     "You can also use your services on http://www.roundone.in/ "
+                                                     "or you can reach out at support@roundone.in"}))
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return HttpResponse(
-            json.dumps({'status': False, 'message': 'Roundone is facing some technical issues. Please try later'}))
+            json.dumps({'status': False, 'message': 'Sorry! Something went wrong. You can also use your services on '
+                                                    'http://www.roundone.in/ or you can reach out at support@roundone.in'}))
 
 
 class RedirectProfileView(View):

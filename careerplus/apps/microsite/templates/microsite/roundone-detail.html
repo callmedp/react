@@ -287,7 +287,8 @@
    {{ block.super }}
     <script type="text/javascript">
       {% if not job_detail.response %}
-          showErrorModal("Roundone is facing some technical issues. Please Try again.", "Ok");
+          showErrorModal("Sorry! Something went wrong. You can also use your services on " +
+                  "http://www.roundone.in/ or you can reach out at support@roundone.in", "Ok");
       {% endif %}
     </script>
     {% compress js %}

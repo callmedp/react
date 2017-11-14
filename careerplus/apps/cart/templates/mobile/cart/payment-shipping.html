@@ -150,10 +150,9 @@
 
 {% block js_section %}
     {{block.super}}
-
+    <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
     {% compress js %}
-       <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
-       <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
     {% endcompress %}
     
     {% block johukum %}
