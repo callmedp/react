@@ -1240,7 +1240,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         elif user.has_perm('order.can_view_only_assigned_closed_oi_list'):
             queryset = queryset.filter(assigned_to=user)
         elif vendor_employee_list:
-            queryset = queryset.filter(partner__in=vendor_employee_list)
+            queryset = queryset.filter(Q(partner__in=vendor_employee_list) |
+                Q(product__vendor__in=vendor_employee_list))
         else:
             queryset = queryset.none()
 

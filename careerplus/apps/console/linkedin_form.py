@@ -324,6 +324,7 @@ class LinkedinInboxActionForm(forms.Form):
         from django.db.models import Q
         perm = Permission.objects.get(codename='writer_assignment_linkedin_action')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        users = users.filter(active=True)
         self.fields['action'].required = True
         self.fields['action'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['action'].queryset = users
@@ -397,6 +398,7 @@ class LinkedinOIFilterForm(forms.Form):
 
         perm = Permission.objects.get(codename='writer_assignment_linkedin_action')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        users = users.filter(active=True)
         self.fields['writer'].widget.attrs['class'] = 'form-control'
         self.fields['writer'].queryset = users
 
@@ -458,6 +460,7 @@ class AssignmentInterNationalForm(forms.Form):
         from django.db.models import Q
         perm = Permission.objects.get(codename='international_profile_update_assignee')
         users = User.objects.filter(Q(groups__permissions=perm) | Q(user_permissions=perm)).distinct()
+        users = users.filter(active=True)
         self.fields['assign_to'].required = True
         self.fields['assign_to'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['assign_to'].queryset = users
