@@ -241,6 +241,7 @@ class DownloadPdfView(View, UploadInFile):
                 "email": email,
                 "message": message,
                 "path": path,
+                'lead_source': 7,
             }
             if mobile:
                 query_obj = UserQuries(**data_dict)
@@ -265,6 +266,7 @@ class DownloadPdfView(View, UploadInFile):
                     "phn_number": request.session.get('mobile_no'),
                     "email": request.session.get('email'),
                     "path": path,
+                    'lead_source': 7,
                 }
                 query_obj = UserQuries(**data_dict)
                 query_obj.save()

@@ -16,7 +16,7 @@
         <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
         <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
     {% endcompress %}
-    {% compress css %}
+    {% compress css inline %}
         <style>
            .error{
 /*            color:red;
@@ -81,8 +81,6 @@
 
 {% block js_section %}
     {{block.super}}
-
-    {% compress js %}
       <script type="text/javascript">
           var error = "{{error_type}}";
           console.log(error);
@@ -94,7 +92,6 @@
               }, 3000);
           }
       </script>
-    {% endcompress %}
 
     {% block johukum %}
     {% endblock johukum %}

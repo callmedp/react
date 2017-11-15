@@ -741,10 +741,10 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
         queryset = queryset.exclude(id__in=exclude_list)
         user = self.request.user
-        if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
+        if user.is_superuser:
             pass
         elif user.has_perm('order.international_profile_update_assigner'):
-            queryset = queryset.filter(assigned_to__isnull=True)
+            queryset = queryset.filter(assigned_to=None)
         elif user.has_perm('order.international_profile_update_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:

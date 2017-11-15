@@ -79,8 +79,8 @@
 {% endblock container %}
 {% block js_section %}
    {{ block.super }}
-    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
     {% compress js %}
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}

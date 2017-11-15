@@ -9,6 +9,8 @@
     {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css inline %}
     <style type="text/css">
         .error{
             color: red;
