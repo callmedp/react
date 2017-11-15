@@ -184,10 +184,10 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-COMPRESS_CSS_FILTERS = [
+COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.rCSSMinFilter'
-]
+    'compressor.filters.cssmin.rCSSMinFilter',
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -507,3 +507,4 @@ DEPARTMENT_HEAD_GROUP_LIST = ['DEPARTMENT_HEAD']
 FINANCE_GROUP_LIST = ['FINANCE']
 BUSINESS_APPROVAL_LIMIT = 25000  # refund
 REFUND_GROUP_LIST = OPS_GROUP_LIST + OPS_HEAD_GROUP_LIST + BUSINESS_HEAD_GROUP_LIST + DEPARTMENT_HEAD_GROUP_LIST + FINANCE_GROUP_LIST
+
