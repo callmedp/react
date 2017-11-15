@@ -1,16 +1,17 @@
 function GA(){
     var that = this;
-    that.fireGaEvent = function(category,action,label,value,noninteraction,switchcase,metrics){
-
-        var path = self.window.location.pathname;
-        type = 'event';
-        category = category || '';
-        action = action || '';
-        label= label || '';
-        value = value || 0;
-        noninteraction = noninteraction || false;
-        switchcase = switchcase || false;
-        metrics = metrics || {};
+    that.fireGaEvent = function(options){
+        // category,action,label,value,noninteraction,switchcase,metrics
+        var path = self.window.location.pathname,
+        type = 'event',
+        category = options.category || '',
+        action = options.action || '',
+        label= options.label || '',
+        value = options.value || 0,
+        noninteraction = options.noninteraction || false,
+        switchcase = options.switchcase || false,
+        metrics = options.metrics || {},
+        name = options.name || '';
         /*if(switchcase){
 
             if(path.indexOf('job-search/')>-1){
@@ -28,8 +29,14 @@ function GA(){
         }*/
 
         try{
+
             /*ga('send',type,category,action,label,value,noninteraction,metrics);*/
-            ga('send',type,category,action,label,noninteraction);
+            //ga('send',type,category,action,label,noninteraction);
+            gtag('event', name, {
+              'event_category': category,
+              'event_label': label,
+              'event_action':action
+            });
         }catch(e)
         {
             try{
@@ -94,8 +101,14 @@ GA.prototype.SendEvent = function() {
             if(typeof arguments[5] != "undefined") {
                 noninteraction = arguments[5];
             }
-
-            that.fireGaEvent(arguments[1],arguments[2],arguments[3],value,noninteraction);
+            that.fireGaEvent({
+                'category': arguments[1],
+                'action': arguments[2],
+                'label': arguments[3],
+                'value': value,
+                'noninteraction': noninteraction,
+                'name': 'leadform' 
+            });
             break;
         
     }
