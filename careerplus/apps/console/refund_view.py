@@ -169,7 +169,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset
+        return queryset.order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_view_refund_request_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -220,10 +220,13 @@ class RefundOrderRequestView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RefundOrderRequestView, self).get_queryset()
         user = self.request.user
+        grp_list = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST
         if user.is_superuser:
             pass
-        elif has_group(user=user, grp_list=settings.OPS_HEAD_GROUP_LIST):
-            queryset = queryset.filter(status=1)
+        elif has_group(user=user, grp_list=grp_list):
+            pass
+        else:
+            queryset = queryset.none()
 
         try:
             if self.query:
@@ -265,7 +268,7 @@ class RefundOrderRequestView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset
+        return queryset.order_by('-modified')
 
 
 class RefundRequestDetail(DetailView, RefundInfoMixin):
@@ -613,6 +616,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 refund_obj.message = message
                 refund_obj.document = attached_file
                 last_status = refund_obj.status
+                refund_obj.status = 1
                 # if request.user.has_group 'ops'
                 #     refund_obj.last_status = refund_obj.status
                 #     refund_obj.status = 9
