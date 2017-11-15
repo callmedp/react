@@ -89,7 +89,6 @@ LOCAL_APPS = [
     'linkedin',
     'emailers',
     'quizs',
-    'database',
     'crmapi',
     'api',
     'marketing',
