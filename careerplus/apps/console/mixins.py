@@ -144,7 +144,7 @@ class ActionUserMixin(object):
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
-                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                            "username": oi.order.first_name,
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
@@ -181,7 +181,7 @@ class ActionUserMixin(object):
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
-                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                            "username": oi.order.first_name,
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
@@ -294,11 +294,11 @@ class ActionUserMixin(object):
                 for chunk in file.chunks():
                     dest.write(chunk)
                 dest.close()
-                oi_draft = full_path + file_name 
+                oi_draft = full_path + file_name
             except Exception as e:
                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
-                raise 
-            
+                raise
+
             if oi.product.type_flow in [2, 10]:
                 last_oi_status = oi.last_oi_status
                 oi.oi_status = 4  # closed orderitem
@@ -328,7 +328,7 @@ class ActionUserMixin(object):
                 email_dict = {}
                 email_dict.update({
                     "subject": 'Your service(s) has been initiated',
-                    "name": oi.order.first_name if oi.order.first_name else 'User',
+                    "name": oi.order.first_name,
                     "mobile": oi.order.mobile,
                     'oi': oi,
                 })
@@ -337,12 +337,14 @@ class ActionUserMixin(object):
                 try:
                     SendMail().send(to_emails, mail_type, email_dict)
                 except Exception as e:
-                    logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-
+                    logging.getLogger('email_log').error(
+                        "%s - %s - %s" % (
+                            str(to_emails), str(e), str(mail_type)))
                 try:
                     SendSMS().send(sms_type=mail_type, data=email_dict)
                 except Exception as e:
-                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    logging.getLogger('sms_log').error(
+                        "%s - %s" % (str(mail_type), str(e)))
 
             elif oi.product.type_flow == 6:
                 if oi.oi_status == 81:

@@ -49,7 +49,6 @@ def draft_reminder_mail():
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        "candidateid": oi.order.candidate_id,
                         'mobile': oi.order.mobile,
                         'days': 22,
                         'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -75,7 +74,6 @@ def draft_reminder_mail():
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        "candidateid": oi.order.candidate_id,
                         'mobile': oi.order.mobile,
                         'days': 15,
                         'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -100,7 +98,6 @@ def draft_reminder_mail():
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        "candidateid": oi.order.candidate_id,
                         'mobile': oi.order.mobile,
                         'days': 7,
                         'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -160,7 +157,6 @@ def draft_reminder_mail():
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        "candidateid": oi.order.candidate_id,
                         'mobile': oi.order.mobile,
                         'days': 7,
                         'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -184,7 +180,6 @@ def draft_reminder_mail():
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        "candidateid": oi.order.candidate_id,
                         'mobile': oi.order.mobile,
                         'days': 4,
                         'upload_url': "%s/autologin/%s/?next=/dashboard" % (
