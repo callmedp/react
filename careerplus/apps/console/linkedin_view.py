@@ -1087,7 +1087,6 @@ class ProfileCredentialDownload(View):
             return HttpResponseForbidden()
 
 
-
 class CreateDrftObject(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -1105,10 +1104,12 @@ class CreateDrftObject(TemplateView):
                 edu_obj = Education()
                 edu_obj.draft = draft_obj
                 edu_obj.save()
-
-                quiz_rsp = QuizResponse()
-                quiz_rsp.oi = order_item
-                quiz_rsp.save()
+                try:
+                    quiz_rsp = QuizResponse.objects.get(oi=oi)
+                except Exception as e:
+                    quiz_rsp = QuizResponse()
+                    quiz_rsp.oi = order_item
+                    quiz_rsp.save()
 
                 order_item.counselling_form_status = 49
                 order_item.oio_linkedin = draft_obj
