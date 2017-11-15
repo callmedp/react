@@ -158,6 +158,6 @@ def roundone_product(order=None):
                     oi.orderitemoperation_set.create(
                         oi_status=oi.oi_status,
                         last_oi_status=last_oi_status)
-            RoundOneAPI().create_roundone_order(order)
+                    RoundOneAPI().create_roundone_order(order)
     except Exception as e:
         logging.getLogger('error_log').error("%s - %s" % (str(order), str(e)))
