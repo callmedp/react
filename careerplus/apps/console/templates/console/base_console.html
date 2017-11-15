@@ -68,6 +68,20 @@
                 <div class="clearfix"></div>
               </div>
               <!-- /menu profile quick info -->
+              {% if perms.order.can_search_order_from_console %}
+                <form autocomplete="off" method="GET" action="{% url "console:search-order" %}" id="filter-tables">
+                  <div class="title_right">
+                    <div class="col-md-12 col-sm-12 form-group pull-right top_search">
+                      <div class="input-group">
+                        <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for order...">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
+                        </span>
+                      </div>
+                    </div>
+                   </div>
+                </form>
+              {% endif %}
   
             {% endblock sidebar_quickinfo %}
             
