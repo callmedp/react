@@ -1032,7 +1032,7 @@ class InterNationalAssignmentOrderItemView(View):
 
                     data = {}
                     data.update({
-                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "username": obj.order.first_name,
                         "writer_name": assign_to.name,
                         "subject": "Your service has been initiated",
                         "writer_email": assign_to.email,

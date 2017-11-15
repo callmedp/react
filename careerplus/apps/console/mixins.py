@@ -67,7 +67,7 @@ class ActionUserMixin(object):
                 mail_type = 'ALLOCATED_TO_WRITER'
                 email_data = {}
                 email_data.update({
-                    "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                    "username": obj.order.first_name,
                     "writer_name": assigned_to.name,
                     "writer_email": assigned_to.email,
                     "subject": "Your service has been initiated",
