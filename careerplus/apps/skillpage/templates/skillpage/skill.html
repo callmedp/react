@@ -114,7 +114,7 @@
 			<!-- Importance in Market -->
             {% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
 			<div id="market" class="importance-market clearfix mb-40 scroll">
-				{% if not category_obj.graph_image %}
+				{% if category_obj.graph_image %}
 				<h2>Importance in Market</h2>
 			    <div class="col-sm-6 box-panel">
 			    	<figure>
