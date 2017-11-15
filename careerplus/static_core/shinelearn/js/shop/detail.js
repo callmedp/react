@@ -97,30 +97,59 @@ $(document).ready(function () {
         },
         errorPlacement: function(error, element){
             $(element).siblings('.error').html(error.text());
-        } 
+        },
+        ignore : '',
+        submitHandler: function(form){
+          // ga code
+          var path = window.location.pathname, 
+              action = '';
+          if (path.indexOf('/course/') > -1) {
+            action = 'Course Enquiry';
+          } else if (path.indexOf('/services/') > -1) {
+            action = 'Service Enquiry';
+          }
+          MyGA.SendEvent('QueryForm', 'Form Interactions', action, 'success');
+          //form.submit();
+          var formData = $(form).serialize();
+          $.ajax({
+                  url : "/shop/crm/lead/",
+                  type: "POST",
+                  data : formData,
+                  success: function(data, textStatus, jqXHR)
+                  {
+                    $("#detailpage").modal('hide');
+                    alert('Your Query Submitted Successfully.');
+                        window.location.reload();
+                  },
+                  error: function (jqXHR, textStatus, errorThrown)
+                  {
+                      window.location.reload(); 
+                  }
+              }); 
+        }
   });
 
   
-  $('#id_callback').click(function(){
-    if ( $("#callback_form").valid()) {
-      var formData = $("#callback_form").serialize();
-      $.ajax({
-              url : "/shop/crm/lead/",
-              type: "POST",
-              data : formData,
-              success: function(data, textStatus, jqXHR)
-              {
-                $("#detailpage").modal('hide');
-                alert('Your Query Submitted Successfully.');
-                    window.location.reload();
-              },
-              error: function (jqXHR, textStatus, errorThrown)
-              {
-                  window.location.reload(); 
-              }
-          }); 
-    }  
-    });
+  // $('#id_callback').click(function(){
+  //   if ( $("#callback_form").valid()) {
+  //     var formData = $("#callback_form").serialize();
+  //     $.ajax({
+  //             url : "/shop/crm/lead/",
+  //             type: "POST",
+  //             data : formData,
+  //             success: function(data, textStatus, jqXHR)
+  //             {
+  //               $("#detailpage").modal('hide');
+  //               alert('Your Query Submitted Successfully.');
+  //                   window.location.reload();
+  //             },
+  //             error: function (jqXHR, textStatus, errorThrown)
+  //             {
+  //                 window.location.reload(); 
+  //             }
+  //         }); 
+  //   }  
+  //   });
 });
       $(document).ready(function() {
       // Configure/customize these variables.
