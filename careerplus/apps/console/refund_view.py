@@ -424,7 +424,6 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
         return super(RefundRequestEditView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-
         selected_items = request.POST.getlist('item_name', [])
         attached_file = request.FILES.get('attach_file', '')
         message = request.POST.get('message', '').strip()
@@ -626,6 +625,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 refund_obj.refundoperation_set.create(
                     status=12,
                     last_status=last_status,
+                    message=message,
                     added_by=request.user,
                 )
                 messages.add_message(
@@ -913,6 +913,7 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
 
                 refund_obj.refundoperation_set.create(
                     status=9,
+                    message=message,
                     last_status=refund_obj.last_status,
                     added_by=request.user,
                 )
