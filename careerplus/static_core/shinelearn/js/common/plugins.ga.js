@@ -33,6 +33,7 @@ function GA(){
             /*ga('send',type,category,action,label,value,noninteraction,metrics);*/
             //ga('send',type,category,action,label,noninteraction);
             gtag('event', name, {
+              'send_to': ['UA-3537905-41'],
               'event_category': category,
               'event_label': label,
               'event_action':action
