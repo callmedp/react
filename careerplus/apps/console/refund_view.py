@@ -169,7 +169,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset
+        return queryset.order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_view_refund_request_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
@@ -220,10 +220,13 @@ class RefundOrderRequestView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RefundOrderRequestView, self).get_queryset()
         user = self.request.user
+        grp_list = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST
         if user.is_superuser:
             pass
-        elif has_group(user=user, grp_list=settings.OPS_HEAD_GROUP_LIST):
-            queryset = queryset.filter(status=1)
+        elif has_group(user=user, grp_list=grp_list):
+            pass
+        else:
+            queryset = queryset.none()
 
         try:
             if self.query:
@@ -265,7 +268,7 @@ class RefundOrderRequestView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset
+        return queryset.order_by('-modified')
 
 
 class RefundRequestDetail(DetailView, RefundInfoMixin):
@@ -421,7 +424,6 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
         return super(RefundRequestEditView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-
         selected_items = request.POST.getlist('item_name', [])
         attached_file = request.FILES.get('attach_file', '')
         message = request.POST.get('message', '').strip()
@@ -471,7 +473,6 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 "Please select valid items to refund")
             valid = False
         elif valid and selected_items and order.status in [1, 3]:
-
             for item_id in selected_items:
                 oi = orderitems.get(id=item_id)
                 payment_type = 'type-payment' + str(item_id)
@@ -503,34 +504,35 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 excluded_ois = order.orderitems.filter(id__in=excluded_items)
                 refund_items.all().delete()
                 for oi in excluded_ois:
-                    if oi.oi_status == 161:
-                        last_oi_status = oi.oi_status
-                        oi.oi_status = oi.last_oi_status
-                        oi.last_oi_status = last_oi_status
-                        oi.save()
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=oi.last_oi_status,
-                            assigned_to=oi.assigned_to,
-                            added_by=request.user
-                        )
+                    if str(oi.pk) not in selected_items:
+                        if oi.oi_status == 161:
+                            last_oi_status = oi.oi_status
+                            oi.oi_status = oi.last_oi_status
+                            oi.last_oi_status = last_oi_status
+                            oi.save()
+                            oi.orderitemoperation_set.create(
+                                oi_status=oi.oi_status,
+                                last_oi_status=oi.last_oi_status,
+                                assigned_to=oi.assigned_to,
+                                added_by=request.user
+                            )
 
-                    if oi.is_combo and not oi.parent:
-                        combos = oi.order.orderitems.filter(
-                            parent=oi, is_combo=True)
-                        for combo in combos:
-                            if combo.oi_status == 161:
-                                last_oi_status = combo.oi_status
-                                combo.oi_status = combo.last_oi_status
-                                combo.last_oi_status = last_oi_status
-                                combo.save()
+                        if oi.is_combo and not oi.parent:
+                            combos = oi.order.orderitems.filter(
+                                parent=oi, is_combo=True)
+                            for combo in combos:
+                                if combo.oi_status == 161:
+                                    last_oi_status = combo.oi_status
+                                    combo.oi_status = combo.last_oi_status
+                                    combo.last_oi_status = last_oi_status
+                                    combo.save()
 
-                                combo.orderitemoperation_set.create(
-                                    oi_status=combo.oi_status,
-                                    last_oi_status=combo.last_oi_status,
-                                    assigned_to=combo.assigned_to,
-                                    added_by=request.user
-                                )
+                                    combo.orderitemoperation_set.create(
+                                        oi_status=combo.oi_status,
+                                        last_oi_status=combo.last_oi_status,
+                                        assigned_to=combo.assigned_to,
+                                        added_by=request.user
+                                    )
 
                 total_refund = Decimal(0)
                 for item_id in selected_items:
@@ -545,8 +547,9 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                             amount=refund_amount
                         )
                         total_refund += refund_amount
-                        oi.last_oi_status = oi.oi_status
-                        oi.oi_status = 161
+                        if oi.oi_status != 161:
+                            oi.last_oi_status = oi.oi_status
+                            oi.oi_status = 161
                         oi.save()
                         ops_set = oi.orderitemoperation_set.all()
                         if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
@@ -560,8 +563,9 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                         if oi.is_combo and not oi.parent:
                             combos = oi.order.orderitems.filter(parent=oi, is_combo=True)
                             for combo in combos:
-                                combo.last_oi_status = combo.oi_status
-                                combo.oi_status = 161
+                                if combo.oi_status != 161:
+                                    combo.last_oi_status = combo.oi_status
+                                    combo.oi_status = 161
                                 combo.save()
                                 ops_set = combo.orderitemoperation_set.all()
                                 if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
@@ -581,9 +585,9 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                                 amount=refund_amount
                             )
                             total_refund += refund_amount
-
-                            oi.last_oi_status = oi.oi_status
-                            oi.oi_status = 161
+                            if oi.oi_status != 161:
+                                oi.last_oi_status = oi.oi_status
+                                oi.oi_status = 161
                             oi.save()
                             ops_set = oi.orderitemoperation_set.all()
                             if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
@@ -597,8 +601,9 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                             if oi.is_combo and not oi.parent:
                                 combos = oi.order.orderitems.filter(parent=oi, is_combo=True)
                                 for combo in combos:
-                                    combo.last_oi_status = combo.oi_status
-                                    combo.oi_status = 161
+                                    if combo.oi_status != 161:
+                                        combo.last_oi_status = combo.oi_status
+                                        combo.oi_status = 161
                                     combo.save()
                                     ops_set = combo.orderitemoperation_set.all()
                                     if (ops_set.exists() and ops_set.last().oi_status != 161) or (not ops_set.exists()):
@@ -613,6 +618,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 refund_obj.message = message
                 refund_obj.document = attached_file
                 last_status = refund_obj.status
+                refund_obj.status = 1
                 # if request.user.has_group 'ops'
                 #     refund_obj.last_status = refund_obj.status
                 #     refund_obj.status = 9
@@ -622,6 +628,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 refund_obj.refundoperation_set.create(
                     status=12,
                     last_status=last_status,
+                    message=message,
                     added_by=request.user,
                 )
                 messages.add_message(
@@ -909,6 +916,7 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
 
                 refund_obj.refundoperation_set.create(
                     status=9,
+                    message=message,
                     last_status=refund_obj.last_status,
                     added_by=request.user,
                 )

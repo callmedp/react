@@ -68,6 +68,7 @@
                 <div class="clearfix"></div>
               </div>
               <!-- /menu profile quick info -->
+              {% comment %}
               {% if perms.order.can_search_order_from_console %}
                 <form autocomplete="off" method="GET" action="{% url "console:search-order" %}" id="filter-tables">
                   <div class="title_right">
@@ -82,6 +83,7 @@
                    </div>
                 </form>
               {% endif %}
+              {% endcomment %}
   
             {% endblock sidebar_quickinfo %}
             

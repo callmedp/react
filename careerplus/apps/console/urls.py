@@ -24,11 +24,11 @@ urlpatterns += [
 
 
 # search order url
-urlpatterns += [
-    url(r'^search/order/$',
-        order_view.SearchOrderView.as_view(),
-        name='search-order'),
-]
+# urlpatterns += [
+#     url(r'^search/order/$',
+#         order_view.SearchOrderView.as_view(),
+#         name='search-order'),
+# ]
 
 
 urlpatterns += [

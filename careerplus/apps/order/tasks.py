@@ -537,7 +537,7 @@ def payment_realisation_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        raise e
+        logging.getLogger('error_log').error(str(e))
     try:
         invoice_data = InvoiceGenerate().get_invoice_data(order=order)
         pymt_objs = PaymentTxn.objects.filter(order=order)
@@ -562,7 +562,8 @@ def payment_realisation_mailer(pk=None):
                         "payment realisation %s - %s - %s" % (
                             str(to_emails), str(mail_type), str(e)))
     except Exception as e:
-        raise e
+        logging.getLogger('sms_log').error(
+            "%s - %s" % (str(mail_type), str(e)))
 
 
 @task(name="service_initiation")
@@ -571,7 +572,7 @@ def service_initiation(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        raise e
+        logging.getLogger('error_log').error((str(e)))
     try:
         if order:
             orderitems = order.orderitems.filter(
@@ -627,4 +628,4 @@ def service_initiation(pk=None):
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        raise e
+        logging.getLogger('error_log').error(str(e))

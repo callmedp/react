@@ -2074,21 +2074,26 @@ class ActionOrderItemView(View):
                         added_by=request.user)
 
                     # mail to user about writer information
-                    profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
+                    profile_obj = obj.product.productextrainfo_set.get(
+                        info_type='profile_update')
                     country_obj = Country.objects.get(pk=profile_obj.object_id)
-                    profiles = InternationalProfileCredential.objects.filter(oi=obj.pk)
+                    profiles = InternationalProfileCredential.objects.filter(
+                        oi=obj.pk)
                     to_emails = [obj.order.email]
-                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                    email_sets = list(
+                        obj.emailorderitemoperation_set.all().values_list(
+                            'email_oi_status', flat=True).distinct())
                     data = {}
                     data.update({
-                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "username": obj.order.first_name,
                         "subject": "Your International Profile is updated",
                         "profiles": profiles,
                         "country_name": country_obj.name,
                     })
                     mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
                     if 62 not in email_sets:
-                        send_email(to_emails, mail_type, data, status=62, oi=obj.pk)
+                        send_email(
+                            to_emails, mail_type, data, status=62, oi=obj.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:

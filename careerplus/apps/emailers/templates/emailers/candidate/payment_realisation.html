@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td style="padding: 10px">
-      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {{first_name}},</strong>
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if first_name %}{{first_name}}{% else %}Candidate{% endif %},</strong>
       	<span>We have received your payment of Rs <strong>{{total_payable_amount}}</strong>
         </span>
       </td>
