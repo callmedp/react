@@ -35,7 +35,6 @@
         <![endif]-->
 
     {% endblock css_section %}
-    {% if IS_LIVE %}
     {% block GA %}
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
         <script>
@@ -43,10 +42,9 @@
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'UA-3537905-41');
-          gtag('config', 'UA-3537905-1');
+          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
         </script>
     {% endblock GA %}
-{% endif %}
     {% block banner_ads %}
         <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
         <script>
@@ -100,9 +98,9 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}">
-    </script>
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
     {% endcompress %}
     <script>
         $('.nav-tabs > li > a').hover(function() {

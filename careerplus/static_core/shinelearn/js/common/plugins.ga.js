@@ -33,6 +33,7 @@ function GA(){
             /*ga('send',type,category,action,label,value,noninteraction,metrics);*/
             //ga('send',type,category,action,label,noninteraction);
             gtag('event', name, {
+              'send_to': ['UA-3537905-41'],
               'event_category': category,
               'event_label': label,
               'event_action':action
@@ -84,23 +85,24 @@ GA.prototype.callFromGaParent = function(){
 }
 
 GA.prototype.SendEvent = function() {
-    var that = this;
-    var fn = arguments[0];
+    var that = this,
+    fn = arguments[0],
+    value = "",
+    noninteraction = false;
+    if(typeof arguments[4] != "undefined") {
+        value = arguments[4];
+    }
+    if(typeof arguments[5] != "undefined") {
+        noninteraction = arguments[5];
+    }
     //vars = Array.prototype.slice.call(arguments, 1);
     //return fn.apply(this, vars);
     switch(fn) {
         case 'QueryForm' :  /* Fire event before making ajax from Course Page, Service Page (Have a query?) form */
-            
+        case 'CallbackRequested' : /* when user click on call */        
         case 'InboxJobs' :/*When user click on get these jobs jsrp*/
 
-            var value = "",
-            noninteraction = false;
-            if(typeof arguments[4] != "undefined") {
-                value = arguments[4];
-            }
-            if(typeof arguments[5] != "undefined") {
-                noninteraction = arguments[5];
-            }
+            
             that.fireGaEvent({
                 'category': arguments[1],
                 'action': arguments[2],

@@ -117,15 +117,18 @@ $(document).ready(function () {
                   data : formData,
                   success: function(data, textStatus, jqXHR)
                   {
-                    $("#detailpage").modal('hide');
                     alert('Your Query Submitted Successfully.');
-                        window.location.reload();
+                    $("#detailpage").modal('toggle');
+                    form.reset();
                   },
                   error: function (jqXHR, textStatus, errorThrown)
                   {
-                      window.location.reload(); 
+                    alert('Oops Some error has occured. Kindly try again later.');
+                    $("#detailpage").modal('toggle');
+                    form.reset();
                   }
-              }); 
+              });
+
         }
   });
 
