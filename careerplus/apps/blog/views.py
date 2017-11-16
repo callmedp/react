@@ -81,7 +81,7 @@ class RegisterToCommentView(View):
                     "raw_password": request.POST.get('raw_password'),
                     "cell_phone": request.POST.get('cell_phone'),
                     "country_code": request.POST.get('country_code'),
-                    "vendor_id": request.POST.get('vendor_id'),
+                    "vendor_id": settings.CP_VENDOR_ID,
                 })
                 user_resp = RegistrationLoginApi.user_registration(post_data)
 
