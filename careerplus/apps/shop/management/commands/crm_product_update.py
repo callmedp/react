@@ -11,6 +11,7 @@ from optparse import make_option
 from ...models import Product
 from ...serializers import CRMProductSerializer
 
+
 class Command(BaseCommand):
     """
         Custom command to Update Crm Products.

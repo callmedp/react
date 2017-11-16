@@ -554,6 +554,68 @@ class OrderItemDetailVeiw(DetailView):
 
 
 @Decorate(stop_browser_cache())
+@method_decorator(permission_required('order.can_search_order_from_console', login_url='/console/login/', raise_exception=True), name='dispatch')
+class SearchOrderView(ListView, PaginationMixin):
+    context_object_name = 'order_list'
+    template_name = "console/order/order-search.html"
+    model = Order
+    http_method_names = [u'get', ]
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        self.payment_date, self.created = '', ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '').strip()
+        self.payment_date = request.GET.get('payment_date', '')
+        self.created = request.GET.get('created', '')
+        return super(SearchOrderView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchOrderView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['order_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "messages": alert,
+            "query": self.query,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(SearchOrderView, self).get_queryset()
+        excl_txns = PaymentTxn.objects.filter(status__in=[0, 2, 3, 4, 5], payment_mode__in=[6, 7])
+        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        queryset = queryset.exclude(id__in=excl_order_list)
+        queryset = queryset.filter(status=1)
+
+        try:
+            if self.query:
+                q1 = queryset.filter(
+                    Q(number=self.query) |
+                    Q(email=self.query) |
+                    Q(mobile=self.query))
+
+                pay_txns = PaymentTxn.objects.filter(txn=self.query)
+                order_pks = pay_txns.all().values_list('order__pk', flat=True)
+                q2 = queryset.filter(id__in=order_pks)
+
+                queryset = q1 | q2
+                queryset = queryset.distinct()
+            else:
+                queryset = queryset.none()
+                messages.add_message(self.request, messages.ERROR, 'Search not found any order.')
+        except:
+            queryset = queryset.none()
+            messages.add_message(self.request, messages.ERROR, 'Search not found any order.')
+
+        return queryset.order_by('-modified')
+
+
+@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/', raise_exception=True), name='dispatch')
 class OrderDetailVeiw(DetailView):
     model = Order
@@ -1240,7 +1302,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         elif user.has_perm('order.can_view_only_assigned_closed_oi_list'):
             queryset = queryset.filter(assigned_to=user)
         elif vendor_employee_list:
-            queryset = queryset.filter(partner__in=vendor_employee_list)
+            queryset = queryset.filter(Q(partner__in=vendor_employee_list) |
+                Q(product__vendor__in=vendor_employee_list))
         else:
             queryset = queryset.none()
 
@@ -2011,21 +2074,26 @@ class ActionOrderItemView(View):
                         added_by=request.user)
 
                     # mail to user about writer information
-                    profile_obj = obj.product.productextrainfo_set.get(info_type='profile_update')
+                    profile_obj = obj.product.productextrainfo_set.get(
+                        info_type='profile_update')
                     country_obj = Country.objects.get(pk=profile_obj.object_id)
-                    profiles = InternationalProfileCredential.objects.filter(oi=obj.pk)
+                    profiles = InternationalProfileCredential.objects.filter(
+                        oi=obj.pk)
                     to_emails = [obj.order.email]
-                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                    email_sets = list(
+                        obj.emailorderitemoperation_set.all().values_list(
+                            'email_oi_status', flat=True).distinct())
                     data = {}
                     data.update({
-                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "username": obj.order.first_name,
                         "subject": "Your International Profile is updated",
                         "profiles": profiles,
                         "country_name": country_obj.name,
                     })
                     mail_type = 'INTERNATIONATIONAL_PROFILE_UPDATED'
                     if 62 not in email_sets:
-                        send_email(to_emails, mail_type, data, status=62, oi=obj.pk)
+                        send_email(
+                            to_emails, mail_type, data, status=62, oi=obj.pk)
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:

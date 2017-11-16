@@ -89,7 +89,6 @@ LOCAL_APPS = [
     'linkedin',
     'emailers',
     'quizs',
-    'database',
     'crmapi',
     'api',
     'marketing',
@@ -509,7 +508,3 @@ FINANCE_GROUP_LIST = ['FINANCE']
 BUSINESS_APPROVAL_LIMIT = 25000  # refund
 REFUND_GROUP_LIST = OPS_GROUP_LIST + OPS_HEAD_GROUP_LIST + BUSINESS_HEAD_GROUP_LIST + DEPARTMENT_HEAD_GROUP_LIST + FINANCE_GROUP_LIST
 
-#COMPRESS_ENABLED = True
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'sass {infile} {outfile}'),
-)

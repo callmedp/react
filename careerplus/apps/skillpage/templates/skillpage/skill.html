@@ -77,9 +77,11 @@
 
 			<div class="about-course-links mb-40 cls_scroller pr cls_scroll_tab">
 	        	<a title="About course" class="active cls_tab_child" href="#">About course</a> 
-	        	<a title="Importance in Market" class="cls_tab_child" href="#market">Importance in Market</a>
+	        	{% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
+	        		<a title="Importance in Market" class="cls_tab_child" href="#market">Importance in Market</a>
+	        	{% endif %}
 	        	{% if products %}
-	        	<a title="Courses" class="cls_tab_child" href="#programs">Courses</a>
+	        		<a title="Courses" class="cls_tab_child" href="#programs">Courses</a>
 	        	{% endif %}
 	        	{% if page_reviews %}
 	        		<a title="Reviews" class="cls_tab_child" href="#reviews">Reviews</a>
@@ -112,9 +114,10 @@
 		    </div>
 
 			<!-- Importance in Market -->
+            {% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
 			<div id="market" class="importance-market clearfix mb-40 scroll">
-				<h2>Importance in Market</h2>
 				{% if category_obj.graph_image %}
+				<h2>Importance in Market</h2>
 			    <div class="col-sm-6 box-panel">
 			    	<figure>
 			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
@@ -122,43 +125,42 @@
 			    </div>
 			    {% endif %} 
 				<div class="col-sm-6 market-growth">
-					<div class="col-sm-12 box-panel">
-						<div class="media">
-						    <div class="media-left media-middle">
-						    	<span class="jobs-growth-icon"></span>
-						    </div>
-						    {% if api_data.job_count %}
-							    <div class="media-body">
-							    	<strong>{{api_data.job_count}}</strong>
-							      	jobs in the market demanding this skill
+					{% if api_data.job_count %}
+						<div class="col-sm-12 box-panel">
+							<div class="media">
+							    <div class="media-left media-middle">
+							    	<span class="jobs-growth-icon"></span>
 							    </div>
-						    {% endif %}
-						</div>
-						{% comment %}
+								    <div class="media-body">
+								    	<strong>{{api_data.job_count}}</strong>
+								      	jobs in the market demanding this skill
+								    </div>
+							</div>
+							{% comment %}
+								
+							<div class="media">
+								<div class="media-left media-middle">
+							    	<span class="career-growth-icon"></span>
+							    </div>
+							    <div class="media-body">
+							    	<strong>Only 10%</strong>
+							      	candidates are six sigma certified
+							    </div>
+							</div>
+							{% endcomment %}
 							
-						<div class="media">
-							<div class="media-left media-middle">
-						    	<span class="career-growth-icon"></span>
-						    </div>
-						    <div class="media-body">
-						    	<strong>Only 10%</strong>
-						      	candidates are six sigma certified
-						    </div>
 						</div>
-						{% endcomment %}
-						
-					</div>
+					{% endif %}
 					{% if api_data.jFArea %}
 					    <div class="col-sm-12 box-panel mt-20 job-require">
 					    	<strong>Jobs which require this skill in different functional areas
 					    	</strong>
 					    	<a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.0.0}}" target="_blank">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})</a> | <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.1.0}}" target="_blank">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})</a> | <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.2.0}}" target="_blank">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})</a>  
 					    </div>
-				    {% endif %}
-
+					{% endif %}
 			    </div>
-
 			</div>
+			{% endif %}
 
 		    <!-- certification programs listing -->
 		    {% if products %}
