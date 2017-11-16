@@ -49,7 +49,6 @@
     {% render_block "custom_css" %}
     {{ JS_SETTINGS|safe }}
 {% spaceless %}
-    {% if IS_LIVE %}
         {% block GA %}
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
             <script>
@@ -57,10 +56,9 @@
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'UA-3537905-41');
-              gtag('config', 'UA-3537905-1');
+              gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
             </script>
         {% endblock GA %}
-    {% endif %}
    </head>
 
 
