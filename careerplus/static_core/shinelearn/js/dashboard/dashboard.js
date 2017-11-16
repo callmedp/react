@@ -473,12 +473,14 @@ function updateTabContent(ajaxurl, element1, element2){
         success: function(response){
             result = JSON.parse(response);
             if(!result.response){
-                alert("Roundone is facing technical issue. Please try again.", "Ok");
+                alert("Sorry! Something went wrong. You can also use your services on " +
+                    "http://www.roundone.in/ or you can reach out at support@roundone.in.", "Ok");
             }
             $(element2).html(result.template);
         },
         failure: function(response){
-            alert("Roundone is facing technical issue. Error getting profile. Please try again.", "Ok", "Cancel");
+            alert("Sorry! Something went wrong. You can also use your services on " +
+                "http://www.roundone.in/ or you can reach out at support@roundone.in.", "Ok", "Cancel");
         },
     });
 }

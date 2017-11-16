@@ -88,7 +88,7 @@ def upload_addserver_leads():
                     elif response.status_code == 200 and response_json.get('status') == 0:
                         ld.inactive = True
                     ld.save()
-                    print (str(count) + ' Leads Updated')
+                    print(str(count) + ' Leads Updated')
                     time.sleep(1)
 
                 except Exception as e:

@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td style="padding: 10px">
-      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {{username}},</strong>
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if username %}{{username}}{% else %}Candidate{% endif %},</strong>
       	<span style="fon">
         Congratulations! Your order for the Featured Profile Service has been initiated and your profile will be featured for the next 3 days. <br><br>
         Our service enables your profile to gain better visibility among recruiters who are searching for candidates like you on Shine.com. You are given preference over other candidate in the relevant search results, ensuring you are one of the first candidates seen by them during their search.<br><br>

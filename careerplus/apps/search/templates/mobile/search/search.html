@@ -29,8 +29,6 @@ Search Result Page - Shine Learning
     <link href="{% static "shinelearn/css/mobile/search/filter.css" %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
-    {% compress css %}
-    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -128,9 +126,7 @@ Search Result Page - Shine Learning
 
 {% block js_section %}
     {{block.super}}
-    {% compress js %}
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
-    {% endcompress %}
     <script>
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
             skillsSet = {{ skills_set|safe|default:"[]" }},

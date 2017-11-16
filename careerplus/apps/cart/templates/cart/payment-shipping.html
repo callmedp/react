@@ -13,6 +13,8 @@
     {{block.super}}
     {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    {% endcompress %}
+    {% compress css inline %}
     <style type="text/css">
         .error{
             color:red;
@@ -165,10 +167,10 @@
 
 {% block js_section %}
    {{ block.super }}
-    {% compress js %}
+   {% compress js %}
    <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
    <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
-    {% endcompress %}
+   {% endcompress %}
 {% endblock js_section %}
 
 {% block johukum %}

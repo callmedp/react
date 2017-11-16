@@ -23,6 +23,14 @@ urlpatterns += [
 ]
 
 
+# search order url
+# urlpatterns += [
+#     url(r'^search/order/$',
+#         order_view.SearchOrderView.as_view(),
+#         name='search-order'),
+# ]
+
+
 urlpatterns += [
     url(r'^screenproduct/list/$',
         vendor_view.ListScreenProductView.as_view(),
@@ -328,3 +336,4 @@ urlpatterns += [
     url(r'^queqe/profile-credentials/(?P<oi>\d+)/download/$',
         linkedin_view.ProfileCredentialDownload.as_view(), name='profile_credentials'), 
 ]
+

@@ -302,7 +302,6 @@ class ChangeDraftView(DetailView):
                     Draft, Education,
                     form=EducationForm, formset=OrganizationInlineFormSet,
                     can_delete=True, extra=1)
-
                 org_formset = OrganizationFormset(request.POST, instance=self.get_object())
                 edu_formset = EducationFormset(request.POST, instance=self.get_object())
                 draft_form = DraftForm(request.POST, instance=self.get_object())
@@ -324,13 +323,13 @@ class ChangeDraftView(DetailView):
                     for form in edu_formset.deleted_forms:
                         form.instance.delete()
                     # for update oi status
-                    last_status = ord_obj.oi_status  
+                    last_status = ord_obj.oi_status
                     ord_obj.oi_status = 45  # pending Approval
                     ord_obj.last_oi_status = last_status
                     ord_obj.draft_added_on = timezone.now()
                     ord_obj.save()
                     ord_obj.orderitemoperation_set.create(
-                        linkedin = draft_obj,
+                        linkedin=draft_obj,
                         draft_counter=ord_obj.draft_counter + 1,
                         oi_status=44,
                         last_oi_status=last_status,
@@ -343,22 +342,25 @@ class ChangeDraftView(DetailView):
                         added_by=request.user)
 
                     messages.success(self.request, "Draft Saved Successfully")
-                    return HttpResponseRedirect(reverse('console:linkedin-inbox'))
-
-                self.object = self.get_object()
-                context = super(ChangeDraftView, self).get_context_data(**kwargs)
-                context['form'] = draft_form
-                context['org_formset'] = org_formset
-                context['edu_formset'] = edu_formset
-                messages.error(self.request, "Draft not saved successfully", 'error')
-                return render(request, self.template_name, context)
+                    return HttpResponseRedirect(
+                        reverse('console:linkedin-inbox'))
+                else:
+                    self.object = self.get_object()
+                    context = super(ChangeDraftView, self).get_context_data(
+                        **kwargs)
+                    context['form'] = draft_form
+                    context['org_formset'] = org_formset
+                    context['edu_formset'] = edu_formset
+                    messages.add_message(
+                        request, messages.ERROR, 'Draft not saved ')
+                    return render(request, self.template_name, context)
 
             else:
                 context = super(ChangeDraftView, self).get_context_data(**kwargs)
                 messages.error(self.request, "Draft does not exist with this order", 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
-            logging.getLogger('error_log').error("Post draft:",str(e))
+            logging.getLogger('error_log').error(str(e))
             messages.add_message(request, messages.ERROR, str(e))
             return render(request, self.template_name, context)
 
@@ -741,10 +743,10 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
         queryset = queryset.exclude(id__in=exclude_list)
         user = self.request.user
-        if user.is_superuser or user.has_perm('order.international_profile_update_assigner'):
+        if user.is_superuser:
             pass
         elif user.has_perm('order.international_profile_update_assigner'):
-            queryset = queryset.filter(assigned_to__isnull=True)
+            queryset = queryset.filter(assigned_to=None)
         elif user.has_perm('order.international_profile_update_assignee'):
             queryset = queryset.filter(assigned_to=user)
         else:
@@ -1032,7 +1034,7 @@ class InterNationalAssignmentOrderItemView(View):
 
                     data = {}
                     data.update({
-                        "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+                        "username": obj.order.first_name,
                         "writer_name": assign_to.name,
                         "subject": "Your service has been initiated",
                         "writer_email": assign_to.email,
@@ -1087,13 +1089,12 @@ class ProfileCredentialDownload(View):
             return HttpResponseForbidden()
 
 
-
 class CreateDrftObject(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
             oi = kwargs.get('oi', '')
-            oi_items = OrderItem.objects.filter(oi=oi)
+            oi_items = OrderItem.objects.filter(pk=oi)
             for oi_item in oi_items:
                 order_item = oi_item
                 last_oi_status = order_item.oi_status
@@ -1105,10 +1106,12 @@ class CreateDrftObject(TemplateView):
                 edu_obj = Education()
                 edu_obj.draft = draft_obj
                 edu_obj.save()
-
-                quiz_rsp = QuizResponse()
-                quiz_rsp.oi = order_item
-                quiz_rsp.save()
+                try:
+                    quiz_rsp = QuizResponse.objects.get(oi=oi)
+                except Exception as e:
+                    quiz_rsp = QuizResponse()
+                    quiz_rsp.oi = order_item
+                    quiz_rsp.save()
 
                 order_item.counselling_form_status = 49
                 order_item.oio_linkedin = draft_obj
@@ -1124,3 +1127,7 @@ class CreateDrftObject(TemplateView):
         except Exception as e:
             logging.getLogger('error_log').error(
                 "%s - %s" % (str(oi), str(e)))
+            messages.add_message(request, messages.ERROR, "Error occurred. Please contact Tech")
+        return HttpResponseRedirect(
+            reverse('console:linkedin-inbox')
+        )
