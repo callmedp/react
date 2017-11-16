@@ -24,21 +24,21 @@ class ActionUserMixin(object):
             obj.save()
 
             # mail to user about writer information
-            to_emails = [obj.order.email]
-            email_data = {}
-            email_data.update({
-                "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
-                "writer_name": assigned_to.name,
-                "writer_email": assigned_to.email,
-                "subject": "Your service has been initiated",
-                "oi": obj,
+            # to_emails = [obj.order.email]
+            # email_data = {}
+            # email_data.update({
+            #     "username": obj.order.first_name if obj.order.first_name else obj.order.candidate_id,
+            #     "writer_name": assigned_to.name,
+            #     "writer_email": assigned_to.email,
+            #     "subject": "Your service has been initiated",
+            #     "oi": obj,
 
-            })
-            mail_type = 'ALLOCATED_TO_WRITER'
-            try:
-                SendMail().send(to_emails, mail_type, email_data)
-            except Exception as e:
-                logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+            # })
+            # mail_type = 'ALLOCATED_TO_WRITER'
+            # try:
+            #     SendMail().send(to_emails, mail_type, email_data)
+            # except Exception as e:
+            #     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             obj.orderitemoperation_set.create(
                 oi_status=1,
