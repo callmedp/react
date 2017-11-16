@@ -248,19 +248,20 @@ class ApproveByAdminDraft(View):
                     email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     email_dict = {}
                     email_dict.update({
-                        "first_name": obj.order.first_name if obj.order.first_name else obj.order.first_name,
+                        "first_name": obj.order.first_name,
                         "subject": 'Your developed document has been uploaded',
-                        "email": obj.order.email,
-                        "candidateid": obj.order.candidate_id,
-                        "order_id": obj.order.id,
                         'mobile': obj.order.mobile,
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                            token.decode())
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
 
                     if 42 not in email_sets:
-                        send_email_task.delay(to_emails, mail_type, email_dict, status=42, oi=obj.pk)
+                        send_email_task.delay(
+                            to_emails, mail_type, email_dict, status=42,
+                            oi=obj.pk)
                         try:
                             urlshortener = create_short_url(login_url=email_dict)
                             email_dict.update({'url': urlshortener.get('url')})
@@ -295,22 +296,26 @@ class ApproveByAdminDraft(View):
                     obj.save()
 
                     # mail to candidate
-                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct()) 
+                    email_sets = list(
+                        obj.emailorderitemoperation_set.all().values_list(
+                            'email_oi_status', flat=True).distinct()) 
                     to_emails = [obj.order.email]
-                    token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
+                    token = AutoLogin().encode(
+                        obj.order.email, obj.order.candidate_id, days=None)
                     mail_type = 'DRAFT_UPLOAD'
                     # data = {}
                     data.update({
                         "draft_level": obj.draft_counter,
                         "first_name": obj.order.first_name,
-                        "email": obj.order.email,
-                        "candidateid": obj.order.candidate_id,
-                        "order_id": obj.order.id,
                         'mobile': obj.order.mobile,
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                            token.decode()),
                     })
 
-                    draft_upload_mail(oi=obj, to_emails=to_emails, mail_type=mail_type, email_dict=data)
+                    draft_upload_mail(
+                        oi=obj, to_emails=to_emails, mail_type=mail_type,
+                        email_dict=data)
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(
                             oi_status=24,
@@ -450,52 +455,77 @@ class ApproveDraftByLinkedinAdmin(View):
 
                     # mail to candidate
                     to_emails = [obj.order.email]
-                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
-                    sms_sets = list(obj.smsorderitemoperation_set.all().values_list('sms_oi_status',flat=True).distinct())
+                    email_sets = list(
+                        obj.emailorderitemoperation_set.all().values_list(
+                            'email_oi_status', flat=True).distinct())
+                    sms_sets = list(
+                        obj.smsorderitemoperation_set.all().values_list(
+                            'sms_oi_status', flat=True).distinct())
                     mail_type = 'DRAFT_UPLOAD'
-                    token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
+                    token = AutoLogin().encode(
+                        obj.order.email, obj.order.candidate_id, days=None)
                     email_dict = {}
                     email_dict.update({
                         "draft_level": obj.draft_counter,
                         "first_name": obj.order.first_name,
-                        "email": obj.order.email,
-                        "candidateid": obj.order.candidate_id,
-                        "order_id": obj.order.id,
                         'mobile': obj.order.mobile,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                            token.decode()),
                     })
 
                     if obj.draft_counter == 1:
                         if 102 not in email_sets and 102 not in sms_sets:
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=102, oi=obj.pk)
+                            send_email_task.delay(
+                                to_emails, mail_type, email_dict,
+                                status=102, oi=obj.pk)
                             try:
-                                urlshortener = create_short_url(login_url=email_dict)
-                                email_dict.update({'url': urlshortener.get('url')})
-                                SendSMS().send(sms_type=mail_type, data=email_dict)
-                                obj.smsorderitemoperation_set.create(sms_oi_status=102)
+                                urlshortener = create_short_url(
+                                    login_url=email_dict)
+                                email_dict.update({
+                                    'url': urlshortener.get('url')})
+                                SendSMS().send(
+                                    sms_type=mail_type, data=email_dict)
+                                obj.smsorderitemoperation_set.create(
+                                    sms_oi_status=102)
                             except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                logging.getLogger('sms_log').error(
+                                    "%s - %s" % (str(mail_type), str(e)))
                     elif obj.draft_counter == 2:
                         if 103 not in email_sets and 103 not in sms_sets:
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=103, oi=obj.pk)
+                            send_email_task.delay(
+                                to_emails, mail_type, email_dict,
+                                status=103, oi=obj.pk)
                             try:
-                                urlshortener = create_short_url(login_url=email_dict)
-                                email_dict.update({'url': urlshortener.get('url')})
-                                SendSMS().send(sms_type=mail_type, data=email_dict)
-                                obj.smsorderitemoperation_set.create(sms_oi_status=103)
+                                urlshortener = create_short_url(
+                                    login_url=email_dict)
+                                email_dict.update({
+                                    'url': urlshortener.get('url')})
+                                SendSMS().send(
+                                    sms_type=mail_type, data=email_dict)
+                                obj.smsorderitemoperation_set.create(
+                                    sms_oi_status=103)
                             except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                logging.getLogger('sms_log').error(
+                                    "%s - %s" % (str(mail_type), str(e)))
 
                     elif obj.draft_counter == settings.DRAFT_MAX_LIMIT and 104 not in email_sets:
                         if 104 not in email_sets and 104 not in sms_sets:
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=104, oi=obj.pk)
+                            send_email_task.delay(
+                                to_emails, mail_type, email_dict,
+                                status=104, oi=obj.pk)
                             try:
-                                urlshortener = create_short_url(login_url=email_dict)
-                                email_dict.update({'url': urlshortener.get('url')})
-                                SendSMS().send(sms_type=mail_type, data=email_dict)
-                                obj.smsorderitemoperation_set.create(sms_oi_status=104)
+                                urlshortener = create_short_url(
+                                    login_url=email_dict)
+                                email_dict.update({
+                                    'url': urlshortener.get('url')})
+                                SendSMS().send(
+                                    sms_type=mail_type, data=email_dict)
+                                obj.smsorderitemoperation_set.create(
+                                    sms_oi_status=104)
                             except Exception as e:
-                                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                logging.getLogger('sms_log').error(
+                                    "%s - %s" % (str(mail_type), str(e)))
 
                     if obj.oi_status == 4:
                         obj.orderitemoperation_set.create(

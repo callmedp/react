@@ -92,8 +92,6 @@ class SendMail():
             elif data.get('draft_level') == 3:
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
-            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('day', ''))
-            data['upload_url'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
@@ -127,8 +125,6 @@ class SendMail():
         elif mail_type == "RESUME_CRITIQUE_CLOSED":
             send_dict['subject'] = data.get('subject', "Your developed document has been uploaded")
             send_dict['template'] = 'emailers/candidate/resume_critique_closed.html'
-            token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''))
-            data['autologin'] = "%s://%s/autologin/%s/" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
@@ -148,7 +144,6 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Your resume has been shared with relevant consultants")
             template_name = data.get('template_name', 'booster_candidate.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
-
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
@@ -170,7 +165,6 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Your service(s) has been initiated")
             template_name = data.get('template_name', 'candidate/course_closure.html')
             send_dict['template'] = 'emailers/' + template_name
-
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
@@ -181,7 +175,6 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Your International Profile is updated")
             template_name = data.get('template_name', 'international_profile.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
-
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
@@ -192,7 +185,6 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Your login credential on shine.com")
             template_name = data.get('template_name', 'register.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
-
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
