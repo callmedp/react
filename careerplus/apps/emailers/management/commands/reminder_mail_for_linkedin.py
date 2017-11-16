@@ -6,7 +6,6 @@ from django.utils import timezone
 from django.conf import settings
 from linkedin.autologin import AutoLogin
 from order.models import OrderItem
-from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from order.functions import create_short_url
@@ -47,7 +46,6 @@ def draft_reminder_mail_for_linkedin():
                     "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
                     "first_name": oi.order.first_name,
-                    "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 22,
                     'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -73,7 +71,6 @@ def draft_reminder_mail_for_linkedin():
                     "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
                     "first_name": oi.order.first_name,
-                    "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 15,
                     'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -94,7 +91,6 @@ def draft_reminder_mail_for_linkedin():
                     "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
                     "first_name": oi.order.first_name,
-                    "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 7,
                     'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -152,7 +148,6 @@ def draft_reminder_mail_for_linkedin():
                     "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
                     "first_name": oi.order.first_name,
-                    "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 7,
                     'upload_url': "%s/autologin/%s/?next=/dashboard" % (
@@ -176,7 +171,6 @@ def draft_reminder_mail_for_linkedin():
                     "subject": "Reminder:Your developed resume document has been uploaded",
                     "draft_level": draft_level,
                     "first_name": oi.order.first_name,
-                    "candidateid": oi.order.candidate_id,
                     'mobile': oi.order.mobile,
                     'days': 3,
                     'upload_url': "%s/autologin/%s/?next=/dashboard" % (

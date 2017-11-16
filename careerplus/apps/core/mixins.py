@@ -140,7 +140,7 @@ class InvoiceGenerate(object):
                 igst_amount = Decimal(0.00)
         elif cart_obj:
             # tax in percentage
-            if cart_obj.country.phone == '91' and cart_obj.state.lower() == 'haryana':
+            if cart_obj.country and cart_obj.country.phone == '91' and cart_obj.state and cart_obj.state.lower() == 'haryana':
                 sgst = round((tax_rate_per / 2), 0)
                 cgst = round((tax_rate_per / 2), 0)
                 igst = 0
@@ -149,7 +149,7 @@ class InvoiceGenerate(object):
                 cgst_amount = sgst_amount
                 igst_amount = Decimal(0.00)
 
-            elif cart_obj.country.phone == '91':
+            elif cart_obj.country and cart_obj.country.phone == '91':
                 sgst = round((tax_rate_per / 2), 0)
                 cgst = round((tax_rate_per / 2), 0)
                 igst = 0

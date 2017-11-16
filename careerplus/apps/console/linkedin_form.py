@@ -16,42 +16,51 @@ LEVEL = (
 
 
 class DraftForm(forms.ModelForm):
-    candidate_name = forms.CharField(label=("Name*:"), max_length=85,
+    candidate_name = forms.CharField(
+        label=("Name*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     headline = forms.CharField(
         label=("Headline*:"), max_length=120,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    summary = forms.CharField(max_length=2000, widget=forms.Textarea(attrs={'class':'form-control'}))
+    summary = forms.CharField(
+        max_length=2000, widget=forms.Textarea(
+            attrs={'class': 'form-control'}))
 
-    profile_photo = forms.CharField(label=("Profile Photo"), max_length=2000,
+    profile_photo = forms.CharField(
+        label=("Profile Photo"), max_length=2000,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    recommendation = forms.CharField(label=("Recommendations"), max_length=2000,
+    recommendation = forms.CharField(
+        label=("Recommendations"), max_length=2000,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    follow_company = forms.CharField(label=("Follow companies"), max_length=2000,
+    follow_company = forms.CharField(
+        label=("Follow companies"), max_length=2000,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    join_group = forms.CharField(label=("Join Group"), max_length=2000,
+    join_group = forms.CharField(
+        label=("Join Group"), max_length=2000,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    public_url = forms.CharField(label=("Public Url"), max_length=2000,
+    public_url = forms.CharField(
+        label=("Public Url"), max_length=2000,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    key_skills = forms.CharField(label=("Key Skills"),
+    key_skills = forms.CharField(
+        label=("Key Skills"),
         help_text='comma separated skills, e.g. java, python; ...',
         max_length=2000,
         widget=forms.TextInput(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Draft
@@ -79,31 +88,31 @@ class DraftForm(forms.ModelForm):
     def clean_headline(self):
         name = self.cleaned_data.get('headline', '')
         if name == '':
-            raise forms.ValidationError("This field1 is required.")
+            raise forms.ValidationError("This field is required.")
         return name
 
     def clean_summary(self):
         summary = self.cleaned_data.get('summary', '')
         if summary == '':
-            raise forms.ValidationError("This field1 is required.")
+            raise forms.ValidationError("This field is required.")
         return summary
 
     def clean_profile_photo(self):
         profile_photo = self.cleaned_data.get('profile_photo', '')
         if profile_photo == '':
-            raise forms.ValidationError("This field1 is required.")
+            raise forms.ValidationError("This field is required.")
         return profile_photo
 
     def clean_recommendation(self):
         recommendation = self.cleaned_data.get('recommendation', '')
         if recommendation == '':
-            raise forms.ValidationError("This field1 is required.")
+            raise forms.ValidationError("This field is required.")
         return recommendation
 
     def clean_follow_company(self):
         follow_company = self.cleaned_data.get('follow_company', '')
         if follow_company == '':
-            raise forms.ValidationError("This field1 is required.")
+            raise forms.ValidationError("This field is required.")
         return follow_company
 
     def clean_join_group(self):
@@ -132,23 +141,29 @@ class DraftForm(forms.ModelForm):
 
 
 class OrganizationForm(forms.ModelForm):
-    org_name = forms.CharField(label=("Company Name*:"), max_length=85,
+    org_name = forms.CharField(
+        label=("Company Name*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control'}))
 
-    title = forms.CharField(label=("Title*:"), max_length=85,
+    title = forms.CharField(
+        label=("Title*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control'}))
 
-    org_desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
-    
+    org_desc = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control'}))
+
     work_from = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control work_from'}, format='%m/%d/%Y'))
+        widget=forms.DateInput(
+            attrs={'class': 'form-control work_from'}, format='%m/%d/%Y'))
 
     work_to = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control work_to'}, format='%m/%d/%Y'))
+        widget=forms.DateInput(
+            attrs={'class': 'form-control work_to'}, format='%m/%d/%Y'))
 
-    org_current = forms.BooleanField(label=("Current Organization"),
+    org_current = forms.BooleanField(
+        label=("Current Organization"),
         widget=forms.CheckboxInput(attrs={'class': 'checkbox current_org'}),
         initial=False, required=False)
 
@@ -162,6 +177,8 @@ class OrganizationForm(forms.ModelForm):
         self.fields['org_name'].widget.attrs.update({'required':'required'})
         self.fields['title'].widget.attrs.update({'required':'required'})
         self.fields['work_to'].required = False
+        self.fields['work_from'].required = False
+        self.fields['org_desc'].required = False
         # self.fields['work_to'].widget.attrs.update({'required':'required'})
         # self.fields['org_current'].widget.attrs.update({'required':'required'})
 
@@ -212,30 +229,39 @@ class OrganizationForm(forms.ModelForm):
 
 
 class EducationForm(forms.ModelForm):
-    school_name = forms.CharField(label=("Name*:"), max_length=85,
+    school_name = forms.CharField(
+        label=("Name*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control'}))
 
-    degree = forms.CharField(label=("Degree*:"), max_length=85,
+    degree = forms.CharField(
+        label=("Degree*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control'}))
 
-    field = forms.CharField(label=("Field Of Study*:"), max_length=85,
+    field = forms.CharField(
+        label=("Field Of Study*:"), max_length=85,
         widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control'}))
 
-    level = forms.ChoiceField(choices=LEVEL, 
+    level = forms.ChoiceField(
+        choices=LEVEL,
         widget=forms.Select(attrs={'class': 'form-control'}))
 
-    edu_desc = forms.CharField(required=True, widget=forms.Textarea(attrs={'class':'form-control'}))
-    
+    edu_desc = forms.CharField(
+        widget=forms.Textarea(
+            attrs={'class': 'form-control'}))
+
     study_from = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control study_from'}, format='%m/%d/%Y'))
+        widget=forms.DateInput(
+            attrs={'class': 'form-control study_from'}, format='%m/%d/%Y'))
 
     study_to = forms.DateField(
-          widget=forms.DateInput(attrs={'class': 'form-control study_to'}, format='%m/%d/%Y'))
+        widget=forms.DateInput(
+            attrs={'class': 'form-control study_to'}, format='%m/%d/%Y'))
 
-    edu_current = forms.BooleanField(label=("Current Education"),
+    edu_current = forms.BooleanField(
+        label=("Current Education"),
         widget=forms.CheckboxInput(attrs={'class': 'checkbox current_edu'}),
         initial=False, required=False)
 
@@ -245,11 +271,14 @@ class EducationForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super(EducationForm, self).__init__(*args, **kwargs)
-        self.fields['school_name'].widget.attrs.update({'required':'required'})
-        self.fields['degree'].widget.attrs.update({'required':'required'})
-        self.fields['field'].widget.attrs.update({'required':'required'})
-        self.fields['level'].widget.attrs.update({'required':'required'})
+        self.fields['school_name'].widget.attrs.update({'required': 'required'})
+        self.fields['degree'].widget.attrs.update({'required': 'required'})
+        self.fields['field'].widget.attrs.update({'required': 'required'})
+        self.fields['level'].widget.attrs.update({'required': 'required'})
         self.fields['study_to'].required = False
+        self.fields['study_from'].required = False
+        self.fields['edu_desc'].required = False
+        self.fields['edu_current'].required = False
         # self.fields['study_to'].widget.attrs.update({'required':'required'})
         # self.fields['edu_current'].widget.attrs.update({'required':'required'})
 
