@@ -123,6 +123,9 @@ class Order(AbstractAutoDate):
 
             # order Action permissions
             ("can_mark_order_as_paid", "Can Mark Order As Paid"),
+
+            # order Search permissions
+            ("can_search_order_from_console", "Can Search Order From Console"),
         )
 
     def __str__(self):

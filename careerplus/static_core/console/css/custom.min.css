@@ -11,6 +11,7 @@
       }
       ul.errorlist {
           list-style: none;
-          color: #fff !important;
+          /*color: #fff !important;*/
+          color: red;
           padding-left: 0;
       }
