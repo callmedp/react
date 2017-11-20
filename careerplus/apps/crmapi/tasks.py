@@ -15,7 +15,7 @@ def post_psedu_lead(query_dict):
     headers['content-type'] = 'application/json'
     headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')[0]
     post_url = settings.SHINECPCRM_DICT.get('base_url') + \
-        settings.SHINECPCRM_DICT.get('psuedo_lead_url')
+        settings.SHINECPCRM_DICT.get('create_lead_url')
 
     lead["name"] = query_dict.get('name', '')
     lead["country_code"] = query_dict.get('country_code', '')
