@@ -6,8 +6,7 @@ from geolocation.models import Country
 LEAD_LOCATION = (
     (0, 'Default'),
     (1, 'Skill Page'),
-    (2, 'Course Detail Page'),
-    (8, 'Resume Detail Page'),
+    (2, 'Detail Page'),
     (3, 'Contact Us Page'),
     (6, 'Marketing'),
     (7, 'CMS Page'),
@@ -20,30 +19,21 @@ class UserQuries(AbstractAutoDate):
     """
     Contains the data for candidate who wants to contact, data got from call_me
     """
-    name = models.CharField(
-        max_length=255, null=True, blank=True)
-    email = models.CharField(
-        max_length=255, null=True, blank=True)
-    country = models.ForeignKey(
-        Country, null=True)
-    phn_number = models.CharField(
-        max_length=50)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    email = models.CharField(max_length=255, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True)
+    phn_number = models.CharField(max_length=50)
     message = models.TextField()
     lead_created = models.BooleanField(default=False)
     lead_source = models.SmallIntegerField(choices=LEAD_LOCATION, default=0)
     product = models.CharField(max_length=100, null=True, blank=True)
-    product_id = models.IntegerField(null=True, blank=True)
-    path = models.CharField(
-        max_length=255, null=True, blank=True)
+
     medium = models.SmallIntegerField(choices=DEVICE, default=0)
     source = models.CharField(
         max_length=255, null=True, blank=True)
-    utm_parameter = models.TextField(
-        blank=True,
-        default='')
-    campaign_slug = models.CharField(
+    path = models.CharField(
         max_length=255, null=True, blank=True)
-    
+
     class Meta:
         verbose_name_plural = 'User Queries'
         ordering = ['-modified']
@@ -73,6 +63,10 @@ class AdServerLead(models.Model):
     inactive = models.BooleanField(default=False)
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+    utm_parameter = models.TextField(
+        ('utm_parameter'),
+        blank=True,
+        default='')
 
     def __str__(self):
         return str(self.mobile) + ' ' + str(self.timestamp.date())

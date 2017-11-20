@@ -66,6 +66,7 @@ def upload_addserver_leads():
                 mobile = ld.mobile
                 lead_source = ld.source
                 url = ld.url
+                utm_parameter = ld.utm_parameter
                 timestamp = ld.timestamp.strftime('%Y-%m-%d %H:%M:%S')
                 lead.update({
                     'email': email,
@@ -73,7 +74,8 @@ def upload_addserver_leads():
                     'mobile': mobile,
                     'lead_source': lead_source,
                     'timestamp': timestamp,
-                    'path': url
+                    'path': url,
+                    'utm_parameter': utm_parameter,
                 })
                 try:
                     response = requests.post(
