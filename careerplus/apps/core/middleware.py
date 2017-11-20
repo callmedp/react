@@ -1,6 +1,7 @@
 # python built-in imports
 import logging
 import re
+import json
 import urllib.parse
 from datetime import datetime
 from django.utils import timezone
@@ -67,6 +68,13 @@ class LearningShineMiddleware(object):
             decode_url = urllib.parse.unquote(full_url)
             query = urllib.parse.urlsplit(decode_url).query
             dict_data = dict(urllib.parse.parse_qsl(query))
+            utm_parameter = json.dumps({
+                "utm_content": dict_data.get('utm_content'),
+                "utm_term": dict_data.get('utm_term'),
+                "utm_medium": dict_data.get('utm_medium'),
+                "utm_campaign": dict_data.get('utm_campaign'),
+                "utm_source": dict_data.get('utm_source')
+            })
             request.session['_adserver_'] = dict_data.get('ad_content')
 
         if request.session.get('_adserver_', None):
@@ -92,7 +100,8 @@ class LearningShineMiddleware(object):
                         'email': email,
                         'mobile': mobile,
                         'timestamp': timestamp,
-                        'url': url
+                        'url': url,
+                        'utm_parameter': utm_parameter,
                     })
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))

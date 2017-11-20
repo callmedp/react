@@ -26,12 +26,6 @@ def post_psedu_lead(query_dict):
     lead["lsource"] = int(query_dict.get('lead_source', 0))
     lead["product"] = str(query_dict.get('product', ''))
     lead["medium"] = int(query_dict.get('medium', 0))
-    
-    lead["path"] = query_dict.get('path', '')
-    lead["product_id"] = int(query_dict.get('product_id', 0))
-    lead["utm_parameter"] = query_dict.get('utm_parameter', '')
-    lead["campaign_slug"] = query_dict.get('campaign_slug', '')
-    
     try:
         usr_query = UserQuries.objects.get(
             id=query_dict.get('queryid', ''))
@@ -57,6 +51,7 @@ def addAdServerLead(query_dict):
     country_code = str(query_dict.get('country_code', '91'))
     timestamp = str(query_dict.get('timestamp', ''))
     url = str(query_dict.get('url', ''))
+    utm_parameter = query_dict.get('utm_parameter', '')
 
     try:
         timestamp_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
@@ -72,4 +67,5 @@ def addAdServerLead(query_dict):
     if not object_list.exists():
         AdServerLead.objects.create(
             email=email, country_code=country_code,
-            mobile=mobile, url=url, timestamp=timestamp_obj)
+            mobile=mobile, url=url, timestamp=timestamp_obj,
+            utm_parameter=utm_parameter)
