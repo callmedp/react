@@ -210,11 +210,12 @@
             {{ registerform.email }}
             <span class="error-txt">{{ registerform.email.errors.0 }}</span>
           </div>
+          <div id="user_email"></div>
           <div class="form-group {% if registerform.email.errors %}error{% endif %}">
             {{ registerform.raw_password }}
             <span class="error-txt">{{ registerform.raw_password.errors.0 }}</span>
           </div>
-
+          <div id="raw_psd"></div>
           <div class="form-group {% if registerform.cell_phone.errors or registerform.country_code.errors %}error{% endif %}">
             <div class="country-code">
               <div class="custom-select">
@@ -230,6 +231,7 @@
               </span>
             </div>
           </div>
+          <div id="cell_phone"></div>
           <div class="form-group">
             {{registerform.vendor_id }}
           </div>
@@ -239,6 +241,7 @@
               I agree to Terms & conditions
             </label>
           </div>
+          <div id="terms"></div>
           <button type="button" id="register-button" class="btn btn-primary submit">Register</button>
           <div class="social-login">
             <span>or Register with</span>
