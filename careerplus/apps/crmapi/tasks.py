@@ -5,6 +5,9 @@ from datetime import datetime
 from django.utils import timezone
 from django.conf import settings
 from celery.decorators import task
+
+from core.api_mixin import CrmApiMixin
+
 from .models import AdServerLead, UserQuries
 
 
@@ -73,3 +76,36 @@ def addAdServerLead(query_dict):
         AdServerLead.objects.create(
             email=email, country_code=country_code,
             mobile=mobile, url=url, timestamp=timestamp_obj)
+
+
+@task(name="create_lead_on_crm")
+def create_lead_crm(pk=None):
+    try:
+        data_dict = {}
+        lead = UserQuries.objects.get(pk=pk)
+
+        if lead.lead_source in [4]:
+            pass
+        else:
+            lsource = 0
+        data_dict.update({
+            "name": lead.name,
+            "email": lead.email,
+            "country_code": lead.country.phone if lead.country else '91',
+            "mobile": lead.phn_number,
+            "message": lead.message,
+            "path": lead.path,
+            "product": lead.product,
+            "product_id": lead.product_id,
+            "lead_source": lsource,
+            "campaign_slug": lead.campaign_slug,
+            "medium": lead.medium,
+            "source": lead.source,
+            "utm_parameter": lead.utm_parameter,
+        })
+        flag = CrmApiMixin().create_lead_by_api(data_dict=data_dict)
+        if flag:
+            lead.lead_created = True
+            lead.save()
+    except Exception as e:
+        logging.getLogger('error_log').error("%s" % str(e))

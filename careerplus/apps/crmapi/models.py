@@ -9,7 +9,7 @@ LEAD_LOCATION = (
     (2, 'Course Detail Page'),
     (8, 'Resume Detail Page'),
     (3, 'Contact Us Page'),
-    (6, 'Marketing'),
+    (4, 'SEM'),  # marketing pages
     (7, 'CMS Page'),
 )
 
@@ -43,7 +43,7 @@ class UserQuries(AbstractAutoDate):
         default='')
     campaign_slug = models.CharField(
         max_length=255, null=True, blank=True)
-    
+
     class Meta:
         verbose_name_plural = 'User Queries'
         ordering = ['-modified']

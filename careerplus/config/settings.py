@@ -168,7 +168,8 @@ SHINECPCRM_DICT = {
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
     'ad_server_url': '/api/mobile-version-leads/',
-    'timeout': 30
+    'create_lead_url': '/api/v1/create-lead/',
+    'timeout': 30,
 }
 
 # SHINE_SITE = 'https://www.shine.com'

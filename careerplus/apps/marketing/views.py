@@ -26,7 +26,7 @@ class MarketingPages(TemplateView):
         for key in allowed_keys:
             allowed_val.append(key + ': ' + str(params_dict.get(key, [0])[0]))
         source = ', '.join(allowed_val)
-        context.update({'source': source, 'lead_source': 6})
+        context.update({'source': source, 'lead_source': 4})
         countries = Country.objects.filter(active=True)
         countries = countries.exclude(phone='')
         context.update({
