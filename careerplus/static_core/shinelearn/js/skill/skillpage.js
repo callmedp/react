@@ -57,7 +57,7 @@ $(function() {
 		if ( $("#queryform").valid()) {
 			var formData = $("#queryform").serialize();
 			$.ajax({
-	            url : "/shop/crm/lead/",
+	            url : "/lead/lead-management/",
 	            type: "POST",
 	            data : formData,
 	            success: function(data, textStatus, jqXHR)

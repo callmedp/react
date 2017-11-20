@@ -26,6 +26,12 @@ def post_psedu_lead(query_dict):
     lead["lsource"] = int(query_dict.get('lead_source', 0))
     lead["product"] = str(query_dict.get('product', ''))
     lead["medium"] = int(query_dict.get('medium', 0))
+    
+    lead["path"] = query_dict.get('path', '')
+    lead["product_id"] = int(query_dict.get('product_id', 0))
+    lead["utm_parameter"] = query_dict.get('utm_parameter', '')
+    lead["campaign_slug"] = query_dict.get('campaign_slug', '')
+    
     try:
         usr_query = UserQuries.objects.get(
             id=query_dict.get('queryid', ''))

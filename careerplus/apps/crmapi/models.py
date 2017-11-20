@@ -6,7 +6,8 @@ from geolocation.models import Country
 LEAD_LOCATION = (
     (0, 'Default'),
     (1, 'Skill Page'),
-    (2, 'Detail Page'),
+    (2, 'Course Detail Page'),
+    (8, 'Resume Detail Page'),
     (3, 'Contact Us Page'),
     (6, 'Marketing'),
     (7, 'CMS Page'),
@@ -19,21 +20,30 @@ class UserQuries(AbstractAutoDate):
     """
     Contains the data for candidate who wants to contact, data got from call_me
     """
-    name = models.CharField(max_length=255, null=True, blank=True)
-    email = models.CharField(max_length=255, null=True, blank=True)
-    country = models.ForeignKey(Country, null=True)
-    phn_number = models.CharField(max_length=50)
+    name = models.CharField(
+        max_length=255, null=True, blank=True)
+    email = models.CharField(
+        max_length=255, null=True, blank=True)
+    country = models.ForeignKey(
+        Country, null=True)
+    phn_number = models.CharField(
+        max_length=50)
     message = models.TextField()
     lead_created = models.BooleanField(default=False)
     lead_source = models.SmallIntegerField(choices=LEAD_LOCATION, default=0)
     product = models.CharField(max_length=100, null=True, blank=True)
-
+    product_id = models.IntegerField(null=True, blank=True)
+    path = models.CharField(
+        max_length=255, null=True, blank=True)
     medium = models.SmallIntegerField(choices=DEVICE, default=0)
     source = models.CharField(
         max_length=255, null=True, blank=True)
-    path = models.CharField(
+    utm_parameter = models.TextField(
+        blank=True,
+        default='')
+    campaign_slug = models.CharField(
         max_length=255, null=True, blank=True)
-
+    
     class Meta:
         verbose_name_plural = 'User Queries'
         ordering = ['-modified']

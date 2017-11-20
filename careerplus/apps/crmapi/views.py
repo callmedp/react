@@ -44,6 +44,7 @@ class LeadManagement(View):
             name = request.POST.get('name', '')
             msg = request.POST.get('msg', '')
             prd = request.POST.get('prd', '')
+            product = request.POST.get('product', 0)
             country = request.POST.get('country', '')
             source = request.POST.get('source', '')
             queried_for = request.POST.get('queried_for', '')
@@ -53,7 +54,10 @@ class LeadManagement(View):
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
             if any(rejectkey in msg for rejectkey in rejectlist):
                 return HttpResponse(json.dumps({'status': False}))
-
+            try:
+                product = int(product)
+            except:
+                product = 0
             try:
                 lead_source = int(lead_source)
             except:
@@ -73,6 +77,13 @@ class LeadManagement(View):
             except:
                 country = Country.objects.get(phone='91')
 
+            utm_parameter = json.dumps({
+                "utm_content": request.GET.get("utm_content", ''),
+                "utm_term": request.GET.get("utm_term", ''),
+                "utm_medium": request.GET.get("utm_medium", ''),
+                "utm_campaign": request.GET.get("utm_campaign", ''),
+                "utm_source": request.GET.get("utm_source", '')
+            })
             UserQuries.objects.create(
                 name=name,
                 email=email,
@@ -81,9 +92,12 @@ class LeadManagement(View):
                 message=msg,
                 lead_source=lead_source,
                 product=prd,
+                product_id=product,
                 medium=medium,
                 source=source,
                 path=path,
+                utm_parameter=utm_parameter,
+                campaign_slug=request.GET.get("utm_campaign", '')
             )
             created = True
         except Exception as e:

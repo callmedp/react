@@ -17,16 +17,23 @@
                   {% endfor %}
                 </select>
               </div>
-              <input type="text" id="id_mobile" name="mobile_number" class="form-control modal-form-control" placeholder="Mobile">
+              <input type="text" id="id_mobile" name="number" class="form-control modal-form-control" placeholder="Mobile">
               <span class="error position-error"></span>
             </div>
           </div>
+          {% if  page_obj %}
+            <input type="hidden" name="lsource" value="7">
+            <input type="hidden" name="product" value="{{page_obj.pk}}">
+            <input type="hidden" name="prd" value="{{page_obj.heading}}">
+            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+          {% endif %}
+          
         <!--div class="form-group">
           <input type="text" class="form-control" name="mobile_number" placeholder="Mobile">
           <span class="error position-error"></span>
         </div-->
         <div class="form-group">
-          <textarea class="form-control" rows="3" name="message_box" placeholder="Message"></textarea>
+          <textarea class="form-control" rows="3" name="msg" placeholder="Message"></textarea>
           <span class="error position-error"></span>
         </div>
         

@@ -202,14 +202,14 @@ $(function() {
                 required: true,
                 maxlength: 80
             },
-            mobile_number: {
+            number: {
                 required: true,
                 number: true,
                 indiaMobile: true,
                 minlength: 4,
                 maxlength: 15
             },
-            message_box: {
+            msg: {
                 required: true,
                 maxlength: 300
             }
@@ -219,14 +219,14 @@ $(function() {
                 required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters."
             },
-            mobile_number: {
+            number: {
                 required: "Mobile Number is Mandatory",
                 number: "Enter only number",
                 indiaMobile: "Please enter 10 digits only",
                 maxlength: "Please enter less than 16 digits",
                 minlength: "Please enter atleast 4 digits"
             },
-            message_box: {
+            msg: {
                 required: "Message is required.",
                 maxlength: "Enter less than 300 characters."
             }
@@ -249,7 +249,7 @@ $(function() {
         if (flag) {
             var formData = $callbackForm.serialize();
             $.ajax({
-                url: "/cms/lead-management/",
+                url: "/lead/lead-management/",
                 type: "POST",
                 data: formData,
                 success: function(data, textStatus, jqXHR) {
