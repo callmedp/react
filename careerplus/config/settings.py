@@ -164,7 +164,7 @@ CRM_LEAD_TOKEN = '73f53cf358b94156feb49d034081ed507334e02a'
 SHINECPCRM_DICT = {
     'base_url': CRM_LEAD_URL,
     'token': CRM_LEAD_TOKEN,
-    'psuedo_lead_url': '/api/pseudo-leads/',
+    'create_lead_url': '/api/v1/create-lead/',
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
     'ad_server_url': '/api/mobile-version-leads/',
