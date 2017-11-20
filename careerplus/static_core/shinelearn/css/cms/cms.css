@@ -33,12 +33,13 @@
   color: #333;
   margin: 0 0 10px 0;
 }
-.download-resume h3 {
+.download-resume strong {
   font-size: 15px;
   background-color: #e5e5e5;
   border-radius: 5px;
   padding: 5px 10px;
   display: inline-block;
+  font-weight: 400;
 }
 .download-resume ul {
   list-style-type: none;
@@ -74,6 +75,12 @@
 }
 .formatting h2 {
   font-size: 16px;
+  color: #333;
+  margin: 30px 0 15px 0;
+  font-weight: 600;
+}
+.formatting h3 {
+  font-size: 15px;
   color: #333;
   margin: 30px 0 15px 0;
   font-weight: 600;
