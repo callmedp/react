@@ -97,12 +97,27 @@ $(document).on('click', '#id_download_button', function(event) {
         errorPlacement: errorPlacement,
         submitHandler: function(form){
             MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'success');
-            $("#id_action").val(1); //action on download button
+            // $("#id_action").val(1); //action on download button
 
-            var href = $('#id_download_button').attr('href');
-            form.submit();
-            $('#id_download_model').modal('toggle');
-            window.open(href, '_blank');
+            var formData = $(form).serialize();
+            $.ajax({
+                url: "/lead/lead-management/",
+                type: "POST",
+                data: formData,
+                success: function(data, textStatus, jqXHR) {
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+                    // alert('Your Query Submitted Successfully.');
+                    $pdfForm[0].reset();
+                    var href = $('#id_download_button').attr('href');
+                    $('#id_download_model').modal('toggle');
+                    window.open(href, '_blank');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                    alert('Something went wrong. Try again later.');
+                }
+            });
+            return false;
         }
     });
 
