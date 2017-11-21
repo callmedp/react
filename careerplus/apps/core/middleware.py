@@ -3,7 +3,7 @@ import logging
 import re
 import json
 import urllib.parse
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.utils import timezone
 from crmapi.tasks import addAdServerLead
 from django_mobile import set_flavour
@@ -130,6 +130,10 @@ class TrackingMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
+        max_age = 24 * 60 * 60
+        expires = datetime.strftime(
+            datetime.utcnow() + timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
+            
         if not request.is_ajax():
             utm = request.session.get('utm', {})
         
@@ -138,55 +142,66 @@ class TrackingMiddleware(object):
                 ref_url = ref_url.split('?')[0]
                 if ref_url:
                     utm['ref_url'] = ref_url[:1048]
-            
-            if 'utm_source' in request.GET or '_us' in request.COOKIES:
-                source = request.GET.get('utm_source') or request.COOKIES.get('_us')
+                    
+            if 'utm_source' in request.GET:
+                source = request.GET.get('utm_source')
                 if source:
                     utm['utm_source'] = source[:100]
+                    utm['expires'] = expires
             
-            if 'utm_term' in request.GET or '_ut' in request.COOKIES:
-                term = request.GET.get('utm_term') or request.COOKIES.get('_ut')
+            if 'utm_term' in request.GET:
+                term = request.GET.get('utm_term')
                 if term:
                     utm['utm_term'] = term[:50]
-
-            if 'utm_content' in request.GET or '_uo' in request.COOKIES:
-                content = request.GET.get('utm_content') or request.COOKIES.get('_uo')
+                    utm['expires'] = expires
+            
+            if 'utm_content' in request.GET:
+                content = request.GET.get('utm_content')
                 if content:
                     utm['utm_content'] = content[:50]
-
-            if 'utm_medium' in request.GET or '_um' in request.COOKIES:
-                medium = request.GET.get('utm_medium') or request.COOKIES.get('_um')
+                    utm['expires'] = expires
+            
+            if 'utm_medium' in request.GET:
+                medium = request.GET.get('utm_medium')
                 if medium:
-                    utm['medium'] = medium[:50]
-
-            if 'utm_campaign' in request.GET or '_uc' in request.COOKIES:
-                campaign = request.GET.get('utm_campaign') or request.COOKIES.get('_uc')
+                    utm['utm_medium'] = medium[:50]
+                    utm['expires'] = expires
+            
+            if 'utm_campaign' in request.GET:
+                campaign = request.GET.get('utm_campaign')
                 if campaign:
                     utm['utm_campaign'] = campaign[:100]
-
+                    utm['expires'] = expires
+            
             if 'keyword' in request.GET:
                 keyword = request.GET.get('keyword')
                 if keyword:
                     utm['keyword'] = keyword[:100]
-
+            
             if 'placement' in request.GET:
                 placement = request.GET.get('placement')
                 if placement:
                     utm['placement'] = placement[:100]
-
+            
             request.session['utm'] = utm
 
         response = self.get_response(request)
         
-        if not request.is_ajax():
-            if utm.get('utm_source'):
-                response.set_cookie('_us', utm.get('utm_source'))
-            if utm.get('utm_content'):
-                response.set_cookie('_uo', utm.get('utm_content'))
-            if utm.get('utm_medium'):
-                response.set_cookie('_um', utm.get('utm_medium'))
-            if utm.get('utm_term'):
-                response.set_cookie('_ut', utm.get('utm_term'))
-            if utm.get('utm_campaign'):
-                response.set_cookie('_uc', utm.get('utm_campaign'))
+        # if not request.is_ajax():
+        #     if utm.get('utm_source'):
+        #         response.set_cookie(
+        #             '_us', utm.get('utm_source'), max_age=max_age, expires=expires )
+        #     if utm.get('utm_content'):
+        #         response.set_cookie(
+        #             '_uo', utm.get('utm_content'), max_age=max_age, expires=expires)
+        #     if utm.get('utm_medium'):
+        #         response.set_cookie(
+        #             '_um', utm.get('utm_medium'), max_age=max_age, expires=expires)
+        #     if utm.get('utm_term'):
+        #         response.set_cookie(
+        #             '_ut', utm.get('utm_term'), max_age=max_age, expires=expires)
+        #     if utm.get('utm_campaign'):
+        #         response.set_cookie(
+        #             '_uc', utm.get('utm_campaign'), max_age=max_age, expires=expires)
+        # print(utm)
         return response
