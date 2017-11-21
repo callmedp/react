@@ -108,14 +108,17 @@ $(function(){
                     data = "?page="+ page+ "&slug=" + slug;
                     $.ajax({
                         url: "/article/ajax/article-detail-loading/" + data,
-                        dataType: "html",
-                        success: function(html) {
+                        type: "GET",
+                        dataType: "json",
+                        // dataType: "html",
+                        success: function(data) {
+                            var article_url = data.url;
                             $("#load_more").remove();
-                            $('#related-container').append(html);
+                            $('#related-container').append(data.article_detail);
                             ga('send', 'pageview');
                         },
                         failure: function(response){
-                            alert("Something went wrong.")
+                            //alert("Something went wrong.")
                         }
                     });
                 }
