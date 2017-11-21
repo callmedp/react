@@ -122,3 +122,71 @@ class LoginMiddleware(object):
             request.session.update(resp_status)
         response = self.get_response(request)
         return response
+
+
+class TrackingMiddleware(object):
+    
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if not request.is_ajax():
+            utm = request.session.get('utm', {})
+        
+            ref_url = request.get_full_path()
+            if '?' in ref_url:
+                ref_url = ref_url.split('?')[0]
+                if ref_url:
+                    utm['ref_url'] = ref_url[:1048]
+            
+            if 'utm_source' in request.GET or '_us' in request.COOKIES:
+                source = request.GET.get('utm_source') or request.COOKIES.get('_us')
+                if source:
+                    utm['utm_source'] = source[:100]
+            
+            if 'utm_term' in request.GET or '_ut' in request.COOKIES:
+                term = request.GET.get('utm_term') or request.COOKIES.get('_ut')
+                if term:
+                    utm['utm_term'] = term[:50]
+
+            if 'utm_content' in request.GET or '_uo' in request.COOKIES:
+                content = request.GET.get('utm_content') or request.COOKIES.get('_uo')
+                if content:
+                    utm['utm_content'] = content[:50]
+
+            if 'utm_medium' in request.GET or '_um' in request.COOKIES:
+                medium = request.GET.get('utm_medium') or request.COOKIES.get('_um')
+                if medium:
+                    utm['medium'] = medium[:50]
+
+            if 'utm_campaign' in request.GET or '_uc' in request.COOKIES:
+                campaign = request.GET.get('utm_campaign') or request.COOKIES.get('_uc')
+                if campaign:
+                    utm['utm_campaign'] = campaign[:100]
+
+            if 'keyword' in request.GET:
+                keyword = request.GET.get('keyword')
+                if keyword:
+                    utm['keyword'] = keyword[:100]
+
+            if 'placement' in request.GET:
+                placement = request.GET.get('placement')
+                if placement:
+                    utm['placement'] = placement[:100]
+
+            request.session['utm'] = utm
+
+        response = self.get_response(request)
+        
+        if not request.is_ajax():
+            if utm.get('utm_source'):
+                response.set_cookie('_us', utm.get('utm_source'))
+            if utm.get('utm_content'):
+                response.set_cookie('_uo', utm.get('utm_content'))
+            if utm.get('utm_medium'):
+                response.set_cookie('_um', utm.get('utm_medium'))
+            if utm.get('utm_term'):
+                response.set_cookie('_ut', utm.get('utm_term'))
+            if utm.get('utm_campaign'):
+                response.set_cookie('_uc', utm.get('utm_campaign'))
+        return response
