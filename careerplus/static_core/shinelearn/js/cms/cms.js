@@ -1,18 +1,38 @@
-var highlightError = function(element, errorClass) {
-    $(element).siblings('.error').removeClass('hide_error');
-};
+if (window.CURRENT_FLAVOUR == 'mobile'){
+    var highlightError = function(element, errorClass) {
+        $(element).closest('.form-group').addClass('error');
+        $(element).siblings('.mgs').show();
+    };
 
-var unhighlightError = function(element, errorClass) {
-    $(element).siblings('.error').addClass('hide_error');
-};
+    var unhighlightError = function(element, errorClass) {
+        $(element).closest('.form-group').removeClass('error');
+        $(element).siblings('.mgs').hide();
+    };
 
-var errorPlacement = function(error, element) {
-    $(element).siblings('.error').html(error.text());
-};
+    var errorPlacement = function(error, element){
+        $(element).siblings('.mgs').html(error.text());
+    };
+    var showLeadForm = function () {
+        // nothing
+    };
+}else{
 
-var showLeadForm = function() {
-    $('#id_download_model').modal("show");
-};
+    var highlightError = function(element, errorClass) {
+        $(element).siblings('.error').removeClass('hide_error');
+    };
+
+    var unhighlightError = function(element, errorClass) {
+        $(element).siblings('.error').addClass('hide_error');
+    };
+
+    var errorPlacement = function(error, element) {
+        $(element).siblings('.error').html(error.text());
+    };
+
+    var showLeadForm = function() {
+        $('#id_download_model').modal("show");
+    };
+}
 
 $.validator.addMethod("indiaMobile", function(value, element) {
     var country_code = $("input[name=country]").val(); //$('#call_back_country_code-id').val();
@@ -37,11 +57,24 @@ $(document).on('click', '#id_download_button', function(event) {
     var pop_up = $(this).attr('pop-up');
     var href = $(this).attr('href');
     if (pop_up == "no") {
-        $("#id_action").val(2); // action for login -user
-        $("#downloadpdf_form").submit();
+        // $("#id_action").val(2); // action for login -user
+        $.ajax({
+            url: "/lead/lead-management/",
+            type: "POST",
+            data: $("#downloadpdf_form").serialize(),
+            success: function(data, textStatus, jqXHR) {
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                alert('Something went wrong. Try again later.');
+            }
+        });
+        if (window.CURRENT_FLAVOUR == 'mobile'){
+            $('.cls_mask').click(); 
+        }
         window.open(href, '_blank');
     } else {
-
         showLeadForm();
     }
 });
@@ -107,6 +140,9 @@ $(document).on('click', '#id_download_button', function(event) {
                 success: function(data, textStatus, jqXHR) {
                     MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
                     // alert('Your Query Submitted Successfully.');
+                    if (window.CURRENT_FLAVOUR == 'mobile'){
+                        $('.cls_mask').click();  
+                    }
                     $pdfForm[0].reset();
                     var href = $('#id_download_button').attr('href');
                     $('#id_download_model').modal('toggle');
@@ -161,7 +197,9 @@ $(function() {
 
     $("#id_skip").click(function() {
         MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'skip');
-        $("#id_action").val(0); // action on skip button
+        if (window.CURRENT_FLAVOUR == 'mobile'){
+            $('.cls_mask').click(); 
+        }
         var href = $('#id_download_button').attr('href');
         window.open(href, '_blank');
     });
