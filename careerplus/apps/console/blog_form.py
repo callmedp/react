@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.sites.models import Site
+# from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
@@ -46,22 +46,22 @@ class ArticleAddForm(forms.ModelForm):
         to_field_name='name', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    sites = forms.ModelMultipleChoiceField(label=("Sites:"),
-        queryset=Site.objects.all(), widget=forms.SelectMultiple(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+    # sites = forms.ModelMultipleChoiceField(label=("Sites:"),
+    #     queryset=Site.objects.all(), widget=forms.SelectMultiple(
+    #     attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     allow_comment = forms.BooleanField(label=("Allow Comment:"),
         required=False, widget=forms.CheckboxInput())
 
     class Meta:
         model = Blog
-        fields = ['name', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'sites', 'allow_comment']
+        fields = ['name', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment']
     
     def __init__(self, *args, **kwargs):
         super(ArticleAddForm, self).__init__(*args, **kwargs)
         self.fields['tags'].required = False
         self.fields['sec_cat'].required = False
-        self.fields['sites'].required = False
+        # self.fields['sites'].required = False
         self.fields['content'].required = True
 
 
@@ -102,9 +102,9 @@ class ArticleChangeForm(forms.ModelForm):
         to_field_name='name', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    sites = forms.ModelMultipleChoiceField(label=("Sites:"),
-        queryset=Site.objects.all(), widget=forms.SelectMultiple(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+    # sites = forms.ModelMultipleChoiceField(label=("Sites:"),
+    #     queryset=Site.objects.all(), widget=forms.SelectMultiple(
+    #     attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     # user = forms.ModelChoiceField(label=("Writer:"),
     #     queryset=User.objects.filter(is_active=True, is_staff=True),
@@ -121,7 +121,7 @@ class ArticleChangeForm(forms.ModelForm):
 
     class Meta:
         model = Blog
-        fields = ['name', 'status', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'sites', 'allow_comment',
+        fields = ['name', 'status', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment',
             'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords']
 
         widgets = {
@@ -136,7 +136,7 @@ class ArticleChangeForm(forms.ModelForm):
         super(ArticleChangeForm, self).__init__(*args, **kwargs)
         self.fields['tags'].required = False
         self.fields['sec_cat'].required = False
-        self.fields['sites'].required = False
+        # self.fields['sites'].required = False
 
         self.fields['heading'].label = 'Heading*'
         self.fields['heading'].required = True

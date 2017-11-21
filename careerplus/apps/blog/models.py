@@ -5,6 +5,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from django.urls import reverse
 # from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 
 from meta.models import ModelMeta
@@ -16,11 +17,25 @@ from seo.models import AbstractSEO
 
 from .config import STATUS
 
+SITE_TYPE = ((1, 'ShineLearning'),(2, 'TalentEconomy'),(3, 'Both'))
 
 class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
-    name = models.CharField(max_length=255, null=False, blank=False, unique=True)
-    slug = models.SlugField(('Slug'), unique=True, max_length=255,
+    name = models.CharField(
+        max_length=255, null=False, blank=False, unique=True)
+    slug = models.SlugField(
+        ('Slug'), unique=True, max_length=255,
         blank=True, null=True, help_text=("Used to build the category's URL."))
+    visibility = models.PositiveIntegerField(
+        _('Site Visibilty'),
+        choices=SITE_TYPE,
+        default=1,
+        help_text=_('sites where blog published.'))
+    image = models.FileField(
+        "Image", max_length=200, upload_to="images/blog/category/",
+        blank=True, null=True, help_text='use this category image')
+    image_alt = models.CharField(
+        max_length=100, null=True, blank=True)
+    
     is_active = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
 
@@ -81,9 +96,16 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
-    name = models.CharField(max_length=255, null=False, blank=False, unique=True)
-    slug = models.SlugField(('Slug'), unique=True, max_length=255,
+    name = models.CharField(
+        max_length=255, null=False, blank=False, unique=True)
+    slug = models.SlugField(
+        ('Slug'), unique=True, max_length=255,
         blank=True, null=True, help_text=("Used to build the tag's URL."))
+    visibility = models.PositiveIntegerField(
+        _('Site Visibilty'),
+        choices=SITE_TYPE,
+        default=1,
+        help_text=_('sites where blog published.'))
     is_active = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
 
@@ -134,26 +156,98 @@ class Tag(AbstractCommonModel, AbstractSEO, ModelMeta):
         return reverse('blog:articles-by-tag', kwargs={'slug': self.slug})
 
 
+class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
+    name = models.CharField(
+        max_length=255, null=False, blank=False, unique=True)
+    slug = models.SlugField(
+        ('Slug'), unique=True, max_length=255,
+        blank=True, null=True, help_text=("Used to build the author's URL."))
+    visibility = models.PositiveIntegerField(
+        _('Site Visibilty'),
+        choices=SITE_TYPE,
+        default=1,
+        help_text=_('sites where blog published.'))
+    image = models.FileField(
+        "Profile Image", max_length=200, upload_to="images/blog/author/",
+        blank=True, null=True, help_text='use this category image')
+    image_alt = models.CharField(
+        max_length=100, null=True, blank=True)
+    about = models.TextField(
+        _('About Author'),
+        blank=True, default='')
+    designation = models.CharField(
+        _('Designation'), max_length=255, blank=True)
+    company = models.CharField(
+        _('Company'), max_length=255, blank=True)
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True,
+        help_text='for user or writer')
+    
+    is_active = models.BooleanField(default=False)
+    
+
+    _metadata_default = ModelMeta._metadata_default.copy()
+    # _metadata_default['locale'] = 'dummy_locale'
+
+    # _metadata = {
+    #     'title': 'get_title',
+    #     'description': 'get_description',
+    #     'og_description': 'get_description',
+    #     'keywords': 'get_keywords',
+    #     'published_time': 'publish_date',
+    #     'modified_time': 'last_modified_on',
+    #     'url': 'get_full_url'
+    # }
+
+    # class Meta:
+    #     ordering = ['priority']
+
+    def __str__(self):
+        return self.name
+
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     
-    name = models.CharField(('Name'), max_length=200, blank=False,
+    name = models.CharField(
+        ('Name'), max_length=200, blank=False,
         help_text=("Set name for slug generation."))
-    p_cat = models.ForeignKey(Category, related_name='primary_category',
+    p_cat = models.ForeignKey(
+        Category, related_name='primary_category',
         blank=False, null=False)
-    sec_cat = models.ManyToManyField(Category, related_name='secondary_category',
+    sec_cat = models.ManyToManyField(
+        Category, related_name='secondary_category',
         blank=True)
-    slug = models.SlugField(('Slug'), unique=True, max_length=255,
+    slug = models.SlugField(
+        ('Slug'), unique=True, max_length=255,
         blank=True, null=True, help_text=("Used to build the tag's URL."))
-    image = models.FileField("Image", max_length=200, upload_to="images/blog/",
+    image = models.FileField(
+        "Image", max_length=200, upload_to="images/blog/",
         blank=True, null=True, help_text='use this banner image')
-    image_alt = models.CharField(max_length=100, null=True, blank=True)
-    content = RichTextUploadingField(default="", blank=True, null=True,
+    image_alt = models.CharField(
+        max_length=100, null=True, blank=True)
+    content = RichTextUploadingField(
+        default="", blank=True, null=True,
         help_text=("content for blog."))
-    tags = models.ManyToManyField(Tag, blank=True)
-    sites = models.ManyToManyField(Site, blank=True, related_name='related_sites',
-        help_text=("sites where blog published."))
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+    tags = models.ManyToManyField(
+        Tag, blank=True)
+    visibility = models.PositiveIntegerField(
+        _('Site Visibilty'),
+        choices=SITE_TYPE,
+        default=1,
+        help_text=_('sites where blog published.'))
+    summary = models.TextField(
+        _('Summary Article'),
+        blank=True, default='')
+    author = models.ForeignKey(
+        Author, null=True, blank=True,
+        help_text='for author')
+    
+    # sites = models.ManyToManyField(Site, blank=True, related_name='related_sites',
+    #     help_text=("sites where blog published."))
+    
+    #do not use#
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True,
         help_text='for user or writer')
     
     status = models.PositiveIntegerField(choices=STATUS, default=0)
@@ -184,6 +278,10 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 
     class Meta:
         ordering = ['-score', '-publish_date']
+        permissions = (
+            ("console_change_learning_article", "Can Change Learning Article From Console"),
+            ("console_change_talent_article", "Can Change Talent Article From Console"),
+        )
 
     def __str__(self):
         return str(self.id) + '_' + self.name
@@ -254,3 +352,5 @@ class Comment(AbstractCommonModel):
 
 	def __str__(self):
 		return str(self.id) + '_' + str(self.created_on.date())
+
+

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.sites.models import Site
+# from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.conf import settings
@@ -48,9 +48,9 @@ class BlogAddForm(forms.ModelForm):
         to_field_name='name', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    sites = forms.ModelMultipleChoiceField(label=("Sites:"),
-        queryset=Site.objects.all(), widget=forms.SelectMultiple(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+    # sites = forms.ModelMultipleChoiceField(label=("Sites:"),
+    #     queryset=Site.objects.all(), widget=forms.SelectMultiple(
+    #     attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     user = forms.ModelChoiceField(label=("Writer:"),
         queryset=User.objects.filter(is_active=True, is_staff=True),
@@ -68,7 +68,7 @@ class BlogAddForm(forms.ModelForm):
 
     class Meta:
         model = Blog
-        fields = ['name', 'slug', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'sites', 'user', 'allow_comment',
+        fields = ['name', 'slug', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'user', 'allow_comment',
             'status', 'url', 'title', 'meta_desc', 'meta_keywords']
         widgets = {
             'url': forms.URLInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
@@ -82,7 +82,7 @@ class BlogAddForm(forms.ModelForm):
         self.fields['slug'].required = False
         self.fields['tags'].required = False
         self.fields['sec_cat'].required = False
-        self.fields['sites'].required = False
+        # self.fields['sites'].required = False
         self.fields['content'].required = True
         self.fields['slug'].widget.attrs['readonly'] = True
         # self.fields['slug'].widget.attrs['disabled'] = 'disabled'
