@@ -179,6 +179,12 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
         _('Designation'), max_length=255, blank=True)
     company = models.CharField(
         _('Company'), max_length=255, blank=True)
+    fb_url = models.CharField(
+        _('Facebook'), max_length=255, blank=True)
+    twitter_url = models.CharField(
+        _('Twitter'), max_length=255, blank=True)
+    linkedin_url = models.CharField(
+        _('LinkedIN'), max_length=255, blank=True)
     
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
