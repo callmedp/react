@@ -143,32 +143,32 @@ class TrackingMiddleware(object):
                 if ref_url:
                     utm['ref_url'] = ref_url[:1048]
                     
-            if 'utm_source' in request.GET or '_us' in request.COOKIES:
-                source = request.GET.get('utm_source') or request.COOKIES.get('_us')
+            if 'utm_source' in request.GET:
+                source = request.GET.get('utm_source')
                 if source:
                     utm['utm_source'] = source[:100]
                     utm['expires'] = expires
             
-            if 'utm_term' in request.GET or '_ut' in request.COOKIES:
-                term = request.GET.get('utm_term') or request.COOKIES.get('_ut')
+            if 'utm_term' in request.GET:
+                term = request.GET.get('utm_term')
                 if term:
                     utm['utm_term'] = term[:50]
                     utm['expires'] = expires
             
-            if 'utm_content' in request.GET or '_uo' in request.COOKIES:
-                content = request.GET.get('utm_content') or request.COOKIES.get('_uo')
+            if 'utm_content' in request.GET:
+                content = request.GET.get('utm_content')
                 if content:
                     utm['utm_content'] = content[:50]
                     utm['expires'] = expires
             
-            if 'utm_medium' in request.GET or '_um' in request.COOKIES:
-                medium = request.GET.get('utm_medium') or request.COOKIES.get('_um')
+            if 'utm_medium' in request.GET:
+                medium = request.GET.get('utm_medium')
                 if medium:
                     utm['utm_medium'] = medium[:50]
                     utm['expires'] = expires
             
-            if 'utm_campaign' in request.GET or '_uc' in request.COOKIES:
-                campaign = request.GET.get('utm_campaign') or request.COOKIES.get('_uc')
+            if 'utm_campaign' in request.GET:
+                campaign = request.GET.get('utm_campaign')
                 if campaign:
                     utm['utm_campaign'] = campaign[:100]
                     utm['expires'] = expires
@@ -187,21 +187,21 @@ class TrackingMiddleware(object):
 
         response = self.get_response(request)
         
-        if not request.is_ajax():
-            if utm.get('utm_source'):
-                response.set_cookie(
-                    '_us', utm.get('utm_source'), max_age=max_age, expires=expires )
-            if utm.get('utm_content'):
-                response.set_cookie(
-                    '_uo', utm.get('utm_content'), max_age=max_age, expires=expires)
-            if utm.get('utm_medium'):
-                response.set_cookie(
-                    '_um', utm.get('utm_medium'), max_age=max_age, expires=expires)
-            if utm.get('utm_term'):
-                response.set_cookie(
-                    '_ut', utm.get('utm_term'), max_age=max_age, expires=expires)
-            if utm.get('utm_campaign'):
-                response.set_cookie(
-                    '_uc', utm.get('utm_campaign'), max_age=max_age, expires=expires)
-        print(utm)
+        # if not request.is_ajax():
+        #     if utm.get('utm_source'):
+        #         response.set_cookie(
+        #             '_us', utm.get('utm_source'), max_age=max_age, expires=expires )
+        #     if utm.get('utm_content'):
+        #         response.set_cookie(
+        #             '_uo', utm.get('utm_content'), max_age=max_age, expires=expires)
+        #     if utm.get('utm_medium'):
+        #         response.set_cookie(
+        #             '_um', utm.get('utm_medium'), max_age=max_age, expires=expires)
+        #     if utm.get('utm_term'):
+        #         response.set_cookie(
+        #             '_ut', utm.get('utm_term'), max_age=max_age, expires=expires)
+        #     if utm.get('utm_campaign'):
+        #         response.set_cookie(
+        #             '_uc', utm.get('utm_campaign'), max_age=max_age, expires=expires)
+        # print(utm)
         return response
