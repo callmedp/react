@@ -15,7 +15,7 @@ var showLeadForm = function() {
 };
 
 $.validator.addMethod("indiaMobile", function(value, element) {
-    var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
+    var country_code = $("input[name=country]").val(); //$('#call_back_country_code-id').val();
     if (country_code == '91') {
         return value.length == 10;
     }
@@ -41,6 +41,7 @@ $(document).on('click', '#id_download_button', function(event) {
         $("#downloadpdf_form").submit();
         window.open(href, '_blank');
     } else {
+
         showLeadForm();
     }
 });
@@ -58,7 +59,7 @@ $(document).on('click', '#id_download_button', function(event) {
                 required: false,
                 maxlength: 100
             },
-            mobile_number: {
+            number: {
                 required: true,
                 digits: true,
                 indiaMobile: true,
@@ -78,7 +79,7 @@ $(document).on('click', '#id_download_button', function(event) {
             email: {
                 maxlength: "At most 100 characters"
             },
-            mobile_number: {
+            number: {
                 required: "Mobile Number is Mandatory",
                 digits: "Enter only digits",
                 indiaMobile: "Please enter 10 digits only",
