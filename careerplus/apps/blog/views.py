@@ -191,9 +191,6 @@ class BlogDetailView(DetailView, BlogMixin):
 
         object_list = main_obj_list + article_list
 
-        # detail_obj = self.scrollPagination(
-        #         paginated_by=self.paginated_by, page=self.page,
-        #         object_list=main_obj)
         detail_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
                 object_list=object_list)
@@ -212,17 +209,6 @@ class BlogDetailView(DetailView, BlogMixin):
             "detail_article": detail_article,
             "main_article": main_obj[0],
         })
-
-
-        # page_obj = self.scrollPagination(
-        #         paginated_by=self.paginated_by, page=self.page,
-        #         object_list=article_list)
-
-        # context.update({
-        #     "scroll_article": render_to_string('include/detail-article-list.html',
-        #         {"page_obj": page_obj,
-        #         "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
-        # })
 
         context.update({
             "loginform": ModalLoginApiForm(),
