@@ -213,5 +213,5 @@ class TrackingMiddleware(object):
         #     if utm.get('utm_campaign'):
         #         response.set_cookie(
         #             '_uc', utm.get('utm_campaign'), max_age=max_age, expires=expires)
-        print(utm)
+        # print(utm)
         return response
