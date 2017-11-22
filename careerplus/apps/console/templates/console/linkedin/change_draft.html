@@ -204,55 +204,23 @@
     src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}">
   </script>
   <script type="text/javascript">
-
     var d = new Date();
     var todayDate = '' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
 
-    $('.work_from').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'1960-01-01',
-      maxDate:todayDate,
-      autoUpdateInput: false,
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.work_from').val(chosen_date.format('YYYY-MM-DD'));
+    function dateclass(el) {
+      el.daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        maxDate:todayDate,
+        autoUpdateInput: false,
+      }, function(chosen_date) {
+        el.val(chosen_date.format('YYYY-MM-DD'));
+      });
+    }
+
+    $('.study_from, .work_from, .work_to, .study_to').each(function(){
+      dateclass($(this));
     });
-
-
-    $('.work_to').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'01/01/1960',
-      maxDate:todayDate,
-      autoUpdateInput: false
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.work_to').val(chosen_date.format('YYYY-MM-DD'));
-    });
-
-    $('.study_from').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'01/01/1960',
-      maxDate:todayDate,
-      autoUpdateInput: false,
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.study_from').val(chosen_date.format('YYYY-MM-DD'));
-    });
-
-    $('.study_to').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'01/01/1960',
-      maxDate:todayDate,
-      autoUpdateInput: false,
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.study_to').val(chosen_date.format('YYYY-MM-DD'));
-    });
-
   </script>
   <script type="text/javascript">
   $(document).ready(function() {
