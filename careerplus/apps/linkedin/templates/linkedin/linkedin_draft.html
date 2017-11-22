@@ -111,15 +111,15 @@
             {% for edu in education_list %}
               <ul>
                 <li class="wd1">School</li>
-                {% if  current_edu.level == 0 %}
+                {% if  edu.level == 0 %}
                     <li class="wd2">School</li>    
                 {% else %}
                     <li class="wd2">College</li>
                 {% endif %}
                 <li class="wd1">Degree</li>
-                <li class="wd2">{{current_edu.degree}}</li>
+                <li class="wd2">{{edu.degree}}</li>
                 <li class="wd1">Description</li>
-                <li class="wd2">{{current_edu.edu_desc|safe}}</li>
+                <li class="wd2">{{edu.edu_desc|safe}}</li>
                 <li class="wd1">Duration</li>
                 <li class="wd2">
                   {{edu.study_from|date:'N o'}} - {% if edu.edu_current %}Present{%else%}
