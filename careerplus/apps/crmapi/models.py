@@ -10,6 +10,7 @@ LEAD_LOCATION = (
     (3, 'Contact Us Page'),
     (4, 'SEM'),  # marketing pages
     (7, 'CMS Page'),
+    (21, 'AdServerLead'),
 )
 
 DEVICE = ((0, 'Desktop'), (1, 'Mobile'))
@@ -42,6 +43,8 @@ class UserQuries(AbstractAutoDate):
         default='')
     campaign_slug = models.CharField(
         max_length=255, null=True, blank=True)
+    inactive = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'User Queries'
