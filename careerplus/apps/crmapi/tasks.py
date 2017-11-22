@@ -81,7 +81,7 @@ def create_lead_crm(pk=None):
         lead = UserQuries.objects.get(pk=pk)
 
         if lead.lead_source in [4]:
-            pass
+            lsource = 4
         else:
             lsource = 0
         data_dict.update({
