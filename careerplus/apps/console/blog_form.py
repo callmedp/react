@@ -127,9 +127,13 @@ class ArticleChangeForm(forms.ModelForm):
             choices=SITE_TYPE, widget=forms.Select(attrs={
                 'class': 'form-control col-md-7 col-xs-12'}))
 
+    summary = forms.CharField(label=("Summary:"),
+        required=False, widget=forms.Textarea(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Blog
-        fields = ['name', 'status', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment',
+        fields = ['name', 'status', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment','summary',
             'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords','visibility']
 
         widgets = {

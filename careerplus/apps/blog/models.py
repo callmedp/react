@@ -6,6 +6,7 @@ from django.conf import settings
 from django.urls import reverse
 # from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from bs4 import BeautifulSoup
 
 
 from meta.models import ModelMeta
@@ -305,6 +306,11 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
             self.display_name = self.name
         if self.id:
             self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+        try:
+            soup = BeautifulSoup(self.content, 'html.parser')
+            self.summary = soup.blockquote.text.strip()
+        except:
+            self.summary = ''
         super(Blog, self).save(*args, **kwargs)
 
     def get_title(self):
