@@ -105,11 +105,13 @@
                             </li>
                         {% endif %}
 
-                        {% for page_number in recent_begin %}
-                            <li class="paginate_button {% ifequal recent_page.number page_number %} active disable {% endifequal %} ">
-                                <a href="?page={{ page_number }}&tab={{left_tab}}" >{{ page_number }}</a>
-                            </li>
-                        {% endfor %}
+                        {% if recent_begin|length > 1 %}
+                          {% for page_number in recent_begin %}
+                              <li class="paginate_button {% ifequal recent_page.number page_number %} active disable {% endifequal %} ">
+                                  <a href="?page={{ page_number }}&tab={{left_tab}}" >{{ page_number }}</a>
+                              </li>
+                          {% endfor %}
+                        {% endif %}
 
                         {% if recent_middle %}
                             <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
@@ -290,7 +292,7 @@
                     </figure>
                 {% endif %}
                 <div class="media-body">
-                  {{art.display_name}}
+                  {{art.display_name|truncatechars:40}}
                 </div>
               </a>
             </div>
@@ -313,7 +315,7 @@
                     </figure>
               {% endif %}
                 <div class="media-body">
-                  {{art.display_name}}
+                  {{art.display_name|truncatechars:40}}
                 </div>
               </a>
             </div>

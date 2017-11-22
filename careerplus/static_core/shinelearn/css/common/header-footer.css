@@ -485,7 +485,7 @@ footer .footer-links span {
   margin-bottom: 25px;
 }
 .page-header h1 {
-  font-size: 33px;
+  font-size: 31px;
   margin: 0;
 }
 
@@ -814,6 +814,8 @@ footer .footer-links span {
   padding-left: 0;
   box-shadow: none;
   color: #999;
+  resize: none;
+  min-height: 60px;
 }
 .request-call .country-code {
   display: block;

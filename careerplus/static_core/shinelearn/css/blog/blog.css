@@ -165,8 +165,9 @@
   padding-right: 20px;
 }
 .article-listing .media-heading {
-  font-size: 25px;
+  font-size: 23px;
   margin-bottom: 10px;
+  line-height: 26px;
 }
 .article-listing .editor {
   font-size: 13px;
@@ -292,6 +293,11 @@
   margin: 0;
   padding: 20px 0 0 20px;
 }
+.blog-detail-content article strong,
+.blog-detail-content article b {
+  font-weight: 600;
+}
+
 .blog-detail-content figure {
   margin-top: 30px;
 }
