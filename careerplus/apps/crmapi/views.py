@@ -6,7 +6,7 @@ from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from geolocation.models import Country
-from .models import UserQuries
+from .models import UserQuries, DEFAULT_SLUG_SOURCE
 from .tasks import create_lead_crm
 
 
@@ -50,7 +50,7 @@ class LeadManagement(View):
             country = request.POST.get('country', '91')
             source = request.POST.get('source', '')
             queried_for = request.POST.get('queried_for', '')
-            lead_source = request.POST.get('lsource', '0')
+            lead_source = request.POST.get('lsource', 0)
             selection = request.POST.get('selection', None)
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
@@ -79,9 +79,13 @@ class LeadManagement(View):
             except:
                 country = Country.objects.get(phone='91')
 
+
             utm = request.session.get('utm', {})
             campaign_slug = utm.get('utm_campaign', '')
             utm_parameter = json.dumps(utm)
+            if not campaign_slug:
+                slug_source = dict(DEFAULT_SLUG_SOURCE)
+                campaign_slug = slug_source.get(int(lead_source))
 
             lead = UserQuries.objects.create(
                 name=name,
@@ -170,6 +174,10 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             utm = request.session.get('utm', {})
             campaign_slug = utm.get('utm_campaign', '')
             utm_parameter = json.dumps(utm)
+            if not campaign_slug:
+                slug_source = dict(DEFAULT_SLUG_SOURCE)
+                campaign_slug = slug_source.get(int(lead_source))
+
             lead = UserQuries.objects.create(
                 name=name,
                 email=email,

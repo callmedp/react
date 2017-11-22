@@ -132,10 +132,20 @@ class TrackingMiddleware(object):
     def __call__(self, request):
         max_age = 24 * 60 * 60
         expires = datetime.strftime(
-            datetime.utcnow() + timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
+            datetime.now() + timedelta(seconds=max_age), "%Y-%m-%d %H:%M:%S")
             
         if not request.is_ajax():
             utm = request.session.get('utm', {})
+            expiry = utm.get('expires', None)
+            if expiry:
+                try:
+                    expiry = timezone.make_aware(
+                        datetime.strptime(expiry, "%Y-%m-%d %H:%M:%S"),
+                        timezone.get_current_timezone())
+                    if timezone.now() > expiry:
+                        utm = {}
+                except Exception as e:
+                    pass
         
             ref_url = request.get_full_path()
             if '?' in ref_url:
@@ -203,5 +213,5 @@ class TrackingMiddleware(object):
         #     if utm.get('utm_campaign'):
         #         response.set_cookie(
         #             '_uc', utm.get('utm_campaign'), max_age=max_age, expires=expires)
-        # print(utm)
+        print(utm)
         return response
