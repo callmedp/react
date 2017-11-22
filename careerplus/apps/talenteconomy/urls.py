@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 
 
 urlpatterns = [
-     url(r'^$', TemplateView.as_view(template_name="main.html"), name='talent-landing'),
+     url(r'^$', TemplateView.as_view(template_name="talenteconomy/landing.html"), name='talent-landing'),
 
     
 
