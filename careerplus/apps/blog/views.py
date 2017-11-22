@@ -401,7 +401,7 @@ class BlogLandingPageView(TemplateView, BlogMixin):
         return context
 
     def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_rdata(**kwargs)
+        context = super(self.__class__, self).get_context_data(**kwargs)
         categories = Category.objects.filter(is_active=True, visibility=1)
         exc_cat = []
         for cat in categories:
