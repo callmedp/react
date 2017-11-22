@@ -8,7 +8,7 @@ from celery.decorators import task
 from geolocation.models import Country
 from core.api_mixin import CrmApiMixin
 
-from .models import AdServerLead, UserQuries
+from .models import UserQuries
 
 
 @task(name="post_psedu_lead")
@@ -32,7 +32,7 @@ def post_psedu_lead(query_dict):
     try:
         usr_query = UserQuries.objects.get(
             id=query_dict.get('queryid', ''))
-        if not usr_query.lead_created:
+        if not usr_query.lead_created and usr_query.lead_source != 21:
             rsp = requests.post(
                 post_url, data=json.dumps(lead),
                 headers=headers,
@@ -47,31 +47,31 @@ def post_psedu_lead(query_dict):
         logging.getLogger('error_log').error("%s" % str(e))
 
 
-@task()
-def addAdServerLead(query_dict):
-    email = str(query_dict.get('email', ''))
-    mobile = str(query_dict.get('mobile', ''))
-    country_code = str(query_dict.get('country_code', '91'))
-    timestamp = str(query_dict.get('timestamp', ''))
-    url = str(query_dict.get('url', ''))
-    utm_parameter = query_dict.get('utm_parameter', '')
+# @task()
+# def addAdServerLead(query_dict):
+#     email = str(query_dict.get('email', ''))
+#     mobile = str(query_dict.get('mobile', ''))
+#     country_code = str(query_dict.get('country_code', '91'))
+#     timestamp = str(query_dict.get('timestamp', ''))
+#     url = str(query_dict.get('url', ''))
+#     utm_parameter = query_dict.get('utm_parameter', '')
 
-    try:
-        timestamp_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
-        timestamp_obj = timezone.make_aware(timestamp_obj, timezone.get_current_timezone())
-    except:
-        timestamp_obj = timezone.now()
+#     try:
+#         timestamp_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
+#         timestamp_obj = timezone.make_aware(timestamp_obj, timezone.get_current_timezone())
+#     except:
+#         timestamp_obj = timezone.now()
 
-    object_list = AdServerLead.objects.filter(
-        email=email,
-        country_code=country_code, mobile=mobile, created=False,
-        timestamp__year=timestamp_obj.year, timestamp__month=timestamp_obj.month,
-        timestamp__day=timestamp_obj.day)
-    if not object_list.exists():
-        AdServerLead.objects.create(
-            email=email, country_code=country_code,
-            mobile=mobile, url=url, timestamp=timestamp_obj,
-            utm_parameter=utm_parameter)
+#     object_list = AdServerLead.objects.filter(
+#         email=email,
+#         country_code=country_code, mobile=mobile, created=False,
+#         timestamp__year=timestamp_obj.year, timestamp__month=timestamp_obj.month,
+#         timestamp__day=timestamp_obj.day)
+#     if not object_list.exists():
+#         AdServerLead.objects.create(
+#             email=email, country_code=country_code,
+#             mobile=mobile, url=url, timestamp=timestamp_obj,
+#             utm_parameter=utm_parameter)
 
 
 @task(name="add_server__lead_task")
@@ -117,7 +117,7 @@ def create_lead_crm(pk=None):
     try:
         data_dict = {}
         lead = UserQuries.objects.get(pk=pk)
-        if lead.lead_source in [4]:
+        if lead.lead_source in [4, 21]:
             lsource = lead.lead_source
         else:
             lsource = 0
