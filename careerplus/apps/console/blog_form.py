@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-from blog.models import Tag, Category, Blog, Comment
+from blog.models import Tag, Category, Blog, Comment, SITE_TYPE
 from blog.config import STATUS
 
 
@@ -53,9 +53,13 @@ class ArticleAddForm(forms.ModelForm):
     allow_comment = forms.BooleanField(label=("Allow Comment:"),
         required=False, widget=forms.CheckboxInput())
 
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Blog
-        fields = ['name', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment']
+        fields = ['name', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment','visibility']
     
     def __init__(self, *args, **kwargs):
         super(ArticleAddForm, self).__init__(*args, **kwargs)
@@ -119,10 +123,14 @@ class ArticleChangeForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Blog
         fields = ['name', 'status', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment',
-            'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords']
+            'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords','visibility']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
@@ -162,10 +170,13 @@ class TagAddForm(forms.ModelForm):
     name = forms.CharField(label=("Tag*:"), max_length=70,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Tag
-        fields = ['name', ]
+        fields = ['name','visibility' ]
 
     def __init__(self, *args, **kwargs):
         super(TagAddForm, self).__init__(*args, **kwargs)
@@ -199,9 +210,13 @@ class TagChangeForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Tag
-        fields = ['name', 'is_active', 'priority',
+        fields = ['name', 'is_active', 'priority','visibility',
             'title', 'slug', 'url', 'meta_desc', 'meta_keywords']
 
         widgets = {
@@ -252,9 +267,19 @@ class CategoryChangeForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    image = forms.ImageField(label=("Image:"), max_length=200 , required= False)
+
+    image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
+        required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Category
-        fields = ['name', 'is_active', 'priority',
+        fields = ['name', 'is_active', 'priority', 'image', 'image_alt', 'visibility',
             'title', 'slug', 'url', 'meta_desc', 'meta_keywords']
 
         widgets = {
@@ -273,6 +298,8 @@ class CategoryChangeForm(forms.ModelForm):
 
         self.fields['title'].required = True
         self.fields['title'].widget.attrs['maxlength'] = 70
+
+        self.fields['image'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
 
         self.fields['is_active'].required = False
         self.fields['is_active'].widget.attrs['class'] = 'js-switch'
@@ -295,9 +322,21 @@ class CategoryAddForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    image = forms.ImageField(label=("Image:"), max_length=200, required= False,
+        widget=forms.FileInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    image_alt = forms.CharField(label=("Image Alt:"), max_length=100, required= False,
+        widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Category
-        fields = ['name', ]
+        fields = ['name', 'visibility','image','image_alt']
 
     def __init__(self, *args, **kwargs):
         super(CategoryAddForm, self).__init__(*args, **kwargs)
