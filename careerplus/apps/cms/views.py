@@ -20,8 +20,7 @@ from users.forms import (
     PasswordResetRequestForm,
 )
 from .models import Page, Comment
-from .mixins import UploadInFile, LoadMoreMixin
-from crmapi.models import UserQuries
+from .mixins import LoadMoreMixin
 
 
 class CMSPageView(DetailView, LoadMoreMixin):
@@ -171,111 +170,111 @@ class CMSPageView(DetailView, LoadMoreMixin):
         return context
 
 
-class LeadManagementView(View, UploadInFile):
-    http_method_names = [u'post', ]
+# class LeadManagementView(View, UploadInFile):
+#     http_method_names = [u'post', ]
 
-    def post(self, request, *args, **kwargs):
-        if request.is_ajax():
-            data_dict = {}
-            name = request.POST.get('name', '').strip()
-            email = request.POST.get('email', '').strip()
-            country_code = request.POST.get('country_code')
-            mobile = request.POST.get('mobile_number', '').strip()
-            message = request.POST.get('message_box', '').strip()
-            term_condition = request.POST.get('term_condition')
-            path = request.path
+#     def post(self, request, *args, **kwargs):
+#         if request.is_ajax():
+#             data_dict = {}
+#             name = request.POST.get('name', '').strip()
+#             email = request.POST.get('email', '').strip()
+#             country_code = request.POST.get('country_code')
+#             mobile = request.POST.get('mobile_number', '').strip()
+#             message = request.POST.get('message_box', '').strip()
+#             term_condition = request.POST.get('term_condition')
+#             path = request.path
 
-            try:
-                country_obj = Country.objects.get(phone=country_code)
-            except:
-                country_obj = Country.objects.get(phone='91')
+#             try:
+#                 country_obj = Country.objects.get(phone=country_code)
+#             except:
+#                 country_obj = Country.objects.get(phone='91')
 
-            data_dict = {
-                "name": name,
-                "country": country_obj,
-                "phn_number": mobile,
-                "email": email,
-                "message": message,
-                "path": path,
-                'lead_source': 7,
-            }
-            query_obj = UserQuries(**data_dict)
-            query_obj.save()
-            data_dict.update({
-                'term_condition': term_condition,
-                "country": country_obj.phone,
-            })
-            self.write_in_file(data_dict=data_dict)
-            data = {"status": 1, }
-            return HttpResponse(
-                json.dumps(data), content_type="application/json")
-        return HttpResponseForbidden()
+#             data_dict = {
+#                 "name": name,
+#                 "country": country_obj,
+#                 "phn_number": mobile,
+#                 "email": email,
+#                 "message": message,
+#                 "path": path,
+#                 'lead_source': 7,
+#             }
+#             query_obj = UserQuries(**data_dict)
+#             query_obj.save()
+#             data_dict.update({
+#                 'term_condition': term_condition,
+#                 "country": country_obj.phone,
+#             })
+#             self.write_in_file(data_dict=data_dict)
+#             data = {"status": 1, }
+#             return HttpResponse(
+#                 json.dumps(data), content_type="application/json")
+#         return HttpResponseForbidden()
 
 
-class DownloadPdfView(View, UploadInFile):
+# class DownloadPdfView(View, UploadInFile):
 
-    def post(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        page_obj = None
-        try:
-            action_type = int(request.POST.get('action_type', '0'))
-        except:
-            action_type = 0
-        name = request.POST.get('name', '').strip()
-        email = request.POST.get('email', '').strip()
-        country_code = request.POST.get('country_code')
-        mobile = request.POST.get('mobile_number', '').strip()
-        message = request.POST.get('message', '').strip()
-        term_condition = request.POST.get('term_condition')
-        path = request.POST.get('path', '')
-        try:
-            country_obj = Country.objects.get(phone=country_code)
-        except:
-            country_obj = Country.objects.get(phone='91')
+#     def post(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         page_obj = None
+#         try:
+#             action_type = int(request.POST.get('action_type', '0'))
+#         except:
+#             action_type = 0
+#         name = request.POST.get('name', '').strip()
+#         email = request.POST.get('email', '').strip()
+#         country_code = request.POST.get('country_code')
+#         mobile = request.POST.get('mobile_number', '').strip()
+#         message = request.POST.get('message', '').strip()
+#         term_condition = request.POST.get('term_condition')
+#         path = request.POST.get('path', '')
+#         try:
+#             country_obj = Country.objects.get(phone=country_code)
+#         except:
+#             country_obj = Country.objects.get(phone='91')
 
-        if action_type == 1:
-            data_dict = {
-                "name": name,
-                "country": country_obj,
-                "phn_number": mobile,
-                "email": email,
-                "message": message,
-                "path": path,
-                'lead_source': 7,
-            }
-            if mobile:
-                query_obj = UserQuries(**data_dict)
-                query_obj.save()
-                data_dict.update({
-                    'term_condition': term_condition,
-                    "country": country_obj.phone,
-                })
-                self.write_in_file(data_dict=data_dict)
+#         if action_type == 1:
+#             data_dict = {
+#                 "name": name,
+#                 "country": country_obj,
+#                 "phn_number": mobile,
+#                 "email": email,
+#                 "message": message,
+#                 "path": path,
+#                 'lead_source': 7,
+#             }
+#             if mobile:
+#                 query_obj = UserQuries(**data_dict)
+#                 query_obj.save()
+#                 data_dict.update({
+#                     'term_condition': term_condition,
+#                     "country": country_obj.phone,
+#                 })
+#                 self.write_in_file(data_dict=data_dict)
 
-        elif action_type == 2:
-            if request.session.get('candidate_id'):
-                country_code = request.session.get('country_code')
-                try:
-                    country_obj = Country.objects.get(phone=country_code)
-                except:
-                    country_obj = Country.objects.get(phone='91')
+#         elif action_type == 2:
+#             if request.session.get('candidate_id'):
+#                 country_code = request.session.get('country_code')
+#                 try:
+#                     country_obj = Country.objects.get(phone=country_code)
+#                 except:
+#                     country_obj = Country.objects.get(phone='91')
 
-                data_dict = {
-                    "name": request.session.get('full_name'),
-                    "country": country_obj,
-                    "phn_number": request.session.get('mobile_no'),
-                    "email": request.session.get('email'),
-                    "path": path,
-                    'lead_source': 7,
-                }
-                query_obj = UserQuries(**data_dict)
-                query_obj.save()
-                data_dict.update({
-                    "country": country_obj.phone,
-                })
-                self.write_in_file(data_dict=data_dict)
-        try:
-            page_obj = Page.objects.get(pk=pk, is_active=True)
-        except Exception:
-            raise Http404
-        return HttpResponseRedirect(page_obj.get_absolute_url())
+#                 data_dict = {
+#                     "name": request.session.get('full_name'),
+#                     "country": country_obj,
+#                     "phn_number": request.session.get('mobile_no'),
+#                     "email": request.session.get('email'),
+#                     "path": path,
+#                     'lead_source': 7,
+#                 }
+#                 query_obj = UserQuries(**data_dict)
+#                 query_obj.save()
+#                 data_dict.update({
+#                     "country": country_obj.phone,
+#                 })
+#                 self.write_in_file(data_dict=data_dict)
+#         try:
+#             page_obj = Page.objects.get(pk=pk, is_active=True)
+#         except Exception:
+#             raise Http404
+#         return HttpResponseRedirect(page_obj.get_absolute_url())

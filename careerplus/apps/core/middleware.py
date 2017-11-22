@@ -81,9 +81,19 @@ class TrackingMiddleware(object):
         max_age = 24 * 60 * 60
         expires = datetime.strftime(
             datetime.utcnow() + timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
+
         if not request.is_ajax():
             utm = request.session.get('utm', {})
-
+            expiry = utm.get('expires', None)
+            if expiry:
+                try:
+                    expiry = timezone.make_aware(
+                        datetime.strptime(expiry, "%Y-%m-%d %H:%M:%S"),
+                        timezone.get_current_timezone())
+                    if timezone.now() > expiry:
+                        utm = {}
+                except Exception as e:
+                    pass
             ref_url = request.get_full_path()
             if '?' in ref_url:
                 ref_url = ref_url.split('?')[0]

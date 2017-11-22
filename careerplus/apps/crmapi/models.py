@@ -13,6 +13,16 @@ LEAD_LOCATION = (
     (21, 'AdServerLead'),
 )
 
+DEFAULT_SLUG_SOURCE = (
+    (0, 'gstgsp'),
+    (1, 'gstgsp'),
+    (2, 'gstgsp'),
+    (3, 'gstgsp'),
+    (4, 'gstgsp'),  # marketing pages
+    (7, 'gstgsp'),
+)
+
+
 DEVICE = ((0, 'Desktop'), (1, 'Mobile'))
 
 
