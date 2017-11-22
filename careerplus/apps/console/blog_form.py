@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-from blog.models import Tag, Category, Blog, Comment, SITE_TYPE
+from blog.models import Tag, Category, Blog, Comment, Author, SITE_TYPE
 from blog.config import STATUS
 
 
@@ -430,3 +430,129 @@ class CommentActionForm(forms.Form):
         choices=ACTION_STATUS, initial=0, required=True, widget=forms.Select(attrs={
             'class': 'form-control col-md-7 col-xs-12',
             'required': True}))
+
+class AuthorAddForm(forms.ModelForm):
+    name = forms.CharField(label=("Name*:"), required=True, max_length=85,
+        help_text='enter name for slug generation.',
+        widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    image = forms.ImageField(label=("Image*:"), max_length=200,
+        widget=forms.FileInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    image_alt = forms.CharField(label=("Image Alt*:"), max_length=100,
+        widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    about = forms.CharField(label=("Description*:"),
+        widget=CKEditorUploadingWidget())
+
+    designation = forms.CharField(label=("Designation*:"), widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    company = forms.CharField(label=("Company:"), required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    fb_url = forms.CharField(label=("Fb URL:"), required=False,widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    twitter_url = forms.CharField(label=("Twitter URL:"), required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    linkedin_url =  forms.CharField(label=("Linked-In URL:"), required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    user = forms.ModelChoiceField(label=("Select User:"),
+        queryset=Category.objects.filter(is_active=True),
+        empty_label="Select Category", required=True,
+        to_field_name='pk', widget=forms.Select(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
+    class Meta:
+        model = Author
+        fields = ['name', 'image', 'image_alt', 'about','designation','company','fb_url','twitter_url','linkedin_url','visibility']
+    
+    def __init__(self, *args, **kwargs):
+        super(AuthorAddForm, self).__init__(*args, **kwargs)
+
+class AuthorChangeForm(forms.ModelForm):
+
+    name = forms.CharField(label=("Name*:"), required=True, max_length=85,
+        help_text='enter name for slug generation.',
+        widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    is_active = forms.BooleanField(label=("Active:"),
+        widget=forms.CheckboxInput())
+
+    image = forms.ImageField(label=("Image*:"), max_length=200)
+
+    image_alt = forms.CharField(label=("Image Alt*:"), max_length=100,
+        required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+
+    # user = forms.ModelChoiceField(label=("Writer:"),
+    #     queryset=User.objects.filter(is_active=True, is_staff=True),
+    #     empty_label="Select Writer", required=True,
+    #     to_field_name='pk', widget=forms.Select(
+    #     attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+
+    slug = forms.SlugField(label=("Slug*:"), max_length=100,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    visibility = forms.ChoiceField(label=("Visibility*:"),
+            choices=SITE_TYPE, widget=forms.Select(attrs={
+                'class': 'form-control col-md-7 col-xs-12'}))
+
+    about = forms.CharField(label=("Description*:"),
+        widget=CKEditorUploadingWidget())
+
+    designation = forms.CharField(label=("Designation*:"), widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    company = forms.CharField(label=("Company:"), required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    fb_url = forms.CharField(label=("Fb URL:"), required=False,widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    twitter_url = forms.CharField(label=("Twitter URL:"), required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    linkedin_url =  forms.CharField(label=("Linked-In URL:"), required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+
+    class Meta:
+        model = Author
+        fields = ['name', 'is_active', 'about','image', 'image_alt', 'url','slug', 'fb_url','linkedin_url','twitter_url','designation',
+                'company','meta_desc', 'meta_keywords','visibility']
+
+        widgets = {
+            'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'title': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
+            'meta_desc': forms.Textarea(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '300'}),
+            'meta_keywords': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '150'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super(AuthorChangeForm, self).__init__(*args, **kwargs)
+
+        self.fields['slug'].widget.attrs['readonly'] = True
+
+        self.fields['image'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+
+        self.fields['url'].widget.attrs['readonly'] = True
+
+        self.fields['is_active'].required = False
+        self.fields['is_active'].widget.attrs['class'] = 'js-switch'
+        self.fields['is_active'].widget.attrs['data-switchery'] = 'true'

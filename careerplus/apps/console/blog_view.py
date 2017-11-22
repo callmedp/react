@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 
-from blog.models import Tag, Category, Blog, Comment
+from blog.models import Tag, Category, Blog, Comment, Author
 from blog.mixins import PaginationMixin
 
 from .blog_form import (
@@ -21,7 +21,9 @@ from .blog_form import (
 	ArticleAddForm,
 	ArticleChangeForm,
 	CommentUpdateForm,
-	CommentActionForm,)
+	CommentActionForm,
+        AuthorAddForm,
+        AuthorChangeForm)
 
 
 class CommentModerateView(UpdateView):
@@ -493,3 +495,112 @@ class TagAddView(FormView):
 				messages.add_message(request, messages.ERROR, 'Tag Not Created. Due to %s' % (str(e)))
 				return self.form_invalid(form)
 		return self.form_invalid(form)
+
+class AuthorAddView(FormView):
+	template_name = "console/blog/author-add.html"
+	success_url = "/console/blog/author/"
+	http_method_names = [u'get', u'post']
+	form_class = AuthorAddForm
+
+	def get(self, request, *args, **kwargs):
+		return super(self.__class__, self).get(request, args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		alert = messages.get_messages(self.request)
+		context.update({
+			'messages': alert})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		form = self.get_form()
+		if form.is_valid():
+			try:
+				author = form.save(commit=False)
+				if request.user.is_authenticated():
+					author.created_by = request.user
+					author.last_modified_by = request.user
+					author.save()
+				valid_form = self.form_valid(form)
+				form.save_m2m()
+				messages.add_message(request, messages.SUCCESS, 'Author Created Successfully.')
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Author Not Created. Due to %s' % (str(e)))
+				return self.form_invalid(form)
+		return self.form_invalid(form)
+
+class AuthorUpdateView(UpdateView):
+	model = Author
+	template_name = 'console/blog/author-change.html'
+	success_url = "/console/blog/author/"
+	http_method_names = [u'get', u'post']
+	form_class = AuthorChangeForm
+
+	def get(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		context = super(self.__class__, self).get(request, *args, **kwargs)
+		return context
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		alert = messages.get_messages(self.request)
+		context.update({
+			'messages': alert})
+		return context
+
+	def post(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		form = self.get_form()
+		if form.is_valid():
+			try:
+				obj = form.save(commit=False)
+				if request.user.is_authenticated():
+					obj.last_modified_by = request.user
+
+				valid_form = self.form_valid(form)
+				form.save_m2m()
+				messages.add_message(request, messages.SUCCESS,
+					'Author %s Updated Successfully.' % (self.object.id))
+				return valid_form
+			except Exception as e:
+				messages.add_message(request, messages.ERROR, 'Author %s Not Updated. Due to %s' % (self.object.id, str(e)))
+				return self.form_invalid(form)
+		return self.form_invalid(form)
+
+
+class AuthorListView(ListView, PaginationMixin):
+
+	context_object_name = 'author_list'
+	template_name = 'console/blog/author-list.html'
+	model = Author
+	http_method_names = [u'get', u'post']
+
+	def __init__(self):
+		self.page = 1
+		self.paginated_by = 50
+		self.query = ''
+
+	def get(self, request, *args, **kwargs):
+		self.page = request.GET.get('page', 1)
+		self.query = request.GET.get('query', '')
+		return super(self.__class__, self).get(request, args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super(self.__class__, self).get_context_data(**kwargs)
+		paginator = Paginator(context['author_list'], self.paginated_by)
+		context.update(self.pagination(paginator, self.page))
+		context.update({
+			"query": self.query,
+		})
+		return context
+
+	def get_queryset(self):
+		queryset = super(self.__class__, self).get_queryset()
+		try:
+			if self.query:
+				queryset = queryset.filter(Q(name__icontains=self.query))
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
+			pass
+		return queryset
