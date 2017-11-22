@@ -260,7 +260,7 @@ class CrmApiMixin(object):
             lead_create_api = settings.SHINECPCRM_DICT.get('base_url') + settings.SHINECPCRM_DICT.get('create_lead_url')
 
             client_data = data_dict
-            resp = requests.post(lead_create_api, data=client_data, headers=headers)
+            resp = requests.post(lead_create_api, data=json.dumps(client_data), headers=headers)
             if resp.status_code == 201:
                 return True
         except Exception as e:
