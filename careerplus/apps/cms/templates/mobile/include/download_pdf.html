@@ -29,12 +29,12 @@
             <form role="form" method="post" id="downloadpdf_form">
                 {% csrf_token %}
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Name" id="user_name" name="name" {% if request.session.full_name %}value="{{request.session.full_name}}"{% endif %}>
+                    <input type="text" class="form-control" placeholder="Name" id="user_name" name="name" {% if request.session.full_name %}value="{{request.session.full_name}}"{% endif %} maxlength="100">
                     <p class="mgs"></p>
                 </div>
 
                 <div class="form-group">
-                    <input type="email" id="id_email" name="email"  class="form-control" placeholder="Email" {% if request.session.email %}value="{{request.session.email}}"{% endif %}>
+                    <input type="email" id="id_email" name="email"  class="form-control" placeholder="Email" {% if request.session.email %}value="{{request.session.email}}"{% endif %} maxlength="100">
                     <p class="mgs"></p>
                 </div>
 
@@ -42,11 +42,11 @@
                     <div class="pull-left code">
                         <select name="country">
                             {% for country in country_choices %}
-                            <option value="{{country.0}}" {% if country.0 == initial_country or country.0 == request.session.country_code %} selected {% endif %} >{{country.1}}</option>
+                            <option value="{{country.0}}" {% if country.0 == initial_country or country.0 == request.session.country_code %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <input type="number" id="id_mobile" name="number" class="form-control pull-left number" placeholder="Mobile" {% if request.session.mobile_no %}value="{{request.session.mobile_no}}"{% endif %}>
+                    <input type="number" id="id_mobile" name="number" class="form-control pull-left number" placeholder="Mobile" {% if request.session.mobile_no %}value="{{request.session.mobile_no}}"{% endif %} maxlength="15">
                     <p class="mgs"></p>
                     <div class="clearfix"></div>
                 </div>

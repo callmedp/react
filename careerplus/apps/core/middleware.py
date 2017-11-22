@@ -80,7 +80,7 @@ class TrackingMiddleware(object):
         dict_data = dict(urllib.parse.parse_qsl(query))
         max_age = 24 * 60 * 60
         expires = datetime.strftime(
-            datetime.utcnow() + timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
+            datetime.now() + timedelta(seconds=max_age), "%Y-%m-%d %H:%M:%S")
 
         if not request.is_ajax():
             utm = request.session.get('utm', {})

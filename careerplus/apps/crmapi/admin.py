@@ -30,9 +30,15 @@ def lead_creted_on_crm(modeladmin, request, queryset):
             # query_dict.update({
             #     'queryid': query.id})
             # post_psedu_lead.delay(query_dict)
-            create_lead_crm(pk=query.pk)
-            messages.add_message(
+            
+            if query.lead_created:
+                create_lead_crm(pk=query.pk)
+                messages.add_message(
                 request, messages.SUCCESS, "lead created")
+            else:
+                messages.add_message(
+                request, messages.ERROR, "lead already created")
+                
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
 lead_creted_on_crm.short_description = 'create lead on crm'

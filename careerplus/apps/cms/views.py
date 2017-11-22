@@ -108,7 +108,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
         context['page_obj'] = page_obj
         context['page_heading'] = page_obj.get_display_name
 
-        country_choices = [(m.phone, m.phone) for m in
+        country_choices = [(m.phone, m.name) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
 

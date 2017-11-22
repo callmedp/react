@@ -26,11 +26,11 @@
           </div-->
           {% csrf_token %}
           <div class="form-group">
-            <input type="text" class="form-control" id="user_name" name="name" aria-describedby="nameHelp" placeholder="Name" {% if request.session.full_name %}value="{{request.session.full_name}}"{% endif %}>
+            <input type="text" class="form-control" id="user_name" name="name" aria-describedby="nameHelp" placeholder="Name" {% if request.session.full_name %}value="{{request.session.full_name}}"{% endif %} maxlength="100">
             <span class="error position-error"></span>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="id_email" name="email" aria-describedby="emailHelp" placeholder="Email" {% if request.session.email %}value="{{request.session.email}}"{% endif %}>
+            <input type="text" class="form-control" id="id_email" name="email" aria-describedby="emailHelp" placeholder="Email" {% if request.session.email %}value="{{request.session.email}}"{% endif %} maxlength="100">
             <span class="error position-error"></span>
           </div>
           <div class="form-group">
@@ -38,13 +38,13 @@
               <div class="custom-select">
                 <select class="form-control" name="country">
                   {% for country in country_choices %}
-                       <option value="{{country.0}}" {% if country.0 == initial_country or country.0 == request.session.country_code %} selected {% endif %} >{{country.1}}</option>
+                       <option value="{{country.0}}" {% if country.0 == initial_country or country.0 == request.session.country_code %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
                   {% endfor %}
                   <!--option>+91</option>
                   <option>+91</option-->
                 </select>
               </div>
-              <input type="text" id="id_mobile" name="number" class="form-control modal-form-control" placeholder="Mobile" {% if request.session.mobile_no %}value="{{request.session.mobile_no}}"{% endif %}>
+              <input type="text" id="id_mobile" name="number" class="form-control modal-form-control" placeholder="Mobile" {% if request.session.mobile_no %}value="{{request.session.mobile_no}}"{% endif %} maxlength="15">
               <span class="error position-error"></span>
             </div>
           </div>
