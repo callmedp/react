@@ -15,7 +15,8 @@
   <!-- Wrapper for slides -->
   <div class="container">
       <div class="carousel-inner" role="listbox">
-        <div class="item active">
+      	{% for i in "12" %}
+        <div class="item {% if forloop.counter == 1 %}active{% endif %}">
           <!-- big images -->
           <div class="col-sm-8 pr pl-0">
             <a href="#">
@@ -57,48 +58,7 @@
             </div>
           </div>
         </div>
-        <div class="item">
-          <!-- big images -->
-          <div class="col-sm-8 pr pl-0">
-            <a href="#">
-              <figure class="big-image">
-                <img src="images/article-image-big.jpg" alt="Talent Economy">
-              </figure>
-              <div class="carousel-heading-container">
-                <span class="product-title">Project Management</span>
-                <strong class="heading-carousel heading-carousel-primary">Career management: Defining the process and purpose</strong>
-                <span class="author author-primary">Ajay Misra</span>
-              </div>
-            </a>
-          </div>
-          <!-- small images -->
-          <div class="col-sm-4">
-            <div class="pr mb-20">
-              <a href="#">
-                <figure>
-                  <img src="images/article-image-small1.jpg" alt="Talent Economy">
-                </figure>
-                <div class="carousel-heading-container b-mini">
-                  <span class="product-title">IFRS</span>
-                  <strong class="heading-carousel heading-carousel-secondary">8 Reasons to consider a career change</strong>
-                  <span class="author author-primary">Ajay Misra</span>
-                </div>
-              </a>
-            </div>
-            <div class="pr">
-              <a href="#">
-                <figure>
-                  <img src="images/article-image-small2.jpg" alt="Talent Economy">
-                </figure>
-                <div class="carousel-heading-container b-mini">
-                  <span class="product-title">Interview Preparation</span>
-                  <strong class="heading-carousel heading-carousel-secondary">8 Reasons to consider a career change</strong>
-                  <span class="author author-primary">Ajay Misra</span>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
   </div>
   <!-- Controls -->
@@ -207,7 +167,7 @@
 			<div class="carousel slide row" data-ride="carousel" data-type="multi" data-interval="3000" id="myCarousel1">
 				<div class="carousel-inner">
 					{% for i in "12345678" %}
-					<div class="item active">
+					<div class="item {% if forloop.counter == 1 %}active{% endif %}">
 						<div class="col">
 							<a class="box-panel" href="#">
 								<figure>
