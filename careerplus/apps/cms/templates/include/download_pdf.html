@@ -38,7 +38,7 @@
               <div class="custom-select">
                 <select class="form-control" name="country">
                   {% for country in country_choices %}
-                       <option value="{{country.0}}" {% if country.0 == initial_country or country.0 == request.session.country_code %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
+                       <option value="{{country.0}}" {% if country.0 == initial_country or country.0 == request.session.country_code %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
                   {% endfor %}
                   <!--option>+91</option>
                   <option>+91</option-->

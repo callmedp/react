@@ -13,7 +13,7 @@
               <div class="custom-select">
                 <select class="form-control" id="call_back_country_code-id" name="country_code">
                   {% for country in country_choices %}
-                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
+                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
                   {% endfor %}
                 </select>
               </div>
