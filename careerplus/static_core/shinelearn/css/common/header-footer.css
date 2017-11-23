@@ -243,7 +243,7 @@ datalist {
 .courses-dropdown .tab-content ul {
   list-style-type: none;
   margin: 10px 0 0 0;
-  padding: 0;
+  padding: 0 0 55px;
 }
 .courses-dropdown .tab-content ul li { /* TODO: level 3 only, */
   display: block;
