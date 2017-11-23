@@ -64,13 +64,13 @@
                     <p><strong>Status:</strong> Modifications requested</p>
 
                 {% elif obj.oi_status == 46 and obj.draft_counter == 1 %}
-                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="{% url "linkedin-draf-download" obj.pk obj.oio_linkedin.pk %}">Download</a></p>
+                    <p><strong>Status:</strong> Document is ready - <a target="_blank" href="{% url "dashboard-draf-download" obj.pk %}">Download</a></p>
 
                 {% elif obj.oi_status == 46 and obj.draft_counter < max_draft_limit %}
-                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="{% url "linkedin-draf-download" obj.pk obj.oio_linkedin.pk %}">Download</a></p>
+                    <p><strong>Status:</strong> Revised Document is ready - <a target="_blank" href="{% url "dashboard-draf-download" obj.pk %}">Download</a></p>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
-                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="{% url "linkedin-draf-download" obj.pk obj.oio_linkedin.pk %}">Download</a></p>
+                    <p><strong>Status:</strong> Final Document is ready - <a target="_blank" href="{% url "dashboard-draf-download" obj.pk %}">Download</a></p>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
                     <p><strong>Status:</strong> Service has been processed and Document is finalized - <a target="_blank" href="{% url "linkedin-draf-download" obj.pk obj.oio_linkedin.pk %}">Download</a></p>
