@@ -1,0 +1,77 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   {{object.display_name}} Talenteconomy | Shinelearning
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+{% endblock css_section %}
+
+{% block header %}
+ <!-- header menu Icon Starts here -->
+<header class="w100fl">
+    <!-- header menu Icon Starts here -->
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="index.html" class="icon-logo pull-left"></a>
+        </div><!-- / Left side Icon ends here -->
+
+        <div class="pull-right">
+            <a class="icon-search pull-left " href="#">search</a>
+            <a class="icon-cart pull-left" href="#" >cart</a>
+        </div><!-- / Right side Icon ends here -->
+    </div><!-- header menu Icon ends here -->
+</header><!-- header ends here -->
+<!-- header menu Icon Starts here -->
+{% endblock header %}
+
+{% block container %}
+<!-- Trending articles Starts here -->
+<div class="trending-articles talent-gr">
+    <div class="content-box pt-30">
+    <div class="slide-container"> 
+        <ul class="article-slider">
+            {% for i in '12345' %}
+            <li>
+                <a href="#" class="caption-bg-txt">
+                    <div class="bottom-text">
+              <span class="main-head">Project Management</span>
+                        <p class="pb-5">Career management: Defining the process and purpose</p>
+                        <span class="editor fs-12">Ajay Mishra</span>
+                    </div>
+                </a>
+                <img src="images/article-1.jpg">
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    </div>
+</div><!-- Trending articles Ends here -->
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}
