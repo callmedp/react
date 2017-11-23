@@ -464,8 +464,8 @@ class AuthorAddForm(forms.ModelForm):
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     user = forms.ModelChoiceField(label=("Select User:"),
-        queryset=Category.objects.filter(is_active=True),
-        empty_label="Select Category", required=True,
+        queryset=User.objects.filter(is_active=True),
+        empty_label="Select User", required=True,
         to_field_name='pk', widget=forms.Select(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
@@ -531,6 +531,11 @@ class AuthorChangeForm(forms.ModelForm):
     linkedin_url =  forms.CharField(label=("Linked-In URL:"), required=False, widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    user = forms.ModelChoiceField(label=("Select User:"),
+        queryset=User.objects.filter(is_active=True),
+        empty_label="Select User", required=True,
+        to_field_name='pk', widget=forms.Select(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Author
