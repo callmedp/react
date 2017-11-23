@@ -24,7 +24,7 @@
     <div class="col-sm-12 linkedin_resume">
       <img src="{% static 'shinelearn/images/resume_linkedin.jpg' %}" class="pull-left mr-20 mt-20"
       alt="Linkedin">
-      <div class="downloadpdf"><a href="{% url "linkedin-draf-download" orderitem.pk op_id.linkedin %}">Download PDF</a></div>
+      <div class="downloadpdf"><a href="{% url "linkedin-draf-download" orderitem.pk op_id.pk %}">Download PDF</a></div>
         <div class="card card-block nobdr pull-left">
           <h2 class="card-title">{{orderitem.order.first_name}}</h2>
           <p class="card-text">{{draft.headline}}</p>
