@@ -118,7 +118,22 @@
                       {% for obj in orderitems %}
                       <tr>
                           <td>{{obj.id}}</td>
-                          <td>{{obj.product.name}} {{obj.product.get_exp}}</td>
+                          <td>{% if obj.parent and obj.is_variation %}
+                              <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+                            {% endif %}
+                                {{obj.product.get_name}}<br/>
+                            {%if obj.product.get_exp_db %}
+                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_studymode_db %}
+                                <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_coursetype_db %}
+                                <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+                            {% endif %}
+                            {% if obj.product.get_duration_db %}
+                                <strong>Duration:</strong> {{obj.product.get_duration_db}}
+                            {% endif %}</td>
                           <td>{{obj.get_oi_status}}</td>
                           <td>
                               <table class="table table-bordered table-responsive">
