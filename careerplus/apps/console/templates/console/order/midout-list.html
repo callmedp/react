@@ -205,10 +205,10 @@
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
                       <td>
                             {% if obj.parent and obj.is_variation %}
-                              {{obj.parent.product.get_name}}:</br>
+                              <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
                             {% endif %}
                                 {{obj.product.get_name}}<br/>
-                            {%if obj.product.product.get_exp_db %}
+                            {%if obj.product.get_exp_db %}
                                 <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
                             {% endif %}
                             {% if obj.product.get_studymode_db %}

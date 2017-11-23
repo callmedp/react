@@ -145,7 +145,23 @@
                               <input {% if refund_item %}checked{% endif %} type="checkbox" class="item-checked" onclick="clickItemAction('{{oi.pk}}')" data-id="{{oi.pk}}" id="item-{{oi.pk}}" name="item_name" value="{{oi.pk}}" data-price="{{oi.get_refund_amount}}">
                           </td>
                           <td>
-                              {{oi.product.name}}{% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}
+                              {% if oi.parent and oi.is_variation %}
+                                <strong>{{oi.parent.product.get_name}}{% if oi.parent.product.get_exp_db %} - Exp: {{oi.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+                              {% endif %}
+                                  {{oi.product.get_name}}<br/>
+                              {%if oi.product.get_exp_db %}
+                                  <strong>Exp:</strong> {{oi.product.get_exp_db}}<br/>
+                              {% endif %}
+                              {% if oi.product.get_studymode_db %}
+                                  <strong>Study mode:</strong> {{oi.product.get_studymode_db}}<br/>
+                              {% endif %}
+                              {% if oi.product.get_coursetype_db %}
+                                  <strong>Course type:</strong> {{oi.product.get_coursetype_db}}<br/>
+                              {% endif %}
+                              {% if oi.product.get_duration_db %}
+                                  <strong>Duration:</strong> {{oi.product.get_duration_db}}
+                              {% endif %}
+                              
                               {% if combo %}
                                    <br>
                                    <h3>This Package includes:</h3>
