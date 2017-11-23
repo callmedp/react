@@ -5,7 +5,8 @@ from .views import (
 	LinkedinDraftView,
 	DraftAdminView,
 	DraftDownloadView,
-	CounsellingForm)
+	CounsellingForm,
+    DashboardDraftDownloadView,)
 
 urlpatterns = [
 	url(r'^counsellingform/(?P<order_item>[-\w]+)/$',
@@ -22,4 +23,7 @@ urlpatterns = [
 
     url(r'^counselling-form/(?P<order_item>.+)/$',
         CounsellingForm.as_view(), name='counselling_form'),
+    
+    url(r'^dashboard-draft-download/(?P<order_item>[-\w]+)/$',
+        DashboardDraftDownloadView.as_view(), name='dashboard-draf-download'),
 ]
