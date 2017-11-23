@@ -1109,11 +1109,13 @@ class Product(AbstractProduct, ModelMeta):
             if cat_slug:
                 cat_slug = cat_slug.get_parent()[0] if cat_slug.get_parent() else None
         cat_slug = cat_slug.slug if cat_slug else None
-        if self.is_course:
-            return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+        if cat_slug:
+            if self.is_course:
+                return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+            else:
+                return reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         else:
-            return reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
-
+            return reverse('homepage')
         # else self.is_writing:
         #     return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         # elif self.is_service:

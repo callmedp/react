@@ -337,7 +337,7 @@ class DraftDownloadView(View):
 
         try:
             order_item = OrderItem.objects.get(pk=orderitem_id)
-            oio = order_item.orderitemoperation_set.get(linkedin=op_id)
+            oio = order_item.orderitemoperation_set.get(pk=op_id)
             try:
                 draft = ''
                 if oio:
