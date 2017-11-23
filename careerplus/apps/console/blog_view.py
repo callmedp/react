@@ -225,6 +225,7 @@ class ArticleListView(ListView, PaginationMixin):
 		self.sel_status = int(request.GET.get('status', '-1'))
 		self.sel_p_cat = request.GET.get('p_cat', '')
 		self.sel_writer = request.GET.get('user', '')
+		self.visibility = request.GET.get('visibility', 1)
 		return super(self.__class__, self).get(request, args, **kwargs)
 
 	def get_context_data(self, **kwargs):
@@ -234,7 +235,8 @@ class ArticleListView(ListView, PaginationMixin):
 		initial_filter_data = {
 			"user": self.sel_writer,
 			"p_cat": self.sel_p_cat,
-			"status": self.sel_status
+			"status": self.sel_status,
+                        "visibility":self.visibility,
 		}
 		filter_form = ArticleFilterForm(initial=initial_filter_data)
 		context.update({
@@ -242,7 +244,8 @@ class ArticleListView(ListView, PaginationMixin):
 			"filter_form": filter_form,
 			"sel_status": self.sel_status,
 			"sel_p_cat": self.sel_p_cat,
-			"sel_writer": self.sel_writer
+			"sel_writer": self.sel_writer,
+                        "visibility":self.visibility,
 		})
 		return context
 
@@ -273,6 +276,13 @@ class ArticleListView(ListView, PaginationMixin):
 		try:
 			if self.sel_writer:
 				queryset = queryset.filter(user__pk=self.sel_writer)
+		except Exception as e:
+			logging.getLogger('error_log').error("%s " % str(e))
+			pass
+
+		try:
+			if self.visibility:
+				queryset = queryset.filter(visibility=self.visibility)
 		except Exception as e:
 			logging.getLogger('error_log').error("%s " % str(e))
 			pass

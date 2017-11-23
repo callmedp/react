@@ -57,9 +57,15 @@ class ArticleAddForm(forms.ModelForm):
             choices=SITE_TYPE, widget=forms.Select(attrs={
                 'class': 'form-control col-md-7 col-xs-12'}))
 
+    author = forms.ModelChoiceField(label=("Writer*:"),
+         queryset=Author.objects.filter(is_active=True),
+         empty_label="Select Writer", required=True,
+         to_field_name='pk', widget=forms.Select(
+         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Blog
-        fields = ['name', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment','visibility']
+        fields = ['name', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment','author','visibility']
     
     def __init__(self, *args, **kwargs):
         super(ArticleAddForm, self).__init__(*args, **kwargs)
@@ -131,10 +137,16 @@ class ArticleChangeForm(forms.ModelForm):
         required=False, widget=forms.Textarea(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    author = forms.ModelChoiceField(label=("Writer:"),
+         queryset=Author.objects.filter(is_active=True),
+         empty_label="Change Writer", required=True,
+         to_field_name='pk', widget=forms.Select(
+         attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Blog
         fields = ['name', 'status', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment','summary',
-            'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords','visibility']
+            'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords','author','visibility']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
@@ -381,10 +393,11 @@ class ArticleFilterForm(forms.ModelForm):
             to_field_name='pk',
             widget=forms.Select(
                 attrs={'class': 'form-control col-md-7 col-xs-12'}))
+        self.fields['visibility'] = forms.ChoiceField(label=("Visibility"), choices=SITE_TYPE, widget=forms.Select(attrs={'class':'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Blog
-        fields = ['user', 'status', 'p_cat']
+        fields = ['user', 'status', 'p_cat','visibility']
 
 
 class CommentUpdateForm(forms.ModelForm):
