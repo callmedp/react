@@ -10,6 +10,8 @@ from django.views.generic import (
 from django.http import HttpResponseForbidden, Http404,\
     HttpResponsePermanentRedirect, HttpResponse
 from django.db.models import Count
+from django.core.paginator import Paginator
+from django.urls import reverse
 
 from django.conf import settings
 from meta.views import Meta
@@ -68,3 +70,63 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         )
         return {"meta": meta}
 
+class TEBlogCategoryListView(TemplateView, PaginationMixin):
+    template_name = "talenteconomy/category.html"
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 8
+        self.cat_obj = None
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        try:
+            self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=2)
+        except Exception:
+            raise Http404
+
+        context = super(TEBlogCategoryListView, self).get(request, args, **kwargs)
+        context = super(TEBlogCategoryListView, self).get(request, args, **kwargs)
+        return context
+        
+    def get_context_data(self, **kwargs):
+        context = super(TEBlogCategoryListView, self).get_context_data(**kwargs)
+        cat_obj = self.cat_obj
+
+        categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
+
+        authors = Author.objects.filter(visibility=2).annotate(no_of_blog=Count('blog')).order_by('no_of_blog')
+
+        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=2) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=2)
+        main_articles = main_articles.order_by('-publish_date').distinct().select_related('author')
+
+        paginator = Paginator(main_articles, self.paginated_by)
+        page_data = self.pagination(paginator, self.page)
+
+        popular_courses = BlogMixin().get_product(cat_obj.slug)
+
+        context.update({
+            "recent_page": page_data.get('page'),
+            "recent_end": page_data.get('page_end'),
+            "recent_middle": page_data.get('middle'),
+            "recent_begin": page_data.get('begin'),
+            "recent_articles": main_articles
+        })
+        context.update({
+            "authors":authors,
+            "category": cat_obj,
+            "categories": categories,
+            "popular_courses":popular_courses,
+        })
+        context.update(self.get_breadcrumb_data())
+        context['meta'] = cat_obj.as_meta(self.request)
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": '/talenteconomy/', "name": "Talent Economy"})
+        breadcrumbs.append({"url": None, "name": self.cat_obj.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data

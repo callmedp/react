@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from .views import TalentEconomyLandingView
+from .views import TalentEconomyLandingView, TEBlogCategoryListView
 #     BlogDetailView, BlogDetailAjaxView,\
 #     LoginToCommentView, ShowCommentBoxView, LoadMoreCommentView,\
 #     BlogTagListView, RegisterToCommentView
@@ -10,7 +10,8 @@ from .views import TalentEconomyLandingView
 
 urlpatterns = [
      url(r'^$', TalentEconomyLandingView.as_view(), name='talent-landing'),
-     url(r'^category/', TemplateView.as_view(template_name="talenteconomy/category.html"), name='category-landing'),
+     url(r'^(?P<slug>[-\w]+)/$', TEBlogCategoryListView.as_view(),
+        name='articles-by-category'),
 
 ]
 
