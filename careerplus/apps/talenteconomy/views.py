@@ -102,7 +102,7 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
 
         categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
 
-        authors = Author.objects.filter(visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        authors = Author.objects.filter(visibility=2,is_active=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
 
         main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=2) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=2)
         main_articles = main_articles.order_by('-publish_date').distinct().select_related('author')
@@ -260,7 +260,6 @@ class AuthorListingView(TemplateView):
     template_name = "talenteconomy/author-listing.html"
 
     def get(self, request, *args, **kwargs):
-        self.page = self.request.GET.get('page', 1)
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
 
@@ -269,9 +268,12 @@ class AuthorListingView(TemplateView):
 
         categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
 
-        authors = Author.objects.filter(visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        authors = Author.objects.filter(is_active=1,visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
 
-        popular_courses = BlogMixin().get_product('a')
+        top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat')[:9]
+        top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
+        top_cats = ' '.join(top_3_cats)
+        popular_courses = BlogMixin().get_product(top_cats)
 
         context.update({
         'authors':authors,
@@ -292,9 +294,63 @@ class AuthorListingView(TemplateView):
 
     def get_meta_details(self):
         meta = Meta(
-            title="Talent Economy: Career Skilling for a future ready India",
-            description="Talent Economy - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
+            title="Career & Certification Guidance Top Authors @ Shine Learning",
+            description="Use experts’ advice & guidance to decide your career path. Get the list of authors and related articles written by experts @ Shine Learning",
         )
         return {"meta": meta}
 
+class AuthorDetailView(DetailView):
+    template_name = "talenteconomy/author-detail.html"
+    model = Author
+
+    def get(self, request, *args, **kwargs):
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
+
+    def get_queryset(self):
+        qs = Author.objects.filter(is_active=1,visibility=2)
+        return qs
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('slug')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if slug is not None:
+            queryset = queryset.filter(slug=slug, is_active=1, visibility=2)
+        try:
+            obj = queryset.get()
+        except:
+            raise Http404
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        author = self.object
+
+        context['meta'] = author.as_meta(self.request)
+        context.update(self.get_breadcrumb_data())
+        context['SITEDOMAIN'] = settings.SITE_DOMAIN
+
+        article_list = Blog.objects.filter(status=1, visibility=2, author=author).order_by('-publish_date')
+        most_recent_cat = article_list[0].p_cat.slug if article_list else ''
+
+        popular_courses = BlogMixin().get_product(most_recent_cat)
+
+        context.update({
+            "author":author,
+            "article_list":article_list,
+            "popular_courses": popular_courses,
+        })
+
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({"url": reverse('talent:authors-listing'), "name": "Authors"})
+        breadcrumbs.append({"url": None, "name": self.object.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
 
