@@ -26,6 +26,17 @@
 <header id="carousel-example-generic2" class="carousel slide article-carousel" data-ride="carousel">
   <!-- Wrapper for slides -->
   <div class="container">
+  	<!-- breadcrums -->
+    <ol class="breadcrumb ">
+    {% for bradcbs in breadcrumbs %}
+      {% if bradcbs.url == None %}
+      	<li class="active">{{bradcbs.name}}</li>
+      {% else %}
+      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+      {% endif %}
+    {% endfor %}
+    </ol>
+
       <div class="carousel-inner" role="listbox">
 
       	{% for topArtList in top_article_list %}
