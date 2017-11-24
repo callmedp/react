@@ -31,8 +31,11 @@ class CourseSitemap(CustomSitemap):
         return 0.8
 
     def items(self):
+        p_list = list(ProductCategory.objects.filter(active=True).values_list(
+            'product__pk', flat=True).distinct())
+        
         return Product.browsable.exclude(
-            product_class__isnull=True).filter(product_class__slug='course')
+            product_class__isnull=True).filter(product_class__slug='course', pk__in=p_list)
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
@@ -76,7 +79,10 @@ class ServiceSitemap(CustomSitemap):
         return 0.8
 
     def items(self):
-        return Product.browsable.exclude(
+        p_list = list(ProductCategory.objects.filter(active=True).values_list(
+            'product__pk', flat=True).distinct())
+        
+        return Product.browsable.filter(pk__in=p_list).exclude(
             product_class__isnull=True).exclude(product_class__slug='course')
 
     def lastmod(self, item):

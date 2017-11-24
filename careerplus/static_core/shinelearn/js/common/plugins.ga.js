@@ -49,7 +49,7 @@ function GA(){
     };
     that.SetMetrics = function(metricName, metricValue) {
         try{
-            ga('set',metricName,metricValue);
+            gtag('set',metricName,metricValue);
         }catch(e){
             try{
                 console.log(e);
@@ -63,12 +63,10 @@ function GA(){
     that.PassEvents = function() {
         that.fireGaEvent( $(this).data('category'), $(this).data('action'), $(this).data('label'), 0, true);
     };
-
-    that.PageView = function() {
-        ga('send', 'pageview');
-    };
-    that.sendVirtualPage = function(page){
-        ga('send', 'pageview',page);
+    
+    that.sendVirtualPage = function(event){
+        var event_id = event || 'UA-3537905-41'
+        gtag('event', 'page_view',{'send_to': event_id});
     }
 
 

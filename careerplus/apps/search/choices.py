@@ -223,8 +223,8 @@ CL_FACETS = {
 }
 
 CERT_FACETS = {
-    'true': 'Required',
-    0: 'Not Required'
+    'true': 'Courses',
+    0: 'Certifications'
 }
 
 DURATION_DICT = {
