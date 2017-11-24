@@ -12,6 +12,7 @@ from django.http import HttpResponseForbidden, Http404,\
 from django.db.models import Count
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.template.loader import render_to_string
 
 from django.conf import settings
 from meta.views import Meta
@@ -126,7 +127,120 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": 'talent:talent-landing', "name": "Talent Economy"})
+        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
         breadcrumbs.append({"url": None, "name": self.cat_obj.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+class TEBlogDetailView(DetailView, BlogMixin):
+    template_name = "talenteconomy/article-detail.html"
+    model = Blog
+
+    def __init__(self):
+        self.article = None
+        self.paginated_by = 1
+        self.page = 1
+
+    def get_queryset(self):
+        qs = Blog.objects.filter(status=1,visibility=2)
+        return qs
+
+    def get_object(self, queryset=None):
+        cat_slug = self.kwargs.get('cat_slug')
+        slug = self.kwargs.get('slug')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if slug is not None:
+            queryset = queryset.filter(slug=slug, status=1, visibility=2)
+        try:
+            obj = queryset.get()
+        except:
+            raise Http404
+        return obj
+
+#    def redirect_if_necessary(self, current_path, article):
+#        expected_path = article.get_absolute_url()
+#        if expected_path != urlquote(current_path):
+#            return HttpResponsePermanentRedirect(expected_path)
+#        return None
+
+    def get(self, request, *args, **kwargs):
+        self.slug = kwargs.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        self.object = self.get_object()
+        self.object.no_views += 1
+        self.object.update_score()
+        self.object.save()
+        #redirect = self.redirect_if_necessary(request.path, self.object)
+        #if redirect:
+        #    return redirect
+
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        blog = self.object
+        p_cat = blog.p_cat
+        articles = p_cat.primary_category.filter(status=1, visibility=2).exclude(pk=blog.pk)
+        articles = articles.order_by('-publish_date')
+
+        context['meta'] = blog.as_meta(self.request)
+        #context.update({
+        #    "reset_form": PasswordResetRequestForm()
+        #})
+        context.update(self.get_breadcrumb_data())
+        context['SITEDOMAIN'] = settings.SITE_DOMAIN
+
+        main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=2)
+
+        detail_obj = self.scrollPagination(
+                paginated_by=self.paginated_by, page=self.page,
+                object_list=main_obj)
+        #if self.request.flavour == 'mobile':
+         #   detail_article = render_to_string('include/detail-article-list.html',
+          #      {"page_obj": detail_obj,
+           #     "slug": blog.slug,
+            #    "SITEDOMAIN": settings.SITE_DOMAIN,
+             #   "main_article": main_obj[0]})
+        #else:
+        detail_article = render_to_string('include/detail-article-list.html',
+            {"page_obj": detail_obj,
+            "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+
+        context.update({
+            "detail_article": detail_article,
+            "main_article": main_obj[0],
+        })
+
+        article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=2).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=2).order_by('-publish_date')
+        article_list = article_list.exclude(slug=blog.slug)
+        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+
+        page_obj = self.scrollPagination(
+                paginated_by=self.paginated_by, page=self.page,
+                object_list=article_list)
+
+        context.update({
+            "scroll_article": render_to_string('include/detail-article-list.html',
+                {"page_obj": page_obj,
+                "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        })
+
+        #context.update({
+        #    "loginform": ModalLoginApiForm(),
+        #    "registerform": ModalRegistrationApiForm()
+        #})
+
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        #breadcrumbs.append({"url": reverse('te-articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
+        breadcrumbs.append({"url": '/', "name": self.object.p_cat.name})
+        breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data
