@@ -14,7 +14,7 @@ class SkillPageMixin(object):
 				response_data = response.json()
 				data_dict.update({
 					'job_count': response_data['count'],
-					'jFArea': response_data['facets']['fields']['jFArea'][0:3]
+					'jFArea': response_data.get('facets', {}).get('fields').get('jFArea')
 				})
 				return data_dict
 
