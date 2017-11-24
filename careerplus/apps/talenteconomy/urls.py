@@ -11,7 +11,7 @@ from .views import TalentEconomyLandingView, TEBlogCategoryListView
 urlpatterns = [
      url(r'^$', TalentEconomyLandingView.as_view(), name='talent-landing'),
      url(r'^(?P<slug>[-\w]+)/$', TEBlogCategoryListView.as_view(),
-        name='articles-by-category'),
+        name='te-articles-by-category'),
 
 ]
 

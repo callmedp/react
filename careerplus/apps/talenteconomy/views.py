@@ -126,7 +126,7 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": '/talenteconomy/', "name": "Talent Economy"})
+        breadcrumbs.append({"url": 'talent:talent-landing', "name": "Talent Economy"})
         breadcrumbs.append({"url": None, "name": self.cat_obj.name})
         data = {"breadcrumbs": breadcrumbs}
         return data

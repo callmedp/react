@@ -87,7 +87,10 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
-        return reverse('articles-by-category', kwargs={'slug': self.slug})
+        if self.visibility == 2:
+            return reverse('talent:te-articles-by-category', kwargs={'slug': self.slug})
+        else:
+            return reverse('articles-by-category', kwargs={'slug': self.slug})
 
     def article_exists(self):
         q = self.primary_category.filter(status=1) | self.secondary_category.filter(status=1)
