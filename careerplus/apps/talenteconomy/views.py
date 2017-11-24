@@ -19,6 +19,12 @@ from meta.views import Meta
 from blog.mixins import BlogMixin, PaginationMixin
 from blog.models import Category, Blog, Tag, Author
 
+from users.forms import (
+    ModalLoginApiForm,
+    ModalRegistrationApiForm,
+    PasswordResetRequestForm
+)
+
 class TalentEconomyLandingView(TemplateView, BlogMixin):
     model = Blog
     template_name = "talenteconomy/landing.html"
@@ -187,9 +193,9 @@ class TEBlogDetailView(DetailView, BlogMixin):
         articles = articles.order_by('-publish_date')
 
         context['meta'] = blog.as_meta(self.request)
-        #context.update({
-        #    "reset_form": PasswordResetRequestForm()
-        #})
+        context.update({
+            "reset_form": PasswordResetRequestForm()
+        })
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
@@ -228,10 +234,15 @@ class TEBlogDetailView(DetailView, BlogMixin):
                 "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
         })
 
-        #context.update({
-        #    "loginform": ModalLoginApiForm(),
-        #    "registerform": ModalRegistrationApiForm()
-        #})
+        context.update({
+            "loginform": ModalLoginApiForm(),
+            "registerform": ModalRegistrationApiForm()
+        })
+
+        popular_courses = self.get_product(p_cat.slug)
+        context.update({
+            "popular_courses": popular_courses,
+        })
 
         return context
 
