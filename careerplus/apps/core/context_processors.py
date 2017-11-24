@@ -40,6 +40,7 @@ def common_context_processor(request):
         "VENDOR_GROUP_LIST": settings.VENDOR_GROUP_LIST,
         "OPERATION_GROUP_LIST": settings.OPERATION_GROUP_LIST,
         "SEO_GROUP_LIST": settings.SEO_GROUP_LIST,
+        "BLOGGER_GROUP_LIST": settings.BLOGGER_GROUP_LIST,
         "WRITING_GROUP_LIST": settings.WRITING_GROUP_LIST,
         "REFUND_GROUP_LIST": settings.REFUND_GROUP_LIST,
         "OPS_GROUP_LIST": settings.OPS_GROUP_LIST,

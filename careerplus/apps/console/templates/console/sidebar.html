@@ -2,6 +2,23 @@
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
   <div class="menu_section">
+    {% if request.user|has_group:BLOGGER_GROUP_LIST %} 
+      <h3>Blogs</h3>
+        
+      <ul class="nav side-menu">
+        
+      <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+          <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
+          <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
+          <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
+          <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
+          <li><a href="{% url 'console:blog-author-list' %}">Author</a></li>
+        </ul>
+      </li>
+      </ul>
+    {% endif %}
+    
     {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>
         <ul class="nav side-menu">
@@ -104,17 +121,8 @@
     {% endif %}
       <ul class="nav side-menu">
         
-
-      <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
-          <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
-          <li><a href="{% url 'console:blog-tag-list' %}">Tag</a></li>
-          <li><a href="{% url 'console:blog-comment-to-moderate' %}">Comment</a></li>
-          <li><a href="{% url 'console:blog-author-list' %}">Author</a></li>
-        </ul>
-      </li>
-
+    {% comment %}
+      
         {% if is_admin %}
             <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
@@ -133,7 +141,8 @@
               </ul>
             </li>
         {% endif %}
-
+      {% endcomment %}
+    
         {% if request.user|has_group:REFUND_GROUP_LIST %}
             <ul class="nav side-menu">
                 <li><a><i class="fa fa-edit"></i> Refund Operation <span class="fa fa-chevron-down"></span></a>
