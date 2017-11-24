@@ -5,7 +5,7 @@
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="name" placeholder="Name">
+          <input type="text" class="form-control" name="name" placeholder="Name" value="{{request.session.full_name|safe}}">
           <span class="error position-error"></span>
         </div>
         <div class="form-group">
@@ -17,7 +17,7 @@
                   {% endfor %}
                 </select>
               </div>
-              <input type="text" id="id_mobile" name="mobile_number" class="form-control modal-form-control" placeholder="Mobile">
+              <input type="text" id="id_mobile" name="mobile_number" class="form-control modal-form-control" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
               <span class="error position-error"></span>
             </div>
           </div>

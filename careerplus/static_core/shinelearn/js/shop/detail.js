@@ -153,6 +153,9 @@ $(document).ready(function () {
   //         }); 
   //   }  
   //   });
+
+  // scroll effect;
+  activeOnScroll.init({ className:'.cls_scroll_tab'});
 });
       $(document).ready(function() {
       // Configure/customize these variables.

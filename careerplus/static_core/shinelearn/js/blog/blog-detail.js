@@ -125,6 +125,17 @@ $(function(){
                 
             }
         });
+
+        // $(document).on("scroll", function(event) {
+        //     var scrollPos = $(document).scrollTop() + 50;
+        //     $('.scroll-page').each(function () {
+        //         var currLink = $(this);
+        //         if (currLink.offset().top <= scrollPos && currLink.offset().top + currLink.outerHeight() > scrollPos) {
+        //             MyGA.sendVirtualPage('page path');
+        //             history.pushState(null, null, url);
+        //         }
+        //     });
+        // });
     });
 
 });

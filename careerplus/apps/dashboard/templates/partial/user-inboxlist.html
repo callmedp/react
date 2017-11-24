@@ -241,7 +241,7 @@
                     <form class="reject-msg" id="reject-form-id{{obj.pk}}" enctype='multipart/form-data'>
                       <div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/></div>
                       <div class="form-group error">
-                        <label>If you have made changes to resume upload here</label>
+                        <label>If you have made any changes to the document, please upload here.</label>
                         <div class="input-file">
                           <a class='' href='javascript:;'>
                               <input maxlength="200" type="file" id="reject-file-id" name="reject_file" style='position:absolute;z-index:1;top:0;left:0;width:100%;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:#333;' size="30"  onchange='$("#upload-file-info1").html($("#reject-file-id")[0].files[0].name);'>
