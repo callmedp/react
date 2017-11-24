@@ -29,7 +29,7 @@ class BlogMixin(object):
 			        'hl': 'false',
 			        'spellcheck': 'false'
 			    }).only(
-				'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc')[:5]
+				'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
 			for prd in results:
 				product.append(OrderedDict({
 					'title': prd.pTt,
@@ -42,7 +42,9 @@ class BlogMixin(object):
 					'image': prd.pImg,
 					'image_alt':prd.pImA,
 					'buy_count':prd.pBC,
-					'pPc':prd.pPc
+					'class':prd.pPc,
+					'star': prd.pStar
+
 					}))
 			return product	
 		return []

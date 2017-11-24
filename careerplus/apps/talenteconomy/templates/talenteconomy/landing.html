@@ -27,47 +27,52 @@
   <!-- Wrapper for slides -->
   <div class="container">
       <div class="carousel-inner" role="listbox">
-      	{% for i in "12" %}
+
+      	{% for topArtList in top_article_list %}
         <div class="item {% if forloop.counter == 1 %}active{% endif %}">
           <!-- big images -->
           <div class="col-sm-8 pr pl-0">
-            <a href="#">
+            <a href="{{topArtList.0.url}}">
               <figure class="big-image">
-                <img src="images/article-image-big.jpg" alt="Talent Economy">
+                <img src="{{topArtList.0.image}}" alt="{{topArtList.0.image_alt}}">
               </figure>
               <div class="carousel-heading-container">
-                <span class="product-title">Project Management</span>
-                <strong class="heading-carousel heading-carousel-primary">Career management: Defining the process and purpose</strong>
-                <span class="author author-primary">Ajay Misra</span>
+                <span class="product-title">{{topArtList.0.p_cat.name}}</span>
+                <strong class="heading-carousel heading-carousel-primary">{{topArtList.0.name}}</strong>
+                <span class="author author-primary">{{topArtList.0.author.name}}</span>
               </div>
             </a>
           </div>
           <!-- small images -->
           <div class="col-sm-4">
+          	{% if topArtList.1 %}
             <div class="pr mb-20">
-              <a href="#">
+              <a href="{{topArtList.1.url}}">
                 <figure>
-                  <img src="images/article-image-small1.jpg" alt="Talent Economy">
+                  <img src="{{topArtList.1.image}}" alt="{{topArtList.1.image_alt}}">
                 </figure>
                 <div class="carousel-heading-container b-mini">
-                  <span class="product-title">IFRS</span>
-                  <strong class="heading-carousel heading-carousel-secondary">8 Reasons to consider a career change</strong>
-                  <span class="author author-primary">Ajay Misra</span>
+                  <span class="product-title">{{topArtList.1.p_cat.name}}</span>
+                  <strong class="heading-carousel heading-carousel-secondary">{{topArtList.1.name}}</strong>
+                  <span class="author author-primary">{{topArtList.1.author.name}}</span>
                 </div>
               </a>
             </div>
+            {% endif %}
+            {% if topArtList.2 %}
             <div class="pr">
-              <a href="#">
+              <a href="{{topArtList.2.url}}">
                 <figure>
-                  <img src="images/article-image-small2.jpg" alt="Talent Economy">
+                  <img src="{{topArtList.2.image}}" alt="{{topArtList.2.image_alt}}">
                 </figure>
                 <div class="carousel-heading-container b-mini">
-                  <span class="product-title">Interview Preparation</span>
-                  <strong class="heading-carousel heading-carousel-secondary">8 Reasons to consider a career change</strong>
-                  <span class="author author-primary">Ajay Misra</span>
+                  <span class="product-title">{{topArtList.2.p_cat.name}}</span>
+                  <strong class="heading-carousel heading-carousel-secondary">{{topArtList.2.name}}</strong>
+                  <span class="author author-primary">{{topArtList.2.author.name}}</span>
                 </div>
               </a>
             </div>
+            {% endif %}
           </div>
         </div>
         {% endfor %}
@@ -92,27 +97,27 @@
 			</div>
             <div class="row">
                 <h2 class="main-heading-article ml-15">Recently added</h2>
-                {% for i in "123456" %}
+                {% for artList in article_list %}
                 <div class="article-list col-sm-6">
-                  	<a class="box-panel" href="#">
+                  	<a class="box-panel" href="{{artList.url}}" title="{{artList.title}}">
                     	<figure class="pr">
-                      		<img src="images/article-listing1.jpg" alt="Talent Economy">
-                      		<span class="product-title product-title-pos">Interview Preparation</span>
+                      		<img src="{{artList.image}}" alt="{{artList.image_alt}}">
+                      		<span class="product-title product-title-pos">{{artList}}</span>
                     	</figure>
-                    	<h3 class="heading-article"> 8 Reasons to consider a career change </h3>
+                    	<h3 class="heading-article">{{artList.heading}}</h3>
                     	<article>
-	                      Now predict your NCHM JEE rank 2017 using NCHM JEE Rank Predictor Tool on HTCampus and shortlist colleges based on your predicted rank.
+	                      {{artList.content|safe}}
 	                    </article>
                     	<hr>
                     	<span class="view-forward">
-	                    	<figure class="forward-icon"></figure> 43
-	                  		<figure class="view-icon ml-20"></figure> 21
+	                    	<figure class="forward-icon"></figure> {{artList.no_shares}}
+	                  		<figure class="view-icon ml-20"></figure> {{artList.no_views}}
                 		</span>
 		                <div class="author author-secondary">
 		                  <figure>
-		                    <img src="images/author-pic.jpg" alt="Author">
+		                    <img src="{{artList.author.image}}" alt="{{artList.author.name}}">
 		                  </figure>
-		                  Ajay Misra
+		                  {{artList.author.name}}
 		                </div>
               		</a>
             	</div>
@@ -126,13 +131,13 @@
 			<div class="take-me-to box-panel col-sm-6 col-md-12 mb-40">
 				<h2 class="heading-right-talent">take me to</h2>
 				<ul>
-                	{% for i in "1234567" %}
+                	{% for category in categories %}
 					<li>
-						<a href="#">
+						<a href="{{category.url}}" title="{{category.title}}">
 							<figure>
-								<img src="images/takeme-pic1.jpg" alt="Talent Economy" class="img-responsive">
+								<img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
 							</figure>
-							<h4>Project Management</h4>
+							<h4>{{category.name}}</h4>
 						</a>
 					</li>
 					{% endfor %}
@@ -140,32 +145,40 @@
 			</div>
 
 			<!-- Popular Courses -->
+			{% if popular_courses %}
 			<div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
 				<h2 class="heading-right-talent">Popular Courses</h2>
 				<ul>
-					{% for i in "1234" %}
+					{% for pCourses in popular_courses %}
 					<li>
 						<a href="#">
-						  <h3>Education and Experience Veri...</h3>
+						  <h3>{{pCourses.name}}</h3>
 						  <div class="rating-box">
-						      <figure class="full-star"></figure>
-						      <figure class="full-star"></figure>
-						      <figure class="half-star"></figure>
-						      <figure class="blank-star"></figure>
-						      <figure class="blank-star"></figure>
-						      <strong>3.9<small>/5</small></strong> 
+							  {% for star in pCourses.star %}
+							  	{% if star == '*' %}
+							      <figure class="full-star"></figure>
+							    {% endif %}
+							  	{% if star == '+' %}
+							      <figure class="half-star"></figure>
+							    {% endif %}
+							  	{% if star == '-' %}
+							      <figure class="blank-star"></figure>
+							    {% endif %}
+						      {% endfor %}
+						      <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
 						  </div>
 						  <span class="jobs-available">
 						    <strong>21735</strong>  jobs available
 						  </span>
 						  <span class="people-bought">
-						    <strong>21735</strong>  people bought
+						    <strong>{{pCourse.buy_count}}</strong>  people bought
 						  </span>
 						</a>
 					</li>
 					{% endfor %}
 				</ul>
 			</div>
+			{% endif %}
 		</div>
 		<!-- right content end -->
 	</div>

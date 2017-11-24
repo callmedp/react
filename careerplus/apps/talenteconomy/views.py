@@ -52,7 +52,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         popular_courses = self.get_product(top_cats)
 
         context.update({
-        'top_article_list':top_article_list,
+        'top_article_list':[top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
         'categories': categories,
         'article_list': article_list,
         'popular_courses':popular_courses,
