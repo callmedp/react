@@ -42,6 +42,9 @@ $().ready(function() {
                     minlength: 4,
                     maxlength: 15,
                 },
+                country_code:{
+                    required: true,
+                },
                 address:{
                     required: true,
                     maxlength: 200, 
@@ -71,12 +74,17 @@ $().ready(function() {
             //     email: 'enter only valid email id',
             //     maxlength: 'length should be less than 100 characters',
             // },
+
+            
             mobile:{
                 required: 'this value is required.',
                 digits: 'only digit accepted.',
                 indiaMobile: 'length must be 10 digits.',
                 minlength: 'length must be greater than 3 digits.',
                 maxlength: 'length must be less than 15 digits.',
+            },
+            country_code:{
+                required: 'this value is required.',
             },
             address:{
                 required: 'this value is required.',
@@ -93,22 +101,31 @@ $().ready(function() {
             }
         },
         highlight: function(element) {
-            if (window.CURRENT_FLAVOUR == 'mobile'){
+            /*if (window.CURRENT_FLAVOUR == 'mobile'){
                 $(element).closest('.form-group').addClass('error');
             }
             else{
                 $(element).closest('.col-sm-6').addClass('error');
+            }*/
+
+            var className = '.col-sm-6';
+            if (window.CURRENT_FLAVOUR == 'mobile'){
+                className = '.form-group';
             }
+            $(element).closest(className).addClass('error');
         },
         unhighlight: function(element) {
             if (window.CURRENT_FLAVOUR == 'mobile'){
                 $(element).closest('.form-group').removeClass('error');
             }
             else{
-                $(element).closest('.col-sm-6').removeClass('error');
+                if ($(element).attr('name') != "country_code"){
+                    $(element).closest('.col-sm-6').removeClass('error');
+                }
             }
         },
         errorPlacement: function(error, element){
+
             $(element).siblings('.error-txt').html(error.text());
         }
     });

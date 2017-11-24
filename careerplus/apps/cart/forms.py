@@ -1,5 +1,6 @@
 from django import forms
 from django.db.models import Q
+from django.utils.safestring import mark_safe
 
 from geolocation.models import Country
 
@@ -29,10 +30,12 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         try:
             country_choices = []
             for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='') | Q(active__exact=False)):
-                country_choices.append((m.phone, m.phone))
+                choice_name = m.phone + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;' + m.name
+                choice_name = mark_safe(choice_name)
+                country_choices.append((m.phone, choice_name))
 
         except:
-            country_choices = [('91', '91')]
+            country_choices = [('91', mark_safe('91 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp; India'))]
 
         form_class = 'form-control'
         self.fields['first_name'].required = True
@@ -85,9 +88,6 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         if not first_name:
             raise forms.ValidationError(
                 "This field is required.")
-        elif not first_name.isalpha():
-            raise forms.ValidationError(
-                "This field should be only letters.")
         return first_name
 
     def clean_last_name(self):
@@ -95,9 +95,6 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         if not last_name:
             raise forms.ValidationError(
                 "This field is required.")
-        elif not last_name.isalpha():
-            raise forms.ValidationError(
-                "This field should be only letters.")
         return last_name
 
     def clean_mobile(self):
