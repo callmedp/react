@@ -1050,7 +1050,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_heading(self):
         if self.is_course:
-            return '%s Certification Course' % (
+            return '%s ' % (
                 self.name,
             )
         elif self.is_service or self.is_writing:
@@ -1064,7 +1064,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_title(self):
         if self.is_course:
-            return '%s Certification Course (INR %s)  - Shine Learning.' % (
+            return '%s (INR %s)  - Shine Learning.' % (
                 self.name,
                 str(round(self.inr_price, 0)),
             )
@@ -1578,6 +1578,28 @@ class ProductScreen(AbstractProduct):
             return self.variationproduct.all()[0] if self.variationproduct.exists() else None
         else:
             return None
+
+    @property
+    def is_course(self):
+        if self.product_class and self.product_class.slug in settings.COURSE_SLUG:
+            return True
+        else:
+            return False
+
+    @property
+    def is_writing(self):
+        if self.product_class and self.product_class.slug in settings.WRITING_SLUG:
+            return True
+        else:
+            return False
+
+    @property
+    def is_service(self):
+        if self.product_class and self.product_class.slug in settings.SERVICE_SLUG:
+            return True
+        else:
+            return False
+
 
 
 # class ProductArchive(AbstractProduct):

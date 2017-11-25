@@ -158,7 +158,7 @@ class AddScreenProductForm(forms.ModelForm):
             self.fields['product_class'].queryset = vendor.prd_add_class.all()
                        
         self.fields['inr_price'].widget.attrs['class'] = form_class
-        self.fields['inr_price'].required = False
+        self.fields['inr_price'].required = True
         
         self.fields['name'].widget.attrs['class'] = form_class
         self.fields['name'].widget.attrs['maxlength'] = 100
