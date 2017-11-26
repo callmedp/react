@@ -15,6 +15,7 @@
 
 {% block css_section %}
     {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
 {% endblock css_section %}
 
@@ -38,27 +39,145 @@
 {% endblock header %}
 
 {% block container %}
+<div class="body-wrapper">
 <!-- Trending articles Starts here -->
 <div class="trending-articles talent-gr">
     <div class="content-box pt-30">
     <div class="slide-container"> 
         <ul class="article-slider">
-            {% for i in '12345' %}
+            {% for topArtList in top_article_list %}
             <li>
-                <a href="#" class="caption-bg-txt">
+                <a href="{{topArtList.0.url}}" class="caption-bg-txt">
                     <div class="bottom-text">
-              <span class="main-head">Project Management</span>
-                        <p class="pb-5">Career management: Defining the process and purpose</p>
-                        <span class="editor fs-12">Ajay Mishra</span>
+                        <span class="main-head">{{topArtList.0.p_cat.name}}</span>
+                        <p class="pb-5">{{topArtList.0.name}}</p>
+                        <span class="editor fs-12">{{topArtList.0.author.name}}</span>
                     </div>
                 </a>
-                <img src="images/article-1.jpg">
+                <img src="{{topArtList.0.image}}" alt="{{topArtList.0.image_alt}}">
             </li>
+            {% if topArtList.1 %}
+            <li>
+                <a href="{{topArtList.1.url}}" class="caption-bg-txt">
+                    <div class="bottom-text">
+                        <span class="main-head">{{topArtList.1.p_cat.name}}</span>
+                        <p class="pb-5">{{topArtList.1.name}}</p>
+                        <span class="editor fs-12">{{topArtList.1.author.name}}</span>
+                    </div>
+                </a>
+                <img src="{{topArtList.1.image}}" alt="{{topArtList.1.image_alt}}">
+            </li>
+            {% endif %}
+            {% if topArtList.1 %}
+            <li>
+                <a href="{{topArtList.2.url}}" class="caption-bg-txt">
+                    <div class="bottom-text">
+                        <span class="main-head">{{topArtList.2.p_cat.name}}</span>
+                        <p class="pb-5">{{topArtList.2.name}}</p>
+                        <span class="editor fs-12">{{topArtList.2.author.name}}</span>
+                    </div>
+                </a>
+                <img src="{{topArtList.2.image}}" alt="{{topArtList.2.image_alt}}">
+            </li>
+            {% endif %}
             {% endfor %}
         </ul>
     </div>
     </div>
-</div><!-- Trending articles Ends here -->
+</div>
+<!-- Trending articles Ends here -->
+<!-- Starts of talent-economy list -->
+<section class="content-box pt-0 pb-0">
+    <!-- Talent Economy starts here -->
+    <div class="talent-economy">
+        <div class="talent-gr-50"></div>
+        <div class="talent-content">
+          <h1>Talent Economy</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque pentibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque.</p>
+        </div>
+        <img src="images/talent-economy.jpg" class="img-responsive">
+    </div>
+    <!-- Talent Economy starts here -->
+
+    <!-- box panel starts here -->
+    <div class="box-panel row ">
+        <p class="semi-head">Recently added</p>
+        {% for artList in article_list %}
+        <div class="media article-list">
+          <a title="{{artList.title}}" href="{{artList.url}}">
+            <figure class="media-left">
+              <img class="media-object w-auto" src="{{artList.image}}" alt="{{artList.image_alt}}">
+            </figure>
+            <div class="media-body rel">
+              <span class="article-tag">{{artList.title}}</span>
+              <h3 class="media-heading">{{artList.heading}}</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">{{artList.author.name}}</span>
+                <span class="view-forward pull-right">
+                    <figure class="icon-forward"></figure> {{artList.no_shares}}
+                    <figure class="icon-view icon-grey-view ml-10"></figure> {{artList.no_views}}
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- box panel ends here -->
+    <h2 class="mt-20">Contributors</h2>
+    <div class="slide-container">
+        <ul class="contributors">
+
+            <li>
+              <img src="images/ajay-misra.jpg">
+              <p class="head pb-0">Ajay Misra</p>
+              <p class="post pb-0"><span>CEO</span> <sup></sup></p>
+              <p class="fs-12"><a href="#">35 articles</a></p>
+            </li>
+
+            <li>
+              <img src="images/pallavi-sh.jpg">
+              <p class="head pb-0">Pallavi Sharma</p>
+              <p class="post pb-0"><span>Chairman</span> <sup></sup></p>
+              <p class="fs-12"><a href="#">35 articles</a></p>
+            </li>
+
+            <li>
+              <img src="images/ajay-misra.jpg">
+              <p class="head pb-0">Ajay Misra</p>
+              <p class="post pb-0"><span>CEO</span> <sup></sup></p>
+              <p class="fs-12"><a href="#">35 articles</a></p>
+            </li>
+
+            <li>
+              <img src="images/pallavi-sh.jpg">
+              <p class="head pb-0">Pallavi Sharma</p>
+              <p class="post pb-0"><span>Chairman</span> <sup></sup></p>
+              <p class="fs-12"><a href="#">35 articles</a></p>
+            </li>
+
+        </ul>
+    </div>
+
+    {% if categories %}
+    <div class="box-panel row mt-20">
+        <p class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>take me to</p>
+
+        <ul class="take-list mt-20">
+            {% for category in categories %}
+            <li>
+                <div class="list-box">
+                  <img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
+                  <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
+                </div>       
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+  </section>
+</div>
 {% endblock container %}
 
 

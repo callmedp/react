@@ -29,10 +29,10 @@
   	<!-- breadcrums -->
     <ol class="breadcrumb ">
     {% for bradcbs in breadcrumbs %}
-      {% if bradcbs.url == None %}
-      	<li class="active">{{bradcbs.name}}</li>
-      {% else %}
+      {% if bradcbs.url %}
       	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+      {% else %}
+      	<li class="active">{{bradcbs.name}}</li>
       {% endif %}
     {% endfor %}
     </ol>
@@ -106,6 +106,7 @@
 				<h1>Talent Economy</h1>
 				<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque pena tibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque.</p>
 			</div>
+			{% if article_list %}
             <div class="row">
                 <h2 class="main-heading-article ml-15">Recently added</h2>
                 {% for artList in article_list %}
@@ -113,11 +114,11 @@
                   	<a class="box-panel" href="{{artList.url}}" title="{{artList.title}}">
                     	<figure class="pr">
                       		<img src="{{artList.image}}" alt="{{artList.image_alt}}">
-                      		<span class="product-title product-title-pos">{{artList}}</span>
+                      		<span class="product-title product-title-pos">{{artList.title}}</span>
                     	</figure>
                     	<h3 class="heading-article">{{artList.heading}}</h3>
                     	<article>
-	                      {{artList.content|safe}}
+	                      {{artList.content|striptags|safe}}
 	                    </article>
                     	<hr>
                     	<span class="view-forward">
@@ -134,11 +135,13 @@
             	</div>
             	{% endfor %}
 			</div>
+			{% endif %}
 		</div>
 		<!-- left content end -->
 		<!-- right content start -->
 		<div class="col-md-3 col-sm-12">
 			<!-- take me to -->
+			{% if categories %}
 			<div class="take-me-to box-panel col-sm-6 col-md-12 mb-40">
 				<h2 class="heading-right-talent">take me to</h2>
 				<ul>
@@ -154,7 +157,7 @@
 					{% endfor %}
 				</ul>
 			</div>
-
+			{% endif %}
 			<!-- Popular Courses -->
 			{% if popular_courses %}
 			<div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
