@@ -26,8 +26,13 @@
           <div class="container">
             <!-- breadcrums -->
             <ol class="breadcrumb mt-30">
-              <li><a href="#">Home</a></li>
-              <li class="active">Contributors</li>
+               {% for bradcbs in breadcrumbs %}
+                {% if bradcbs.url %}
+                  <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+                {% else %}
+                  <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+                {% endif %}
+              {% endfor %}
             </ol>
             <div class="article-category-heading">
               <h1>Contributors</h1>
@@ -42,18 +47,21 @@
             <!-- left content start -->
             <div class="col-md-9 col-sm-12">
               <div class="row">
-
+                {% for author in authors %}
                 <div class="col-sm-6 author-listing">
                   <a class="box-panel" href="#">
                     <div class="media">
                       <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic1.jpg" alt="Author">
+                        {% if author.image %}
+                        <img src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
+                        {% endif %}
+                        
                       </figure>
                       <figcaption class="media-body">
-                        <strong class="author-name">Ajay Misra</strong>
-                        <span class="designation">CEO</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
+                        <strong class="author-name">{{author.name}}</strong>
+                        <span class="designation">{{author.designation}}</span>
+                        <span class="articles-no">{{author.no_of_blog}} articles</span>
+                        <p>{{author.about|striptags}}</p>
                         <span class="social-login-gr">
                           <i class="facebook-gr"></i>
                           <i class="twitter-gr"></i>
@@ -64,202 +72,11 @@
                   </a>
                 </div>
 
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic2.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Pallavi Sharma</strong>
-                        <span class="designation">Chairman</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
+                {% if forloop.counter|divisibleby:2 %}
+                  <li class="clearfix is-hidden"></li>
+                {% endif %}
 
-                <div class="clearfix"></div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic3.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Siddarth Gupta</strong>
-                        <span class="designation">CFO</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic4.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Gauri Arora</strong>
-                        <span class="designation">HR</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="clearfix"></div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic5.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Jai Sharma</strong>
-                        <span class="designation">Designer</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic1.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Ajay Misra</strong>
-                        <span class="designation">CEO</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="clearfix"></div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic2.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Pallavi Sharma</strong>
-                        <span class="designation">Chairman</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic3.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Siddarth Gupta</strong>
-                        <span class="designation">CFO</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="clearfix"></div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic4.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Gauri Arora</strong>
-                        <span class="designation">HR</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
-
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
-                    <div class="media">
-                      <figure class="media-left">
-                          <img class="media-object" src="images/contributor-pic5.jpg" alt="Author">
-                      </figure>
-                      <figcaption class="media-body">
-                        <strong class="author-name">Jai Sharma</strong>
-                        <span class="designation">Designer</span>
-                        <span class="articles-no">35 articles</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                        <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
+                {% endfor %}
 
               </div>
             </div>
@@ -269,157 +86,59 @@
 <div class="col-md-3 col-sm-12">
 <!-- take me to -->
 <div class="take-me-to box-panel col-sm-6 col-md-12 mb-40">
+{% if categories %}
 <h2 class="heading-right-talent">take me to</h2>
 <ul>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic1.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>Project Management</h4>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic2.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>Digital Marketing</h4>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic3.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>IFRS</h4>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic4.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>Big Data</h4>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic5.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>Six Sigma</h4>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic6.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>GST</h4>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic7.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>Supply Chain</h4>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <figure>
-        <img src="images/takeme-pic8.jpg" alt="Talent Economy" class="img-responsive">
-      </figure>
-      <h4>Interview Preparation</h4>
-    </a>
-  </li>
+    {% for category in categories %}
+      <li>
+        <a href="{{category.url}}" title="{{category.title}}">
+          <figure>
+            {% if category.image %}
+            <img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
+            {% endif %}
+          </figure>
+          <h4>{{category.name}}</h4>
+        </a>
+      </li>
+    {% endfor %}
 </ul>
 </div>
+{% endif %}
 
-<!-- Popular Courses -->
-<div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 ml4">
-<h2 class="heading-right-talent">Popular Courses</h2>
-<ul>
-  <li>
-    <a href="#">
-      <h3>Education and Experience Veri...</h3>
-      <div class="rating-box">
-          <figure class="full-star"></figure>
-          <figure class="full-star"></figure>
-          <figure class="half-star"></figure>
-          <figure class="blank-star"></figure>
-          <figure class="blank-star"></figure>
-          <strong>3.9<small>/5</small></strong> 
-      </div>
-      <span class="jobs-available">
-        <strong>21735</strong>  jobs available
-      </span>
-      <span class="people-bought">
-        <strong>21735</strong>  people bought
-      </span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <h3>Job Interview Coaching by Sara...</h3>
-      <div class="rating-box">
-          <figure class="full-star"></figure>
-          <figure class="full-star"></figure>
-          <figure class="half-star"></figure>
-          <figure class="blank-star"></figure>
-          <figure class="blank-star"></figure>
-          <strong>3.9<small>/5</small></strong> 
-      </div>
-      <span class="jobs-available">
-        <strong>982</strong>  jobs available
-      </span>
-      <span class="people-bought">
-        <strong>735</strong>  people bought
-      </span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <h3>International Resume Writing...</h3>
-      <div class="rating-box">
-          <figure class="full-star"></figure>
-          <figure class="full-star"></figure>
-          <figure class="half-star"></figure>
-          <figure class="blank-star"></figure>
-          <figure class="blank-star"></figure>
-          <strong>3.9<small>/5</small></strong> 
-      </div>
-      <span class="jobs-available">
-        <strong>11982</strong>  jobs available
-      </span>
-      <span class="people-bought">
-        <strong>21735</strong>  people bought
-      </span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <div class="rating-box">
-          <figure class="full-star"></figure>
-          <figure class="full-star"></figure>
-          <figure class="half-star"></figure>
-          <figure class="blank-star"></figure>
-          <figure class="blank-star"></figure>
-          <strong>3.9<small>/5</small></strong> 
-      </div>
-      <h3>LinkedIn Profile for 4-8 years</h3>
-      <span class="jobs-available">
-        <strong>11982</strong>  jobs available
-      </span>
-      <span class="people-bought">
-        <strong>21735</strong>  people bought
-      </span>
-    </a>
-  </li>
-</ul>
-</div>
+{% if popular_courses %}
+  <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
+    <h2 class="heading-right-talent">Popular Courses</h2>
+    <ul>
+      {% for pCourses in popular_courses %}
+      <li>
+        <a href="#">
+          <h3>{{pCourses.name}}</h3>
+          <div class="rating-box">
+            {% for star in pCourses.star %}
+              {% if star == '*' %}
+                <figure class="full-star"></figure>
+              {% endif %}
+              {% if star == '+' %}
+                <figure class="half-star"></figure>
+              {% endif %}
+              {% if star == '-' %}
+                <figure class="blank-star"></figure>
+              {% endif %}
+              {% endfor %}
+              <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
+          </div>
+          <span class="jobs-available">
+            <strong>21735</strong>  jobs available
+          </span>
+          <span class="people-bought">
+            <strong>{{pCourse.buy_count}}</strong>  people bought
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
 
 </div>
 <!-- right content end -->
