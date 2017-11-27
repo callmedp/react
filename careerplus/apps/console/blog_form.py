@@ -354,10 +354,8 @@ class CategoryChangeForm(forms.ModelForm):
         if img_obj:
             img_size = img_obj._size
             if img_size > 50*1024:
-                raise forms.ValidationError("Image file too large ( > 100 kb )")
+                raise forms.ValidationError("Image file too large ( > 50 kb )")
                 return image
-        else:
-            raise forms.ValidationError("Couldn't read uploaded image")
 
 class CategoryAddForm(forms.ModelForm):
     name = forms.CharField(label=("Category*:"), max_length=70,
@@ -400,7 +398,7 @@ class CategoryAddForm(forms.ModelForm):
         if img_obj:
             img_size = img_obj._size
             if img_size > 50*1024:
-                raise forms.ValidationError("Image file too large ( > 100 kb )")
+                raise forms.ValidationError("Image file too large ( > 50 kb )")
                 return image
         else:
             raise forms.ValidationError("Couldn't read uploaded image")

@@ -10,7 +10,7 @@
 {% endblock canonical_url %}
 
 {% block title %}
-   {{object.display_name}} Talenteconomy | Shinelearning
+   Talent Economy: Career Skilling for a future ready India
 {% endblock title %}
 
 {% block css_section %}
@@ -20,22 +20,21 @@
 {% endblock css_section %}
 
 {% block header %}
- <!-- header menu Icon Starts here -->
+
 <header class="w100fl">
-    <!-- header menu Icon Starts here -->
     <div class="main-menu w100fl">
         <div class="pull-left">
             <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
-            <a href="index.html" class="icon-logo pull-left"></a>
-        </div><!-- / Left side Icon ends here -->
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
 
         <div class="pull-right">
-            <a class="icon-search pull-left " href="#">search</a>
-            <a class="icon-cart pull-left" href="#" >cart</a>
-        </div><!-- / Right side Icon ends here -->
-    </div><!-- header menu Icon ends here -->
-</header><!-- header ends here -->
-<!-- header menu Icon Starts here -->
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div>
+    </div>
+</header>
+
 {% endblock header %}
 
 {% block container %}
@@ -106,7 +105,9 @@
         <div class="talent-gr-50"></div>
         <div class="talent-content">
           <h1>Talent Economy</h1>
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque pentibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque.</p>
+          <p>It goes without saying that over time, jobs will require a different set of
+          unique skillsets, as opposed to the ones required now. By applying for the
+          online professional courses present on this platform, you'll be able to stay ahead of the curve and massively improve your job prospects by staying future-ready at all times.</p>
         </div>
         <img src="/media/images/talent-economy.jpg" class="img-responsive">
     </div>
@@ -141,41 +142,23 @@
     <h2 class="mt-20">Contributors</h2>
     <div class="slide-container">
         <ul class="contributors">
-
+            {% for author in authors %}
             <li>
-              <img src="images/ajay-misra.jpg">
-              <p class="head pb-0">Ajay Misra</p>
-              <p class="post pb-0"><span>CEO</span> <sup></sup></p>
-              <p class="fs-12"><a href="#">35 articles</a></p>
+              {% if author.image %}
+              <img src="{{author.image.url}}">
+              {% endif %}
+              <p class="head pb-0">{{author.name}}</p>
+              <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
+              <p class="fs-12"><a href="#">{{author.no_of_blog}} articles</a></p>
             </li>
-
-            <li>
-              <img src="images/pallavi-sh.jpg">
-              <p class="head pb-0">Pallavi Sharma</p>
-              <p class="post pb-0"><span>Chairman</span> <sup></sup></p>
-              <p class="fs-12"><a href="#">35 articles</a></p>
-            </li>
-
-            <li>
-              <img src="images/ajay-misra.jpg">
-              <p class="head pb-0">Ajay Misra</p>
-              <p class="post pb-0"><span>CEO</span> <sup></sup></p>
-              <p class="fs-12"><a href="#">35 articles</a></p>
-            </li>
-
-            <li>
-              <img src="images/pallavi-sh.jpg">
-              <p class="head pb-0">Pallavi Sharma</p>
-              <p class="post pb-0"><span>Chairman</span> <sup></sup></p>
-              <p class="fs-12"><a href="#">35 articles</a></p>
-            </li>
+            {% endfor %}
 
         </ul>
     </div>
 
     {% if categories %}
     <div class="box-panel row mt-20 clearfix">
-        <p class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>take me to</p>
+        <p class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>Take me to</p>
 
         <ul class="take-list mt-20">
             {% for category in categories %}

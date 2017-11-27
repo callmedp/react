@@ -41,7 +41,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
 
-        article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author').order_by('-publish_date')
+        article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author').order_by('-publish_date')[:10]
         top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author')[:9]
 
         authors = Author.objects.filter(visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')

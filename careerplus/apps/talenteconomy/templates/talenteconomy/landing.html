@@ -11,7 +11,7 @@
 
 
 {% block title %}
-   Talenteconomy @ Learning.Shine
+	Talent Economy: Career Skilling for a future ready India
 {% endblock title %}
 
 {% block css_section %}
@@ -32,7 +32,7 @@
       {% if bradcbs.url %}
       	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
       {% else %}
-      	<li class="active">{{bradcbs.name}}</li>
+      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
       {% endif %}
     {% endfor %}
     </ol>
@@ -45,7 +45,7 @@
           <div class="col-sm-8 pr pl-0">
             <a href="{{topArtList.0.url}}">
               <figure class="big-image">
-                <img src="{{topArtList.0.image}}" alt="{{topArtList.0.image_alt}}">
+                <img src="{{topArtList.0.image.url}}" alt="{{topArtList.0.image_alt}}">
               </figure>
               <div class="carousel-heading-container">
                 <span class="product-title">{{topArtList.0.p_cat.name}}</span>
@@ -104,7 +104,9 @@
 	    <div class="col-md-9 col-sm-12">
 			<div class="talent-economy">
 				<h1>Talent Economy</h1>
-				<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque pena tibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque.</p>
+				<p>It goes without saying that over time, jobs will require a different set of
+					unique skillsets, as opposed to the ones required now. By applying for the
+					online professional courses present on this platform, you'll be able to stay ahead of the curve and massively improve your job prospects by staying future-ready at all times. </p>
 			</div>
 			{% if article_list %}
             <div class="row">
@@ -113,7 +115,7 @@
                 <div class="article-list col-sm-6">
                   	<a class="box-panel" href="{{artList.url}}" title="{{artList.title}}">
                     	<figure class="pr">
-                      		<img src="{{artList.image}}" alt="{{artList.image_alt}}">
+                      		<img src="{{artList.image.url}}" alt="{{artList.image_alt}}">
                       		<span class="product-title product-title-pos">{{artList.title}}</span>
                     	</figure>
                     	<h3 class="heading-article">{{artList.heading}}</h3>
@@ -127,7 +129,9 @@
                 		</span>
 		                <div class="author author-secondary">
 		                  <figure>
-		                    <img src="{{artList.author.image}}" alt="{{artList.author.name}}">
+		                  	{% if artList.author.image %}
+		                    <img src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
+		                    {% endif %}
 		                  </figure>
 		                  {{artList.author.name}}
 		                </div>
@@ -149,7 +153,9 @@
 					<li>
 						<a href="{{category.url}}" title="{{category.title}}">
 							<figure>
-								<img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
+								{% if category.image %}
+								<img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
+								{% endif %}
 							</figure>
 							<h4>{{category.name}}</h4>
 						</a>
@@ -205,15 +211,17 @@
 		<div class="col-sm-12 col-md-offset-0">
 			<div class="carousel slide row" data-ride="carousel" data-type="multi" data-interval="3000" id="myCarousel1">
 				<div class="carousel-inner">
-					{% for i in "12345678" %}
+					{% for author in authors %}
 					<div class="item {% if forloop.counter == 1 %}active{% endif %}">
 						<div class="col">
 							<a class="box-panel" href="#">
 								<figure>
-									<img src="images/contributor-pic1.jpg" class="img-responsive">
+									{% if author.image %}
+									<img src="{{author.image.url}}" class="img-responsive">
+									{% endif %}
 									<figcaption>
-										Ajay Misra <strong>CEO</strong>
-										<span class="read">35 articles</span>
+										{{author.name}} <strong>{{author.designation}}</strong>
+										<span class="read">{{author.no_of_blog}} articles</span>
 									</figcaption>
 								</figure>
 							</a>
@@ -225,7 +233,7 @@
 		</div>
 		<a class="left carousel-control" href="#myCarousel1" data-slide="prev"></a>
 		<a class="right carousel-control" href="#myCarousel1" data-slide="next"></a>
-		<a href="#" class="view-all">View all</a>
+		<a href="{% url 'talent:authors-listing' %}" class="view-all">View all</a>
 	</div>
 </section>
 <!-- contributors end -->
