@@ -71,9 +71,17 @@ class ArticleAddForm(forms.ModelForm):
         super(ArticleAddForm, self).__init__(*args, **kwargs)
         self.fields['tags'].required = False
         self.fields['sec_cat'].required = False
-        # self.fields['sites'].required = False
         self.fields['content'].required = True
 
+    def clean_image(self):
+        img_obj = self.cleaned_data.get('image')
+        if img_obj:
+            img_size = img_obj._size
+            if img_size > 100*1024:
+                raise forms.ValidationError("Image file too large ( > 100 kb )")
+                return image
+        else:
+            raise forms.ValidationError("Couldn't read uploaded image")
 
 class ArticleChangeForm(forms.ModelForm):
 
@@ -181,6 +189,15 @@ class ArticleChangeForm(forms.ModelForm):
             blog.save()
         return blog
 
+    def clean_image(self):
+        img_obj = self.cleaned_data.get('image')
+        if img_obj:
+            img_size = img_obj._size
+            if img_size > 100*1024:
+                raise forms.ValidationError("Image file too large ( > 100 kb )")
+                return image
+        else:
+            raise forms.ValidationError("Couldn't read uploaded image")
 
 class TagAddForm(forms.ModelForm):
     name = forms.CharField(label=("Tag*:"), max_length=70,
@@ -332,6 +349,15 @@ class CategoryChangeForm(forms.ModelForm):
                 "This field is required.")
         return name
 
+    def clean_image(self):
+        img_obj = self.cleaned_data.get('image')
+        if img_obj:
+            img_size = img_obj._size
+            if img_size > 50*1024:
+                raise forms.ValidationError("Image file too large ( > 100 kb )")
+                return image
+        else:
+            raise forms.ValidationError("Couldn't read uploaded image")
 
 class CategoryAddForm(forms.ModelForm):
     name = forms.CharField(label=("Category*:"), max_length=70,
@@ -369,16 +395,25 @@ class CategoryAddForm(forms.ModelForm):
                 "This field is required.")
         return name
 
+    def clean_image(self):
+        img_obj = self.cleaned_data.get('image')
+        if img_obj:
+            img_size = img_obj._size
+            if img_size > 50*1024:
+                raise forms.ValidationError("Image file too large ( > 100 kb )")
+                return image
+        else:
+            raise forms.ValidationError("Couldn't read uploaded image")
+
 
 class ArticleFilterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ArticleFilterForm, self).__init__(*args, **kwargs)
-
-        qs = User.objects.filter(is_staff=True)
+        qs = Author.objects.filter(is_active=True)
         NEWSTATUS = ((-1, 'Select Status'),) + STATUS
 
-        self.fields['user'] = forms.ModelChoiceField(label=("Writer:"),
+        self.fields['author'] = forms.ModelChoiceField(label=("Writer:"),
             queryset=qs,
             to_field_name='pk',
             widget=forms.Select(
@@ -397,7 +432,7 @@ class ArticleFilterForm(forms.ModelForm):
 
     class Meta:
         model = Blog
-        fields = ['user', 'status', 'p_cat','visibility']
+        fields = ['author', 'status', 'p_cat','visibility']
 
 
 class CommentUpdateForm(forms.ModelForm):

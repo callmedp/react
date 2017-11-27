@@ -27,8 +27,8 @@ from .blog_form import (
     ArticleChangeForm,
     CommentUpdateForm,
     CommentActionForm,
-        AuthorAddForm,
-        AuthorChangeForm)
+    AuthorAddForm,
+    AuthorChangeForm)
 
 
 @Decorate(stop_browser_cache())
@@ -237,7 +237,7 @@ class ArticleListView(ListView, PaginationMixin):
         self.query = request.GET.get('query', '')
         self.sel_status = int(request.GET.get('status', '-1'))
         self.sel_p_cat = request.GET.get('p_cat', '')
-        self.sel_writer = request.GET.get('user', '')
+        self.sel_writer = request.GET.get('author', '')
         self.visibility = request.GET.get('visibility', 1)
         return super(self.__class__, self).get(request, args, **kwargs)
 
@@ -246,7 +246,7 @@ class ArticleListView(ListView, PaginationMixin):
         paginator = Paginator(context['article_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         initial_filter_data = {
-            "user": self.sel_writer,
+            "author": self.sel_writer,
             "p_cat": self.sel_p_cat,
             "status": self.sel_status,
                         "visibility":self.visibility,
@@ -258,7 +258,7 @@ class ArticleListView(ListView, PaginationMixin):
             "sel_status": self.sel_status,
             "sel_p_cat": self.sel_p_cat,
             "sel_writer": self.sel_writer,
-                        "visibility":self.visibility,
+            "visibility":self.visibility,
         })
         return context
 
