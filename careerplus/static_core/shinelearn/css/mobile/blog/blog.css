@@ -684,3 +684,9 @@ blockquote {
 .rel-imp {
   position: relative !important;
 }
+
+.is-hidden {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}

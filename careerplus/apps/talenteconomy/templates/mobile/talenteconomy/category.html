@@ -55,7 +55,7 @@
       <h1>{{category.name}}</h1>
 
     </div>
-    <img src="{% static 'images/article-category.jpg' %}" class="img-responsive">
+    <img src="{% static 'shinelearn/images/mobile/common/article-category.jpg' %}" class="img-responsive">
 </div><!-- Trending articles Ends here -->
 
 <!-- Starts of talent-economy list -->
@@ -63,7 +63,7 @@
   <!-- box panel starts here -->
   <div class="box-panel row ">
     <p class="semi-head">All articles</p>      
-    {% for artList in article_list %}
+    {% for artList in recent_articles %}
       <div class="media article-list">
         <a title="{{artList.title}}" href="{{artList.url}}">
           <figure class="media-left">
@@ -89,14 +89,19 @@
   <h2 class="mt-20">Contributors</h2>
   <div class="slide-container">
     <ul class="contributors">
-      {% for i in '1234' %}
-      <li>
-        <img src="images/ajay-misra.jpg">
-        <p class="head pb-0">Ajay Misra</p>
-        <p class="post pb-0"><span>CEO</span> <sup></sup></p>
-        <p class="fs-12"><a href="#">35 articles</a></p>
-      </li>
-      {% endfor %}
+        {% for author in authors %}
+        <li>
+          {% if author.image %}
+          {% thumbnail obj.image "130x130" crop="center" as im %}
+          <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
+          {% endthumbnail %}
+          {% endif %}
+          <p class="head pb-0">{{author.name}}</p>
+          <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
+          <p class="fs-12"><a href="#">{{author.no_of_blog}} articles</a></p>
+        </li>
+        {% endfor %}
+
     </ul>
   </div>
 
@@ -112,6 +117,10 @@
             <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
           </div> 
         </li>
+
+        {% if forloop.counter|divisibleby:2 %}
+          <li class="clearfix is-hidden"></li>
+        {% endif %}
       {% endfor %}      
     </ul>
     <div class="clearfix"></div>

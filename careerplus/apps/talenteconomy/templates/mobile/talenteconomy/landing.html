@@ -120,7 +120,9 @@
         <div class="media article-list">
           <a title="{{artList.title}}" href="{{artList.url}}">
             <figure class="media-left">
-              <img class="media-object w-auto" src="{{artList.image.url}}" alt="{{artList.image_alt}}">
+              {% thumbnail obj.image "96x73" crop="center" as im %}
+              <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}">
+              {% endthumbnail %}
             </figure>
             <div class="media-body rel">
               <span class="article-tag">{{artList.title}}</span>
@@ -145,7 +147,9 @@
             {% for author in authors %}
             <li>
               {% if author.image %}
-              <img src="{{author.image.url}}">
+              {% thumbnail obj.image "130x130" crop="center" as im %}
+              <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
+              {% endthumbnail %}
               {% endif %}
               <p class="head pb-0">{{author.name}}</p>
               <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
@@ -164,7 +168,9 @@
             {% for category in categories %}
             <li>
                 <div class="list-box">
-                  <img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
+                  {% thumbnail obj.image "133x90" crop="center" as im %}
+                  <img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
+                  {% endthumbnail %}
                   <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
                 </div>       
             </li>

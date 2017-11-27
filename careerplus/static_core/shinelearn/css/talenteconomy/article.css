@@ -494,4 +494,6 @@
   color: #fff;
 }
 
-/*# sourceMappingURL=article.css.map */
+body > footer {
+  margin-top: 0;
+}
