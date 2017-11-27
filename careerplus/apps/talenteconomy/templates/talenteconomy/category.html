@@ -11,7 +11,7 @@
 
 
 {% block title %}
-   Talenteconomy - Category @ Learning.Shine
+   {{category.name}} - Career & Certification Guidance @ Shine Learning
 {% endblock title %}
 
 {% block css_section %}
@@ -54,7 +54,9 @@
                 <div class="article-list col-sm-6">
                   	<a class="box-panel" href="{{artList.url}}" title="{{artList.title}}">
                     	<figure class="pr">
-                      		<img src="{{artList.image}}" alt="{{artList.image_alt}}">
+                    		{% if artList.image  %}
+                      			<img src="{{artList.image.url}}" alt="{{artList.image_alt}}">
+                      		{% endif %}
                       		<span class="product-title product-title-pos">{{artList.title}}</span>
                     	</figure>
                     	<h3 class="heading-article">{{artList.heading}}</h3>
@@ -68,7 +70,9 @@
                 		</span>
 		                <div class="author author-secondary">
 		                  <figure>
-		                    <img src="{{artList.author.image}}" alt="{{artList.author.name}}">
+		                  	{% if artList.author.image %}
+		                    <img src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
+		                    {% endif %}
 		                  </figure>
 		                  {{artList.author.name}}
 		                </div>
@@ -90,7 +94,9 @@
 					<li>
 						<a href="{{category.url}}" title="{{category.title}}">
 							<figure>
+								{% if category.image %}
 								<img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
+								{% endif %}
 							</figure>
 							<h4>{{category.name}}</h4>
 						</a>
@@ -147,15 +153,17 @@
 		<div class="col-sm-12 col-md-offset-0">
 			<div class="carousel slide row" data-ride="carousel" data-type="multi" data-interval="3000" id="myCarousel1">
 				<div class="carousel-inner">
-					{% for i in "12345678" %}
+					{% for author in authors %}
 					<div class="item {% if forloop.counter == 1 %}active{% endif %}">
 						<div class="col">
 							<a class="box-panel" href="#">
 								<figure>
-									<img src="images/contributor-pic1.jpg" class="img-responsive">
+									{% if author.image %}
+									<img src="{{author.image.url}}" class="img-responsive">
+									{% endif %}
 									<figcaption>
-										Ajay Misra <strong>CEO</strong>
-										<span class="read">35 articles</span>
+										{{author.name}} <strong>{{author.designation}}</strong>
+										<span class="read">{{author.no_of_blog}} articles</span>
 									</figcaption>
 								</figure>
 							</a>
@@ -167,7 +175,7 @@
 		</div>
 		<a class="left carousel-control" href="#myCarousel1" data-slide="prev"></a>
 		<a class="right carousel-control" href="#myCarousel1" data-slide="next"></a>
-		<a href="#" class="view-all">View all</a>
+		<a href="{% url 'talent:authors-listing' %}" class="view-all">View all</a>
 	</div>
 </section>
 <!-- contributors end -->
