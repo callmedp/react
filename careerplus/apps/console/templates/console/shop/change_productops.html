@@ -85,44 +85,44 @@
                   </div>
                 {% endif %}
                 <div class="item form-group ">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Welcome Mail <span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="">Welcome Mail <span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{object.mail_desc|safe}}
                   </div>
                 </div>
                 <hr>
                 <div class="item form-group ">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Description <span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="">Description <span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{object.description|safe}}
                   </div>
                 </div>
                 <hr>
                 
                 <div class="item form-group ">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">About <span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="">About <span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{object.about|safe}}
                   </div>
                 </div>
                 <hr>
                 
                 <div class="item form-group ">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">What u'll get <span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="">What u'll get <span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{object.buy_shine|safe}}
                   </div>
                 </div>
                 <hr>
                 
                 <div class="item form-group {% if op_form.call_desc.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ op_form.call_desc.id_for_label }}">Welcome Call <span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ op_form.call_desc.id_for_label }}">Welcome Call <span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{op_form.call_desc}}
                   </div>
                   <div class="alert">{{op_form.call_desc.errors}}</div>

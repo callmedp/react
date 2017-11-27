@@ -3,7 +3,7 @@ import random
 from django.contrib.sitemaps import Sitemap
 from django.conf import settings
 
-from shop.models import Product, Category
+from shop.models import Product, Category, ProductCategory
 from cms.models import Page
 from blog.models import Blog, Category as BlogCategory
 

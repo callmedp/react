@@ -99,18 +99,18 @@
               {% endif %}
 
               <div class="item form-group {% if form.name.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.name.id_for_label }}">Name <span class="required">*</span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.name.id_for_label }}">Name <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.name}}
                 </div>
                 <div class="alert">{{form.name.errors}}</div>
               </div>
 
               <div class="item form-group {% if form.upc.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.upc.id_for_label }}">UPC <span class="required">*</span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.upc.id_for_label }}">UPC <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.upc}}
                 </div>
                 <div class="alert">{{form.upc.errors}}</div>
@@ -124,68 +124,68 @@
               {% endfor %}
 
               <div class="item form-group {% if form.inr_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;INR Price&nbsp;<span class="required">*</span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;INR Price&nbsp;<span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.inr_price}}
                 </div>
                 <div class="alert">{{form.inr_price.errors}}</div>
               </div>
               <div class="item form-group {% if form.fake_inr_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.fake_inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;Fake INR Price&nbsp;<span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.fake_inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;Fake INR Price&nbsp;<span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.fake_inr_price}}
                 </div>
                 <div class="alert">{{form.fake_inr_price.errors}}</div>
               </div>
 
               <div class="item form-group {% if form.usd_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;USD Price&nbsp; <span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;USD Price&nbsp; <span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.usd_price}}
                 </div>
                 <div class="alert">{{form.usd_price.errors}}</div>
               </div>
               <div class="item form-group {% if form.fake_usd_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.fake_usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;Fake USD Price&nbsp;<span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.fake_usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;Fake USD Price&nbsp;<span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.fake_usd_price}}
                 </div>
                 <div class="alert">{{form.fake_usd_price.errors}}</div>
               </div>
 
               <div class="item form-group {% if form.aed_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;AED Price&nbsp;<span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;AED Price&nbsp;<span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.aed_price}}
                 </div>
                 <div class="alert">{{form.aed_price.errors}}</div>
               </div>
               <div class="item form-group {% if form.fake_aed_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.fake_aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;Fake AED Price&nbsp;<span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.fake_aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;Fake AED Price&nbsp;<span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.fake_aed_price}}
                 </div>
                 <div class="alert">{{form.fake_aed_price.errors}}</div>
               </div>
 
               <div class="item form-group {% if form.gbp_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;GBP Price&nbsp;<span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;GBP Price&nbsp;<span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.gbp_price}}
                 </div>
                 <div class="alert">{{form.gbp_price.errors}}</div>
               </div>
               <div class="item form-group {% if form.fake_gbp_price.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.fake_gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;Fake GBP Price&nbsp;<span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.fake_gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;Fake GBP Price&nbsp;<span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.fake_gbp_price}}
                 </div>
                 <div class="alert">{{form.fake_gbp_price.errors}}</div>

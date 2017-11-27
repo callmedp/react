@@ -208,13 +208,40 @@
     var todayDate = '' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
 
     function dateclass(el) {
+
+      var checkedFrom = el.hasClass('study_from');
+      var checkedTo = el.hasClass('study_to');
+
       el.daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
         maxDate:todayDate,
         autoUpdateInput: false,
       }, function(chosen_date) {
-        el.val(chosen_date.format('YYYY-MM-DD'));
+        debugger;
+        if(checkedFrom) {
+          var toDate = el.parent().next().find('.study_to').val();
+          var dateFrom = new Date(chosen_date.format('YYYY/MM/DD'))
+          var dateTo = new Date(toDate);
+
+          if(dateFrom <= dateTo) {
+            alert('from date')
+            return false;
+          }
+        }
+
+        if(checkedTo) {
+          var toDate = el.parent().prev().find('.study_from').val();
+          var dateFrom = new Date(chosen_date.format('YYYY/MM/DD'))
+          var dateTo = new Date(toDate);
+
+          if(dateFrom <= dateTo) {
+            alert('to date')
+            return false;
+          }
+        }
+
+        el.val(chosen_date.format('YYYY/MM/DD'));
       });
     }
 
@@ -290,7 +317,7 @@
 
     function orgAddForm(btn, prefix) {
       var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-      var row = $('.org-add:first').clone(false).get(0);
+      var row = $('.org-add:first').clone().get(0);
       $(row).removeAttr('id').insertAfter($('.org-add:last')).children('.hidden').removeClass('hidden');
 
       $(row).children().not(':last').children().each(function() {
@@ -307,28 +334,30 @@
       });
 
       $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+      dateclass($('#id_'+prefix+'-' + formCount + '-work_from'));
+      dateclass($('#id_'+prefix+'-' + formCount + '-work_to'));
 
-      $('#id_'+prefix+'-' + formCount + '-work_from').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput: false,
-        // startDate:'01/01/1960',
-        maxDate:todayDate,
-        // locale:{format: 'YYYY-MM-DD'}
-      }, function(chosen_date) {
-        $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
-      });
+      // $('#id_'+prefix+'-' + formCount + '-work_from').daterangepicker({
+      //   singleDatePicker: true,
+      //   showDropdowns: true,
+      //   autoUpdateInput: false,
+      //   // startDate:'01/01/1960',
+      //   maxDate:todayDate,
+      //   // locale:{format: 'YYYY-MM-DD'}
+      // }, function(chosen_date) {
+      //   $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
+      // });
 
-      $('#id_'+prefix+'-' + formCount + '-work_to').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput: false,
-        // startDate:'01/01/1960',
-        maxDate:todayDate,
-        // locale:{format: 'YYYY-MM-DD'}
-      }, function(chosen_date) {
-        $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
-      });
+      // $('#id_'+prefix+'-' + formCount + '-work_to').daterangepicker({
+      //   singleDatePicker: true,
+      //   showDropdowns: true,
+      //   autoUpdateInput: false,
+      //   // startDate:'01/01/1960',
+      //   maxDate:todayDate,
+      //   // locale:{format: 'YYYY-MM-DD'}
+      // }, function(chosen_date) {
+      //   $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
+      // });
 
       return false;
     }
@@ -336,7 +365,7 @@
     function eduAddForm(btn, prefix) {
       var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
       if (formCount < 10) {
-        var row = $(".edu-add:first").clone(false).get(0);
+        var row = $(".edu-add:first").clone().get(0);
         // Insert it after the last form
         $(row).removeAttr('id').hide().insertAfter(".edu-add:last").slideDown(300);
         // Remove the bits we don't want in the new row/form
@@ -348,8 +377,8 @@
           $(this).val('');
           $(this).attr('checked', false);
           $(this).attr("disabled", false);
-          $(this).removeClass("study_from");
-          $(this).removeClass("study_to");
+          // $(this).removeClass("study_from");
+          // $(this).removeClass("study_to");
         });
         // Add an event handler for the delete item/form link 
         $(row).find('.edu-delete').click(function() {
@@ -358,27 +387,29 @@
         // Update the total form count
         $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
 
-        $('#id_'+prefix+'-' + formCount + '-study_from').daterangepicker({
-          singleDatePicker: true,
-          showDropdowns: true,
-          autoUpdateInput: false,
-          // startDate:'01/01/1960',
-          maxDate:todayDate,
-          // locale:{format: 'YYYY-MM-DD'}
-        }, function(chosen_date) {
-          $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
-        });
+        dateclass($('#id_'+prefix+'-' + formCount + '-study_from'));
+        dateclass($('#id_'+prefix+'-' + formCount + '-study_to'));
+        // $('#id_'+prefix+'-' + formCount + '-study_from').daterangepicker({
+        //   singleDatePicker: true,
+        //   showDropdowns: true,
+        //   autoUpdateInput: false,
+        //   // startDate:'01/01/1960',
+        //   maxDate:todayDate,
+        //   // locale:{format: 'YYYY-MM-DD'}
+        // }, function(chosen_date) {
+        //   $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
+        // });
 
-        $('#id_'+prefix+'-' + formCount + '-study_to').daterangepicker({
-          singleDatePicker: true,
-          showDropdowns: true,
-          autoUpdateInput: false,
-          // startDate:'01/01/1960',
-          maxDate:todayDate,
-          // locale:{format: 'YYYY-MM-DD'}
-        }, function(chosen_date) {
-          $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));
-        });
+        // $('#id_'+prefix+'-' + formCount + '-study_to').daterangepicker({
+        //   singleDatePicker: true,
+        //   showDropdowns: true,
+        //   autoUpdateInput: false,
+        //   // startDate:'01/01/1960',
+        //   maxDate:todayDate,
+        //   // locale:{format: 'YYYY-MM-DD'}
+        // }, function(chosen_date) {
+        //   $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));
+        // });
       } // End if
       else {
         alert("Sorry, you can only enter a maximum of ten items.");
@@ -401,15 +432,15 @@
     $(".edu-delete").click(function() {
       return eduDeleteForm(this, 'from_education');
     });
-    $('.current_org').click(function() {
-      $('.work_to').attr('disabled', this.checked)
-       $('.work_to').prop('required',false);
-    });
+    // $('.current_org').click(function() {
+    //   $('.work_to').attr('disabled', this.checked)
+    //    $('.work_to').prop('required',false);
+    // });
 
-    $('.current_edu').click(function() {
-      $('.study_to').attr('disabled', this.checked)
-       $('.study_to').prop('required',false);
-    });
+    // $('.current_edu').click(function() {
+    //   $('.study_to').attr('disabled', this.checked)
+    //    $('.study_to').prop('required',false);
+    // });
   });
 </script>
 {% endblock js_block %}

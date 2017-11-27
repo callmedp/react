@@ -116,8 +116,8 @@
 			<!-- Importance in Market -->
             {% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
 			<div id="market" class="importance-market clearfix mb-40 scroll">
-				{% if category_obj.graph_image %}
 				<h2>Importance in Market</h2>
+				{% if category_obj.graph_image %}
 			    <div class="col-sm-6 box-panel">
 			    	<figure>
 			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
@@ -153,8 +153,19 @@
 					{% endif %}
 					{% if api_data.jFArea %}
 					    <div class="col-sm-12 box-panel mt-20 job-require">
-					    	<strong>Skill in high demand in following departments</strong>
-					    	<a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.0.0}}" target="_blank">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})</a> | <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.1.0}}" target="_blank">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})</a> | <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.2.0}}" target="_blank">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})</a>  
+					    	<strong>Jobs which require this skill in different functional areas
+					    	</strong>
+					    	{% for ls in api_data.jFArea %}
+					    	    {% if forloop.counter == 1 and ls %}
+					    		<a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+					    		{% endif %}
+					    		{% if forloop.counter == 2 and ls %}
+					    		| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+					    		{% endif %}
+					    		{% if forloop.counter == 3 and ls %}
+					    		| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+					    		{% endif %}
+					    	{% endfor %} 
 					    </div>
 					{% endif %}
 			    </div>
