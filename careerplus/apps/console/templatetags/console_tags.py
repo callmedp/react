@@ -60,6 +60,9 @@ def has_group(user, grp_list):
 def widget_type(field):
   return field.field.widget.__class__.__name__
 
+@register.filter(name='test_chk')
+def test_chk(field):
+  return field.field.widget.__class__.__name__
 
 
 @register.filter(name='get_item')

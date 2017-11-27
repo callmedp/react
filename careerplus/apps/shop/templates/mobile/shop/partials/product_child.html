@@ -4,7 +4,15 @@
 		<h2>Combo includes</h2>
 		<ul class="combos grey-bg p-10">
 			{% for i in combo_list  %}
-				<li><a href="{{i.url}}">{{i.name}}</a></li>
+				<li>
+				<a href="{{i.url}}">
+				{% if i.heading %}
+	              {{i.heading}}
+	            {% else %}
+	              {{i.name}}  
+	            {% endif %}
+	            </a>
+				</li>
 			{% endfor %}
 		</ul>
 	</div><!-- Combo includes ends here -->

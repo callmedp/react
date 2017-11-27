@@ -108,20 +108,34 @@ $(function(){
                     data = "?page="+ page+ "&slug=" + slug;
                     $.ajax({
                         url: "/article/ajax/article-detail-loading/" + data,
-                        dataType: "html",
-                        success: function(html) {
+                        type: "GET",
+                        dataType: "json",
+                        // dataType: "html",
+                        success: function(data) {
+                            var article_url = data.url;
                             $("#load_more").remove();
-                            $('#related-container').append(html);
+                            $('#related-container').append(data.article_detail);
                             ga('send', 'pageview');
                         },
                         failure: function(response){
-                            alert("Something went wrong.")
+                            //alert("Something went wrong.")
                         }
                     });
                 }
                 
             }
         });
+
+        // $(document).on("scroll", function(event) {
+        //     var scrollPos = $(document).scrollTop() + 50;
+        //     $('.scroll-page').each(function () {
+        //         var currLink = $(this);
+        //         if (currLink.offset().top <= scrollPos && currLink.offset().top + currLink.outerHeight() > scrollPos) {
+        //             MyGA.sendVirtualPage('page path');
+        //             history.pushState(null, null, url);
+        //         }
+        //     });
+        // });
     });
 
 });

@@ -246,7 +246,24 @@
                         name:{{obj.order.first_name}}<br>
                         mobile:{{obj.order.mobile}}
                       </td>
-                      <td>{{obj.product}}</td>
+                      <td>
+                          {% if obj.parent and obj.is_variation %}
+                            <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+                          {% endif %}
+                              {{obj.product.get_name}}<br/>
+                          {%if obj.product.get_exp_db %}
+                              <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+                          {% endif %}
+                          {% if obj.product.get_studymode_db %}
+                              <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+                          {% endif %}
+                          {% if obj.product.get_coursetype_db %}
+                              <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+                          {% endif %}
+                          {% if obj.product.get_duration_db %}
+                              <strong>Duration:</strong> {{obj.product.get_duration_db}}
+                          {% endif %}
+                      </td>
                       <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>User Category</td>

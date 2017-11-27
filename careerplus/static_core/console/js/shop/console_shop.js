@@ -857,6 +857,19 @@
 		};	  
 	  	
 	  }; 
+
+	 function scrollReload () {
+          if (localStorage) {
+              var posReader = localStorage["posStorage"];
+              if (posReader) {
+                  console.log(posReader);
+                  $(window).scrollTop(posReader);
+                  localStorage.removeItem("posStorage");
+              }
+              return true;
+          }
+          return false;
+        }
 	   
 	   
 	$(document).ready(function() {
@@ -887,8 +900,14 @@
 
 		init_product_structure_change();
 		init_product_faq_change();
-
-
+		scrollReload();
+		$( ".save_scroll" ).click(function() {
+		  if (localStorage) {
+              	  localStorage["posStorage"] = $(window).scrollTop();
+          }
+          return true;
+		});
+		
 	});	
 
 

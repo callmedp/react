@@ -161,47 +161,47 @@
                     {% endif %}
 
                     <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Modified</label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="">Modified</label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         <label style="padding-top:8px;">{{object.modified|naturaltime}}</label>
                       </div>
                     </div>
 
 
                     <div class="item form-group {% if form.name.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.name.id_for_label }}">Name <span class="required">*</span>
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.name.id_for_label }}">Name <span class="required">*</span>
                       </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         {{form.name}}
                       </div>
                       <div class="alert">{{form.name.errors}}</div>
                     </div>
 
                     <div class="item form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Slug</label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="">Slug</label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         <label style="padding-top:8px;">{{object.slug}}</label>
                       </div>
                     </div>
 
                     <div class="item form-group {% if form.product_class.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Class</label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="">Class</label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         <label style="padding-top:8px;">{{object.product_class.name}}</label>
                       </div>
                     </div>
 
                     <div class="item form-group {% if form.type_product.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.type_product.id_for_label }}">Type </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.type_product.id_for_label }}">Type </label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         <label style="padding-top:8px;">{{object.get_type}}</label>
                       </div>
                     </div>
 
                     <div class="item form-group {% if form.upc.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.upc.id_for_label }}">UPC <span class="required">*</span>
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.upc.id_for_label }}">UPC <span class="required">*</span>
                       </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         {{form.upc}}
                       </div>
                       <div class="alert">{{form.upc.errors}}</div>
@@ -209,27 +209,27 @@
 
                     
                     <div class="item form-group {% if form.about.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.about.id_for_label }}">About <span class="required">*</span>
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.about.id_for_label }}">About <span class="required">*</span>
                       </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         {{form.about}}
                       </div>
                       <div class="alert">{{form.about.errors}}</div>
                     </div>
 
                     <div class="item form-group {% if form.description.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.description.id_for_label }}">Description <span class="required">*</span>
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.description.id_for_label }}">Description <span class="required">*</span>
                       </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         {{form.description}}
                       </div>
                       <div class="alert">{{form.description.errors}}</div>
                     </div>
 
                     <div class="item form-group {% if form.buy_shine.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.buy_shine.id_for_label }}">What u'll get <span class="required">*</span>
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.buy_shine.id_for_label }}">What u'll get <span class="required">*</span>
                       </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         {{form.buy_shine}}
                       </div>
                       <div class="alert">{{form.buy_shine.errors}}</div>
@@ -241,7 +241,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                       <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-success save_scroll">Submit</button>
                       </div>
                     </div>
                   </form>
@@ -272,15 +272,14 @@
                     {% for field in attribute_form %}
                         {% if 'attribute' in field.id_for_label %}
                             {% include "console/vendor/form_field.html" %}
-                            
                         {% endif %}
                     {% endfor %}
                     
 
                     <div class="item form-group {% if attribute_form.comment.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ attribute_form.comment.id_for_label }}">Comment <span class="required"></span>
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ attribute_form.comment.id_for_label }}">Comment <span class="required"></span>
                       </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-7 col-sm-7 col-xs-12">
                         {{attribute_form.comment}}
                       </div>
                       <div class="alert" style="margin-left:100px;">{{attribute_form.comment.errors}}</div>
@@ -291,7 +290,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                       <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-success save_scroll">Submit</button>
                       </div>
                     </div>
                   </form>
@@ -322,7 +321,7 @@
                     <div class="inter-related-parent-div">    
                     {% for inline_admin_form in prdchapter_formset.forms %}
                     <div class="panel {% if forloop.last %} {% endif %}">
-                      <a class="panel-heading collapsed" role="tab" id="heading3{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion3" href="#collapse3{{forloop.counter}}" aria-expanded="false" aria-controls="collapse3{{forloop.counter}}">
+                      <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading3{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion3" href="#collapse3{{forloop.counter}}" aria-expanded="false" aria-controls="collapse3{{forloop.counter}}">
                         {% if  inline_admin_form|get_instance %}
                         <h4 class="panel-title">{{inline_admin_form|get_instance}}</h4>
 
@@ -332,7 +331,7 @@
 
                           
                       </a>
-                      <div id="collapse3{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading3{{forloop.counter}}" aria-expanded="false" style="height: 0px;">
+                      <div id="collapse3{{forloop.counter}}" class="panel-collapse collapse {% if  inline_admin_form.errors %}in{% endif %}" role="tabpanel" aria-labelledby="heading3{{forloop.counter}}" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}>
                         <div class="panel-body">
                             {% if  inline_admin_form.DELETE %}
                               <div class="pull-left">
@@ -349,35 +348,35 @@
                             {% endfor %}
                         
                           <div class="item form-group {% if inline_admin_form.heading.errors %}bad{% endif %}">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.heading.id_for_label }}">Heading <span class="required">*</span>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.heading.id_for_label }}">Heading <span class="required">*</span>
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
                               {{inline_admin_form.heading}}
                             </div>
                             <div class="alert">{{inline_admin_form.heading.errors}}</div>
                           </div>
                           <div class="item form-group {% if inline_admin_form.answer.errors %}bad{% endif %}">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.answer.id_for_label }}">Content <span class="required">*</span>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.answer.id_for_label }}">Content <span class="required"></span>
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
                               {{inline_admin_form.answer}}
                             </div>
                             <div class="alert">{{inline_admin_form.answer.errors}}</div>
                           </div>
                           
                           <div class="item form-group {% if inline_admin_form.status.errors %}bad{% endif %}">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.status.id_for_label }}">Active <span class="required"></span>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.status.id_for_label }}">Active <span class="required"></span>
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
                               {{inline_admin_form.status}}
                             </div>
                             <div class="alert">{{inline_admin_form.status.errors}}</div>
                           </div>
                           
                           <div class="item form-group {% if inline_admin_form.ordering.errors %}bad{% endif %}">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.ordering.id_for_label }}">Sort Order <span class="required"></span>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.ordering.id_for_label }}">Sort Order <span class="required"></span>
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
                               {{inline_admin_form.ordering}}
                             </div>
                             <div class="alert">{{inline_admin_form.ordering.errors}}</div>
@@ -396,7 +395,7 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
-                          <button type="submit" class="btn btn-success">Submit</button>
+                          <button type="submit" class="btn btn-success save_scroll">Submit</button>
                         </div>
                       </div>
                     
@@ -428,12 +427,12 @@
                   {% endif %}
 
                   <div class="item form-group {% if country_form.countries.errors %}bad{% endif %}">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ country_form.countries.id_for_label }}">Countries Visible <span class="required"></span>
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ country_form.countries.id_for_label }}">Countries Visible <span class="required">*</span>
                     </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-md-7 col-sm-7 col-xs-12">
                       {{country_form.countries}}
                     </div>
-                    <div class="alert" style="margin-left:100px;">{{country_form.countries.errors}}</div>
+                    <div class="alert" >{{country_form.countries.errors}}</div>
                   </div>
                   
                   
@@ -442,7 +441,7 @@
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                      <button type="submit" class="btn btn-success">Submit</button>
+                      <button type="submit" class="btn btn-success save_scroll">Submit</button>
                     </div>
                   </div>
                 </form>
@@ -474,68 +473,68 @@
                 {% endif %}
 
                 <div class="item form-group {% if price_form.inr_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;INR Price&nbsp;<span class="required">*</span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;INR Price&nbsp;<span class="required">*</span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.inr_price}}
                   </div>
                   <div class="alert">{{price_form.inr_price.errors}}</div>
                 </div>
                 <div class="item form-group {% if price_form.fake_inr_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.fake_inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;Fake INR Price&nbsp;<span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.fake_inr_price.id_for_label }}">(<i class="fa fa-inr"></i>)&nbsp;Fake INR Price&nbsp;<span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.fake_inr_price}}
                   </div>
                   <div class="alert">{{price_form.fake_inr_price.errors}}</div>
                 </div>
 
                 <div class="item form-group {% if price_form.usd_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;USD Price&nbsp; <span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;USD Price&nbsp; <span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.usd_price}}
                   </div>
                   <div class="alert">{{price_form.usd_price.errors}}</div>
                 </div>
                 <div class="item form-group {% if price_form.fake_usd_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.fake_usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;Fake USD Price&nbsp;<span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.fake_usd_price.id_for_label }}">(<i class="fa fa-usd"></i>)&nbsp;Fake USD Price&nbsp;<span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.fake_usd_price}}
                   </div>
                   <div class="alert">{{price_form.fake_usd_price.errors}}</div>
                 </div>
 
                 <div class="item form-group {% if price_form.aed_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;AED Price&nbsp;<span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;AED Price&nbsp;<span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.aed_price}}
                   </div>
                   <div class="alert">{{price_form.aed_price.errors}}</div>
                 </div>
                 <div class="item form-group {% if price_form.fake_aed_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.fake_aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;Fake AED Price&nbsp;<span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.fake_aed_price.id_for_label }}">(<i class="fa fa-money"></i>)&nbsp;Fake AED Price&nbsp;<span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.fake_aed_price}}
                   </div>
                   <div class="alert">{{price_form.fake_aed_price.errors}}</div>
                 </div>
 
                 <div class="item form-group {% if price_form.gbp_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;GBP Price&nbsp;<span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;GBP Price&nbsp;<span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.gbp_price}}
                   </div>
                   <div class="alert">{{price_form.gbp_price.errors}}</div>
                 </div>
                 <div class="item form-group {% if price_form.fake_gbp_price.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ price_form.fake_gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;Fake GBP Price&nbsp;<span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ price_form.fake_gbp_price.id_for_label }}">(<i class="fa fa-gbp"></i>)&nbsp;Fake GBP Price&nbsp;<span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{price_form.fake_gbp_price}}
                   </div>
                   <div class="alert">{{price_form.fake_gbp_price.errors}}</div>
@@ -546,7 +545,7 @@
                 <div class="ln_solid"></div>
                 <div class="form-group">
                   <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="submit" class="btn btn-success save_scroll">Submit</button>
                   </div>
                 </div>
                 </form>
@@ -554,8 +553,9 @@
           </div>
         </div>
         {% if object.type_product == 1 %}
-              
-        <div class="x_panel">
+        {% if prdvars_formset.forms %}
+            
+          <div class="x_panel">
           <div class="x_title">
             <h2><i class="fa fa-thumb-tack"></i>Variations</h2>
             <ul class="nav navbar-right panel_toolbox">
@@ -579,7 +579,7 @@
                   <div class="inter-related-parent-div">    
                   {% for inline_admin_form in prdvars_formset.forms %}
                   <div class="panel {% if forloop.last %} {% endif %}">
-                    <a class="panel-heading collapsed" role="tab" id="heading1{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion1" href="#collapse1{{forloop.counter}}" aria-expanded="false" aria-controls="collapse1{{forloop.counter}}">
+                    <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading1{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion1" href="#collapse1{{forloop.counter}}" aria-expanded="false" aria-controls="collapse1{{forloop.counter}}">
                       {% if  inline_admin_form|get_instance %}
                       <h4 class="panel-title">Variation Product:&nbsp;{{inline_admin_form|get_instance}}</h4>
 
@@ -587,7 +587,7 @@
 
                         
                     </a>
-                    <div id="collapse1{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1{{forloop.counter}}" aria-expanded="false" style="height: 0px;">
+                    <div id="collapse1{{forloop.counter}}" class="panel-collapse collapse {% if inline_admin_form.errors %}in{% endif %}" role="tabpanel" aria-labelledby="heading1{{forloop.counter}}" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}>
                       <div class="panel-body">
                             <div class="pull-left">
                               <a href="{{inline_admin_form|get_edit_url}}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
@@ -610,18 +610,18 @@
                           {% endfor %}
                       
                         <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Active <span class="required"></span>
+                          <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Active <span class="required"></span>
                           </label>
-                          <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="col-md-7 col-sm-7 col-xs-12">
                             {{inline_admin_form.active}}
                           </div>
                           <div class="alert">{{inline_admin_form.active.errors}}</div>
                         </div>
                         
                         <div class="item form-group {% if inline_admin_form.sort_order.errors %}bad{% endif %}">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">Sort Order <span class="required"></span>
+                          <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">Sort Order <span class="required"></span>
                           </label>
-                          <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="col-md-7 col-sm-7 col-xs-12">
                             {{inline_admin_form.sort_order}}
                           </div>
                           <div class="alert">{{inline_admin_form.sort_order.errors}}</div>
@@ -640,7 +640,7 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                       <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
-                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-success save_scroll">Submit</button>
                       </div>
                     </div>
                   
@@ -648,6 +648,8 @@
                 </div>  
           </div>
         </div>
+        {% endif %}       
+        
         {%endif %}
         <div class="x_panel">
           <div class="x_title">
@@ -672,8 +674,8 @@
                       {% endif %}
                     <div class="inter-related-parent-div">    
                     {% for inline_admin_form in prdfaq_formset.forms %}
-                    <div class="panel {% if forloop.last %} {% endif %}">
-                      <a class="panel-heading collapsed" role="tab" id="heading2{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion2" href="#collapse2{{forloop.counter}}" aria-expanded="false" aria-controls="collapse2{{forloop.counter}}">
+                    <div class="panel ">
+                      <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion2" href="#collapse2{{forloop.counter}}" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse2{{forloop.counter}}">
                         {% if  inline_admin_form|get_instance %}
                         <h4 class="panel-title">FAQ:&nbsp;{{inline_admin_form|get_instance}}</h4>
 
@@ -683,7 +685,10 @@
 
                           
                       </a>
-                      <div id="collapse2{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading2{{forloop.counter}}" aria-expanded="false" style="height: 0px;">
+                      <div id="collapse2{{forloop.counter}}" class="panel-collapse collapse
+                      {% if inline_admin_form.errors %}in{% endif %}" 
+                      {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}
+                      role="tabpanel" aria-labelledby="heading2{{forloop.counter}}" >
                         <div class="panel-body">
                             {% if  inline_admin_form.DELETE %}
                               <div class="pull-left">
@@ -700,27 +705,27 @@
                             {% endfor %}
                         
                             <div class="item form-group {% if inline_admin_form.question.errors %}bad{% endif %}">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.question.id_for_label }}">Question <span class="required">*</span>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.question.id_for_label }}">Question <span class="required">*</span>
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
                               {{inline_admin_form.question}}
                             </div>
                             <div class="alert">{{inline_admin_form.question.errors}}</div>
                           </div>
                           
                           <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Active <span class="required"></span>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Active <span class="required"></span>
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
                               {{inline_admin_form.active}}
                             </div>
                             <div class="alert">{{inline_admin_form.active.errors}}</div>
                           </div>
                           
                           <div class="item form-group {% if inline_admin_form.question_order.errors %}bad{% endif %}">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.question_order.id_for_label }}">Sort Order <span class="required"></span>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.question_order.id_for_label }}">Sort Order <span class="required"></span>
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
                               {{inline_admin_form.question_order}}
                             </div>
                             <div class="alert">{{inline_admin_form.question_order.errors}}</div>
@@ -739,7 +744,7 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
-                          <button type="submit" class="btn btn-success">Submit</button>
+                          <button type="submit" class="btn btn-success save_scroll">Submit</button>
                         </div>
                       </div>
                     
@@ -779,6 +784,8 @@
       <!-- Custom Theme Scripts -->
       <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
       <script>
+        
+
        $(document).ready(function() {
           $('.click-modal').click(function(){
             let msg = $(this).data("msg");

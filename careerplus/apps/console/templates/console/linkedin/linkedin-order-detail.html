@@ -34,7 +34,23 @@
             <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Order item Detail <small>Item name: {{object.product.name}}({{object.product.get_exp}})</small></h2>
+                <h2>Order item Detail <small>Item name: 
+                            {% if object.parent and object.is_variation %}
+                              <strong>{{object.parent.product.get_name}}{% if object.parent.product.get_exp_db %} - Exp: {{object.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+                            {% endif %}
+                                {{object.product.get_name}}<br/>
+                            {%if object.product.get_exp_db %}
+                                <strong>Exp:</strong> {{object.product.get_exp_db}}<br/>
+                            {% endif %}
+                            {% if object.product.get_studymode_db %}
+                                <strong>Study mode:</strong> {{object.product.get_studymode_db}}<br/>
+                            {% endif %}
+                            {% if object.product.get_coursetype_db %}
+                                <strong>Course type:</strong> {{object.product.get_coursetype_db}}<br/>
+                            {% endif %}
+                            {% if object.product.get_duration_db %}
+                                <strong>Duration:</strong> {{object.product.get_duration_db}}
+                            {% endif %}</small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
