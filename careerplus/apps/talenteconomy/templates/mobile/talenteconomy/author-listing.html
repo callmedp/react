@@ -1,0 +1,330 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   Talent Economy: Career Skilling for a future ready India
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right">
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block container %}        
+        
+
+        <div class="body-wrapper ">
+            
+<!-- Trending articles Starts here -->
+<div class="article-category talent-gr">
+    <div class="content">
+      <ul class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Talent Economy</a></li> 
+        <li class="active">Talent Economy</li> 
+      </ul>
+
+      <h1>Contributors</h1>
+
+    </div>
+    <img src="{% static 'shinelearn/images/mobile/common/author-img.jpg' %}" class="img-responsive">
+</div><!-- Trending articles Ends here -->
+
+<!-- Starts of talent-economy list -->
+<section class="content-box pt-0 pb-0">
+  <!-- box panel starts here -->
+
+<div class="pt-20 pb-20">
+<div class="box mb-20">
+    <div class="author-item">
+      <span class="author-img"><img src="images/ajay-misra.jpg"></span>
+      <div class="author-detail">
+        <h2 class="mb-0 fs-16">Ajay Misra <sup></sup></h2>
+        <span class="spacer c-666">/</span> <span class="c-666 fs-12">CEO</span>
+        <p class="fs-12"><a href="#"><strong>35 articles</strong></a></p>
+        <p class="fs-12 italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada.</p>
+        <ul class="mt-5">
+          <li class="icon-fbGrey"><a href="#">facebook</a></li>
+          <li class="icon-twGrey"><a href="#">twitter</a></li>
+          <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+        </ul>
+      </div>
+    </div><!-- ends of author item -->
+  </div><!-- ends of Box item -->
+
+  <div class="box mb-20">
+    <div class="author-item">
+      <span class="author-img"><img src="images/pallavi-sh.jpg"></span>
+      <div class="author-detail">
+        <h2 class="mb-0 fs-16">Pallavi Sharma <sup></sup></h2>
+        <span class="spacer c-666">/</span> <span class="c-666 fs-12">Chairman</span>
+        <p class="fs-12"><a href="#"><strong>35 articles</strong></a></p>
+        <p class="fs-12 italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada.</p>
+        <ul class="mt-5">
+          <li class="icon-fbGrey"><a href="#">facebook</a></li>
+          <li class="icon-twGrey"><a href="#">twitter</a></li>
+          <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+        </ul>
+      </div>
+    </div><!-- ends of author item -->
+  </div><!-- ends of Box item --><div class="box mb-20">
+    <div class="author-item">
+      <span class="author-img"><img src="images/ajay-misra.jpg"></span>
+      <div class="author-detail">
+        <h2 class="mb-0 fs-16">Ajay Misra <sup></sup></h2>
+        <span class="spacer c-666">/</span> <span class="c-666 fs-12">CEO</span>
+        <p class="fs-12"><a href="#"><strong>35 articles</strong></a></p>
+        <p class="fs-12 italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada.</p>
+        <ul class="mt-5">
+          <li class="icon-fbGrey"><a href="#">facebook</a></li>
+          <li class="icon-twGrey"><a href="#">twitter</a></li>
+          <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+        </ul>
+      </div>
+    </div><!-- ends of author item -->
+  </div><!-- ends of Box item -->
+
+  <div class="box mb-20">
+    <div class="author-item">
+      <span class="author-img"><img src="images/pallavi-sh.jpg"></span>
+      <div class="author-detail">
+        <h2 class="mb-0 fs-16">Pallavi Sharma <sup></sup></h2>
+        <span class="spacer c-666">/</span> <span class="c-666 fs-12">Chairman</span>
+        <p class="fs-12"><a href="#"><strong>35 articles</strong></a></p>
+        <p class="fs-12 italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada.</p>
+        <ul class="mt-5">
+          <li class="icon-fbGrey"><a href="#">facebook</a></li>
+          <li class="icon-twGrey"><a href="#">twitter</a></li>
+          <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+        </ul>
+      </div>
+    </div><!-- ends of author item -->
+  </div><!-- ends of Box item --><div class="box mb-20">
+    <div class="author-item">
+      <span class="author-img"><img src="images/ajay-misra.jpg"></span>
+      <div class="author-detail">
+        <h2 class="mb-0 fs-16">Ajay Misra <sup></sup></h2>
+        <span class="spacer c-666">/</span> <span class="c-666 fs-12">CEO</span>
+        <p class="fs-12"><a href="#"><strong>35 articles</strong></a></p>
+        <p class="fs-12 italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada.</p>
+        <ul class="mt-5">
+          <li class="icon-fbGrey"><a href="#">facebook</a></li>
+          <li class="icon-twGrey"><a href="#">twitter</a></li>
+          <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+        </ul>
+      </div>
+    </div><!-- ends of author item -->
+  </div><!-- ends of Box item -->
+
+  <div class="box mb-20">
+    <div class="author-item">
+      <span class="author-img"><img src="images/pallavi-sh.jpg"></span>
+      <div class="author-detail">
+        <h2 class="mb-0 fs-16">Pallavi Sharma <sup></sup></h2>
+        <span class="spacer c-666">/</span> <span class="c-666 fs-12">Chairman</span>
+        <p class="fs-12"><a href="#"><strong>35 articles</strong></a></p>
+        <p class="fs-12 italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada.</p>
+        <ul class="mt-5">
+          <li class="icon-fbGrey"><a href="#">facebook</a></li>
+          <li class="icon-twGrey"><a href="#">twitter</a></li>
+          <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+        </ul>
+      </div>
+    </div><!-- ends of author item -->
+  </div><!-- ends of Box item -->
+</div>
+
+
+  <div class="box-panel row ">
+    <p class="semi-head">You may also like</p>
+		 
+		<div class="media article-list">
+          <a title="Government Jobs" href="blog-detail.html">
+            <figure class="media-left">
+              <img class="media-object w-auto" src="images/article-list-1.jpg" alt="...">
+            </figure>
+            <div class="media-body rel">
+              <span class="article-tag">Project Management</span>
+              <h3 class="media-heading">8 Reasons to consider a career change</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">Ajay Mishra</span>
+                <span class="view-forward pull-right">
+                	<figure class="icon-forward"></figure> 43 
+                	<figure class="icon-view icon-grey-view ml-10"></figure> 21
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+		<div class="media article-list">
+          <a title="Government Jobs" href="blog-detail.html">
+            <figure class="media-left">
+              <img class="media-object w-auto" src="images/article-list-2.jpg" alt="...">
+            </figure>
+            <div class="media-body rel">
+              <span class="article-tag">Supply Chain</span>
+              <h3 class="media-heading">Career management: Defining the process and purpose</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">Ajay Mishra</span>
+                <span class="view-forward pull-right">
+                	<figure class="icon-forward"></figure> 43 
+                	<figure class="icon-view icon-grey-view ml-10"></figure> 21
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+		<div class="media article-list">
+          <a title="Government Jobs" href="blog-detail.html">
+            <figure class="media-left">
+              <img class="media-object w-auto" src="images/article-list-3.jpg" alt="...">
+            </figure>
+            <div class="media-body rel">
+              <span class="article-tag">Six Sigma</span>
+              <h3 class="media-heading">8 Reasons to consider a career change</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">Ajay Mishra</span>
+                <span class="view-forward pull-right">
+                	<figure class="icon-forward"></figure> 43 
+                	<figure class="icon-view icon-grey-view ml-10"></figure> 21
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+		<div class="media article-list">
+          <a title="Government Jobs" href="blog-detail.html">
+            <figure class="media-left">
+              <img class="media-object w-auto" src="images/article-list-1.jpg" alt="...">
+            </figure>
+            <div class="media-body rel">
+              <span class="article-tag">Project Management</span>
+              <h3 class="media-heading">8 Reasons to consider a career change</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">Ajay Mishra</span>
+                <span class="view-forward pull-right">
+                	<figure class="icon-forward"></figure> 43 
+                	<figure class="icon-view icon-grey-view ml-10"></figure> 21
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+		<div class="media article-list">
+          <a title="Government Jobs" href="blog-detail.html">
+            <figure class="media-left">
+              <img class="media-object w-auto" src="images/article-list-2.jpg" alt="...">
+            </figure>
+            <div class="media-body rel">
+              <span class="article-tag">Supply Chain</span>
+              <h3 class="media-heading">Career management: Defining the process and purpose</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">Ajay Mishra</span>
+                <span class="view-forward pull-right">
+                	<figure class="icon-forward"></figure> 43 
+                	<figure class="icon-view icon-grey-view ml-10"></figure> 21
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+		<div class="media article-list">
+          <a title="Government Jobs" href="blog-detail.html">
+            <figure class="media-left">
+              <img class="media-object w-auto" src="images/article-list-3.jpg" alt="...">
+            </figure>
+            <div class="media-body rel">
+              <span class="article-tag">Six Sigma</span>
+              <h3 class="media-heading">8 Reasons to consider a career change</h3>
+
+              <div class="blog-author fs-11">
+                <span class="editor">Ajay Mishra</span>
+                <span class="view-forward pull-right">
+                	<figure class="icon-forward"></figure> 43 
+                	<figure class="icon-view icon-grey-view ml-10"></figure> 21
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+	</div><!-- box panel ends here -->
+</section><!-- End of talent-economy list -->
+
+        </div>
+
+        
+        
+    </div>
+    
+
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script> 
+    <!-- Include all compiled plugins (below), or include individual files as needed --> 
+     <script src="js/multilevelnav.js"></script>
+    <script src="js/jquery.simpler-sidebar.js"> </script> 
+    <script type="text/javascript" src="js/smk-accordion.js"></script>
+    <script type="text/javascript" src="js/slick.js"></script>
+    <script src="js/base.js"> </script>
+
+    
+    <script src="js/slick.js" type="text/javascript" charset="utf-8"></script>
+
+
+    
+    <link rel="stylesheet" href="css/images.css">
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}
