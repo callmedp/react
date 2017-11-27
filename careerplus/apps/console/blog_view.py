@@ -8,9 +8,14 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
+from django.conf import settings
 
 from blog.models import Tag, Category, Blog, Comment
 from blog.mixins import PaginationMixin
+
+from .decorators import (
+    Decorate,
+    check_group, stop_browser_cache)
 
 from .blog_form import (
 	TagAddForm,
@@ -24,6 +29,8 @@ from .blog_form import (
 	CommentActionForm,)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class CommentModerateView(UpdateView):
 	model = Comment
 	template_name = 'console/blog/comment-moderation-update.html'
@@ -65,6 +72,8 @@ class CommentModerateView(UpdateView):
 		return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class CommentModerateListView(ListView, PaginationMixin):
 
 	context_object_name = 'comment_list'
@@ -130,6 +139,8 @@ class CommentModerateListView(ListView, PaginationMixin):
 		return queryset
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class ArticleUpdateView(UpdateView):
 	model = Blog
 	template_name = 'console/blog/article-change.html'
@@ -169,6 +180,8 @@ class ArticleUpdateView(UpdateView):
 		return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class ArticleAddView(FormView):
 	template_name = "console/blog/article-add.html"
 	success_url = "/console/blog/article/"
@@ -204,6 +217,8 @@ class ArticleAddView(FormView):
 		return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class ArticleListView(ListView, PaginationMixin):
 
 	context_object_name = 'article_list'
@@ -278,6 +293,8 @@ class ArticleListView(ListView, PaginationMixin):
 		return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by')
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class CategoryUpdateView(UpdateView):
 	model = Category
 	template_name = 'console/blog/category-change.html'
@@ -316,6 +333,8 @@ class CategoryUpdateView(UpdateView):
 		return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class CategoryListView(ListView, PaginationMixin):
 
 	context_object_name = 'category_list'
@@ -353,6 +372,8 @@ class CategoryListView(ListView, PaginationMixin):
 		return queryset
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class CategoryAddView(FormView):
 	template_name = "console/blog/category-add.html"
 	success_url = "/console/blog/category/"
@@ -387,6 +408,8 @@ class CategoryAddView(FormView):
 		return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class TagUpdateView(UpdateView):
 	model = Tag
 	template_name = 'console/blog/tag-change.html'
@@ -423,6 +446,8 @@ class TagUpdateView(UpdateView):
 		return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 @method_decorator(permission_required('blog.add_tag', login_url='/console/login/'), name='dispatch')
 class TagListView(ListView, PaginationMixin):
 
@@ -461,6 +486,8 @@ class TagListView(ListView, PaginationMixin):
 		return queryset
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.BLOG_WRITER_GROUP_LIST]))
 class TagAddView(FormView):
 	template_name = "console/blog/tag-add.html"
 	success_url = "/console/blog/tag/"

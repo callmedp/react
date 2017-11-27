@@ -580,7 +580,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             for cmb in combos:
                 combo_list.append({
                     'pk': cmb.pk,
-                    'name': cmb.heading,
+                    'name': cmb.name,
+                    'heading': cmb.heading if cmb.heading else '',
                     'url': cmb.get_url(relative=True)
                 })
             combo_dict.update({
@@ -723,6 +724,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     fbt_list.append({
                         'id': pv.id,
                         'label': pv.name,
+                        'heading':pv.heading if pv.heading else '',
                         'mode': pv.get_studymode(),
                         'duration': pv.get_duration(),
                         'type': pv.get_coursetype(),
@@ -739,6 +741,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     fbt_list.append({
                         'id': pv.id,
                         'label': pv.name,
+                        'heading':pv.heading if pv.heading else '',
                         'country': pv.get_profile_country(),
                         'experience': pv.get_exp(),
                         'inr_price': float(pv.inr_price),
@@ -770,6 +773,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     pop_list.append({
                         'id': pv.id,
                         'label': pv.name,
+                        'heading':pv.heading if pv.heading else '',
                         'vendor': pv.vendor.name,
                         'vendor_image': pv.vendor.image.url if pv.vendor.image else None,
                         'url': pv.get_url(relative=True),
@@ -792,6 +796,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     pop_list.append({
                         'id': pv.id,
                         'label': pv.name,
+                        'heading':pv.heading if pv.heading else '',
                         'experience': pv.get_exp(),
                         'url': pv.get_url(relative=True),
                         'inr_price': float(pv.inr_price),

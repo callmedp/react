@@ -161,7 +161,7 @@ function updateUnCheckedPrice(this_obj){
             // actual price update
             actual_total = actual_total - actual_price;
 
-            if (actual_price > sum_price){
+            if (actual_total > sum_price){
                 var show_price = 'Rs. ' + actual_total.toString() + '/';
                 $('#id-total-actual-price').text(show_price);
                 $("#id-total-actual-price").attr("total-actual-price", actual_total);
