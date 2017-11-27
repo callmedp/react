@@ -42,17 +42,70 @@
         <div class="col-md-9 col-sm-12">
 
           <!-- content start -->
-          
+          {% include "detail-article-list.html" %}
 
         </div>
 		<!-- left content end -->
 
 		<!-- right content start -->
 		<div class="col-md-3 col-sm-12">
-		<!-- Popular Courses -->
+			
+			<!-- take me to -->
+			{% if categories %}
+			<div class="take-me-to box-panel col-sm-6 col-md-12 mb-40">
+				<h2 class="heading-right-talent">take me to</h2>
+				<ul>
+                	{% for category in categories %}
+					<li>
+						<a href="{{category.url}}" title="{{category.title}}">
+							<figure>
+								{% if category.image %}
+								<img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
+								{% endif %}
+							</figure>
+							<h4>{{category.name}}</h4>
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
 
-
-		<!-- take me to -->
+			<!-- Popular Courses -->
+			{% if popular_courses %}
+			<div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
+				<h2 class="heading-right-talent">Popular Courses</h2>
+				<ul>
+					{% for pCourses in popular_courses %}
+					<li>
+						<a href="#">
+						  <h3>{{pCourses.name}}</h3>
+						  <div class="rating-box">
+							  {% for star in pCourses.star %}
+							  	{% if star == '*' %}
+							      <figure class="full-star"></figure>
+							    {% endif %}
+							  	{% if star == '+' %}
+							      <figure class="half-star"></figure>
+							    {% endif %}
+							  	{% if star == '-' %}
+							      <figure class="blank-star"></figure>
+							    {% endif %}
+						      {% endfor %}
+						      <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
+						  </div>
+						  <span class="jobs-available">
+						    <strong>21735</strong>  jobs available
+						  </span>
+						  <span class="people-bought">
+						    <strong>{{pCourse.buy_count}}</strong>  people bought
+						  </span>
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
 
 
 		</div>

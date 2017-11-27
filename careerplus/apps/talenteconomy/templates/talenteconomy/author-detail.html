@@ -1,0 +1,169 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+{% load thumbnail %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+{% endblock canonical_url %}
+
+
+{% block title %}
+  Talent Economy: Career Skilling for a future ready India
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/article.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+{% block container %}
+
+ <section class="container">
+    <ol class="breadcrumb">
+        {% for bradcbs in breadcrumbs %}
+	      {% if bradcbs.url %}
+	      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+	      {% else %}
+	      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+	      {% endif %}
+	    {% endfor %}
+    </ol>
+</section>
+
+<!-- main section start -->
+<section class="container">
+    <!-- page content body start -->
+    <div class="row">
+    	<!-- left content start -->
+    	<div class="col-md-9 col-sm-12">
+    		<div class="row">
+    			<div class="author-profile col-sm-12">
+                    <div class="media">
+                        <figure class="media-left">
+                            <img class="media-object" src="images/contributor-pic1.jpg" alt="Author">
+                        </figure>
+                        <figcaption class="media-body">
+                            <h1 class="author-name">Ajay Misra</h1>
+                            <span class="designation">(CEO)</span>
+                            <a href="#" class="articles-no">35 articles</a>
+                            <span class="social-login-gr mt-10">
+                    <a class="facebook-gr"></a>
+                    <a class="twitter-gr"></a>
+                    <a class="linkedin-gr"></a>
+                  </span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
+                        </figcaption>
+                    </div>
+                </div>
+				<!-- author main end here -->
+
+				{% for i in '123' %}
+				<div class="author-article-list col-sm-12">
+	                <a class="box-panel" href="#">
+	                    <div class="col-sm-6">
+	                        <figure class="pr">
+	                            <img src="images/article-listing1.jpg" alt="Talent Economy">
+	                            <span class="product-title product-title-pos">Interview Preparation</span>
+	                        </figure>
+	                    </div>
+	                    <div class="col-sm-6">
+	                        <h3 class="heading-article">
+	                            8 Reasons to consider a career change
+	                        </h3>
+	                        <article>
+	                            Now predict your NCHM JEE rank 2017 using NCHM JEE Rank Predictor Tool on HTCampus and shortlist colleges based on your predicted rank.
+	                        </article>
+	                        <hr>
+	                        <span class="view-forward">
+				                <figure class="calender-icon"></figure> 03 Nov 2016
+				                <figure class="forward-icon ml-20"></figure> 43
+				                <figure class="view-icon ml-20"></figure> 21
+				              </span>
+	                    </div>
+	                </a>
+	            </div>
+				{% endfor %}
+
+    		</div>
+
+    	</div>
+    	<!-- left content end -->
+
+        <!-- right content start -->
+        <div class="col-md-3 col-sm-12">
+        	<!-- Popular Courses -->
+        	{% if popular_courses %}
+			  <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 res-wd100">
+			    <h2 class="heading-right-talent">Popular Courses</h2>
+			    <ul>
+			      {% for pCourses in popular_courses %}
+			      <li>
+			        <a href="#">
+			          <h3>{{pCourses.name}}</h3>
+			          <div class="rating-box">
+			            {% for star in pCourses.star %}
+			              {% if star == '*' %}
+			                <figure class="full-star"></figure>
+			              {% endif %}
+			              {% if star == '+' %}
+			                <figure class="half-star"></figure>
+			              {% endif %}
+			              {% if star == '-' %}
+			                <figure class="blank-star"></figure>
+			              {% endif %}
+			              {% endfor %}
+			              <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
+			          </div>
+			          <span class="jobs-available">
+			            <strong>21735</strong>  jobs available
+			          </span>
+			          <span class="people-bought">
+			            <strong>{{pCourse.buy_count}}</strong>  people bought
+			          </span>
+			        </a>
+			      </li>
+			      {% endfor %}
+			    </ul>
+			  </div>
+			  {% endif %}
+        </div>
+    </div>
+</section>
+
+
+{% endblock container %}
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+
+<script type="text/javascript">
+      $('#myCarousel1').carousel({
+        interval: false,
+
+      })
+
+     $('.carousel[data-type="multi"] .item').each(function(){
+        var next = $(this).next();
+        if (!next.length) {
+          next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+
+        for (var i=0;i<3;i++) {
+          next=next.next();
+          if (!next.length) {
+            next = $(this).siblings(':first');
+          }
+          
+          next.children(':first-child').clone().appendTo($(this));
+        }
+      });
+    </script>
+    {% endcompress %}
+{% endblock js_section %}

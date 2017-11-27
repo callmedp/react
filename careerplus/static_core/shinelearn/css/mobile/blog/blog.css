@@ -686,7 +686,7 @@ blockquote {
 }
 
 .is-hidden {
-  padding: 0;
+  padding: 0 !importance;
   margin: 0;
-  width: 100%;
+  width: 100% !importance;
 }

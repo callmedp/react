@@ -1,0 +1,57 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   Talent Economy: Career Skilling for a future ready India
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right">
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block container %} 
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

@@ -839,6 +839,7 @@
 .author-listing .media-left {
   width: 122px;
   height: 122px;
+  min-width: 122px;
 }
 .author-listing .media-left img {
   width: 122px;
