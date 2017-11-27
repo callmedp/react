@@ -1,0 +1,76 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+{% endblock canonical_url %}
+
+
+{% block title %}
+	Talent Economy: Career Skilling for a future ready India
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/article.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block container %}
+<!-- breadcrums -->
+<section class="container">
+    <ol class="breadcrumb">
+    {% for bradcbs in breadcrumbs %}
+      {% if bradcbs.url %}
+      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+      {% else %}
+      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+      {% endif %}
+    {% endfor %}
+    </ol>
+</section>
+
+<section class="container">
+	<!-- page content body start -->
+	<div class="row">
+        <!-- left content start -->
+        <div class="col-md-9 col-sm-12">
+
+          <!-- content start -->
+          
+
+        </div>
+		<!-- left content end -->
+
+		<!-- right content start -->
+		<div class="col-md-3 col-sm-12">
+		<!-- Popular Courses -->
+
+
+		<!-- take me to -->
+
+
+		</div>
+		<!-- right content end -->
+
+	</div>
+<!-- page content body end -->
+</section>
+
+{% endblock container %}
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script>
+    	$(function(){
+    		Article.init();
+    	});
+    </script>
+    {% endcompress %}
+{% endblock js_section %}
