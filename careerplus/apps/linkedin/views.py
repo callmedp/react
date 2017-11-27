@@ -232,7 +232,7 @@ class LinkedinDraftView(TemplateView):
                     if draft.public_url:
                         flag2 = True
                     if draft.recommendation:
-                        flag2 - True
+                        flag2 = True
                     if draft.follow_company:
                         flag2 = True
                     if draft.join_group:
@@ -288,7 +288,7 @@ class ConsoleLinkedinDraftView(TemplateView):
                     if draft.public_url:
                         flag2 = True
                     if draft.recommendation:
-                        flag2 - True
+                        flag2 = True
                     if draft.follow_company:
                         flag2 = True
                     if draft.join_group:
@@ -358,7 +358,7 @@ class DraftAdminView(TemplateView):
                     if draft.public_url:
                         flag2 = True
                     if draft.recommendation:
-                        flag2 - True
+                        flag2 = True
                     if draft.follow_company:
                         flag2 = True
                     if draft.join_group:
@@ -412,7 +412,7 @@ class DraftDownloadView(View):
                     if draft.public_url:
                         flag2 = True
                     if draft.recommendation:
-                        flag2 - True
+                        flag2 = True
                     if draft.follow_company:
                         flag2 = True
                     if draft.join_group:
@@ -473,7 +473,7 @@ class DashboardDraftDownloadView(View):
                         if draft.public_url:
                             flag2 = True
                         if draft.recommendation:
-                            flag2 - True
+                            flag2 = True
                         if draft.follow_company:
                             flag2 = True
                         if draft.join_group:
