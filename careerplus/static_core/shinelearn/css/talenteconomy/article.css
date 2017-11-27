@@ -82,12 +82,12 @@
   opacity: 9;
 }
 .article-carousel .carousel-control.left {
-  background: url(../images/sprite.png) no-repeat -366px -322px;
+  background: url(../../images/sprite.png) no-repeat -366px -322px;
   width: 45px;
   height: 45px;
 }
 .article-carousel .carousel-control.right {
-  background: url(../images/sprite.png) no-repeat -412px -322px;
+  background: url(../../images/sprite.png) no-repeat -412px -322px;
   width: 45px;
   height: 45px;
 }
@@ -139,7 +139,7 @@
 .talent-economy {
   color: #fff;
   background-size: cover !important;
-  background: url(../images/talent-economy-bg.jpg) no-repeat 0 0;
+  background: url(../../images/talent-economy-bg.jpg) no-repeat 0 0;
   overflow: hidden;
   padding: 20px;
   border-radius: 10px;
@@ -318,7 +318,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: url(../images/sprite.png) no-repeat -460px -322px;
+  background: url(../../images/sprite.png) no-repeat -460px -322px;
   width: 13px;
   height: 14px;
   vertical-align: sub;
@@ -339,7 +339,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: url(../images/sprite.png) no-repeat -475px -322px;
+  background: url(../../images/sprite.png) no-repeat -475px -322px;
   width: 13px;
   height: 12px;
   vertical-align: sub;
@@ -463,12 +463,12 @@
   opacity: 9;
 }
 .contributor-carousel .carousel-control.left {
-  background: url(../images/sprite.png) no-repeat -366px -371px;
+  background: url(../../images/sprite.png) no-repeat -366px -371px;
   width: 45px;
   height: 45px;
 }
 .contributor-carousel .carousel-control.right {
-  background: url(../images/sprite.png) no-repeat -413px -371px;
+  background: url(../../images/sprite.png) no-repeat -413px -371px;
   width: 45px;
   height: 45px;
 }
@@ -480,7 +480,7 @@
 /*----Article Category page css---*/
 .article-category-header {
   clear: both;
-  background: url(../images/article-header-bg.jpg) no-repeat center top;
+  background: url(../../images/article-header-bg.jpg) no-repeat center top;
   background-size: cover;
   display: block;
 }
