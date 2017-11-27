@@ -2058,6 +2058,7 @@ class ActionOrderItemView(View):
                     obj.oi_status = 4  # closed
                     obj.last_oi_status = 6
                     obj.approved_on = timezone.now()
+                    obj.closed_on = timezone.now()
                     obj.save()
                     approval += 1
 
