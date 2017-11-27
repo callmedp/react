@@ -215,12 +215,21 @@
                     {% for obj in refunditems %}
                         <tr class="even pointer">
                           <td>
-                              {% if obj.oi.parent %}
-                                  {{obj.oi.parent.product.name}}:
+                              {% if obj.oi.parent and obj.oi.is_variation %}
+                              <strong>{{obj.oi.parent.product.get_name}}{% if obj.oi.parent.product.get_exp_db %} - Exp: {{obj.oi.parent.product.get_exp_db}}{% endif %}:</strong><br/>
                               {% endif %}
-                              {{obj.oi.product.name}}
-                              {% if obj.oi.product.get_exp %}
-                               - {{obj.oi.product.get_exp}}
+                                  {{obj.oi.product.get_name}}<br/>
+                              {%if obj.oi.product.get_exp_db %}
+                                  <strong>Exp:</strong> {{obj.oi.product.get_exp_db}}<br/>
+                              {% endif %}
+                              {% if obj.oi.product.get_studymode_db %}
+                                  <strong>Study mode:</strong> {{obj.oi.product.get_studymode_db}}<br/>
+                              {% endif %}
+                              {% if obj.oi.product.get_coursetype_db %}
+                                  <strong>Course type:</strong> {{obj.oi.product.get_coursetype_db}}<br/>
+                              {% endif %}
+                              {% if obj.oi.product.get_duration_db %}
+                                  <strong>Duration:</strong> {{obj.oi.product.get_duration_db}}
                               {% endif %}
                           </td>
                           <td>

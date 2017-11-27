@@ -212,10 +212,10 @@ class LinkedinDraftView(TemplateView):
         op_id = kwargs.get('op_id', '')
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
-            op_id = oi.orderitemoperation_set.filter(linkedin=op_id)[0]
+            op_id = oi.orderitemoperation_set.get(pk=op_id)
             try:
                 draft = ''
-                if op_id:
+                if orderitem_id:
                     draft = op_id.linkedin
                     flag2 = False
                     skill_list = draft.key_skills
@@ -241,6 +241,61 @@ class LinkedinDraftView(TemplateView):
                         'flag2': flag2,
                         'orderitem': oi,
                         'op_id':op_id,
+                        'draft': draft,
+                        'skill_list': skill_list.split(','),
+                        'organization_list': organization_list,
+                        'education_list': education_list,
+                        'current_edu': current_edu,
+                        'current_org': current_org
+                    })
+                else:
+                    context.update({'draft': ''})
+            except:
+                context.update({'draft': ''})
+
+        except:
+            context.update({'draft': ''})
+        return context
+
+
+class ConsoleLinkedinDraftView(TemplateView):
+    template_name = "linkedin/console_linkedin_draft.html"
+
+    def get(self, request, *args, **kwargs):
+        return super(ConsoleLinkedinDraftView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ConsoleLinkedinDraftView, self).get_context_data(**kwargs)
+        orderitem_id = kwargs.get('order_item', '')
+        try:
+            oi = OrderItem.objects.get(pk=orderitem_id)
+            try:
+                draft = ''
+                if oi:
+                    draft = oi.oio_linkedin
+                    flag2 = False
+                    skill_list = draft.key_skills
+                    organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
+                    education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
+                    current_org = draft.from_organization.filter(org_current=True)
+                    current_edu = draft.from_education.filter(edu_current=True)
+                    if current_edu:
+                        current_edu = current_edu[0]
+                    if current_org:
+                        current_org = current_org[0]
+                    if draft.profile_photo:
+                        flag2 = True
+                    if draft.public_url:
+                        flag2 = True
+                    if draft.recommendation:
+                        flag2 - True
+                    if draft.follow_company:
+                        flag2 = True
+                    if draft.join_group:
+                        flag2 = True
+                    context.update({
+                        'flag2': flag2,
+                        'orderitem': oi,
                         'draft': draft,
                         'skill_list': skill_list.split(','),
                         'organization_list': organization_list,
@@ -334,10 +389,9 @@ class DraftDownloadView(View):
     def get(self, request, *args, **kwargs):
         orderitem_id = kwargs.get('order_item', '')
         op_id = kwargs.get('op_id', '')
-
         try:
             order_item = OrderItem.objects.get(pk=orderitem_id)
-            oio = order_item.orderitemoperation_set.get(linkedin=op_id)
+            oio = order_item.orderitemoperation_set.get(pk=op_id)
             try:
                 draft = ''
                 if oio:
@@ -381,11 +435,73 @@ class DraftDownloadView(View):
                     html = template.render(context)
                     pdf_file = HTML(string=html).write_pdf()
                     http_response = HttpResponse(pdf_file, content_type='application/pdf')
-                    http_response['Content-Disposition'] = 'filename="report.pdf"'
+                    http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
                     return http_response
                 else:
                     return HttpResponseForbidden()
             except:
                 return HttpResponseForbidden()
+        except:
+            return HttpResponseForbidden()
+
+
+class DashboardDraftDownloadView(View):
+
+    def get(self, request, *args, **kwargs):
+        orderitem_id = kwargs.get('order_item', '')
+        try:
+            order_item = OrderItem.objects.get(pk=orderitem_id)
+            ord_candidate = order_item.order.candidate_id
+            if ord_candidate and request.session.get('candidate_id'):
+                try:
+                    draft = ''
+                    if order_item:
+                        flag2 = False
+                        draft = order_item.oio_linkedin
+                        name = draft.candidate_name
+                        skill_list = draft.key_skills
+                        organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
+                        education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
+                        current_org = draft.from_organization.filter(org_current=True)
+                        current_edu = draft.from_education.filter(edu_current=True)
+                        if current_edu:
+                            current_edu = current_edu[0]
+                        if current_org:
+                            current_org = current_org[0]
+                        if draft.profile_photo:
+                            flag2 = True
+                        if draft.public_url:
+                            flag2 = True
+                        if draft.recommendation:
+                            flag2 - True
+                        if draft.follow_company:
+                            flag2 = True
+                        if draft.join_group:
+                            flag2 = True
+
+                        context_dict = {
+                            'pagesize': 'A4',
+                            'orderitem': order_item,
+                            'draft': draft,
+                            'name': name,
+                            'skill_list': skill_list.split(','),
+                            'organization_list': organization_list,
+                            'education_list': education_list,
+                            'flag2': flag2,
+                            'current_edu': current_edu,
+                            'current_org': current_org,
+                        }
+                        template = get_template('linkedin/linkedin-resume-pdf.html')
+                        context = Context(context_dict)
+                        html = template.render(context)
+                        pdf_file = HTML(string=html).write_pdf()
+                        http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                        http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
+                        return http_response
+                    else:
+                        return HttpResponseForbidden()
+                except:
+                    return HttpResponseForbidden()
+            return HttpResponseForbidden()
         except:
             return HttpResponseForbidden()

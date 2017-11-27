@@ -62,63 +62,63 @@
           </div>
           <div class="x_content">
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.candidate_name.id_for_label }}">Candidate Name</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.candidate_name.id_for_label }}">Candidate Name*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.candidate_name }} 
                 {{ form.candidate_name.errors }}
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.headline.id_for_label }}">Headline</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.headline.id_for_label }}">Headline*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.headline }}
                 {{ form.headline.errors }} 
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.summary.id_for_label }}">Summary</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.summary.id_for_label }}">Summary*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.summary }}
                 {{ form.summary.errors }} 
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.profile_photo.id_for_label }}">Profile Photograph</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.profile_photo.id_for_label }}">Profile Photograph*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.profile_photo }}
                 {{ form.profile_photo.errors }}
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.recommendation.id_for_label }}">Recommendation</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.recommendation.id_for_label }}">Recommendation*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.recommendation }}
                 {{ form.recommendation.errors }}
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.follow_company.id_for_label }}">Follow Company</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.follow_company.id_for_label }}">Follow Company*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.follow_company }}
                 {{ form.follow_company.errors }} 
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.join_group.id_for_label }}">Join Groups</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.join_group.id_for_label }}">Join Groups*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.join_group }}
                 {{ form.join_group.errors }} 
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.public_url.id_for_label }}">Public Url</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.public_url.id_for_label }}">Public Url*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.public_url }}
                 {{ form.public_url.errors }}
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.key_skills.id_for_label }}">Key Skill</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.key_skills.id_for_label }}">Key Skill*</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 {{ form.key_skills }}
                 {{ form.key_skills.errors }}
@@ -204,55 +204,50 @@
     src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}">
   </script>
   <script type="text/javascript">
-
     var d = new Date();
     var todayDate = '' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
 
-    $('.work_from').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'1960-01-01',
-      maxDate:todayDate,
-      autoUpdateInput: false,
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.work_from').val(chosen_date.format('YYYY-MM-DD'));
+    function dateclass(el) {
+
+      var checkedFrom = el.hasClass('study_from');
+      var checkedTo = el.hasClass('study_to');
+
+      el.daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        maxDate:todayDate,
+        autoUpdateInput: false,
+      }, function(chosen_date) {
+        debugger;
+        if(checkedFrom) {
+          var toDate = el.parent().next().find('.study_to').val();
+          var dateFrom = new Date(chosen_date.format('YYYY/MM/DD'))
+          var dateTo = new Date(toDate);
+
+          if(dateFrom <= dateTo) {
+            alert('from date')
+            return false;
+          }
+        }
+
+        if(checkedTo) {
+          var toDate = el.parent().prev().find('.study_from').val();
+          var dateFrom = new Date(chosen_date.format('YYYY/MM/DD'))
+          var dateTo = new Date(toDate);
+
+          if(dateFrom <= dateTo) {
+            alert('to date')
+            return false;
+          }
+        }
+
+        el.val(chosen_date.format('YYYY/MM/DD'));
+      });
+    }
+
+    $('.study_from, .work_from, .work_to, .study_to').each(function(){
+      dateclass($(this));
     });
-
-
-    $('.work_to').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'01/01/1960',
-      maxDate:todayDate,
-      autoUpdateInput: false
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.work_to').val(chosen_date.format('YYYY-MM-DD'));
-    });
-
-    $('.study_from').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'01/01/1960',
-      maxDate:todayDate,
-      autoUpdateInput: false,
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.study_from').val(chosen_date.format('YYYY-MM-DD'));
-    });
-
-    $('.study_to').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      // startDate:'01/01/1960',
-      maxDate:todayDate,
-      autoUpdateInput: false,
-      // locale:{format: 'YYYY-MM-DD'}
-    }, function(chosen_date) {
-      $('.study_to').val(chosen_date.format('YYYY-MM-DD'));
-    });
-
   </script>
   <script type="text/javascript">
   $(document).ready(function() {
@@ -322,7 +317,7 @@
 
     function orgAddForm(btn, prefix) {
       var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-      var row = $('.org-add:first').clone(false).get(0);
+      var row = $('.org-add:first').clone().get(0);
       $(row).removeAttr('id').insertAfter($('.org-add:last')).children('.hidden').removeClass('hidden');
 
       $(row).children().not(':last').children().each(function() {
@@ -339,28 +334,30 @@
       });
 
       $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+      dateclass($('#id_'+prefix+'-' + formCount + '-work_from'));
+      dateclass($('#id_'+prefix+'-' + formCount + '-work_to'));
 
-      $('#id_'+prefix+'-' + formCount + '-work_from').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput: false,
-        // startDate:'01/01/1960',
-        maxDate:todayDate,
-        // locale:{format: 'YYYY-MM-DD'}
-      }, function(chosen_date) {
-        $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
-      });
+      // $('#id_'+prefix+'-' + formCount + '-work_from').daterangepicker({
+      //   singleDatePicker: true,
+      //   showDropdowns: true,
+      //   autoUpdateInput: false,
+      //   // startDate:'01/01/1960',
+      //   maxDate:todayDate,
+      //   // locale:{format: 'YYYY-MM-DD'}
+      // }, function(chosen_date) {
+      //   $('#id_'+prefix+'-' + formCount + '-work_from').val(chosen_date.format('YYYY-MM-DD'));
+      // });
 
-      $('#id_'+prefix+'-' + formCount + '-work_to').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput: false,
-        // startDate:'01/01/1960',
-        maxDate:todayDate,
-        // locale:{format: 'YYYY-MM-DD'}
-      }, function(chosen_date) {
-        $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
-      });
+      // $('#id_'+prefix+'-' + formCount + '-work_to').daterangepicker({
+      //   singleDatePicker: true,
+      //   showDropdowns: true,
+      //   autoUpdateInput: false,
+      //   // startDate:'01/01/1960',
+      //   maxDate:todayDate,
+      //   // locale:{format: 'YYYY-MM-DD'}
+      // }, function(chosen_date) {
+      //   $('#id_'+prefix+'-' + formCount + '-work_to').val(chosen_date.format('YYYY-MM-DD'));
+      // });
 
       return false;
     }
@@ -368,7 +365,7 @@
     function eduAddForm(btn, prefix) {
       var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
       if (formCount < 10) {
-        var row = $(".edu-add:first").clone(false).get(0);
+        var row = $(".edu-add:first").clone().get(0);
         // Insert it after the last form
         $(row).removeAttr('id').hide().insertAfter(".edu-add:last").slideDown(300);
         // Remove the bits we don't want in the new row/form
@@ -380,8 +377,8 @@
           $(this).val('');
           $(this).attr('checked', false);
           $(this).attr("disabled", false);
-          $(this).removeClass("study_from");
-          $(this).removeClass("study_to");
+          // $(this).removeClass("study_from");
+          // $(this).removeClass("study_to");
         });
         // Add an event handler for the delete item/form link 
         $(row).find('.edu-delete').click(function() {
@@ -390,27 +387,29 @@
         // Update the total form count
         $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
 
-        $('#id_'+prefix+'-' + formCount + '-study_from').daterangepicker({
-          singleDatePicker: true,
-          showDropdowns: true,
-          autoUpdateInput: false,
-          // startDate:'01/01/1960',
-          maxDate:todayDate,
-          // locale:{format: 'YYYY-MM-DD'}
-        }, function(chosen_date) {
-          $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
-        });
+        dateclass($('#id_'+prefix+'-' + formCount + '-study_from'));
+        dateclass($('#id_'+prefix+'-' + formCount + '-study_to'));
+        // $('#id_'+prefix+'-' + formCount + '-study_from').daterangepicker({
+        //   singleDatePicker: true,
+        //   showDropdowns: true,
+        //   autoUpdateInput: false,
+        //   // startDate:'01/01/1960',
+        //   maxDate:todayDate,
+        //   // locale:{format: 'YYYY-MM-DD'}
+        // }, function(chosen_date) {
+        //   $('#id_'+prefix+'-' + formCount + '-study_from').val(chosen_date.format('YYYY-MM-DD'));
+        // });
 
-        $('#id_'+prefix+'-' + formCount + '-study_to').daterangepicker({
-          singleDatePicker: true,
-          showDropdowns: true,
-          autoUpdateInput: false,
-          // startDate:'01/01/1960',
-          maxDate:todayDate,
-          // locale:{format: 'YYYY-MM-DD'}
-        }, function(chosen_date) {
-          $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));
-        });
+        // $('#id_'+prefix+'-' + formCount + '-study_to').daterangepicker({
+        //   singleDatePicker: true,
+        //   showDropdowns: true,
+        //   autoUpdateInput: false,
+        //   // startDate:'01/01/1960',
+        //   maxDate:todayDate,
+        //   // locale:{format: 'YYYY-MM-DD'}
+        // }, function(chosen_date) {
+        //   $('#id_'+prefix+'-' + formCount + '-study_to').val(chosen_date.format('YYYY-MM-DD'));
+        // });
       } // End if
       else {
         alert("Sorry, you can only enter a maximum of ten items.");
@@ -433,15 +432,15 @@
     $(".edu-delete").click(function() {
       return eduDeleteForm(this, 'from_education');
     });
-    $('.current_org').click(function() {
-      $('.work_to').attr('disabled', this.checked)
-       $('.work_to').prop('required',false);
-    });
+    // $('.current_org').click(function() {
+    //   $('.work_to').attr('disabled', this.checked)
+    //    $('.work_to').prop('required',false);
+    // });
 
-    $('.current_edu').click(function() {
-      $('.study_to').attr('disabled', this.checked)
-       $('.study_to').prop('required',false);
-    });
+    // $('.current_edu').click(function() {
+    //   $('.study_to').attr('disabled', this.checked)
+    //    $('.study_to').prop('required',false);
+    // });
   });
 </script>
 {% endblock js_block %}

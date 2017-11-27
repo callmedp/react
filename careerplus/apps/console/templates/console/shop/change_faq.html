@@ -84,35 +84,35 @@
               {% endif %}
               
               <div class="item form-group {% if form.text.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.text.id_for_label }}">Question <span class="required">*</span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.text.id_for_label }}">Question <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.text}}
                 </div>
                 <div class="alert">{{form.text.errors}}</div>
               </div>
 
               <div class="item form-group {% if form.answer.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.answer.id_for_label }}">Answer <span class="required">*</span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.answer.id_for_label }}">Answer <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.answer}}
                 </div>
                 <div class="alert">{{form.answer.errors}}</div>
               </div>
                 <div class="item form-group {% if form.status.errors %}bad{% endif %}">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.status.id_for_label }}">Status <span class="required"></span>
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.status.id_for_label }}">Status <span class="required"></span>
                   </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-7 col-sm-7 col-xs-12">
                     {{form.status}}
                   </div>
                   <div class="alert">{{form.status.errors}}</div>
                 </div>
               
               <div class="item form-group {% if form.vendor.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.vendor.id_for_label }}">Vendor <span class="required">*</span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.vendor.id_for_label }}">Vendor <span class="required">*</span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.vendor}}
                 </div>
                 <div class="alert">{{form.vendor.errors}}</div>
@@ -120,9 +120,9 @@
 
                 
               <div class="item form-group {% if form.sort_order.errors %}bad{% endif %}">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.sort_order.id_for_label }}">Order <span class="required"></span>
+                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.sort_order.id_for_label }}">Order <span class="required"></span>
                 </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-7 col-sm-7 col-xs-12">
                   {{form.sort_order}}
                 </div>
                 <div class="alert">{{form.sort_order.errors}}</div>
@@ -163,9 +163,9 @@
                   {% endif %}
 
                   <div class="item form-group {% if vendor_form.public_vendor.errors %}bad{% endif %}">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ vendor_form.public_vendor.id_for_label }}">Vendor Public <span class="required"></span>
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ vendor_form.public_vendor.id_for_label }}">Vendor Public <span class="required"></span>
                     </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-md-7 col-sm-7 col-xs-12">
                       {{vendor_form.public_vendor}}
                     </div>
                     <div class="alert" style="margin-left:100px;">{{vendor_form.public_vendor.errors}}</div>

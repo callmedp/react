@@ -17,6 +17,7 @@ from order.models import Order
 from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon
+from core.api_mixin import ShineCandidateDetail
 # from order.mixins import OrderMixin
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
@@ -64,6 +65,19 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     msg = 'candidate_id is required.'
                     flag = False
 
+                first_name, last_name = '', ''
+
+                if candidate_id:
+                    status_response = ShineCandidateDetail().get_status_detail(
+                        email=None, shine_id=candidate_id)
+
+                    if status_response:
+                        first_name = status_response.get('first_name')
+                        last_name = status_response.get('last_name')
+
+                    if not first_name and not last_name:
+                        first_name = name
+
                 if country_code:
                     try:
                         country_obj = Country.objects.get(phone=country_code)
@@ -82,7 +96,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         payment_date=timezone.now())
 
                     order.number = 'CP' + str(order.id)
-                    order.first_name = name
+                    order.first_name = first_name
+                    order.last_name = last_name
                     order.currency = int(request.data.get('currency', 0))
                     order.tax_config = str(request.data.get('tax_config', {}))
                     order.status = 1
