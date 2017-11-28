@@ -113,7 +113,7 @@
 				<ul>
 					{% for pCourses in popular_courses %}
 					<li>
-						<a href="#">
+						<a href="{{pCourses.url}}">
 						  <h3>{{pCourses.name}}</h3>
 						  <div class="rating-box">
 							  {% for star in pCourses.star %}

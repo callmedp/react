@@ -113,7 +113,7 @@
                 <h2 class="main-heading-article ml-15">Recently added</h2>
                 {% for artList in article_list %}
                 <div class="article-list col-sm-6">
-                  	<a class="box-panel" href="{{artList.url}}" title="{{artList.title}}">
+                  	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.title}}">
                     	<figure class="pr">
                       		<img src="{{artList.image.url}}" alt="{{artList.image_alt}}">
                       		<span class="product-title product-title-pos">{{artList.title}}</span>
@@ -171,7 +171,7 @@
 				<ul>
 					{% for pCourses in popular_courses %}
 					<li>
-						<a href="#">
+						<a href="{{pCourses.url}}">
 						  <h3>{{pCourses.name}}</h3>
 						  <div class="rating-box">
 							  {% for star in pCourses.star %}
