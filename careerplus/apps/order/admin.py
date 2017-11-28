@@ -41,8 +41,8 @@ class OrderItemInline(admin.TabularInline):
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'number', 'site', 'candidate_id', 'email',
-        'status', 'date_placed']
-    list_filter = ('status', )
+        'status', 'date_placed', 'payment_date']
+    list_filter = ('status', 'site')
     raw_id_fields = ('country',)
     search_fields = ('number', 'id', 'candidate_id', 'email')
     inlines = [OrderItemInline, TxnOrderInline, CouponOrderInline, WalletOrderInline]
