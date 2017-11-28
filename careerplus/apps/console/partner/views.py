@@ -16,7 +16,7 @@ from console.order_form import (
     OIActionForm,)
 
 
-@method_decorator(permission_required('order.can_show_partner_inbox_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_partner_inbox_queue', login_url='/console/login/'), name='dispatch')
 class PartnerInboxQueueView(ListView, PaginationMixin):
     context_object_name = 'inbox_list'
     template_name = 'console/partner/partner-inbox.html'
@@ -106,7 +106,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product').order_by('-modified')
 
 
-@method_decorator(permission_required('order.can_show_hold_orderitem_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_hold_orderitem_queue', login_url='/console/login/'), name='dispatch')
 class PartnerHoldQueueView(ListView, PaginationMixin):
     context_object_name = 'hold_list'
     template_name = 'console/partner/partner-hold.html'
@@ -196,7 +196,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product').order_by('-modified')
 
 
-@method_decorator(permission_required('order.can_show_varification_report_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_varification_report_queue', login_url='/console/login/'), name='dispatch')
 class PartnerVarificationQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/partner/partner-varification-report.html'
