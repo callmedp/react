@@ -20,7 +20,7 @@ from django.forms.models import inlineformset_factory
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
-
+from django.contrib.auth.decorators import permission_required
 from linkedin.models import Draft, Organization, Education
 from geolocation.models import Country
 from quizs.models import QuizResponse
@@ -45,6 +45,7 @@ from emailers.sms import SendSMS
 from django.conf import settings
 
 
+@method_decorator(permission_required('order.can_show_linkedin_inbox_queue', login_url='/console/login/'), name='dispatch')
 class LinkedinQueueView(ListView, PaginationMixin):
     context_object_name = 'orderitem_list'
     template_name = 'console/linkedin/linkedin_inbox_list.html'
@@ -210,6 +211,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
         return super(LinkedinQueueView, self).dispatch(request, *args, **kwargs)
 
 
+@method_decorator(permission_required('order.can_view_order_item_detail', login_url='/console/login/'), name='dispatch')
 class LinkedinOrderDetailVeiw(DetailView):
     model = Order
     template_name = "console/order/order-detail.html"
@@ -236,6 +238,7 @@ class LinkedinOrderDetailVeiw(DetailView):
         return context
 
 
+@method_decorator(permission_required('order.can_show_linkedin_writer_draft', login_url='/console/login/'), name='dispatch')
 class ChangeDraftView(DetailView):
     template_name = 'console/linkedin/change_draft.html'
     model = Draft
@@ -250,6 +253,10 @@ class ChangeDraftView(DetailView):
             q_resp = QuizResponse.objects.get(oi=ord_obj)
             org_obj = Organization.objects.filter(draft=self.object)
             edu_obj = Education.objects.filter(draft=self.object)
+            ord_assign_to = ord_obj.assigned_to.get_short_name()
+            req_assign_to = request.user.get_short_name()
+            if ord_assign_to != req_assign_to:
+                return HttpResponseForbidden()
             if not org_obj.count():
                 Organization.objects.create(draft=self.object)
             if not edu_obj.count():
@@ -365,6 +372,7 @@ class ChangeDraftView(DetailView):
             return render(request, self.template_name, context)
 
 
+@method_decorator(permission_required('order.can_show_linkedinrejectedbyadmin_queue', login_url='/console/login/'), name='dispatch')
 class LinkedinRejectedByAdminView(ListView, PaginationMixin):
     context_object_name = 'rejectedbylinkedinadmin_list'
     template_name = 'console/linkedin/rejectedbylinkedinadmin-list.html'
@@ -472,6 +480,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
+@method_decorator(permission_required('order.can_show_linkedinrejectedbycandidate_queue', login_url='/console/login/'), name='dispatch')
 class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
     context_object_name = 'rejectedbylinkedincandidate_list'
     template_name = 'console/linkedin/reject-linkedin-candidate.html'
@@ -578,6 +587,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
 
+@method_decorator(permission_required('order.can_show_linkedin_approval_queue', login_url='/console/login/'), name='dispatch')
 class LinkedinApprovalVeiw(ListView, PaginationMixin):
     context_object_name = 'approval_list'
     template_name = 'console/linkedin/linkedin-approval-list.html'
