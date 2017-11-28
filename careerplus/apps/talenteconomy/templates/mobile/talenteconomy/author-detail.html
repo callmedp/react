@@ -37,7 +37,84 @@
 
 {% endblock header %}
 
-{% block container %} 
+{% block container %}
+
+<div class="body-wrapper ">
+	<section class="content-box">
+        <ul class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Talent Economy</a></li>
+            <li class="active">Name of the author</li>
+        </ul>
+
+        <div class="author-item mt-20 mb-10">
+            <span class="author-img"><img src="images/ajay-misra.jpg"></span>
+            <div class="author-detail">
+                <h1 class="mb-0 fs-16">Ajay Misra <sup></sup></h1>
+                <span class="spacer c-666">/</span> <span class="c-666 fs-12">CEO</span>
+                <p class="fs-12"><a href="#"><strong>35 articles</strong></a></p>
+                <ul class="mt-5">
+                    <li class="icon-fbGrey"><a href="#">facebook</a></li>
+                    <li class="icon-twGrey"><a href="#">twitter</a></li>
+                    <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- ends of author item -->
+
+        <p class="c-666">Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.</p>
+        <p class="c-666">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. </p>
+
+        <hr>
+
+        <!-- box panel starts here -->
+        <div class="box-panel row no-shadow">
+        	{% for i in '1234' %}
+        	<div class="media article-list">
+                <a title="Government Jobs" href="blog-detail.html">
+                    <figure class="media-left">
+                        <img class="media-object w-auto" src="images/article-list-1.jpg" alt="...">
+                    </figure>
+                    <div class="media-body rel">
+                        <span class="article-tag">Project Management</span>
+                        <h3 class="media-heading">8 Reasons to consider a career change</h3>
+
+                        <div class="blog-author fs-11">
+                            <span class="editor">Ajay Mishra</span>
+                            <span class="view-forward pull-right">
+					          <figure class="icon-forward"></figure> 43 
+					          <figure class="icon-view icon-grey-view ml-10"></figure> 21
+					        </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="row bg-grey no-shadow content-box">
+            <h2 class="mt-20">Contributors</h2>
+		    <div class="slide-container">
+		        <ul class="contributors">
+		            {% for author in authors %}
+		            <li>
+		              {% if author.image %}
+		              {% thumbnail obj.image "130x130" crop="center" as im %}
+		              <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
+		              {% endthumbnail %}
+		              {% endif %}
+		              <p class="head pb-0">{{author.name}}</p>
+		              <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
+		              <p class="fs-12"><a href="#">{{author.no_of_blog}} articles</a></p>
+		            </li>
+		            {% endfor %}
+
+		        </ul>
+		    </div>
+        </div>
+    </section>
+</div>
 
 {% endblock container %}
 
