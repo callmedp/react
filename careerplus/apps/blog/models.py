@@ -333,7 +333,10 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         return self.build_absolute_uri(self.get_absolute_url())
 
     def get_absolute_url(self):
-        return reverse('blog:articles-deatil', kwargs={'slug': self.slug, 'pk': self.pk})
+        if self.visibility == 2:
+            return reverse('talent:te-articles-detail', kwargs={'cat_slug': self.p_cat.slug, 'slug': self.slug})
+        else:
+            return reverse('blog:articles-deatil', kwargs={'slug': self.slug, 'pk': self.pk})
 
     def update_score(self):
         score = Decimal(self.no_views) * Decimal(0.9)
