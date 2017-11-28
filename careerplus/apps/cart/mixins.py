@@ -584,8 +584,7 @@ class CartMixin(object):
         try:
             if not request:
                 request = self.request
-            if not request.session.get('cart_pk'):
-                self.getCartObject(request=request)
+            self.getCartObject(request=request)
             cart_pk = request.session.get('cart_pk')
 
             if cart_pk:
