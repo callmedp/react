@@ -120,7 +120,7 @@
         <div class="media article-list">
           <a title="{{artList.title}}" href="{{artList.url}}">
             <figure class="media-left">
-              {% thumbnail obj.image "96x73" crop="center" as im %}
+              {% thumbnail artList.image "96x73" crop="center" as im %}
               <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}">
               {% endthumbnail %}
             </figure>
@@ -147,7 +147,7 @@
             {% for author in authors %}
             <li>
               {% if author.image %}
-              {% thumbnail obj.image "130x130" crop="center" as im %}
+              {% thumbnail author.image "130x130" crop="center" as im %}
               <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
               {% endthumbnail %}
               {% endif %}
@@ -168,8 +168,8 @@
             {% for category in categories %}
             <li>
                 <div class="list-box">
-                  {% thumbnail obj.image "133x90" crop="center" as im %}
-                  <img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
+                  {% thumbnail category.image "133x90" crop="center" as im %}
+                  <img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
                   {% endthumbnail %}
                   <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
                 </div>       

@@ -52,7 +52,7 @@
                 <h2 class="main-heading-article ml-15">All Articles</h2>
                 {% for artList in recent_articles %}
                 <div class="article-list col-sm-6">
-                  	<a class="box-panel" href="{{artList.url}}" title="{{artList.title}}">
+                  	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.title}}">
                     	<figure class="pr">
                     		{% if artList.image  %}
                       			<img src="{{artList.image.url}}" alt="{{artList.image_alt}}">

@@ -353,7 +353,12 @@ class AuthorDetailView(DetailView):
         return data
 
     def get_meta_details(self):
+        auth = self.object
+        desc  = ''
+        if auth:
+            about = auth.about
+            desc = '.'.join(about.split('.')[:2])
         meta = Meta(
-            description=self.object,
+            description=desc,
         )
         return {"meta": meta}
