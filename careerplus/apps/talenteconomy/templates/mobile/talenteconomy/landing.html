@@ -125,14 +125,18 @@
               {% endthumbnail %}
             </figure>
             <div class="media-body rel">
-              <span class="article-tag">{{artList.title}}</span>
+              <span class="article-tag">{{artList.p_cat.name}}</span>
               <h3 class="media-heading">{{artList.heading}}</h3>
 
               <div class="blog-author fs-11">
                 <span class="editor">{{artList.author.name}}</span>
                 <span class="view-forward pull-right">
+                  {% if article.no_shares > 0 %}
                     <figure class="icon-forward"></figure> {{artList.no_shares}}
+                  {% endif %}
+                  {% if article.no_views > 0 %}
                     <figure class="icon-view icon-grey-view ml-10"></figure> {{artList.no_views}}
+                  {% endif %}
                 </span>
               </div>
             </div>

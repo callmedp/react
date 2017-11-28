@@ -58,9 +58,9 @@
                 <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
                 <p class="fs-12"><a href="#"><strong>{{author.no_of_blog}} articles</strong></a></p>
                 <ul class="mt-5">
-                    <li class="icon-fbGrey"><a href="#">facebook</a></li>
-                    <li class="icon-twGrey"><a href="#">twitter</a></li>
-                    <li class="icon-linkedinGrey"><a href="#">linkedin</a></li>
+                    {% if author.fb_url %}<li class="icon-fbGrey"><a href="{{author.fb_url}}">facebook</a></li> {% endif %}
+                    {% if author.twitter_url %}<li class="icon-twGrey"><a href="{{author.twitter_url}}">twitter</a></li>{% endif %}
+                    {% if author.linkedin_url %}<li class="icon-linkedinGrey"><a href="{{author.linkedin_url}}">linkedin</a></li>{% endif %}
                 </ul>
             </div>
         </div>
