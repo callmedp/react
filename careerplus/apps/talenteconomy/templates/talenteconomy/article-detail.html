@@ -11,7 +11,7 @@
 
 
 {% block title %}
-	Talent Economy: Career Skilling for a future ready India
+	{{main_article.heading}} - Talent Economy
 {% endblock title %}
 
 {% block css_section %}
@@ -42,7 +42,7 @@
         <div class="col-md-9 col-sm-12">
 
           <!-- content start -->
-          {% include "detail-article-list.html" %}
+          {% include "talenteconomy/detail-article-list.html" %}
 
         </div>
 		<!-- left content end -->
@@ -78,7 +78,7 @@
 				<ul>
 					{% for pCourses in popular_courses %}
 					<li>
-						<a href="#">
+						<a href="{{pCourses.url}}">
 						  <h3>{{pCourses.name}}</h3>
 						  <div class="rating-box">
 							  {% for star in pCourses.star %}

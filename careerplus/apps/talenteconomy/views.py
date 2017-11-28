@@ -198,7 +198,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
-        main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=2)
+        main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=2).prefetch_related('tags')
 
         detail_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
@@ -249,8 +249,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
         breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        #breadcrumbs.append({"url": reverse('te-articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
-        breadcrumbs.append({"url": '/', "name": self.object.p_cat.name})
+        breadcrumbs.append({"url": reverse('talent:te-articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
         breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data

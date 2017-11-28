@@ -3,90 +3,67 @@
 
     <!-- page heading -->
     <div class="page-header">
-        <h1>Career management: Defining the process and purpose</h1>
+        <h1>{{main_article.heading}}</h1>
         <div class="editor-comments-views">
             <span>
-      <img src="images/author-pic.jpg" class="author-small-pic" alt="author">
-      <a href="#">Ajay Mishra</a> / 03 Nov 2016
-    </span>
+              <img src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
+              <a href="{% url 'talent:authors-detail' main_article.author.slug %}">{{main_article.author.name}}</a> / {{article.publish_date.date}}
+            </span>
+
+            {% if main_article.no_comment %}
             <span>
-      <a href="#">
-        <figure class="comment-small-icon"></figure> 
-        <strong>23</strong> comments</a>
-      </span>
+              <a href="#">
+                <figure class="comment-small-icon"></figure> 
+                <strong>{{main_article.no_comment}}</strong> comments</a>
+            </span>
+            {% endif %}
+
             <span>
-      <figure class="view-icon"></figure> 
-      <strong>21</strong>
-    </span>
+            {% if main_article.no_views %}
+              <figure class="view-icon"></figure> 
+              <strong>{{main_article.no_views}}</strong>
+            </span>
+            {% endif %}
         </div>
         <div class="social-login">
-            <a class="facebook" href="#"></a>
-            <a class="twitter" href="#"></a>
-            <a class="gplus" href="#"></a>
-            <a class="whatsapp" href="#"></a>
-            <a class="linkedin" href="#"></a>
+            <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{article.get_absolute_url}}" article-slug="{{article.slug}}" target="_blank"></a>
+            
+            <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status=={{SITEDOMAIN}}{{article.get_absolute_url}}"></a>
+
+            <a class="gplus" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{article.get_absolute_url}}"></a>
+
+            <a class="linkedin" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url={{SITEDOMAIN}}{{article.get_absolute_url}}&title={{article.title}}&summary={{article.meta_desc}}&source={{SITEDOMAIN}}/"></a>
+
         </div>
     </div>
 
     <figure>
-        <img src="images/article-detail-pic.jpg" alt="Detail Pic" class="img-responsive">
+        <img src="{{main_article.image.url}}" alt="{{main_article.image_alt}}" class="img-responsive">
     </figure>
 
     <article class="article-content">
-        <p>In order to be eligible for the <a href="#">Civil Services Examination</a> - 2015, candidates must possess a Graduate degree or above. Candidates who are in their final year of Graduation examination are also eligible to apply for the Examination.</p>
-
-        <p>The minimum age limit for candidates is 21 years and the maximum age limit is 32 years. The upper age limit is further relaxed by 5 years and 3 years for candidates belonging to SC/ST and OBC categories respectively.</p>
-
-        <blockquote>
-            The minimum age limit for candidates is 21 years and the maximum age limit is 32 years. The upper age limit is further relaxed by 5 years and 3 years for candidates belonging to SC/ST and OBC categories respectively.
-        </blockquote>
-
-        <h3>Examination Pattern:</h3>
-        <p>As we all know, the <a href="#">CSE</a> is conducted in two stages - first, the preliminary examination and the second, Mains (Written examination and Interview)</p>
-
-        <h3>Preliminary Examination</h3>
-        <p>The <a href="#">UPSC CSE</a> 2015 preliminary examination will be an objective type examination, consisting of two papers as given below. Both these papers are worth two hundred marks and are of two hours duration each.</p>
-
-        <p>
-            <span class="list-mid-head">A) General Studies paper </span> There have been no changes in the General Studies paper I and therefore, the syllabus the paper is as follows:
-        </p>
-
-        <img src="images/article-listing-pic.jpg" class="img-responsive" style="float: right; width: 266px;" alt="Talent Economy">
-
-        <ol>
-            <li>Current events of national and international importance.
-                <ul>
-                    <li>The independent learning Career Management Skills Unit has been designed by the Careers Service and meets the 8 learning outcomes.</li>
-                    <li>The Careers Service updates the materials and has ownership of Route A.</li>
-                </ul>
-            </li>
-            <li>History of India and Indian National Movement
-                <ul>
-                    <li>The independent learning Career Management Skills Unit has been designed by the Careers Service and meets the 8 learning outcomes.</li>
-                    <li>The Careers Service updates the materials and has ownership of Route A.</li>
-                </ul>
-            </li>
-            <li>Indian Polity and Governance - Constitution, Political System, Panchayat Raj, Public Policy, Rights issues etc.</li>
-            <li><a href="#">Economic and Social Development</a> - Sustainable development, poverty, Inclusion, Demographics, Social Sector Initiatives etc.</li>
-            <li>Indian and world Geography - Physical, Social, Economic</li>
-            <li>General Issues on Environmental Ecology, Bio- diversity and Climate Change</li>
-            <li>General Science</li>
-        </ol>
+        {{main_article.content|safe}}
     </article>
 
-    <div class="social-login">
+ <!--    <div class="social-login">
         <a class="facebook" href="#"></a>
         <a class="twitter" href="#"></a>
         <a class="gplus" href="#"></a>
         <a class="whatsapp" href="#"></a>
         <a class="linkedin" href="#"></a>
-    </div>
+    </div> -->
 
     <!-- Tagged in box -->
+    {% with article.tags.all as tags %}
+    {% if tags %}
     <div class="tagged-in mt-40">
         <strong>Tagged in</strong>
+        {% for tag in tags %}
         <span><a href="#">CIVILSERVICES</a></span> <span><a href="#">UPSC</a></span> <span><a href="#">Government News</a></span>
+        {% endfor %}
     </div>
+    {% endif %}
+    {% endwith %}
 
     <!-- comments box -->
     <div class="comments-box mb-40 mt-40">

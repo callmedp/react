@@ -46,9 +46,13 @@
 <div class="article-category talent-gr">
     <div class="content">
       <ul class="breadcrumb">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Talent Economy</a></li> 
-        <li class="active">Talent Economy</li> 
+        {% for bradcbs in breadcrumbs %}
+          {% if bradcbs.url %}
+            <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+          {% else %}
+            <li class="active">{{bradcbs.name}}</li>
+          {% endif %}
+        {% endfor %} 
       </ul>
 
       <h1>All Contributors</h1>
