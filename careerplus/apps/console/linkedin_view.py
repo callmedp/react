@@ -255,8 +255,12 @@ class ChangeDraftView(DetailView):
             edu_obj = Education.objects.filter(draft=self.object)
             ord_assign_to = ord_obj.assigned_to.get_short_name()
             req_assign_to = request.user.get_short_name()
-            if ord_assign_to != req_assign_to:
+
+            if org_obj.assigned_by.get_short_name() != req_assign_to:
                 return HttpResponseForbidden()
+            elif ord_assign_to != req_assign_to:
+                return HttpResponseForbidden()
+
             if not org_obj.count():
                 Organization.objects.create(draft=self.object)
             if not edu_obj.count():

@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+<link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
 <body>
 <h2>Linkedin Counselling Form Updation</h2>
 	<form method="post" id="counselling_form" 
@@ -36,13 +37,13 @@
 			<textarea class="js-answer" rows="5" cols="50" class="js-answer"
 			name="q5">{{quiz_resp.anser5}}</textarea>
 			<p class='submit-error' style="color:red;"></p>         
-		</li>  
+		</li>
 	 </ol>
-         	<button type="submit" name="save" class="grp-button grp-default js-click" 
-         	style="width: 150px;float: left;height:44px" value="save">Save</button>
+         	<button type="submit" name="save" class="btn js-click" 
+         	style="width:150px;float:left;height:44px;margin-left:919px;margin-bottom: 10px;" value="save">Save</button>
             {% if not flag  %}
                  <button type="submit" name="submit" class="grp-button grp-default js-submit" 
-                 style="width:150px;float:right;background-image: linear-gradient(#FF8D00,#FF2300);height:44px" value="submit" id="admin-counselling-form">Submit</button>
+                 style="width:150px;float:right;background-image: linear-gradient(#FF8D00,#FF2300);height:44px;margin-bottom:10px;margin-right:14px;" value="submit" id="admin-counselling-form">Submit</button>
             {% endif %}                   
 	<!--<button type="submit">submit</button>-->
 	</form>
@@ -50,7 +51,8 @@
 
 	<script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
 	<script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
-	<script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+	<script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}">
+	</script>
 
 	<script type="text/javascript">
 	$().ready(function() {
