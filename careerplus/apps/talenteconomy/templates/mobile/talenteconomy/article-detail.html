@@ -40,22 +40,23 @@
 {% block container %}
 
 <div class="body-wrapper ">
-
-
     <section class="content-box">
         <ul class="breadcrumb">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Talent Economy</a></li>
-            <li class="active">Six Sigma</li>
+         {% for bradcbs in breadcrumbs %}
+          {% if bradcbs.url %}
+            <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+          {% else %}
+            <li class="active">{{bradcbs.name}}</li>
+          {% endif %}
+        {% endfor %}
         </ul>
 
+        {% include 'talenteconomy/detail-article-list.html' %}
 
-        {% include 'detail-article-list.html' %}
     </section>
 
-    <!-- end of section here -->
 
-    <!-- you may like starts here -->
+    {% comment %}
     <section>
         <!-- box panel starts here -->
         <div class="box-panel ">
@@ -84,6 +85,7 @@
             {% endfor %}
         </div>
     </section>
+    {% endcomment %}
 
     <div class="share-wrap">
         <ul id="share-icon">

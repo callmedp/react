@@ -10,16 +10,16 @@
               <a href="{% url 'talent:authors-detail' main_article.author.slug %}">{{main_article.author.name}}</a> / {{article.publish_date.date}}
             </span>
 
-            {% if main_article.no_comment %}
+            {% if main_article.comment_moderated > 0 %}
             <span>
               <a href="#">
                 <figure class="comment-small-icon"></figure> 
-                <strong>{{main_article.no_comment}}</strong> comments</a>
+                <strong>{{main_article.comment_moderated}}</strong> comments</a>
             </span>
             {% endif %}
 
             <span>
-            {% if main_article.no_views %}
+            {% if main_article.no_views > 0 %}
               <figure class="view-icon"></figure> 
               <strong>{{main_article.no_views}}</strong>
             </span>
@@ -54,12 +54,12 @@
     </div> -->
 
     <!-- Tagged in box -->
-    {% with article.tags.all as tags %}
+    {% with main_article.tags.all as tags %}
     {% if tags %}
     <div class="tagged-in mt-40">
         <strong>Tagged in</strong>
         {% for tag in tags %}
-        <span><a href="#">CIVILSERVICES</a></span> <span><a href="#">UPSC</a></span> <span><a href="#">Government News</a></span>
+        <span><a href="#">{{tag.name}}</a></span>
         {% endfor %}
     </div>
     {% endif %}
