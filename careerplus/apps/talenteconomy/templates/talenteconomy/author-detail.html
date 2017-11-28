@@ -10,9 +10,8 @@
   <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
 {% endblock canonical_url %}
 
-
 {% block title %}
-  Talent Economy: Career Skilling for a future ready India
+{{author.name}} – Career Guidance Author @ Shine Learning
 {% endblock title %}
 
 {% block css_section %}
@@ -44,46 +43,53 @@
     		<div class="row">
     			<div class="author-profile col-sm-12">
                     <div class="media">
+                    	{% if author.image %}
                         <figure class="media-left">
-                            <img class="media-object" src="images/contributor-pic1.jpg" alt="Author">
+	                        <img class="media-object" src="{{author.image.url}}" alt="{{author.image_alt}}">
                         </figure>
+                        {% endif %}
                         <figcaption class="media-body">
-                            <h1 class="author-name">Ajay Misra</h1>
-                            <span class="designation">(CEO)</span>
-                            <a href="#" class="articles-no">35 articles</a>
+                            <h1 class="author-name">{{author.name}}</h1>
+                            <span class="designation">({{author.designation}})</span>
+                            <a href="#" class="articles-no">{{author.no_of_blog}} articles</a>
                             <span class="social-login-gr mt-10">
                     <a class="facebook-gr"></a>
                     <a class="twitter-gr"></a>
                     <a class="linkedin-gr"></a>
                   </span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat congue malesuada. Morbi augue urna, tincidunt ut fermentum vitae.</p>
+                            {{author.about|safe}}
                         </figcaption>
                     </div>
                 </div>
 				<!-- author main end here -->
 
-				{% for i in '123' %}
+				{% for article in article_list %}
 				<div class="author-article-list col-sm-12">
 	                <a class="box-panel" href="#">
 	                    <div class="col-sm-6">
 	                        <figure class="pr">
-	                            <img src="images/article-listing1.jpg" alt="Talent Economy">
-	                            <span class="product-title product-title-pos">Interview Preparation</span>
+	                        	{% if article.image  %}
+	                            <img src="{{article.image.url}}" alt="{{article.image_alt}}">
+	                            {% endif %}
+	                            <span class="product-title product-title-pos">{{article.p_cat.name}}</span>
 	                        </figure>
 	                    </div>
 	                    <div class="col-sm-6">
 	                        <h3 class="heading-article">
-	                            8 Reasons to consider a career change
+	                            {{article.heading}}
 	                        </h3>
 	                        <article>
-	                            Now predict your NCHM JEE rank 2017 using NCHM JEE Rank Predictor Tool on HTCampus and shortlist colleges based on your predicted rank.
+	                            {{article.summary|safe}}
 	                        </article>
 	                        <hr>
 	                        <span class="view-forward">
-				                <figure class="calender-icon"></figure> 03 Nov 2016
-				                <figure class="forward-icon ml-20"></figure> 43
-				                <figure class="view-icon ml-20"></figure> 21
+				                <figure class="calender-icon"></figure> {{article.publish_date.date}}
+				                {% if article.no_shares > 0 %}
+				                	<figure class="forward-icon ml-20"></figure> {{article.no_shares}}
+				                {% endif %}
+				                {% if article.no_views > 0 %}
+				                	<figure class="view-icon ml-20"></figure> {{article.no_views}}
+				                {% endif %}
 				              </span>
 	                    </div>
 	                </a>
@@ -100,11 +106,11 @@
         	<!-- Popular Courses -->
         	{% if popular_courses %}
 			  <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 res-wd100">
-			    <h2 class="heading-right-talent">Popular Courses</h2>
+			    <h2 class="heading-right-talent">Suggested Courses</h2>
 			    <ul>
 			      {% for pCourses in popular_courses %}
 			      <li>
-			        <a href="#">
+			        <a href="{{pCourses.url}}">
 			          <h3>{{pCourses.name}}</h3>
 			          <div class="rating-box">
 			            {% for star in pCourses.star %}
@@ -120,9 +126,9 @@
 			              {% endfor %}
 			              <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
 			          </div>
-			          <span class="jobs-available">
+			         <!--  <span class="jobs-available">
 			            <strong>21735</strong>  jobs available
-			          </span>
+			          </span> -->
 			          <span class="people-bought">
 			            <strong>{{pCourse.buy_count}}</strong>  people bought
 			          </span>

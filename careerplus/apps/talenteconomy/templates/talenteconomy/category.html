@@ -86,18 +86,19 @@
 		<!-- right content start -->
 		<div class="col-md-3 col-sm-12">
 			<!-- take me to -->
+			{% with category.slug as main_cat %}
 			{% if categories %}
 			<div class="take-me-to box-panel col-sm-6 col-md-12 mb-40">
 				<h2 class="heading-right-talent">take me to</h2>
 				<ul>
                 	{% for category in categories %}
-					<li>
+					<li {% if category.slug == main_cat %}style="border:1px solid #666"{% endif %}>
 						<a href="{{category.url}}" title="{{category.title}}">
+							{% if category.image %}
 							<figure>
-								{% if category.image %}
 								<img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
-								{% endif %}
 							</figure>
+							{% endif %}
 							<h4>{{category.name}}</h4>
 						</a>
 					</li>
@@ -105,6 +106,7 @@
 				</ul>
 			</div>
 			{% endif %}
+			{% endwith %}
 
 			<!-- Popular Courses -->
 			{% if popular_courses %}
@@ -129,9 +131,9 @@
 						      {% endfor %}
 						      <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
 						  </div>
-						  <span class="jobs-available">
+						<!--   <span class="jobs-available">
 						    <strong>21735</strong>  jobs available
-						  </span>
+						  </span> -->
 						  <span class="people-bought">
 						    <strong>{{pCourse.buy_count}}</strong>  people bought
 						  </span>

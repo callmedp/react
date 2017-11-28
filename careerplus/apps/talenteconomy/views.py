@@ -313,7 +313,7 @@ class AuthorDetailView(DetailView):
             queryset = self.get_queryset()
 
         if slug is not None:
-            queryset = queryset.filter(slug=slug, is_active=1, visibility=2)
+            queryset = queryset.filter(slug=slug, is_active=1, visibility=2).annotate(no_of_blog=Count('blog'))
         try:
             obj = queryset.get()
         except:
@@ -339,6 +339,8 @@ class AuthorDetailView(DetailView):
             "popular_courses": popular_courses,
         })
 
+        context.update(self.get_meta_details())
+
         return context
 
     def get_breadcrumb_data(self):
@@ -350,3 +352,8 @@ class AuthorDetailView(DetailView):
         data = {"breadcrumbs": breadcrumbs}
         return data
 
+    def get_meta_details(self):
+        meta = Meta(
+            description=self.object,
+        )
+        return {"meta": meta}
