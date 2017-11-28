@@ -7,7 +7,7 @@
         <div class="editor-comments-views">
             <span>
               <img src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
-              <a href="{% url 'talent:authors-detail' main_article.author.slug %}">{{main_article.author.name}}</a> / {{article.publish_date.date}}
+              <a href="{% url 'talent:authors-detail' main_article.author.slug %}">{{main_article.author.name}}</a> / {{main_article.publish_date.date}}
             </span>
 
             {% if main_article.comment_moderated > 0 %}
