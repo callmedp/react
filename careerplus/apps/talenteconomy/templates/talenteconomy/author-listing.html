@@ -12,7 +12,7 @@
 
 
 {% block title %}
-  Talent Economy: Career Skilling for a future ready India
+Career & Certification Guidance Top Authors @ Shine Learning
 {% endblock title %}
 
 {% block css_section %}
@@ -64,9 +64,16 @@
                         <span class="articles-no">{{author.no_of_blog}} articles</span>
                         <p>{{author.about|striptags}}</p>
                         <span class="social-login-gr">
-                          <i class="facebook-gr"></i>
-                          <i class="twitter-gr"></i>
-                          <i class="linkedin-gr"></i>
+
+                          {% if author.fb_url %}
+                            <a href="{{author.fb_url}}"><i class="facebook-gr"></i></a>
+                          {% endif %}
+                          {% if author.twitter_url %}
+                            <a href="{{author.twitter_url}}"><i class="twitter-gr"></i></a>
+                          {% endif %}
+                          {% if author.linkedin_url %}
+                            <a href="{{author.linkedin_url}}"><i class="linkedin-gr"></i></a>
+                          {% endif %}
                         </span>
                       </figcaption>
                     </div>
@@ -112,7 +119,7 @@
     <ul>
       {% for pCourses in popular_courses %}
       <li>
-        <a href="#">
+        <a href="{{pCourses.url}}">
           <h3>{{pCourses.name}}</h3>
           <div class="rating-box">
             {% for star in pCourses.star %}

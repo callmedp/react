@@ -289,6 +289,7 @@ class AuthorListingView(TemplateView):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
         breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({"url": None, "name": "Authors"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
