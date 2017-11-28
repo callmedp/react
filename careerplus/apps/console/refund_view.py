@@ -64,7 +64,7 @@ class RefundInfoMixin(object):
                 )
 
 
-@method_decorator(permission_required('order.can_view_refund_approval_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_view_refund_approval_queue', login_url='/console/login/'), name='dispatch')
 class RefundRequestApprovalView(ListView, PaginationMixin):
     context_object_name = 'refund_approval_list'
     template_name = 'console/refund/refund-approval-list.html'
@@ -172,7 +172,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
         return queryset.order_by('-modified')
 
 
-@method_decorator(permission_required('order.can_view_refund_request_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_view_refund_request_queue', login_url='/console/login/'), name='dispatch')
 class RefundOrderRequestView(ListView, PaginationMixin):
     context_object_name = 'refund_request_list'
     template_name = 'console/refund/refund-request-list.html'
