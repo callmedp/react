@@ -1,5 +1,5 @@
-@import "bootstrap/variables";
-@import "bootstrap/mixins";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
 
 header {
 	border-bottom: 1px solid #f1f1f1;
@@ -7,7 +7,7 @@ header {
 
 .detail-course-header {
 	clear: both;
-	background: url(../images/detail-header-bg.jpg) no-repeat center top; 
+	background: url(#{$imagePath}/images/detail-header-bg.jpg) no-repeat center top; 
 	background-size: cover;
 	display: block;
 }
