@@ -1,0 +1,132 @@
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+
+/*----------------feddback & interview page css----------------*/
+.about-header {
+	clear: both;
+	background: url(../images/about-header-bg.jpg) no-repeat center top; 
+	background-size: cover;
+	display: block;
+}
+
+.about-heading {
+	display: table-cell;
+
+	h1 {
+		display: block;
+		margin: 20px 0 30px 0;
+		color: $white-color;
+	}
+}
+
+.why-us-box {
+	padding: 40px 0;
+	font-size: 15px;
+
+	.why-us {
+		padding: 20px;
+
+		h2 {
+			color: $anchor-color;
+			margin: 0 0 15px 0;
+			font-size: $font-size+13;
+		}
+
+		p {
+			font-size: $font-size+4;
+			font-weight: $font-weight+300;
+		}
+
+		ul {
+			list-style-type: none;
+			margin: 15px 0 0 8px;
+			padding: 0;
+			border-left: 1px solid #3cb878;
+
+			li {
+				display: block;
+				margin: 0 0 10px 0;
+				position: relative;
+				padding: 0 0 0 20px;
+
+				&:before {
+					content: '';
+					width: 17px;
+					height: 17px;
+					display: inline-block;
+					background: $sprite -561px -289px;
+					position: absolute;
+					top: 0;
+					left: -8px;
+				}
+			}
+		}
+	}
+}
+
+.we-provide {
+	background-color: #eaeef6;
+	padding: 30px 0;
+
+	h2 {
+		font-size: $font-size+29px;
+		color: $anchor-color;
+	}
+
+	ul {
+		list-style-type: none;
+		padding: 0;
+		margin: 20px 0 0 0;	
+		overflow: visible;
+
+		li {
+			display: inline-block;
+			padding: 40px 30px 20px 30px;
+			margin: 1.5%;
+			width: 30%;
+			vertical-align: top;
+			min-height: 300px;
+
+			@media (max-width: 1190px) {
+				min-height: 315px;
+			}
+
+			@media (max-width: 991px) {
+				min-height: 370px;
+			}
+
+			h3 {
+				color: $anchor-color;
+				margin: 10px 0 20px 0;
+			}
+
+			p {
+				font-size: $font-size+4;
+			}
+		}
+	}
+
+}
+
+.our-partners {
+	padding-top: 20px;
+	font-size: $font-size+4;
+
+	h2 {
+		text-align: center;
+		color: $anchor-color;
+		font-size: $font-size+29px;
+	}
+
+	.media {
+		padding: 20px;
+		margin-top: 40px;
+
+		.media-left {
+			width: 17%;
+		}
+	}
+}
+
+
+

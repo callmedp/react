@@ -269,6 +269,9 @@ GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
 GOOGLE_RECAPTCHA_KEY = '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY'
 GOOGLE_RECAPTCHA_SECRET = '6Lfa5zYUAAAAAAke3_HJ7XgC3Voxbdn1bscy878R'
 
+COMPRESS_PRECOMPILERS = (
+   ('text/scss', 'sass --scss {infile} {outfile}'),
+)
 
 try:
     from .settings_local import *
