@@ -23,7 +23,9 @@ class BlogAddForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    image = forms.FileField(label=("Image:"), max_length=200, required=False)
+    image = forms.FileField(
+        help_text='max size 100kb.',
+        label=("Image:"), max_length=200, required=False)
 
     image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
         required=False, widget=forms.TextInput(

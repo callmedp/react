@@ -2,11 +2,13 @@ from django import forms
 # from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-
+from django.conf import settings
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from blog.models import Tag, Category, Blog, Comment, Author, SITE_TYPE
 from blog.config import STATUS
+from .decorators import (
+    has_group,)
 
 
 User = get_user_model()
@@ -20,6 +22,7 @@ class ArticleAddForm(forms.ModelForm):
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     image = forms.ImageField(label=("Image*:"), max_length=200,
+        help_text='max size 100kb.',
         widget=forms.FileInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
@@ -68,7 +71,29 @@ class ArticleAddForm(forms.ModelForm):
         fields = ['name', 'image', 'image_alt', 'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment','author','visibility']
     
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(ArticleAddForm, self).__init__(*args, **kwargs)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['p_cat'].queryset = Category.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['sec_cat'].queryset = Category.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['tags'].queryset = Tag.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['author'].queryset = Author.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['visibility'].choices = site_type
         self.fields['tags'].required = False
         self.fields['sec_cat'].required = False
         self.fields['content'].required = True
@@ -95,7 +120,9 @@ class ArticleChangeForm(forms.ModelForm):
             'class': 'form-control col-md-7 col-xs-12',
             'required': True}))
 
-    image = forms.ImageField(label=("Image*:"), max_length=200)
+    image = forms.ImageField(
+        help_text='max size 100kb.',
+        label=("Image*:"), max_length=200)
 
     image_alt = forms.CharField(label=("Image Alt*:"), max_length=100,
         required=False, widget=forms.TextInput(
@@ -165,7 +192,30 @@ class ArticleChangeForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(ArticleChangeForm, self).__init__(*args, **kwargs)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['p_cat'].queryset = Category.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['sec_cat'].queryset = Category.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['tags'].queryset = Tag.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['author'].queryset = Author.objects.filter(
+            is_active=True,
+            visibility__in=visibility)
+        self.fields['visibility'].choices = site_type
+        
         self.fields['tags'].required = False
         self.fields['sec_cat'].required = False
         # self.fields['sites'].required = False
@@ -212,7 +262,18 @@ class TagAddForm(forms.ModelForm):
         fields = ['name','visibility' ]
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(TagAddForm, self).__init__(*args, **kwargs)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['visibility'].choices = site_type
+        
         self.fields['name'].required = True
 
     def clean_name(self):
@@ -260,7 +321,18 @@ class TagChangeForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(TagChangeForm, self).__init__(*args, **kwargs)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['visibility'].choices = site_type
+        
         self.fields['slug'].required = False
         self.fields['slug'].widget.attrs['readonly'] = True
 
@@ -300,7 +372,9 @@ class CategoryChangeForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    image = forms.ImageField(label=("Image:"), max_length=200 , required= False)
+    image = forms.ImageField(
+        help_text='max size 100kb.',
+        label=("Image:"), max_length=200 , required= False)
 
     image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
         required=False, widget=forms.TextInput(
@@ -323,7 +397,18 @@ class CategoryChangeForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(CategoryChangeForm, self).__init__(*args, **kwargs)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['visibility'].choices = site_type
+        
         self.fields['slug'].required = False
         self.fields['slug'].widget.attrs['readonly'] = True
         
@@ -365,7 +450,9 @@ class CategoryAddForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    image = forms.ImageField(label=("Image:"), max_length=200, required= False,
+    image = forms.ImageField(
+        help_text='max size 100kb.',
+        label=("Image:"), max_length=200, required= False,
         widget=forms.FileInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
@@ -382,7 +469,18 @@ class CategoryAddForm(forms.ModelForm):
         fields = ['name', 'visibility','image','image_alt']
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(CategoryAddForm, self).__init__(*args, **kwargs)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['visibility'].choices = site_type
+        
         self.fields['name'].required = True
 
     def clean_name(self):
@@ -411,12 +509,20 @@ class CategoryAddForm(forms.ModelForm):
 class ArticleFilterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(ArticleFilterForm, self).__init__(*args, **kwargs)
-        qs = Author.objects.filter(is_active=True)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
         NEWSTATUS = ((-1, 'Select Status'),) + STATUS
 
         self.fields['author'] = forms.ModelChoiceField(label=("Writer:"),
-            queryset=qs,
+            queryset=Author.objects.filter(is_active=True, visibility__in=visibility),
             to_field_name='pk',
             widget=forms.Select(
                 attrs={'class': 'form-control col-md-7 col-xs-12'}))
@@ -426,11 +532,11 @@ class ArticleFilterForm(forms.ModelForm):
                 'class': 'form-control col-md-7 col-xs-12'}))
 
         self.fields['p_cat'] = forms.ModelChoiceField(label=("Category"),
-            queryset=Category.objects.all(),
+            queryset=Category.objects.filter(is_active=True, visibility__in=visibility),
             to_field_name='pk',
             widget=forms.Select(
                 attrs={'class': 'form-control col-md-7 col-xs-12'}))
-        self.fields['visibility'] = forms.ChoiceField(label=("Visibility"), choices=SITE_TYPE, widget=forms.Select(attrs={'class':'form-control col-md-7 col-xs-12'}))
+        self.fields['visibility'] = forms.ChoiceField(label=("Visibility"), choices=site_type, widget=forms.Select(attrs={'class':'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Blog
@@ -487,7 +593,9 @@ class AuthorAddForm(forms.ModelForm):
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    image = forms.ImageField(label=("Image*:"), max_length=200,
+    image = forms.ImageField(
+        help_text='max size 100kb.',
+        label=("Image*:"), max_length=200,
         widget=forms.FileInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
@@ -513,12 +621,11 @@ class AuthorAddForm(forms.ModelForm):
     linkedin_url =  forms.CharField(label=("Linked-In URL:"), required=False, widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    user = forms.ModelChoiceField(label=("Select User:"),
+    user = forms.ModelChoiceField(label=("Select User*:"),
         queryset=User.objects.filter(is_active=True),
         empty_label="Select User", required=True,
         to_field_name='pk', widget=forms.Select(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
-
 
     visibility = forms.ChoiceField(label=("Visibility*:"),
             choices=SITE_TYPE, widget=forms.Select(attrs={
@@ -526,10 +633,21 @@ class AuthorAddForm(forms.ModelForm):
 
     class Meta:
         model = Author
-        fields = ['name', 'image', 'image_alt', 'about','designation','company','fb_url','twitter_url','linkedin_url','visibility']
+        fields = ['name', 'image', 'image_alt', 'about','designation','company','fb_url','twitter_url','linkedin_url','visibility', 'user']
     
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(AuthorAddForm, self).__init__(*args, **kwargs)
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['visibility'].choices = site_type
+        
 
 class AuthorChangeForm(forms.ModelForm):
 
@@ -541,7 +659,9 @@ class AuthorChangeForm(forms.ModelForm):
     is_active = forms.BooleanField(label=("Active:"),
         widget=forms.CheckboxInput())
 
-    image = forms.ImageField(label=("Image*:"), max_length=200)
+    image = forms.ImageField(
+        help_text='max size 100kb.',
+        label=("Image*:"), max_length=200)
 
     image_alt = forms.CharField(label=("Image Alt*:"), max_length=100,
         required=False, widget=forms.TextInput(
@@ -581,7 +701,7 @@ class AuthorChangeForm(forms.ModelForm):
     linkedin_url =  forms.CharField(label=("Linked-In URL:"), required=False, widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    user = forms.ModelChoiceField(label=("Select User:"),
+    user = forms.ModelChoiceField(label=("Select User*:"),
         queryset=User.objects.filter(is_active=True),
         empty_label="Select User", required=True,
         to_field_name='pk', widget=forms.Select(
@@ -600,8 +720,18 @@ class AuthorChangeForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(AuthorChangeForm, self).__init__(*args, **kwargs)
-
+        visibility = [3]
+        site_type = []
+        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(1)
+            site_type.append((1,"ShineLearning"))
+        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(2)
+            site_type.append((2,"TalentEconomy"))
+        self.fields['visibility'].choices = site_type
+        
         self.fields['slug'].widget.attrs['readonly'] = True
 
         self.fields['image'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'

@@ -18,7 +18,11 @@ from seo.models import AbstractSEO
 
 from .config import STATUS
 
-SITE_TYPE = ((1, 'ShineLearning'),(2, 'TalentEconomy'),(3, 'Both'))
+SITE_TYPE = (
+        (1, 'ShineLearning'),
+        (2, 'TalentEconomy'),
+        # (3, 'Both')
+    )
 
 class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -41,8 +45,6 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
     priority = models.IntegerField(default=0)
 
     _metadata_default = ModelMeta._metadata_default.copy()
-    _metadata_default['locale'] = 'dummy_locale'
-
     _metadata = {
         'title': 'get_title',
         'description': 'get_description',
@@ -274,8 +276,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     expiry_date = models.DateTimeField(null=True, blank=True)
 
     _metadata_default = ModelMeta._metadata_default.copy()
-    _metadata_default['locale'] = 'dummy_locale'
-
+    
     _metadata = {
         'title': 'get_title',
         'description': 'get_description',
@@ -302,19 +303,27 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         if not self.heading:
             self.heading = self.name
         if not self.meta_desc:
-            # desc = mark_safe(self.content)
-            desc = re.sub(re.compile('<.*?>'), '', self.content)
-            self.meta_desc = 'Read Article on ' + self.name + '.' + desc[:200]
+            self.meta_desc = self.get_meta_desc()
         if not self.display_name:
             self.display_name = self.name
         if self.id:
             self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+        if not summary:
+            try:
+                soup = BeautifulSoup(self.content, 'html.parser')
+                self.summary = soup.blockquote.text.strip()
+            except:
+                self.summary = ''
+        super(Blog, self).save(*args, **kwargs)
+
+    def get_meta_desc(self, description=''):
         try:
             soup = BeautifulSoup(self.content, 'html.parser')
-            self.summary = soup.blockquote.text.strip()
+            cleantext = soup.get_text()
+            cleantext = 'Read Article on ' + self.name + '.' + cleantext[:200]
         except:
-            self.summary = ''
-        super(Blog, self).save(*args, **kwargs)
+            cleantext = 'Read Article on ' + self.name + '.'
+        return cleantext
 
     def get_title(self):
         title = self.title

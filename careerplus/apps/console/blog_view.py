@@ -149,6 +149,11 @@ class ArticleUpdateView(UpdateView):
     http_method_names = [u'get', u'post']
     form_class = ArticleChangeForm
 
+    def get_form_kwargs(self):
+        kwargs = super(ArticleUpdateView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = super(self.__class__, self).get(request, *args, **kwargs)
@@ -187,6 +192,11 @@ class ArticleAddView(FormView):
     success_url = "/console/blog/article/"
     http_method_names = [u'get', u'post']
     form_class = ArticleAddForm
+
+    def get_form_kwargs(self):
+        kwargs = super(ArticleAddView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         return super(self.__class__, self).get(request, args, **kwargs)
@@ -249,9 +259,9 @@ class ArticleListView(ListView, PaginationMixin):
             "author": self.sel_writer,
             "p_cat": self.sel_p_cat,
             "status": self.sel_status,
-                        "visibility":self.visibility,
+            "visibility":self.visibility,
         }
-        filter_form = ArticleFilterForm(initial=initial_filter_data)
+        filter_form = ArticleFilterForm(initial=initial_filter_data,request=self.request)
         context.update({
             "query": self.query,
             "filter_form": filter_form,
@@ -317,6 +327,11 @@ class CategoryUpdateView(UpdateView):
     success_url = "/console/blog/category/"
     http_method_names = [u'get', u'post']
     form_class = CategoryChangeForm
+
+    def get_form_kwargs(self):
+        kwargs = super(CategoryUpdateView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -401,6 +416,11 @@ class CategoryAddView(FormView):
     http_method_names = [u'get', u'post']
     form_class = CategoryAddForm
 
+    def get_form_kwargs(self):
+        kwargs = super(CategoryAddView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def get(self, request, *args, **kwargs):
         return super(self.__class__, self).get(request, args, **kwargs)
 
@@ -436,6 +456,11 @@ class TagUpdateView(UpdateView):
     success_url = "/console/blog/tag/"
     http_method_names = [u'get', u'post']
     form_class = TagChangeForm
+
+    def get_form_kwargs(self):
+        kwargs = super(TagUpdateView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -519,6 +544,11 @@ class TagAddView(FormView):
     http_method_names = [u'get', u'post']
     form_class = TagAddForm
 
+    def get_form_kwargs(self):
+        kwargs = super(TagAddView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def get(self, request, *args, **kwargs):
         return super(self.__class__, self).get(request, args, **kwargs)
 
@@ -554,6 +584,11 @@ class AuthorAddView(FormView):
     success_url = "/console/blog/author/"
     http_method_names = [u'get', u'post']
     form_class = AuthorAddForm
+
+    def get_form_kwargs(self):
+        kwargs = super(AuthorAddView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         return super(self.__class__, self).get(request, args, **kwargs)
@@ -592,6 +627,11 @@ class AuthorUpdateView(UpdateView):
     success_url = "/console/blog/author/"
     http_method_names = [u'get', u'post']
     form_class = AuthorChangeForm
+
+    def get_form_kwargs(self):
+        kwargs = super(AuthorUpdateView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
