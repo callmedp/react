@@ -36,7 +36,7 @@
       {% endif %}
     {% endfor %}
     </ol>
-
+	 {% if top_article_list %}
       <div class="carousel-inner" role="listbox">
 
       	{% for topArtList in top_article_list %}
@@ -88,6 +88,7 @@
         </div>
         {% endfor %}
       </div>
+      {% endif %}
   </div>
   <!-- Controls -->
   <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
