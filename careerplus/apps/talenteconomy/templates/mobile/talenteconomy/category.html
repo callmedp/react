@@ -85,45 +85,12 @@
       {% endfor %}  
   </div><!-- box panel ends here -->
 
-  <h2 class="mt-20">Contributors</h2>
-  <div class="slide-container">
-    <ul class="contributors">
-        {% for author in authors %}
-        <li>
-          {% if author.image %}
-          {% thumbnail obj.image "130x130" crop="center" as im %}
-          <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
-          {% endthumbnail %}
-          {% endif %}
-          <p class="head pb-0">{{author.name}}</p>
-          <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
-          <p class="fs-12"><a href="#">{{author.no_of_blog}} articles</a></p>
-        </li>
-        {% endfor %}
+  
+  {% include './include/authorSlide.tmpl.html' with authors=authors %}
 
-    </ul>
-  </div>
 
   {% if categories %}
-  <div class="box-panel row mt-20">
-    <p class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>take me to</p>
-
-    <ul class="take-list mt-20">
-      {% for category in categories %}
-        <li>
-          <div class="list-box">
-            <img src="{{category.image}}" alt="{{category.image_alt}}" class="img-responsive">
-            <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
-          </div> 
-        </li>
-
-        {% if forloop.counter|divisibleby:2 %}
-          <li class="clearfix is-hidden"></li>
-        {% endif %}
-      {% endfor %}      
-    </ul>
-    <div class="clearfix"></div>
-  </div>
+    {% include './include/category.tmpl.html' with categories=categories %}
   {% endif %}
 
 </section><!-- End of talent-economy list -->

@@ -1,0 +1,22 @@
+{% load thumbnail %}
+
+<div class="box-panel row mt-20 clearfix">
+  <p class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>Take me to</p>
+
+  <ul class="take-list mt-20">
+    {% for category in categories %}
+      <li>
+        <div class="list-box">
+          {% thumbnail category.image "133x90" crop="center" as im %}
+            <img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
+          {% endthumbnail %}
+          <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
+        </div>     
+      </li>
+    {% endfor %}
+
+    {% if forloop.counter|divisibleby:2 %}
+      <li class="clearfix is-hidden"></li>
+    {% endif %}
+  </ul>
+</div>

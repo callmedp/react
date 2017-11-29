@@ -65,63 +65,18 @@
             </div>
         </div>
         <!-- ends of author item -->
-        {{author.about|safe}}
+        {{author.about|striptags|safe}}
 
         <hr>
 
         <!-- box panel starts here -->
         <div class="box-panel row no-shadow">
-        	{% for article in article_list %}
-        	<div class="media article-list">
-                <a title="Government Jobs" href="blog-detail.html">
-                    {% if article.image  %}
-                    {% thumbnail article.image "96x73" crop="center" as im %}
-                    <figure class="media-left">
-                        <img class="media-object w-auto" src="{{article.image.url}}" alt="{{article.image_alt}}" width="{{ im.width }}" height="{{ im.height }}">
-                    </figure>
-                    {% endthumbnail %}
-                    {% endif %}
-                    <div class="media-body rel">
-                        <span class="article-tag">{{article.p_cat.name}}</span>
-                        <h3 class="media-heading">{{article.heading}}</h3>
-
-                        <div class="blog-author fs-11">
-                            <!-- <span class="editor">Ajay Mishra</span> -->
-                            <span class="view-forward pull-right">
-                                {% if article.no_shares > 0 %}
-                                    <figure class="icon-forward"></figure> {{article.no_shares}} 
-                                {% endif %}
-                                {% if article.no_views > 0 %}
-					             <figure class="icon-view icon-grey-view ml-10"></figure> {{article.no_views}}
-                                {% endif %}
-					        </span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
+            {% include './include/articles.tmpl.html' with articlelists=article_list %}
         </div>
 
         {% if authors %}
         <div class="row bg-grey no-shadow content-box">
-            <h2 class="mt-20">Contributors</h2>
-		    <div class="slide-container">
-		        <ul class="contributors">
-		            {% for author in authors %}
-		            <li>
-		              {% if author.image %}
-		              {% thumbnail obj.image "130x130" crop="center" as im %}
-		              <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
-		              {% endthumbnail %}
-		              {% endif %}
-		              <p class="head pb-0">{{author.name}}</p>
-		              <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
-		              <p class="fs-12"><a href="#">{{author.no_of_blog}} articles</a></p>
-		            </li>
-		            {% endfor %}
-
-		        </ul>
-		    </div>
+            {% include './include/authorSlide.tmpl.html' with authors=authors %}
         </div>
         {% endif %}
     </section>

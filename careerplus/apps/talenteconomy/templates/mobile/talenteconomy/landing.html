@@ -58,44 +58,17 @@
     <div class="content-box pt-10">
     <div class="slide-container"> 
         <ul class="article-slider">
-            {% for topArtList in top_article_list %}
+          {% for topArtList in top_article_list %}
             {% if topArtList.0 %}
-            <li>
-                <a href="{{topArtList.0.url}}" class="caption-bg-txt">
-                    <div class="bottom-text">
-                        <span class="main-head">{{topArtList.0.p_cat.name}}</span>
-                        <p class="pb-5">{{topArtList.0.name}}</p>
-                        <span class="editor fs-12">{{topArtList.0.author.name}}</span>
-                    </div>
-                </a>
-                <img src="{{topArtList.0.image.url}}" alt="{{topArtList.0.image_alt}}">
-            </li>
+              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 %}
             {% endif %}
             {% if topArtList.1 %}
-            <li>
-                <a href="{{topArtList.1.url}}" class="caption-bg-txt">
-                    <div class="bottom-text">
-                        <span class="main-head">{{topArtList.1.p_cat.name}}</span>
-                        <p class="pb-5">{{topArtList.1.name}}</p>
-                        <span class="editor fs-12">{{topArtList.1.author.name}}</span>
-                    </div>
-                </a>
-                <img src="{{topArtList.1.image.url}}" alt="{{topArtList.1.image_alt}}">
-            </li>
+              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 %}
             {% endif %}
             {% if topArtList.1 %}
-            <li>
-                <a href="{{topArtList.2.url}}" class="caption-bg-txt">
-                    <div class="bottom-text">
-                        <span class="main-head">{{topArtList.2.p_cat.name}}</span>
-                        <p class="pb-5">{{topArtList.2.name}}</p>
-                        <span class="editor fs-12">{{topArtList.2.author.name}}</span>
-                    </div>
-                </a>
-                <img src="{{topArtList.2.image.url}}" alt="{{topArtList.2.image_alt}}">
-            </li>
+              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 %}
             {% endif %}
-            {% endfor %}
+          {% endfor %}
         </ul>
     </div>
     </div>
@@ -113,78 +86,22 @@
           unique skillsets, as opposed to the ones required now. By applying for the
           online professional courses present on this platform, you'll be able to stay ahead of the curve and massively improve your job prospects by staying future-ready at all times.</p>
         </div>
-        <img src="/media/images/talent-economy.jpg" class="img-responsive">
+        <img src="{% static '/shinelearn/images/mobile/common/talent-economy.jpg' %}" class="img-responsive minh-185">
     </div>
     <!-- Talent Economy starts here -->
 
     <!-- box panel starts here -->
     <div class="box-panel row ">
-        <p class="semi-head">Recently added</p>
-        {% for artList in article_list %}
-        <div class="media article-list">
-          <a title="{{artList.title}}" href="{{artList.url}}">
-            <figure class="media-left">
-              {% thumbnail artList.image "96x73" crop="center" as im %}
-              <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}">
-              {% endthumbnail %}
-            </figure>
-            <div class="media-body rel">
-              <span class="article-tag">{{artList.p_cat.name}}</span>
-              <h3 class="media-heading">{{artList.heading}}</h3>
+      <p class="semi-head">Recently added</p>
 
-              <div class="blog-author fs-11">
-                <span class="editor">{{artList.author.name}}</span>
-                <span class="view-forward pull-right">
-                  {% if article.no_shares > 0 %}
-                    <figure class="icon-forward"></figure> {{artList.no_shares}}
-                  {% endif %}
-                  {% if article.no_views > 0 %}
-                    <figure class="icon-view icon-grey-view ml-10"></figure> {{artList.no_views}}
-                  {% endif %}
-                </span>
-              </div>
-            </div>
-          </a>
-        </div>
-        {% endfor %}
+      {% include './include/articles.tmpl.html' with articlelists=article_list %}
+
     </div>
     <!-- box panel ends here -->
-    <h2 class="mt-20">Contributors</h2>
-    <div class="slide-container">
-        <ul class="contributors">
-            {% for author in authors %}
-            <li>
-              {% if author.image %}
-              {% thumbnail author.image "130x130" crop="center" as im %}
-              <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
-              {% endthumbnail %}
-              {% endif %}
-              <p class="head pb-0">{{author.name}}</p>
-              <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
-              <p class="fs-12"><a href="#">{{author.no_of_blog}} articles</a></p>
-            </li>
-            {% endfor %}
-
-        </ul>
-    </div>
+    {% include './include/authorSlide.tmpl.html' with authors=authors %}
 
     {% if categories %}
-    <div class="box-panel row mt-20 clearfix">
-        <p class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>Take me to</p>
-
-        <ul class="take-list mt-20">
-            {% for category in categories %}
-            <li>
-                <div class="list-box">
-                  {% thumbnail category.image "133x90" crop="center" as im %}
-                  <img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
-                  {% endthumbnail %}
-                  <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
-                </div>       
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+      {% include './include/category.tmpl.html' with categories=categories %}
     {% endif %}
   </section>
 </div>

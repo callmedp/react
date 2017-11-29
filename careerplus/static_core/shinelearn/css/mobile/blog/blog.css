@@ -10,13 +10,11 @@
   width: 1%; }
 
 .box-panel {
-  -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-     -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-          box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   padding: 10px 15px; }
 
-.author-item .author-detail h2 sup {
+.author-item .author-detail h2 sup, .author-item .author-detail h1 sup {
   height: 1px;
   width: 20px;
   display: inline-block;
@@ -57,15 +55,14 @@
       width: 50px;
       -webkit-border-radius: 50%;
       -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
       border-radius: 50%;
       text-align: center;
       font-size: 11px;
       line-height: 12px;
       vertical-align: middle;
       color: #666;
-      -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
-         -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
-              box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
       position: relative; }
 
 /* Tabbing Start From Here */
@@ -96,6 +93,7 @@
 .cms .tabs {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid #e5e5e5; }
@@ -124,9 +122,7 @@ input, select, textarea, button {
 
 input:focus {
   border: 1;
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
   outline: none; }
 
 select {
@@ -146,9 +142,6 @@ select {
   outline: 0;
   padding: 6px 30px 6px 6px;
   text-align: left;
-  -webkit-transition: all .3s ease;
-  -o-transition: all .3s ease;
-  -moz-transition: all .3s ease;
   transition: all .3s ease; }
   select option {
     padding: 6px; }
@@ -185,18 +178,12 @@ button {
   text-align: center;
   border: 1px solid #ddd; }
   .input-group-addon:first-child {
-    -webkit-border-bottom-right-radius: 0;
-       -moz-border-radius-bottomright: 0;
-            border-bottom-right-radius: 0;
-    -webkit-border-top-right-radius: 0;
-       -moz-border-radius-topright: 0;
-            border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
     border-right: 0; }
   .input-group-addon:last-child {
     border-left: 0 none;
-    -webkit-border-radius: 0;
-       -moz-border-radius: 0;
-            border-radius: 0; }
+    border-radius: 0; }
 
 .form-control {
   display: block;
@@ -208,19 +195,12 @@ button {
   background-color: #fff;
   font-family: "Open Sans", sans-serif;
   border: 1px solid #c1c1c1;
-  -webkit-border-radius: 0;
-     -moz-border-radius: 0;
-          border-radius: 0;
+  border-radius: 0;
   color: #555;
   font-size: 12px;
   line-height: 1.42857;
   padding: 6px 12px;
-  -webkit-transition: border-color 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s;
-  transition: border-color 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s;
-  -o-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-  -moz-transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s, -moz-box-shadow 0.15s ease-in-out 0s;
-  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s, -webkit-box-shadow 0.15s ease-in-out 0s, -moz-box-shadow 0.15s ease-in-out 0s; }
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s; }
   .form-control::-moz-placeholder {
     color: #999;
     opacity: 1; }
@@ -237,6 +217,7 @@ button {
       width: 40px;
       -webkit-border-radius: 50%;
       -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
       border-radius: 50%;
       background-color: #ebebeb;
       position: absolute;
@@ -246,6 +227,7 @@ button {
         width: 40px;
         -webkit-border-radius: 50%;
         -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
         border-radius: 50%; }
 
 /* Related articles Start From Here */
@@ -281,8 +263,7 @@ button {
     display: inline-block;
     max-width: 110px;
     overflow: hidden;
-    -o-text-overflow: ellipsis;
-       text-overflow: ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
     color: #999;
     height: auto !important; }
@@ -426,6 +407,7 @@ article {
 .main-head {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
   border-radius: 3px;
   color: #fff;
   background-color: rgba(0, 0, 0, 0.5);
@@ -445,9 +427,6 @@ article {
   /* FF3.6-15 */
   background: -webkit-linear-gradient(-45deg, rgba(59, 111, 194, 0.5) 0%, rgba(28, 139, 174, 0.5) 50%, rgba(16, 151, 166, 0.5) 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: -webkit-linear-gradient(315deg, rgba(59, 111, 194, 0.5) 0%, rgba(28, 139, 174, 0.5) 50%, rgba(16, 151, 166, 0.5) 100%);
-  background: -moz-linear-gradient(315deg, rgba(59, 111, 194, 0.5) 0%, rgba(28, 139, 174, 0.5) 50%, rgba(16, 151, 166, 0.5) 100%);
-  background: -o-linear-gradient(315deg, rgba(59, 111, 194, 0.5) 0%, rgba(28, 139, 174, 0.5) 50%, rgba(16, 151, 166, 0.5) 100%);
   background: linear-gradient(135deg, rgba(59, 111, 194, 0.5) 0%, rgba(28, 139, 174, 0.5) 50%, rgba(16, 151, 166, 0.5) 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#803b6fc2', endColorstr='#801097a6',GradientType=1 );
@@ -461,18 +440,10 @@ article {
   /* FF3.6-15 */
   background: -webkit-linear-gradient(-45deg, #3b6fc2 0%, #1c8bae 77%, #1097a6 100%);
   /* Chrome10-25,Safari5.1-6 */
-  background: -webkit-linear-gradient(315deg, #3b6fc2 0%, #1c8bae 77%, #1097a6 100%);
-  background: -moz-linear-gradient(315deg, #3b6fc2 0%, #1c8bae 77%, #1097a6 100%);
-  background: -o-linear-gradient(315deg, #3b6fc2 0%, #1c8bae 77%, #1097a6 100%);
   background: linear-gradient(135deg, #3b6fc2 0%, #1c8bae 77%, #1097a6 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b6fc2', endColorstr='#1097a6',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
-
-.talent-gr-nav {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3b6fc2+0,1c8bae+77,1097a6+100 */
-  background: #3b6fc2;
- }
 
 .talent-gr li {
   height: 195px; }
@@ -483,6 +454,7 @@ article {
 .talent-economy {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
   border-radius: 3px;
   position: relative;
   overflow: hidden;
@@ -524,6 +496,7 @@ article {
   padding-bottom: 0; }
 
 .contributors li {
+  background-color: #fff;
   width: 130px;
   display: block;
   text-align: center;
@@ -662,10 +635,13 @@ blockquote {
       width: 90px;
       -webkit-border-radius: 100%;
       -moz-border-radius: 100%;
+      -ms-border-radius: 100%;
       border-radius: 100%; }
-  .author-item .author-detail h2 {
-    display: inline-block; }
-    .author-item .author-detail h2 sup {
+  .author-item .author-detail h2, .author-item .author-detail h1 {
+    display: inline-block;
+    color: #333;
+    font-weight: 600; }
+    .author-item .author-detail h2 sup, .author-item .author-detail h1 sup {
       display: block;
       margin-top: 5px;
       width: 45px; }
@@ -675,18 +651,22 @@ blockquote {
 .italic {
   font-style: italic; }
 
-.clearfix:after {
-  content: '';
-  clear: both;
-  display: table;
+
+.clearfix:after { 
+  content: ''; 
+  clear: both; 
+  display: table; 
+} 
+ 
+.rel-imp { 
+  position: relative !important; 
+} 
+ 
+.is-hidden { 
+  padding: 0 !importance; 
+  margin: 0; 
+  width: 100% !importance; 
 }
 
-.rel-imp {
-  position: relative !important;
-}
-
-.is-hidden {
-  padding: 0 !importance;
-  margin: 0;
-  width: 100% !importance;
-}
+.no-shadow {
+  box-shadow: none; }
