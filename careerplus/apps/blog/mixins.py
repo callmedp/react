@@ -21,31 +21,33 @@ class BlogMixin(object):
 		if query:
 			product = []
 			slug = settings.COURSE_SLUG[0]
-			results = SQS().filter(text=query, pPc=slug).extra({
-			        'mm': '1',
-			        'qt': 'edismax',
-			        'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1',
-			        'tie': 1,
-			        'hl': 'false',
-			        'spellcheck': 'false'
-			    }).only(
-				'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
-			for prd in results:
-				product.append(OrderedDict({
-					'title': prd.pTt,
-					'url': prd.pURL,
-					'display_name':prd.pHd,
-					'name': prd.pNm,
-					'avg_rating_exact': prd.pARx,
-					'avg_rating':prd.pAR,
-					'num_jobs': prd.pNJ,
-					'image': prd.pImg,
-					'image_alt':prd.pImA,
-					'buy_count':prd.pBC,
-					'class':prd.pPc,
-					'star': prd.pStar
-
-					}))
+			try:
+				results = SQS().filter(text=query, pPc=slug).extra({
+				        'mm': '1',
+				        'qt': 'edismax',
+				        'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1',
+				        'tie': 1,
+				        'hl': 'false',
+				        'spellcheck': 'false'
+				    }).only(
+					'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
+				for prd in results:
+					product.append(OrderedDict({
+						'title': prd.pTt,
+						'url': prd.pURL,
+						'display_name':prd.pHd,
+						'name': prd.pNm,
+						'avg_rating_exact': prd.pARx,
+						'avg_rating':prd.pAR,
+						'num_jobs': prd.pNJ,
+						'image': prd.pImg,
+						'image_alt':prd.pImA,
+						'buy_count':prd.pBC,
+						'class':prd.pPc,
+						'star': prd.pStar
+						}))
+			except:
+				product = []
 			return product	
 		return []
 

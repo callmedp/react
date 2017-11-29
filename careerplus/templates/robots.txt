@@ -15,6 +15,6 @@ sitemap: https://learning.shine.com/job_services_sitemap.xml
 
 {% else %}
 User-agent: *
-Disallow: /
 
+Disallow: /
 {% endif %} 
