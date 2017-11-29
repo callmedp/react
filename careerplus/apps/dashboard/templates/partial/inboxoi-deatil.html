@@ -148,7 +148,7 @@
                             {% endif %}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
-                          {% if op.oi_status == 49 and oi.counselling_form_status == 41 %}
+                          {% if op.oi_status == 49 %}
                           <a href="{% url 'counselling_form' oi.pk %}">Complete form</a>
                           {% elif op.oi_status == 46 %}
                               <a href="{% url "linkedin-draf-download" oi.pk op.pk %}" target="_blank">Download</a>
