@@ -48,20 +48,20 @@
 		<!-- left content start -->
 	    <div class="col-md-9 col-sm-12">
 	    	{% if recent_articles %}
-            <div class="row">
+            <div class="row" itemscope itemtype="https://schema.org/ItemList">
                 <h2 class="main-heading-article ml-15">All Articles</h2>
                 {% for artList in recent_articles %}
-                <div class="article-list col-sm-6">
-                  	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.title}}">
+                <div class="article-list col-sm-6" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+                  	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.title}}" itemprop="url">
                     	<figure class="pr">
                     		{% if artList.image  %}
-                      			<img src="{{artList.image.url}}" alt="{{artList.image_alt}}">
+                      			<img src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
                       		{% endif %}
-                      		<span class="product-title product-title-pos">{{artList.title}}</span>
+                      		<span class="product-title product-title-pos">{{artList.p_cat.name}}</span>
                     	</figure>
-                    	<h3 class="heading-article">{{artList.heading}}</h3>
+                    	<h3 class="heading-article" itemprop="name">{{artList.heading}}</h3>
                     	<article>
-	                      {{artList.content|striptags|safe}}
+	                      {{artList.summary|striptags|safe}}
 	                    </article>
                     	<hr>
                     	<span class="view-forward">
@@ -74,9 +74,12 @@
 		                    <img src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
 		                    {% endif %}
 		                  </figure>
-		                  {{artList.author.name}}
+		                  <span itemprop="author">{{artList.author.name}}</span>
 		                </div>
               		</a>
+              		<meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
+              		<meta itemprop="position" content="{{forloop.counter}}">
+              		<meta itemprop="headline" content="{{artList.heading}}">
             	</div>
             	{% endfor %}
 			</div>

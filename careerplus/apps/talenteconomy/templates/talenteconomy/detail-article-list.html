@@ -1,14 +1,15 @@
 <!-- content start -->
-<div class="article-detail-content">
+<div class="article-detail-content" itemscope itemtype="https://schema.org/Article">
 
     <!-- page heading -->
     <div class="page-header">
-        <h1>{{main_article.heading}}</h1>
+        <h1 itemprop="name">{{main_article.heading}}</h1>
         <div class="editor-comments-views">
             <span>
               <img src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
-              <a href="{% url 'talent:authors-detail' main_article.author.slug %}">{{main_article.author.name}}</a> / {{main_article.publish_date.date}}
+              <a href="{% url 'talent:authors-detail' main_article.author.slug %}">{{main_article.author.name}}</a> / <span itemprop="datePublished">{{main_article.publish_date.date}}</span>
             </span>
+            <meta itemprop="author" content={{main_article.author.name}}>
 
             {% if main_article.comment_moderated > 0 %}
             <span>
@@ -38,10 +39,10 @@
     </div>
 
     <figure>
-        <img src="{{main_article.image.url}}" alt="{{main_article.image_alt}}" class="img-responsive">
+        <img src="{{main_article.image.url}}" alt="{{main_article.image_alt}}" class="img-responsive" itemprop="image">
     </figure>
 
-    <article class="article-content">
+    <article class="article-content" itemprop="articleBody">
         {{main_article.content|safe}}
     </article>
 
@@ -54,6 +55,8 @@
 
         <a class="linkedin" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url={{SITEDOMAIN}}{{main_article.get_absolute_url}}&title={{main_article.title}}&summary={{main_article.meta_desc}}&source={{SITEDOMAIN}}/"></a>
     </div>
+
+    <meta itemprop="headline" content="{{main_article.heading}}">
 
     <!-- Tagged in box -->
     {% with main_article.tags.all as tags %}
