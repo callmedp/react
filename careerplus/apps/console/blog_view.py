@@ -9,7 +9,6 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 from django.conf import settings
-<<<<<<< HEAD
 from blog.models import Tag, Category, Blog, Comment, Author
 from blog.mixins import PaginationMixin
 
