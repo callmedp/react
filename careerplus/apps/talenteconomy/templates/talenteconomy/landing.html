@@ -205,9 +205,10 @@
 </section>
 <!-- main section end -->
 <!-- contributors start -->
+{% if authors %}
 <section class="contributor-carousel mt-40">
 	<div class="container">
-		<h2 class="heading-article">Contributors</h2>
+		<h2 class="main-heading-article">Contributors</h2>
 		<div class="col-sm-12 col-md-offset-0">
 			<div class="carousel slide row" data-ride="carousel" data-type="multi" data-interval="3000" id="myCarousel1">
 				<div class="carousel-inner">
@@ -236,6 +237,7 @@
 		<a href="{% url 'talent:authors-listing' %}" class="view-all">View all</a>
 	</div>
 </section>
+{% endif %}
 <!-- contributors end -->
 {% endblock container %}
 {% block js_section %}
