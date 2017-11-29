@@ -15,14 +15,14 @@
     {% block css_section %}
         {{block.super}}
         {% compress css %}
-        <link type="text/css" href="{% static 'shinelearn/css/blog/blog.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/blog/custom.css' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/blog/blog.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/blog/custom.scss' %}" rel="stylesheet">
+        {% endcompress %}
         <style type="text/css">
           .error {
                 color: red;
           } 
         </style>
-        {% endcompress %}
     {% endblock css_section %}
 
     
