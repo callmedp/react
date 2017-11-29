@@ -110,16 +110,16 @@
 					online professional courses present on this platform, you'll be able to stay ahead of the curve and massively improve your job prospects by staying future-ready at all times. </p>
 			</div>
 			{% if article_list %}
-            <div class="row">
+            <div class="row" itemscope itemtype="https://schema.org/ItemList">
                 <h2 class="main-heading-article ml-15">Recently added</h2>
                 {% for artList in article_list %}
-                <div class="article-list col-sm-6">
-                  	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.title}}">
+                <div class="article-list col-sm-6" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+                  	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.title}}" itemprop="url">
                     	<figure class="pr">
-                      		<img src="{{artList.image.url}}" alt="{{artList.image_alt}}">
-                      		<span class="product-title product-title-pos">{{artList.title}}</span>
+                      		<img src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+                      		<span class="product-title product-title-pos">{{artList.p_cat.name}}</span>
                     	</figure>
-                    	<h3 class="heading-article">{{artList.heading}}</h3>
+                    	<h3 class="heading-article" itemprop="name">{{artList.heading}}</h3>
                     	<article>
 	                      {{artList.summary|striptags|safe}}
 	                    </article>
@@ -134,9 +134,13 @@
 		                    <img src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
 		                    {% endif %}
 		                  </figure>
-		                  {{artList.author.name}}
+		                  <span itemprop="author">{{artList.author.name}}</span>
+
 		                </div>
               		</a>
+              		<meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
+              		<meta itemprop="position" content="{{forloop.counter}}">
+              		<meta itemprop="headline" content="{{artList.heading}}">
             	</div>
             	{% endfor %}
 			</div>
