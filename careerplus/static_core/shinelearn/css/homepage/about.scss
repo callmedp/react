@@ -1,10 +1,10 @@
-@import "bootstrap/variables";
-@import "bootstrap/mixins";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
 
 /*----------------feddback & interview page css----------------*/
 .about-header {
 	clear: both;
-	background: url(../images/about-header-bg.jpg) no-repeat center top; 
+	background: url(#{$imagePath}images/about-header-bg.jpg) no-repeat center top; 
 	background-size: cover;
 	display: block;
 }

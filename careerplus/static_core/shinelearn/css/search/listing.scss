@@ -1,9 +1,9 @@
-@import "bootstrap/variables";
-@import "bootstrap/mixins";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
 
 .search-header {
 	clear: both;
-	background: url(../images/search-header-bg.jpg) #0d141b no-repeat center top; 
+	background: url(#{$imagePath}images/search-header-bg.jpg) #0d141b no-repeat center top; 
 	background-size: cover;
 	display: block;
 

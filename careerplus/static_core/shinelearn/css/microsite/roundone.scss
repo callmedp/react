@@ -1,5 +1,5 @@
-@import "bootstrap/variables";
-@import "bootstrap/mixins";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
 
 .ro-heading {
 	font-size: $font-size+16;
@@ -12,7 +12,7 @@
 
 .roundone-header {
 	clear: both;
-	background: url(../images/roundone-header-bg.jpg) #0d141b no-repeat center top; 
+	background: url(#{$imagePath}images/roundone-header-bg.jpg) #0d141b no-repeat center top; 
 	background-size: cover;
 	display: block;
 
@@ -417,7 +417,7 @@
 
 .roundone-header-shine {
 	clear: both;
-	background: url(../images/roundone-intermediate-shine.jpg) #567ab8 no-repeat center top; 
+	background: url(#{$imagePath}images/roundone-intermediate-shine.jpg) #567ab8 no-repeat center top; 
 	background-size: cover;
 	overflow: hidden;
 	display: block;
