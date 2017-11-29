@@ -41,6 +41,8 @@ def common_context_processor(request):
         "OPERATION_GROUP_LIST": settings.OPERATION_GROUP_LIST,
         "SEO_GROUP_LIST": settings.SEO_GROUP_LIST,
         "BLOGGER_GROUP_LIST": settings.BLOGGER_GROUP_LIST,
+        "LEARNING_BLOGGER": settings.LEARNING_BLOGGER,
+        "TALENT_BLOGGER": settings.TALENT_BLOGGER,
         "WRITING_GROUP_LIST": settings.WRITING_GROUP_LIST,
         "REFUND_GROUP_LIST": settings.REFUND_GROUP_LIST,
         "OPS_GROUP_LIST": settings.OPS_GROUP_LIST,
@@ -48,7 +50,6 @@ def common_context_processor(request):
         "BUSINESS_HEAD_GROUP_LIST": settings.BUSINESS_HEAD_GROUP_LIST,
         "DEPARTMENT_HEAD_GROUP_LIST": settings.DEPARTMENT_HEAD_GROUP_LIST,
         "FINANCE_GROUP_LIST": settings.FINANCE_GROUP_LIST,
-        "BLOG_WRITER_GROUP_LIST": settings.BLOG_WRITER_GROUP_LIST,
         "roundone_user": roundone_user,
         "IS_LIVE": settings.IS_LIVE
     })

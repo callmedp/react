@@ -238,7 +238,7 @@ class ArticleListView(ListView, PaginationMixin):
         self.sel_status = int(request.GET.get('status', '-1'))
         self.sel_p_cat = request.GET.get('p_cat', '')
         self.sel_writer = request.GET.get('author', '')
-        self.visibility = request.GET.get('visibility', 1)
+        self.visibility = request.GET.get('visibility', '')
         return super(self.__class__, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):

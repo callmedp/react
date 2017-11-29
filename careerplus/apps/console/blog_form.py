@@ -590,7 +590,7 @@ class AuthorChangeForm(forms.ModelForm):
     class Meta:
         model = Author
         fields = ['name', 'is_active', 'about','image', 'image_alt', 'url','slug', 'fb_url','linkedin_url','twitter_url','designation',
-                'company','meta_desc', 'meta_keywords','visibility']
+                'company','meta_desc', 'meta_keywords','visibility', 'user']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),

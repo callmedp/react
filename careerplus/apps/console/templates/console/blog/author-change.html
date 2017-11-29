@@ -10,6 +10,8 @@
 {% block css_block %}
   {{ block.super }}
   <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
+  <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}" rel="stylesheet" type="text/css">
+  
                 
 {% endblock css_block %}
 
@@ -126,5 +128,6 @@
   </script>
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+    <!-- Switchery -->
 
 {% endblock js_block %}
