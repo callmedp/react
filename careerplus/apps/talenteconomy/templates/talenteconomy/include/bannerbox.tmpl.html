@@ -1,0 +1,10 @@
+<a href="{{articlelist.url}}">
+  <figure class="{% if bigtmpl %}big-image{% endif %}">
+    <img src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}">
+  </figure>
+  <div class="carousel-heading-container">
+    <span class="product-title">{{articlelist.p_cat.name}}</span>
+    <strong class="heading-carousel heading-carousel-primary">{{articlelist.name}}</strong>
+    <span class="author author-primary">{{articlelist.author.name}}</span>
+  </div>
+</a>

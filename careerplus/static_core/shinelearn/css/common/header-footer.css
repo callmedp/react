@@ -85,7 +85,7 @@ datalist {
   cursor: pointer;
   padding-left: 0;
   padding-right: 0;
-  margin-left: 20px;
+  margin-left: 19px;
   min-height: 54px;
 }
 
@@ -96,7 +96,7 @@ datalist {
   font-weight: 400;
 }
 .dropdown-menu > li > a:hover {
-  font-size: 13px; /* TODO: font-size, */
+  font-size: 13px;
   color: #666;
   visibility: visible;
   display: block;
@@ -243,13 +243,13 @@ datalist {
 .courses-dropdown .tab-content ul {
   list-style-type: none;
   margin: 10px 0 0 0;
-  padding: 0 0 55px;
+  padding: 0;
 }
-.courses-dropdown .tab-content ul li { /* TODO: level 3 only, */
+.courses-dropdown .tab-content ul li {
   display: block;
   padding: 8px 10px 8px 10px;
 }
-.courses-dropdown .tab-content ul li:last-child { /* TODO: level 3 only, */
+.courses-dropdown .tab-content ul li:last-child {
   border-top: 1px solid #ddd;
   position: absolute;
   left: 25px;
@@ -257,16 +257,16 @@ datalist {
   width: 88%;
   padding-left: 0;
 }
-.courses-dropdown .tab-content ul li:last-child a { /* TODO: level 3 only, */
+.courses-dropdown .tab-content ul li:last-child a {
   color: #3f5f94;
   padding: 10px 10px 10px 0;
 }
-.courses-dropdown .tab-content ul li a { /* TODO: level 3 only, */
+.courses-dropdown .tab-content ul li a {
   color: #666;
   font-size: 13px;
   line-height: 20px;
 }
-.courses-dropdown .tab-content ul li a:hover { /* TODO: level 3 only, */
+.courses-dropdown .tab-content ul li a:hover {
   font-weight: 400;
 }
 
@@ -304,29 +304,29 @@ datalist {
   border: none;
   background-color: #ebebeb;
 }
-.format-dropdown .nav-tabs li.active a { /* TODO: level 3 only, */
+.format-dropdown .nav-tabs li.active a {
   background-color: #ebebeb;
   border-radius: 0;
   border: none;
 }
-.format-dropdown .nav-tabs li.active a:focus { /* TODO: level 3 only, */
+.format-dropdown .nav-tabs li.active a:focus {
   background: transparent;
 }
 .format-dropdown .nav-tabs li.active:hover, .format-dropdown .nav-tabs li.active:focus {
   padding: 8px 10px;
 }
-.format-dropdown .nav-tabs li a { /* TODO: level 3 only, */
+.format-dropdown .nav-tabs li a {
   color: #666;
   font-size: 13px;
   padding: 0;
   border: none;
 }
-.format-dropdown .nav-tabs li a:hover { /* TODO: level 3 only, */
+.format-dropdown .nav-tabs li a:hover {
   cursor: pointer;
   padding: 0;
   border: none;
 }
-.format-dropdown .nav-tabs li a:focus { /* TODO: level 3 only, */
+.format-dropdown .nav-tabs li a:focus {
   background: transparent;
 }
 .format-dropdown .tab-content {
@@ -347,11 +347,11 @@ datalist {
   margin: 10px 0 0 0;
   padding: 0;
 }
-.format-dropdown .tab-content ul li { /* TODO: level 3 only, */
+.format-dropdown .tab-content ul li {
   display: block;
   padding: 8px 10px 8px 10px;
 }
-.format-dropdown .tab-content ul li:last-child { /* TODO: level 3 only, */
+.format-dropdown .tab-content ul li:last-child {
   border-top: 1px solid #ddd;
   position: absolute;
   left: 25px;
@@ -359,16 +359,16 @@ datalist {
   width: 88%;
   padding-left: 0;
 }
-.format-dropdown .tab-content ul li:last-child a { /* TODO: level 3 only, */
+.format-dropdown .tab-content ul li:last-child a {
   color: #3f5f94;
   padding: 10px 10px 10px 0;
 }
-.format-dropdown .tab-content ul li a { /* TODO: level 3 only, */
+.format-dropdown .tab-content ul li a {
   color: #666;
   font-size: 13px;
   line-height: 20px;
 }
-.format-dropdown .tab-content ul li a:hover { /* TODO: level 3 only, */
+.format-dropdown .tab-content ul li a:hover {
   font-weight: 400;
 }
 
@@ -437,7 +437,7 @@ footer .secure-payment .secure-icon {
 footer .secure-payment .secure-text {
   display: inline-block;
 }
-footer .secure-payment .secure-text strong { /* TODO: level 3 only, */
+footer .secure-payment .secure-text strong {
   font-size: 26px;
   font-weight: 300;
   display: block;
@@ -485,7 +485,7 @@ footer .footer-links span {
   margin-bottom: 25px;
 }
 .page-header h1 {
-  font-size: 31px;
+  font-size: 33px;
   margin: 0;
 }
 
@@ -573,7 +573,7 @@ footer .footer-links span {
   display: block;
   margin-bottom: 20px;
 }
-.register input { /* TODO: border, */
+.register input {
   border-top: 1px solid #fff;
   border-right: 1px solid #fff;
   border-bottom: 1px solid #ccc;
@@ -603,7 +603,7 @@ footer .footer-links span {
   line-height: 30px;
   margin: 20px 0 10px 0;
 }
-.register .form-control:focus { /* TODO: border, */
+.register .form-control:focus {
   border-top: 1px solid #fff;
   border-right: 1px solid #fff;
   border-bottom: 1px solid #5cb3fd;
@@ -616,7 +616,7 @@ footer .footer-links span {
 .register .form-group {
   position: relative;
 }
-.register .form-group .form-control { /* TODO: border, */
+.register .form-group .form-control {
   border-radius: 0;
   box-shadow: none;
   border-top: 1px solid #fff;
@@ -651,7 +651,7 @@ footer .footer-links span {
   text-indent: 1px;
   text-overflow: '';
 }
-.register .country-code .custom-select select { /* TODO: level 3 only, */
+.register .country-code .custom-select select {
   -webkit-appearance: none;
   -moz-appearance: none;
   text-indent: 0;
@@ -660,10 +660,10 @@ footer .footer-links span {
   height: 35px;
   padding: 6px 0;
 }
-.register .country-code .custom-select select::-ms-expand { /* TODO: level 3 only, */
+.register .country-code .custom-select select::-ms-expand {
   display: none;
 }
-.register .country-code .custom-select select option { /* TODO: level 3 only, */
+.register .country-code .custom-select select option {
   min-width: 100px;
 }
 .register .country-code .form-control {
@@ -735,6 +735,28 @@ footer .footer-links span {
   text-align: center;
   margin-left: 10px;
 }
+.social-login .whatsapp {
+  border-radius: 2px;
+  width: 52px;
+  height: 35px;
+  border: 1px solid #44c455;
+  display: inline-block;
+  text-align: center;
+  margin-left: 10px;
+  position: relative;
+}
+.social-login .whatsapp:after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 0;
+  top: 3px;
+  bottom: 0;
+  display: inline-block;
+  background: url(../../images/sprite.png) no-repeat -463px -341px;
+  width: 27px;
+  height: 27px;
+}
 .social-login .share-txt {
   border-radius: 2px;
   background: #fff;
@@ -779,6 +801,31 @@ footer .footer-links span {
   }
 }
 
+.social-login-gr {
+  display: block;
+}
+.social-login-gr .facebook-gr {
+  width: 8px;
+  height: 14px;
+  display: inline-block;
+  background: url(../../images/sprite.png) no-repeat -581px -290px;
+  margin-right: 10px;
+}
+.social-login-gr .twitter-gr {
+  width: 15px;
+  height: 12px;
+  display: inline-block;
+  background: url(../../images/sprite.png) no-repeat -592px -292px;
+  margin-right: 10px;
+}
+.social-login-gr .linkedin-gr {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  background: url(../../images/sprite.png) no-repeat -609px -290px;
+  margin-right: 10px;
+}
+
 .request-call {
   padding: 20px;
 }
@@ -814,8 +861,6 @@ footer .footer-links span {
   padding-left: 0;
   box-shadow: none;
   color: #999;
-  resize: none;
-  min-height: 60px;
 }
 .request-call .country-code {
   display: block;
@@ -961,8 +1006,8 @@ footer .footer-links span {
   font-size: 11px;
   position: absolute;
   left: 0;
+  bottom: -13px;
   right: 0;
-  bottom: -3px;
   z-index: 9;
 }
 
@@ -1734,6 +1779,14 @@ footer .footer-links span {
   vertical-align: sub;
 }
 
+.calender-icon {
+  width: 12px;
+  height: 12px;
+  background: url(../../images/sprite.png) no-repeat -562px -310px;
+  display: inline-block;
+  vertical-align: sub;
+}
+
 /*---------login signup banner page css---------*/
 .login-signup-box {
   -webkit-box-shadow: 0px 0px 21px 3px #ededed;
@@ -2199,6 +2252,10 @@ footer .footer-links span {
   margin-left: 15px !important;
 }
 
+.mr-0 {
+  margin-right: 0 !important;
+}
+
 .mr-5 {
   margin-right: 5px;
 }
@@ -2263,3 +2320,4 @@ footer .footer-links span {
 .color6 {
   background-color: #c8c04a;
 }
+

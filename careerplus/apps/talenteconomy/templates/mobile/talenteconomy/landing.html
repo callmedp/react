@@ -59,6 +59,7 @@
     <div class="slide-container"> 
         <ul class="article-slider">
             {% for topArtList in top_article_list %}
+            {% if topArtList.0 %}
             <li>
                 <a href="{{topArtList.0.url}}" class="caption-bg-txt">
                     <div class="bottom-text">
@@ -69,6 +70,7 @@
                 </a>
                 <img src="{{topArtList.0.image.url}}" alt="{{topArtList.0.image_alt}}">
             </li>
+            {% endif %}
             {% if topArtList.1 %}
             <li>
                 <a href="{{topArtList.1.url}}" class="caption-bg-txt">

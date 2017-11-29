@@ -24,17 +24,10 @@ Career & Certification Guidance Top Authors @ Shine Learning
 {% block container %}
         <!-- header -->
         <header class="article-category-header">
-          <div class="container">
+          <div class="container pt-30">
             <!-- breadcrums -->
-            <ol class="breadcrumb mt-30">
-               {% for bradcbs in breadcrumbs %}
-                {% if bradcbs.url %}
-                  <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
-                {% else %}
-                  <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
-                {% endif %}
-              {% endfor %}
-            </ol>
+            {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+
             <div class="article-category-heading">
               <h1>Contributors</h1>
             </div>
@@ -50,7 +43,7 @@ Career & Certification Guidance Top Authors @ Shine Learning
               <div class="row">
                 {% for author in authors %}
                 <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="#">
+                  <a class="box-panel" href="{{request.path}}{{author.slug}}">
                     <div class="media">
                       {% if author.image %}
                       <figure class="media-left">
@@ -62,9 +55,8 @@ Career & Certification Guidance Top Authors @ Shine Learning
                         <strong class="author-name">{{author.name}}</strong>
                         <span class="designation">{{author.designation}}</span>
                         <span class="articles-no">{{author.no_of_blog}} articles</span>
-                        <p>{{author.about|striptags}}</p>
+                        <p>{{author.about|striptags|safe|truncatechars:140}}</p>
                         <span class="social-login-gr">
-
                           {% if author.fb_url %}
                             <a href="{{author.fb_url}}"><i class="facebook-gr"></i></a>
                           {% endif %}
@@ -93,60 +85,13 @@ Career & Certification Guidance Top Authors @ Shine Learning
 <!-- right content start -->
 <div class="col-md-3 col-sm-12">
 <!-- take me to -->
-<div class="take-me-to box-panel col-sm-6 col-md-12 mb-40">
 {% if categories %}
-<h2 class="heading-right-talent">take me to</h2>
-<ul>
-    {% for category in categories %}
-      <li>
-        <a href="{{category.url}}" title="{{category.title}}">
-          <figure>
-            {% if category.image %}
-            <img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
-            {% endif %}
-          </figure>
-          <h4>{{category.name}}</h4>
-        </a>
-      </li>
-    {% endfor %}
-</ul>
-</div>
+  {% include './include/category.tmpl.html' with categories=categories %}
 {% endif %}
 
 {% if popular_courses %}
-  <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
-    <h2 class="heading-right-talent">Popular Courses</h2>
-    <ul>
-      {% for pCourses in popular_courses %}
-      <li>
-        <a href="{{pCourses.url}}">
-          <h3>{{pCourses.name}}</h3>
-          <div class="rating-box">
-            {% for star in pCourses.star %}
-              {% if star == '*' %}
-                <figure class="full-star"></figure>
-              {% endif %}
-              {% if star == '+' %}
-                <figure class="half-star"></figure>
-              {% endif %}
-              {% if star == '-' %}
-                <figure class="blank-star"></figure>
-              {% endif %}
-              {% endfor %}
-              <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
-          </div>
-          <span class="jobs-available">
-            <strong>21735</strong>  jobs available
-          </span>
-          <span class="people-bought">
-            <strong>{{pCourse.buy_count}}</strong>  people bought
-          </span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
+  {% include './include/popular.tmpl.html' with popular_courses=popular_courses %}
+{% endif %}
 
 </div>
 <!-- right content end -->

@@ -27,65 +27,37 @@
   <!-- Wrapper for slides -->
   <div class="container">
   	<!-- breadcrums -->
-    <ol class="breadcrumb ">
-    {% for bradcbs in breadcrumbs %}
-      {% if bradcbs.url %}
-      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
-      {% else %}
-      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
-      {% endif %}
-    {% endfor %}
-    </ol>
+    {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+
 	 {% if top_article_list %}
       <div class="carousel-inner" role="listbox">
 
       	{% for topArtList in top_article_list %}
+        {% if topArtList.0 %}
         <div class="item {% if forloop.counter == 1 %}active{% endif %}">
           <!-- big images -->
           <div class="col-sm-8 pr pl-0">
-            <a href="{{topArtList.0.url}}">
-              <figure class="big-image">
-                <img src="{{topArtList.0.image.url}}" alt="{{topArtList.0.image_alt}}">
-              </figure>
-              <div class="carousel-heading-container">
-                <span class="product-title">{{topArtList.0.p_cat.name}}</span>
-                <strong class="heading-carousel heading-carousel-primary">{{topArtList.0.name}}</strong>
-                <span class="author author-primary">{{topArtList.0.author.name}}</span>
-              </div>
-            </a>
+          	{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 bigtmpl=True %}
           </div>
+
           <!-- small images -->
           <div class="col-sm-4">
-          	{% if topArtList.1 %}
+
+      	  	{% if topArtList.1 %}
             <div class="pr mb-20">
-              <a href="{{topArtList.1.url}}">
-                <figure>
-                  <img src="{{topArtList.1.image}}" alt="{{topArtList.1.image_alt}}">
-                </figure>
-                <div class="carousel-heading-container b-mini">
-                  <span class="product-title">{{topArtList.1.p_cat.name}}</span>
-                  <strong class="heading-carousel heading-carousel-secondary">{{topArtList.1.name}}</strong>
-                  <span class="author author-primary">{{topArtList.1.author.name}}</span>
-                </div>
-              </a>
+          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 %}
             </div>
             {% endif %}
+            
             {% if topArtList.2 %}
             <div class="pr">
-              <a href="{{topArtList.2.url}}">
-                <figure>
-                  <img src="{{topArtList.2.image}}" alt="{{topArtList.2.image_alt}}">
-                </figure>
-                <div class="carousel-heading-container b-mini">
-                  <span class="product-title">{{topArtList.2.p_cat.name}}</span>
-                  <strong class="heading-carousel heading-carousel-secondary">{{topArtList.2.name}}</strong>
-                  <span class="author author-primary">{{topArtList.2.author.name}}</span>
-                </div>
-              </a>
+          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 %}
             </div>
             {% endif %}
+
           </div>
         </div>
+        {% endif %}
         {% endfor %}
       </div>
       {% endif %}
@@ -151,58 +123,11 @@
 		<div class="col-md-3 col-sm-12">
 			<!-- take me to -->
 			{% if categories %}
-			<div class="take-me-to box-panel col-sm-6 col-md-12 mb-40">
-				<h2 class="heading-right-talent">take me to</h2>
-				<ul>
-                	{% for category in categories %}
-					<li>
-						<a href="{{category.url}}" title="{{category.title}}">
-							<figure>
-								{% if category.image %}
-								<img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
-								{% endif %}
-							</figure>
-							<h4>{{category.name}}</h4>
-						</a>
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
+				{% include './include/category.tmpl.html' with categories=categories %}
 			{% endif %}
 			<!-- Popular Courses -->
 			{% if popular_courses %}
-			<div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
-				<h2 class="heading-right-talent">Popular Courses</h2>
-				<ul>
-					{% for pCourses in popular_courses %}
-					<li>
-						<a href="{{pCourses.url}}">
-						  <h3>{{pCourses.name}}</h3>
-						  <div class="rating-box">
-							  {% for star in pCourses.star %}
-							  	{% if star == '*' %}
-							      <figure class="full-star"></figure>
-							    {% endif %}
-							  	{% if star == '+' %}
-							      <figure class="half-star"></figure>
-							    {% endif %}
-							  	{% if star == '-' %}
-							      <figure class="blank-star"></figure>
-							    {% endif %}
-						      {% endfor %}
-						      <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
-						  </div>
-						  <span class="jobs-available">
-						    <strong>21735</strong>  jobs available
-						  </span>
-						  <span class="people-bought">
-						    <strong>{{pCourse.buy_count}}</strong>  people bought
-						  </span>
-						</a>
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
+				{% include './include/popular.tmpl.html' with popular_courses=popular_courses %}
 			{% endif %}
 		</div>
 		<!-- right content end -->
@@ -211,37 +136,7 @@
 <!-- main section end -->
 <!-- contributors start -->
 {% if authors %}
-<section class="contributor-carousel mt-40">
-	<div class="container">
-		<h2 class="main-heading-article">Contributors</h2>
-		<div class="col-sm-12 col-md-offset-0">
-			<div class="carousel slide row" data-ride="carousel" data-type="multi" data-interval="3000" id="myCarousel1">
-				<div class="carousel-inner">
-					{% for author in authors %}
-					<div class="item {% if forloop.counter == 1 %}active{% endif %}">
-						<div class="col">
-							<a class="box-panel" href="#">
-								<figure>
-									{% if author.image %}
-									<img src="{{author.image.url}}" class="img-responsive">
-									{% endif %}
-									<figcaption>
-										{{author.name}} <strong>{{author.designation}}</strong>
-										<span class="read">{{author.no_of_blog}} articles</span>
-									</figcaption>
-								</figure>
-							</a>
-						</div>
-					</div>
-					{% endfor %}
-				</div>
-			</div>
-		</div>
-		<a class="left carousel-control" href="#myCarousel1" data-slide="prev"></a>
-		<a class="right carousel-control" href="#myCarousel1" data-slide="next"></a>
-		<a href="{% url 'talent:authors-listing' %}" class="view-all">View all</a>
-	</div>
-</section>
+	{% include './include/authorSlide.tmpl.html' with authors=authors %}
 {% endif %}
 <!-- contributors end -->
 {% endblock container %}
