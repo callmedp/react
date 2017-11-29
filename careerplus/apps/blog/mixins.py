@@ -6,7 +6,7 @@ from core.library.haystack.query import SQS
 from django.conf import settings
 
 class BlogMixin(object):
-	def scrollPagination(self, paginated_by=3, page=1, object_list=None):
+	def scrollPagination(self, paginated_by=1, page=1, object_list=None):
 		# data = {}
 		paginator = Paginator(object_list, paginated_by)
 		try:

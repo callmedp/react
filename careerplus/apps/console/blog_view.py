@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 from django.conf import settings
+<<<<<<< HEAD
 from blog.models import Tag, Category, Blog, Comment, Author
 from blog.mixins import PaginationMixin
 
@@ -545,6 +546,7 @@ class TagAddView(FormView):
                 messages.add_message(request, messages.ERROR, 'Tag Not Created. Due to %s' % (str(e)))
                 return self.form_invalid(form)
         return self.form_invalid(form)
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))

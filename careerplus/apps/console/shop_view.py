@@ -1701,6 +1701,8 @@ class ActionCategoryView(View, CategoryValidation):
         except Exception as e:
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -1725,7 +1727,7 @@ class ActionProductView(View, ProductValidation):
                 try:
                     product = Product.objects.get(pk=pk_obj)
                     if action == "active":
-                        if True: #self.validate_before_active(request=self.request,product=product):    
+                        if self.validate_before_active(request=self.request,product=product):    
                             product.active = True
                             product.save()
                             if product.type_product == 1:
@@ -1759,7 +1761,7 @@ class ActionProductView(View, ProductValidation):
                             data = {'success': 'True',
                                 'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
                     elif action == "index":
-                        if True: #self.validate_before_index(request=self.request,product=product):
+                        if self.validate_before_index(request=self.request,product=product):
                             product.is_indexable = True
                             product.save()    
                             if product.type_product == 1:

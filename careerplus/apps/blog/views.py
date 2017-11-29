@@ -153,8 +153,8 @@ class BlogDetailView(DetailView, BlogMixin):
         # except Exception:
         #     raise Http404
         self.object.no_views += 1
-        self.object.update_score()
         self.object.save()
+        self.object.update_score()
         redirect = self.redirect_if_necessary(request.path, self.object)
         if redirect:
             return redirect
@@ -181,10 +181,20 @@ class BlogDetailView(DetailView, BlogMixin):
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
         main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=1)
+        main_obj_list = list(main_obj)
+
+        article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=1).order_by('-publish_date')
+        article_list = article_list.exclude(pk=blog.pk)
+        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+
+        article_list = list(article_list)
+
+        object_list = main_obj_list + article_list
 
         detail_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
-                object_list=main_obj)
+                object_list=object_list)
+        
         if self.request.flavour == 'mobile':
             detail_article = render_to_string('include/detail-article-list.html',
                 {"page_obj": detail_obj,
@@ -199,20 +209,6 @@ class BlogDetailView(DetailView, BlogMixin):
         context.update({
             "detail_article": detail_article,
             "main_article": main_obj[0],
-        })
-
-        article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=1).order_by('-publish_date')
-        article_list = article_list.exclude(slug=blog.slug)
-        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
-
-        page_obj = self.scrollPagination(
-                paginated_by=self.paginated_by, page=self.page,
-                object_list=article_list)
-
-        context.update({
-            "scroll_article": render_to_string('include/detail-article-list.html',
-                {"page_obj": page_obj,
-                "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
         })
 
         context.update({
@@ -502,8 +498,8 @@ class BlogLandingAjaxView(ListView, BlogMixin):
         return qs
 
 
-class BlogDetailAjaxView(TemplateView, BlogMixin):
-    template_name = 'include/detail-article-list.html'
+class BlogDetailAjaxView(View, BlogMixin):
+    # template_name = 'include/detail-article-list.html'
 
     def __init__(self):
         self.page = 1
@@ -517,29 +513,33 @@ class BlogDetailAjaxView(TemplateView, BlogMixin):
             self.slug = self.request.GET.get('slug')
             try:
                 self.blog = Blog.objects.get(slug=self.slug, status=1, visibility=1)
+                main_objs = Blog.objects.filter(slug=self.blog.slug, status=1, visibility=1)
+
+                article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
+                article_list = article_list.exclude(slug=self.blog.slug)
+                article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+
+                object_list = list(main_objs) + list(article_list)
+
+                page_obj = self.scrollPagination(
+                    paginated_by=self.paginated_by, page=self.page,
+                    object_list=object_list)
+
+                detail_article = render_to_string('include/detail-article-list.html',
+                    {"page_obj": page_obj,
+                    "slug": self.blog.slug,
+                    "SITEDOMAIN": settings.SITE_DOMAIN,
+                    "main_article": main_objs[0]})
+
+                data = {
+                    'article_detail': detail_article,
+                    'url': page_obj.object_list[0].get_absolute_url(),
+                }
+
+                return HttpResponse(json.dumps(data), content_type="application/json")
             except:
-                return ''
-            return super(self.__class__, self).get(request, args, **kwargs)
-        else:
-            return HttpResponseForbidden()
-
-    def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
-
-        article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
-        article_list = article_list.exclude(slug=self.blog.slug)
-        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
-
-        page_obj = self.scrollPagination(
-                paginated_by=self.paginated_by, page=self.page,
-                object_list=article_list)
-
-        context.update({
-                "page_obj": page_obj,
-                "slug": self.blog.slug,
-                "SITEDOMAIN": settings.SITE_DOMAIN})
-
-        return context
+                pass
+        return HttpResponseForbidden()
 
 
 class ShowCommentBoxView(TemplateView, LoadCommentMixin):
@@ -576,7 +576,6 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
 
         comment_list = render_to_string('include/article-load-comment.html',
             comment_load_context)
-
 
         if self.request.session.get('candidate_id'):
             login_status = 1

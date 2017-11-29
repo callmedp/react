@@ -21,6 +21,58 @@
             </div>
         {% endif %}
     </div>
+{% elif product.pk == 1941 %}
+    <div class="detail-wrap">
+        <div class="provided-by">
+            <div class="media">
+                <div class="media-body rel">
+                  <p class="pb-0">Duration</p>
+                    <a>30 days</a>
+                  <p class="pb-0">Starting at <strong>{{start_price|floatformat}}/-</strong></p>
+                </div>
+            </div>
+        </div>
+        {% if pop_list %}
+        <div class="select-provider">
+            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+        </div>
+        {% endif %}
+    </div>
+{% elif product.pk == 1939 %}
+    <div class="detail-wrap">
+        <div class="provided-by">
+            <div class="media">
+                <div class="media-body rel">
+                  <p class="pb-0">Duration</p>
+                    <a>90 days</a>
+                  <p class="pb-0">Starting at <strong>{{start_price|floatformat}}/-</strong></p>
+                </div>
+            </div>
+        </div>
+        {% if pop_list %}
+        <div class="select-provider">
+            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+        </div>
+        {% endif %}
+    </div>
+{% elif product.pk == 1942 %}
+    <div class="detail-wrap">
+        <div class="provided-by">
+            <div class="media">
+                <div class="media-body rel">
+                  <p class="pb-0">Duration</p>
+                    <a>180 days</a>
+                  <p class="pb-0">Starting at <strong>{{start_price|floatformat}}/-</strong></p>
+                </div>
+            </div>
+        </div>
+        {% if pop_list %}
+        <div class="select-provider">
+            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+        </div>
+        {% endif %}
+    </div>
+
 {% else %}
     <div class="detail-wrap">
         <div class="provided-by">

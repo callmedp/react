@@ -9,7 +9,7 @@
 # from django.core.management.base import BaseCommand
 # from django.db import IntegrityError, transaction
 # from django.contrib.contenttypes.models import ContentType
-# from database.models import CPUser
+# # from database.models import CPUser
 # from shop.models import Product
 
 # class Command(BaseCommand):
@@ -244,7 +244,7 @@
 #                     cart_orderitem.net_payable_allocation, cart_orderitem.on_hold 
 #                 FROM cart_orderitem 
 #                 INNER JOIN cart_order 
-#                 ON ( cart_orderitem.order_id = cart_order.id ) WHERE cart_order.added_on >= '2014-04-01 00:00:00'  
+#                 ON ( cart_orderitem.order_id = cart_order.id ) WHERE cart_order.id IN (939911, 941833, 941927, 941935, 941949, 941951, 941953, 941955, 941957, 941989, 941991, 941997, 942003, 942015, 942021, 942029, 942041, 942043, 942045, 942095, 942107, 942129, 942157, 942189, 942191, 942193, 942205, 942223, 942243, 942249, 942253, 942265, 942269, 942275, 942299, 942303, 942307, 942317, 942321, 942331, 941975, 942229, 942231)  
 #                 ORDER BY cart_orderitem.added_on DESC
 #                 """
 #         db2 = MySQLdb.connect(db2_host,db2_user,db2_pwd,db2_name, autocommit=True)

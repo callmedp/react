@@ -1124,6 +1124,10 @@ header {
   margin-top: -50px;
   padding-top: 50px;
 }
+.scroll div {
+  background: transparent !important;
+  color: #333 !important;
+}
 
 /*sticky menu css*/
 .visible-onscroll {

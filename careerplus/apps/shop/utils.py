@@ -23,9 +23,9 @@ def _attribute_text_field(attribute):
 def _attribute_textarea_field(attribute):
     return forms.CharField(
         label=attribute.display_name,
+        required=attribute.required,
         widget=forms.Textarea(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),
-        required=attribute.required)
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
 def _attribute_integer_field(attribute):
     return forms.IntegerField(
@@ -190,28 +190,25 @@ class ProductModeration(object):
         try:
             if request and request.user:
                 if product:
+                    # if not product.heading:
+                    #     messages.error(request, "Product Heading is required")
+                    #     return test_pass
                     if not product.name:
                         messages.error(request, "Product Name is required")
                         return test_pass
                     if not product.product_class:
                         messages.error(request, "Product Class is required")
                         return test_pass
-                    if not product.upc:
-                        messages.error(request, "UPC is required")
-                        return test_pass
-                    if not product.inr_price:
-                        messages.error(request, "INR Price is required")
-                        return test_pass
-                    if not product.inr_price > Decimal(0):
+                    if product.inr_price < Decimal(0):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
                     if product.type_product in [0,1,3,5]:
-                        if not product.chapter_product.filter(status=True):
-                            messages.error(request, "Product has no active chapter")
-                            return test_pass
-                    
+                        if product.is_course:
+                            if not product.chapter_product.filter(status=True):
+                                messages.error(request, "Product has no active chapter")
+                                return test_pass
                     if request.user.groups.filter(name='Product').exists() or request.user.is_superuser:
-                        diction = [0,1, 3, 4, 5]
+                        diction = [0, 1, 3, 4, 5]
                     else:
                         diction = [0, 1]
                     if product.type_product in diction:
@@ -258,13 +255,10 @@ class ProductModeration(object):
                             if not sibling.name:
                                 messages.error(request, "Variation" + str(sibling) +" Name is required")
                                 return test_pass
-                            if not sibling.upc:
-                                messages.error(request, "Variation" + str(sibling) +" UPC is required")
-                                return test_pass
                             if not sibling.inr_price:
                                 messages.error(request, "Variation" + str(sibling) +" INR Price is required")
                                 return test_pass
-                            if not sibling.inr_price > Decimal(0):
+                            if sibling.inr_price < Decimal(0):
                                 messages.error(request, "Variation" + str(sibling) +" INR Price is negetive")
                                 return test_pass
 
@@ -321,7 +315,8 @@ class ProductModeration(object):
         copy = False
         try:
             with transaction.atomic():
-                product.name = screen.name
+
+                product.heading = screen.name
                 product.upc = screen.upc
                 product.product_class = screen.product_class
                 product.type_product = screen.type_product
@@ -459,7 +454,7 @@ class ProductModeration(object):
         copy = False
         try:
             with transaction.atomic():
-                screen.name = product.name
+                screen.name = product.heading
                 screen.upc = product.upc
                 screen.product_class = product.product_class
                 screen.type_product = product.type_product
@@ -893,24 +888,21 @@ class ProductValidation(object):
                     if not product.vendor:
                         messages.error(request, "Product Vendor is Required")
                         return test_pass
-
+                    if not product.heading:
+                        messages.error(request, "Product Heading is required")
+                        return test_pass
+                    
                     if not product.name:
                         messages.error(request, "Product Name is required")
                         return test_pass
                     if not product.product_class:
                         messages.error(request, "Product Class is required")
                         return test_pass
-                    if not product.upc:
-                        messages.error(request, "UPC is required")
-                        return test_pass
                     if not product.type_flow:
                         messages.error(request, "Product Flow is required")
                         return test_pass
                     
-                    if not product.inr_price:
-                        messages.error(request, "INR Price is required")
-                        return test_pass
-                    if not product.inr_price > Decimal(0):
+                    if product.inr_price < Decimal(0):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
 
@@ -923,9 +915,10 @@ class ProductValidation(object):
                         return test_pass
                     
                     if product.type_product in [0,1,3,5]:
-                        if not product.chapter_product.filter(status=True):
-                            messages.error(request, "Product has no active chapter")
-                            return test_pass
+                        if product.is_course:
+                            if not product.chapter_product.filter(status=True):
+                                messages.error(request, "Product has no active chapter")
+                                return test_pass
                     
 
                     if product.type_product in [0, 1, 3, 4]:
@@ -1014,7 +1007,7 @@ class ProductValidation(object):
                         if not sibling.inr_price:
                             messages.error(request, "Variation" + str(sibling) +" INR Price is required")
                             return test_pass
-                        if not sibling.inr_price > Decimal(0):
+                        if sibling.inr_price < Decimal(0):
                             messages.error(request, "Variation" + str(sibling) +" INR Price is negetive")
                             return test_pass
                         if not self.validate_attributes(request=request, product=sibling):
@@ -1042,10 +1035,10 @@ class ProductValidation(object):
                     for attribute in productattr.get_all_attributes():
                         value = getattr(productattr, attribute.name, None)
                         if value is None:
-                            if attribute.required:
+                            if attribute.required:    
                                 messages.error(request, (
-                                    ("%(attr)s attribute cannot be blank") %
-                                    {'attr': attribute.name}))
+                                ("%(attr)s attribute cannot be blank") %
+                                {'attr': attribute.name}))
                                 return test_pass
                         else:
                             try:

@@ -488,6 +488,7 @@ class DashboardAcceptService(View):
                     if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status
                         oi.oi_status = 4
+                        oi.closed_on = timezone.now()
                         oi.last_oi_status = 27
                         oi.save()
 

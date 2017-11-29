@@ -30,7 +30,7 @@ def common_context_processor(request):
         roundone_user = Subscription.objects.filter(candidateid=candidate_id).exists()
     except:
         roundone_user = None
-    
+
     context.update({
         "SITE_DOMAIN": settings.SITE_DOMAIN,
         "MOBILE_SITE_DOMAIN": settings.MOBILE_SITE_DOMAIN,
@@ -48,6 +48,7 @@ def common_context_processor(request):
         "BUSINESS_HEAD_GROUP_LIST": settings.BUSINESS_HEAD_GROUP_LIST,
         "DEPARTMENT_HEAD_GROUP_LIST": settings.DEPARTMENT_HEAD_GROUP_LIST,
         "FINANCE_GROUP_LIST": settings.FINANCE_GROUP_LIST,
+        "BLOG_WRITER_GROUP_LIST": settings.BLOG_WRITER_GROUP_LIST,
         "roundone_user": roundone_user,
         "IS_LIVE": settings.IS_LIVE
     })

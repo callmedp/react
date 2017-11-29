@@ -50,7 +50,7 @@ from .mixins import ActionUserMixin
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/'), name='dispatch')
 class OrderListView(ListView, PaginationMixin):
     context_object_name = 'order_list'
     template_name = 'console/order/order-list.html'
@@ -144,7 +144,7 @@ class OrderListView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/'), name='dispatch')
 class WelcomeCallVeiw(ListView, PaginationMixin):
     context_object_name = 'welcome_list'
     template_name = 'console/order/welcome-list.html'
@@ -249,7 +249,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_midout_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_midout_queue', login_url='/console/login/'), name='dispatch')
 class MidOutQueueView(TemplateView, PaginationMixin):
     # context_object_name = 'midout_list'
     template_name = 'console/order/midout-list.html'
@@ -347,7 +347,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_inbox_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_inbox_queue', login_url='/console/login/'), name='dispatch')
 class InboxQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'inbox_list'
     template_name = 'console/order/inbox-list.html'
@@ -484,7 +484,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_view_order_item_detail', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_view_order_item_detail', login_url='/console/login/'), name='dispatch')
 class OrderItemDetailVeiw(DetailView):
     model = OrderItem
     template_name = "console/order/order-item-detail.html"
@@ -554,7 +554,7 @@ class OrderItemDetailVeiw(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_search_order_from_console', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_search_order_from_console', login_url='/console/login/'), name='dispatch')
 class SearchOrderView(ListView, PaginationMixin):
     context_object_name = 'order_list'
     template_name = "console/order/order-search.html"
@@ -616,7 +616,7 @@ class SearchOrderView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/'), name='dispatch')
 class OrderDetailVeiw(DetailView):
     model = Order
     template_name = "console/order/order-detail.html"
@@ -645,7 +645,7 @@ class OrderDetailVeiw(DetailView):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_approval_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_approval_queue', login_url='/console/login/'), name='dispatch')
 class ApprovalQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'approval_list'
     template_name = 'console/order/approval-list.html'
@@ -768,7 +768,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/'), name='dispatch')
 class ApprovedQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'approved_list'
     template_name = 'console/order/approved-list.html'
@@ -888,7 +888,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_rejectedbyadmin_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_rejectedbyadmin_queue', login_url='/console/login/'), name='dispatch')
 class RejectedByAdminQueue(ListView, PaginationMixin):
     context_object_name = 'rejectedbyadmin_list'
     template_name = 'console/order/rejectedbyadmin-list.html'
@@ -1012,7 +1012,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_rejectedbycandidate_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_rejectedbycandidate_queue', login_url='/console/login/'), name='dispatch')
 class RejectedByCandidateQueue(ListView, PaginationMixin):
     context_object_name = 'rejectedbycandidate_list'
     template_name = 'console/order/rejectedbycandidate-list.html'
@@ -1137,7 +1137,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/'), name='dispatch')
 class AllocatedQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'allocated_list'
     template_name = 'console/order/allocated-list.html'
@@ -1254,7 +1254,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_closed_oi_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_closed_oi_queue', login_url='/console/login/'), name='dispatch')
 class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'closed_oi_list'
     template_name = 'console/order/closed-oi-list.html'
@@ -1355,7 +1355,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
 class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/domestic-profile-update-list.html'
@@ -1479,7 +1479,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_domestic_profile_approval_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_domestic_profile_approval_queue', login_url='/console/login/'), name='dispatch')
 class DomesticProfileApprovalQueue(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/domestic-profile-approval-list.html'
@@ -1569,7 +1569,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_booster_queue', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_show_booster_queue', login_url='/console/login/'), name='dispatch')
 class BoosterQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'booster_list'
     template_name = 'console/order/booster-list.html'
@@ -2058,6 +2058,7 @@ class ActionOrderItemView(View):
                     obj.oi_status = 4  # closed
                     obj.last_oi_status = 6
                     obj.approved_on = timezone.now()
+                    obj.closed_on = timezone.now()
                     obj.save()
                     approval += 1
 
@@ -2243,7 +2244,7 @@ class AssignmentOrderItemView(View):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/', raise_exception=True), name='dispatch')
+@method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/'), name='dispatch')
 class ConsoleResumeDownloadView(View):
 
     def get(self, request, *args, **kwargs):
