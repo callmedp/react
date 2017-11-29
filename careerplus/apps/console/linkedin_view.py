@@ -1127,7 +1127,8 @@ class CreateDrftObject(TemplateView):
                     quiz_rsp.oi = order_item
                     quiz_rsp.save()
 
-                order_item.counselling_form_status = 49
+                order_item.oi_status = 49
+                order_item.last_oi_status = last_oi_status
                 order_item.oio_linkedin = draft_obj
                 order_item.save()
                 order_item.orderitemoperation_set.create(
