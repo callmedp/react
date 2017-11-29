@@ -23,15 +23,7 @@
 {% block container %}
 
  <section class="container">
-    <ol class="breadcrumb">
-        {% for bradcbs in breadcrumbs %}
-	      {% if bradcbs.url %}
-	      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
-	      {% else %}
-	      	<li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
-	      {% endif %}
-	    {% endfor %}
-    </ol>
+    {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
 </section>
 
 <!-- main section start -->
@@ -53,9 +45,15 @@
                             <span class="designation">({{author.designation}})</span>
                             <a href="#" class="articles-no">{{author.no_of_blog}} articles</a>
                             <span class="social-login-gr mt-10">
+                            	{% if author.fb_url %}
 			                    <a class="facebook-gr" href="{{author.fb_url}}"></a>
+		                    	{% endif %}
+                            	{% if author.twitter_url %}
 			                    <a class="twitter-gr" href="{{author.twitter_url}}"></a>
+		                    	{% endif %}
+                            	{% if author.linkedin_url %}
 			                    <a class="linkedin-gr" href="{{author.linkedin_url}}"></a>
+		                    	{% endif %}
 		                    </span>
                             {{author.about|safe}}
                         </figcaption>
@@ -80,7 +78,7 @@
 	                            {{article.heading}}
 	                        </h3>
 	                        <article>
-	                            {{article.summary|safe}}
+	                            {{article.summary|striptags|safe}}
 	                        </article>
 	                        <hr>
 	                        <span class="view-forward">
@@ -91,7 +89,7 @@
 				                {% if article.no_views > 0 %}
 				                	<figure class="view-icon ml-20"></figure> {{article.no_views}}
 				                {% endif %}
-				              </span>
+				            </span>
 	                    </div>
 	                </a>
 	                <meta itemprop="position" content="{{forloop.counter}}">
@@ -110,39 +108,8 @@
         <div class="col-md-3 col-sm-12">
         	<!-- Popular Courses -->
         	{% if popular_courses %}
-			  <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 res-wd100">
-			    <h2 class="heading-right-talent">Suggested Courses</h2>
-			    <ul>
-			      {% for pCourses in popular_courses %}
-			      <li>
-			        <a href="{{pCourses.url}}">
-			          <h3>{{pCourses.name}}</h3>
-			          <div class="rating-box">
-			            {% for star in pCourses.star %}
-			              {% if star == '*' %}
-			                <figure class="full-star"></figure>
-			              {% endif %}
-			              {% if star == '+' %}
-			                <figure class="half-star"></figure>
-			              {% endif %}
-			              {% if star == '-' %}
-			                <figure class="blank-star"></figure>
-			              {% endif %}
-			              {% endfor %}
-			              <strong>{{pCourses.avg_rating_exact}}<small>/5</small></strong> 
-			          </div>
-			         <!--  <span class="jobs-available">
-			            <strong>21735</strong>  jobs available
-			          </span> -->
-			          <span class="people-bought">
-			            <strong>{{pCourse.buy_count}}</strong>  people bought
-			          </span>
-			        </a>
-			      </li>
-			      {% endfor %}
-			    </ul>
-			  </div>
-			  {% endif %}
+				{% include './include/popular.tmpl.html' with popular_courses=popular_courses titleCourses='Suggested Courses' %}
+			{% endif %}
         </div>
     </div>
 </section>

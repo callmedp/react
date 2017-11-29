@@ -205,6 +205,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
                 object_list=main_obj)
 
         detail_article = render_to_string('include/detail-article-list.html',
+        detail_article = render_to_string('talenteconomy/include/detail-article-list.tmpl.html',
             {"page_obj": detail_obj,
             "slug": blog.slug, 
             "SITEDOMAIN": settings.SITE_DOMAIN})
@@ -224,7 +225,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
                 object_list=article_list)
 
         context.update({
-            "scroll_article": render_to_string('include/detail-article-list.html',
+            "scroll_article": render_to_string('talenteconomy/include/detail-article-list.tmpl.html',
                 {"page_obj": page_obj,
                 "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
         })
