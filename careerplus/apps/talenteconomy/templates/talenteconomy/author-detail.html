@@ -63,19 +63,20 @@
                 </div>
 				<!-- author main end here -->
 
+				<div itemscope itemtype="https://schema.org/ItemList">
 				{% for article in article_list %}
-				<div class="author-article-list col-sm-12">
-	                <a class="box-panel" href="#">
+				<div class="author-article-list col-sm-12" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+	                <a class="box-panel" href="{% url 'talent:te-articles-detail' article.p_cat.slug article.slug %}" itemprop="url">
 	                    <div class="col-sm-6">
 	                        <figure class="pr">
 	                        	{% if article.image  %}
-	                            <img src="{{article.image.url}}" alt="{{article.image_alt}}">
+	                            <img src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
 	                            {% endif %}
 	                            <span class="product-title product-title-pos">{{article.p_cat.name}}</span>
 	                        </figure>
 	                    </div>
 	                    <div class="col-sm-6">
-	                        <h3 class="heading-article">
+	                        <h3 class="heading-article" itemprop="name">
 	                            {{article.heading}}
 	                        </h3>
 	                        <article>
@@ -93,9 +94,13 @@
 				              </span>
 	                    </div>
 	                </a>
+	                <meta itemprop="position" content="{{forloop.counter}}">
+	                <meta itemprop="headline" content="{{article.heading}}">
+	                <meta itemprop="datePublished" content="{{article.publish_date.date}}"></meta>
+	                <meta itemprop="author" content={{article.author.name}}>
 	            </div>
 				{% endfor %}
-
+			</div>
     		</div>
 
     	</div>
