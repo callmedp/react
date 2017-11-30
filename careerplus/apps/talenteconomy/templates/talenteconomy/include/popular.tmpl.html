@@ -9,7 +9,7 @@
 	<ul>
 		{% for popularCourses in popular_courses %}
 		<li>
-			<a href="{{popularCourses.url}}">
+			<a href="{{popularCourses.url}}?itm_source=TE&itm_medium=PopularCourses&itm_campaign={{page}}&itm_content={{popularCourses.name.split|join:"-"}}">
 			  <h3>
 			  	{% if popularCourses.display_name %}
 			  		{{popularCourses.display_name}}
