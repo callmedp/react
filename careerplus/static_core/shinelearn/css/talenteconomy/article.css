@@ -1,7 +1,29 @@
 .article-carousel {
-  background: #3c70c2;
+
   clear: both;
+
   padding: 20px 0;
+
+  background: #3c70c2;
+
+  /* Old browsers */
+
+  background: -moz-linear-gradient(left, #3c70c2 1%, #1196a6 100%);
+
+  /* FF3.6-15 */
+
+  background: -webkit-linear-gradient(left, #3c70c2 1%, #1196a6 100%);
+
+  /* Chrome10-25,Safari5.1-6 */
+
+  background: linear-gradient(to right, #3c70c2 1%, #1196a6 100%);
+
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3c70c2', endColorstr='#1196a6',GradientType=1 );
+
+  /* IE6-9 */
+
 }
 .article-carousel .carousel-heading-container {
   position: absolute;
@@ -276,7 +298,8 @@
   display: block;
   margin: 10px 0;
   line-height: 18px;
-  height: 32px;
+  height: 35px;
+  text-align: center;
   vertical-align: middle;
   overflow: hidden;
 }
@@ -376,124 +399,257 @@
 }
 
 .contributor-carousel {
+
   position: relative;
+
   background: #f6f6f6;
+
   padding-top: 10px;
+
   padding-bottom: 40px;
+
 }
-.contributor-carousel figure {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  -ms-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-}
-.contributor-carousel figure figcaption {
-  color: #333;
-  font-size: 16px;
-  font-weight: 600;
-  display: block;
-  text-align: center;
-  margin-top: 10px;
-  padding-bottom: 10px;
-}
-@media (max-width: 992px) {
-  .contributor-carousel figure figcaption {
-    font-size: 14px;
-  }
-}
-.contributor-carousel figure figcaption strong {
-  color: #999;
-  font-size: 12px;
-  font-weight: 400;
-  display: block;
-  position: relative;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-}
-.contributor-carousel figure figcaption strong:after {
-  border-bottom: 1px solid #e1e1e1;
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  right: 0;
-  width: 30px;
-  content: '';
-  margin: auto;
-  display: block;
-}
-.contributor-carousel figure figcaption .read {
-  color: #3f5f94;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: center;
-  display: block;
-}
-.contributor-carousel .col {
-  width: 20%;
-  float: left;
-  padding-left: 10px;
-  padding-right: 10px;
-}
+
 .contributor-carousel .box-panel {
-  overflow: visible;
-  box-shadow: none;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  -ms-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  background-color: #fff;
+
+  overflow: hidden;
+
 }
-.contributor-carousel .carousel-inner {
-  margin: auto;
-  width: 100%;
+
+.contributor-carousel figure {
+
+  height: 190px;
+
+  overflow: hidden;
+
 }
-.contributor-carousel .carousel-control {
-  width: auto;
+
+.contributor-carousel figure img {
+
+  height: 100%;
+
 }
-.contributor-carousel .carousel-control.left,
-.contributor-carousel .carousel-control.right {
-  background-image: none;
-}
-.contributor-carousel .glyphicon-chevron-left, .contributor-carousel .carousel-control .glyphicon-chevron-right {
-  margin-top: -10px;
-  margin-left: -10px;
-  color: #444;
-}
-.contributor-carousel .carousel-inner {
+
+.contributor-carousel figcaption {
+
+  color: #333;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  display: block;
+
+  text-align: center;
+
+  margin-top: 10px;
+
   padding-bottom: 10px;
+
 }
-.contributor-carousel .carousel-inner a {
-  display: table-cell;
-  height: auto;
-  width: auto;
-  vertical-align: middle;
-}
-.contributor-carousel .carousel-inner img {
-  margin: auto auto;
-  max-width: 100%;
-}
-.contributor-carousel .carousel-control {
-  width: 15px;
-  top: 45%;
-  opacity: 9;
-}
-.contributor-carousel .carousel-control.left {
-  background: url(../../images/sprite.png) no-repeat -366px -371px;
-  width: 45px;
-  height: 45px;
-}
-.contributor-carousel .carousel-control.right {
-  background: url(../../images/sprite.png) no-repeat -413px -371px;
-  width: 45px;
-  height: 45px;
-}
-.contributor-carousel .view-all {
-  margin-top: 20px;
-  margin-right: 27px;
-}
-.contributor-carousel .main-heading-article {
-  margin-top: 20px;
-}
+
 @media (max-width: 992px) {
-  .contributor-carousel figure.pr {
-    height: 155px;
+
+  .contributor-carousel figcaption {
+
+    font-size: 14px;
+
   }
+
+}
+
+.contributor-carousel figcaption strong {
+
+  color: #999;
+
+  font-size: 12px;
+
+  font-weight: 400;
+
+  display: block;
+
+  position: relative;
+
+  margin-bottom: 10px;
+
+  padding-bottom: 10px;
+
+}
+
+.contributor-carousel figcaption strong:after {
+
+  border-bottom: 1px solid #e1e1e1;
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: -2px;
+
+  right: 0;
+
+  width: 30px;
+
+  content: '';
+
+  margin: auto;
+
+  display: block;
+
+}
+
+.contributor-carousel figcaption .read {
+
+  color: #3f5f94;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  text-align: center;
+
+  display: block;
+
+}
+
+.contributor-carousel .col {
+
+  width: 20%;
+
+  float: left;
+
+  padding-left: 10px;
+
+  padding-right: 10px;
+
+}
+
+.contributor-carousel .box-panel {
+
+  overflow: visible;
+
+}
+
+.contributor-carousel .carousel-inner {
+
+  margin: auto;
+
+  width: 100%;
+
+}
+
+.contributor-carousel .carousel-control {
+
+  width: auto;
+
+}
+
+.contributor-carousel .carousel-control.left,
+
+.contributor-carousel .carousel-control.right {
+
+  background-image: none;
+
+}
+
+.contributor-carousel .glyphicon-chevron-left, .contributor-carousel .carousel-control .glyphicon-chevron-right {
+
+  margin-top: -10px;
+
+  margin-left: -10px;
+
+  color: #444;
+
+}
+
+.contributor-carousel .carousel-inner {
+
+  padding-bottom: 10px;
+
+}
+
+.contributor-carousel .carousel-inner a {
+
+  display: table-cell;
+
+  height: auto;
+
+  width: auto;
+
+  vertical-align: middle;
+
+}
+
+.contributor-carousel .carousel-inner img {
+
+  margin: auto auto;
+
+  max-width: 100%;
+
+}
+
+.contributor-carousel .carousel-control {
+
+  width: 15px;
+
+  top: 45%;
+
+  opacity: 9;
+
+}
+
+.contributor-carousel .carousel-control.left {
+
+  background: url(../../images/sprite.png) no-repeat -366px -371px;
+
+  width: 45px;
+
+  height: 45px;
+
+}
+
+.contributor-carousel .carousel-control.right {
+
+  background: url(../../images/sprite.png) no-repeat -413px -371px;
+
+  width: 45px;
+
+  height: 45px;
+
+}
+
+.contributor-carousel .view-all {
+
+  margin-top: 20px;
+
+  margin-right: 27px;
+
+}
+
+.contributor-carousel .main-heading-article {
+
+  margin-top: 20px;
+
+}
+
+@media (max-width: 992px) {
+
+  .contributor-carousel figure.pr {
+
+    height: 155px;
+
+  }
+
 }
 
 /*----Article Category page css---*/
