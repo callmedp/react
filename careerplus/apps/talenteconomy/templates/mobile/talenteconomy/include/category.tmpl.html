@@ -13,10 +13,10 @@
           <p class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></p>
         </div>     
       </li>
-    {% endfor %}
 
-    {% if forloop.counter|divisibleby:2 %}
-      <li class="clearfix is-hidden"></li>
-    {% endif %}
+      {% if forloop.counter|divisibleby:2 %}
+        <li class="clearfix is-hidden"></li>
+      {% endif %}
+    {% endfor %}
   </ul>
 </div>
