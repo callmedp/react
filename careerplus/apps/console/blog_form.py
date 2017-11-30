@@ -279,9 +279,9 @@ class TagAddForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
-            if len(name) < 4 or len(name) > 70:
+            if len(name) < 2 or len(name) > 70:
                 raise forms.ValidationError(
-                    "Name should be between 4-70 characters.")
+                    "Name should be between 2-70 characters.")
 
         else:
             raise forms.ValidationError(
@@ -348,9 +348,9 @@ class TagChangeForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
-            if len(name) < 4 or len(name) > 70:
+            if len(name) < 2 or len(name) > 70:
                 raise forms.ValidationError(
-                    "Name should be between 4-70 characters.")
+                    "Name should be between 2-70 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -426,9 +426,9 @@ class CategoryChangeForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
-            if len(name) < 4 or len(name) > 70:
+            if len(name) < 2 or len(name) > 70:
                 raise forms.ValidationError(
-                    "Name should be between 4-70 characters.")
+                    "Name should be between 2-70 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -486,9 +486,9 @@ class CategoryAddForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
-            if len(name) < 4 or len(name) > 70:
+            if len(name) < 2 or len(name) > 70:
                 raise forms.ValidationError(
-                    "Name should be between 4-70 characters.")
+                    "Name should be between 2-70 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
