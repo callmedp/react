@@ -41,10 +41,10 @@
 <div class="body-wrapper">
 <div class="article-category talent-gr">
     <div class="content">
-      <ul class="breadcrumb">
+      <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
         {% for bradcbs in breadcrumbs %}
           {% if bradcbs.url %}
-            <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
           {% else %}
             <li class="active">{{bradcbs.name}}</li>
           {% endif %}

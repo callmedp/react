@@ -41,14 +41,14 @@
 
 <div class="body-wrapper ">
     <section class="content-box">
-        <ul class="breadcrumb">
-         {% for bradcbs in breadcrumbs %}
-          {% if bradcbs.url %}
-            <li><a href="{{bradcbs.url}}">{{bradcbs.name}}</a></li>
-          {% else %}
-            <li class="active">{{bradcbs.name}}</li>
-          {% endif %}
-        {% endfor %}
+        <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+          {% for bradcbs in breadcrumbs %}
+            {% if bradcbs.url %}
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+            {% else %}
+              <li class="active">{{bradcbs.name}}</li>
+            {% endif %}
+          {% endfor %} 
         </ul>
 
         {% include './include/detail-article-list.tmpl.html' %}
