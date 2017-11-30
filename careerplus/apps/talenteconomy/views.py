@@ -333,8 +333,11 @@ class AuthorDetailView(DetailView):
 
         popular_courses = BlogMixin().get_product(most_recent_cat)
 
+        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(id=author.id)
+
         context.update({
             "author":author,
+            "authors":authors,
             "article_list":article_list,
             "popular_courses": popular_courses,
         })
