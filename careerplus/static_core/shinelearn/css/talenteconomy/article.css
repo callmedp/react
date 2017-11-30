@@ -98,6 +98,11 @@
     margin-top: -7%;
   }
 }
+.article-carousel .carousel-inner iframe {
+  width: 100%;
+  height: 100%;
+}
+
 .article-carousel .carousel-control {
   width: 15px;
   top: 45%;
@@ -783,6 +788,10 @@
 }
 .article-detail-content figure img {
   width: 100%;
+}
+.article-detail-content figure iframe {
+  width: 100%;
+  height: 100%;
 }
 .article-detail-content .article-content img {
   margin: 5px;
