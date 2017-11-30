@@ -34,7 +34,7 @@ class Cart(AbstractAutoDate):
         'coupon.Coupon',
         on_delete=models.SET_NULL,
         verbose_name=_("Coupon"), null=True,)
-    
+
     is_submitted = models.BooleanField(default=False)
     date_merged = models.DateTimeField(
         _("Date merged"), null=True, blank=True)
@@ -68,8 +68,10 @@ class Cart(AbstractAutoDate):
     country = models.ForeignKey(Country, null=True, blank=True)
 
     shipping_done = models.BooleanField(default=False)  #shipping process
+    payment_page = models.BooleanField(default=False)
     # summary_done = models.BooleanField(default=False)  #summary process
     lead_archive = models.BooleanField(default=False)
+    lead_created = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'cart'

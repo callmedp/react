@@ -6,19 +6,20 @@ from geolocation.models import Country
 LEAD_LOCATION = (
     (0, 'Default'),
     (1, 'Skill Page'),
-    (2, 'Course Detail Page'),
+    (5, 'Course Detail Page'),
     (3, 'Contact Us Page'),
     (4, 'SEM'),  # marketing pages
     (7, 'CMS Page'),
     (8, 'Resume Detail Page'),
     (21, 'AdServerLead'),
+    (2, 'CartLead'),
 
 )
 
 DEFAULT_SLUG_SOURCE = (
     (0, 'gstgsp'),
     (1, 'gstgsp'),
-    (2, 'gstgsp'),
+    (2, 'CartLead'),
     (3, 'gstgsp'),
     (4, 'gstgsp'),  # marketing pages
     (7, 'gstgsp'),
