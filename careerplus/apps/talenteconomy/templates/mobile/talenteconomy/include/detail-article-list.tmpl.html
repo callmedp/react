@@ -31,11 +31,12 @@
 {% endif %}
 {% endwith %}
 
-
+{% comment %}
 <p class="take-me pb-0 mt-10">
     <span class="line"><sup></sup></span>
     <span class="icon-chat"></span>{{main_article.comment_moderated}} comments
 </p>
+
 <div class="comment-wrap mt-20">
     <ul class="mt-20 article-comment">
         <li>
@@ -56,6 +57,7 @@
         <button class="btn-sm btn-blue btn-round mt-10">Submit</button>
     </div>
 </div>
-<!-- end of Comment wrap here -->
+{% endcomment %}
+
 </article>
 <!-- end of article -->
