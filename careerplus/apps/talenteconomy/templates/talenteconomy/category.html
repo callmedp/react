@@ -83,7 +83,7 @@
 		<div class="col-md-3 col-sm-12">
 			<!-- take me to -->
 			{% if categories %}
-				{% include './include/category.tmpl.html' with categories=categories category.slug=main_cat%}
+				{% include './include/category.tmpl.html' with categories=categories main_cat=category.slug  %}
 			{% endif %}
 
 			<!-- Popular Courses -->
