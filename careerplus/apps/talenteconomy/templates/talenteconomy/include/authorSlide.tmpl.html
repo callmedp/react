@@ -7,7 +7,7 @@
 					{% for author in authors %}
 					<div class="item {% if forloop.counter == 1 %}active{% endif %}">
 						<div class="col">
-							<a class="box-panel" href="#">
+							<a class="box-panel" href="{% url 'talent:authors-detail' author.slug %}">
 								<figure>
 									{% if author.image %}
 									<img src="{{author.image.url}}" class="img-responsive">
