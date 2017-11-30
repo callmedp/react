@@ -39,8 +39,33 @@
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
+              
               gtag('config', 'UA-3537905-41');
               gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+
+              gtag('config', 'UA-3537905-41', {
+                'custom_map': {
+                   'itm_source': 'source',
+                   'itm_medium': 'medium',
+                   'itm_campaign': 'campaign',
+                   'itm_content': 'content'
+              }});
+
+              {% if request.GET.itm_campaign %}
+                gtag('event', 'itm', {'source': '{{request.GET.itm_campaign}}'});
+              {% endif %}
+
+              {% if request.GET.itm_medium %}
+                gtag('event', 'itm', {'medium': '{{request.GET.itm_medium}}'});
+              {% endif %}
+
+              {% if request.GET.itm_campaign %}
+                gtag('event', 'itm', {'campaign': '{{request.GET.itm_campaign}}'});
+              {% endif %}
+
+              {% if request.GET.itm_content %}
+                gtag('event', 'itm', {'content': '{{request.GET.itm_content}}'});
+              {% endif %}
             </script>
         {% endblock GA %}
     {% block banner_ads %}
