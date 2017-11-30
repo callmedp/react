@@ -308,7 +308,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
             self.display_name = self.name
         if self.id:
             self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
-        if not summary:
+        if not self.summary:
             try:
                 soup = BeautifulSoup(self.content, 'html.parser')
                 self.summary = soup.blockquote.text.strip()
