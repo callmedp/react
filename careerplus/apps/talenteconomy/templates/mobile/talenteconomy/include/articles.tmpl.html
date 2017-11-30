@@ -2,7 +2,7 @@
 
 {% for articlelist in articlelists %}
 <div class="media article-list">
-  <a title="{{articlelist.title}}" href="{{articlelist.url}}">
+  <a title="{{articlelist.title}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}">
     <figure class="media-left">
       {% thumbnail articlelist.image "96x73" crop="center" as im %}
       <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}">
