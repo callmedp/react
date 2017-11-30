@@ -1,9 +1,11 @@
-<ol class="breadcrumb">
+<ol class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
    {% for breadcrumb in breadcrumbs %}
     {% if breadcrumb.url %}
-      <li><a href="{{breadcrumb.url}}">{{breadcrumb.name}}</a></li>
+      <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{breadcrumb.url}}" ><span itemprop="name">{{breadcrumb.name}}</span></a></li>
+
     {% else %}
       <li class="active">{{breadcrumb.name}}</li>
     {% endif %}
+    
   {% endfor %}
 </ol>
