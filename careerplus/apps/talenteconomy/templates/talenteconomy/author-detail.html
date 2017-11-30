@@ -96,6 +96,12 @@
 	                <meta itemprop="headline" content="{{article.heading}}">
 	                <meta itemprop="datePublished" content="{{article.publish_date.date}}"></meta>
 	                <meta itemprop="author" content={{article.author.name}}>
+                     <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+                    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+                      <meta itemprop="url" content="https://learning.shine.com/media/static/shinelearn/images/logo.png">
+                    </div>
+                    <meta itemprop="name" content="Shine">
+                  </div>
 	            </div>
 				{% endfor %}
 			</div>
