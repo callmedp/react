@@ -267,16 +267,15 @@
 .take-me-to ul li:nth-child(2n+1) {
   margin-left: 0;
 }
-.take-me-to ul li h4 {
+.take-me-to ul li h4,
+.take-me-to ul li h3
+ {
   font-size: 14px;
   color: #3f5f94;
   font-weight: 600;
   display: block;
-  text-align: center;
-  margin: 10px 0;
-  vertical-align: middle;
-  height: 32px;
-  overflow: hidden;
+  margin: 5px 0;
+  line-height: 18px;
 }
 
 .popular-courses {
