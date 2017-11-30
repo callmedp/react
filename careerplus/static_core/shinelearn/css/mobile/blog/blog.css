@@ -675,3 +675,7 @@ blockquote {
 
 .no-shadow {
   box-shadow: none; }
+
+.minh-185 {
+  min-height: 185px;
+}

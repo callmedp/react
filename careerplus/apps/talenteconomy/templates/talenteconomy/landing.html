@@ -45,13 +45,13 @@
 
       	  	{% if topArtList.1 %}
             <div class="pr mb-20">
-          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 %}
+          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 mini=True secondary=True %}
             </div>
             {% endif %}
             
             {% if topArtList.2 %}
             <div class="pr">
-          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 %}
+          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 mini=True secondary=True %}
             </div>
             {% endif %}
 
