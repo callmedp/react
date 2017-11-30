@@ -12,7 +12,7 @@
           {% endif %}
           <p class="head pb-0">{{author.name}}</p>
           <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
-          <p class="fs-12"><a href="{{request.path}}{{author.slug}}">{{author.no_of_blog}} articles</a></p>
+          <p class="fs-12"><a href="{% url 'talent:authors-detail' author.slug %}">{{author.no_of_blog}} articles</a></p>
         </li>
         {% endfor %}
     </ul>
