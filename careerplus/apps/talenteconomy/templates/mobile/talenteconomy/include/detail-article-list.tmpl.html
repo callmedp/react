@@ -1,8 +1,8 @@
-
-<h1 class="h1-head">{{main_article.heading}}</h1>
+<div itemscope itemtype="https://schema.org/Article">
+<h1 class="h1-head" itemprop="name">{{main_article.heading}}</h1>
 
 <div class="clearfix border-bottom pb-10 mb-10 fs-13">
-    <span class="editor">{{main_article.author.name}} <span class="spacer c-666">/</span> <span class="c-666">{{main_article.publish_date.date}}</span>
+    <span class="editor" itemprop="author">{{main_article.author.name}} <span class="spacer c-666">/</span> <span class="c-666" itemprop="datePublished">{{main_article.publish_date.date}}</span>
     </span>
     <span class="view-forward pull-right mt-0">
         {% if main_article.comment_moderated > 0 %}
@@ -14,10 +14,16 @@
     </span>
 </div>
 
-<p class="mt-15"><img src="{{main_article.image.url}}" class="img-responsive"></p>
-<article class="">
+<p class="mt-15"><img src="{{main_article.image.url}}" class="img-responsive" itemprop="image"></p>
+<article class="" itemprop="articleBody">
 {{main_article.content|safe}}
-
+<meta itemprop="headline" content="{{main_article.heading}}">
+<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+      <meta itemprop="url" content="https://learning.shine.com/media/static/shinelearn/images/logo.png">
+    </div>
+    <meta itemprop="name" content="Shine">
+  </div>
 <hr>
 
 {% with main_article.tags.all as tags %}
@@ -61,3 +67,4 @@
 
 </article>
 <!-- end of article -->
+</div>

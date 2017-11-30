@@ -60,20 +60,20 @@
 <!-- Starts of talent-economy list -->
 <section class="content-box pt-0 pb-0">
   <!-- box panel starts here -->
-  <div class="box-panel row ">
+  <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
     <p class="semi-head">All articles</p>      
     {% for artList in recent_articles %}
-      <div class="media article-list">
-        <a title="{{artList.title}}" href="{{artList.url}}">
+      <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+        <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
           <figure class="media-left">
-            <img class="media-object w-auto" src="{{artList.image}}" alt="{{artList.image_alt}}">
+            <img class="media-object w-auto" src="{{artList.image}}" alt="{{artList.image_alt}}" itemprop="image">
           </figure>
           <div class="media-body rel">
             <span class="article-tag">{{artList.title}}</span>
-            <h3 class="media-heading">{{artList.heading}}</h3>
+            <h3 class="media-heading" itemprop="name">{{artList.heading}}</h3>
 
             <div class="blog-author fs-11">
-              <span class="editor">{{artList.author.name}}</span>
+              <span class="editor" itemprop="author">{{artList.author.name}}</span>
               <span class="view-forward pull-right">
                   <figure class="icon-forward"></figure> {{artList.no_shares}}
                   <figure class="icon-view icon-grey-view ml-10"></figure> {{artList.no_views}}
@@ -81,6 +81,16 @@
             </div>
           </div>
         </a>
+          <meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
+          <meta itemprop="position" content="{{forloop.counter}}">
+          <meta itemprop="headline" content="{{artList.heading}}">
+          
+          <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+            <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+              <meta itemprop="url" content="https://learning.shine.com/media/static/shinelearn/images/logo.png">
+            </div>
+            <meta itemprop="name" content="Shine">
+          </div>
       </div>
       {% endfor %}  
   </div><!-- box panel ends here -->
