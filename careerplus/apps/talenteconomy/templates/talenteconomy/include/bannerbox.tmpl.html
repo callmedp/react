@@ -4,7 +4,7 @@
   </figure>
   <div class="carousel-heading-container">
     <span class="product-title">{{articlelist.p_cat.name}}</span>
-    <strong class="heading-carousel heading-carousel-primary">{{articlelist.name}}</strong>
+    <strong class="heading-carousel heading-carousel-primary">{% if bigtmpl %}{{articlelist.name}}{% else %}{{articlelist.name|truncatechars:20}}{% endif %}</strong>
     <span class="author author-primary">{{articlelist.author.name}}</span>
   </div>
 </a>
