@@ -445,6 +445,11 @@ article {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b6fc2', endColorstr='#1097a6',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
 
+.talent-gr-nav {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3b6fc2+0,1c8bae+77,1097a6+100 */
+  background: #3b6fc2;
+}
+
 .talent-gr li {
   height: 195px; }
 
