@@ -6,7 +6,7 @@ from geolocation.models import Country
 LEAD_LOCATION = (
     (0, 'Default'),
     (1, 'Skill Page'),
-    (5, 'Course Detail Page'),
+    (2, 'Course Detail Page'),
     (3, 'Contact Us Page'),
     (4, 'SEM'),  # marketing pages
     (7, 'CMS Page'),
@@ -16,9 +16,7 @@ LEAD_LOCATION = (
     (2, 'CartLead'),
     (26, 'Email Marketing Course Leads'),
     (27, 'Email Marketing Resume Leads'),
-
-
-
+    (22, 'CartLead'),
 )
 
 DEFAULT_SLUG_SOURCE = (
@@ -33,6 +31,7 @@ DEFAULT_SLUG_SOURCE = (
     (20, 'missedcalldefault'),
     (26, 'coursemailerdefault'),
     (27, 'resmdefault'),  # resume mailer default
+    (22, 'defaultchatleads'),
 )
 
 
