@@ -45,7 +45,7 @@ def create_lead_on_crm(source_type=None):
 
 
 def lead_creation_function(filter_dict=None):
-    cart_objs = Cart.objects.filter(**filter_dict).exclude(owner_id__exact='')[0:3]
+    cart_objs = Cart.objects.filter(**filter_dict).exclude(owner_id__exact='')
     extra_info = {}
     for cart_obj in cart_objs:
         data_dict = {}
