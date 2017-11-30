@@ -31,8 +31,8 @@ def lead_creted_on_crm(modeladmin, request, queryset):
             #     'queryid': query.id})
             # post_psedu_lead.delay(query_dict)
             
-            if query.lead_created:
-                create_lead_crm(pk=query.pk)
+            if not query.lead_created:
+                create_lead_crm.delay(pk=query.pk)
                 messages.add_message(
                 request, messages.SUCCESS, "lead created")
             else:

@@ -14,16 +14,18 @@ LEAD_LOCATION = (
     (21, 'AdServerLead'),
     (2, 'CartLead'),
 
+
 )
 
 DEFAULT_SLUG_SOURCE = (
-    (0, 'gstgsp'),
-    (1, 'gstgsp'),
-    (2, 'CartLead'),
-    (3, 'gstgsp'),
-    (4, 'gstgsp'),  # marketing pages
-    (7, 'gstgsp'),
-    (8, 'gstgsp'),
+    (0, ''),
+    (1, 'skillleads'),
+    (2, 'courseonline'),
+    (3, ''),
+    (4, 'semdefault'),  # marketing pages
+    (7, 'cmsonline'),
+    (8, 'resumeonline'),
+    (21, 'adserverdefault'),
 )
 
 

@@ -216,10 +216,12 @@ class AddScreenProductForm(forms.ModelForm):
 
     def clean_inr_price(self):
         inr_price = self.cleaned_data.get('inr_price', '')
-        if inr_price:
-            if inr_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if inr_price is None:
+            raise forms.ValidationError(
+                "This field is required.")
+        elif inr_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return inr_price
     
     def save(self, commit=True, *args, **kwargs):
@@ -382,72 +384,86 @@ class ScreenProductPriceForm(forms.ModelForm):
 
     def clean_inr_price(self):
         inr_price = self.cleaned_data.get('inr_price', '')
-        inr_price = self.cleaned_data.get('inr_price', '')
-        if inr_price:
-            if inr_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if inr_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif inr_price < Decimal(0):    
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return inr_price
+    
     def clean_usd_price(self):
         usd_price = self.cleaned_data.get('usd_price', '')
-        if usd_price:
-            if usd_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if usd_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif usd_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return usd_price
 
     def clean_aed_price(self):
         aed_price = self.cleaned_data.get('aed_price', '')
-        if aed_price:
-            if aed_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if aed_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif aed_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return aed_price
 
     def clean_gbp_price(self):
         gbp_price = self.cleaned_data.get('gbp_price', '')
-        if gbp_price:
-            if gbp_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if gbp_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif gbp_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return gbp_price
 
     def clean_fake_usd_price(self):
         usd_price = self.cleaned_data.get('usd_price', '')
         fake_usd_price = self.cleaned_data.get('fake_usd_price', '')
-        if fake_usd_price:
-            if fake_usd_price < Decimal(0):
+        if fake_usd_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif fake_usd_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
+        elif fake_usd_price > Decimal(0):
+            if fake_usd_price <= usd_price:
                 raise forms.ValidationError(
-                    "This value cannot be negative.")
-            elif fake_usd_price > Decimal(0):
-                if fake_usd_price <= usd_price:
-                    raise forms.ValidationError(
-                        "This value should be greater than true price.")
+                    "This value should be greater than true price.")
         return fake_usd_price
 
     def clean_fake_inr_price(self):
         inr_price = self.cleaned_data.get('inr_price', '')
         fake_inr_price = self.cleaned_data.get('fake_inr_price', '')
-        if fake_inr_price:
-            if fake_inr_price < Decimal(0):
+        if fake_inr_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif fake_inr_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
+        elif fake_inr_price > Decimal(0):
+            if fake_inr_price <= inr_price:
                 raise forms.ValidationError(
-                    "This value cannot be negative.")
-            elif fake_inr_price > Decimal(0):
-                if fake_inr_price <= inr_price:
-                    raise forms.ValidationError(
-                        "This value should be greater than true price.")
+                    "This value should be greater than true price.")
         return fake_inr_price
 
     def clean_fake_aed_price(self):
         aed_price = self.cleaned_data.get('aed_price', '')
         fake_aed_price = self.cleaned_data.get('fake_aed_price', '')
-        if fake_aed_price:
-            if fake_aed_price < Decimal(0):
+        if fake_aed_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif fake_aed_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
+        elif fake_aed_price > Decimal(0):
+            if fake_aed_price <= aed_price:
                 raise forms.ValidationError(
-                    "This value cannot be negative.")
-            elif fake_aed_price > Decimal(0):
-                if fake_aed_price <= aed_price:
-                    raise forms.ValidationError(
                         "This value should be greater than true price.")
         return fake_aed_price
 
@@ -703,73 +719,86 @@ class AddScreenProductVariantForm(forms.ModelForm):
         
     def clean_inr_price(self):
         inr_price = self.cleaned_data.get('inr_price', '')
-        inr_price = self.cleaned_data.get('inr_price', '')
-        if inr_price:
-            if inr_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if inr_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif inr_price < Decimal(0):    
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return inr_price
-
+    
     def clean_usd_price(self):
         usd_price = self.cleaned_data.get('usd_price', '')
-        if usd_price:
-            if usd_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if usd_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif usd_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return usd_price
 
     def clean_aed_price(self):
         aed_price = self.cleaned_data.get('aed_price', '')
-        if aed_price:
-            if aed_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if aed_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif aed_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return aed_price
 
     def clean_gbp_price(self):
         gbp_price = self.cleaned_data.get('gbp_price', '')
-        if gbp_price:
-            if gbp_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
+        if gbp_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif gbp_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
         return gbp_price
 
     def clean_fake_usd_price(self):
         usd_price = self.cleaned_data.get('usd_price', '')
         fake_usd_price = self.cleaned_data.get('fake_usd_price', '')
-        if fake_usd_price:
-            if fake_usd_price < Decimal(0):
+        if fake_usd_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif fake_usd_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
+        elif fake_usd_price > Decimal(0):
+            if fake_usd_price <= usd_price:
                 raise forms.ValidationError(
-                    "This value cannot be negative.")
-            elif fake_usd_price > Decimal(0):
-                if fake_usd_price <= usd_price:
-                    raise forms.ValidationError(
-                        "This value should be greater than true price.")
+                    "This value should be greater than true price.")
         return fake_usd_price
 
     def clean_fake_inr_price(self):
         inr_price = self.cleaned_data.get('inr_price', '')
         fake_inr_price = self.cleaned_data.get('fake_inr_price', '')
-        if fake_inr_price:
-            if fake_inr_price < Decimal(0):
+        if fake_inr_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif fake_inr_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
+        elif fake_inr_price > Decimal(0):
+            if fake_inr_price <= inr_price:
                 raise forms.ValidationError(
-                    "This value cannot be negative.")
-            elif fake_inr_price > Decimal(0):
-                if fake_inr_price <= inr_price:
-                    raise forms.ValidationError(
-                        "This value should be greater than true price.")
+                    "This value should be greater than true price.")
         return fake_inr_price
 
     def clean_fake_aed_price(self):
         aed_price = self.cleaned_data.get('aed_price', '')
         fake_aed_price = self.cleaned_data.get('fake_aed_price', '')
-        if fake_aed_price:
-            if fake_aed_price < Decimal(0):
+        if fake_aed_price is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        elif fake_aed_price < Decimal(0):
+            raise forms.ValidationError(
+                "This value cannot be negative.")
+        elif fake_aed_price > Decimal(0):
+            if fake_aed_price <= aed_price:
                 raise forms.ValidationError(
-                    "This value cannot be negative.")
-            elif fake_aed_price > Decimal(0):
-                if fake_aed_price <= aed_price:
-                    raise forms.ValidationError(
                         "This value should be greater than true price.")
         return fake_aed_price
 
@@ -785,7 +814,7 @@ class AddScreenProductVariantForm(forms.ModelForm):
                     raise forms.ValidationError(
                         "This value should be greater than true price.")
         return fake_gbp_price
-
+        
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         if name:
@@ -797,16 +826,6 @@ class AddScreenProductVariantForm(forms.ModelForm):
                 "This field is required.")
         return name
 
-    def clean_inr_price(self):
-        inr_price = self.cleaned_data.get('inr_price', '')
-        if inr_price:
-            if inr_price < Decimal(0):
-                raise forms.ValidationError(
-                    "This value cannot be negative.")
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return inr_price
     
     def save(self, commit=True, *args, **kwargs):
         parent = self.parent
