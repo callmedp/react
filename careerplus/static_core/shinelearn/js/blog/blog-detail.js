@@ -1,6 +1,11 @@
-function openCommentBox(article_id) {
+function openCommentBox(article_id, visibility=1) {
     if (article_id){
         $('#total_comment' + article_id).addClass('disabled').removeAttr("onclick");
+
+        if (visibility == 2) {
+            article_id += '&visibility=2';
+        }
+
         $.ajax({
             url: '/article/show-comment-box/?art_id=' + article_id,
             dataType: 'html',
