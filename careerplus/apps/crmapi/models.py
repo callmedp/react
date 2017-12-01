@@ -13,7 +13,6 @@ LEAD_LOCATION = (
     (8, 'Resume Detail Page'),
     (20, 'Miss Call Lead'),
     (21, 'AdServerLead'),
-    (2, 'CartLead'),
     (26, 'Email Marketing Course Leads'),
     (27, 'Email Marketing Resume Leads'),
     (22, 'CartLead'),
@@ -31,7 +30,7 @@ DEFAULT_SLUG_SOURCE = (
     (20, 'missedcalldefault'),
     (26, 'coursemailerdefault'),
     (27, 'resmdefault'),  # resume mailer default
-    (22, 'defaultchatleads'),
+    (22, 'cartleads'),
 )
 
 
