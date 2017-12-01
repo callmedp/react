@@ -52,7 +52,7 @@
         </ul>
 
         <div class="author-item mt-20 mb-10">
-            <span class="author-img"><img src="images/ajay-misra.jpg"></span>
+            <span class="author-img"><img src="{{author.image.url}}"></span>
             <div class="author-detail">
                 <h1 class="mb-0 fs-16">{{author.name}}<sup></sup></h1>
                 <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
@@ -65,7 +65,9 @@
             </div>
         </div>
         <!-- ends of author item -->
+        <p class="mt-20">
         {{author.about|striptags|safe}}
+        </p>
 
         <hr>
 

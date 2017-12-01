@@ -22,7 +22,7 @@
 	            next = $(this).siblings(':first');
 	          }
 	          
-	          next.children(':first-child').clone().appendTo($(this));
+	         // next.children(':first-child').clone().appendTo($(this));
 	        }
 	    });
 	}
