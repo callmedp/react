@@ -80,7 +80,7 @@
     {% endwith %}
 
     <!-- comments box -->
-    {% comment %}
+    {% if article.allow_comment %}
     <div class="comments-box mb-40 mt-40">
         <!-- comments box heading-->
         <div class="comments-box-heading">
@@ -129,6 +129,6 @@
         <a href="#" class="comments-links mb-40"> <span class="comments-icon mr-10"></span>More Comments</a>
 
     </div>
-    {% endcomment %}
+    {% endif %}
 
 </div>
