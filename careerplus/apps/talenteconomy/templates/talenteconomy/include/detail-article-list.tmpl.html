@@ -80,11 +80,11 @@
     {% endwith %}
 
     <!-- comments box -->
-    {% if article.allow_comment %}
+    {% if main_article.allow_comment %}
     <div class="comments-box mb-40 mt-40">
         <!-- comments box heading-->
         <div class="comments-box-heading">
-            <span class="comments-icon mr-10"></span> <strong>23 comments</strong>
+            <span class="comments-icon mr-10"></span> <strong>{{main_article.comment_moderated}} comments</strong>
             <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a>
         </div>
 
