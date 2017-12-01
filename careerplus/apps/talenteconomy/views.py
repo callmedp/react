@@ -44,7 +44,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author').order_by('-publish_date')[:10]
         top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author')[:9]
 
-        authors = Author.objects.filter(visibility=2,blog__visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        authors = Author.objects.filter(visibility=2,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
 
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
         top_cats = ' '.join(top_3_cats)
@@ -102,7 +102,7 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
 
         categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
 
         main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=2) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=2)
         main_articles = main_articles.order_by('-publish_date').distinct().select_related('author')
@@ -284,7 +284,7 @@ class AuthorListingView(TemplateView):
 
         categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
 
         top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat')[:9]
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
@@ -334,7 +334,7 @@ class AuthorDetailView(DetailView):
             queryset = self.get_queryset()
 
         if slug is not None:
-            queryset = queryset.filter(slug=slug, is_active=1, visibility=2, blog__visibility=2).annotate(no_of_blog=Count('blog'))
+            queryset = queryset.filter(slug=slug, is_active=1, visibility=2, blog__visibility=2, blog__status=1).annotate(no_of_blog=Count('blog'))
         try:
             obj = queryset.get()
         except:
@@ -354,7 +354,7 @@ class AuthorDetailView(DetailView):
 
         popular_courses = BlogMixin().get_product(most_recent_cat)
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(id=author.id)
+        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(id=author.id)
 
         context.update({
             "author":author,
