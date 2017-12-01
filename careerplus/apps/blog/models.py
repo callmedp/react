@@ -202,21 +202,25 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
     _metadata_default = ModelMeta._metadata_default.copy()
     # _metadata_default['locale'] = 'dummy_locale'
 
-    # _metadata = {
+    _metadata = {
     #     'title': 'get_title',
     #     'description': 'get_description',
     #     'og_description': 'get_description',
     #     'keywords': 'get_keywords',
     #     'published_time': 'publish_date',
     #     'modified_time': 'last_modified_on',
-    #     'url': 'get_full_url'
-    # }
+         'url': 'get_absolute_url'
+     }
 
-    # class Meta:
-    #     ordering = ['priority']
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        if self.visibility == 2:
+            return reverse('talent:authors-detail', kwargs={'slug': self.slug})
+        else:
+            return '/'
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     

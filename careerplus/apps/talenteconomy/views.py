@@ -382,7 +382,9 @@ class AuthorDetailView(DetailView):
         if auth:
             about = auth.about
             desc = '.'.join(about.split('.')[:2])
+            name = auth.name
         meta = Meta(
             description=desc,
+            title ="%s - Career Guidance Author @ Shine Learning" %name,
         )
         return {"meta": meta}
