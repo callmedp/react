@@ -679,3 +679,9 @@ blockquote {
 .minh-185 {
   min-height: 185px;
 }
+
+@media only screen and (width: 320px)  {
+ .minh-185 {
+    min-height: 220px; 
+  } 
+}
