@@ -22,83 +22,83 @@ Career & Certification Guidance Top Authors @ Shine Learning
     {% endcompress %}
 {% endblock css_section %}
 {% block container %}
-        <!-- header -->
-        <header class="article-category-header">
-          <div class="container pt-30">
-            <!-- breadcrums -->
-            {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+<!-- header -->
+<header class="article-category-header">
+  <div class="container pt-30">
+    <!-- breadcrums -->
+    {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
 
-            <div class="article-category-heading">
-              <h1>Contributors</h1>
+    <div class="article-category-heading">
+      <h1>Contributors</h1>
+    </div>
+  </div>
+</header>
+
+  <!-- main section start -->
+<section class="container mt-40">
+  <!-- page content body start -->
+  <div class="row">
+    <!-- left content start -->
+    <div class="col-md-9 col-sm-12">
+      <div class="row">
+        {% for author in authors %}
+        <div class="col-sm-6 author-listing">
+          <div class="box-panel" >
+            <div class="media">
+              {% if author.image %}
+              <a href="{{request.path}}{{author.slug}}" class="media-left">
+                <figure>
+                  <img src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
+                </figure>
+              </a>
+              {% endif %}
+
+              <figcaption class="media-body">
+                <strong class="author-name">{{author.name}}</strong>
+                <span class="designation">{{author.designation}}</span>
+                <a href="{{request.path}}{{author.slug}}" class="articles-no">{{author.no_of_blog}} articles</a>
+                <p>{{author.about|striptags|safe|truncatechars:140}}</p>
+                <span class="social-login-gr">
+                  {% if author.fb_url %}
+                    <a href="{{author.fb_url}}"><i class="facebook-gr"></i></a>
+                  {% endif %}
+                  {% if author.twitter_url %}
+                    <a href="{{author.twitter_url}}"><i class="twitter-gr"></i></a>
+                  {% endif %}
+                  {% if author.linkedin_url %}
+                    <a href="{{author.linkedin_url}}"><i class="linkedin-gr"></i></a>
+                  {% endif %}
+                </span>
+              </figcaption>
             </div>
           </div>
-        </header>
+        </div>
 
-        <!-- main section start -->
-        <section class="container mt-40">
-          <!-- page content body start -->
-          <div class="row">
-            <!-- left content start -->
-            <div class="col-md-9 col-sm-12">
-              <div class="row">
-                {% for author in authors %}
-                <div class="col-sm-6 author-listing">
-                  <a class="box-panel" href="{{request.path}}{{author.slug}}">
-                    <div class="media">
-                      {% if author.image %}
-                      <figure class="media-left">
-                        <img src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
-                      </figure>
-                      {% endif %}
+        {% if forloop.counter|divisibleby:2 %}
+          <div class="clearfix is-hidden"></div>
+        {% endif %}
 
-                      <figcaption class="media-body">
-                        <strong class="author-name">{{author.name}}</strong>
-                        <span class="designation">{{author.designation}}</span>
-                        <span class="articles-no">{{author.no_of_blog}} articles</span>
-                        <p>{{author.about|striptags|safe|truncatechars:140}}</p>
-                        <span class="social-login-gr">
-                          {% if author.fb_url %}
-                            <a href="{{author.fb_url}}"><i class="facebook-gr"></i></a>
-                          {% endif %}
-                          {% if author.twitter_url %}
-                            <a href="{{author.twitter_url}}"><i class="twitter-gr"></i></a>
-                          {% endif %}
-                          {% if author.linkedin_url %}
-                            <a href="{{author.linkedin_url}}"><i class="linkedin-gr"></i></a>
-                          {% endif %}
-                        </span>
-                      </figcaption>
-                    </div>
-                  </a>
-                </div>
+        {% endfor %}
 
-                {% if forloop.counter|divisibleby:2 %}
-                  <li class="clearfix is-hidden"></li>
-                {% endif %}
+      </div>
+    </div>
+    <!-- left content end -->
 
-                {% endfor %}
+    <!-- right content start -->
+    <div class="col-md-3 col-sm-12">
+    <!-- take me to -->
+    {% if categories %}
+      {% include './include/category.tmpl.html' with categories=categories %}
+    {% endif %}
 
-              </div>
-            </div>
-<!-- left content end -->
+    {% if popular_courses %}
+      {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-author-listing' %}
+    {% endif %}
 
-<!-- right content start -->
-<div class="col-md-3 col-sm-12">
-<!-- take me to -->
-{% if categories %}
-  {% include './include/category.tmpl.html' with categories=categories %}
-{% endif %}
-
-{% if popular_courses %}
-  {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-author-listing' %}
-{% endif %}
-
-</div>
-<!-- right content end -->
-
-
-</div>
-<!-- page content body end -->
+    </div>
+    <!-- right content end -->
+  </div>
+  <!-- page content body end -->
 </section>
 <!-- main section end -->
 
