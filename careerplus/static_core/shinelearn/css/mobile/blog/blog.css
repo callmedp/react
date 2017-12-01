@@ -404,6 +404,12 @@ article {
     color: #333;
     font-weight: 600;
     font-size: 130%; }
+article ul {
+    padding-left: 25px;
+    padding-bottom: 15px; }
+    article ul li {
+      padding-bottom: 10px;
+      list-style-type: disc; }
 
 .trending-articles .slick-initialized .slick-slide {
   width: 220px;
