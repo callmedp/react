@@ -51,7 +51,7 @@
         {% endfor %}
       </ul>
 
-      <h1>{{category.name}}</h1>
+      <h1>{{category.name}} - Career Guidance</h1>
 
     </div>
     <img src="{% static 'shinelearn/images/mobile/common/article-category.jpg' %}" class="img-responsive">
@@ -61,7 +61,7 @@
 <section class="content-box pt-0 pb-0">
   <!-- box panel starts here -->
   <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
-    <p class="semi-head">All articles</p>      
+    <h2 class="semi-head">All articles</h2>      
     {% for artList in recent_articles %}
       <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
         <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
