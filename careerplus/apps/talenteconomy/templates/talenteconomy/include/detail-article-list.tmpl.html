@@ -80,7 +80,8 @@
     {% endwith %}
 
     <!-- comments box -->
-    {% if main_article.allow_comment %}
+    {% comment %}
+
     <div class="comments-box mb-40 mt-40" id="comment-box{{main_article.id}}">
         <!-- comments box heading-->
         <div class="comments-box-heading">
@@ -129,6 +130,7 @@
         <a class="comments-links mb-40" onclick="openCommentBox('{{main_article.id}}')" id="total_comment{{main_article.id}}"> <span class="comments-icon mr-10"></span>More Comments</a>
 
     </div>
-    {% endif %}
+
+    {% endcomment %}
 
 </div>
