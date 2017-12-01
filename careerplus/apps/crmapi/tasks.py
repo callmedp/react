@@ -112,7 +112,7 @@ def add_server_lead_task(query_dict):
             utm_parameter=utm_parameter, campaign_slug=campaign_slug)
 
 
-@task(name="create_lead_on_crm")
+@task(name="create_lead_crm")
 def create_lead_crm(pk=None):
     try:
         data_dict = {}
