@@ -52,7 +52,7 @@
               }});
 
               {% if request.GET.itm_campaign %}
-                gtag('event', 'itm', {'source': '{{request.GET.itm_campaign}}'});
+                gtag('event', 'itm', {'source': '{{request.GET.itm_source}}'});
               {% endif %}
 
               {% if request.GET.itm_medium %}
