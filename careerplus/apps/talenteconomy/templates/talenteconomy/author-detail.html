@@ -64,7 +64,7 @@
 				<div itemscope itemtype="https://schema.org/ItemList">
 				{% for article in article_list %}
 				<div class="author-article-list col-sm-12" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-	                <a class="box-panel" href="{% url 'talent:te-articles-detail' article.p_cat.slug article.slug %}" itemprop="url">
+	                <a class="box-panel" href="{% url 'talent:te-articles-detail' article.p_cat.slug article.slug %}" itemprop="url" title="{{article.heading}}">
 	                    <div class="col-sm-6">
 	                        <figure class="pr">
 	                        	{% if article.image  %}

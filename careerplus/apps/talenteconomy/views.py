@@ -127,6 +127,8 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = cat_obj.as_meta(self.request)
+        context.update(self.get_meta_details())
+
         return context
 
     def get_breadcrumb_data(self):
@@ -136,6 +138,14 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
         breadcrumbs.append({"url": None, "name": self.cat_obj.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
+
+    def get_meta_details(self):
+        name = self.cat_obj.name
+        meta = Meta(
+            title=name + " - Career & Certification Guidance @ Shine Learning",
+            description = "Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+        )
+        return {"meta": meta}
 
 class TEBlogDetailView(DetailView, BlogMixin):
     template_name = "talenteconomy/article-detail.html"
@@ -239,6 +249,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
             "popular_courses": popular_courses,
         })
 
+        context.update(self.get_meta_details())
         return context
 
     def get_breadcrumb_data(self):
@@ -249,6 +260,16 @@ class TEBlogDetailView(DetailView, BlogMixin):
         breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data
+
+    def get_meta_details(self):
+        heading = self.object.heading
+        first_line = self.object.content.split('.')
+        firstline = first_line[0] if first_line else ''
+        meta = Meta(
+            title= heading + "- Talent Economy",
+            description = "Read Article on %s. %s" %(heading,firstline),
+        )
+        return {"meta": meta}
 
 class AuthorListingView(TemplateView):
     model = Author
