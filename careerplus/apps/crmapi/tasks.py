@@ -74,7 +74,7 @@ def post_psedu_lead(query_dict):
 #             utm_parameter=utm_parameter)
 
 
-@task(name="add_server__lead_task")
+@task(name="add_server_lead_task")
 def add_server_lead_task(query_dict):
     email = str(query_dict.get('email', ''))
     mobile = str(query_dict.get('mobile', ''))

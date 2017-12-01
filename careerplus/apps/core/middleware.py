@@ -216,7 +216,7 @@ class LearningShineMiddleware(object):
                             timestamp_obj, timezone.get_current_timezone())
                     except:
                         timestamp_obj = timezone.now()
-                    add_server_lead_task({
+                    add_server_lead_task.delay({
                         'email': email,
                         'mobile': mobile,
                         'timestamp': timestamp,
