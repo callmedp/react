@@ -117,10 +117,8 @@ def create_lead_crm(pk=None):
     try:
         data_dict = {}
         lead = UserQuries.objects.get(pk=pk)
-        if lead.lead_source in [4, 21]:
-            lsource = lead.lead_source
-        else:
-            lsource = 0
+        lsource = lead.lead_source
+        
         data_dict.update({
             "name": lead.name,
             "email": lead.email,

@@ -9,6 +9,7 @@ LEAD_LOCATION = (
     (2, 'Course Detail Page'),
     (3, 'Contact Us Page'),
     (4, 'SEM'),  # marketing pages
+    (6, 'Chat Lead'),
     (7, 'CMS Page'),
     (8, 'Resume Detail Page'),
     (20, 'Miss Call Lead'),
@@ -24,6 +25,7 @@ DEFAULT_SLUG_SOURCE = (
     (2, 'courseonline'),
     (3, ''),
     (4, 'semdefault'),  # marketing pages
+    (6, 'defaultchatleads'),
     (7, 'cmsonline'),
     (8, 'resumeonline'),
     (21, 'adserverdefault'),
