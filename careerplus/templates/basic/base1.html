@@ -45,26 +45,26 @@
 
               gtag('config', 'UA-3537905-41', {
                 'custom_map': {
-                   'itm_source': 'source',
-                   'itm_medium': 'medium',
-                   'itm_campaign': 'campaign',
-                   'itm_content': 'content'
+                  'dimension1': 'itm_source',
+                  'dimension2': 'itm_medium',
+                  'dimension3': 'itm_campaign',
+                  'dimension4': 'itm_content'
               }});
 
               {% if request.GET.itm_campaign %}
-                gtag('event', 'itm', {'source': '{{request.GET.itm_source}}'});
+                gtag('event', 'src', {'itm_source': '{{request.GET.itm_source}}'});
               {% endif %}
 
               {% if request.GET.itm_medium %}
-                gtag('event', 'itm', {'medium': '{{request.GET.itm_medium}}'});
+                gtag('event', 'med', {'itm_medium': '{{request.GET.itm_medium}}'});
               {% endif %}
 
               {% if request.GET.itm_campaign %}
-                gtag('event', 'itm', {'campaign': '{{request.GET.itm_campaign}}'});
+                gtag('event', 'cmp', {'itm_campaign': '{{request.GET.itm_campaign}}'});
               {% endif %}
 
               {% if request.GET.itm_content %}
-                gtag('event', 'itm', {'content': '{{request.GET.itm_content}}'});
+                gtag('event', 'con', {'itm_content': '{{request.GET.itm_content}}'});
               {% endif %}
             </script>
         {% endblock GA %}
