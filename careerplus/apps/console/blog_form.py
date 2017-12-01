@@ -437,12 +437,10 @@ class CategoryChangeForm(forms.ModelForm):
     def clean_image(self):
         img_obj = self.cleaned_data.get('image')
         if img_obj:
-            img_size = img_obj.file.size
+            img_size = img_obj._size
             if img_size > 50*1024:
                 raise forms.ValidationError("Image file too large ( > 50 kb )")
             return img_obj
-        else:
-            raise forms.ValidationError("This field is required.")
         return img_obj
 
 class CategoryAddForm(forms.ModelForm):
