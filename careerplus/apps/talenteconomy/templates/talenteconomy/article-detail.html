@@ -1,0 +1,74 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+{% endblock canonical_url %}
+
+
+{% block title %}
+	{{main_article.heading}} - Talent Economy
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/article.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block container %}
+<!-- breadcrums -->
+<section class="container">
+	{% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+</section>
+
+<section class="container mb-20">
+	<!-- page content body start -->
+	<div class="row">
+        <!-- left content start -->
+        <div class="col-md-9 col-sm-12">
+
+          <!-- content start -->
+          {% include "./include/detail-article-list.tmpl.html" %}
+
+        </div>
+		<!-- left content end -->
+
+		<!-- right content start -->
+		<div class="col-md-3 col-sm-12">
+			
+			<!-- take me to -->
+			{% if categories %}
+				{% include './include/category.tmpl.html' with categories=categories %}
+			{% endif %}
+
+			<!-- Popular Courses -->
+			{% if popular_courses %}
+				{% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}
+			{% endif %}
+
+		</div>
+		<!-- right content end -->
+
+	</div>
+<!-- page content body end -->
+</section>
+
+
+{% endblock container %}
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script>
+    	$(function(){
+    		Article.init();
+    	});
+    </script>
+    {% endcompress %}
+{% endblock js_section %}
