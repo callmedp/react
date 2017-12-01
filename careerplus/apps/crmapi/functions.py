@@ -17,7 +17,8 @@ def lead_create_on_crm(cart_obj, data_dict=None):
                 post_url, data=json.dumps(data_dict),
                 headers=headers,
                 timeout=settings.SHINECPCRM_DICT.get('timeout'))
-            if rsp.status_code == 201 and rsp.get('status') == 1:
+            api_rsp = rsp.json()
+            if rsp.status_code == 201 and api_rsp.get('status') == 1:
                 cart_obj.lead_creted = True
                 cart_obj.save()
                 logging.info(rsp.json())
