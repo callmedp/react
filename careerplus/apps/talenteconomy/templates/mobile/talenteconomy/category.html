@@ -66,7 +66,9 @@
       <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
         <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
           <figure class="media-left">
-            <img class="media-object w-auto" src="{{artList.image}}" alt="{{artList.image_alt}}" itemprop="image">
+            {% thumbnail artList.image "96x73" crop="center" as im %}
+            <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+            {% endthumbnail %}
           </figure>
           <div class="media-body rel">
             <span class="article-tag">{{artList.title}}</span>

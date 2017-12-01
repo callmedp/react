@@ -58,8 +58,12 @@
 	                    </article>
                     	<hr>
                     	<span class="view-forward">
-	                    	<figure class="forward-icon"></figure> {{artList.no_shares}}
-	                  		<figure class="view-icon ml-20"></figure> {{artList.no_views}}
+                        {% if artList.no_shares > 0 %}
+	                    	  <figure class="forward-icon"></figure> {{artList.no_shares}}
+                        {% endif %}
+                        {% if artList.no_views > 0 %}
+	                  		  <figure class="view-icon ml-20"></figure> {{artList.no_views}}
+                        {% endif %}
                 		</span>
 		                <div class="author author-secondary">
 		                  <figure>
