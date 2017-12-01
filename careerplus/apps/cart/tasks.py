@@ -55,6 +55,7 @@ def lead_creation_function(filter_dict=None):
                 "name": '{}{}'.format(cart_obj.first_name, cart_obj.last_name),
                 "email": cart_obj.email,
                 "mobile": cart_obj.mobile,
+                "country_code": cart_obj.country_code,
                 "lead_source": 2,
             })
             if cart_obj:
