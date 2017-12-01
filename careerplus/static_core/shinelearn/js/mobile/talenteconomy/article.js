@@ -2,7 +2,7 @@
 	function init() {
 
 		$(".contributors").slick({
-			autoplay:false,
+			autoplay:true,
 			autoplaySpeed:3000,
 			dots: false,
 			arrows: false,

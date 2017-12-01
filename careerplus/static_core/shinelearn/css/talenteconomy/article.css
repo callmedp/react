@@ -796,20 +796,24 @@
   font-size: 17px;
   font-weight: 600;
 }
-.article-detail-content ol {
+.article-detail-content ol,
+.article-detail-content ul {
   margin: -10px 0 30px 0;
   padding: 0 0 0 20px;
 }
-.article-detail-content ol li {
+.article-detail-content ol li,
+.article-detail-content ul li {
   font-size: 17px;
   margin-bottom: 10px;
 }
-.article-detail-content ol li ul {
+.article-detail-content ol li ul,
+.article-detail-content ul li ul {
   list-style-type: disc;
   margin: 0;
   padding-left: 10px;
 }
-.article-detail-content ol li ul li {
+.article-detail-content ol li ul li,
+.article-detail-content ul li ul li {
   font-size: 15px;
   margin: 5px 0;
 }
