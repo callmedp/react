@@ -45,70 +45,73 @@ def create_lead_on_crm(source_type=None):
 
 
 def lead_creation_function(filter_dict=None):
-    cart_objs = Cart.objects.filter(**filter_dict).exclude(owner_id__exact='')
-    extra_info = {}
-    for cart_obj in cart_objs:
-        data_dict = {}
-        total_amount = None
-        data_dict.update({
-            "name": '{}{}'.format(cart_obj.first_name, cart_obj.last_name),
-            "email": cart_obj.email,
-            "mobile": cart_obj.mobile,
-            "lead_source": 2,
-        })
-        if cart_obj:
-            total_amount = CartMixin().getPayableAmount(cart_obj)
-            pay_amount = total_amount.get('total_payable_amount')
-            extra_info.update({
-                'total_amount': round(pay_amount)
+    try:
+        cart_objs = Cart.objects.filter(**filter_dict).exclude(owner_id__exact='')
+        extra_info = {}
+        for cart_obj in cart_objs:
+            data_dict = {}
+            total_amount = None
+            data_dict.update({
+                "name": '{}{}'.format(cart_obj.first_name, cart_obj.last_name),
+                "email": cart_obj.email,
+                "mobile": cart_obj.mobile,
+                "lead_source": 2,
             })
-            m_prods = cart_obj.lineitems.filter(
-                parent=None).select_related(
-                'product', 'product__vendor').order_by('-created')
-            product_list = []
-            addon_list = []
-            variation_list = []
-            if m_prods:
-                count = 0
-                for m_prod in m_prods:
-                    count = count + 1
-                    product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
-                    if count == 1:
-                        data_dict.update({
-                            "product": product_name,
-                            "productid": m_prod.product.id
-                        })
-                    else:
-                        product_list.append(product_name)
-                        addons = cart_obj.lineitems.filter(
-                            parent=m_prod,
-                            parent_delete=False
-                        ).select_related('product')
-
-                        variations = cart_obj.lineitems.filter(
-                            parent=m_prod,
-                            parent_delete=True
-                        ).select_related('product')
-                        if addons:
-                            for addon in addons:
-                                addon = addon.product.heading if addon.product.heading else addon.product.name
-                                addon_list.append(addon)
-                        if variations:
-                            for variation in variations:
-                                variation = variation.product.heading if variation.product.heading else variation.product.name
-                                variation_list.append(variation)
-
+            if cart_obj:
+                total_amount = CartMixin().getPayableAmount(cart_obj)
+                pay_amount = total_amount.get('total_payable_amount')
                 extra_info.update({
-                    "parent": product_list,
-                    "addon": addon_list,
-                    "variation": variation_list
+                    'total_amount': round(pay_amount)
                 })
-        data_dict.update({
-            "extra_info": json.dumps(extra_info),
-            "campaign_slug": "CartLead"
-        })
-        # create lead on crm
-        lead_create_on_crm(cart_obj, data_dict=data_dict)
+                m_prods = cart_obj.lineitems.filter(
+                    parent=None).select_related(
+                    'product', 'product__vendor').order_by('-created')
+                product_list = []
+                addon_list = []
+                variation_list = []
+                if m_prods:
+                    count = 0
+                    for m_prod in m_prods:
+                        count = count + 1
+                        product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
+                        if count == 1:
+                            data_dict.update({
+                                "product": product_name,
+                                "productid": m_prod.product.id
+                            })
+                        else:
+                            product_list.append(product_name)
+                            addons = cart_obj.lineitems.filter(
+                                parent=m_prod,
+                                parent_delete=False
+                            ).select_related('product')
+
+                            variations = cart_obj.lineitems.filter(
+                                parent=m_prod,
+                                parent_delete=True
+                            ).select_related('product')
+                            if addons:
+                                for addon in addons:
+                                    addon = addon.product.heading if addon.product.heading else addon.product.name
+                                    addon_list.append(addon)
+                            if variations:
+                                for variation in variations:
+                                    variation = variation.product.heading if variation.product.heading else variation.product.name
+                                    variation_list.append(variation)
+
+                    extra_info.update({
+                        "parent": product_list,
+                        "addon": addon_list,
+                        "variation": variation_list
+                    })
+            data_dict.update({
+                "extra_info": json.dumps(extra_info),
+                "campaign_slug": "cartleads"
+            })
+            # create lead on crm
+            lead_create_on_crm(cart_obj, data_dict=data_dict)
+    except Exception as e:
+        logging.getLogger('error_log').error("%s" % str(e))
 
 
 @task(name="cart_drop_out_mail")
