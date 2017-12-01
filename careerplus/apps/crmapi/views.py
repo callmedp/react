@@ -102,7 +102,7 @@ class LeadManagement(View):
                 campaign_slug=campaign_slug
             )
             created = True
-            valid_source_list = [1, 2, 4, 6, 7, 8, 20, 21, 26, 27, 22]
+            valid_source_list = [4]
             if lead.lead_source in valid_source_list:
                 create_lead_crm.delay(pk=lead.pk)
         except Exception as e:
@@ -194,7 +194,7 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             )
 
             created = True
-            valid_source_list = [1, 2, 4, 6, 7, 8, 20, 21, 26, 27, 22]
+            valid_source_list = [4]
             if lead.lead_source in valid_source_list:
                 create_lead_crm.delay(pk=lead.pk)
             response_dict = json.dumps({'status': created, 'recaptcha': True})
