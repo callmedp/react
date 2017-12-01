@@ -1223,3 +1223,8 @@
 body > footer {
   margin-top: 0;
 }
+
+.white li a,
+.white li.active {
+  color: #fff;
+}
