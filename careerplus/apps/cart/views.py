@@ -70,6 +70,8 @@ class AddToCartView(View, CartMixin):
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
             prod_id = request.POST.get('prod_id')
+            cart_pk = request.session.get('cart_pk', '')
+            candidate_id = request.session.get('candidate_id', '')
             try:
                 product = Product.objects.get(id=prod_id)  # not filter on active because product is coming from solr 
                 addons = request.POST.getlist('addons[]')
@@ -77,9 +79,16 @@ class AddToCartView(View, CartMixin):
                 cv_id = request.POST.get('cv_id')
                 data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options)
                 cart_drop_out_mail.apply_async((), countdown=45 * 60)
-                source_type = "cart_drop_out"
-                create_lead_on_crm.apply_async(
-                    (source_type,), countdown=12 * 60 * 60)
+
+                try:
+                    cart_obj = Cart.objects.get(pk=cart_pk)
+                except Exception as e:
+                    cart_obj = None
+
+                if cart_obj and (candidate_id == cart_obj.owner_id):
+                    source_type = "cart_drop_out"
+                    create_lead_on_crm.apply_async(
+                        (cart_obj.pk, source_type,), countdown=12 * 60 * 60)
             except Exception as e:
                 data['error_message'] = str(e)
                 logging.getLogger('error_log').error("%s " % str(e))

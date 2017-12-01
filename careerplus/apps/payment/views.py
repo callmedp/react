@@ -68,7 +68,10 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
 
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         source_type = "payment_drop_out"
-        create_lead_on_crm.apply_async((source_type), countdown=10 * 60)
+        candidate_id = request.session.get('candidate_id')
+        if self.cart_obj.owner_id == candidate_id:
+            create_lead_on_crm.apply_async(
+                (self.cart_obj.pk, source_type), countdown=10 * 60)
         total_payable_amount = payment_dict.get('total_payable_amount')
         if total_payable_amount <= 0:
             order = self.createOrder(self.cart_obj)

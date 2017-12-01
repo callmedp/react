@@ -11,7 +11,7 @@ from linkedin.autologin import AutoLogin
 
 
 @task(name="create_lead_on_crm")
-def create_lead_on_crm(source_type=None):
+def create_lead_on_crm(pk=None, source_type=None):
     try:
         filter_dict = {}
         if source_type == "cart_drop_out":
@@ -20,6 +20,7 @@ def create_lead_on_crm(source_type=None):
                 "owner_id__isnull": False,
                 "shipping_done": False,
                 "payment_page": False,
+                "pk": pk,
             })
             lead_creation_function(filter_dict=filter_dict)
 
@@ -29,6 +30,7 @@ def create_lead_on_crm(source_type=None):
                 "owner_id__isnull": False,
                 "shipping_done": True,
                 "payment_page": False,
+                "pk": pk,
             })
             lead_creation_function(filter_dict=filter_dict)
 
@@ -36,8 +38,9 @@ def create_lead_on_crm(source_type=None):
             filter_dict.update({
                 "status": 2,
                 "owner_id__isnull": False,
-                "shipping_done": False,
+                "shipping_done": True,
                 "payment_page": True,
+                "pk": pk,
             })
             lead_creation_function(filter_dict=filter_dict)
     except Exception as e:
