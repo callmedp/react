@@ -71,7 +71,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         candidate_id = request.session.get('candidate_id')
         if self.cart_obj.owner_id == candidate_id:
             create_lead_on_crm.apply_async(
-                (self.cart_obj.pk, source_type), countdown=10 * 60)
+                (self.cart_obj.pk, source_type), countdown=10)
         total_payable_amount = payment_dict.get('total_payable_amount')
         if total_payable_amount <= 0:
             order = self.createOrder(self.cart_obj)
