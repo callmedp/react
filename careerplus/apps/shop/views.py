@@ -316,7 +316,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update(self.solar_faq(self.sqs))
         ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
-        country_choices = [(m.phone, m.phone) for m in
+        country_choices = [(m.phone, m.name) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
         ctx.update({
@@ -549,34 +549,34 @@ class ProductReviewListView(ListView, ProductInformationMixin):
         return context
 
 
-class LeadView(View):
-    http_method_names = [u'post', ]
+# class LeadView(View):
+#     http_method_names = [u'post', ]
 
-    def post(self, request, *args, **kwargs):
-        if request.is_ajax():
-            query_dict = {}
-            name = request.POST.get('name', '').strip()
-            country_code = request.POST.get('country_code')
-            mobile = request.POST.get('mobile', '').strip()
-            message = request.POST.get('message', '').strip()
-            product = request.POST.get('product', '').strip()
-            lead_source = request.POST.get('lead_source', '').strip()
+#     def post(self, request, *args, **kwargs):
+#         if request.is_ajax():
+#             query_dict = {}
+#             name = request.POST.get('name', '').strip()
+#             country_code = request.POST.get('country_code')
+#             mobile = request.POST.get('mobile', '').strip()
+#             message = request.POST.get('message', '').strip()
+#             product = request.POST.get('product', '').strip()
+#             lead_source = request.POST.get('lead_source', '').strip()
 
-            try:
-                country_obj = Country.objects.get(phone=country_code)
-            except:
-                country_obj = Country.objects.get(phone='91')
+#             try:
+#                 country_obj = Country.objects.get(phone=country_code)
+#             except:
+#                 country_obj = Country.objects.get(phone='91')
 
-            query_dict = {
-                "name": name,
-                "country": country_obj,
-                "phn_number": mobile,
-                "message": message,
-                'product': product,
-                'lead_source': lead_source,
-            }
-            query_obj = UserQuries(**query_dict)
-            query_obj.save()
-            data = {'status': 1}
-            return HttpResponse(json.dumps(data), content_type="application/json")
-        return HttpResponseForbidden()
+#             query_dict = {
+#                 "name": name,
+#                 "country": country_obj,
+#                 "phn_number": mobile,
+#                 "message": message,
+#                 'product': product,
+#                 'lead_source': lead_source,
+#             }
+#             query_obj = UserQuries(**query_dict)
+#             query_obj.save()
+#             data = {'status': 1}
+#             return HttpResponse(json.dumps(data), content_type="application/json")
+#         return HttpResponseForbidden()

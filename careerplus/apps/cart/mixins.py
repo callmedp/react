@@ -10,6 +10,7 @@ from haystack.query import SearchQuerySet
 
 from shop.models import Product, ProductClass
 from core.mixins import InvoiceGenerate
+from geolocation.models import Country
 
 from .models import Cart, LineItem
 
@@ -59,6 +60,9 @@ class CartMixin(object):
         try:
             flag = 1
             candidate_id = self.request.session.get('candidate_id')
+            email = self.request.session.get('email')
+            mobile = self.request.session.get('mobile_no')
+            country_code = self.request.session.get('country_code')
             if add_type == "cart":
                 self.getCartObject()
                 cart_pk = self.request.session.get('cart_pk')
@@ -80,6 +84,24 @@ class CartMixin(object):
                     cart_obj = Cart.objects.create(session_id=session_id, status=3)
 
             if cart_obj:
+                if email and not cart_obj.owner_email:
+                    cart_obj.owner_email = email
+                    cart_obj.email = email
+                    cart_obj.save()
+
+                if country_code and not cart_obj.country_code:
+                    try:
+                        country_obj = Country.objects.get(phone=country_code, active=True)
+                    except:
+                        country_obj = Country.objects.get(phone='91', active=True)
+
+                    cart_obj.country_code = country_obj.phone
+                    cart_obj.save()
+
+                if mobile and not cart_obj.mobile:
+                    cart_obj.mobile = mobile
+                    cart_obj.save()
+
                 cart_obj.lineitems.filter(product=product).delete()
 
                 if product.is_course and cv_id:
