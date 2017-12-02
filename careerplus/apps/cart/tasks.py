@@ -119,11 +119,11 @@ def lead_creation_function(filter_dict=None):
 
 
 @task(name="cart_drop_out_mail")
-def cart_drop_out_mail():
+def cart_drop_out_mail(pk=None):
     mail_type = 'CART_DROP_OUT'
     cart_objs = Cart.objects.filter(
         status=2,
-        owner_id__isnull=False).exclude(owner_id__exact='')
+        owner_id__isnull=False, pk=pk).exclude(owner_id__exact='')
     count = 0
     for cart_obj in cart_objs:
         try:
