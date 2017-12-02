@@ -87,12 +87,12 @@ def lead_creation_function(filter_dict=None):
                             product_list.append(product_name)
                             addons = cart_obj.lineitems.filter(
                                 parent=m_prod,
-                                parent_delete=False
+                                parent_deleted=False
                             ).select_related('product')
 
                             variations = cart_obj.lineitems.filter(
                                 parent=m_prod,
-                                parent_delete=True
+                                parent_deleted=True
                             ).select_related('product')
                             if addons:
                                 for addon in addons:
