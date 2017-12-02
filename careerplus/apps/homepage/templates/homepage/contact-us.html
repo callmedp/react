@@ -121,7 +121,7 @@
               <form class="mt-20" id="lead" action="{% url "crmapi:lead-management" %}" method="post">{% csrf_token %}
 
                 <div class="form-group">
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Name" maxlength="100">
                   <span class="error-txt"></span>
                 </div>
 
@@ -130,16 +130,16 @@
                     <div class="custom-select">
                       <select id="id_country_code" name="country" class="form-control">
                         {% for country in countries %}
-                            <option {% if country.phone == "91" %} selected="selected" {%endif%} value="{{country.phone}}">{{country.phone}}</option>
+                            <option {% if country.phone == "91" %} selected="selected" {%endif%} value="{{country.phone}}">{{country.phone}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;&nbsp;{{country.name}}</option>
                         {% endfor %}
                       </select>
                     </div>
-                    <input type="text" class="form-control" placeholder="Mobile" id="mobile" name="number">
+                    <input type="text" class="form-control" placeholder="Mobile" id="mobile" name="number" maxlength="15">
                     <span class="error-txt"></span>
                   </div>
                 </div>
                 <div class="form-group">
-                  <textarea class="form-control" name="msg" rows="1" placeholder="Message"></textarea>
+                  <textarea class="form-control" name="msg" rows="1" placeholder="Message" maxlength="500"></textarea>
                   <span class="error-txt"></span>
                 </div>
 

@@ -94,7 +94,8 @@
                 <p style="color: rgb(255, 0, 0); display: none; font-size: 11px; margin: 0px; padding: 0px;  position: absolute; top: 58px;" id="hiddenrecaptcha"> Captcha Validation is required</p>
             </div>
             
-              <input type="hidden" name="prd" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+              <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+              <input type="hidden" name="prd" value="shrm certification">
               <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
               <input type="hidden" name="lsource" value="{{ lead_source }}">
 

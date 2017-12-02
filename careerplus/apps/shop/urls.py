@@ -18,6 +18,6 @@ urlpatterns = [
     url(r'^reviews/(?P<product_pk>[\w-]+)/$',
         views.ProductReviewListView.as_view(), name='product-review'),
 
-    url(r'^crm/lead/$',
-        views.LeadView.as_view(), name='crm-lead'),
+    # url(r'^crm/lead/$',
+    #     views.LeadView.as_view(), name='crm-lead'),
 ]
