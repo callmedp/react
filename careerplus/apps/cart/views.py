@@ -86,10 +86,11 @@ class AddToCartView(View, CartMixin):
 
                 if cart_obj and (candidate_id == cart_obj.owner_id):
                     cart_drop_out_mail.apply_async(
-                        (cart_pk,), countdown=45 * 60)
+                        (cart_pk,), countdown=settings.CART_DROP_OUT_EMAIL)
                     source_type = "cart_drop_out"
                     create_lead_on_crm.apply_async(
-                        (cart_obj.pk, source_type,), countdown=12 * 60 * 60)
+                        (cart_obj.pk, source_type,),
+                        countdown=settings.CART_DROP_OUT_LEAD)
             except Exception as e:
                 data['error_message'] = str(e)
                 logging.getLogger('error_log').error("%s " % str(e))
@@ -367,7 +368,8 @@ class PaymentShippingView(UpdateView, CartMixin):
                 if obj.owner_id == request.session.get('candidate_id'):
                     source_type = "shipping_drop_out"
                     create_lead_on_crm.apply_async(
-                        (obj.pk, source_type,), countdown=20 * 60)
+                        (obj.pk, source_type,),
+                        countdown=settings.SHIPPING_DROP_OUT_LEAD)
                 return valid_form
             except Exception as e:
                 non_field_error = 'Personal detail not updated due to %s' % (str(e))
