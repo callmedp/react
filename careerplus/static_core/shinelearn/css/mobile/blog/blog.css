@@ -722,3 +722,92 @@ blockquote {
     min-height: 90px;
     padding-top: 10px;
 }
+
+/* Rating Start From Here */
+.rating {
+  color: #666;
+  margin: 0 5px; }
+  .rating span {
+    color: #333; }
+  .rating sup {
+    display: inline-block;
+    width: 13px;
+    height: 12px;
+    position: relative;
+    top: 5px; }
+  .rating .fill-star {
+    background-position: -35px -110px; }
+  .rating .unfill-star {
+    background-position: -50px -110px; }
+
+/* Ratings widget */
+.rate {
+  display: inline-block;
+  border: 0; }
+
+/* Hide radio */
+.rate > input {
+  display: none; }
+
+/* Order correctly by floating highest to the right */
+.rate > label {
+  color: #e1e1e1;
+  float: right;
+  height: 16px; }
+
+/* The star of the show */
+.rate > label:before {
+  display: inline-block;
+  font-size: 20px;
+  padding: 0 1px;
+  margin: 0;
+  cursor: pointer;
+  content: "\2605 ";
+  /* full star */ }
+
+/* Zero stars rating */
+.rate > label:last-child:before {
+  content: "\2605 ";
+  /* empty star outline */ }
+
+/* Half star trick */
+.rate .half:before {
+  content: "\2605 ";
+  /* half star no outline */
+  position: absolute;
+  padding-right: 0; }
+
+/* Click + hover color */
+.rating-feedback input:checked ~ label,
+.rating-feedback label:hover, label:hover ~ label {
+  color: #3f5f94; }
+
+/* color previous stars on hover */
+/* Hover highlights */
+.rating-feedback input:checked + label:hover,
+.rating-feedback input:checked ~ label:hover,
+.rating-feedback input:checked ~ label:hover ~ label,
+.rating-feedback label:hover ~ input:checked ~ label {
+  color: #3f5f94; }
+
+.rating-feedback input:checked ~ label:hover:before {
+  border: 0 none; }
+
+/* Popular Courses Satrts here */
+.popular-course li {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f5f5f5; }
+  .popular-course li:last-child {
+    border-bottom: 0 none;
+    margin-bottom: 0;
+    padding-bottom: 0; }
+
+/* Popular Courses edsn here */
+.italic {
+  font-style: italic; }
+
+.no-shadow {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none; }

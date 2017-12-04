@@ -17,13 +17,13 @@
               <sup class="fill-star"></sup>
             {% endif %}
             {% if star == '+' %}
-              <figure class="half-star"></sup>
+              <sup class="fill-star"></sup>
             {% endif %}
             {% if star == '-' %}
               <sup class="unfill-star"></sup>
             {% endif %}
             {% endfor %}
-            <strong>{{popularCourses.avg_rating_exact}}/5</strong> 
+            <strong>{{popularCourses.avg_rating_exact|floatformat:"0"}}/5</strong> 
           </div>
 
           <div class="fs-12 pb-5"><figure class="icon-jobs"></figure><strong>{{popularCourses.num_jobs}}</strong> Jobs available</div>
