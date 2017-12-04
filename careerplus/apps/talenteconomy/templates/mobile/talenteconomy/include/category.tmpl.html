@@ -6,12 +6,12 @@
   <ul class="take-list mt-20">
     {% for category in categories %}
       <li>
-        <div class="list-box">
+        <a href="{{category.url}}" title="{{category.name}}"><div class="list-box">
           {% thumbnail category.image "133x90" crop="center" as im %}
             <img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
           {% endthumbnail %}
-          <h3 class="title"><a href="{{category.url}}" title="{{category.title}}">{{category.name}}</a></h3>
-        </div>     
+          <h3 class="title">{{category.name}}</h3>
+        </div> </a>    
       </li>
 
       {% if forloop.counter|divisibleby:2 %}
