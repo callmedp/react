@@ -85,11 +85,16 @@ class AddToCartView(View, CartMixin):
                     cart_obj = None
 
                 if cart_obj and (candidate_id == cart_obj.owner_id):
+                    first_name = request.session.get('first_name', '')
+                    last_name = request.session.get('last_name', '')
+                    email = request.session.get('email', '')
+                    name = "{}{}".format(first_name, last_name)
                     cart_drop_out_mail.apply_async(
-                        (cart_pk,), countdown=settings.CART_DROP_OUT_EMAIL)
+                        (cart_pk, email),
+                        countdown=settings.CART_DROP_OUT_EMAIL)
                     source_type = "cart_drop_out"
                     create_lead_on_crm.apply_async(
-                        (cart_obj.pk, source_type,),
+                        (cart_obj.pk, source_type, name),
                         countdown=settings.CART_DROP_OUT_LEAD)
             except Exception as e:
                 data['error_message'] = str(e)
@@ -366,9 +371,12 @@ class PaymentShippingView(UpdateView, CartMixin):
                     return self.form_invalid(form)
                 valid_form = self.form_valid(form)
                 if obj.owner_id == request.session.get('candidate_id'):
+                    first_name = request.session.get('first_name', '')
+                    last_name = request.session.get('last_name', '')
+                    name = "{}{}".format(first_name, last_name)
                     source_type = "shipping_drop_out"
                     create_lead_on_crm.apply_async(
-                        (obj.pk, source_type,),
+                        (obj.pk, source_type, name),
                         countdown=settings.SHIPPING_DROP_OUT_LEAD)
                 return valid_form
             except Exception as e:
