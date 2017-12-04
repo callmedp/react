@@ -5,7 +5,7 @@ from django.conf import settings
 
 from shop.models import Product, Category, ProductCategory
 from cms.models import Page
-from blog.models import Blog, Category as BlogCategory
+from blog.models import Blog, Category as BlogCategory, Author
 
 EXCULDE_CATEGORY = [247, 176, 170, 145, 139, 87, 147, 132, 76, 73, 69, 65, 61]
 
@@ -110,7 +110,7 @@ class ArticleSitemap(CustomSitemap):
         return 0.5
 
     def items(self):
-        return Blog.objects.filter(status=1)
+        return Blog.objects.filter(status=1, visibility=1)
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
@@ -124,7 +124,49 @@ class ArticleCategorySitemap(CustomSitemap):
         return 0.8
 
     def items(self):
-        return BlogCategory.objects.filter(is_active=True)
+        return BlogCategory.objects.filter(is_active=True, visibility=1)
+
+    def lastmod(self, item):
+        return datetime.date.today() - datetime.timedelta(1)
+
+
+class TalentEconomySitemap(CustomSitemap):
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
+
+
+    def priority(self, item):
+        return 0.9
+
+    def items(self):
+        return Blog.objects.filter(status=1, visibility=2)
+
+    def lastmod(self, item):
+        return datetime.date.today() - datetime.timedelta(1)
+
+
+class TalentCategorySitemap(CustomSitemap):
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
+
+
+    def priority(self, item):
+        return 0.8
+
+    def items(self):
+        return BlogCategory.objects.filter(is_active=True, visibility=2)
+
+    def lastmod(self, item):
+        return datetime.date.today() - datetime.timedelta(1)
+
+
+class TalentAuthorSitemap(CustomSitemap):
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
+
+
+    def priority(self, item):
+        return 0.7
+
+    def items(self):
+        return Author.objects.filter(is_active=True, visibility=2)
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
