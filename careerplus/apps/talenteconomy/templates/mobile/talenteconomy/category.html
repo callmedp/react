@@ -108,6 +108,10 @@
     {% include './include/category.tmpl.html' with categories=categories %}
   {% endif %}
 
+  {% if popular_courses %}
+      {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-category' %}
+  {% endif %}
+
 </section><!-- End of talent-economy list -->
 </div>
 {% endblock container %}

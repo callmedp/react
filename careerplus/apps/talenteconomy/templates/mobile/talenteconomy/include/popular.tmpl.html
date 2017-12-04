@@ -3,7 +3,7 @@
     <ul class="mt-20 popular-course">
       {% for popularCourses in popular_courses %}
       <li>
-        <a href="#">
+        <a href="{{popularCourses.url}}?itm_source=TE&itm_medium=PopularCourses&itm_campaign={{page}}&itm_content={{popularCourses.name.split|join:"-"}}" title="{% if popularCourses.display_name %} {{popularCourses.display_name}} {% else %} {{popularCourses.name}} {% endif %}">
           <h3 class="pb-0 blue-link">
             {% if popularCourses.display_name %}
               {{popularCourses.display_name}}
