@@ -1,0 +1,36 @@
+<div class="box-panel row mt-30">
+    <h2 class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>Popular Courses</h2>
+    <ul class="mt-20 popular-course">
+      {% for popularCourses in popular_courses %}
+      <li>
+        <a href="#">
+          <h3 class="pb-0 blue-link">
+            {% if popularCourses.display_name %}
+              {{popularCourses.display_name}}
+            {% else %}
+              {{popularCourses.name}}
+            {% endif %}
+          </h3>
+          <div class="rating block ml-0 fs-12 pb-5">
+          {% for star in popularCourses.star %}
+            {% if star == '*' %}
+              <sup class="fill-star"></sup>
+            {% endif %}
+            {% if star == '+' %}
+              <figure class="half-star"></sup>
+            {% endif %}
+            {% if star == '-' %}
+              <sup class="unfill-star"></sup>
+            {% endif %}
+            {% endfor %}
+            <strong>{{popularCourses.avg_rating_exact}}/5</strong> 
+          </div>
+
+          <div class="fs-12 pb-5"><figure class="icon-jobs"></figure><strong>{{popularCourses.num_jobs}}</strong> Jobs available</div>
+          <div class="fs-12"><figure class="icon-bag"></figure><strong>{{popularCourses.buy_count}}</strong> people bought</div>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="clearfix"></div>
+  </div>
