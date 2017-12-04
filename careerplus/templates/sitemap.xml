@@ -6,7 +6,7 @@
   {% if request.path == '/article_sitemap.xml' %}
       	<url>
           <loc>https://learning.shine.com/article/</loc>
-          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="{{url.loc_mobile}}" />
+          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/article/" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
           <changefreq>daily</changefreq>
           <priority>0.8</priority>
@@ -14,14 +14,14 @@
   {% elif request.path == '/te_sitemap.xml' %}
         <url>
           <loc>https://learning.shine.com/talenteconomy/</loc>
-          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="{{url.loc_mobile}}" />
+          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/talenteconomy/" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
           <changefreq>daily</changefreq>
           <priority>0.8</priority>
          </url>
         <url>
           <loc>https://learning.shine.com/authors/</loc>
-          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="{{url.loc_mobile}}" />
+          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/authors/" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
           <changefreq>daily</changefreq>
           <priority>0.7</priority>
