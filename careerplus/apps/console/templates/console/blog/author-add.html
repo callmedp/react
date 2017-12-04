@@ -1,0 +1,121 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+  <title>Add Author</title>
+{% endblock title %}
+
+
+{% block css_block %}
+    {{block.super}} 
+    <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3>
+
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Add Author <small>(add new Author to the Blog catalog)</small></h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+            <form class="form-horizontal form-label-left" novalidate data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="add-category-form">{% csrf_token %}
+              {{form.media}}
+              <fieldset>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <div class="form-group error">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
+                                <div class="col-md-6 col-sm-6 col-xs-12">{{ field }}
+                                    <p class="text-danger">
+                                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <br/>
+                    {% endfor %}
+                </fieldset>
+              
+              <div class="ln_solid"></div>
+
+              <div class="form-group">
+                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                  <center>
+                  <button type="submit" class="btn btn-success">Submit</button></center>
+                </div>
+              </div>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+  <script type="text/javascript">
+        jQuery.each($("select[multiple]"), function () {
+          // "Locations" can be any label you want
+          SelectFilter.init(this.id, this.name, 0, "/media/");
+         });
+  </script>
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}">
+  </script>
+
+{% endblock js_block %}

@@ -1,0 +1,104 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   {{author.name}} – Career Guidance Author @ Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right">
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block container %}
+
+<div class="body-wrapper ">
+	<section class="content-box">
+        <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+          {% for bradcbs in breadcrumbs %}
+            {% if bradcbs.url %}
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+            {% else %}
+              <li class="active">{{bradcbs.name}}</li>
+            {% endif %}
+          {% endfor %} 
+        </ul>
+
+        <div class="author-item mt-20 mb-10">
+            <span class="author-img"><img src="{{author.image.url}}"></span>
+            <div class="author-detail">
+                <h1 class="mb-0 fs-16">{{author.name}}<sup></sup></h1>
+                <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
+                <p class="fs-12"><a href="#"><strong>{{author.no_of_blog}} articles</strong></a></p>
+                <ul class="mt-5">
+                    {% if author.fb_url %}<li class="icon-fbGrey"><a href="{{author.fb_url}}">facebook</a></li> {% endif %}
+                    {% if author.twitter_url %}<li class="icon-twGrey"><a href="{{author.twitter_url}}">twitter</a></li>{% endif %}
+                    {% if author.linkedin_url %}<li class="icon-linkedinGrey"><a href="{{author.linkedin_url}}">linkedin</a></li>{% endif %}
+                </ul>
+            </div>
+        </div>
+        <!-- ends of author item -->
+        <p class="mt-20">
+        {{author.about|striptags|safe}}
+        </p>
+
+        <hr>
+
+        <!-- box panel starts here -->
+        <div class="box-panel row no-shadow">
+            {% include './include/articles.tmpl.html' with articlelists=article_list %}
+        </div>
+
+        {% if authors %}
+        <div class="row bg-grey no-shadow content-box">
+            {% include './include/authorSlide.tmpl.html' with authors=authors %}
+        </div>
+        {% endif %}
+    </section>
+</div>
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

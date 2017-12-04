@@ -1,0 +1,125 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   Talent Economy: Career Skilling for a future ready India
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right">
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block container %}
+<div class="body-wrapper">
+<div class="article-category talent-gr-nav">
+    <div class="content rel-imp pb-0">
+      <ul class="breadcrumb my-0" itemscope itemtype="http://schema.org/BreadcrumbList">
+        {% for bradcbs in breadcrumbs %}
+          {% if bradcbs.url %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+          {% else %}
+            <li class="active">{{bradcbs.name}}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+</div>
+<!-- Trending articles Starts here -->
+{% if top_article_list %}
+<div class="trending-articles talent-gr">
+    <div class="content-box pt-10">
+    <div class="slide-container"> 
+        <ul class="article-slider">
+          {% for topArtList in top_article_list %}
+            {% if topArtList.0 %}
+              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 %}
+            {% endif %}
+            {% if topArtList.1 %}
+              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 %}
+            {% endif %}
+            {% if topArtList.1 %}
+              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+    </div>
+    </div>
+</div>
+{% endif %}
+<!-- Trending articles Ends here -->
+<!-- Starts of talent-economy list -->
+<section class="content-box pt-0 pb-0">
+    <!-- Talent Economy starts here -->
+    <div class="talent-economy">
+        <div class="talent-gr-50"></div>
+        <div class="talent-content">
+          <h1>Talent Economy</h1>
+          <p>It goes without saying that over time, jobs will require a different set of
+          unique skillsets, as opposed to the ones required now. By applying for the
+          online professional courses present on this platform, you'll be able to stay ahead of the curve and massively improve your job prospects by staying future-ready at all times.</p>
+        </div>
+        <img src="{% static '/shinelearn/images/mobile/common/talent-economy.jpg' %}" class="img-responsive minh-185">
+    </div>
+    <!-- Talent Economy starts here -->
+
+    <!-- box panel starts here -->
+    <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
+      <h2 class="semi-head">Recently Added</h2>
+
+      {% include './include/articles.tmpl.html' with articlelists=article_list %}
+
+    </div>
+    <!-- box panel ends here -->
+    {% include './include/authorSlide.tmpl.html' with authors=authors %}
+
+    {% if categories %}
+      {% include './include/category.tmpl.html' with categories=categories %}
+    {% endif %}
+  </section>
+</div>
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

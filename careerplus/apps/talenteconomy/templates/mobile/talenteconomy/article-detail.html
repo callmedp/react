@@ -1,0 +1,119 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   {{main_article.heading}} - Talent Economy
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">{% endcompress %}
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right">
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block container %}
+
+<div class="body-wrapper ">
+    <section class="content-box">
+        <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+          {% for bradcbs in breadcrumbs %}
+            {% if bradcbs.url %}
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+            {% else %}
+              <li class="active">{{bradcbs.name}}</li>
+            {% endif %}
+          {% endfor %} 
+        </ul>
+
+        {% include './include/detail-article-list.tmpl.html' %}
+
+    </section>
+
+
+    {% comment %}
+    <section>
+        <!-- box panel starts here -->
+        <div class="box-panel ">
+            <p class="semi-head mt-5 mb-5">You may also like</p>
+            
+            {% for i in '1234' %}
+            <div class="media article-list">
+                <a title="Government Jobs" href="blog-detail.html">
+                    <figure class="media-left">
+                        <img class="media-object w-auto" src="images/article-list-1.jpg" alt="...">
+                    </figure>
+                    <div class="media-body rel">
+                        <span class="article-tag">Project Management</span>
+                        <h4 class="media-heading">8 Reasons to consider a career change</h4>
+
+                        <div class="blog-author fs-11">
+                            <span class="editor">Ajay Mishra</span>
+                            <span class="view-forward pull-right">
+                              <figure class="icon-forward"></figure> 43 
+                              <figure class="icon-view icon-grey-view ml-10"></figure> 21
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endcomment %}
+
+    <div class="share-wrap">
+        <ul id="share-icon">
+            <!-- <li class="wp-bg"><a href="#"><span class="icon-wp"></span></a></li> -->
+            <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-gp"></span></a></li>
+            <li class="tw-bg"><a href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-tw"></span></a></li>
+            <li class="fb-bg"><a href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-fb"></span></a></li>
+            <li class="share-bg"><a href="#">{{main_article.no_shares}}<br>{% if main_article.no_shares > 1 %} Shares {% else %}Share{% endif %}</a></li>
+        </ul>
+        <a href="JavaScript:Void(0);" id="share-btn" class="blue-circle-60"><span class="icon-share"></span></a>
+    </div>
+</div>
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

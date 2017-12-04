@@ -92,6 +92,7 @@ LOCAL_APPS = [
     'crmapi',
     'api',
     'marketing',
+    'talenteconomy'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -500,6 +501,10 @@ SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['WRITER', 'WRITER_HEAD']
 BLOG_WRITER_GROUP_LIST = ['BLOG_WRITER']
 
+#BLOGGER#
+LEARNING_BLOGGER = ['LEARNING_BLOGGER']
+TALENT_BLOGGER = ['TALENT_BLOGGER']
+BLOGGER_GROUP_LIST = [LEARNING_BLOGGER, TALENT_BLOGGER, PRODUCT_GROUP_LIST]
 # Refund Application level
 OPS_GROUP_LIST = ['OPERATION']
 OPS_HEAD_GROUP_LIST = ['OPS_HEAD']
