@@ -2,7 +2,7 @@
 	function init() {
 
 		$(".contributors").slick({
-			autoplay:false,
+			autoplay:true,
 			autoplaySpeed:3000,
 			dots: false,
 			arrows: false,
@@ -22,6 +22,19 @@
 			slidesToScroll: 1,
 			infinite: true
 		});
+
+	$(document).on('click', '#article_share', function(event) {
+        $.ajax({
+            url: "/ajax/article-share/",
+            type: 'GET',
+            data: {
+              article_slug: $(this).attr('article-slug'),
+            },
+            success: function(data) {
+                console.log('success');
+            }
+        });
+    });
 
 	}
 

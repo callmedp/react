@@ -242,9 +242,10 @@ class ArticleChangeForm(forms.ModelForm):
     def clean_image(self):
         img_obj = self.cleaned_data.get('image')
         if img_obj:
-            img_size = img_obj.file.size
-            if img_size > 100*1024:
-                raise forms.ValidationError("Image file too large ( > 100 kb )")
+            if self.instance.image != img_obj:
+                img_size = img_obj._size
+                if img_size > 100*1024:
+                    raise forms.ValidationError("Image file too large ( > 100 kb )")
         else:
             raise forms.ValidationError("Couldn't read uploaded image")
         return img_obj
@@ -373,7 +374,7 @@ class CategoryChangeForm(forms.ModelForm):
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     image = forms.ImageField(
-        help_text='max size 100kb.',
+        help_text='max size 50kb.',
         label=("Image:"), max_length=200 , required= False)
 
     image_alt = forms.CharField(label=("Image Alt:"), max_length=100,
@@ -437,12 +438,10 @@ class CategoryChangeForm(forms.ModelForm):
     def clean_image(self):
         img_obj = self.cleaned_data.get('image')
         if img_obj:
-            img_size = img_obj.file.size
-            if img_size > 50*1024:
-                raise forms.ValidationError("Image file too large ( > 50 kb )")
-            return img_obj
-        else:
-            raise forms.ValidationError("This field is required.")
+            if self.instance.image != img_obj:
+                img_size = img_obj._size
+                if img_size > 50*1024:
+                    raise forms.ValidationError("Image file too large ( > 50 kb )")
         return img_obj
 
 class CategoryAddForm(forms.ModelForm):

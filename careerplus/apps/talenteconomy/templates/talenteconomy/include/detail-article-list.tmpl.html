@@ -29,7 +29,7 @@
         <div class="social-login">
             <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"></a>
             
-            <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a>
+            <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"></a>
 
             <a class="gplus" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a>
 
@@ -85,15 +85,35 @@
         <!-- comments box heading-->
         <div class="comments-box-heading">
             <span class="comments-icon mr-10"></span> <strong>{{main_article.comment_moderated}} comments</strong>
-            <!-- <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a> -->
+            <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a>
         </div>
 
         <!-- Leave a comment box-->
-        
+        <div class="collapse leave-comment" id="collapseExample">
+            <strong>Leave a comment</strong>
+
+            <form>
+                <div class="form-group">
+                    <textarea class="form-control" placeholder="Your comment" rows="3"></textarea>
+                </div>
+                <div class="form-inline row hidden">
+                    <div class="form-group col-sm-6">
+                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                    </div>
+                </div>
+                <button type="submit" class="submit-button" onclick="commentSubmit('{{main_article.id}}', '{{login_status}}')" id="comment-submit{{main_article.id}}">Post comment</button>
+            </form>
+        </div>
 
         <!-- comments-->
-    </div>
+
     <a class="comments-links mb-40" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}"> <span class="comments-icon mr-10"></span>More Comments</a>
+
+
+    </div>
     {% endif %}
 
 </div>

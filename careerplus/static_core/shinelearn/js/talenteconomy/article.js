@@ -22,9 +22,22 @@
 	            next = $(this).siblings(':first');
 	          }
 	          
-	          next.children(':first-child').clone().appendTo($(this));
+	         // next.children(':first-child').clone().appendTo($(this));
 	        }
 	    });
+
+	  	$(document).on('click', '#article_share', function(event) {
+	        $.ajax({
+	            url: "/ajax/article-share/",
+	            type: 'GET',
+	            data: {
+	              article_slug: $(this).attr('article-slug'),
+	            },
+	            success: function(data) {
+	                console.log('success');
+	            }
+	        });
+    	});
 	}
 
 	Article.init = init;

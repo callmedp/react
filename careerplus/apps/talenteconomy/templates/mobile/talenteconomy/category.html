@@ -1,12 +1,12 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
-{% load thumbnail %}
+{% load thumbnail compress %}
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
 {%  endblock django_meta %}
 {% block canonical_url %}
-  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
 {% endblock canonical_url %}
 
 {% block title %}
@@ -15,8 +15,10 @@
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
     <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -51,7 +53,7 @@
         {% endfor %}
       </ul>
 
-      <h1>{{category.name}}</h1>
+      <h1>{{category.name}} - Career Guidance</h1>
 
     </div>
     <img src="{% static 'shinelearn/images/mobile/common/article-category.jpg' %}" class="img-responsive">
@@ -61,7 +63,7 @@
 <section class="content-box pt-0 pb-0">
   <!-- box panel starts here -->
   <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
-    <p class="semi-head">All articles</p>      
+    <h2 class="semi-head">All articles</h2>      
     {% for artList in recent_articles %}
       <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
         <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
