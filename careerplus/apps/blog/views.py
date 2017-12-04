@@ -558,7 +558,7 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
                 self.article = Blog.objects.get(id=self.art_id)
             except:
                 return ''
-            visibility = request.GET.get('visibility',1)
+            visibility = int(request.GET.get('visibility',1))
             if visibility == 2:
                 self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
             self.visibility = visibility
@@ -579,8 +579,12 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
             "page_obj": self.article,
         }
 
-        comment_list = render_to_string('include/article-load-comment.html',
-            comment_load_context)
+        if self.visibility == 2:
+            comment_list = render_to_string('talenteconomy/include/article-load-comment.html',
+                comment_load_context)
+        else:
+            comment_list = render_to_string('include/article-load-comment.html',
+                comment_load_context)
 
         if self.request.session.get('candidate_id'):
             login_status = 1
