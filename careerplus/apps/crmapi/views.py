@@ -6,7 +6,8 @@ from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from geolocation.models import Country
-from .models import UserQuries
+from .models import UserQuries, DEFAULT_SLUG_SOURCE
+from .tasks import create_lead_crm
 
 
 class ReCaptchaMixin(object):
@@ -33,6 +34,7 @@ class ReCaptchaMixin(object):
             ip = request.META.get('REMOTE_ADDR')
         return ip
 
+
 class LeadManagement(View):
 
     @csrf_exempt
@@ -44,16 +46,20 @@ class LeadManagement(View):
             name = request.POST.get('name', '')
             msg = request.POST.get('msg', '')
             prd = request.POST.get('prd', '')
-            country = request.POST.get('country', '')
+            product_id = request.POST.get('product', 0)
+            country = request.POST.get('country', '91')
             source = request.POST.get('source', '')
             queried_for = request.POST.get('queried_for', '')
-            lead_source = request.POST.get('lsource', '0')
+            lead_source = request.POST.get('lsource', 0)
             selection = request.POST.get('selection', None)
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
             if any(rejectkey in msg for rejectkey in rejectlist):
                 return HttpResponse(json.dumps({'status': False}))
-
+            try:
+                product_id = int(product_id)
+            except:
+                product_id = 0
             try:
                 lead_source = int(lead_source)
             except:
@@ -73,7 +79,14 @@ class LeadManagement(View):
             except:
                 country = Country.objects.get(phone='91')
 
-            UserQuries.objects.create(
+            utm = request.session.get('utm', {})
+            campaign_slug = utm.get('utm_campaign', '')
+            utm_parameter = json.dumps(utm)
+            if not campaign_slug:
+                slug_source = dict(DEFAULT_SLUG_SOURCE)
+                campaign_slug = slug_source.get(int(lead_source))
+
+            lead = UserQuries.objects.create(
                 name=name,
                 email=email,
                 country=country,
@@ -81,23 +94,19 @@ class LeadManagement(View):
                 message=msg,
                 lead_source=lead_source,
                 product=prd,
+                product_id=product_id,
                 medium=medium,
                 source=source,
                 path=path,
+                utm_parameter=utm_parameter,
+                campaign_slug=campaign_slug
             )
             created = True
+            valid_source_list = [4]
+            if lead.lead_source in valid_source_list:
+                create_lead_crm.delay(pk=lead.pk)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-
-        # try:
-        #     if selection:
-        #         prd_var = ProductVariation.objects.get(pk=selection)
-        #         order = self.get_or_create_order()
-        #         units = 1
-        #         order_items = order.add_order_items(prd_var, [], units)
-        # except Exception as e:
-        #     logging.getLogger('error_log').error("%s - %s" % (e, 'Fail to add Product'))
-        #     pass
 
         response_dict = json.dumps({'status': created, })
         response = HttpResponse(response_dict)
@@ -118,11 +127,18 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             name = request.POST.get('name', '')
             msg = request.POST.get('msg', '')
             prd = request.POST.get('prd', '')
-            country = request.POST.get('country', '')
+            try:
+                product_id = int(request.POST.get('product', 0))
+            except:
+                product_id = 0
+                
+            country = request.POST.get('country', '91')
             source = request.POST.get('source', '')
             queried_for = request.POST.get('queried_for', '')
             lead_source = request.POST.get('lsource', '0')
+
             selection = request.POST.get('selection', None)
+
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
             recaptcha_response = request.POST.get('g-recaptcha-response', None)
@@ -131,7 +147,7 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
                 return HttpResponse(json.dumps({'status': False}))
             remoteip = self.get_client_ip(request=request)
             recaptcha = self.confirm_recaptcha(recaptcha_response=recaptcha_response, remoteip=remoteip) 
-            if not recaptcha.get('status', False):       
+            if not recaptcha.get('status', False):
                 response_error_dict = json.dumps({'status': False, 'recaptcha': False})
                 return HttpResponse(response_error_dict)
             
@@ -154,7 +170,14 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             except:
                 country = Country.objects.get(phone='91')
 
-            UserQuries.objects.create(
+            utm = request.session.get('utm', {})
+            campaign_slug = utm.get('utm_campaign', '')
+            utm_parameter = json.dumps(utm)
+            if not campaign_slug:
+                slug_source = dict(DEFAULT_SLUG_SOURCE)
+                campaign_slug = slug_source.get(int(lead_source))
+
+            lead = UserQuries.objects.create(
                 name=name,
                 email=email,
                 country=country,
@@ -162,26 +185,23 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
                 message=msg,
                 lead_source=lead_source,
                 product=prd,
+                product_id=product_id,
                 medium=medium,
                 source=source,
                 path=path,
+                utm_parameter=utm_parameter,
+                campaign_slug=campaign_slug
             )
+
             created = True
+            valid_source_list = [4]
+            if lead.lead_source in valid_source_list:
+                create_lead_crm.delay(pk=lead.pk)
             response_dict = json.dumps({'status': created, 'recaptcha': True})
             response = HttpResponse(response_dict)
             return response
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-
-        # try:
-        #     if selection:
-        #         prd_var = ProductVariation.objects.get(pk=selection)
-        #         order = self.get_or_create_order()
-        #         units = 1
-        #         order_items = order.add_order_items(prd_var, [], units)
-        # except Exception as e:
-        #     logging.getLogger('error_log').error("%s - %s" % (e, 'Fail to add Product'))
-        #     pass
 
         response_dict = json.dumps({'status': False, 'recaptcha': True})
         response = HttpResponse(response_dict)

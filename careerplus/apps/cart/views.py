@@ -23,6 +23,7 @@ from wallet.models import Wallet
 from geolocation.models import Country
 from users.tasks import user_register
 from search.helpers import get_recommendations
+from cart.tasks import cart_drop_out_mail, create_lead_on_crm
 
 from .models import Cart
 from .mixins import CartMixin
@@ -69,12 +70,26 @@ class AddToCartView(View, CartMixin):
             data = {"status": -1}
             cart_type = request.POST.get('cart_type')
             prod_id = request.POST.get('prod_id')
+            cart_pk = request.session.get('cart_pk', '')
+            candidate_id = request.session.get('candidate_id', '')
             try:
                 product = Product.objects.get(id=prod_id)  # not filter on active because product is coming from solr 
                 addons = request.POST.getlist('addons[]')
                 req_options = request.POST.getlist('req_options[]')
                 cv_id = request.POST.get('cv_id')
                 data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options)
+                cart_drop_out_mail.apply_async((), countdown=45*60)
+
+                try:
+                    cart_obj = Cart.objects.get(pk=cart_pk)
+                except Exception as e:
+                    cart_obj = None
+
+                if cart_obj and (candidate_id == cart_obj.owner_id):
+                    cart_drop_out_mail.apply_async((cart_pk,), countdown=10)
+                    source_type = "cart_drop_out"
+                    create_lead_on_crm.apply_async(
+                        (cart_obj.pk, source_type,), countdown=12*60*60)
             except Exception as e:
                 data['error_message'] = str(e)
                 logging.getLogger('error_log').error("%s " % str(e))
@@ -348,8 +363,10 @@ class PaymentShippingView(UpdateView, CartMixin):
                     non_field_error = 'Internal error on shinelearning, please try again after sometimes.'
                     form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
                     return self.form_invalid(form)
-
                 valid_form = self.form_valid(form)
+                source_type = "shipping_drop_out"
+                create_lead_on_crm.apply_async(
+                    (obj.pk, source_type,), countdown=60*20)
                 return valid_form
             except Exception as e:
                 non_field_error = 'Personal detail not updated due to %s' % (str(e))
