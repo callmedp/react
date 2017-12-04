@@ -1,0 +1,11 @@
+<div class="comment-wrap mt-20">
+    <ul class="mt-20 article-comment" id="page_comment{{article.id}}">
+        {{ comment_list|safe|default:'' }}
+    </ul>
+    <a href="#" class="btn-slg btn-grey block text-center">More comments</a>
+    <p class="text-center mt-20 mb-20 text-upper bold"><a href="javascript:void(0);" class="" id="js_commentBtn"><span class="icon-leaveComment"></span>Leave a comment</a></p>
+    <div class="mt-20 mb-20" id="js_comments">
+        <textarea placeholder="Write comments" class="form-control"></textarea>
+        <button class="btn-sm btn-blue btn-round mt-10">Submit</button>
+    </div>
+</div>

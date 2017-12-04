@@ -1,0 +1,21 @@
+{% load static %}
+{% load humanize %}
+{% load humanize_tags %}
+
+{% for comment in comments %}
+    <li>
+        <sup><img src="images/default-user.jpg"></sup>
+        <p><strong>Krishna Singh</strong> <span class="spacer c-666">/</span><span class="c-666">{% get_humanize_date comment.created_on %}</span></p>
+        <p class="pb-0">{{comment.message}}</p>
+    </li>
+{% endfor %}
+
+{% if comments.has_next %}
+<div id="load_more{{page_obj.id}}">
+    <form role="form" id="loadform{{page_obj.id}}">
+        <input type="hidden" name="page" value="{{comments.next_page_number}}">
+        <input type="hidden" name="slug" value="{{page_obj.slug}}">
+    </form>
+    <a id="comment_load_more{{page_obj.id}}" role="button" onclick="loadMoreComment('{{page_obj.id}}')" class="btn-slg btn-grey block text-center"> <span class="comments-icon mr-10"></span>More Comments</a>
+</div>
+{% endif %}
