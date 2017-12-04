@@ -25,12 +25,19 @@ function openCommentBox(article_id, visibility=1) {
     }
 };
 
-function loadMoreComment(article_id) {
+function loadMoreComment(article_id,visibility=1) {
     if (article_id){
         $('#comment_load_more' + article_id).addClass('disabled').removeAttr("onclick");
         var formData = $("#loadform" + article_id).serialize();
+
+        var _arguments = '';
+
+        if (visibility == 2) {
+            _arguments = '?visibility=2';
+        }
+
         $.ajax({
-            url: '/article/load-more-comment/',
+            url: '/article/load-more-comment/'+_arguments,
             type: "GET",
             data : formData,
             dataType: 'html',

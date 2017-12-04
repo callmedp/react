@@ -4,7 +4,7 @@
     <form id="blog-comment-form{{article.id}}">
         {% csrf_token %}
         <div class="form-group">
-            <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment{{article.id}}"></textarea>
+            <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment{{article.id}}" name="message"></textarea>
         </div>
         <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
         <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
