@@ -177,8 +177,10 @@ class CartMixin(object):
             if not request.session.session_key:
                 request.session.create()
             sessionid = request.session.session_key
-
-            cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
+            cart_users = []
+            if candidate_id:
+                cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
+                
             cart_sessions = Cart.objects.filter(session_id=sessionid, status=0)
             cart_user, cart_session = None, None
             if cart_users:
