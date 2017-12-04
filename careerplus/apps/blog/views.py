@@ -558,6 +558,11 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
                 self.article = Blog.objects.get(id=self.art_id)
             except:
                 return ''
+            visibility = request.GET.get('visibility',1)
+            if visibility == 2:
+                self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
+            self.visibility = visibility
+
             return super(self.__class__, self).get(request, args, **kwargs)
         else:
             return HttpResponseForbidden()
