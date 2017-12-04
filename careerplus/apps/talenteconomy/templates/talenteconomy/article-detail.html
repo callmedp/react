@@ -64,6 +64,9 @@
 {% block js_section %}
     {{ block.super }}
     {% compress js %}
+    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script>
     	$(function(){

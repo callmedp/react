@@ -81,11 +81,15 @@
 
     <!-- comments box -->
     {% if main_article.allow_comment %}
-    <div class="comments-box mb-40 mt-40" id="comment-box{{main_article.id}}">
+    <div class="comments-box mb-40 mt-40">
         <!-- comments box heading-->
         <div class="comments-box-heading">
-            <span class="comments-icon mr-10"></span> <strong><a class="comments-links mb-40" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">{{main_article.comment_moderated}} comments</a></strong>
+            <span class="comments-icon mr-10"></span> <strong><label for="total_comment{{main_article.id}}">{{main_article.comment_moderated}} comments</label></strong>
             <!-- <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a> -->
+            <input type="radio" class="hide" onchange="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
+        </div>
+        <div id="comment-box{{main_article.id}}" class="mt-20">
+            
         </div>
 
     </div>
