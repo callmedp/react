@@ -616,6 +616,10 @@ class LoadMoreCommentView(TemplateView, LoadCommentMixin):
                 self.article = Blog.objects.get(slug=self.slug)
             except:
                 return ''
+            visibility = int(request.GET.get('visibility',1))
+            if visibility == 2:
+                self.template_name = 'talenteconomy/include/article-load-comment.html'
+            self.visibility = visibility
             return super(self.__class__, self).get(request, args, **kwargs)
         else:
             return HttpResponseForbidden()

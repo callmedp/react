@@ -86,8 +86,9 @@
                 <h2 class="main-heading-article ml-15">Recently added</h2>
                 {% for artList in article_list %}
                 <div class="article-list col-sm-6" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-                  	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url">
-                    	<figure class="pr">
+                  	<div class="box-panel">
+                    	<a href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url" class="db">
+                      <figure class="pr">
                       		<img src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
                       		<span class="product-title product-title-pos">{{artList.p_cat.name}}</span>
                     	</figure>
@@ -96,10 +97,12 @@
 	                      {{artList.summary|striptags|safe}}
 	                    </article>
                     	<hr>
-                    	<span class="view-forward">
-	                    	<figure class="forward-icon"></figure> {{artList.no_shares}}
-	                  		<figure class="view-icon ml-20"></figure> {{artList.no_views}}
-                		</span>
+                    </a>
+                    <a href="/talenteconomy/authors/{{artList.author.slug}}" class="db">
+                      <span class="view-forward">
+                        <figure class="forward-icon"></figure> {{artList.no_shares}}
+                        <figure class="view-icon ml-20"></figure> {{artList.no_views}}
+                    </span>
 		                <div class="author author-secondary">
 		                  <figure>
 		                  	{% if artList.author.image %}
@@ -110,6 +113,7 @@
 
 		                </div>
               		</a>
+                  </div>
               		<meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
               		<meta itemprop="position" content="{{forloop.counter}}">
               		<meta itemprop="headline" content="{{artList.heading}}">

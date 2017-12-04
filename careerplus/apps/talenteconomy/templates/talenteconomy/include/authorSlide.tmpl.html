@@ -2,7 +2,7 @@
 	<div class="container">
 		<h2 class="main-heading-article">Contributors</h2>
 		<div class="col-sm-12 col-md-offset-0">
-			<div class="carousel slide row" data-ride="carousel" data-type="multi" data-interval="3000" id="myCarousel1">
+			<div class="carousel slide row" {% if authors.count > 4 %} data-ride="carousel"  data-type="multi" data-interval="3000" id="myCarousel1" {% endif %}>
 				<div class="carousel-inner">
 					{% for author in authors %}
 					<div class="item {% if forloop.counter == 1 %}active{% endif %}">
@@ -24,8 +24,10 @@
 				</div>
 			</div>
 		</div>
+		{% if authors.count > 4 %}
 		<a class="left carousel-control" href="#myCarousel1" data-slide="prev"></a>
 		<a class="right carousel-control" href="#myCarousel1" data-slide="next"></a>
 		<a href="{% url 'talent:authors-listing' %}" class="view-all" title="View all Contributors">View all</a>
+		{% endif %}
 	</div>
 </section>

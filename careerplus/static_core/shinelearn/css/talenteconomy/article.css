@@ -1232,3 +1232,13 @@ body > footer {
 .white li.active {
   color: #fff;
 }
+.ul.parsley-errors-list {
+  list-style: none;
+  color: red;
+  margin: 0;
+  padding-left: 0;
+}
+
+.db {
+  display: block;
+}
