@@ -32,7 +32,7 @@ def create_lead_on_crm(pk=None, source_type=None, name=None):
                 "payment_page": False,
                 "pk": pk,
             })
-            lead_creation_function(filter_dict=filter_dict)
+            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
 
         if source_type == "payment_drop_out":
             filter_dict.update({
@@ -42,7 +42,7 @@ def create_lead_on_crm(pk=None, source_type=None, name=None):
                 "payment_page": True,
                 "pk": pk,
             })
-            lead_creation_function(filter_dict=filter_dict)
+            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
     except Exception as e:
         logging.getLogger('error_log').error("%s" % str(e))
 
