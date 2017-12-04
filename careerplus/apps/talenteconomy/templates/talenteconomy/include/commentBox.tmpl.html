@@ -1,7 +1,7 @@
 <div class="leave-comment" id="collapseExample">
     <strong>Leave a comment</strong>
 
-    <form>
+    <form id="blog-comment-form{{article.id}}">
         {% csrf_token %}
         <div class="form-group">
             <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment{{article.id}}"></textarea>
@@ -16,7 +16,7 @@
                 <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
             </div>
         </div> -->
-        <button type="submit" class="submit-button" onclick="commentSubmit('{{main_article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Post comment</button>
+        <button type="submit" class="submit-button" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Post comment</button>
     </form>
 </div>
 
