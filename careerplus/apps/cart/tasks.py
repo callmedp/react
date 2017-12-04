@@ -123,6 +123,8 @@ def cart_drop_out_mail(pk=None):
     mail_type = 'CART_DROP_OUT'
     cart_objs = Cart.objects.filter(
         status=2,
+        shipping_done=False,
+        payment_page=False,
         owner_id__isnull=False, pk=pk).exclude(owner_id__exact='')
     count = 0
     for cart_obj in cart_objs:

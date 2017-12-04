@@ -42,7 +42,8 @@
               <tr>
                 <td><strong>Subscription</strong></td>
                 <td><strong>Price (in Rs.)</strong></td>
-              </tr>              
+              </tr>
+              {% if m_prod.product.product_class.name == 'course' and variations %}            
               <tr>
                 <td>
                   {% if m_prod.product.heading %}
@@ -51,25 +52,57 @@
                       {{m_prod.product.name}}
                   {% endif %}
                 </td>
-                {% if not addon and not variations %}
-                  <td>{{m_prod.product.get_price}}</td>
-                {% endif %}
               </tr>
-              {% if addons %}
-                {% for addon in addons %}
-                  <tr>
-                      <td>{{addon.product.name}}</td>
-                      <td>{{addon.product.get_price}}</td>
-                  </tr>
-                {% endfor %}
-              {% endif %}
-              {% if variations %}
-                {% for var in variations %}
-                  <tr>
-                      <td>{{var.product.name}}</td>
-                      <td>{{var.product.get_price}}</td>
-                  </tr>
-                {% endfor %}
+              {% for addon in addons %}
+                <tr>
+                    <td>{{addon.product.name}}</td>
+                    <td>{{addon.product.get_price}}</td>
+                </tr>
+              {% endfor %}
+              {% for var in variations %}
+                <tr>
+                    <td>{{var.product.name}}</td>
+                    <td>{{var.product.get_price}}</td>
+                </tr>
+              {% endfor %}
+              {% elif m_prod.product.product_class.name == 'course' %}
+                <tr>
+                  <td>
+                    {% if m_prod.product.heading %}
+                        {{m_prod.product.heading}}
+                    {% else %}
+                        {{m_prod.product.name}}
+                    {% endif %}
+                  </td>
+                  <td>{{m_prod.product.get_price}}</td>
+                </tr>
+              {% elif m_prod.product.product_class.name == 'service' or m_prod.product.product_class.name == 'resume'%}
+                <tr>
+                  <td>
+                    {% if m_prod.product.heading %}
+                        {{m_prod.product.heading}}
+                    {% else %}
+                        {{m_prod.product.name}}
+                    {% endif %}
+                  </td>
+                  <td>{{m_prod.product.get_price}}</td>
+                </tr>
+                {% if addons %}
+                  {% for addon in addons %}
+                    <tr>
+                        <td>{{addon.product.name}}</td>
+                        <td>{{addon.product.get_price}}</td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+                {% if variations %}
+                  {% for var in variations %}
+                    <tr>
+                        <td>{{var.product.name}}</td>
+                        <td>{{var.product.get_price}}</td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
               {% endif %}
               <tr>
                 <td style="border-top:1px dashed #333; padding:3px 0;"><strong>Total (T)</strong></td>
