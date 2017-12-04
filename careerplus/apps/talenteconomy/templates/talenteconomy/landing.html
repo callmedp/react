@@ -17,6 +17,7 @@
 {% block css_section %}
     {{block.super}}
     {% compress css %}
+    <link rel="stylesheet" href="{% static 'shinelearn/css/mobile/common/slick.css' %}" >
     <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/article.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
@@ -156,6 +157,7 @@
 {% block js_section %}
     {{ block.super }}
     {% compress js %}
+    <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script>
     	$(function(){
