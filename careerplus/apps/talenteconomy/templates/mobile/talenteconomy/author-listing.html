@@ -1,6 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
-{% load thumbnail %}
+{% load thumbnail compress %}
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
@@ -71,7 +71,7 @@
       <div class="author-item">
         <span class="author-img"><img src="{{author.image.url}}"></span>
         <div class="author-detail">
-          <h2 class="mb-0 fs-16">{{author.name}} <sup></sup></h2>
+          <h2 class="mb-0 fs-16"><a href="{% url 'talent:authors-detail' author.slug %}">{{author.name}} </a><sup></sup></h2>
           <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
           <p class="fs-12"><a href="{{request.path}}{{author.slug}}"><strong>{{author.no_of_blog}} articles</strong></a></p>
           <p class="fs-12 italic">{{author.about|striptags|safe|truncatechars:140}}</p>
