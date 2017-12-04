@@ -26,7 +26,7 @@ class ArticleCategoryListMobile(ListView):
 
     def get_queryset(self):
         queryset = super(ArticleCategoryListMobile, self).get_queryset()
-        qs = queryset.filter(is_active=True)
+        qs = queryset.filter(is_active=True, visibility=1)
         return qs
 
 
@@ -51,7 +51,7 @@ class ArticleLoadMoreMobileView(TemplateView, PaginationMixin):
                 self.active_tab = 0
             self.cat_slug = self.request.GET.get('cat_slug', '')
             try:
-                self.cat_obj = Category.objects.get(slug=self.cat_slug, is_active=True)
+                self.cat_obj = Category.objects.get(slug=self.cat_slug, is_active=True, visibility=1)
                 return super(ArticleLoadMoreMobileView, self).get(request, args, **kwargs)
             except:
                 return ''
@@ -61,7 +61,7 @@ class ArticleLoadMoreMobileView(TemplateView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(ArticleLoadMoreMobileView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
-        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1)
+        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=1) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=1)
         main_articles = main_articles.order_by('-publish_date').distinct().select_related('created_by')
 
         paginator = Paginator(main_articles, self.paginated_by)
@@ -101,7 +101,7 @@ class ArticleLoadMoreTagView(TemplateView, PaginationMixin):
                 self.active_tab = 0
             self.tag_slug = self.request.GET.get('tag_slug', '')
             try:
-                self.tag_obj = Tag.objects.get(slug=self.tag_slug, is_active=True)
+                self.tag_obj = Tag.objects.get(slug=self.tag_slug, is_active=True, visibility=1)
                 return super(ArticleLoadMoreTagView, self).get(request, args, **kwargs)
             except:
                 return ''
@@ -111,7 +111,7 @@ class ArticleLoadMoreTagView(TemplateView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(ArticleLoadMoreTagView, self).get_context_data(**kwargs)
         tag_obj = self.tag_obj
-        article_list = tag_obj.blog_set.filter(status=1)
+        article_list = tag_obj.blog_set.filter(status=1, visibility=1)
         article_list = article_list.order_by('-publish_date')
 
         if self.active_tab == 0:

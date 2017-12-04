@@ -1,0 +1,42 @@
+{% load thumbnail %}
+
+{% for articlelist in articlelists %}
+<div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+  <a title="{{articlelist.title}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}" itemprop="url">
+    <figure class="media-left">
+      {% thumbnail articlelist.image "96x73" crop="center" as im %}
+      <img class="media-object" width="{{ im.width }}" height="{{ im.height }}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}" itemprop="image">
+      {% endthumbnail %}
+    </figure>
+    <div class="media-body rel">
+      <span class="article-tag">{{articlelist.p_cat.name}}</span>
+      <h3 class="media-heading" itemprop="name">{{articlelist.heading}}</h3>
+
+      <div class="blog-author fs-11">
+        <span class="editor" itemprop="author">{{articlelist.author.name}}</span>
+        <span class="view-forward pull-right">
+          {% if article.no_shares > 0 %}
+            <figure class="icon-forward"></figure> {{articlelist.no_shares}}
+          {% endif %}
+          {% if article.no_views > 0 %}
+            <figure class="icon-view icon-grey-view ml-10"></figure> {{articlelist.no_views}}
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </a>
+  <meta itemprop="datePublished" content="{{articlelist.publish_date.date}}"></meta>
+  <meta itemprop="position" content="{{forloop.counter}}">
+  <meta itemprop="headline" content="{{articlelist.heading}}">
+  <meta itemprop="dateModified" content="{{articlelist.publish_date.date}}">
+  <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
+  
+  <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+      <meta itemprop="url" content="https://learning.shine.com/media/static/shinelearn/images/logo.png">
+    </div>
+    <meta itemprop="name" content="Shine">
+  </div>
+  
+</div>
+{% endfor %}

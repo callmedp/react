@@ -129,9 +129,9 @@ class BlogDetailView(DetailView, BlogMixin):
             queryset = self.get_queryset()
 
         if pk is not None:
-            queryset = queryset.filter(pk=pk, status=1)
+            queryset = queryset.filter(pk=pk, status=1, visibility=1)
         elif slug is not None:
-            queryset = queryset.filter(slug=slug, status=1)
+            queryset = queryset.filter(slug=slug, status=1, visibility=1)
         try:
             obj = queryset.get()
         except:
@@ -163,10 +163,10 @@ class BlogDetailView(DetailView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(is_active=True)
+        categories = Category.objects.filter(is_active=True, visibility=1)
         blog = self.object
         p_cat = blog.p_cat
-        articles = p_cat.primary_category.filter(status=1).exclude(pk=blog.pk)
+        articles = p_cat.primary_category.filter(status=1, visibility=1).exclude(pk=blog.pk)
         pop_aricles = articles[: 5]
         articles = articles.order_by('-publish_date')
         
@@ -180,10 +180,10 @@ class BlogDetailView(DetailView, BlogMixin):
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
-        main_obj = Blog.objects.filter(slug=blog.slug, status=1)
+        main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=1)
         main_obj_list = list(main_obj)
 
-        article_list = Blog.objects.filter(p_cat=p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1).order_by('-publish_date')
+        article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=1).order_by('-publish_date')
         article_list = article_list.exclude(pk=blog.pk)
         article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
 
@@ -194,6 +194,7 @@ class BlogDetailView(DetailView, BlogMixin):
         detail_obj = self.scrollPagination(
                 paginated_by=self.paginated_by, page=self.page,
                 object_list=object_list)
+        
         if self.request.flavour == 'mobile':
             detail_article = render_to_string('include/detail-article-list.html',
                 {"page_obj": detail_obj,
@@ -245,7 +246,7 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         except:
             self.active_tab = 0
         try:
-            self.cat_obj = Category.objects.get(slug=slug, is_active=True)
+            self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=1)
         except Exception:
             raise Http404
         context = super(BlogCategoryListView, self).get(request, args, **kwargs)
@@ -254,12 +255,12 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(BlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
-        categories = Category.objects.filter(is_active=True)
-        article_list = Blog.objects.filter(status=1)
+        categories = Category.objects.filter(is_active=True, visibility=1)
+        article_list = Blog.objects.filter(status=1, visibility=1)
         top_5_pop = article_list[: 5]
         article_list = article_list.order_by('-publish_date')
         top_5_recent = article_list[: 5]
-        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1)
+        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=1) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=1)
         main_articles = main_articles.order_by('-publish_date').distinct().select_related('user')
 
         paginator = Paginator(main_articles, self.paginated_by)
@@ -323,7 +324,7 @@ class BlogTagListView(TemplateView, PaginationMixin):
         except:
             self.active_tab = 0
         try:
-            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True, visibility=1)
         except Exception:
             raise Http404
         context = super(BlogTagListView, self).get(request, args, **kwargs)
@@ -332,8 +333,8 @@ class BlogTagListView(TemplateView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(BlogTagListView, self).get_context_data(**kwargs)
         tag_obj = self.tag_obj
-        categories = Category.objects.filter(is_active=True)
-        article_list = tag_obj.blog_set.filter(status=1)
+        categories = Category.objects.filter(is_active=True, visibility=1)
+        article_list = tag_obj.blog_set.filter(status=1, visibility=1)
         article_list = article_list.order_by('-publish_date')
 
         paginator = Paginator(article_list, self.paginated_by)
@@ -397,10 +398,10 @@ class BlogLandingPageView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(is_active=True)
+        categories = Category.objects.filter(is_active=True, visibility=1)
         exc_cat = []
         for cat in categories:
-            if not cat.primary_category.filter(status=1).exists():
+            if not cat.primary_category.filter(status=1, visibility=1).exists():
                 exc_cat.append(cat.pk)
 
         categories = categories.exclude(pk__in=exc_cat)
@@ -410,7 +411,7 @@ class BlogLandingPageView(TemplateView, BlogMixin):
 
         article_list = {}
         for p in page_obj:
-            top_articles = p.primary_category.filter(status=1)
+            top_articles = p.primary_category.filter(status=1, visibility=1)
             if top_articles.count() > 3:
                 top_articles = top_articles[: 3]
             else:
@@ -475,7 +476,7 @@ class BlogLandingAjaxView(ListView, BlogMixin):
 
         article_list = {}
         for p in page_obj:
-            top_articles = p.primary_category.filter(status=1)
+            top_articles = p.primary_category.filter(status=1, visibility=1)
             if top_articles.count() > 3:
                 top_articles = top_articles[: 3]
             elif top_articles.exists():
@@ -511,11 +512,10 @@ class BlogDetailAjaxView(View, BlogMixin):
             self.page = self.request.GET.get('page', 1)
             self.slug = self.request.GET.get('slug')
             try:
-                self.blog = Blog.objects.get(slug=self.slug, status=1)
+                self.blog = Blog.objects.get(slug=self.slug, status=1, visibility=1)
+                main_objs = Blog.objects.filter(slug=self.blog.slug, status=1, visibility=1)
 
-                main_objs = Blog.objects.filter(slug=self.blog.slug, status=1)
-
-                article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
+                article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
                 article_list = article_list.exclude(slug=self.blog.slug)
                 article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
 
@@ -537,7 +537,6 @@ class BlogDetailAjaxView(View, BlogMixin):
                 }
 
                 return HttpResponse(json.dumps(data), content_type="application/json")
-
             except:
                 pass
         return HttpResponseForbidden()
