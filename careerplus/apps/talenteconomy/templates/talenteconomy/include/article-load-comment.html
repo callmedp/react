@@ -13,9 +13,9 @@
     </div>
     <figcaption class="media-body">
         <span class="author-name">Krishna Singh</span>
-        <span class="time">1 hr ago</span>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s</p>
-        <a href="#">Reply</a>
+        <span class="time">{% get_humanize_date comment.created_on %}</span>
+        {{comment.message}}
+        <!-- <a href="#">Reply</a> -->
     </figcaption>
   </div>
 {% endfor %}
