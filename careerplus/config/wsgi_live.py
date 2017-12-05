@@ -8,9 +8,10 @@ https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/
 """
 
 import os
-
+import newrelic.agent
 from django.core.wsgi import get_wsgi_application
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "careerplus.config.settings_live"
-
+#NewRelic
+newrelic.agent.initialize('/var/www/site/shine_learning/newrelic.ini')
 application = get_wsgi_application()
