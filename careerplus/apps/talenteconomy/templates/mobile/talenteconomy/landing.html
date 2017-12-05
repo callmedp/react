@@ -102,9 +102,14 @@
     <!-- box panel ends here -->
     {% include './include/authorSlide.tmpl.html' with authors=authors %}
 
+    {% if popular_courses %}
+        {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-home' %}
+    {% endif %}
+
     {% if categories %}
       {% include './include/category.tmpl.html' with categories=categories %}
     {% endif %}
+
   </section>
 </div>
 {% endblock container %}

@@ -43,7 +43,7 @@
 	         // next.children(':first-child').clone().appendTo($(this));
 	        }
 	    });
-
+*/
 	  	$(document).on('click', '#article_share', function(event) {
 	        $.ajax({
 	            url: "/ajax/article-share/",
