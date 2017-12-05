@@ -29,7 +29,7 @@
         <div class="social-login">
             <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"></a>
             
-            <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"></a>
+            <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"></a>
 
             <a class="gplus" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a>
 
@@ -80,57 +80,19 @@
     {% endwith %}
 
     <!-- comments box -->
-    {% comment %}
-
-    <div class="comments-box mb-40 mt-40" id="comment-box{{main_article.id}}">
+    {% if main_article.allow_comment %}
+    <div class="comments-box mb-40 mt-40">
         <!-- comments box heading-->
-        <div class="comments-box-heading">
-            <span class="comments-icon mr-10"></span> <strong>{{main_article.comment_moderated}} comments</strong>
-            <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a>
+        <div class="comments-box-heading is-clickable">
+            <span class="comments-icon mr-10"></span> <strong><label for="total_comment{{main_article.id}}" class="is-clickable">{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Click to Comment {% endif %}</label></strong>
+            <!-- <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a> -->
+            <input type="radio" class="hide" onchange="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
         </div>
-
-        <!-- Leave a comment box-->
-        <div class="collapse leave-comment" id="collapseExample">
-            <strong>Leave a comment</strong>
-
-            <form>
-                <div class="form-group">
-                    <textarea class="form-control" placeholder="Your comment" rows="3"></textarea>
-                </div>
-                <div class="form-inline row hidden">
-                    <div class="form-group col-sm-6">
-                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                    </div>
-                </div>
-                <button type="submit" class="submit-button" onclick="commentSubmit('{{main_article.id}}', '{{login_status}}')" id="comment-submit{{main_article.id}}">Post comment</button>
-            </form>
+        <div id="comment-box{{main_article.id}}" class="mt-20">
+            
         </div>
-
-        <!-- comments-->
-        {% for i in '12' %}
-        <div class="media mt-30" >
-            <div class="media-left">
-                <figure>
-                    <a href="#">
-                    <img class="media-object" src="images/talent-author-pic1.jpg" alt="shine">
-                  </a>
-                </figure>
-            </div>
-            <figcaption class="media-body">
-                <span class="author-name">Krishna Singh</span>
-                <span class="time">1 hr ago</span>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s</p>
-                <a href="#">Reply</a>
-            </figcaption>
-        </div>
-        {% endfor %}
-        <a class="comments-links mb-40" onclick="openCommentBox('{{main_article.id}}')" id="total_comment{{main_article.id}}"> <span class="comments-icon mr-10"></span>More Comments</a>
 
     </div>
-
-    {% endcomment %}
+    {% endif %}
 
 </div>

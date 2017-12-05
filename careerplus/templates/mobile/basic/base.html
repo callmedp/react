@@ -2,15 +2,12 @@
 {% spaceless %}
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
-
     <head>
     {% block head %}
     {% block meta_html %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width shrink-to-fit=no, initial-scale=1.0, user-scalable=0">
-{#        <meta name="viewport" content="width=device-width ">#}
-        
     {% endblock meta_html %}
     {% block django_meta %}
     {% endblock django_meta %}
@@ -45,23 +42,18 @@
         </script>
     {% endblock banner_ads %}
     {% endblock head %}
-{% endspaceless %}
-    {% render_block "custom_css" %}
     {{ JS_SETTINGS|safe }}
-{% spaceless %}
-        {% block GA %}
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
-            <script>
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'UA-3537905-41');
-              gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
-            </script>
-        {% endblock GA %}
+    {% block GA %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-3537905-41');
+          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+        </script>
+    {% endblock GA %}
    </head>
-
-
     <body>
         {% block main_container %}
         <div class="wrapper">
@@ -83,21 +75,12 @@
                         <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
                 </div><!-- header menu Icon ends here -->
-
-
-                    {% block header_title %}{% endblock header_title %}
-
+                {% block header_title %}{% endblock header_title %}
                     <!-- Search listing tagging ends here -->
                 </header><!-- header ends here -->
             {% endblock header %}
 
-
             {% block container %}
-                {% comment %}
-                <div class="body-wrapper mb-50">
-                    <!-- main section start -->
-                </div>
-                {% endcomment %}
                 {% block call_us %}{% endblock call_us %}
             {% endblock container %}
 
@@ -117,17 +100,17 @@
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
         {% compress js %}
-        <script src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-        <script src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
-        <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-        <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         {% endcompress %}
         {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''
@@ -136,9 +119,6 @@
         </script>
         {% endblock johukum %}
     {% endblock js_section %}
-{% endspaceless %}
-    {% render_block "custom_js" %}
-{% spaceless %}
     {% block banner_ads_bottom %}
         <!-- /1198510/ShineLearning_1x1_mobile -->
         <div id='div-gpt-ad-1509431552856-0'>

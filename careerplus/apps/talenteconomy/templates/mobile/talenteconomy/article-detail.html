@@ -55,8 +55,13 @@
         {% include './include/detail-article-list.tmpl.html' %}
 
     </section>
-
-
+    
+    {% if popular_courses %}
+        <section>
+            {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}
+        </section>
+    {% endif %}
+    
     {% comment %}
     <section>
         <!-- box panel starts here -->
@@ -92,7 +97,7 @@
         <ul id="share-icon">
             <!-- <li class="wp-bg"><a href="#"><span class="icon-wp"></span></a></li> -->
             <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}"><span class="icon-gp"></span></a></li>
-            <li class="tw-bg"><a href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}"><span class="icon-tw"></span></a></li>
+            <li class="tw-bg"><a href="https://twitter.com/home?status={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}"><span class="icon-tw"></span></a></li>
             <li class="fb-bg"><a href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}"><span class="icon-fb"></span></a></li>
             <li class="share-bg"><a href="#">{{main_article.no_shares}}<br>{% if main_article.no_shares > 1 %} Shares {% else %}Share{% endif %}</a></li>
         </ul>
@@ -105,6 +110,8 @@
 
 {% block js_section %}
     {{block.super}}
+    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+    <script src="{% static "shinelearn/js/blog/blog-detail.js" %}"></script>
     <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
     <script>
         $(function() {

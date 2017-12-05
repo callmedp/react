@@ -102,6 +102,7 @@
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+    <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}
     <script>
         $('.nav-tabs > li > a').hover(function() {
@@ -111,6 +112,9 @@
             $('.dropdown-toggle', this).trigger('click');
           });
     </script>
+    {% if request.GET.itm_campaign or request.GET.itm_campaign or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+       <script type="text/javascript"> MyGA.SendEvent('itm','Popular Course','{{request.GET.itm_content}}','click');</script>
+    {%endif%}
 {% endblock js_section %}
 
 {% block johukum %}

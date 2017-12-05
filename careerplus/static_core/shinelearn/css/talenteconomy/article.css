@@ -29,6 +29,7 @@
   position: absolute;
   bottom: 20px;
   left: 40px;
+  width: 90%;
 }
 .article-carousel .carousel-heading-container.b-mini {
   bottom: 10px;
@@ -170,11 +171,14 @@
   height: 37px;
   border-radius: 100%;
   display: inline-block;
-  vertical-align: sub;
+  vertical-align: middle;
   margin: 0 10px 0 20px;
+  overflow: hidden;
 }
 .author figure img {
   max-width: 100%;
+  width: 77px;
+  height: 77px;
 }
 
 .main-heading-article {
@@ -242,7 +246,7 @@
   margin: 15px 20px 10px 20px;
   line-height: 20px;
   font-size: 18px;
-  height: 40px;
+  height: 41px;
   overflow: hidden;
   color: #333;
 }
@@ -316,7 +320,7 @@
   margin-top: 15px;
   border: 1px solid #e1e1e1;
   width: 48%;
-  margin-left: 2%;
+  margin-left: 4%;
   vertical-align: top;
   min-height: 120px !important;
   overflow: hidden;
@@ -445,7 +449,8 @@
 
 }
 
-.contributor-carousel .box-panel {
+.contributor-carousel .box-panel,
+.contributor-slide .box-panel {
 
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
@@ -461,7 +466,8 @@
 
 }
 
-.contributor-carousel figure {
+.contributor-carousel figure,
+.contributor-slide figure {
 
   height: 190px;
 
@@ -469,13 +475,15 @@
 
 }
 
-.contributor-carousel figure img {
+.contributor-carousel figure img,
+.contributor-slide figure img {
 
   height: 100%;
 
 }
 
-.contributor-carousel figcaption {
+.contributor-carousel figcaption,
+.contributor-slide figcaption {
 
   color: #333;
 
@@ -503,7 +511,8 @@
 
 }
 
-.contributor-carousel figcaption strong {
+.contributor-carousel figcaption strong,
+.contributor-slide figcaption strong {
 
   color: #999;
 
@@ -521,7 +530,8 @@
 
 }
 
-.contributor-carousel figcaption strong:after {
+.contributor-carousel figcaption strong:after,
+.contributor-slide figcaption strong:after {
 
   border-bottom: 1px solid #e1e1e1;
 
@@ -543,7 +553,8 @@
 
 }
 
-.contributor-carousel figcaption .read {
+.contributor-carousel figcaption .read,
+.contributor-slide figcaption .read {
 
   color: #3f5f94;
 
@@ -590,8 +601,10 @@
 }
 
 .contributor-carousel .carousel-control.left,
-
-.contributor-carousel .carousel-control.right {
+.contributor-container .carousel-control.left,
+.contributor-carousel .carousel-control.right,
+.contributor-container .carousel-control.right,
+ {
 
   background-image: none;
 
@@ -633,7 +646,8 @@
 
 }
 
-.contributor-carousel .carousel-control {
+.contributor-carousel .carousel-control,
+.contributor-container .carousel-control {
 
   width: 15px;
 
@@ -643,7 +657,8 @@
 
 }
 
-.contributor-carousel .carousel-control.left {
+.contributor-carousel .carousel-control.left,
+.contributor-container .carousel-control.left {
 
   background: url(../../images/sprite.png) no-repeat -366px -371px;
 
@@ -653,7 +668,8 @@
 
 }
 
-.contributor-carousel .carousel-control.right {
+.contributor-carousel .carousel-control.right,
+.contributor-container .carousel-control.right {
 
   background: url(../../images/sprite.png) no-repeat -413px -371px;
 
@@ -1039,7 +1055,7 @@
 }
 .author-listing .media-left {
   width: 122px;
-  height: 122px;
+  height: auto;
   min-width: 122px;
 }
 .author-listing .media-left img {
@@ -1185,7 +1201,7 @@
   margin: 25px 10px 10px 10px;
   line-height: 20px;
   font-size: 18px;
-  height: 40px;
+  height: 41px;
   overflow: hidden;
   color: #333;
 }
@@ -1231,4 +1247,18 @@ body > footer {
 .white li a,
 .white li.active {
   color: #fff;
+}
+.ul.parsley-errors-list {
+  list-style: none;
+  color: red;
+  margin: 0;
+  padding-left: 0;
+}
+
+.db {
+  display: block;
+}
+
+.is-clickable { 
+  cursor: pointer; 
 }
