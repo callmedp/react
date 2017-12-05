@@ -1,6 +1,9 @@
 {% load thumbnail %}
 
-<h2 class="mt-20">Contributors</h2>
+<div class="clearfix mt-20">
+  <h2 class="pull-left">Contributors</h2>
+  <a href="{% url 'talent:authors-listing' %}" class="pull-right mt-5">View all</a>
+</div>
 <div class="slide-container">
     <ul class="contributors">
         {% for author in authors %}
