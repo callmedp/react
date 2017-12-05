@@ -5,7 +5,6 @@
 	        interval: false,
 	    });
 
-	    $('.carousel[data-type="multi"] .item').each(function(){
 	 
      $('.carousel[data-type="multi"] .item').each(function(){
         var next = $(this).next();
@@ -44,7 +43,7 @@
 	         // next.children(':first-child').clone().appendTo($(this));
 	        }
 	    });
-*/
+
 	  	$(document).on('click', '#article_share', function(event) {
 	        $.ajax({
 	            url: "/ajax/article-share/",
