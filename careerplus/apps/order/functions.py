@@ -95,6 +95,15 @@ def update_initiat_orderitem_sataus(order=None):
                         oi_status=oi.oi_status,
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
+                else:
+                    last_oi_status = oi.oi_status
+                    oi.oi_status = 2
+                    oi.last_oi_status = last_oi_status
+                    oi.save()
+                    oi.orderitemoperation_set.create(
+                        oi_status=oi.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=oi.assigned_to)
 
             elif oi.product.type_flow == 10:
                 last_oi_status = oi.oi_status
@@ -145,7 +154,7 @@ def send_email(to_emails, mail_type, email_dict, status=None, oi=None):
 
 def send_email_from_base(subject=None, body=None, to=[], headers=None, oi=None, status=None):
     try:
-        SendMail().base_send_mail(subject, body, to=[], headers=None)
+        SendMail().base_send_mail(subject, body, to=[], headers=None, bcc=[settings.DEFAULT_FROM_EMAIL])
         if oi:
             from order.models import OrderItem
             obj = OrderItem.objects.get(pk=oi)

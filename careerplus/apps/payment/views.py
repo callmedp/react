@@ -20,6 +20,7 @@ from django.utils import timezone
 
 from core.api_mixin import ShineCandidateDetail
 from .models import PaymentTxn
+from cart.tasks import create_lead_on_crm
 
 from .forms import StateForm, PayByCheckForm
 from .mixin import PaymentMixin
@@ -56,11 +57,21 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
 
     def get(self, request, *args, **kwargs):
         redirect = self.redirect_if_necessary()
+        try:
+            self.cart_obj.payment_page = True
+            self.cart_obj.save()
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+
         if redirect:
             return redirect
 
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
-
+        source_type = "payment_drop_out"
+        candidate_id = request.session.get('candidate_id')
+        if self.cart_obj.owner_id == candidate_id:
+            create_lead_on_crm.apply_async(
+                (self.cart_obj.pk, source_type), countdown=10*60)
         total_payable_amount = payment_dict.get('total_payable_amount')
         if total_payable_amount <= 0:
             order = self.createOrder(self.cart_obj)

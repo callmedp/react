@@ -10,6 +10,7 @@ from haystack.query import SearchQuerySet
 
 from shop.models import Product, ProductClass
 from core.mixins import InvoiceGenerate
+from geolocation.models import Country
 
 from .models import Cart, LineItem
 
@@ -59,6 +60,9 @@ class CartMixin(object):
         try:
             flag = 1
             candidate_id = self.request.session.get('candidate_id')
+            email = self.request.session.get('email')
+            mobile = self.request.session.get('mobile_no')
+            country_code = self.request.session.get('country_code')
             if add_type == "cart":
                 self.getCartObject()
                 cart_pk = self.request.session.get('cart_pk')
@@ -80,6 +84,25 @@ class CartMixin(object):
                     cart_obj = Cart.objects.create(session_id=session_id, status=3)
 
             if cart_obj:
+                if email and not cart_obj.owner_email:
+                    cart_obj.owner_email = email
+                    if not cart_obj.email:
+                        cart_obj.email = email
+                    cart_obj.save()
+
+                if country_code and not cart_obj.country_code:
+                    try:
+                        country_obj = Country.objects.get(phone=country_code, active=True)
+                    except:
+                        country_obj = Country.objects.get(phone='91', active=True)
+
+                    cart_obj.country_code = country_obj.phone
+                    cart_obj.save()
+
+                if mobile and not cart_obj.mobile:
+                    cart_obj.mobile = mobile
+                    cart_obj.save()
+
                 cart_obj.lineitems.filter(product=product).delete()
 
                 if product.is_course and cv_id:
@@ -140,6 +163,11 @@ class CartMixin(object):
                     "checkout_type": add_type,
                 })
 
+                if add_type == "cart":
+                    self.request.session.update({
+                        "cart_count_pk": cart_obj.pk,
+                    })
+
             return flag
 
         except Exception as e:
@@ -155,8 +183,10 @@ class CartMixin(object):
             if not request.session.session_key:
                 request.session.create()
             sessionid = request.session.session_key
-
-            cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
+            cart_users = []
+            if candidate_id:
+                cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
+                
             cart_sessions = Cart.objects.filter(session_id=sessionid, status=0)
             cart_user, cart_session = None, None
             if cart_users:
@@ -196,6 +226,7 @@ class CartMixin(object):
                 request.session.update({
                     "cart_pk": cart_obj.pk,
                     "checkout_type": 'cart',
+                    "cart_count_pk": cart_obj.pk,
                 })
 
             elif request.session.get('cart_pk'):
@@ -584,8 +615,9 @@ class CartMixin(object):
         try:
             if not request:
                 request = self.request
-            self.getCartObject(request=request)
-            cart_pk = request.session.get('cart_pk')
+            if not request.session.get('cart_count_pk'):
+                self.getCartObject(request=request)
+            cart_pk = request.session.get('cart_count_pk')
 
             if cart_pk:
 
