@@ -1,4 +1,7 @@
-$('.cls_eventtrack').on('click', function () {
-	MyGA.SendEvent('talenteconomy', $(this).data('category'), $(this).data('action'), $(this).data('label'));
+$('.cls_eventtrack').on('click', function (e) {
+	var element = $(this).closest('a');
+	if(e.which) {
+		MyGA.SendEvent('talenteconomy', element.data('category'), element.data('action'), element.data('label'));
+	}
 	return true;
 });
