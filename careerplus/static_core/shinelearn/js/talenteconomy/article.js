@@ -1,15 +1,6 @@
 ;(function($, Article){
 	function init() {
-   
-	 	var $contributorSlide =  $('.contributor-slide .item').slick({
-		  slidesToShow: 3,
-		  slidesToScroll: 1,
-		  centerPadding: '60px',
-		  lazyLoad: 'progressive',
-		  variableWidth: true,
-		  infinite: false,
-		  arrows: false
-		});
+
 
 	/*	$('#myCarousel1').carousel({
 	        interval: false,
