@@ -1,0 +1,50 @@
+.right-navbar, .cms-right {
+  padding: 15px;
+
+  h2 {
+    padding: 15px 0 10px;
+    border-bottom: 1px solid $border-grey-c1;
+    font-weight: 600;
+  }
+
+  ul {
+    margin-top: 10px;
+    
+    li {
+      margin-bottom: 10px;
+    }
+  }
+
+  .form-control {
+    @include border-radius (4px);
+  }
+}
+
+.underline {
+  li {
+    border-bottom: 1px solid $border-grey-c1;
+    padding-bottom: 10px;
+    span {
+      height: 40px;
+      display: block;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
+}
+
+.bottom-btn {
+  position: absolute;
+  bottom: 25px;
+  width: 90%;
+}
+
+.cms-right {
+
+  .form-control {
+    @include border-radius (0);
+  }
+
+}

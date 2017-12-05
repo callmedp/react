@@ -1,0 +1,437 @@
+@import '../lib/variables';
+@import '../lib/mixin';
+
+[class^="icon-"] {
+    display: block;
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icon-bar {
+	background-position: 0 0;
+    width: 20px;
+    height: 20px;
+}
+
+.icon-logo {
+  @include icon-block (167px, 67px, -25px 0);
+  margin-top: -16px;
+  margin-left: 10px;
+}
+
+.icon-search {
+	@include icon-block (21px, 21px, 0 -22px);
+}
+
+.icon-cart {
+	@include icon-block (18px, 18px, -3px -46px);
+	margin-left: 25px;
+  position: relative;
+  overflow: visible;
+  text-indent: -1000px;
+
+  span {
+    @include square (15px, block);
+    @include border-radius (50%);
+    position: absolute;
+    background-color: #fecd2f;
+    color: $txt-black;
+    line-height: 15px;
+    text-align: center;
+    left: -7px;
+    top: -10px;
+    text-indent: 0px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: -1px;
+  }
+}
+
+.icon-close {
+  @include icon-block (19px, 19px, -124px -175px);
+  transform: scale(.8);
+}
+
+.icon-view {
+  @include icon-inblock (15px, 9px, 0 -67px);
+  color: $txt-white;
+  font-size: 72%;
+}
+
+.icon-forward {
+   @include icon-inblock (12px, 10px, 0 -78px);
+}
+
+.icon-grey-view {
+  background-position: -14px -79px;
+}
+
+.icon-back {
+  @include icon-inblock (17px, 19px, -196px -1px);
+}
+
+.icon-chat-sm {
+  @include icon-inblock (12px, 10px, 0 -92px);
+  vertical-align: middle;
+}
+
+.icon-chat {
+  @include icon-inblock (18px, 14px, -13px -91px);
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.icon-share {
+  @include icon-inblock (27px, 22px, -38px -68px);
+  @extend %all-center;
+}
+
+.icon-fb {
+  @include icon-inblock (10px, 20px, -75px -70px);
+  @extend %all-center;
+}
+
+.icon-tw {
+  @include icon-inblock (18px, 15px, -126px -71px);
+  @extend %all-center;
+}
+
+.icon-gp {
+  @include icon-inblock (21px, 15px, -97px -71px);
+  @extend %all-center;
+}
+
+.icon-wp {
+  @include icon-inblock (23px, 22px, -154px -67px);
+  @extend %all-center;
+}
+
+.icon-tick {
+  @include icon-inblock (10px, 7px, -37px -96px);
+}
+
+.icon-file {
+ @include icon-inblock (34px, 32px, 0 -110px); 
+}
+
+.icon-graph {
+  @include icon-inblock (40px, 40px, 0 -150px); 
+}
+
+.icon-comments {
+  @include icon-inblock (13px, 12px, -64px -112px); 
+  position: relative;
+  top: 2px;
+}
+
+.icon-jobs {
+  @include icon-inblock (14px, 12px, -81px -111px); 
+  margin-right: 4px;
+}
+
+.icon-bag {
+  @include icon-inblock (12px, 15px, -181px -106px); 
+  margin-right: 4px;
+  position: relative;
+  top: 2px;
+}
+
+.icon-certificate {
+  @include icon-inblock (10px, 18px, -99px -112px); 
+  margin-right: 4px;
+  position: relative;
+  top: 5px;
+}
+
+.icon-fb-2 {
+  @include icon-inblock (10px, 18px, -48px -176px);
+  @extend %all-center;
+}
+
+.icon-tw-2 {
+  @include icon-inblock (18px, 15px, -100px -177px);
+  @extend %all-center;
+}
+
+.icon-gp-2 {
+  @include icon-inblock (21px, 15px, -71px -177px);
+  @extend %all-center;
+}
+
+.icon-link-2 {
+  @include icon-inblock (21px, 34px, -73px -282px);
+  }
+
+.icon-edit {
+  @include icon-inblock (14px, 15px, -148px -177px);
+}
+
+.icon-close-sm {
+  @include icon-inblock (15px, 15px, -193px -177px);
+}
+
+.icon-filter {
+  @include icon-inblock (23px, 23px, -165px -175px);
+  @extend %all-center;
+}
+
+.icon-filter-white {
+  @include icon-inblock (23px, 23px, -113px -199px);
+}
+
+
+.icon-cart-big {
+  @include icon-inblock (32px, 34px, -4px -240px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -16px 0 0 -17px;
+}
+
+.icon-coupon {
+  @include icon-inblock (32px, 32px, -283px 0);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -16px 0 0 -15px;
+}
+
+.icon-apply-coupon {
+  @include icon-inblock (39px, 24px, -325px 0);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -12px 0 0 -20px;
+}
+
+.icon-hand {
+  @include icon-inblock (22px, 32px, -374px 0);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -17px 0 0 -12px;
+}
+
+.icon-download-big {
+  @include icon-block (30px, 30px, -238px -34px);
+}
+
+.icon-tick-green {
+  @include icon-inblock (12px, 10px, -11px -197px);  
+}
+
+.icon-tick-cross {
+  @include icon-inblock (12px, 12px, -72px -200px);  
+}
+
+.icon-comment-white {
+  @include icon-inblock (16px, 15px, -227px -73px); 
+  position: relative;
+  top: 2px;
+  margin-right: 5px;
+}
+
+.icon-request {
+  @include icon-inblock (50px, 44px, -266px -71px);  
+}
+
+.icon-speaak {
+  @include icon-inblock (44px, 44px, -323px -71px);  
+}
+
+.icon-get {
+  @include icon-inblock (44px, 45px, -377px -71px);  
+}
+
+.icon-interview {
+  @include icon-inblock (34px, 45px, -436px -71px);  
+}
+
+.icon-lock {
+  @include icon-inblock (10px, 13px, -250px -153px);  
+  margin-right: 5px;
+}
+
+.icon-wait {
+  @include icon-inblock (29px, 42px, -276px -137px);
+}
+
+
+.more-chances {
+  background-position: 0 0;
+}
+
+.more-faster {
+  background-position: -81px 0;
+}
+
+.more-fortune {
+  background-position: -161px 0;
+}
+
+.more-quick {
+  background-position: -241px 0;
+}
+
+
+.icon-cart-df {
+  @include icon-inblock (32px, 34px, -4px -240px);
+  @extend %absolute-margin-0;
+}
+
+.icon-call-df {
+  @include icon-inblock (36px, 37px, -144px -206px);
+  @extend %absolute-margin-0;
+}
+
+.icon-feedback-df {
+  @include icon-inblock (30px, 42px, -185px -207px);
+  @extend %absolute-margin-0;
+}
+
+.icon-download-df {
+  @include icon-inblock (31px, 33px, -223px -204px);
+  @extend %absolute-margin-0;
+}
+
+.icon-material-df {
+  @include icon-inblock (33px, 28px, -261px -195px);
+  @extend %absolute-margin-0;
+}
+
+.icon-learning-df {
+  @include icon-inblock (33px, 41px, -303px -194px);
+  @extend %absolute-margin-0;
+}
+
+.icon-certified-df {
+  @include icon-inblock (30px, 37px, -346px -195px);
+  @extend %absolute-margin-0;
+}
+
+.icon-evaluate-df {
+  @include icon-inblock (29px, 35px, -386px -186px);
+  @extend %absolute-margin-0;
+}
+
+.icon-recieve-df {
+  @include icon-inblock (30px, 30px, -425px -188px);
+  @extend %absolute-margin-0;
+}
+
+.icon-resume-df {
+  @include icon-inblock (27px, 37px, -466px -186px);
+  @extend %absolute-margin-0;
+}
+
+.icon-expert-df {
+  @include icon-inblock (32px, 38px, -135px -249px);
+  @extend %absolute-margin-0;
+}
+
+.icon-accessing-df {
+  @include icon-inblock (38px, 25px, -177px -257px);
+  @extend %absolute-margin-0;
+}
+
+.icon-increase-df {
+  @include icon-inblock (29px, 29px, -224px -248px);
+  @extend %absolute-margin-0;
+}
+
+.icon-featured-df {
+  @include icon-inblock (37px, 36px, -260px -231px);
+  @extend %absolute-margin-0;
+}
+
+.icon-10x-df {
+  @include icon-inblock (42px, 19px, -327px -282px);
+  @extend %absolute-margin-0;
+}
+
+.icon-verification-df {
+  @include icon-inblock (32px, 35px, -305px -241px);
+  @extend %absolute-margin-0;
+}
+
+.icon-download-df {
+  @include icon-inblock (31px, 33px, -346px -240px);
+  @extend %absolute-margin-0;
+}
+
+.icon-1kx-df {
+  @include icon-inblock (47px, 12px, -377px -279px);
+  @extend %absolute-margin-0;
+}
+
+.icon-talk-df {
+  @include icon-inblock (31px, 26px, -264px -266px);
+  @extend %absolute-margin-0;
+}
+
+.icon-assessment-df {
+  @include icon-inblock (33px, 32px, -386px -232px);
+  @extend %absolute-margin-0;
+}
+
+.icon-educators-df {
+  @include icon-inblock (44px, 41px, -429px -230px);
+  @extend %absolute-margin-0;
+}
+
+.icon-loc {
+  @include icon-inblock (12px, 17px, -2px -306px);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.mail-iconStrock {
+  @include icon-inblock (28px, 22px, -21px -304px);
+  @extend %absolute-margin-0;
+}
+
+.icon-leaveComment {
+  @include icon-inblock (20px, 20px, -42px -346px);
+  margin-right: 5px;
+  position: relative;
+  top: 5px;
+}
+
+.icon-fbGrey {
+  @include icon-inblock (20px, 15px, -73px -348px);
+}
+
+.icon-twGrey {
+  @include icon-inblock (20px, 15px, -96px -348px);
+}
+
+.icon-linkedinGrey {
+  @include icon-inblock (20px, 15px, -115px -348px);
+}
+
+
+.icon-resume {
+  @include icon-inblock (30px, 40px, -108px -298px);
+}
+
+.icon-certificateBig {
+  @include icon-inblock (31px, 40px, -143px -298px);
+}
+
+.icon-linkpro {
+  @include icon-inblock (31px, 40px, -177px -298px);
+}
+
+.icon-freeRes {
+  @include icon-inblock (39px, 39px, -212px -299px);
+}
+
+.icon-careerAd {
+  @include icon-inblock (31px, 40px, -257px -298px);
+}
+
+.icon-payment-failure {
+  @include icon-inblock (47px, 40px, -291px -306px);
+}

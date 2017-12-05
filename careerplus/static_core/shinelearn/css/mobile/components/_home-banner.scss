@@ -1,0 +1,42 @@
+.home-banner {
+  background-color: #272d37;
+  position: relative;
+  overflow: hidden;
+
+  .home_content {
+    position: absolute;
+    bottom: 45px;
+    z-index: 2;
+    padding: 0 15px;
+    width: 100%;
+    text-align: center;
+    color: $txt-white;
+
+    .logged-in {
+      display: none;
+    }
+
+    h1 {
+      font-size: 1.8em;
+        font-weight: 400;
+        line-height: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .taglin-1 {
+      color: #e7dcad;
+      font-weight: 400;
+    }
+
+    .custom-search {
+      .form-control {
+        @include border-radius (4px);
+        border: 0 none;
+      }
+    }
+  }
+
+  img {
+    // opacity: .4;
+  }
+}

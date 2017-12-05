@@ -1,0 +1,19 @@
+
+.error {
+  .form-control {
+    border-color: $error;
+    color: $error;
+  }
+
+  .mgs {
+    font-size: 85%;
+    padding-top: 3px;
+    color: $error;
+    display: block;
+    padding-bottom: 0;
+  }
+}
+
+.mgs {
+  display: none;
+}

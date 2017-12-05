@@ -15,7 +15,9 @@ nav {
   list-style-type: none;
   margin: 0;
   padding: 15px 0 0;
-  clear: left; }
+  clear: left; 
+}
+
   .sb-menu:last-child {
     border-bottom: 0 none; }
   .sb-menu li {

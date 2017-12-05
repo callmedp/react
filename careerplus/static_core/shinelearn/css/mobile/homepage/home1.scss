@@ -1,0 +1,362 @@
+@import '../lib/variables';
+@import '../lib/mixin';
+
+/* Share Button Start From Here */
+@import '../components/share';
+
+/* Tabbing Start From Here */
+@import '../components/tabbing';
+
+/* Tabbing Start From Here */
+@import '../components/form-items';
+
+/* Color Start From Here */
+@import '../components/course-list';
+
+/* Rating Start From Here */
+@import '../components/rating';
+
+/* call-us Start From Here */
+@import '../components/call-us';
+
+/* home-banner Start From Here */
+@import '../components/home-banner';
+
+/* testimonials Start From Here */
+@import '../components/testimonials';
+
+.input-group .form-control, .input-group-addon, .input-group-btn {
+  display: table-cell;
+}
+
+.input-group-addon, .input-group-btn {
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 1%;
+}
+
+/* Tabbing Start From Here */
+.tab-search {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  width: 90%;
+  margin: 0 auto;
+
+  .tabs {
+    text-align: center;
+    
+    li {
+      display: inline-block;
+      a {
+        padding: 7px 5px;
+        margin: 0 10px;
+        display: block;
+        font-size: 100%;
+        color: $txt-white;
+        font-weight: 400;
+      }
+    }
+    .current {
+      color: $txt-white;
+      border-bottom: 2px solid #ffca4f;
+    }
+  }
+
+  .tab-content {
+    display: none;
+    padding: 15px;
+    
+    .box-panel {
+      margin-bottom: 15px;
+      .media {
+        border-bottom: 0 none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+    .custom-search {
+      position: relative;
+      .form-control {
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        border: 0 none;
+        width: 88%;
+      }
+    }
+    .custom-advnaced-search {
+      position: relative;
+
+      .form-control {
+      	@include border-radius (4px);
+        border: 0 none;
+        width: 77%;
+        display: inline-block;
+        &.bdr1 {
+          width: 100%;
+        }
+        &.bdr2 {
+        	@include border-radius (0, 0, 0, 0);
+        }
+      }
+    }
+    &.current {
+      display: inherit;
+    }
+  }
+  .search-icon-tab {
+  	@include icon-inblock (40px, 40px, 0 -333px);
+  	@include border-radius (0, 4px, 4px, 0);
+    cursor: pointer;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #ffcf00;
+  }
+}
+/* Tabbing Start From Here */
+
+
+/* Blog landing page */
+.logged-in {
+	li {
+		.media {
+			background-color: $bg-white;
+		}
+
+		.media-body {
+			text-align: left;
+			padding: 10px 15px 0px 0;
+		}
+	}
+
+	.slick-initialized .slick-slide {
+	    width: 300px;
+	    margin-right: 15px;
+
+	    @media (max-width:320px) { 
+			width: 280px;
+		}
+
+	}
+}
+
+.popular-courses {
+	li {
+		.media {
+			background-color: $bg-white;
+			box-shadow: $box-shadow;
+		}
+
+		.media-body {
+			text-align: left;
+			padding: 10px 15px 0px 0;
+		}
+	}
+
+	.slick-initialized .slick-slide {
+	    width: 300px;
+	    margin-right: 15px;
+
+	    @media (max-width:320px) { 
+			width: 280px;
+		}
+	}
+}
+
+.serach-wrap {
+	background-color: #ddd;
+	padding: 15px;
+	position: relative;
+
+	.form-control {
+		padding-right: 70px;
+		position: relative;
+	}
+
+	button {
+		position: absolute;
+		right: 20px;
+		color: $txt-blue;
+		top: 25px;
+		font-weight: 600;
+		border: 0 none;
+		background-color: transparent;
+	}
+}
+
+.bottom-0 {
+	.log-out {
+		display: none;
+	}
+
+	.logged-in {
+		display: block !important;
+	}
+}
+
+.trending-course {
+	background-color: #fff;
+	padding: 30px 15px;
+
+	li {
+		width: 135px;
+		display: block;
+		box-shadow: $box-shadow;
+
+		.img-box {
+			@include square(135px, table-cell);
+			vertical-align: middle;
+		}
+		
+		.title {
+			text-align: left;
+			background-color: $bg-white;
+			padding: 5px 10px;
+			display: block;
+		}
+
+		img {
+			display: inline-block;
+		}
+	}
+
+	.slick-initialized .slick-slide {
+	    width: 135px;
+	    margin-right: 15px;
+	 }
+
+	.slick-list {
+    	padding-bottom: 10px !important;
+    }
+}
+
+.white-bg {
+	background-color: $bg-white;
+}
+
+.course-new {
+	background-color: #f3f8fa;
+	padding: 30px 15px;
+	overflow: hidden;
+
+	.media {
+		display: table;
+		width: 47%;
+		display: inline-block;
+		box-shadow: $box-shadow;
+		background: $bg-white;
+		margin: 0 1% 20px 1%;
+		vertical-align: bottom;
+
+		.media-body {
+			vertical-align: middle;
+			text-align: left;
+		}
+
+		.title {
+			background-color: $bg-white;
+			padding: 0 0 0 10px;
+			display: inline-block;
+			vertical-align: bottom;
+			text-align: left;
+		}
+
+		.img-box {
+			@include square(50px, block);
+			vertical-align: middle;
+			text-align: right;	
+			position: relative;
+
+			img {
+				width: 100%;
+				position: relative;
+				bottom: -10px;
+			}			
+		}		
+	}
+}
+
+.white-bg {
+	background-color: $bg-white;
+}
+
+.job-assistance {
+	background-color: $bg-white;
+	padding: 30px 15px;
+	overflow: hidden;
+
+	li {
+		width: 135px;
+		display: block;
+		box-shadow: $box-shadow;
+
+		.img-box {
+			@include size(135px, 120px, block);
+			vertical-align: middle;
+			background: $bg-white;
+			position: relative;
+			overflow: hidden;
+
+			img {
+				position: relative;
+				bottom: -15px;
+			}
+		}
+		
+		.title {
+			text-align: left;
+			background-color: $bg-white;
+			padding: 5px 10px;
+			display: block;
+		}
+
+		img {
+			// width: 75%;
+			display: inline-block;
+		}
+	}
+
+	.slick-initialized .slick-slide {
+	    width: 135px;
+	    margin-right: 15px;
+	 }
+
+	.slick-list {
+    	padding-bottom: 10px !important;
+    }
+}
+
+
+.how-it-works {
+	background-color: $bg-white;
+	padding: 30px 15px;
+	overflow: hidden;
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		display: block;
+	    font-size: 0.875em;
+	    margin-top: 30px;
+	    margin-top: 20px;
+		
+		figure {
+			padding: 5px 10px;
+			display: block;
+			margin: 0 auto;
+			width: 72px;
+			height: 74px;
+		}
+	}
+}
+
+
+

@@ -5,9 +5,9 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/homepage/home.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}

@@ -1,0 +1,88 @@
+@import 'lib/variables';
+@import 'lib/mixin';
+
+/* Tabbing Start From Here */
+@import 'components/tabbing';
+
+/* Main CSS Start From Here */
+@import 'components/form-items';
+
+/* Main CSS Start From Here */
+@import 'components/popup';
+
+/* Line form Start From Here */
+@import 'components/line-form';
+
+/* error form Start From Here */
+@import 'components/error-form';
+
+.box-panel {
+  border-bottom: 1px solid $border-grey-c1;
+
+  .current {
+    border-bottom: 2px solid $bg-blue !important;
+  }
+
+  li {
+    width: 50%;
+    margin: 0 -1px;
+
+    a {
+      font-size: 1.1em !important;
+      text-align: center;
+      color: $txt-grey-333;
+    }
+  }
+}
+
+.line_wrap {
+    margin: 5px 0 30px;
+    position: relative;
+    text-align: center;
+
+  span {
+    background-color: $bg-white;
+    color: $txt-grey-666;
+    display: inline-block;
+    font-size: 1em;
+    padding: 5px 10px;
+    position: relative;
+    top: 13px;
+  }
+
+  .line {
+    border-bottom: 2px solid $border-grey-c1;
+  }
+}
+
+.social-login {
+  a {
+    @include size (55px, 40px, inline-block);
+    border-radius: $global-radius;
+    border-width: 1px;
+    border-style: solid;
+    position: relative;
+    margin: 0 7px;
+
+    sup {
+      
+    }
+  }
+
+  .fb {
+    border-color: #7c90b9;
+  }
+
+  .tw {
+    border-color: #7cc6e9;
+  }
+
+  .gp {
+    border-color: #e08478;
+  }
+}
+
+.any-query {
+  background-color: #fbfbfb;
+  padding: 30px;
+}

@@ -1,9 +1,13 @@
-/* current element like this */
-[class^="icon-"] {
-  background-image: url("../../../images/mobile/common/sprites.svg"); }
+@import '../lib/variables';
+@import '../lib/mixin';
 
-.fill-star,
-.unfill-star,
+
+[class^="icon-"] {
+	background-image: url($image-path);
+}
+
+.fill-star, 
+.unfill-star, 
 .countries sup,
 .smk_accordion .accordion_in .acc_head .acc_icon_expand,
 .call-us .ui-block-a span,
@@ -14,5 +18,5 @@
 .level-control:after,
 .payment-summary .list-item li .item:before,
 .search-icon-tab, .icon-loc, .mail-iconStrock {
-  background-image: url("../../../images/mobile/common/sprites.svg"); }
-
+	background-image: url($image-path);
+}

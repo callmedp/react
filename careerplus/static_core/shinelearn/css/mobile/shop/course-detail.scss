@@ -1,0 +1,213 @@
+@import 'lib/variables';
+@import 'lib/mixin';
+
+
+/* Rating */
+@import 'components/rating';
+
+/* Main CSS Start From Here */
+@import 'components/form-items';
+
+/* Right Nav Bar CSS */
+@import 'components/right-navbar';
+
+/* Call us CSS */
+@import 'components/call-us';
+
+
+.detail-wrap {
+	position: relative;
+
+	.provided-by {
+		@extend %display-cell;
+		@include border-radius (5px 5px 0 0);
+		background-color: $bg-white;
+		position: relative;
+		height: 55px;
+		bottom: -15px;
+		padding: 5px 8px;
+		width: 65%;
+
+		a {
+			line-height: 14px !important;
+			display: block;
+			font-weight: 700;
+		}
+
+		p {
+			font-size: 11px;
+		}
+
+		figure {
+			width: 45px;
+			height: 22px;
+			vertical-align: middle;
+			padding-right: 3px;
+
+			span {
+				@include size (45px, 22px, block);
+				
+
+				img {
+					opacity: 1;
+				    position: relative;
+				    width: 100%;
+				    height: auto;
+				}
+			}
+		}
+
+		&:after {
+			@extend %cruve;
+			@include size (8px, 5px, block);
+			background-image: url("../images/cruve-1.png");
+			left: -5px;
+		}
+
+		&:before {
+			@extend %cruve;
+			@include size (8px, 5px, block);
+			background-image: url("../images/cruve-2.png");
+			right: -5px;
+		}
+	}
+
+	.select-provider {
+		@extend %display-cell;
+		padding-left: 15px;
+		position: relative;
+		width: 35%;
+
+		.form-control {
+			@include border-radius (0);
+			background-image: url($dropdown-black);
+			background-color: #fff;
+			position: absolute;
+		    right: 0;
+		    width: 90%;
+		    top: 16px;
+		    font-size: 12px;
+		    color: #333;
+		    background-position: right 0;
+		    background-repeat: no-repeat;
+		    line-height: 25px;
+		    overflow: hidden;
+		    
+		    @media (max-width:320px) { 
+				padding-right: 15px
+			}
+
+		}
+	}
+}
+
+.jobs-icon-wrap {
+	li {
+		display: inline-block;
+		margin: 0 14px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+
+		@media (max-width:320px) { 
+			margin: 0 8px;
+		}
+	}
+}
+
+.grey-bg {
+	background-color: $bg-grey-f6;
+}
+
+
+.enrol-now {
+	border-bottom: 1px solid $border-grey-c1;
+	border-top: 1px solid $border-grey-c1;
+
+	ul {
+		margin: 0 -5px;
+		li {
+			display: inline-block;
+			vertical-align: middle;
+			width: 37.33%;
+			margin: 0 -2px;
+			padding: 0 5px;
+
+			&:first-child {
+				width: 25.77%;
+			}
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
+}
+
+.countries {
+	border: 1px solid $border-grey-c1;
+	padding: 10px;
+	position: relative;
+
+	span + span:before  {
+		content: ", "
+	}
+
+	sup {
+		@include icon-inblock (7px, 13px, -28px -197px);
+		position: absolute;
+		right: 10px;
+		top: 50%;
+		margin-top: -7px;
+	}
+}
+
+#sidebar-countries {
+	li {
+		padding-bottom: 0;
+		margin-bottom: 0;
+
+		label {
+		padding: 15px 0;
+		}
+	}
+}
+
+
+.define-flow {
+
+	li {
+		text-align: center;
+		margin-bottom: 20px;
+
+		small {
+			@include icon-inblock (16px, 22px, -404px 0);
+			background-image: url($image-path);
+			text-indent: -99999px;
+		}
+
+		span {
+			@include border-radius (50%);
+			@include box (75px, 75px, inline-block);
+			background-color: $bg-blue;
+			position: relative;
+		}
+
+	}
+}
+
+.combos {
+	li {
+		margin-bottom: 10px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		a {
+			display: inline-block;
+			background-color: $bg-white;
+			box-shadow: $box-shadow;
+			padding: 12px 15px;
+		}
+	}
+}

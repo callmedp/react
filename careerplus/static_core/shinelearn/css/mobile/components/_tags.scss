@@ -1,0 +1,22 @@
+.search-tagging {
+  @include border-radius (4px);
+  background-color: rgba(0,46,102,.6);
+  padding: 0;
+  position: relative;
+  z-index: 1;
+
+  span {
+    @include border-radius (4px);
+    background-color: $bg-grey-eb;
+    display: inline-block;
+    font-size: 0.875em;
+    padding: 3px 10px;
+  }
+
+  .form-control {
+    background-color: transparent;
+    border: 0 none;
+    color: #fff;
+    font-size: 12px;
+  }
+}
