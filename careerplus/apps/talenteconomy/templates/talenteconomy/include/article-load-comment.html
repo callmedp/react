@@ -7,12 +7,12 @@
     <div class="media-left">
         <figure>
             <a href="#">
-            <img class="media-object" src="images/talent-author-pic1.jpg" alt="shine">
+            <img class="media-object" src="{% static 'shinelearn/images/blog/user-pic.jpg' %}" alt="shine">
           </a>
         </figure>
     </div>
     <figcaption class="media-body">
-        <span class="author-name">Krishna Singh</span>
+        <span class="author-name">{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</span>
         <span class="time">{% get_humanize_date comment.created_on %}</span>
         <p>{{comment.message}}</p>
         <!-- <a href="#">Reply</a> -->
