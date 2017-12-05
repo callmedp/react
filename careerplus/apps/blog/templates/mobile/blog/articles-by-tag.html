@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% load thumbnail %}
 
 {% block django_meta %}
@@ -14,8 +14,10 @@
 
 {% block css_section %}
     {{ block.super }}
-    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    {% compress css%}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
+    {%endcompress%}
     
 {% endblock css_section %}
 
@@ -81,7 +83,7 @@
           <h3 class="media-heading">{{obj.display_name}}</h3>
 
           <div class="blog-author fs-11">
-            <span class="editor">{% if obj.created_by and  obj.created_by.name %}{{obj.created_by.name}}, {% endif %}{{obj.publish_date.date}}</span>
+            <span class="editor block">{% if obj.created_by and  obj.created_by.name %}{{obj.created_by.name}}, {% endif %}{{obj.publish_date.date}}</span>
             <span class="view-forward">
               <figure class="icon-forward"></figure> {{obj.comment_moderated}} 
               <figure class="icon-view icon-grey-view ml-10"></figure> {{obj.no_views}}
@@ -126,7 +128,7 @@
                 <h3 class="media-heading">{{obj.display_name}}</h3>
 
                 <div class="blog-author fs-11">
-                  <span class="editor">{% if obj.created_by and  obj.created_by.name %}{{obj.created_by.name}}, {% endif %}{{obj.publish_date.date}}</span>
+                  <span class="editor block">{% if obj.created_by and  obj.created_by.name %}{{obj.created_by.name}}, {% endif %}{{obj.publish_date.date}}</span>
                   <span class="view-forward">
                     <figure class="icon-forward"></figure> {{obj.comment_moderated}}
                     <figure class="icon-view icon-grey-view ml-10"></figure> {{obj.no_views}}

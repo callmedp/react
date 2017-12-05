@@ -1,20 +1,20 @@
-@import 'lib/variables';
-@import 'lib/mixin';
+@import '../lib/variables';
+@import '../lib/mixin';
 
 /* Tabbing Start From Here */
-@import 'components/tabbing';
+@import '../components/tabbing';
 
 /* Main CSS Start From Here */
-@import 'components/form-items';
+@import '../components/form-items';
 
 /* Main CSS Start From Here */
-@import 'components/popup';
+@import '../components/popup';
 
 /* Line form Start From Here */
-@import 'components/line-form';
+@import '../components/line-form';
 
 /* error form Start From Here */
-@import 'components/error-form';
+@import '../components/error-form';
 
 .box-panel {
   border-bottom: 1px solid $border-grey-c1;
