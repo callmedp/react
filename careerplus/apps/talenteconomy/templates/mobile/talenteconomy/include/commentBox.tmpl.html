@@ -2,10 +2,19 @@
     <ul class="mt-20 article-comment" id="page_comment{{article.id}}">
         {{ comment_list|safe|default:'' }}
     </ul>
-    <a href="#" class="btn-slg btn-grey block text-center">More comments</a>
+    
     <p class="text-center mt-20 mb-20 text-upper bold"><a href="javascript:void(0);" class="" id="js_commentBtn"><span class="icon-leaveComment"></span>Leave a comment</a></p>
-    <div class="mt-20 mb-20" id="js_comments">
-        <textarea placeholder="Write comments" class="form-control"></textarea>
-        <button class="btn-sm btn-blue btn-round mt-10">Submit</button>
-    </div>
+    <form class="mt-20 mb-20" class="js_comments"  id="blog-comment-form{{article.id}}">
+    	{% csrf_token %}
+
+		<textarea placeholder="Write comments" class="form-control" id="id_comment{{article.id}}" name="message"></textarea>
+	    <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
+	    <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
+
+         {% if request.session.candidate_id %}
+        	<button class="btn-sm btn-blue btn-round mt-10" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Submit</button>
+        {% else %}
+        	<button class="btn-sm btn-blue btn-round mt-10 js_redirect">Submit</button>
+        {% endif %}
+    </form>
 </div>

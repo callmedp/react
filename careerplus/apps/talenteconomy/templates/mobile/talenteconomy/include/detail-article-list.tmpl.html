@@ -39,16 +39,17 @@
 </div>
 {% endif %}
 {% endwith %}
+</article>
 
 {% if main_article.allow_comment %}
-<p class="take-me pb-0 mt-10">
+<p class="take-me pb-0 mt-10" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
     <span class="line"><sup></sup></span>
     <span class="icon-chat"></span>{{main_article.comment_moderated}} comments
 </p>
-
-
+<div id="comment-box{{main_article.id}}" >
+            
+</div>
 {% endif %}
 
-</article>
 <!-- end of article -->
 </div>
