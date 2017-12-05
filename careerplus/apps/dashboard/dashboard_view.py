@@ -680,7 +680,7 @@ class DownloadQuestionnaireView(View):
         except IOError:
             raise Exception("Resume not found.")
 
-        filename = 'reseme_questionnaire' + '.docx'
+        filename = 'resume_questionnaire' + '.docx'
 
         response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
         response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
