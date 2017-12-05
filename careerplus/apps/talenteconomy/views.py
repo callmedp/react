@@ -47,7 +47,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         authors = Author.objects.filter(visibility=2,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
 
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
-        top_cats = ' '.join(top_3_cats)
+        top_cats = '+'.join(top_3_cats)
         popular_courses = self.get_product(top_cats)
 
         context.update({
@@ -288,7 +288,7 @@ class AuthorListingView(TemplateView):
 
         top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat')[:9]
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
-        top_cats = ' '.join(top_3_cats)
+        top_cats = '+'.join(top_3_cats)
         popular_courses = BlogMixin().get_product(top_cats)
 
         context.update({

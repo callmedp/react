@@ -110,7 +110,7 @@ ROUNDONE_PRODUCT_ID = 2129
 SHINECPCRM_DICT = {
     'base_url': 'http://shinecpcrm.shine.com',
     'token': '73f53cf358b94156feb49d034081ed507334e02a',
-    'psuedo_lead_url': '/api/pseudo-leads/',
+    'create_lead_url': '/api/v1/create-lead/',
     'timeout': 8,
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
