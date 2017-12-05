@@ -13,14 +13,14 @@ $(function() {
                 	required: true,
                     maxlength: 80,
                 },
-                mobile:{
+                number:{
                     required: true,
                     number: true,
                     indiaMobile: true,
                     minlength: 4,
                     maxlength: 15
                 },
-                message:{
+                msg:{
                 	required: true,
                 	maxlength: 500,
                 },
@@ -30,14 +30,16 @@ $(function() {
             	required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters.",
             },
-            mobile:{
+            number:{
                 required: "Mobile Number is Mandatory",
                 number: "Enter only number",
                 indiaMobile: "Please enter 10 digits only",
                 maxlength: "Please enter less than 16 digits",
                 minlength: "Please enter atleast 4 digits"
             },
-            
+            msg:{
+                required: "Message is Mandatory",
+            }
         },
         highlight:function(element, errorClass) {
             $(element).parents('.form-group').addClass('error');
@@ -57,7 +59,7 @@ $(function() {
 		if ( $("#queryform").valid()) {
 			var formData = $("#queryform").serialize();
 			$.ajax({
-	            url : "/shop/crm/lead/",
+	            url : "/lead/lead-management/",
 	            type: "POST",
 	            data : formData,
 	            success: function(data, textStatus, jqXHR)

@@ -5,13 +5,13 @@ $(function() {
                 	required: true,
                     maxlength: 80,
                 },
-                mobile_no:{
+                number:{
                     required: true,
                     number: true,
                     minlength: 5,
                     maxlength: 15,                        
                 },
-                message_box:{
+                msg:{
                 	required: true,
                 	maxlength: 500,
                 },
@@ -21,7 +21,7 @@ $(function() {
             	required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters.",
             },
-            mobile_no:{
+            number:{
                 required:"Mobile Number is Mandatory",
                 number:"Enter only number",
                 maxlength: "Please enter below 15 digits",
@@ -45,7 +45,7 @@ $(function() {
 		if ( $("#queryform").valid()) {
 			var formData = $("#queryform").serialize();
 			$.ajax({
-	            url : "/shop/crm/lead/",
+	            url : "/lead/lead-management/",
 	            type: "POST",
 	            data : formData,
 	            success: function(data, textStatus, jqXHR)

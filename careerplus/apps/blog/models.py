@@ -252,7 +252,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         default=1,
         help_text=_('sites where blog published.'))
     summary = models.TextField(
-        _('Summary Article'),
+        _('Summarys Article'),
         blank=True, default='')
     author = models.ForeignKey(
         Author, null=True, blank=True,

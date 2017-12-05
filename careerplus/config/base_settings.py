@@ -112,6 +112,7 @@ MIDDLEWARE = [
     'core.middleware.UpgradedSetFlavourMiddleware',
     'core.middleware.LearningShineMiddleware',
     'core.middleware.LoginMiddleware',
+    'core.middleware.TrackingMiddleware'
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'

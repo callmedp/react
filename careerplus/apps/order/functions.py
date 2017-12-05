@@ -145,7 +145,7 @@ def send_email(to_emails, mail_type, email_dict, status=None, oi=None):
 
 def send_email_from_base(subject=None, body=None, to=[], headers=None, oi=None, status=None):
     try:
-        SendMail().base_send_mail(subject, body, to=[], headers=None)
+        SendMail().base_send_mail(subject, body, to=[], headers=None, bcc=[settings.DEFAULT_FROM_EMAIL])
         if oi:
             from order.models import OrderItem
             obj = OrderItem.objects.get(pk=oi)
