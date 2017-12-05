@@ -29,7 +29,7 @@
         <div class="social-login">
             <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"></a>
             
-            <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"></a>
+            <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"></a>
 
             <a class="gplus" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a>
 
@@ -83,7 +83,7 @@
     {% if main_article.allow_comment %}
     <div class="comments-box mb-40 mt-40">
         <!-- comments box heading-->
-        <div class="comments-box-heading">
+        <div class="comments-box-heading is-clickable">
             <span class="comments-icon mr-10"></span> <strong><label for="total_comment{{main_article.id}}">{{main_article.comment_moderated}} comments</label></strong>
             <!-- <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a> -->
             <input type="radio" class="hide" onchange="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
