@@ -94,6 +94,10 @@ datalist {
 	padding-right: 0;
 	margin-left: 19px;
 	min-height: 54px;
+
+	@media (max-width: 1190px) {
+		margin-left: 17px;
+	}
 }
 
 .dropdown-menu {
@@ -1256,7 +1260,7 @@ footer {
 
 	&:before {
 		content: '';
-		background: url(../images/sprite.png) no-repeat -448px -112px;
+		background: url(#{$imagePath}images/sprite.png) no-repeat -448px -112px;
 		width: 18px;
 		height: 17px;
 		display: inline-block;
@@ -1266,7 +1270,7 @@ footer {
 
 	&:focus:before{
 		content: '';
-		background: url(../images/sprite.png) no-repeat -467px -112px;
+		background: url(#{$imagePath}images/sprite.png) no-repeat -467px -112px;
 		width: 18px;
 		height: 17px;
 		display: inline-block;
@@ -2017,7 +2021,7 @@ footer {
 }
 
 .login-page-bg {
-	background: url(../images/login-bg.jpg) no-repeat 0 0; 
+	background: url(#{$imagePath}images/login-bg.jpg) no-repeat 0 0; 
 	width: 100%;
 	height: 357px;
 	background-size: cover;
@@ -2303,14 +2307,14 @@ footer {
 }
 
 .bg-404 {
-	background: url(../images/404-bg.jpg) no-repeat 0 0; 
+	background: url(#{$imagePath}images/404-bg.jpg) no-repeat 0 0; 
 	width: 100%;
 	height: auto;
 	background-size: cover;	
 }
 
 .bg-500 {
-	background: url(../images/500-bg.jpg) no-repeat 0 0; 
+	background: url(#{$imagePath}images/500-bg.jpg) no-repeat 0 0; 
 	width: 100%;
 	height: auto;
 	background-size: cover;	
