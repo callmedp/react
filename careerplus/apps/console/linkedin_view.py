@@ -112,10 +112,14 @@ class LinkedinQueueView(ListView, PaginationMixin):
                         mail_type = 'ALLOCATED_TO_WRITER'
                         data = {}
                         data.update({
-                            "username": obj.order.first_name if obj.order.first_name else 'User',
+                            "username": obj.order.first_name,
                             "writer_name": writer.name,
                             "writer_email": writer.email,
                             "subject": "Your service has been initiated",
+                            "type_flow": obj.product.type_flow,
+                            'delivery_service': obj.delivery_service,
+                            'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
+                            'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                         })
 
                         if 101 not in email_sets:
