@@ -58,6 +58,7 @@ function commentSubmit(article_id, login_status){
 
         if (login_status == 0){
             $('#login-model').modal('show');
+            window.event.preventDefault();
         }
         else if (login_status == 1){
             $('#id_comment' + article_id).attr({
