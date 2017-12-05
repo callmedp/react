@@ -117,18 +117,17 @@
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
         {% compress js %}
-        <script src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-        <script src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
-        <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-        <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
-        <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         {% endcompress %}
         {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''
