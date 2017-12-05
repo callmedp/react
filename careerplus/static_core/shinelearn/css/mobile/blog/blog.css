@@ -816,3 +816,22 @@ blockquote {
   -webkit-box-shadow: none;
      -moz-box-shadow: none;
           box-shadow: none; }
+.contributors.slick-slider .slick-track {
+  display: -webkit-box; 
+  display: -webkit-flex; 
+  display: -moz-box; 
+  display: -ms-flexbox; 
+  display: flex; 
+}
+
+.contributors.slick-slider li {
+  -webkit-box-pack: justify; 
+  -webkit-justify-content: space-between; 
+     -moz-box-pack: justify; 
+      -ms-flex-pack: justify; 
+          justify-content: space-between; 
+  -webkit-flex-wrap: wrap; 
+      -ms-flex-wrap: wrap; 
+          flex-wrap: wrap; 
+  height: auto; 
+}
