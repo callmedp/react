@@ -162,6 +162,11 @@ class CartMixin(object):
                     "checkout_type": add_type,
                 })
 
+                if add_type == "cart":
+                    self.request.session.update({
+                        "cart_count_pk": cart_obj.pk,
+                    })
+
             return flag
 
         except Exception as e:
@@ -220,6 +225,7 @@ class CartMixin(object):
                 request.session.update({
                     "cart_pk": cart_obj.pk,
                     "checkout_type": 'cart',
+                    "cart_count_pk": cart_obj.pk,
                 })
 
             elif request.session.get('cart_pk'):
@@ -608,8 +614,9 @@ class CartMixin(object):
         try:
             if not request:
                 request = self.request
-            self.getCartObject(request=request)
-            cart_pk = request.session.get('cart_pk')
+            if not request.session.get('cart_count_pk'):
+                self.getCartObject(request=request)
+            cart_pk = request.session.get('cart_count_pk')
 
             if cart_pk:
 
