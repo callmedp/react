@@ -170,8 +170,9 @@
   height: 37px;
   border-radius: 100%;
   display: inline-block;
-  vertical-align: sub;
+  vertical-align: middle;
   margin: 0 10px 0 20px;
+  overflow: hidden;
 }
 .author figure img {
   max-width: 100%;
@@ -1197,7 +1198,7 @@
   margin: 25px 10px 10px 10px;
   line-height: 20px;
   font-size: 18px;
-  height: 40px;
+  height: 41px;
   overflow: hidden;
   color: #333;
 }
