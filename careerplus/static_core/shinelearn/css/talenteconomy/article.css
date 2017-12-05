@@ -246,7 +246,7 @@
   margin: 15px 20px 10px 20px;
   line-height: 20px;
   font-size: 18px;
-  height: 40px;
+  height: 41px;
   overflow: hidden;
   color: #333;
 }
@@ -320,7 +320,7 @@
   margin-top: 15px;
   border: 1px solid #e1e1e1;
   width: 48%;
-  margin-left: 2%;
+  margin-left: 4%;
   vertical-align: top;
   min-height: 120px !important;
   overflow: hidden;
