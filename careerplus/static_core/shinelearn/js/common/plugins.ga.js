@@ -102,7 +102,8 @@ GA.prototype.SendEvent = function() {
     //return fn.apply(this, vars);
     switch(fn) {
         case 'QueryForm' :  /* Fire event before making ajax from Course Page, Service Page (Have a query?) form */
-        case 'CallbackRequested' : /* when user click on call */        
+        case 'CallbackRequested' : /* when user click on call */   
+        case 'talenteconomy' : /* talenteconomy navigation click (header->desktop, menu->mobile) */    
         case 'InboxJobs' :/*When user click on get these jobs jsrp*/
 
             
