@@ -84,7 +84,7 @@
     <div class="comments-box mb-40 mt-40">
         <!-- comments box heading-->
         <div class="comments-box-heading is-clickable">
-            <span class="comments-icon mr-10"></span> <strong><label for="total_comment{{main_article.id}}">{{main_article.comment_moderated}} comments</label></strong>
+            <span class="comments-icon mr-10"></span> <strong><label for="total_comment{{main_article.id}}">{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Click to Comment {% endif %}</label></strong>
             <!-- <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a> -->
             <input type="radio" class="hide" onchange="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
         </div>
