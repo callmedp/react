@@ -85,8 +85,14 @@ datalist {
   cursor: pointer;
   padding-left: 0;
   padding-right: 0;
-  margin-left: 19px;
+  margin-left: 17px;
   min-height: 54px;
+}
+
+@media (min-width: 1191px) {
+  .navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav > li > a:hover {
+    margin-left: 19px;
+  }
 }
 
 .dropdown-menu > li > a {
