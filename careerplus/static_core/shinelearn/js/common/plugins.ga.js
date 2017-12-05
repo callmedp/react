@@ -13,26 +13,8 @@ function GA(){
         switchcase = options.switchcase || false,
         metrics = options.metrics || {},
         name = options.name || '';
-        /*if(switchcase){
-
-            if(path.indexOf('job-search/')>-1){
-                action = 'JSRP';
-            }else if(path.indexOf('/jobs/')>-1){
-                action = 'JD';
-            }else if(path.indexOf('/myshine/login')>-1 || path.indexOf('/myshine/home')>-1){
-                action = 'HOME';
-            }else if(path.indexOf('/jobs/apply/')>-1 || path.indexOf('/ajax/bulk/save/')>-1){
-                action = 'JAP';
-            }else{
-                action = 'Others';
-            }
-
-        }*/
 
         try{
-
-            /*ga('send',type,category,action,label,value,noninteraction,metrics);*/
-            //ga('send',type,category,action,label,noninteraction);
             gtag('event', name, {
               'send_to': ['UA-3537905-41'],
               'event_category': category,
@@ -98,6 +80,7 @@ GA.prototype.SendEvent = function() {
     if(typeof arguments[5] != "undefined") {
         noninteraction = arguments[5];
     }
+    name = fn;
     //vars = Array.prototype.slice.call(arguments, 1);
     //return fn.apply(this, vars);
     switch(fn) {
@@ -105,6 +88,7 @@ GA.prototype.SendEvent = function() {
         case 'CallbackRequested' : /* when user click on call */   
         case 'talenteconomy' : /* talenteconomy navigation click (header->desktop, menu->mobile) */    
         case 'InboxJobs' :/*When user click on get these jobs jsrp*/
+        case 'itm' : /* when ever url contains itm parameters */
 
             
             that.fireGaEvent({
@@ -113,7 +97,7 @@ GA.prototype.SendEvent = function() {
                 'label': arguments[3],
                 'value': value,
                 'noninteraction': noninteraction,
-                'name': 'leadform' 
+                'name': fn 
             });
             break;
         

@@ -112,6 +112,9 @@
             $('.dropdown-toggle', this).trigger('click');
           });
     </script>
+    {% if request.GET.itm_campaign or request.GET.itm_campaign or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+       <script type="text/javascript"> MyGA.SendEvent('itm','Popular Course','{{request.GET.itm_content}}','click');</script>
+    {%endif%}
 {% endblock js_section %}
 
 {% block johukum %}
