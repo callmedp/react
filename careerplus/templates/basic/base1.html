@@ -39,8 +39,41 @@
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'UA-3537905-41');
+              {% if request.GET.itm_campaign or request.GET.itm_campaign or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+                
+                gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
+              {% else%}
+                gtag('config', 'UA-3537905-41');
+              {%endif%}
+              
               gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+
+              
+              {%comment%}
+                gtag('config', 'UA-3537905-41', {
+                  'custom_map': {
+                    'dimension1': 'itm_source',
+                    'dimension2': 'itm_medium',
+                    'dimension3': 'itm_campaign',
+                    'dimension4': 'itm_content'
+                  }
+                });
+                {% if request.GET.itm_campaign %}
+                  gtag('event', 'src', {'itm_source': '{{request.GET.itm_source}}'});
+                {% endif %}
+
+                {% if request.GET.itm_medium %}
+                  gtag('event', 'med', {'itm_medium': '{{request.GET.itm_medium}}'});
+                {% endif %}
+
+                {% if request.GET.itm_campaign %}
+                  gtag('event', 'cmp', {'itm_campaign': '{{request.GET.itm_campaign}}'});
+                {% endif %}
+
+                {% if request.GET.itm_content %}
+                  gtag('event', 'con', {'itm_content': '{{request.GET.itm_content}}'});
+                {% endif %}
+              {%endcomment%}
             </script>
         {% endblock GA %}
     {% block banner_ads %}
@@ -58,9 +91,10 @@
         });
         </script>
     {% endblock banner_ads %}
-   </head>
-  {{ JS_SETTINGS|safe }}
+   {{ JS_SETTINGS|safe }}
 
+   </head>
+  
   {% endblock head %}
   
 <body>

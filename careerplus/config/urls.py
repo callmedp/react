@@ -36,7 +36,12 @@ from blog import views as blog_view
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
-from seo.sitemap import CourseSitemap, SkillSitemap, CategorySitemap, ServiceSitemap, ArticleSitemap, ArticleCategorySitemap, CMSSitemap
+from seo.sitemap import (
+    CourseSitemap, SkillSitemap,
+    CategorySitemap, ServiceSitemap,
+    ArticleSitemap, ArticleCategorySitemap,
+    CMSSitemap, TalentEconomySitemap, TalentCategorySitemap,
+    TalentAuthorSitemap)
 
 handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
@@ -60,6 +65,12 @@ cms_sitemap = {
    'service': CMSSitemap,
 }
 
+talent_sitemap = {
+   'talenteconomy': TalentEconomySitemap,
+   'category': TalentCategorySitemap,
+   'author': TalentAuthorSitemap
+}
+
 
 urlpatterns = []
 
@@ -78,6 +89,9 @@ urlpatterns += [
         'template_name': 'sitemap.xml'}, name='sitemap'),
     url(r'^cms_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
         'sitemaps': cms_sitemap,
+        'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^te_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+        'sitemaps': talent_sitemap,
         'template_name': 'sitemap.xml'}, name='sitemap'),
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
@@ -104,6 +118,8 @@ urlpatterns += [
     url(r'^user/', include('users.urls', namespace='users')),
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^article/', include('blog.urls', namespace='blog')),
+    url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
+    
     url(r'^cart/', include('cart.urls', namespace='cart')),
     url(r'^order/', include('order.urls', namespace='order')),
     url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),

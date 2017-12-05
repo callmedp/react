@@ -1,0 +1,128 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail compress %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   {{category.name}} - Career & Certification Guidance @ Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <!-- header menu Icon Starts here -->
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right">
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div><!-- / Right side Icon ends here -->
+    </div>
+</header>
+{% endblock header %}
+
+{% block container %}
+<div class="body-wrapper">
+<div class="article-category talent-gr">
+    <div class="content">
+      <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        {% for bradcbs in breadcrumbs %}
+          {% if bradcbs.url %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+          {% else %}
+            <li class="active">{{bradcbs.name}}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+      <h1>{{category.name}} - Career Guidance</h1>
+
+    </div>
+    <img src="{% static 'shinelearn/images/mobile/common/article-category.jpg' %}" class="img-responsive">
+</div><!-- Trending articles Ends here -->
+
+<!-- Starts of talent-economy list -->
+<section class="content-box pt-0 pb-0">
+  <!-- box panel starts here -->
+  <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
+    <h2 class="semi-head">All articles</h2>      
+    {% for artList in recent_articles %}
+      <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+        <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
+          <figure class="media-left">
+            {% thumbnail artList.image "96x73" crop="center" as im %}
+            <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+            {% endthumbnail %}
+          </figure>
+          <div class="media-body rel">
+            <h3 class="media-heading" itemprop="name">{{artList.heading}}</h3>
+
+            <div class="blog-author fs-11">
+              <span class="editor" itemprop="author">{{artList.author.name}}</span>
+              <span class="view-forward pull-right">
+                  <figure class="icon-forward"></figure> {{artList.no_shares}}
+                  <figure class="icon-view icon-grey-view ml-10"></figure> {{artList.no_views}}
+              </span>
+            </div>
+          </div>
+        </a>
+          <meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
+          <meta itemprop="position" content="{{forloop.counter}}">
+          <meta itemprop="headline" content="{{artList.heading}}">
+          <meta itemprop="dateModified" content="{{artList.publish_date.date}}">
+          <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
+          
+          <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+            <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+              <meta itemprop="url" content="https://learning.shine.com/media/static/shinelearn/images/logo.png">
+            </div>
+            <meta itemprop="name" content="Shine">
+          </div>
+      </div>
+      {% endfor %}  
+  </div><!-- box panel ends here -->
+
+  
+  {% include './include/authorSlide.tmpl.html' with authors=authors %}
+
+
+  {% if categories %}
+    {% include './include/category.tmpl.html' with categories=categories %}
+  {% endif %}
+
+</section><!-- End of talent-economy list -->
+</div>
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

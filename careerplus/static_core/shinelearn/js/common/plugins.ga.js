@@ -1,5 +1,6 @@
 function GA(){
     var that = this;
+    var trackingId = 'UA-3537905-41';
     that.fireGaEvent = function(options){
         // category,action,label,value,noninteraction,switchcase,metrics
         var path = self.window.location.pathname,
@@ -65,11 +66,15 @@ function GA(){
     };
     
     that.sendVirtualPage = function(event){
-        var event_id = event || 'UA-3537905-41'
+        var event_id = event || trackingId;
         gtag('event', 'page_view',{'send_to': event_id});
-    }
+    };
 
-
+    that.customDimension = function(name, value) {
+        gtag('config', trackingId, {
+          'custom_map': {name: value}
+        });
+    };
 };
 /***Function called for GA Profile***/
 GA.prototype.callFromGaParent = function(){

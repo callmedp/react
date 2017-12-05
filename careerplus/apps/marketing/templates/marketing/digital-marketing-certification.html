@@ -85,7 +85,9 @@
 
                 <textarea class="message_input" placeholder="Message" name="msg" maxlength="600" rows="3"></textarea>
 
-                <input type="hidden" name="prd" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+
+                <input type="hidden" name="prd" value="Digital Marketing Certification">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 

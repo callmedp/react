@@ -168,6 +168,13 @@ urlpatterns += [
     url(r'^blog/comment/(?P<pk>\d+)/change/$',
         blog_view.CommentModerateView.as_view(),
         name='blog-comment-moderate-update'),
+
+    url(r'^blog/author/$', blog_view.AuthorListView.as_view(),
+        name='blog-author-list'),
+    url(r'^blog/author/add/$', blog_view.AuthorAddView.as_view(),
+        name='blog-author-add'),
+    url(r'^blog/author/(?P<pk>\d+)/change/$',
+        blog_view.AuthorUpdateView.as_view(), name='blog-author-update'),
 ]
 
 

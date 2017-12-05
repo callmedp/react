@@ -239,3 +239,30 @@ class AcrossShine(object):
             if inp_list and len(inp_list) > 1 and inp_list[1] == settings.ACROSS_ENCODE_KEY:
                 return inp_list[0]
         return None
+
+
+class CrmApiMixin(object):
+
+    def get_api_headers(self):
+        try:
+            headers = {
+                "Authorization": 'Token ' + settings.SHINECPCRM_DICT.get('token'),
+                "Content-Type": 'application/json',
+                "Accept": 'application/json', }
+            return headers
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return None
+
+    def create_lead_by_api(self, data_dict={}):
+        try:
+            headers = self.get_api_headers()
+            lead_create_api = settings.SHINECPCRM_DICT.get('base_url') + settings.SHINECPCRM_DICT.get('create_lead_url')
+
+            client_data = data_dict
+            resp = requests.post(lead_create_api, data=json.dumps(client_data), headers=headers)
+            if resp.status_code == 201:
+                return True
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        return None

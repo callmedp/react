@@ -1,7 +1,9 @@
+from collections import OrderedDict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
-
+from core.library.haystack.query import SQS
+from django.conf import settings
 
 class BlogMixin(object):
 	def scrollPagination(self, paginated_by=1, page=1, object_list=None):
@@ -14,6 +16,32 @@ class BlogMixin(object):
 		except EmptyPage:
 			page_obj = paginator.page(paginator.num_pages)  # for out range deliver last page
 		return page_obj
+
+	def get_product(self, query=''):
+		if query:
+			product = []
+			slug = settings.COURSE_SLUG[0]
+			try:
+				results = SQS().filter(text=query, pPc=slug).extra({'qt': 'edismax', 'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1'}).only( 'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
+				for prd in results:
+					product.append(OrderedDict({
+						'title': prd.pTt,
+						'url': prd.pURL,
+						'display_name':prd.pHd,
+						'name': prd.pNm,
+						'avg_rating_exact': prd.pARx,
+						'avg_rating':prd.pAR,
+						'num_jobs': prd.pNJ,
+						'image': prd.pImg,
+						'image_alt':prd.pImA,
+						'buy_count':prd.pBC,
+						'class':prd.pPc,
+						'star': prd.pStar
+						}))
+			except:
+				product = []
+			return product	
+		return []
 
 
 class LoadCommentMixin(object):

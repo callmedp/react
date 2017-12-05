@@ -1,0 +1,134 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+{% load thumbnail %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+{% endblock canonical_url %}
+
+
+{% block title %}
+Career & Certification Guidance Top Authors @ Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/article.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+{% block container %}
+<!-- header -->
+<header class="article-category-header">
+  <div class="container pt-30">
+    <!-- breadcrums -->
+    {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+
+    <div class="article-category-heading">
+      <h1>All Contributors</h1>
+    </div>
+  </div>
+</header>
+
+  <!-- main section start -->
+<section class="container mt-40">
+  <!-- page content body start -->
+  <div class="row">
+    <!-- left content start -->
+    <div class="col-md-9 col-sm-12">
+      <div class="row">
+        {% for author in authors %}
+        <div class="col-sm-6 author-listing">
+          <div class="box-panel" >
+            <div class="media">
+              {% if author.image %}
+              <a href="{{request.path}}{{author.slug}}" class="media-left">
+                <figure>
+                  <img src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
+                </figure>
+              </a>
+              {% endif %}
+
+              <figcaption class="media-body">
+                <strong class="author-name">{{author.name}}</strong>
+                <span class="designation">{{author.designation}}</span>
+                <a href="{{request.path}}{{author.slug}}" class="articles-no">{{author.no_of_blog}} articles</a>
+                <p>{{author.about|striptags|safe|truncatechars:140}}</p>
+                <span class="social-login-gr">
+                  {% if author.fb_url %}
+                    <a href="{{author.fb_url}}"><i class="facebook-gr"></i></a>
+                  {% endif %}
+                  {% if author.twitter_url %}
+                    <a href="{{author.twitter_url}}"><i class="twitter-gr"></i></a>
+                  {% endif %}
+                  {% if author.linkedin_url %}
+                    <a href="{{author.linkedin_url}}"><i class="linkedin-gr"></i></a>
+                  {% endif %}
+                </span>
+              </figcaption>
+            </div>
+          </div>
+        </div>
+
+        {% if forloop.counter|divisibleby:2 %}
+          <div class="clearfix is-hidden"></div>
+        {% endif %}
+
+        {% endfor %}
+
+      </div>
+    </div>
+    <!-- left content end -->
+
+    <!-- right content start -->
+    <div class="col-md-3 col-sm-12">
+    <!-- take me to -->
+    {% if categories %}
+      {% include './include/category.tmpl.html' with categories=categories %}
+    {% endif %}
+
+    {% if popular_courses %}
+      {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-author-listing' %}
+    {% endif %}
+
+    </div>
+    <!-- right content end -->
+  </div>
+  <!-- page content body end -->
+</section>
+<!-- main section end -->
+
+{% endblock container %}
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+
+<script type="text/javascript">
+      $('#myCarousel1').carousel({
+        interval: false,
+
+      })
+
+     $('.carousel[data-type="multi"] .item').each(function(){
+        var next = $(this).next();
+        if (!next.length) {
+          next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+
+        for (var i=0;i<3;i++) {
+          next=next.next();
+          if (!next.length) {
+            next = $(this).siblings(':first');
+          }
+          
+          next.children(':first-child').clone().appendTo($(this));
+        }
+      });
+    </script>
+    {% endcompress %}
+{% endblock js_section %}

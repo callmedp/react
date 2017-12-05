@@ -4,9 +4,11 @@
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static 'shinelearn/css/mobile/homepage/checkbox.css' %}" rel="stylesheet" >
     <link href="{% static 'shinelearn/css/mobile/homepage/contact.css' %}" rel="stylesheet" >
     <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet" >
+    {% endcompress css %}
         
             
 {% endblock css_section %}

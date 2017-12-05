@@ -1,21 +1,41 @@
-var highlightError = function(element, errorClass) {
-    $(element).siblings('.error').removeClass('hide_error');
-};
+if (window.CURRENT_FLAVOUR == 'mobile'){
+    var highlightError = function(element, errorClass) {
+        $(element).closest('.form-group').addClass('error');
+        $(element).siblings('.mgs').show();
+    };
 
-var unhighlightError = function(element, errorClass) {
-    $(element).siblings('.error').addClass('hide_error');
-};
+    var unhighlightError = function(element, errorClass) {
+        $(element).closest('.form-group').removeClass('error');
+        $(element).siblings('.mgs').hide();
+    };
 
-var errorPlacement = function(error, element) {
-    $(element).siblings('.error').html(error.text());
-};
+    var errorPlacement = function(error, element){
+        $(element).siblings('.mgs').html(error.text());
+    };
+    var showLeadForm = function () {
+        // nothing
+    };
+}else{
 
-var showLeadForm = function() {
-    $('#id_download_model').modal("show");
-};
+    var highlightError = function(element, errorClass) {
+        $(element).siblings('.error').removeClass('hide_error');
+    };
+
+    var unhighlightError = function(element, errorClass) {
+        $(element).siblings('.error').addClass('hide_error');
+    };
+
+    var errorPlacement = function(error, element) {
+        $(element).siblings('.error').html(error.text());
+    };
+
+    var showLeadForm = function() {
+        $('#id_download_model').modal("show");
+    };
+}
 
 $.validator.addMethod("indiaMobile", function(value, element) {
-    var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
+    var country_code = $("input[name=country]").val(); //$('#call_back_country_code-id').val();
     if (country_code == '91') {
         return value.length == 10;
     }
@@ -37,8 +57,22 @@ $(document).on('click', '#id_download_button', function(event) {
     var pop_up = $(this).attr('pop-up');
     var href = $(this).attr('href');
     if (pop_up == "no") {
-        $("#id_action").val(2); // action for login -user
-        $("#downloadpdf_form").submit();
+        // $("#id_action").val(2); // action for login -user
+        $.ajax({
+            url: "/lead/lead-management/",
+            type: "POST",
+            data: $("#downloadpdf_form").serialize(),
+            success: function(data, textStatus, jqXHR) {
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                alert('Something went wrong. Try again later.');
+            }
+        });
+        if (window.CURRENT_FLAVOUR == 'mobile'){
+            $('.cls_mask').click(); 
+        }
         window.open(href, '_blank');
     } else {
         showLeadForm();
@@ -58,7 +92,7 @@ $(document).on('click', '#id_download_button', function(event) {
                 required: false,
                 maxlength: 100
             },
-            mobile_number: {
+            number: {
                 required: true,
                 digits: true,
                 indiaMobile: true,
@@ -78,7 +112,7 @@ $(document).on('click', '#id_download_button', function(event) {
             email: {
                 maxlength: "At most 100 characters"
             },
-            mobile_number: {
+            number: {
                 required: "Mobile Number is Mandatory",
                 digits: "Enter only digits",
                 indiaMobile: "Please enter 10 digits only",
@@ -96,12 +130,30 @@ $(document).on('click', '#id_download_button', function(event) {
         errorPlacement: errorPlacement,
         submitHandler: function(form){
             MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'success');
-            $("#id_action").val(1); //action on download button
+            // $("#id_action").val(1); //action on download button
 
-            var href = $('#id_download_button').attr('href');
-            form.submit();
-            $('#id_download_model').modal('toggle');
-            window.open(href, '_blank');
+            var formData = $(form).serialize();
+            $.ajax({
+                url: "/lead/lead-management/",
+                type: "POST",
+                data: formData,
+                success: function(data, textStatus, jqXHR) {
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+                    // alert('Your Query Submitted Successfully.');
+                    if (window.CURRENT_FLAVOUR == 'mobile'){
+                        $('.cls_mask').click();  
+                    }
+                    $pdfForm[0].reset();
+                    var href = $('#id_download_button').attr('href');
+                    $('#id_download_model').modal('toggle');
+                    window.open(href, '_blank');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                    alert('Something went wrong. Try again later.');
+                }
+            });
+            return false;
         }
     });
 
@@ -145,7 +197,9 @@ $(function() {
 
     $("#id_skip").click(function() {
         MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'skip');
-        $("#id_action").val(0); // action on skip button
+        if (window.CURRENT_FLAVOUR == 'mobile'){
+            $('.cls_mask').click(); 
+        }
         var href = $('#id_download_button').attr('href');
         window.open(href, '_blank');
     });
@@ -202,14 +256,14 @@ $(function() {
                 required: true,
                 maxlength: 80
             },
-            mobile_number: {
+            number: {
                 required: true,
                 number: true,
                 indiaMobile: true,
                 minlength: 4,
                 maxlength: 15
             },
-            message_box: {
+            msg: {
                 required: true,
                 maxlength: 300
             }
@@ -219,14 +273,14 @@ $(function() {
                 required: "Name is Mandatory.",
                 maxlength: "Maximum 80 characters."
             },
-            mobile_number: {
+            number: {
                 required: "Mobile Number is Mandatory",
                 number: "Enter only number",
                 indiaMobile: "Please enter 10 digits only",
                 maxlength: "Please enter less than 16 digits",
                 minlength: "Please enter atleast 4 digits"
             },
-            message_box: {
+            msg: {
                 required: "Message is required.",
                 maxlength: "Enter less than 300 characters."
             }
@@ -249,7 +303,7 @@ $(function() {
         if (flag) {
             var formData = $callbackForm.serialize();
             $.ajax({
-                url: "/cms/lead-management/",
+                url: "/lead/lead-management/",
                 type: "POST",
                 data: formData,
                 success: function(data, textStatus, jqXHR) {
