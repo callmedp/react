@@ -55,8 +55,13 @@
         {% include './include/detail-article-list.tmpl.html' %}
 
     </section>
-
-
+    
+    {% if popular_courses %}
+        <section>
+            {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}
+        </section>
+    {% endif %}
+    
     {% comment %}
     <section>
         <!-- box panel starts here -->
