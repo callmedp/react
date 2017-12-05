@@ -323,7 +323,6 @@ class CartMixin(object):
                                 if is_available and var.delivery_service:
                                     total_amount += var.delivery_service.get_price()
 
-
                                 var_data = {
                                     "id": var_id,
                                     "li": var,
