@@ -242,7 +242,7 @@ class DashboardDetailView(TemplateView):
             elif self.oi.product.type_flow == 6:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163])
             elif self.oi.product.type_flow == 7:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 61, 62, 161, 162, 163])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 8:
                 oi_status_list = [49, 5, 46, 48, 27, 4, 161, 162, 163]
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=oi_status_list)
