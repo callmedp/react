@@ -26,7 +26,6 @@ def booster():
     days = 7
     candidate_data = {}
     recruiter_data = {}
-    recruiter_data = {}
     candidate_list = []
 
     for oi in booster_ois:
@@ -151,7 +150,7 @@ def booster():
         recruiters = settings.BOOSTER_RECRUITERS
         mail_type = 'BOOSTER_RECRUITER'
         recruiter_data.update({"data": candidate_list})
-        if recruiter_data:
+        if candidate_list != []:
             send_email_task.delay(recruiters, mail_type, recruiter_data)
             for oi in booster_ois:
                 oi.emailorderitemoperation_set.create(email_oi_status=92)
