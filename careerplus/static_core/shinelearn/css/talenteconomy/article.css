@@ -175,6 +175,8 @@
 }
 .author figure img {
   max-width: 100%;
+  width: 37px;
+  height: 37px;
 }
 
 .main-heading-article {
