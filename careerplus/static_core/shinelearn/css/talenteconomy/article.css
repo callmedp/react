@@ -1054,13 +1054,13 @@
   padding: 25px 15px;
 }
 .author-listing .media-left {
-  width: 122px;
+  width: 115px;
   height: auto;
-  min-width: 122px;
+  min-width: 115px;
 }
 .author-listing .media-left img {
-  width: 122px;
-  height: 122px;
+  width: 115px;
+  height: 115px;
   border-radius: 100%;
 }
 .author-listing .media-body {
