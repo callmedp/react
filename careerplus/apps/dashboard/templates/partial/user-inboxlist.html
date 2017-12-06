@@ -156,7 +156,11 @@
                 {% endif %}
 
             {% elif obj.product.type_flow == 7 %}
-                <p><strong>Status:</strong> {{obj.get_user_oi_status}}
+                {% if obj.oi_status == 2 %}
+                <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
+                {% else %}
+                    {{obj.get_user_oi_status}}
+                {% endif %}
 
             {% elif obj.product.type_flow == 9 %}
                 {% with obj.get_roundone_status as op_status %}

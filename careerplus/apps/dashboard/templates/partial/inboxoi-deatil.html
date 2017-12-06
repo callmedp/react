@@ -259,6 +259,9 @@
                             {{op.get_user_oi_status}}
                         </datalist>
                         <datalist class="col-sm-3 text-right">
+                          {% if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2 %}
+                              <a role="button" class="upload-resume">Upload Resume</a>
+                          {% endif %}
                         </datalist>
                     </li>
                 {% endfor %}

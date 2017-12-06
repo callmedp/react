@@ -84,9 +84,10 @@ class CartMixin(object):
                     cart_obj = Cart.objects.create(session_id=session_id, status=3)
 
             if cart_obj:
-                if email and not cart_obj.owner_email:
+                if email and email != "None" and not cart_obj.owner_email:
                     cart_obj.owner_email = email
-                    cart_obj.email = email
+                    if not cart_obj.email:
+                        cart_obj.email = email
                     cart_obj.save()
 
                 if country_code and not cart_obj.country_code:
@@ -162,6 +163,11 @@ class CartMixin(object):
                     "checkout_type": add_type,
                 })
 
+                if add_type == "cart":
+                    self.request.session.update({
+                        "cart_count_pk": cart_obj.pk,
+                    })
+
             return flag
 
         except Exception as e:
@@ -220,6 +226,7 @@ class CartMixin(object):
                 request.session.update({
                     "cart_pk": cart_obj.pk,
                     "checkout_type": 'cart',
+                    "cart_count_pk": cart_obj.pk,
                 })
 
             elif request.session.get('cart_pk'):
@@ -315,7 +322,6 @@ class CartMixin(object):
 
                                 if is_available and var.delivery_service:
                                     total_amount += var.delivery_service.get_price()
-
 
                                 var_data = {
                                     "id": var_id,
@@ -608,8 +614,9 @@ class CartMixin(object):
         try:
             if not request:
                 request = self.request
-            self.getCartObject(request=request)
-            cart_pk = request.session.get('cart_pk')
+            if not request.session.get('cart_count_pk'):
+                self.getCartObject(request=request)
+            cart_pk = request.session.get('cart_count_pk')
 
             if cart_pk:
 

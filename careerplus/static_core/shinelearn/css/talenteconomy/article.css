@@ -1129,13 +1129,13 @@
   border-bottom: 1px solid #e1e1e1;
 }
 .author-profile .media-left {
-  width: 155px;
+  width: 122px;
   height: 122px;
   padding-right: 30px;
 }
 .author-profile .media-left img {
-  width: 155px;
-  height: 155px;
+  width: 122px;
+  height: auto;
   border-radius: 100%;
 }
 .author-profile .media-body {
