@@ -666,7 +666,9 @@ blockquote {
       margin-top: 5px;
       width: 45px; }
   .author-item ul li {
-    margin-right: 5px; }
+    margin-right: 5px; 
+    display: inline-block;
+  }
 
 .italic {
   font-style: italic; }
