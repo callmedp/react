@@ -25,6 +25,11 @@
   display: none; 
 }
 
+.error-txt{
+  color: $error;
+  font-size: 11px;
+}
+
 
 .form-group label.error {
     font-size: 11px;

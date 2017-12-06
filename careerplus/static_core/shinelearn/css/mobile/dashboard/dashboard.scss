@@ -1,29 +1,29 @@
-@import 'lib/variables';
-@import 'lib/mixin';
+@import '../lib/variables';
+@import '../lib/mixin';
 
 /* Rating */
-@import 'components/rating';
+@import '../components/rating';
 
 /* Right navbar */
-@import 'components/right-navbar';
+@import '../components/right-navbar';
 
 /* Tabbing Start From Here */
-@import 'components/tabbing';
+@import '../components/tabbing';
 
 /* Rating Here */
-@import 'components/rating';
+@import '../components/rating';
 
 /* Form item Here */
-@import 'components/form-items';
+@import '../components/form-items';
 
 /* Form item Here */
-@import 'components/chat-box';
+@import '../components/chat-box';
 
 /* Main CSS Start From Here */
-@import 'components/popup';
+@import '../components/popup';
 
 /* File upload CSS Start From Here */
-@import 'components/file-upload';
+@import '../components/file-upload';
 
 .cms .tabs li {
   width: 50%; 
@@ -358,4 +358,19 @@
 		margin-bottom: 30px; 
 		list-style: block;
 	}
+}
+
+#sidebar-secondary {
+  overflow: scroll;
+}
+
+.sigma-pro {
+  display: block;
+  height: 70px;
+  width: 70px;
+
+  img {
+  	width: 100%;
+    height: 100%; 
+  }
 }

@@ -1,17 +1,17 @@
-@import 'lib/variables';
-@import 'lib/mixin';
+@import '../lib/variables';
+@import '../lib/mixin';
 
 /* Main CSS Start From Here */
-@import 'components/form-items';
+@import '../components/form-items';
 
 /* Line form Start From Here */
-@import 'components/line-form';
+@import '../components/line-form';
 
 /* error form Start From Here */
-@import 'components/error-form';
+@import '../components/error-form';
 
 /* error form Start From Here */
-@import 'components/file-upload';
+@import '../components/file-upload';
 
 .payment-nav {
   font-size: 1em;
@@ -65,14 +65,16 @@
   float: left;
 
   .item {
-    width: 78%;
+    width: 70%;
     float: left;
     padding-right: 15px;
+    text-align: left;
   }
 
   .price {
-    width: 22%;
+    width: 30%;
     float: left;
+    text-align: right;
   }
   
   .heading {
@@ -280,6 +282,11 @@
       list-style-type: disc;
     }
   }
+}
+
+.hidden-div {
+  display: none;
+  margin-top: 10px;
 }
 
 

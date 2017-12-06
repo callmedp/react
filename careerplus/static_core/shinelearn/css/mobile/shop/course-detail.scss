@@ -1,18 +1,18 @@
-@import 'lib/variables';
-@import 'lib/mixin';
+@import '../lib/variables';
+@import '../lib/mixin';
 
 
 /* Rating */
-@import 'components/rating';
+@import '../components/rating';
 
 /* Main CSS Start From Here */
-@import 'components/form-items';
+@import '../components/form-items';
 
 /* Right Nav Bar CSS */
-@import 'components/right-navbar';
+@import '../components/right-navbar';
 
 /* Call us CSS */
-@import 'components/call-us';
+@import '../components/call-us';
 
 
 .detail-wrap {
@@ -104,7 +104,7 @@
 .jobs-icon-wrap {
 	li {
 		display: inline-block;
-		margin: 0 14px;
+		margin: 0 12px;
 
 		&:last-child {
 			margin-right: 0;
@@ -180,6 +180,7 @@
 	li {
 		text-align: center;
 		margin-bottom: 20px;
+		list-style: none !important;
 
 		small {
 			@include icon-inblock (16px, 22px, -404px 0);
