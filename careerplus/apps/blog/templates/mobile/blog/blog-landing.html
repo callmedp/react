@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% block django_meta %}
         {% include 'meta/meta.html' %}
     {%  endblock django_meta %}
@@ -14,9 +14,11 @@
 
 {% block css_section %}
     {{ block.super }}
+    {% compress css %}
     <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
     <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
     <link href="{% static 'shinelearn/css/mobile/blog/blog.css' %}" rel="stylesheet">
+    {% endcompress css %}
     
 {% endblock css_section %}
 

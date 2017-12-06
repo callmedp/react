@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static%}
 {% load humanize search_tags compress %}
 {% block css_section %}
 {{ block.super }}
@@ -9,15 +9,12 @@
     <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
     <link href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
     {% endcompress css %}
-
-    {% compress css inline %}
         <style>
             a[disabled], a[disabled]:hover {
                pointer-events: none;
                color: #e1e1e1;
             }
         </style>
-    {% endcompress css %}
 {% endblock css_section %}
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% endif %}

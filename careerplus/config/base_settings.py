@@ -92,6 +92,7 @@ LOCAL_APPS = [
     'crmapi',
     'api',
     'marketing',
+    'talenteconomy'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -111,6 +112,7 @@ MIDDLEWARE = [
     'core.middleware.UpgradedSetFlavourMiddleware',
     'core.middleware.LearningShineMiddleware',
     'core.middleware.LoginMiddleware',
+    'core.middleware.TrackingMiddleware'
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -186,7 +188,7 @@ STATICFILES_FINDERS = (
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.rCSSMinFilter',
+    'compressor.filters.cssmin.CSSMinFilter'
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -500,6 +502,10 @@ SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['WRITER', 'WRITER_HEAD']
 BLOG_WRITER_GROUP_LIST = ['BLOG_WRITER']
 
+#BLOGGER#
+LEARNING_BLOGGER = ['LEARNING_BLOGGER']
+TALENT_BLOGGER = ['TALENT_BLOGGER']
+BLOGGER_GROUP_LIST = [LEARNING_BLOGGER, TALENT_BLOGGER, PRODUCT_GROUP_LIST]
 # Refund Application level
 OPS_GROUP_LIST = ['OPERATION']
 OPS_HEAD_GROUP_LIST = ['OPS_HEAD']

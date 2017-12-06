@@ -26,27 +26,27 @@
         <h2 class="mb-0">{{heading}}</h2>
 
         <div class="mt-20">
-            <form role="form" method="post" id="downloadpdf_form" action="{% url "cms:download-pdf" page_obj.pk %}">
+            <form role="form" method="post" id="downloadpdf_form">
                 {% csrf_token %}
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Name" id="user_name" name="name" >
+                    <input type="text" class="form-control" placeholder="Name" id="user_name" name="name" {% if request.session.full_name %}value="{{request.session.full_name}}"{% endif %} maxlength="100">
                     <p class="mgs"></p>
                 </div>
 
                 <div class="form-group">
-                    <input type="email" id="id_email" name="email"  class="form-control" placeholder="Email">
+                    <input type="email" id="id_email" name="email"  class="form-control" placeholder="Email" {% if request.session.email %}value="{{request.session.email}}"{% endif %} maxlength="100">
                     <p class="mgs"></p>
                 </div>
 
                 <div class="form-group">
                     <div class="pull-left code">
-                        <select name="country_code">
+                        <select name="country">
                             {% for country in country_choices %}
-                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.1}}</option>
+                            <option value="{{country.0}}" {% if country.0 == initial_country or country.0 == request.session.country_code %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <input type="number" id="id_mobile" name="mobile_number" class="form-control pull-left number" placeholder="Mobile">
+                    <input type="number" id="id_mobile" name="number" class="form-control pull-left number" placeholder="Mobile" {% if request.session.mobile_no %}value="{{request.session.mobile_no}}"{% endif %} maxlength="15">
                     <p class="mgs"></p>
                     <div class="clearfix"></div>
                 </div>
@@ -61,11 +61,17 @@
                         <span class="mgs"></span>
                     </p>
                 </div>
-                <input type='hidden' id="id_action" name='action_type' />
+                <div style='display:none'>
+                    <!--input type='hidden' id="id_action" name='action_type'/-->
+                    <input type='hidden' name='path' value="{{request.path}}" />
+                    <input type='hidden' name='lsource' value="7" />
+                    <input type="hidden" name="product" value="{{page_obj.pk}}">
+                    <input type="hidden" name="prd" value="{{page_obj.heading}}">
+                </div>
                 <div class="form-group text-center tabs">
                     <button type="submit" id="id_download" class="btn btn-blue w100fl btn-round mb-20">Download</button>
                     <div class="clearfix"></div>
-                    <p> <a href="#" id="id_skip">Skip</a></p>
+                    <p> <a href="javascript:void();" role="button" id="id_skip">Skip</a></p>
                 </div>
 
             </form>

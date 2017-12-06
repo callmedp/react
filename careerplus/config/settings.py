@@ -161,14 +161,18 @@ SHINE_API_USER_PWD = 'tarun@123'
 # Use for CRM Lead
 CRM_LEAD_URL = 'http://172.22.65.32:8003'
 CRM_LEAD_TOKEN = '73f53cf358b94156feb49d034081ed507334e02a'
+
+# CRM_LEAD_URL = 'http://127.0.0.1:8000'
+# CRM_LEAD_TOKEN = '57da37ac3fb12133266927b629168292c368bd33'
+
 SHINECPCRM_DICT = {
     'base_url': CRM_LEAD_URL,
     'token': CRM_LEAD_TOKEN,
-    'psuedo_lead_url': '/api/pseudo-leads/',
+    'create_lead_url': '/api/v1/create-lead/',
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
     'ad_server_url': '/api/mobile-version-leads/',
-    'timeout': 30
+    'timeout': 30,
 }
 
 # SHINE_SITE = 'https://www.shine.com'

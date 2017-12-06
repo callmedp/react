@@ -62,7 +62,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         page = self.request.GET.get('page', 1)
         api_data = self.get_job_count_and_fuctionan_area(self.object.name)
         career_outcomes = self.object.split_career_outcomes()
-        country_choices = [(m.phone, m.phone) for m in
+        country_choices = [(m.phone, m.name) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
         top_3_prod, top_4_vendors = None, None

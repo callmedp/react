@@ -1,0 +1,10 @@
+<a href="{{articlelist.url}}" title="{{articlelist.name}}">
+  <figure class="{% if bigtmpl %}big-image{% endif %}">
+    <img src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}">
+  </figure>
+  <div class="carousel-heading-container {% if mini %}b-mini{% endif %}">
+    <span class="product-title">{{articlelist.p_cat.name}}</span>
+    <strong class="heading-carousel heading-carousel-{% if secondary %}secondary{% else %}primary{% endif %}">{% if bigtmpl %}{{articlelist.name}}{% else %}{{articlelist.name|truncatechars:20}}{% endif %}</strong>
+    <span class="author author-primary">{{articlelist.author.name}}</span>
+  </div>
+</a>

@@ -1,0 +1,26 @@
+{% load thumbnail %}
+
+<div class="clearfix mt-20">
+  <h2 class="pull-left">Contributors</h2>
+  <a href="{% url 'talent:authors-listing' %}" class="pull-right mt-5">View all</a>
+</div>
+<div class="slide-container">
+    <ul class="contributors">
+        {% for author in authors %}
+        <li>
+          <a href="{% url 'talent:authors-detail' author.slug %}">
+          {% if author.image %}
+            {% thumbnail author.image "130x130" crop="center" as im %}
+            <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
+          {% endif %}
+          <div class="contributor-body">
+            <p class="head pb-0">{{author.name}}</p>
+            <p class="post pb-0"><span>{{author.designation}}</span> <sup></sup></p>
+            <p class="fs-12">{{author.no_of_blog}} articles</p>
+          </div>
+          </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

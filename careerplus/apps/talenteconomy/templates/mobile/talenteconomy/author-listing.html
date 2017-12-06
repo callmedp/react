@@ -1,0 +1,123 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load thumbnail compress %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   Career & Certification Guidance Top Authors @ Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
+    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right">
+            <!-- <a class="icon-search pull-left " href="#">search</a> -->
+            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block container %}        
+<div class="body-wrapper ">
+            
+  <!-- Trending articles Starts here -->
+  <div class="article-category talent-gr">
+      <div class="content">
+        <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+          {% for bradcbs in breadcrumbs %}
+            {% if bradcbs.url %}
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+            {% else %}
+              <li class="active">{{bradcbs.name}}</li>
+            {% endif %}
+          {% endfor %} 
+        </ul>
+
+        <h1>All Contributors</h1>
+
+      </div>
+      <img src="{% static 'shinelearn/images/mobile/common/author-img.jpg' %}" class="img-responsive">
+  </div><!-- Trending articles Ends here -->
+
+  <!-- Starts of talent-economy list -->
+  <section class="content-box pt-0 pb-0">
+    <!-- box panel starts here -->
+
+  <div class="pt-20 pb-20">
+  {% for author in authors %}
+  <div class="box mb-20">
+      <div class="author-item">
+        <span class="author-img"><img src="{{author.image.url}}"></span>
+        <div class="author-detail">
+          <h2 class="mb-0 fs-16"><a href="{% url 'talent:authors-detail' author.slug %}">{{author.name}} </a><sup></sup></h2>
+          <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
+          <p class="fs-12"><a href="{{request.path}}{{author.slug}}"><strong>{{author.no_of_blog}} articles</strong></a></p>
+          <p class="fs-12 italic">{{author.about|striptags|safe|truncatechars:140}}</p>
+          <ul class="mt-5">
+            {% if author.fb_url %}
+              <li class="icon-fbGrey"><a href="{{author.fb_url}}">facebook</a></li>
+            {% endif %}
+            {% if author.twitter_url %}
+              <li class="icon-twGrey"><a href="{{author.twitter_url}}">twitter</a></li>
+            {% endif %}
+            {% if author.linkedin_url %}
+            <li class="icon-linkedinGrey"><a href="{{author.linkedin_url}}">linkedin</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div><!-- ends of author item -->
+    </div><!-- ends of Box item -->
+  {% endfor %}
+  </div>
+
+  {% comment %}
+    <div class="box-panel row ">
+      <p class="semi-head">You may also like</p>
+
+      {% include './include/articles.tmpl.html' with articlelists=article_list %}
+          
+    </div><!-- box panel ends here -->
+  {% endcomment %}
+  </section><!-- End of talent-economy list -->
+
+</div>
+        
+<link rel="stylesheet" href="css/images.css">
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script>
+        $(function() {
+            Article.init();
+        });
+    </script>
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}
