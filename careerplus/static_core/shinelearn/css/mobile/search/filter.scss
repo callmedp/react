@@ -1,9 +1,9 @@
-@import 'lib/variables';
-@import 'lib/mixin';
+@import '../lib/variables';
+@import '../lib/mixin';
 
 
 /* Tabbing Start From Here */
-@import 'components/tabbing';
+@import '../components/tabbing';
 
 .vertical-tabbing {
   position: absolute;

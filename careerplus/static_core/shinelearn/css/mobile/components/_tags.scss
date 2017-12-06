@@ -5,18 +5,22 @@
   position: relative;
   z-index: 1;
 
-  span {
-    @include border-radius (4px);
-    background-color: $bg-grey-eb;
-    display: inline-block;
-    font-size: 0.875em;
-    padding: 3px 10px;
-  }
-
   .form-control {
     background-color: transparent;
     border: 0 none;
-    color: #fff;
+    color: $txt-white;
     font-size: 12px;
   }
+
+  span {
+    &.advanced {
+      @include border-radius (4px);
+    background-color: #ebebeb;
+    display: inline-block;
+    font-size: 0.875em;
+    padding: 3px 10px;
+    margin: 2px;
+    }
+  }
+
 }

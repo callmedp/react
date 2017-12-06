@@ -1,23 +1,23 @@
-@import 'lib/variables';
-@import 'lib/mixin';
+@import '../lib/variables';
+@import '../lib/mixin';
 
 /* Share Button Start From Here */
-@import 'components/share';
+@import '../components/share';
 
 /* Share Button Start From Here */
-@import 'components/form-items';
+@import '../components/form-items';
 
 /* Rating */
-@import 'components/rating';
+@import '../components/rating';
 
 /* Share Button Start From Here */
-@import 'components/tags';
+@import '../components/tags';
 
 /* Course icon CSS */
-@import 'components/course-list';
+@import '../components/course-list';
 
 /* Course icon CSS */
-@import 'components/right-navbar';
+@import '../components/right-navbar';
 
 .ui-widget.ui-widget-content {
 	@include border-radius (4px);
