@@ -177,8 +177,8 @@
 }
 .author figure img {
   max-width: 100%;
-  width: 77px;
-  height: 77px;
+  width: 37px;
+  height: 37px;
 }
 
 .main-heading-article {
@@ -377,7 +377,7 @@
   font-size: 12px;
   color: #666;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   position: relative;
   padding-left: 17px;
 }
@@ -398,7 +398,7 @@
   font-size: 12px;
   color: #666;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   position: relative;
   padding-left: 17px;
 }
@@ -418,7 +418,7 @@
 .popular-courses .rating-box {
   display: block;
   color: #999;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 .popular-courses .rating-box strong {
   font-weight: 600;
@@ -1054,13 +1054,13 @@
   padding: 25px 15px;
 }
 .author-listing .media-left {
-  width: 122px;
+  width: 115px;
   height: auto;
-  min-width: 122px;
+  min-width: 115px;
 }
 .author-listing .media-left img {
-  width: 122px;
-  height: 122px;
+  width: 115px;
+  height: 105px;
   border-radius: 100%;
 }
 .author-listing .media-body {
@@ -1130,7 +1130,7 @@
 }
 .author-profile .media-left {
   width: 155px;
-  height: 122px;
+  height: 155px;
   padding-right: 30px;
 }
 .author-profile .media-left img {

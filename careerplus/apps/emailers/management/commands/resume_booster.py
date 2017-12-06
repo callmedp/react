@@ -3,6 +3,7 @@ import logging
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.utils import timezone
 
 from order.models import OrderItem
 from core.mixins import TokenExpiry
@@ -20,15 +21,69 @@ def booster():
     ''' Resume Boosters mail sending'''
 
     booster_ois = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=7, oi_status=5)
+        order__status__in=[1, 3], product__type_flow=7, oi_status__in=[0, 5, 61, 62])
     booster_ois = booster_ois.select_related('order')
     days = 7
     candidate_data = {}
     recruiter_data = {}
-    recruiter_data = {}
     candidate_list = []
 
     for oi in booster_ois:
+        if oi.oi_status == 61:
+            closed_ois = oi.order.orderitems.filter(oi_status=4, product__type_flow=1, no_process=False)
+            if closed_ois.exists():
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.oi_draft = closed_ois[0].oi_draft
+                oi.draft_counter += 1
+                oi.last_oi_status = last_oi_status
+                oi.draft_added_on = timezone.now()
+                oi.save()
+
+                oi.orderitemoperation_set.create(
+                    oi_draft=oi.oi_draft,
+                    draft_counter=oi.draft_counter,
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    assigned_to=oi.assigned_to,
+                )
+            continue
+        elif oi.oi_status == 62:
+            last_oi_status = oi.oi_status
+            oi.oi_status = 4
+            oi.last_oi_status = 6
+            oi.save()
+            oi.orderitemoperation_set.create(
+                oi_status=62,
+                last_oi_status=last_oi_status,
+                assigned_to=oi.assigned_to,
+            )
+
+            oi.orderitemoperation_set.create(
+                oi_status=6,
+                last_oi_status=62,
+                assigned_to=oi.assigned_to,
+            )
+
+            oi.orderitemoperation_set.create(
+                oi_status=4,
+                last_oi_status=6,
+                assigned_to=oi.assigned_to,
+            )
+            continue
+        elif oi.oi_status == 0:
+            last_oi_status = oi.oi_status
+            oi.oi_status = 2
+            oi.last_oi_status = last_oi_status
+            oi.save()
+
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to,
+            )
+            continue
+
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
         to_emails = [oi.order.email]
         email_sets = list(oi.emailorderitemoperation_set.all().values_list(
@@ -65,12 +120,24 @@ def booster():
                 SendSMS().send(
                     sms_type="BOOSTER_CANDIDATE", data=candidate_data)
                 last_oi_status = oi.oi_status
-                oi.oi_status = 62
-                oi.last_oi_status = last_oi_status
+                oi.oi_status = 4
+                oi.last_oi_status = 6
                 oi.save()
                 oi.orderitemoperation_set.create(
                     oi_status=62,
                     last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to,
+                )
+
+                oi.orderitemoperation_set.create(
+                    oi_status=6,
+                    last_oi_status=62,
+                    assigned_to=oi.assigned_to,
+                )
+
+                oi.orderitemoperation_set.create(
+                    oi_status=4,
+                    last_oi_status=6,
                     assigned_to=oi.assigned_to,
                 )
 
@@ -83,7 +150,7 @@ def booster():
         recruiters = settings.BOOSTER_RECRUITERS
         mail_type = 'BOOSTER_RECRUITER'
         recruiter_data.update({"data": candidate_list})
-        if recruiter_data:
+        if candidate_list != []:
             send_email_task.delay(recruiters, mail_type, recruiter_data)
             for oi in booster_ois:
                 oi.emailorderitemoperation_set.create(email_oi_status=92)

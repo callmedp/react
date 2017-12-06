@@ -40,7 +40,9 @@ def draft_reminder_mail():
             token = AutoLogin().encode(
                 oi.order.email, oi.order.candidate_id, days=None)
             if oi.product.type_flow in [1, 12, 13]:
-                email_sets = oi.emailorderitemoperation_set.filter(email_oi_status=26) if draft_level == 1 else oi.emailorderitemoperation_set.filter(email_oi_status=27)           
+                email_sets = oi.emailorderitemoperation_set.filter(
+                    email_oi_status=26) if draft_level == 1 else oi.emailorderitemoperation_set.filter(
+                    email_oi_status=27)
                 if draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=8) and len(email_sets) == 0:
                     to_emails = [oi.order.email]
                     mail_type = 'REMINDER'
@@ -51,8 +53,8 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         'mobile': oi.order.mobile,
                         'days': 22,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=26, oi=oi.pk)
@@ -76,8 +78,8 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         'mobile': oi.order.mobile,
                         'days': 15,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=26, oi=oi.pk)
@@ -100,8 +102,8 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         'mobile': oi.order.mobile,
                         'days': 7,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=26, oi=oi.pk)
@@ -123,8 +125,8 @@ def draft_reminder_mail():
                         "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
                         'mobile': oi.order.mobile,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     last_oi_status = oi.oi_status
                     oi.oi_status = 4
@@ -159,8 +161,8 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         'mobile': oi.order.mobile,
                         'days': 7,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=27, oi=oi.pk)
@@ -182,8 +184,8 @@ def draft_reminder_mail():
                         "first_name": oi.order.first_name,
                         'mobile': oi.order.mobile,
                         'days': 4,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=27, oi=oi.pk)
@@ -205,8 +207,8 @@ def draft_reminder_mail():
                         "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
                         'mobile': oi.order.mobile,
-                        'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                     })
 
                     try:
