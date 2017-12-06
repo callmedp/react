@@ -1,0 +1,234 @@
+@import '../lib/variables';
+@import '../lib/mixin';
+
+.find-us {
+  padding-left: 0;
+  margin: 0;
+  clear: both;
+
+  li{
+    color: #333;  
+    line-height: 1.5;  
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px #eeeeee solid;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    h2 {
+      color: #2f5da5;
+      font-size: 16px;
+      display: block;
+      line-height: 20px;
+      margin-top: 0;
+      margin-bottom: 0;
+      position: relative;
+      padding-left: 20px;
+    }
+  }
+}
+
+
+.care-seciton {
+  background: #f8fafe;
+  padding: 15px;
+  display: table;
+  color: #333;  
+  line-height: 1.5;  
+  text-align: left;
+  font-size: 14px;
+  margin-top: 30px;
+  width: 100%;
+
+  .care-left {
+    display: table-cell;
+    padding-right: 10px;
+  }
+
+  .care-rgt {
+    display: table-cell;
+    vertical-align: top;
+
+    h2 {
+      color: #2f5da5;
+      font-size: 16px;
+      display: block;
+      line-height: 20px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+  
+.mail-icon {
+  background: #2f5ea6;
+  box-shadow: 0px 2px 12px 0px rgba(172, 172, 172, 0.75);
+  border-radius: 50%;
+  width: 61px;
+  height: 61px;
+  position: fixed;
+  bottom: 30px;
+  right: 15px;
+  z-index: 9;
+}
+
+
+/* about us css start here */
+.whyusabt {
+  -webkit-box-shadow: 0px 0px 37px 11px rgba(230,230,230,1);
+  -moz-box-shadow: 0px 0px 37px 11px rgba(230,230,230,1);
+  box-shadow: 0px 0px 37px 11px rgba(230,230,230,1);
+  padding: 15px;
+  background: #fff;
+  margin-top: 50px;
+}
+    
+.whyusabt h2 {
+  color: #2f5da5;
+  font-size: 20px;
+  display: block;
+  line-height: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  
+}
+  
+.whyusabt ul {
+  padding-left: 5px;
+  margin-top: 20px;
+}
+  
+.whyusabt li {
+  color: #333;
+  text-align: left;
+  font-size: 14px;
+  list-style: none;
+  border-left: #81d1a8 1px solid;
+  padding-left: 20px;
+  position: relative;
+  line-height: 20px;
+  padding-bottom: 15px;
+}
+
+.whyusabt li:last-child {
+  padding-bottom: 0;
+}
+  
+  
+.whyusabt li:before {
+    display: inline-block;
+    content: '';
+    background-color: #fff;
+    color: #FFFFFF;
+    font-size: 32px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 11px;
+    height: 11px;
+    text-align: left;
+    margin-right: 10px;
+    position: absolute;
+    left: -7px;
+    top: 4px;
+    border: #3cb878 1px solid;
+}
+
+.whyusabt li:after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  background-color: #3cb878;
+  left: -3px;
+  top: 8px;
+
+}
+
+
+  
+.we-provide {
+  background: #eaeef6;
+  text-align: center;
+  padding:50px 0px;
+}
+.we-provide h2  {
+  color: #2f5da5;
+  font-size: 24px;
+  display: block;
+  line-height: 20px;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+  
+.we-provide ul  {
+  margin-left: 15px;
+}
+  
+.we-provide li  {
+  color: #333;
+  font-size: 14px;
+  display: block;
+  line-height: 20px;
+  margin: 20px 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 17px 5px rgba(230,230,230,1);
+  -moz-box-shadow: 0px 0px 17px 5px rgba(230,230,230,1);
+  box-shadow: 0px 0px 17px 5px rgba(230,230,230,1);
+  text-align: center;
+}
+
+.slide-provide .slick-slide {
+  width: 290px;
+}
+
+.we-provide li img {
+  display: inline-block;
+}
+  
+.we-provide li h2 {
+  color: #2f5da5;
+  font-size: 14px;
+  display: block;
+  line-height: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.are-partner {
+  margin: 40px 0;
+}
+  
+.are-partner h2 {
+  color: #2f5da5;
+  font-size: 30px;
+  display: block;
+  line-height: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.are-partner-bx {
+  -webkit-box-shadow: 0px 0px 17px 5px rgba(230,230,230,1);
+  -moz-box-shadow: 0px 0px 17px 5px rgba(230,230,230,1);
+  box-shadow: 0px 0px 17px 5px rgba(230,230,230,1);
+    padding: 20px;
+    background: #fff;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  line-height: 20px;
+}
+  
+.are-partner-bx img { 
+  display: block;
+  margin-bottom: 20px;
+}
+
+article ol {
+  padding-left: 25px;
+}
+  
+/* about us css end here */

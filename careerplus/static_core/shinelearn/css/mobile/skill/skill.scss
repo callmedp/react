@@ -1,12 +1,12 @@
-@import 'lib/variables';
-@import 'lib/mixin';
+@import '../lib/variables';
+@import '../lib/mixin';
 
 
 /* Rating */
-@import 'components/rating';
+@import '../components/rating';
 
 /* Course icon CSS */
-@import 'components/course-list';
+@import '../components/course-list';
 
 .skill-box {
 
@@ -28,9 +28,9 @@
 				text-align: center;
 
 
-				img {
-					@include box (auto, auto, inline-block);
-				}
+				// img {
+				// 	@include box (auto, auto, inline-block);
+				// }
 			}
 		}
 	}
@@ -83,3 +83,7 @@
 	}
 }
 
+.skill-provider .slick-slide {
+  width: 180px;
+
+}

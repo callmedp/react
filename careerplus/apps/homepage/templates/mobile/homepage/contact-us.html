@@ -1,12 +1,13 @@
 {% extends "mobile/basic/base.html" %}
+{% load static compress %}
 {% load static thumbnail compress %}
 {% block title %}Contact us | Shine learning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet" >
-    <link href="{% static 'shinelearn/css/mobile/homepage/contact.css' %}" rel="stylesheet" >
-            
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/contact.scss' %}" rel="stylesheet" >
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
