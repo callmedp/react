@@ -77,13 +77,13 @@
           <p class="fs-12 italic">{{author.about|striptags|safe|truncatechars:140}}</p>
           <ul class="mt-5">
             {% if author.fb_url %}
-              <li><a href="{{author.fb_url}}" class="icon-fbGrey">facebook</a></li>
+              <li><a href="{{author.fb_url}}" target="_blank" class="icon-fbGrey">facebook</a></li>
             {% endif %}
             {% if author.twitter_url %}
-              <li><a href="{{author.twitter_url}}" class="icon-twGrey">twitter</a></li>
+              <li><a href="{{author.twitter_url}}" target="_blank" class="icon-twGrey">twitter</a></li>
             {% endif %}
             {% if author.linkedin_url %}
-            <li><a href="{{author.linkedin_url}}" class="icon-linkedinGrey">linkedin</a></li>
+            <li><a href="{{author.linkedin_url}}" target="_blank" class="icon-linkedinGrey">linkedin</a></li>
             {% endif %}
           </ul>
         </div>

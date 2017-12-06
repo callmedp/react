@@ -649,14 +649,16 @@ blockquote {
   .author-item .author-img {
     display: block;
     left: 0;
-    position: absolute; }
-    .author-item .author-img img {
+    position: absolute;
       height: 90px;
       width: 90px;
-      -webkit-border-radius: 100%;
-      -moz-border-radius: 100%;
-      -ms-border-radius: 100%;
-      border-radius: 100%; }
+      border-radius: 100%;
+      overflow: hidden;
+    }
+    .author-item .author-img img {
+      height: auto;
+      max-width: 100%;
+    }
   .author-item .author-detail h2, .author-item .author-detail h1 {
     display: inline-block;
     color: #333;
