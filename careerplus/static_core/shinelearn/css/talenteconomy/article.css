@@ -1060,7 +1060,7 @@
 }
 .author-listing .media-left img {
   width: 115px;
-  height: 115px;
+  height: auto;
   border-radius: 100%;
 }
 .author-listing .media-body {
@@ -1129,13 +1129,13 @@
   border-bottom: 1px solid #e1e1e1;
 }
 .author-profile .media-left {
-  width: 122px;
-  height: 122px;
+  width: 155px;
+  height: 155px;
   padding-right: 30px;
 }
 .author-profile .media-left img {
-  width: 122px;
-  height: auto;
+  width: 155px;
+  height: 155px;
   border-radius: 100%;
 }
 .author-profile .media-body {
