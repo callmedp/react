@@ -377,7 +377,7 @@
   font-size: 12px;
   color: #666;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   position: relative;
   padding-left: 17px;
 }
@@ -398,7 +398,7 @@
   font-size: 12px;
   color: #666;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   position: relative;
   padding-left: 17px;
 }
@@ -418,7 +418,7 @@
 .popular-courses .rating-box {
   display: block;
   color: #999;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 .popular-courses .rating-box strong {
   font-weight: 600;
