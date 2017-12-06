@@ -16,8 +16,11 @@
 /* Breadcrumb Start From Here */
 @import '../components/breadcrumb';
 
-/* Breadcrumb Start From Here */
+/* Color Start From Here */
 @import '../components/color';
+
+/* Ratting Start From Here */
+@import '../components/rating';
 
 /* Blog landing page */
 .trending-articles {
@@ -29,7 +32,12 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: transparent;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0+0,0.65+100 */ /* FF3.6-15 */
+    background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); /* Chrome10-25,Safari5.1-6 */ /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 ); /* IE6-9 */
     padding: 20px;
 
     .caption-heading {
@@ -185,7 +193,6 @@ article {
 
 
 // Article CSS Starts here
-
 .main-head {
   @include border-radius(3px);
   color: $txt-white;
@@ -217,6 +224,16 @@ background: -moz-linear-gradient(-45deg, rgba(59,111,194,1) 0%, rgba(28,139,174,
 background: -webkit-linear-gradient(-45deg, rgba(59,111,194,1) 0%,rgba(28,139,174,1) 77%,rgba(16,151,166,1) 100%); /* Chrome10-25,Safari5.1-6 */
 background: linear-gradient(135deg, rgba(59,111,194,1) 0%,rgba(28,139,174,1) 77%,rgba(16,151,166,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b6fc2', endColorstr='#1097a6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  
+  .trending-articles {
+    background-color: transparent;
+  }
+
+}
+
+.talent-gr-nav {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3b6fc2+0,1c8bae+77,1097a6+100 */
+  background: #3b6fc2;
 }
 
 .talent-gr li {
@@ -463,13 +480,16 @@ blockquote {
   padding-left: 110px;
   
   .author-img {
+    @include square (90px);
+    @include border-radius (100%);
     display: block;
     left: 0;
     position: absolute;
 
     img {
-      @include square (90px);
-      @include border-radius (100%);
+      @include square (100%);
+      height: auto;
+      max-width: 100%;
     }
   }/* author-img ends here */
 
@@ -499,6 +519,67 @@ blockquote {
   font-style: italic;
 }
 
+.clearfix:after { 
+  content: ''; 
+  clear: both; 
+  display: table; 
+} 
+
+.rel-imp { 
+  position: relative !important; 
+} 
+ 
+
+ .is-hidden { 
+  padding: 0 !important; 
+  margin: 0; 
+  width: 100% !important; 
+}
+
 .no-shadow {
   box-shadow: none;
+}
+
+.minh-185 {
+  min-height: 185px;
+
+  @media only screen and (width: 320px)  {
+    min-height: 220px;
+  }
+}
+
+.mw-full {
+  max-width: 100%;
+}
+
+.contributor-body {
+  min-height: 110px;
+  padding-top: 10px;
+}
+
+
+.no-shadow {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none; 
+}
+
+.contributors.slick-slider .slick-track {
+  display: -webkit-box; 
+  display: -webkit-flex; 
+  display: -moz-box; 
+  display: -ms-flexbox; 
+  display: flex; 
+}
+
+.contributors.slick-slider li {
+  -webkit-box-pack: justify; 
+  -webkit-justify-content: space-between; 
+     -moz-box-pack: justify; 
+      -ms-flex-pack: justify; 
+          justify-content: space-between; 
+  -webkit-flex-wrap: wrap; 
+      -ms-flex-wrap: wrap; 
+          flex-wrap: wrap; 
+  height: auto; 
 }
