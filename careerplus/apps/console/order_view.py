@@ -1968,7 +1968,7 @@ class ActionOrderItemView(View):
                     # send mail to rectuter
                     recruiters = settings.BOOSTER_RECRUITERS
                     mail_type = 'BOOSTER_RECRUITER'
-                    if recruiter_data:
+                    if candidate_list != []:
                         send_email_task.delay(
                             recruiters, mail_type, recruiter_data)
                         for oi in booster_ois:

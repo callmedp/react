@@ -84,7 +84,7 @@ class CartMixin(object):
                     cart_obj = Cart.objects.create(session_id=session_id, status=3)
 
             if cart_obj:
-                if email and not cart_obj.owner_email:
+                if email and email != "None" and not cart_obj.owner_email:
                     cart_obj.owner_email = email
                     if not cart_obj.email:
                         cart_obj.email = email
@@ -322,7 +322,6 @@ class CartMixin(object):
 
                                 if is_available and var.delivery_service:
                                     total_amount += var.delivery_service.get_price()
-
 
                                 var_data = {
                                     "id": var_id,
