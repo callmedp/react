@@ -60,14 +60,14 @@
 		&:after {
 			@extend %cruve;
 			@include size (8px, 5px, block);
-			background-image: url("../images/cruve-1.png");
+			background-image: url($path + "/cruve-1.png");
 			left: -5px;
 		}
 
 		&:before {
 			@extend %cruve;
 			@include size (8px, 5px, block);
-			background-image: url("../images/cruve-2.png");
+			background-image: url($path + "/cruve-2.png");
 			right: -5px;
 		}
 	}

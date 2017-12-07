@@ -47,7 +47,7 @@
   height: 8px;
   font-size: 16px;
   color: $txt-grey-666;
-  background: url("../../../images/mobile/common/sprites.svg") no-repeat 1px -200px;
+  background: url($image-path) no-repeat 1px -200px;
   transition: all .2s;
 }
 
@@ -168,7 +168,7 @@ label:hover:before {
     margin-left: -6px;
     width: 12px;
     height: 9px;
-    background: url("../../../images/mobile/common/sprites.svg") no-repeat -88px -201px;
+    background: url($image-path) no-repeat -88px -201px;
     z-index: 999;
   }
 
