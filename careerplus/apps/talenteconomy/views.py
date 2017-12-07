@@ -268,11 +268,10 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
     def get_meta_details(self):
         heading = self.object.heading
-        first_line = self.object.content.split('.')
-        firstline = first_line[0] if first_line else ''
+        des = self.object.get_description()
         meta = Meta(
             title= heading + "- Talent Economy",
-            description = "Read Article on %s. %s" %(heading,firstline),
+            description = des,
         )
         return {"meta": meta}
 
