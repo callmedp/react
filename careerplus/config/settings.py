@@ -211,6 +211,11 @@ SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
+# Cart Drop Out Set Time For Task
+CART_DROP_OUT_EMAIL = 1 * 60
+CART_DROP_OUT_LEAD = 3 * 60
+SHIPPING_DROP_OUT_LEAD = 10 * 60
+PAYMENT_DROP_LEAD = 5 * 60
 
 
 CELERY_IMPORTS = (
