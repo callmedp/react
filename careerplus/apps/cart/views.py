@@ -78,7 +78,6 @@ class AddToCartView(View, CartMixin):
                 req_options = request.POST.getlist('req_options[]')
                 cv_id = request.POST.get('cv_id')
                 data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options)
-                cart_drop_out_mail.apply_async((), countdown=45*60)
 
                 try:
                     cart_obj = Cart.objects.get(pk=cart_pk)
@@ -86,10 +85,17 @@ class AddToCartView(View, CartMixin):
                     cart_obj = None
 
                 if cart_obj and (candidate_id == cart_obj.owner_id):
-                    cart_drop_out_mail.apply_async((cart_pk,), countdown=10)
+                    first_name = request.session.get('first_name', '')
+                    last_name = request.session.get('last_name', '')
+                    email = request.session.get('email', '')
+                    name = "{}{}".format(first_name, last_name)
+                    cart_drop_out_mail.apply_async(
+                        (cart_pk, email),
+                        countdown=settings.CART_DROP_OUT_EMAIL)
                     source_type = "cart_drop_out"
                     create_lead_on_crm.apply_async(
-                        (cart_obj.pk, source_type,), countdown=12*60*60)
+                        (cart_obj.pk, source_type, name),
+                        countdown=settings.CART_DROP_OUT_LEAD)
             except Exception as e:
                 data['error_message'] = str(e)
                 logging.getLogger('error_log').error("%s " % str(e))
@@ -364,9 +370,14 @@ class PaymentShippingView(UpdateView, CartMixin):
                     form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
                     return self.form_invalid(form)
                 valid_form = self.form_valid(form)
-                source_type = "shipping_drop_out"
-                create_lead_on_crm.apply_async(
-                    (obj.pk, source_type,), countdown=60*20)
+                if obj.owner_id == request.session.get('candidate_id'):
+                    first_name = request.session.get('first_name', '')
+                    last_name = request.session.get('last_name', '')
+                    name = "{}{}".format(first_name, last_name)
+                    source_type = "shipping_drop_out"
+                    create_lead_on_crm.apply_async(
+                        (obj.pk, source_type, name),
+                        countdown=settings.SHIPPING_DROP_OUT_LEAD)
                 return valid_form
             except Exception as e:
                 non_field_error = 'Personal detail not updated due to %s' % (str(e))
