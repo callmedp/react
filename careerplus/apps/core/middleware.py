@@ -220,7 +220,7 @@ class LearningShineMiddleware(object):
                         'email': email,
                         'mobile': mobile,
                         'timestamp': timestamp,
-                        'url': url,
+                        'url': utm_dict.get('ref_url'),
                         'product_id': product_id,
                         'product': product,
                         'utm_parameter': utm_parameter,

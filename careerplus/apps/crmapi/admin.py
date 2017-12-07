@@ -51,6 +51,8 @@ class UserQuriesAdmin(admin.ModelAdmin):
     )
     ordering = ['-created']
     actions = [lead_creted_on_crm]
+    list_filter = ('lead_source', 'source')
+    search_fields = ('id', 'phn_number', 'email')
     list_per_page = 20
 
 
