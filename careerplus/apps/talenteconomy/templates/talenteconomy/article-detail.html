@@ -3,7 +3,7 @@
 
 {% block django_meta %}
         {% include 'meta/meta.html' %}
-<meta property="og:image" content="{{ SITE_DOMAIN }}{{main_article.image.url}}">
+<meta property="og:image" content="//{{ SITE_DOMAIN }}{{main_article.image.url}}">
 {%  endblock django_meta %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
