@@ -1182,16 +1182,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 12, 13, 8, 3]).exclude(oi_status=4)
-        queryset = queryset.exclude(assigned_to__isnull=True)
-        user = self.request.user
-
-        if user.has_perm('order.can_view_all_allocated_list'):
-            pass
-        elif user.has_perm('order.can_view_only_assigned_allocated_list'):
-            queryset = queryset.filter(assigned_to=user)
-        else:
-            queryset = queryset.none()
+        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 8, 12, 13]).exclude(oi_status=4)
+        # user = self.request.user
 
         try:
             if self.query:
