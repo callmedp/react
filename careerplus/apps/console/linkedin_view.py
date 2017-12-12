@@ -1088,23 +1088,27 @@ class InterNationalAssignmentOrderItemView(View):
 class ProfileCredentialDownload(View):
 
     def get(self, request, *args, **kwargs):
+        session_usr = request.session.get('candidate_id')
         oi = kwargs.get('oi', '')
         profile_credentials = InternationalProfileCredential.objects.filter(oi=oi)
-        try:
-            context_dict = {
-                'pagesize': 'A4',
-                'profile_credentials': profile_credentials,
-            }
-            template = get_template('console/order/profile-update-credentials.html')
-            context = Context(context_dict)
-            html = template.render(context)
-            pdf_file = HTML(string=html).write_pdf()
-            http_response = HttpResponse(pdf_file, content_type='application/pdf')
-            http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
-            return http_response
-        except Exception as e:
-            logging.getLogger('error_log').error("Profile download:",str(e))
-            return HttpResponseForbidden()
+        ord_candidate = profile_credentials.first()
+        if ord_candidate and (session_usr == ord_candidate):
+            try:
+                context_dict = {
+                    'pagesize': 'A4',
+                    'profile_credentials': profile_credentials,
+                }
+                template = get_template('console/order/profile-update-credentials.html')
+                context = Context(context_dict)
+                html = template.render(context)
+                pdf_file = HTML(string=html).write_pdf()
+                http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
+                return http_response
+            except Exception as e:
+                logging.getLogger('error_log').error("Profile download:", str(e))
+        else:
+            return HttpResponseRedirect('/login/')
 
 
 class CreateDrftObject(TemplateView):
