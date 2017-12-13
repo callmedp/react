@@ -1182,6 +1182,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
+
         queryset = queryset.filter(order__status__in=[1, 3], no_process=False, product__type_flow__in=[1, 12, 13, 8, 3]).exclude(oi_status=4)
         # user = self.request.user
 
@@ -1191,6 +1192,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         #     queryset = queryset.filter(assigned_to=user)
         # else:
         #     queryset = queryset.none()
+
 
         try:
             if self.query:

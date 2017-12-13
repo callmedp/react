@@ -108,7 +108,7 @@ def add_server_lead_task(query_dict):
         UserQuries.objects.create(
             email=email, country=country_obj,
             phn_number=mobile, path=url, timestamp=timestamp_obj,
-            product_id=product_id, product=product,
+            product_id=product_id, product=product, lead_source=21,
             utm_parameter=utm_parameter, campaign_slug=campaign_slug)
 
 

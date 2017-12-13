@@ -29,6 +29,12 @@ COMPRESS_OFFLINE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+# Cart Drop Out Set Time For Task
+CART_DROP_OUT_EMAIL = 45 * 60
+CART_DROP_OUT_LEAD = 12 * 60 * 60
+SHIPPING_DROP_OUT_LEAD = 20 * 60
+PAYMENT_DROP_LEAD = 10 * 60
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
