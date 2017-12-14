@@ -4,8 +4,11 @@
 
 /* Tabbing Start From Here */
 @import '../components/tabbing';
+.cms .tabs li {
+  width: 50%; }
 
 .vertical-tabbing {
+  background-color: $bg-white;
   position: absolute;
   left: 0;
   width: 100%;
@@ -15,6 +18,7 @@
     @extend %flexbox; 
     height: 100%;
     width: 100%;
+    overflow: scroll;
   }
 
   .tabs {
