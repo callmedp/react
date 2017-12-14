@@ -50,6 +50,11 @@ def common_context_processor(request):
         "BUSINESS_HEAD_GROUP_LIST": settings.BUSINESS_HEAD_GROUP_LIST,
         "DEPARTMENT_HEAD_GROUP_LIST": settings.DEPARTMENT_HEAD_GROUP_LIST,
         "FINANCE_GROUP_LIST": settings.FINANCE_GROUP_LIST,
+        "USER_QUERY_GROUP_LIST": settings.USER_QUERY_GROUP_LIST,
+        "CMS_GROUP_LIST": settings.CMS_GROUP_LIST,
+        "SKILL_GROUP_LIST": settings.SKILL_GROUP_LIST,
+        "COURSE_GROUP_LIST": settings.COURSE_GROUP_LIST,
+        "SERVICE_GROUP_LIST": settings.SERVICE_GROUP_LIST,
         "roundone_user": roundone_user,
         "IS_LIVE": settings.IS_LIVE
     })

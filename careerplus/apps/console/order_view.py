@@ -111,6 +111,13 @@ class OrderListView(ListView, PaginationMixin):
             pass
 
         try:
+            if int(self.status) != -1:
+                queryset = queryset.filter(status=self.status)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        try:
             if self.payment_date:
                 date_range = self.payment_date.split('-')
                 start_date = date_range[0].strip()
