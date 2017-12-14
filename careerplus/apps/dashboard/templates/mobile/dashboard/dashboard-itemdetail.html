@@ -212,6 +212,9 @@
                         <div class="rel status-item">
                             {{op.get_user_oi_status}}
                             <span>{{op.created.date}}</span>
+                            {% if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2 %}
+                              <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
+                            {% endif %}
                         </div>
                     </li><!-- /.li -->
                 {% endfor %}

@@ -150,7 +150,7 @@ class ActionUserMixin(object):
                             "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
                             'delivery_service': oi.delivery_service,
-                            'delivery_service_slug':oi.delivery_service.slug if oi.delivery_service else '',
+                            'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
                             'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
@@ -218,11 +218,14 @@ class ActionUserMixin(object):
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
-                            "username": obj.order.first_name + ' ' + obj.order.last_name,
+                            "username": oi.order.first_name,
                             "writer_name": assigned_to.name,
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
-                            "oi": oi,
+                            "type_flow": oi.product.type_flow,
+                            'delivery_service': oi.delivery_service,
+                            'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
+                            'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
                         self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
                         if obj.delivery_service and obj.delivery_service.slug == 'super-express':
