@@ -234,6 +234,7 @@ OI_EMAIL_STATUS = (
     (143, 'Sent Flow12 Second Draft Email'),
     (144, 'Sent Flow12 Final Draft Email'),
     (145, 'Sent Flow12 Process Mailer'),
+    (146, 'Sent Flow12 Assignment Mailer'),
 
     # flow13 :151 - 160
     (151, 'Sent Flow13 Pending Resume Email'),
@@ -241,6 +242,7 @@ OI_EMAIL_STATUS = (
     (153, 'Sent Flow13 Second Draft Email'),
     (154, 'Sent Flow13 Final Draft Email'),
     (155, 'Sent Flow13 Process Mailer'),
+    (156, 'Sent Flow13 Assignment Mailer'),
 
     # flow2 :161 - 170
     (161, 'Sent Flow2 Process Mailer'),
@@ -249,7 +251,7 @@ OI_EMAIL_STATUS = (
     (171, 'Sent Flow6 Process Mailer'),
 
     # cashback wallet status: 181 - 190
-    (181, '')  
+    (181, '')
 )
 
 OI_SMS_STATUS = (

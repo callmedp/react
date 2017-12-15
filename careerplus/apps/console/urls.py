@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^order/', include('console.order.urls', namespace='order')),
     url(r'^partner/', include('console.partner.urls', namespace='partner')),
     url(r'^operations/', include('console.operations.urls', namespace='operations')),
+    url(r'^userquery/', include('console.userquery.urls', namespace='userquery')),
 ]
 
 

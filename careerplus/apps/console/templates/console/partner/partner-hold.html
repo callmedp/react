@@ -187,6 +187,8 @@
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
+                    <th class="column-title">MRP</th>
+                    <th class="column-title">Product Id</th>
                     <th class="column-title">Order Details</th>
                     <th class="column-title">Submit Msg</th>
                     <th class="column-title">Payment Date</th>
@@ -229,6 +231,13 @@
                             {% if obj.product.get_duration_db %}
                                 <strong>Duration:</strong> {{obj.product.get_duration_db}}
                             {% endif %}
+                      </td>
+                      <td>{{obj.cost_price}}</td>
+                      <td>{% if obj.parent %}
+                          {{obj.parent.product.id}}
+                        {% else %}
+                          {{obj.product.id}}
+                        {% endif %}
                       </td>
                       
                        <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
