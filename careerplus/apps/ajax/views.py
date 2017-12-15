@@ -341,8 +341,8 @@ class ApproveByAdminDraft(View):
                             "username": obj.order.first_name,
                             'draft_added': obj.draft_added_on,
                             'mobile': obj.order.mobile,
-                            'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_DOMAIN, token.decode()),
+                            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                         })
                         send_email_task.delay(
                             to_emails, mail_type, email_dict, status=9,

@@ -34,6 +34,7 @@ from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo
+from linkedin.autologin import AutoLogin
 
 
 @Decorate(stop_browser_cache())
@@ -517,11 +518,15 @@ class DashboardAcceptService(View):
                                 'sms_oi_status', flat=True).distinct())
                         mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
+                        token = AutoLogin().encode(
+                            oi.order.email, oi.order.candidate_id, days=None)
                         email_dict.update({
                             "subject": 'Closing your ' + oi.product.name + ' service',
                             "username": oi.order.first_name,
                             'draft_added': oi.draft_added_on,
                             'mobile': oi.order.mobile,
+                            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                         })
 
                         if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):
