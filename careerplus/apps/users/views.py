@@ -204,9 +204,12 @@ class DownloadBoosterResume(View):
             email, oi_pk, valid = TokenExpiry().decode(token)
             if valid:
                 oi = OrderItem.objects.get(pk=oi_pk)
-
                 if oi.oi_draft:
                     resume = oi.oi_draft
+                elif oi.oi_resume:
+                    resume = oi.oi_resume
+                    
+                if resume:
                     file_path = resume.path
                     filename = resume.name
                     extn = filename.split('.')[-1]

@@ -1633,7 +1633,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
                 exclude_list.append(obj.pk)
 
         queryset = queryset.exclude(id__in=exclude_list)
-        queryset = queryset.exclude(Q(oi_draft__isnull=True) | Q(oi_draft__exact=''))
+        # queryset = queryset.exclude(Q(oi_draft__isnull=True) | Q(oi_draft__exact=''))
 
         try:
             if self.query:
@@ -1918,7 +1918,7 @@ class ActionOrderItemView(View):
                         "username": oi.order.first_name,
                     })
 
-                    if oi.oi_draft:
+                    if oi.oi_draft or oi.oi_resume:
                         resumevar = "%s://%s/user/resume/download/?token=%s" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
                         resumevar = textwrap.fill(resumevar, width=80)
