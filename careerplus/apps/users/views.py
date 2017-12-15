@@ -208,7 +208,7 @@ class DownloadBoosterResume(View):
                     resume = oi.oi_draft
                 elif oi.oi_resume:
                     resume = oi.oi_resume
-                    
+
                 if resume:
                     file_path = resume.path
                     filename = resume.name
@@ -226,11 +226,15 @@ class DownloadBoosterResume(View):
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (newfilename)
                     return response
                 else:
+                    logging.getLogger(
+                        'error_log').error("candidate booster resume not found")
                     raise Exception("Resume not found.")
         except:
             messages.add_message(
                 request, messages.ERROR,
                 "Sorry, the document is currently unavailable.")
+            logging.getLogger(
+                        'error_log').error("candidate booster resume not found")
             response = HttpResponseRedirect(
                 request.META.get('HTTP_REFERER', '/'))
             return response

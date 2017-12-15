@@ -605,32 +605,33 @@ class MarkedPaidOrderView(View):
             order_pk = request.POST.get('order_pk', None)
             try:
                 obj = Order.objects.get(pk=order_pk)
-                data['status'] = 1
-                payment_date = timezone.now()
-                obj.status = 1
-                obj.paid_by = request.user
-                obj.payment_date = payment_date
-                obj.save()
+                if obj.status != 1:
+                    data['status'] = 1
+                    payment_date = timezone.now()
+                    obj.status = 1
+                    obj.paid_by = request.user
+                    obj.payment_date = payment_date
+                    obj.save()
 
-                txn_objs = obj.ordertxns.filter(status=0)
-                for txn_obj in txn_objs:
-                    txn_obj.status = 1
-                    txn_obj.payment_date = payment_date
-                    txn_obj.save()
+                    txn_objs = obj.ordertxns.filter(status=0)
+                    for txn_obj in txn_objs:
+                        txn_obj.status = 1
+                        txn_obj.payment_date = payment_date
+                        txn_obj.save()
 
-                data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
-                # add reward_point in wallet
-                add_reward_point_in_wallet.delay(order_pk=obj.pk)
-                # OrderMixin().addRewardPointInWallet(order=obj)
+                    data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
+                    # add reward_point in wallet
+                    add_reward_point_in_wallet.delay(order_pk=obj.pk)
+                    # OrderMixin().addRewardPointInWallet(order=obj)
 
-                # pending item email send
-                pending_item_email.apply_async((obj.pk,), countdown=900)
+                    # pending item email send
+                    pending_item_email.apply_async((obj.pk,), countdown=900)
 
-                # send email through process mailers
-                process_mailer.apply_async((obj.pk,), countdown=900)
+                    # send email through process mailers
+                    process_mailer.apply_async((obj.pk,), countdown=900)
 
-                # roundone order
-                roundone_product(order=obj)
+                    # roundone order
+                    roundone_product(order=obj)
 
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
