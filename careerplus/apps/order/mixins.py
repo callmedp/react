@@ -116,7 +116,6 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             # update initial operation status
             update_initiat_orderitem_sataus(order=order)
             service_initiation.delay(order.pk)
-
             # for linkedin
             linkedin_products = order.orderitems.filter(product__type_flow=8)
 
@@ -137,7 +136,8 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 quiz_rsp.oi = linkedin_product
                 quiz_rsp.save()
 
-                order_item.counselling_form_status = 49
+                order_item.oi_status = 2
+                order_item.last_oi_status = last_oi_status
                 order_item.oio_linkedin = draft_obj
                 order_item.save()
                 order_item.orderitemoperation_set.create(

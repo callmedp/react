@@ -428,7 +428,7 @@ class ActionUserMixin(object):
 
         elif orderitem_obj.product.type_flow == 13 and 156 not in email_sets:
             send_email_task.delay(
-                to_emails, mail_type, data, status=151, oi=orderitem_obj.pk)
+                to_emails, mail_type, data, status=156, oi=orderitem_obj.pk)
 
         elif orderitem_obj.product.type_flow == 8 and 101 not in email_sets:
             send_email_task.delay(

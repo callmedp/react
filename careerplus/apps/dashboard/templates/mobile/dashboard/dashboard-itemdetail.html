@@ -126,19 +126,19 @@
                                 {{op.get_user_oi_status}}
                             {% elif op.oi_status == 46 and op.draft_counter < max_draft_limit %}
                                 Revised Document is ready
-                            {% elif op_oi_status == 4 %}
+                            {% elif op.oi_status == 4 %}
                                 Document is finalized
                             {% else %}
                                {{op.get_user_oi_status}}
                             {% endif %}
                             <span>{{op.created.date}}</span>
                         </div>
-                        {% if op.oi_status == 49 and oi.counselling_form_status == 41 %}
-                            <a href="#" class="btn btn-outline w100 mt-20">Complete form</a>
+                        {% if oi.oi_status == 2 %}
+                            <a href="javascript:void(0)" role="button" class="btn btn-outline w100 mt-20 sidebar-secondary-trigger">Upload Resume</a>
                         {% elif op.oi_status == 46 %}
-                            <a href="#" class="btn btn-outline w100 mt-20">Download</a>
+                            <a href="{% url "linkedin-draf-download" oi.pk op.pk %}" class="btn btn-outline w100 mt-20">Download</a>
                         {% elif op.oi_status == 27 %}
-                            <a href="{{oi.oi_draft.url}}" class="btn btn-outline w100 mt-20" download>Download</a>
+                            <a href="{% url "linkedin-draf-download" oi.pk op.pk %}" class="btn btn-outline w100 mt-20">Download</a>
                         {% endif %}
                     </li><!-- /.li -->
                 {% endfor %}
