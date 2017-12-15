@@ -95,7 +95,7 @@ def booster():
             "username": oi.order.first_name,
         })
 
-        if oi.oi_draft:
+        if oi.oi_draft or oi.oi_resume:
             resumevar = "%s://%s/user/resume/download/?token=%s" % (
                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)

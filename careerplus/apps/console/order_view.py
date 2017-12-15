@@ -89,9 +89,9 @@ class OrderListView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(OrderListView, self).get_queryset()
         user = self.request.user
-        excl_txns = PaymentTxn.objects.filter(status__in=[0, 2, 3, 4, 5], payment_mode__in=[6, 7])
-        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
-        queryset = queryset.exclude(id__in=excl_order_list)
+        # excl_txns = PaymentTxn.objects.filter(status__in=[0, 2, 3, 4, 5], payment_mode__in=[6, 7])
+        # excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        # queryset = queryset.exclude(id__in=excl_order_list)
         if user.has_perm('order.can_show_all_order'):
             queryset = queryset
         elif user.has_perm('order.can_show_paid_order'):
@@ -106,6 +106,13 @@ class OrderListView(ListView, PaginationMixin):
                     Q(email__icontains=self.query) |
                     Q(mobile__icontains=self.query) |
                     Q(id__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        try:
+            if int(self.status) != -1:
+                queryset = queryset.filter(status=self.status)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1626,7 +1633,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
                 exclude_list.append(obj.pk)
 
         queryset = queryset.exclude(id__in=exclude_list)
-        queryset = queryset.exclude(Q(oi_draft__isnull=True) | Q(oi_draft__exact=''))
+        # queryset = queryset.exclude(Q(oi_draft__isnull=True) | Q(oi_draft__exact=''))
 
         try:
             if self.query:
@@ -1911,7 +1918,7 @@ class ActionOrderItemView(View):
                         "username": oi.order.first_name,
                     })
 
-                    if oi.oi_draft:
+                    if oi.oi_draft or oi.oi_resume:
                         resumevar = "%s://%s/user/resume/download/?token=%s" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
                         resumevar = textwrap.fill(resumevar, width=80)
