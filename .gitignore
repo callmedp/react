@@ -102,3 +102,6 @@ careerplus/templates/.gitignore
 
 static
 settings_local.py
+
+# Sass
+.sass-cache
