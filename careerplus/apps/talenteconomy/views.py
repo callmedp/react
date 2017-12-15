@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
-
+from itertools import zip_longest
+        
 from django.views.generic import (
     TemplateView,
     DetailView,
@@ -45,17 +46,19 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author')[:9]
 
         authors = Author.objects.filter(visibility=2,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-
+        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
+        
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
-        top_cats = ' '.join(top_3_cats)
+        top_cats = '+'.join(top_3_cats)
         popular_courses = self.get_product(top_cats)
-
+        
         context.update({
         'top_article_list':[top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
         'categories': categories,
         'article_list': article_list,
         'popular_courses':popular_courses,
         'authors':authors,
+        'authors_list': list(author_list)
         })
 
         context.update(self.get_breadcrumb_data())
@@ -103,7 +106,8 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
         categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
 
         authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-
+        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
+        
         main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=2) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=2)
         main_articles = main_articles.order_by('-publish_date').distinct().select_related('author')
 
@@ -121,6 +125,7 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
         })
         context.update({
             "authors":authors,
+            'authors_list': list(author_list),
             "category": cat_obj,
             "categories": categories,
             "popular_courses":popular_courses,
@@ -263,11 +268,10 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
     def get_meta_details(self):
         heading = self.object.heading
-        first_line = self.object.content.split('.')
-        firstline = first_line[0] if first_line else ''
+        des = self.object.get_description()
         meta = Meta(
             title= heading + "- Talent Economy",
-            description = "Read Article on %s. %s" %(heading,firstline),
+            description = des,
         )
         return {"meta": meta}
 
@@ -285,14 +289,16 @@ class AuthorListingView(TemplateView):
         categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
 
         authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-
+        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
+        
         top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat')[:9]
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
-        top_cats = ' '.join(top_3_cats)
+        top_cats = '+'.join(top_3_cats)
         popular_courses = BlogMixin().get_product(top_cats)
 
         context.update({
         'authors':authors,
+        'authors_list': list(author_list),
         'categories': categories,
         'popular_courses':popular_courses,
         })
@@ -355,10 +361,12 @@ class AuthorDetailView(DetailView):
         popular_courses = BlogMixin().get_product(most_recent_cat)
 
         authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(id=author.id)
-
+        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
+        
         context.update({
             "author":author,
             "authors":authors,
+            'authors_list': list(author_list),
             "article_list":article_list,
             "popular_courses": popular_courses,
         })
