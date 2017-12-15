@@ -210,7 +210,7 @@ class DownloadBoosterResume(View):
                     resume = oi.oi_resume
 
                 if resume:
-                    file_path = resume.path
+                    file_path = settings.RESUME_DIR + resume.name
                     filename = resume.name
                     extn = filename.split('.')[-1]
                     newfilename = 'resume_' + oi.order.first_name + '.' + extn
