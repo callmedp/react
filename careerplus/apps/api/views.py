@@ -3,13 +3,14 @@ import datetime
 from decimal import Decimal
 
 from django.utils import timezone
-
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 from users.tasks import user_register
@@ -19,6 +20,7 @@ from shop.models import Product
 from coupon.models import Coupon
 from core.api_mixin import ShineCandidateDetail
 # from order.mixins import OrderMixin
+from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -281,3 +283,19 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
             return Response(
                 {"status": 0, "msg": "there is no items in order"},
                 status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderHistoryAPIView(ListAPIView):
+    serializer_class = OrderListHistorySerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    # permission_classes = []
+
+    def get_queryset(self, *args, **kwargs):
+        candidate_id = self.request.GET.get("candidate_id", None)
+        queryset_list = Order.objects.all()
+        if not candidate_id:
+            return queryset_list.none()
+        else:
+            queryset_list = queryset_list.filter(
+                Q(candidate_id=candidate_id))
+            return queryset_list
