@@ -287,8 +287,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
 
 class OrderHistoryAPIView(ListAPIView):
     serializer_class = OrderListHistorySerializer
+    authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
-    # permission_classes = []
 
     def get_queryset(self, *args, **kwargs):
         candidate_id = self.request.GET.get("candidate_id", None)
