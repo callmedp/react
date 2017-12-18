@@ -2,16 +2,16 @@
 	<h2 class="heading-right-talent">take me to</h2>
 	<ul>
     	{% for category in categories %}
-    	<a href="{{category.url}}" title="{{category.name}}">
 		<li {% if category.slug == main_cat %}style="border:1px solid #666"{% endif %}>
-				<figure>
-					{% if category.image %}
-					<img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
-					{% endif %}
-				</figure>
-				<h3>{{category.name}}</h3>
+	    	<a href="{{category.url}}" title="{{category.name}}">
+					<figure>
+						{% if category.image %}
+						<img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
+						{% endif %}
+					</figure>
+					<h3>{{category.name}}</h3>
+			</a>
 		</li>
-		</a>
 		{% endfor %}
 	</ul>
 </div>

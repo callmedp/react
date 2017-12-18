@@ -1,17 +1,17 @@
 import logging
 import json
+from decimal import Decimal
 from celery.decorators import task
 from django.conf import settings
 from cart.models import Cart
 from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
 from cart.mixins import CartMixin
-from shine.core import ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 
 
 @task(name="create_lead_on_crm")
-def create_lead_on_crm(pk=None, source_type=None):
+def create_lead_on_crm(pk=None, source_type=None, name=None):
     try:
         filter_dict = {}
         if source_type == "cart_drop_out":
@@ -22,7 +22,7 @@ def create_lead_on_crm(pk=None, source_type=None):
                 "payment_page": False,
                 "pk": pk,
             })
-            lead_creation_function(filter_dict=filter_dict)
+            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
 
         if source_type == "shipping_drop_out":
             filter_dict.update({
@@ -32,7 +32,7 @@ def create_lead_on_crm(pk=None, source_type=None):
                 "payment_page": False,
                 "pk": pk,
             })
-            lead_creation_function(filter_dict=filter_dict)
+            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
 
         if source_type == "payment_drop_out":
             filter_dict.update({
@@ -42,12 +42,12 @@ def create_lead_on_crm(pk=None, source_type=None):
                 "payment_page": True,
                 "pk": pk,
             })
-            lead_creation_function(filter_dict=filter_dict)
+            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
     except Exception as e:
         logging.getLogger('error_log').error("%s" % str(e))
 
 
-def lead_creation_function(filter_dict=None):
+def lead_creation_function(filter_dict=None, cndi_name=None):
     try:
         cart_objs = Cart.objects.filter(**filter_dict).exclude(owner_id__exact='')
         extra_info = {}
@@ -55,7 +55,7 @@ def lead_creation_function(filter_dict=None):
             data_dict = {}
             total_amount = None
             data_dict.update({
-                "name": '{}{}'.format(cart_obj.first_name, cart_obj.last_name),
+                "name": cndi_name,
                 "email": cart_obj.email,
                 "mobile": cart_obj.mobile,
                 "country_code": cart_obj.country_code,
@@ -119,22 +119,25 @@ def lead_creation_function(filter_dict=None):
 
 
 @task(name="cart_drop_out_mail")
-def cart_drop_out_mail(pk=None):
+def cart_drop_out_mail(pk=None, cnd_email=None):
     mail_type = 'CART_DROP_OUT'
+    cart_id = None
     cart_objs = Cart.objects.filter(
         status=2,
+        shipping_done=False,
+        payment_page=False,
         owner_id__isnull=False, pk=pk).exclude(owner_id__exact='')
     count = 0
     for cart_obj in cart_objs:
         try:
             crt_obj = cart_obj
+            cart_id = cart_obj.owner_id
             data = {}
-            total_amount = None
+            toemail = ''
             last_cart_items = []
             to_email = []
+            total_price = Decimal(0)
             if crt_obj:
-                total_amount = CartMixin().getPayableAmount(cart_obj)
-                data['total'] = total_amount.get('total_payable_amount')
                 m_prod = crt_obj.lineitems.filter(
                     parent=None, send_email=False).select_related(
                     'product', 'product__vendor').order_by('-created')
@@ -148,23 +151,41 @@ def cart_drop_out_mail(pk=None):
                         parent=m_prod,
                         parent_deleted=True).select_related('product')
                     last_cart_items.append(data)
+                    for last_cart_item in last_cart_items:
+                        parent_li = last_cart_item.get('m_prod')
+                        addons = last_cart_item.get('addons')
+                        variations = last_cart_item.get('variations')
+                        product_price = parent_li.product.get_price()
+                        parent_li.price_incl_tax = product_price
+                        parent_li.save()
+
+                        if parent_li.no_process == False:
+                            total_price += parent_li.price_incl_tax
+                        for li in addons:
+                            product_price = li.product.get_price()
+                            li.price_incl_tax = product_price
+                            li.save()
+                            total_price += li.price_incl_tax
+                        for li in variations:
+                            product_price = li.product.get_price()
+                            li.price_incl_tax = product_price
+                            li.save()
+                            total_price += li.price_incl_tax
+                    data['total'] = round(total_price, 2)
                     product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
                     data['subject'] = '{} is ready to checkout'.format(
                         product_name)
-                    if m_prod.cart.email and m_prod.cart.owner_id:
-                        to_email.append(m_prod.cart.email)
+                    data['product'] = product_name
+                    if cart_id and (cnd_email or m_prod.cart.email):
+                        toemail = cnd_email or m_prod.cart.email
+                        to_email.append(toemail)
                     else:
-                        json_data = ShineCandidateDetail().get_status_detail(
-                            email=None, shine_id=m_prod.cart.owner_id)
-                        if json_data:
-                            to_email.append(json_data['email'])
-                        else:
-                            logging.getLogger('error_log').error("Error in getting"
-                                                                 "response from Shine for id:", m_prod.cart.owner_id)
-                            continue
-                    token = AutoLogin().encode(
-                        m_prod.cart.email, m_prod.cart.owner_id, days=None)
+                        logging.getLogger('error_log').error(
+                            "Error in getting response from Shine for id:",
+                            m_prod.cart.owner_id)
+                        continue
 
+                    token = AutoLogin().encode(toemail, cart_id, days=None)
                     data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
                         settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                         token.decode())

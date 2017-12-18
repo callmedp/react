@@ -60,9 +60,9 @@
                 <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
                 <p class="fs-12"><a href="#"><strong>{{author.no_of_blog}} articles</strong></a></p>
                 <ul class="mt-5">
-                    {% if author.fb_url %}<li class="icon-fbGrey"><a href="{{author.fb_url}}">facebook</a></li> {% endif %}
-                    {% if author.twitter_url %}<li class="icon-twGrey"><a href="{{author.twitter_url}}">twitter</a></li>{% endif %}
-                    {% if author.linkedin_url %}<li class="icon-linkedinGrey"><a href="{{author.linkedin_url}}">linkedin</a></li>{% endif %}
+                    {% if author.fb_url %}<li><a href="{{author.fb_url}}" target="_blank" class="icon-fbGrey">facebook</a></li> {% endif %}
+                    {% if author.twitter_url %}<li><a href="{{author.twitter_url}}" target="_blank" class="icon-twGrey">twitter</a></li>{% endif %}
+                    {% if author.linkedin_url %}<li><a href="{{author.linkedin_url}}" target="_blank" class="icon-linkedinGrey">linkedin</a></li>{% endif %}
                 </ul>
             </div>
         </div>
@@ -83,6 +83,11 @@
             {% include './include/authorSlide.tmpl.html' with authors=authors %}
         </div>
         {% endif %}
+
+        {% if popular_courses %}
+            {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-author-details' %}
+        {% endif %}
+
     </section>
 </div>
 
