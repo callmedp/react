@@ -479,6 +479,7 @@ body {
 				strong {
 					font-weight: $font-weight+300;
 					display: inline-block;
+					margin-left: 0;
 				}
 
 				.jobs-available {
@@ -664,6 +665,7 @@ body {
 
 	.carousel-control {
 		width: 6%;
+		opacity: 0.9;
 	}
 
 	.left-arrow {
