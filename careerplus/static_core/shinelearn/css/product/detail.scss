@@ -1284,6 +1284,11 @@ header {
 .scroll {
 	margin-top: -50px;
 	padding-top: 50px;
+
+	div {
+		background: transparent !important;
+		color: $primary-color !important;
+	}
 }
 
 /*sticky menu css*/

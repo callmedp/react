@@ -165,6 +165,7 @@
 	.media-heading {
 		font-size: $font-size+14;
 		margin-bottom: 10px;
+		line-height: 26px;
 	}
 
 	.editor {
@@ -315,6 +316,10 @@
 		ol {
 			margin: 0;
 			padding: 20px 0 0 20px;
+		}
+
+		strong, b {
+			font-weight: 600;
 		}
 	}
 
