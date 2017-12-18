@@ -149,8 +149,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
         queryset = queryset.filter(
             order__status=1,
             no_process=False,
-            product__type_flow=8, oi_status__in=[5, 3]).exclude(
-            oi_status__in=[4, 45, 46, 47, 48, 161, 162, 163])
+            product__type_flow=8, oi_status__in=[5, 3, 42])
         for query in queryset:
             try:
                 query.quizresponse
