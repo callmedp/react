@@ -115,7 +115,7 @@ class CounsellingSubmit(TemplateView):
                 if not orderitem.tat_date:
                     last_oi_status = orderitem.last_oi_status
                     orderitem.tat_date = datetime.now()
-                    orderitem.last_oi_status = 42
+                    orderitem.oi_status = 42
                     orderitem.save()
                     orderitem.orderitemoperation_set.create(
                         oi_status=42,
@@ -191,7 +191,7 @@ class CounsellingForm(TemplateView):
                 if not orderitem.tat_date:
                     last_oi_status = orderitem.last_oi_status
                     orderitem.tat_date = datetime.now()
-                    orderitem.last_oi_status = 42
+                    orderitem.oi_status = 42
                     orderitem.save()
                     orderitem.orderitemoperation_set.create(
                         oi_status=42,
