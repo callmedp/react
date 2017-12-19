@@ -50,6 +50,7 @@ class AutoLoginView(View):
         return HttpResponseRedirect('/login/')
 
 
+@method_decorator(permission_required('order.can_show_linkedin_counselling_form', login_url='/console/login/'), name='dispatch')
 class CounsellingSubmit(TemplateView):
     template_name = "linkedin/counselling_form.html"
 
