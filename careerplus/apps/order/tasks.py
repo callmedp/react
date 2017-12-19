@@ -40,7 +40,7 @@ def pending_item_email(pk=None):
             token = AutoLogin().encode(
                 oi.order.email, oi.order.candidate_id, days=None)
             data.update({
-                'subject': 'To initiate your service(s) fulfil these pending requirements',
+                'subject': 'To initiate your services fulfil these details',
                 'user': oi.order.first_name,
                 'type_flow': oi.product.type_flow,
                 'product_name': oi.product.name,
@@ -178,11 +178,6 @@ def pending_item_email(pk=None):
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token.decode())
                     })
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/linkedin/counselling-form/%s/" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode(), oi.pk)
-                    })
                     if 151 not in email_sets and 151 not in sms_sets:
                         send_email(to_emails, mail_type, data, 151, oi.pk)
                         try:
@@ -199,9 +194,9 @@ def pending_item_email(pk=None):
 
                 elif oi.product.type_flow == 8:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/linkedin/counselling-form/%s/" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode(), oi.pk)
+                            token.decode())
                     })
                     if 108 not in email_sets and 108 not in sms_sets:
                         send_email(to_emails, mail_type, data, 108, oi.pk)
@@ -447,9 +442,9 @@ def process_mailer(pk=None):
 
                 elif oi.product.type_flow == 8:
                     data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/linkedin/counselling-form/%s/" % (
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode(), oi.pk)
+                            token.decode()),
                     })
                     if 105 not in email_sets and 105 not in sms_sets:
                         send_email(to_emails, mail_type, data, 105, oi.pk)

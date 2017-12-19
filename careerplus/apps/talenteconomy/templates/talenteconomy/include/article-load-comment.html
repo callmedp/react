@@ -1,0 +1,31 @@
+{% load static %}
+{% load humanize %}
+{% load humanize_tags %}
+
+{% for comment in comments %}
+  <div class="media mt-30" >
+    <div class="media-left">
+        <figure>
+            <a href="#">
+            <img class="media-object" src="{% static 'shinelearn/images/blog/user-pic.jpg' %}" alt="shine">
+          </a>
+        </figure>
+    </div>
+    <figcaption class="media-body">
+        <span class="author-name">{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</span>
+        <span class="time">{% get_humanize_date comment.created_on %}</span>
+        <p>{{comment.message}}</p>
+        <!-- <a href="#">Reply</a> -->
+    </figcaption>
+  </div>
+{% endfor %}
+
+{% if comments.has_next %}
+<div id="load_more{{page_obj.id}}">
+    <form role="form" id="loadform{{page_obj.id}}">
+        <input type="hidden" name="page" value="{{comments.next_page_number}}">
+        <input type="hidden" name="slug" value="{{page_obj.slug}}">
+    </form>
+    <a id="comment_load_more{{page_obj.id}}" role="button" onclick="loadMoreComment('{{page_obj.id}}', 2)" class="comments-links mb-40"> <span class="comments-icon mr-10"></span>More Comments</a>
+</div>
+{% endif %}

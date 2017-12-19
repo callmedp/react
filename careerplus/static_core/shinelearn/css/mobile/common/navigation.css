@@ -36,7 +36,7 @@ nav {
         width: 21px;
         margin-right: 12px;
         position: relative;
-        top: 2px; }
+        top: 4px; }
   .sb-menu > li:first-child {
     border-top: none;
     /* Removes top border from first list item.. */ }

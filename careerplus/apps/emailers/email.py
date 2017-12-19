@@ -18,6 +18,8 @@ class SendMail():
             cc = ['upender.singh@hindustantimes.com']
             bcc = ['123snig@gmail.com']
             # cc = ['upenders379@gmail.com']
+        else:
+            bcc = [settings.DEFAULT_FROM_EMAIL]
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
         emsg.content_subtype = "html"
         if attachments:

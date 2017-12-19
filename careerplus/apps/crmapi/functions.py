@@ -22,7 +22,7 @@ def lead_create_on_crm(cart_obj, data_dict=None):
                 cart_obj.lead_created = True
                 cart_obj.save()
                 logging.info(rsp.json())
-            elif rsp.status_code == 400 and rsp.get('status') == 0:
+            elif rsp.status_code == 400 and api_rsp.get('status') == 0:
                 logging.getLogger('error_log').error(rsp.json())
         else:
             logging.getLogger("error_log").error("cart have no mobile number")

@@ -131,10 +131,12 @@
 							    <div class="media-left media-middle">
 							    	<span class="jobs-growth-icon"></span>
 							    </div>
-								    <div class="media-body">
-								    	<strong>{{api_data.job_count}}</strong>
-								      	jobs in the market demanding this skill
-								    </div>
+							    <div class="media-body">
+							    	<a target="_blank" href="https://www.shine.com/job-search/{{category_obj.name|slugify}}-jobs">
+							    		<strong>{{api_data.job_count}}</strong>
+							    	</a>
+							      	jobs in the market demanding this skill
+							    </div>
 							</div>
 							{% comment %}
 								

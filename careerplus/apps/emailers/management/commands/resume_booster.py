@@ -21,11 +21,10 @@ def booster():
     ''' Resume Boosters mail sending'''
 
     booster_ois = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=7, oi_status__in=[5, 61, 62])
+        order__status__in=[1, 3], product__type_flow=7, oi_status__in=[0, 5, 61, 62])
     booster_ois = booster_ois.select_related('order')
     days = 7
     candidate_data = {}
-    recruiter_data = {}
     recruiter_data = {}
     candidate_list = []
 
@@ -72,6 +71,19 @@ def booster():
                 assigned_to=oi.assigned_to,
             )
             continue
+        elif oi.oi_status == 0:
+            last_oi_status = oi.oi_status
+            oi.oi_status = 2
+            oi.last_oi_status = last_oi_status
+            oi.save()
+
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to,
+            )
+            continue
+
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
         to_emails = [oi.order.email]
         email_sets = list(oi.emailorderitemoperation_set.all().values_list(
@@ -83,7 +95,7 @@ def booster():
             "username": oi.order.first_name,
         })
 
-        if oi.oi_draft:
+        if oi.oi_draft or oi.oi_resume:
             resumevar = "%s://%s/user/resume/download/?token=%s" % (
                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)
@@ -138,7 +150,7 @@ def booster():
         recruiters = settings.BOOSTER_RECRUITERS
         mail_type = 'BOOSTER_RECRUITER'
         recruiter_data.update({"data": candidate_list})
-        if recruiter_data:
+        if candidate_list != []:
             send_email_task.delay(recruiters, mail_type, recruiter_data)
             for oi in booster_ois:
                 oi.emailorderitemoperation_set.create(email_oi_status=92)
