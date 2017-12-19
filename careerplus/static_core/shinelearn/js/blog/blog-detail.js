@@ -151,11 +151,15 @@ var showArticleOnScroll = (function(){
     prev_page = 0,
     ajaxOffSetDistance  = 600,
     urlUpdateOffset = 100,
-    defaultUrl = top.window.location.href;
+    defaultUrl = top.window.location.pathname;
 
     function onScroll() {
+        if($('#id_ajax_article').length < 1){
+            return;
+        };
+
         $(window).scroll(function() {
-            if ( $(window).scrollTop() > $('#id_ajax_article').offset().top - ajaxOffSetDistance) {
+            if ($(window).scrollTop() > $('#id_ajax_article').offset().top - ajaxOffSetDistance) {
                makeAjax();
             };
             
@@ -175,8 +179,6 @@ var showArticleOnScroll = (function(){
                     }
                 };
             };
-
-
         });
     };
 

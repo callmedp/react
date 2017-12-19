@@ -65,9 +65,9 @@
 
 {% block container %}
 <div class="body-wrapper">
-    <section class="content-box" id="related-container">
-        {{detail_article|safe}}
-        {{scroll_article|safe}}
+    <section class="content-box">
+        <div id="related-container">{{detail_article}}</div>
+        <div id="id_ajax_article"></div>
     </section>
     
     <div class="share-wrap">
@@ -89,6 +89,9 @@
     <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
     <script src="{% static "shinelearn/js/blog/blog-detail.js" %}"></script>
     <script src="{% static "shinelearn/js/mobile/blog/blog.js" %}"></script>
+    <script type="text/javascript">
+        showArticleOnScroll.scroll(); /* for calling infinite articles */
+    </script>
 {% endblock js_section %}
 
 {% block johukum %}
