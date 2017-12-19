@@ -189,11 +189,11 @@ var showArticleOnScroll = (function(){
         } else {
             return false;
         }
-    }
+    };
 
     function firePageView(){
         MyGA.sendVirtualPage();
-    }
+    };
 
     function makeAjax() {
         page = $("#pg_id").val();
@@ -213,13 +213,11 @@ var showArticleOnScroll = (function(){
                         $('#related-container').append(dynamicDiv);
                         ajaxCalled = false;
                     },
-                    failure: function(response){
-                        //alert("Something went wrong.")
-                    }
+                    failure: function(response){}
                 });
             }
         }
-    }
+    };
 
     
     function upDateUrl(urlPath) {
@@ -230,10 +228,11 @@ var showArticleOnScroll = (function(){
             ret = true;
         }
         return ret;
+    };
+
+    return {
+        scroll : onScroll
     }
-
-
-    onScroll();
 
 })();
 
