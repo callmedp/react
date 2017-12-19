@@ -1,5 +1,5 @@
-@import "bootstrap/variables";
-@import "bootstrap/mixins";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
 
 %heading {
 	color: $white-color;
@@ -175,7 +175,7 @@
 .talent-economy {
 	color: $white-color;
 	background-size: cover !important;
-	background: url(../images/talent-economy-bg.jpg) no-repeat 0 0;
+	background: url(#{$imagePath}images/talent-economy-bg.jpg) no-repeat 0 0;
 	overflow: hidden;
 	padding: 20px;
 	border-radius: 10px;
@@ -578,7 +578,7 @@
 /*----Article Category page css---*/
 .article-category-header {
 	clear: both;
-	background: url(../images/article-header-bg.jpg) no-repeat center top; 
+	background: url(#{$imagePath}images/article-header-bg.jpg) no-repeat center top; 
 	background-size: cover;
 	display: block;
 }
