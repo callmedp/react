@@ -158,20 +158,22 @@ var showArticleOnScroll = (function(){
             if ( $(window).scrollTop() > $('#id_ajax_article').offset().top - ajaxOffSetDistance) {
                makeAjax();
             };
+            
+            if($('.cls_ajax_article').length) {
+                $('.cls_ajax_article').each(function(index,item){
+                    if(isScrolledIntoView(item)) {
+                        if(upDateUrl($(item).data('url'))){
+                            firePageView();    
+                        }
+                        return false;
+                    }
+                });
 
-            $('.cls_ajax_article').each(function(index,item){
-                if(isScrolledIntoView(item)) {
-                    if(upDateUrl($(item).data('url'))){
+                if($(window).scrollTop() + window.innerHeight < $('.cls_ajax_article').first().offset().top) {
+                    if(upDateUrl(defaultUrl)){
                         firePageView();    
                     }
-                    return false;
-                }
-            });
-
-            if($(window).scrollTop() + window.innerHeight < $('.cls_ajax_article').first().offset().top) {
-                if(upDateUrl(defaultUrl)){
-                    firePageView();    
-                }
+                };
             };
 
 
