@@ -1082,13 +1082,15 @@
 	}
 
 	.media-left {
-		width: 122px;
-		height: 122px;
+		width: 115px;
+		height: auto;
+		min-width: 115px;
 
 		img {
-			width: 122px;
-			height: 122px;
+			width: 115px;
+			height: 105px;
 			border-radius: 100%;
+			max-width: auto;
 		}
 	}
 

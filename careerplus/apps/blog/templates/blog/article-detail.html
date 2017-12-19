@@ -28,7 +28,7 @@
     
     {% block breadcrumb %}
        <section class="container">
-            <ol class="breadcrumb mt-0">
+            <ol class="breadcrumb">
                 {% for bread in breadcrumbs %}
                     {% if bread.url %}
                         <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
