@@ -9,14 +9,19 @@
 }
 
 .article-carousel {
-	background: #3c70c2;
 	clear: both;
 	padding: 20px 0;
+	background: #3c70c2; /* Old browsers */
+	background: -moz-linear-gradient(left, #3c70c2 1%, #1196a6 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #3c70c2 1%,#1196a6 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #3c70c2 1%,#1196a6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3c70c2', endColorstr='#1196a6',GradientType=1 ); /* IE6-9 */
 
 	.carousel-heading-container {
 		position: absolute;
 		bottom: 20px;
 		left: 40px;
+		width: 90%;
 
 		&.b-mini {
 			bottom: 10px;
@@ -46,7 +51,22 @@
 			overflow: hidden;
 
 			&:after {
-				background: rgba(0, 0, 0, .2);
+				background: transparent;
+			  /* Old browsers */
+			  background: -moz-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+			  /* FF3.6+ */
+			  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, transparent), color-stop(100%, rgba(0, 0, 0, 0.8)));
+			  /* Chrome,Safari4+ */
+			  background: -webkit-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+			  /* Chrome10+,Safari5.1+ */
+			  background: -o-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+			  /* Opera 11.10+ */
+			  /* IE10+ */
+			  background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.8)));
+			  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+			  /* W3C */
+			  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 );
+			  /* IE6-9 */
 				content: '';
 				position: absolute;
 				left: 0;
@@ -70,7 +90,23 @@
 				overflow: hidden;
 
 				&:after {
-					background: rgba(0, 0, 0, .2);
+					background: transparent;
+				  /* Old browsers */
+				  background: -moz-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+				  /* FF3.6+ */
+				  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, transparent), color-stop(100%, rgba(0, 0, 0, 0.8)));
+				  /* Chrome,Safari4+ */
+				  background: -webkit-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+				  /* Chrome10+,Safari5.1+ */
+				  background: -o-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+				  /* Opera 11.10+ */
+				  /* IE10+ */
+				  background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.8)));
+				  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+				  /* W3C */
+				  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 );
+				  /* IE6-9 */
+				  content: '';
 					content: '';
 					position: absolute;
 					left: 15px;
@@ -94,7 +130,10 @@
 				}
 			}
 		}
-
+	iframe {
+			width: 100%;
+			height: 100%;
+		}
 		
 	}
 
@@ -143,11 +182,14 @@
 		height: 37px;
 		border-radius: 100%;
 		display: inline-block;
-		vertical-align: sub;
+		vertical-align: middle;
 		margin: 0 10px 0 20px;
+		overflow: hidden;
 
 		img {
 			max-width: 100%;
+			width: 37px;
+    		height: 37px;
 		}
 	}
 }
@@ -225,7 +267,7 @@
 		margin: 15px 20px 10px 20px;
 		line-height: 20px;
 		font-size: $font-size+7;
-		height: 40px;
+		height: 41px;
 		overflow: hidden;
 		color: $primary-color;
 	}
@@ -253,6 +295,34 @@
 		margin: 3px 20px 0 0;
 		color: $grey-color;
 		float: right;
+
+		.forward-icon {
+			width: 13px;
+			height: 11px;
+		}
+
+		.view-icon {
+			width: 18px;
+			height: 11px;
+		}
+	}
+
+	.author {
+		figure {
+			width: 37px;
+			height: 37px;
+			vertical-align: middle;
+			border-radius: 100%;
+			display: inline-block;
+			overflow: hidden;
+			margin: 0 10px 0 20px;
+
+			img {
+				max-width: 100%;
+				width: 37px;
+				height: 37px;
+			}
+		}
 	}
 
 }
@@ -305,7 +375,7 @@
 			margin-top: 15px;
 			border: 1px solid $border-color;
 			width: 48%;
-			margin-left: 2%;
+			margin-left: 4%;
 			vertical-align: top;
 			min-height: 120px !important;
 			overflow: hidden;
@@ -314,18 +384,23 @@
 				margin-left: 0;
 			}
 
-			h4 {
+			h3, h4 {
 				font-size: $font-size+3;
 				color: $anchor-color;
 				font-weight: $font-weight+300;
 				display: block;
 				text-align: center;
 				margin: 10px 0;
+				line-height: 18px;
+				height: 35px;
 				vertical-align: middle;
-				height: 32px;
 				overflow: hidden;
 			}
 		}
+	}
+
+	.img-responsive {
+		max-height: 80px;
 	}
 }
 
@@ -421,7 +496,7 @@
 			margin-left: 5px;
 		}
 
-		b {
+		b, small {
 			font-weight: $font-weight+300;
 			margin-left: 10px;
 			font-size: $font-size+3;
@@ -442,55 +517,65 @@
 	padding-top: 10px;
 	padding-bottom: 40px;
 
-	figure {
+	.box-panel {
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
 		-moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
 		-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
 		-ms-box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
 		background-color: #fff;
+		overflow: hidden;
+	}
 
-		figcaption {
-			color: $primary-color;
-			font-size: $font-size+5;
-			font-weight: $font-weight+300;
+	figure {
+		height: 190px;
+		overflow: hidden;
+
+		img {
+			height: 100%;
+		}
+	}
+
+	figcaption {
+		color: $primary-color;
+		font-size: $font-size+5;
+		font-weight: $font-weight+300;
+		display: block;
+		text-align: center;
+		margin-top: 10px;
+		padding-bottom: 10px;
+
+		@media (max-width: 992px) {
+			font-size: $font-size+3;
+		}
+
+		strong {
+			color: $grey-color;
+			font-size: $font-size+1;
+			font-weight: $font-weight+100;
 			display: block;
-			text-align: center;
-			margin-top: 10px;
+			position: relative;
+			margin-bottom: 10px;
 			padding-bottom: 10px;
 
-			@media (max-width: 992px) {
-				font-size: $font-size+3;
-			}
-
-			strong {
-				color: $grey-color;
-				font-size: $font-size+1;
-				font-weight: $font-weight+100;
-				display: block;
-				position: relative;
-				margin-bottom: 10px;
-				padding-bottom: 10px;
-
-				&:after {
-					border-bottom:1px solid $border-color;
-					position: absolute;
-					left: 0;
-					bottom: -2px;
-					right: 0;
-					width: 30px;
-					content: '';
-					margin: auto;
-					display: block; 
-				}
-			}
-
-			.read {
-				color: $anchor-color;
-				font-size: $font-size+2;
-				font-weight: $font-weight+300;
-				text-align: center;
+			&:after {
+				border-bottom:1px solid $border-color;
+				position: absolute;
+				left: 0;
+				bottom: -2px;
+				right: 0;
+				width: 30px;
+				content: '';
+				margin: auto;
 				display: block;
 			}
+		}
+
+		.read {
+			color: $anchor-color;
+			font-size: $font-size+2;
+			font-weight: $font-weight+300;
+			text-align: center;
+			display: block;
 		}
 	}
 
@@ -500,11 +585,10 @@
 		padding-left: 10px;
 		padding-right: 10px;
 	}
-	
+
 	.box-panel {
 		overflow: visible;
 		// background: transparent;
-		box-shadow: none;
 	}
 
 	.carousel-inner { margin: auto; width: 100%; }
@@ -513,7 +597,7 @@
 	.carousel-control.right {
 	  background-image:none;
 	}
-	 
+
 	.glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right {
 	  margin-top:-10px;
 	  margin-left: -10px;
@@ -609,6 +693,7 @@
 
 			img {
 				width: 90px;
+				height: 68px;
 			}
 		}
 
@@ -709,7 +794,7 @@
 		font-weight: $font-weight+300;
 	}
 
-	ol {
+	ol, ul {
 		margin: -10px 0 30px 0;
 		padding: 0 0 0 20px;
 
@@ -732,9 +817,16 @@
 
 	figure {
 		margin-bottom: 30px;
+		max-height: 448px;
+		overflow: hidden;
 
 		img {
 			width: 100%;
+		}
+
+		iframe {
+			max-width: 800px;
+			max-height: 607px;
 		}
 	}
 
@@ -1160,7 +1252,7 @@
 		margin: 25px 10px 10px 10px;
 		line-height: 20px;
 		font-size: $font-size+7;
-		height: 40px;
+		height: 41px;
 		overflow: hidden;
 		color: $primary-color;
 	}
@@ -1202,5 +1294,29 @@
 .res-wd100 {
 	@media (max-width: 992px) {
 		width: 100% !important;
+	}
+}
+
+/*----Article Tag page css---*/
+.article-tag-header {
+	clear: both;
+	background: url(../images/article-tag-bg.jpg) no-repeat center top;
+	background-size: cover;
+	display: block;
+}
+
+header {
+	.breadcrumb {
+		li {
+			color: $white-color;
+
+			&.active {
+					color: $white-color;
+				}
+
+			a {
+				color: $white-color;
+			}
+		}
 	}
 }
