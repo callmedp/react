@@ -135,9 +135,7 @@
         $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
           });
-        {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-          MyGA.SendEvent('itm','Popular Course','{{request.GET.itm_content}}','click');
-        {%endif%}
+        
       
     </script>
 
