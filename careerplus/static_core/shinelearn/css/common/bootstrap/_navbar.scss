@@ -27,10 +27,29 @@
 
 .navbar-header {
   @include clearfix;
+  width: 270px;
+  padding: $navbar-padding-vertical $navbar-padding-horizontal;
+  font-size: $font-size-large;
+  line-height: $line-height-computed;
+  height: $navbar-height;
+  position: relative;
 
   @media (min-width: $grid-float-breakpoint) {
     float: left;
   }
+
+  &:after {
+      content: '';
+      background :$logo;
+      background-position: 0 0;
+      width: 287px;
+      height: 90px;
+      display: inline-block; 
+      position: absolute;
+      top: -10px;
+      left: 0;
+      z-index: 99;
+    } 
 }
 
 
@@ -158,26 +177,12 @@
 // Brand/project name
 
 .navbar-brand {
-  float: left;
-  padding: $navbar-padding-vertical $navbar-padding-horizontal;
-  font-size: $font-size-large;
-  line-height: $line-height-computed;
-  height: $navbar-height;
-  position: relative;
+  height: 55px;
   width: 270px;
-
-  &:after {
-      content: '';
-      background :$logo;
-      background-position: 0 0;
-      width: 287px;
-      height: 90px;
-      display: inline-block; 
-      position: absolute;
-      top: -10px;
-      left: 0;
-      z-index: 99;
-    }      
+  position: absolute;
+  left: 0;
+  top: 0; 
+  z-index: 999;      
 
   &:hover,
   &:focus {
