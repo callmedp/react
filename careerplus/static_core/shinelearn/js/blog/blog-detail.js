@@ -152,6 +152,7 @@ var showArticleOnScroll = (function(){
     ajaxOffSetDistance  = 600,
     urlUpdateOffset = 100,
     defaultUrl = top.window.location.pathname;
+    defaultTitle = document.title;
 
     function onScroll() {
         if($('#id_ajax_article').length < 1){
@@ -166,19 +167,16 @@ var showArticleOnScroll = (function(){
             if($('.cls_ajax_article').length) {
                 $('.cls_ajax_article').each(function(index,item){
                     if(isScrolledIntoView(item)) {
-                        if(upDateUrl($(item).data('url'))){
-                            setTimeout(function(){
-                                firePageView();   
-                            },100);
-                             
+                        if(upDateUrl($(item).data('url'),$(item).data('title'))){
+                            firePageView($(item).data('title'));
                         }
                         return false;
                     }
                 });
 
                 if($(window).scrollTop() + window.innerHeight < $('.cls_ajax_article').first().offset().top) {
-                    if(upDateUrl(defaultUrl)){
-                        firePageView();    
+                    if(upDateUrl(defaultUrl,defaultTitle)){
+                        firePageView(defaultTitle);    
                     }
                 };
             };
@@ -198,8 +196,10 @@ var showArticleOnScroll = (function(){
         }
     };
 
-    function firePageView(){
-        MyGA.sendVirtualPage();
+    function firePageView(pageTitle){
+        var obj = {};
+        obj.pageTitle = pageTitle;
+        MyGA.sendVirtualPage(obj);
     };
 
     function makeAjax() {
@@ -216,7 +216,7 @@ var showArticleOnScroll = (function(){
                     dataType: "json",
                     success: function(data) {
                         $("#load_more").remove();
-                        var dynamicDiv = $('<div/>',{'class' : 'cls_ajax_article','html' : data.article_detail,'data-url':data.url});
+                        var dynamicDiv = $('<div/>',{'class' : 'cls_ajax_article','html' : data.article_detail,'data-url':data.url,'data-title':data.title});
                         $('#related-container').append(dynamicDiv);
                         ajaxCalled = false;
                     },
