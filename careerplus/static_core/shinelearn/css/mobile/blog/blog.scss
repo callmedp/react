@@ -126,7 +126,6 @@
 
   a {
     color: $txt-grey-333;
-    font-weight: 600;
   }
 
   h2 {
@@ -137,6 +136,10 @@
 
   h3 {
     font-size: 100%;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
   }
 
   h4 {
@@ -144,6 +147,10 @@
     color: $txt-grey-333;
     margin-top: 0;
     font-weight: 600;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
   }
 
   .media {
@@ -511,9 +518,26 @@ blockquote {
   ul {
     li {
       margin-right: 5px;
+      display: inline-block;
     }
   }
 }
+
+/* Popular Courses Satrts here */
+.popular-course {
+
+  li {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid $border-grey-f5;
+
+      &:last-child {
+      border-bottom: 0 none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+}/* Popular Courses edsn here */
 
 .italic {
   font-style: italic;
@@ -534,10 +558,6 @@ blockquote {
   padding: 0 !important; 
   margin: 0; 
   width: 100% !important; 
-}
-
-.no-shadow {
-  box-shadow: none;
 }
 
 .minh-185 {
