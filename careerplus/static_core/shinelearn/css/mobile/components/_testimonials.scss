@@ -1,0 +1,38 @@
+.testimonials {
+  background-color: #e6f0f5;
+  padding: 20px 15px 40px;
+  overflow: hidden;
+
+  li {
+    font-size: 0.875em;
+    text-align: left;
+
+    &:before {
+      content: '“';
+      font-size: 40px;
+      line-height: 40px;
+      position: relative;
+      top: 10px;
+      color: $txt-blue;
+    }
+  }
+
+  .slick-initialized .slick-slide {
+      width: 345px;
+      margin-right: 35px;
+      margin-left: 10px;
+
+      @media (max-width:320px) { 
+      width: 280px;
+      margin-right: 15px;
+    }
+   }
+
+   .slick-dots {
+    li {
+      &:before {
+        content: none;
+      }
+    }
+   }
+}

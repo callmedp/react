@@ -1,0 +1,17 @@
+.bullet {
+
+  li {
+
+    list-style-type: circle;
+    list-style-position: inside;
+    padding-bottom: 10px;
+  }
+}
+
+.cms {
+  .bullet li {
+    @extend %half-width;
+    float: left;
+    padding: 10px 5px;
+  }
+}

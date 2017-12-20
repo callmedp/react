@@ -13,8 +13,8 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-        <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-        <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static "shinelearn/css/mobile/common/checkbox.scss" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static "shinelearn/css/mobile/payment/payment.scss" %}" rel="stylesheet">
     {% endcompress %}
     {% compress css inline %}
         <style>

@@ -1,0 +1,51 @@
+.share-wrap {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  display: block;
+  z-index: 99;
+
+  #share-icon {
+    display: none;
+  }
+
+  .share-bg a {
+    background-color: $bg-white;
+  }
+
+  .fb-bg a {
+    background-color: #3b5896;
+  }
+
+  .tw-bg a {
+    background-color: #76a9ea;
+  }
+
+  .gp-bg a {
+    background-color: #f34a38;
+  }
+
+  .wp-bg a {
+    background-color: #2dd54b;
+  }
+
+    li {
+      @include box (50px, 50px, block);
+      margin-top: 7px;
+      margin-bottom: 7px;
+      margin-left: auto;
+      margin-right: auto;
+
+      a {
+        @include box (50px, 50px, table-cell);
+        @include border-radius(50%);
+        text-align: center;
+        font-size: 11px;
+        line-height: 12px;
+        vertical-align: middle;
+        color: #666;
+        box-shadow: $box-shadow-5;
+        position: relative;
+      }
+    }
+}

@@ -1,0 +1,34 @@
+.related-article {
+  background-color: $bg-grey-eb;
+  padding: 15px;
+
+  a {
+    color: $txt-grey-666;
+  }
+
+  h2 {
+    color: $txt-blue-1f3;
+    font-weight: 600;
+  }
+
+  .media-heading {
+    color: $txt-grey-666;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .media-body {
+    font-size: 1.2em;
+    font-weight: 600;
+
+    p {
+      line-height: 1.2em;
+    }
+  }
+}
+
+.related-article {
+  .slick-initialized .slick-slide {
+    width: 345px;
+  }
+}

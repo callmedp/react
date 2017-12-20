@@ -8,10 +8,8 @@
     {% block css_section %}
         {{block.super}}
         {% compress css %}
-        <link type="text/css" href="{% static "shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static "shinelearn/css/dashboard/dashboard.scss" %}" rel="stylesheet">
         {% endcompress %}
-
-        {% compress css inline %}
             <style>
               .reject-msg .input-file .upload-file {
                 top: -14px !important;
@@ -20,7 +18,6 @@
                 float: left;
               }
             </style>
-        {% endcompress %}
 
     {% endblock css_section %}
     

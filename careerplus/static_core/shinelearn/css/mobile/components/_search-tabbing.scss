@@ -1,0 +1,95 @@
+.tab-search {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  width: 90%;
+  margin: 0 auto;
+
+  .tabs {
+    text-align: center;
+
+    li {
+      display: inline-block;
+      
+      a {
+        padding: 7px 5px;
+        margin: 0 10px;
+        display: block;
+        font-size: 100%;
+        color: $txt-white;
+        font-weight: $font-weight;
+      }
+    }
+
+    .current {
+      color: $txt-white;
+      border-bottom: 2px solid #ffca4f;
+    }
+  }
+
+  .tab-content{
+    display: none;
+    padding: 15px;
+
+    .box-panel {
+      margin-bottom: 15px;
+
+      .media {
+        border-bottom: 0 none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .custom-search {
+      position: relative;
+
+      .form-control {
+        @include border-radius (4px);
+        border: 0 none;
+        width: 98%;
+      }
+    }
+
+    .custom-advnaced-search {
+      position: relative;
+
+      .form-control {
+        @include border-radius (4px);
+        border: 0 none;
+        width: 49%;
+        display: inline-block;
+
+        &.bdr1 {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-right: 1px solid #ccc;
+          margin-right: -3px;
+        }
+
+        &.bdr2 {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+    }
+  }
+
+  .tab-content.current{
+    display: inherit;
+  }
+
+  .search-icon-tab {
+    width: 19px;
+    height: 20px;
+    display: inline-block;
+    background-position: -215px -175px;
+    cursor: pointer;
+    border: none;
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    background-color: transparent;
+  }
+}
