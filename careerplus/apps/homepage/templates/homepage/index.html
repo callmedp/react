@@ -16,17 +16,21 @@
     {{block.super}}
     {% if request.session.candidate_id %}
     {% compress css %}
-    <link type="text/css" href="{% static 'shinelearn/css/homepage/home1.css' %}" rel="stylesheet">
-    {% endcompress %}
-    {% else %}
-    {% compress css %}
-    <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
-    {% endcompress %}
-    {% endif %}
-    {% compress css %}
+    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home1.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
+    {% else %}
+    {% compress css %}
+    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+    {% endcompress %}
+    {% endif %}
+    
+    {%comment%}
+        
+    {%endcomment%}
 {% endblock css_section %}
 
 {% block main_container %}

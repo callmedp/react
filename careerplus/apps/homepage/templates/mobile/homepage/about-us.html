@@ -5,9 +5,8 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static 'shinelearn/css/mobile/homepage/checkbox.css' %}" rel="stylesheet" >
-    <link href="{% static 'shinelearn/css/mobile/homepage/contact.css' %}" rel="stylesheet" >
-    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet" >
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/contact.scss' %}" rel="stylesheet" >
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     {% endcompress css %}
 {% endblock css_section %}
 
@@ -48,7 +47,7 @@
 <div class="content-box">
 <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.</p>
 
-<p>Shine Learning uses an algorithm that not only predicts emerging skill sets but also recommends courses to its users after analyzing their resume and application history. Shine Learning strives to bring the best courses from vendors across the globe, completely, unbiased. It’s one of a kind platform that equips users with skills and helps them find a job.</p>
+<p>Shine Learning uses an algorithm that not only predicts emerging skill sets but also recommends courses to its users after analyzing their resume and application history. Shine Learning strives to bring the best courses from vendors across the globe, completely, unbiased. It’s one of a kind platform that equips users with skills and helps them find a job. </p>
 
 <p>Our courses are designed in line with hiring trends and have high acceptance in the market. These certifications come with flexible study options; giving an edge to professionals who can work and learn at the same time.</p>
 </div>
@@ -56,18 +55,6 @@
 <div class="whyusabt">
     <h2>Why Us?</h2>
     <strong>Reasons which makes us India's largest career skills site.</strong>
-    <ul>
-        <li>Variety of courses from leading providers</li>
-        <li>Industry recognized certifications</li>
-        <li>Unbiased user reviews</li>
-        <li>Course counselling</li>
-        <li>Flexible learning plans</li>
-    </ul>
-</div>
-
-<div class="whyusabt">
-    <h2>Why Us?</h2>
-    Reasons which makes us India's largest career skills site:
     <ul>
         <li>Variety of courses from leading providers</li>
         <li>Industry recognized certifications</li>

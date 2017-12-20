@@ -1,5 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static thumbnail compress %}
+{% load static compress %}
 
 
 {% block title %}Order item detail | Shinelearning{% endblock %}
@@ -7,7 +8,7 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/dashboard/dashboard.scss' %}" rel="stylesheet">
     {% endcompress %}
     
 {% endblock css_section %}

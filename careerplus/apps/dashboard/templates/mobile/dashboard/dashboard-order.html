@@ -1,15 +1,14 @@
 {% extends "mobile/basic/base.html" %}
 {% load static thumbnail compress %}
-
+{% load static compress %}
 
 {% block title %}My Order | Shinelearning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/common/smk-accordion.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/dashboard/dashboard.css" %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/dashboard/dashboard.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 

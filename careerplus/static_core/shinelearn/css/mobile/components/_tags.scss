@@ -1,0 +1,26 @@
+.search-tagging {
+  @include border-radius (4px);
+  background-color: rgba(0,46,102,.6);
+  padding: 0;
+  position: relative;
+  z-index: 1;
+
+  .form-control {
+    background-color: transparent;
+    border: 0 none;
+    color: $txt-white;
+    font-size: 12px;
+  }
+
+  span {
+    &.advanced {
+      @include border-radius (4px);
+    background-color: #ebebeb;
+    display: inline-block;
+    font-size: 0.875em;
+    padding: 3px 10px;
+    margin: 2px;
+    }
+  }
+
+}

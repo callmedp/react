@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% load thumbnail compress %}
 
 {% block django_meta %}
@@ -16,8 +16,8 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -41,40 +41,42 @@
 
 {% block container %}
 <div class="body-wrapper">
-<div class="article-category talent-gr-nav">
-    <div class="content rel-imp pb-0">
-      <ul class="breadcrumb mt-20 mb-0" itemscope itemtype="http://schema.org/BreadcrumbList">
-        {% for bradcbs in breadcrumbs %}
-          {% if bradcbs.url %}
-            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
-          {% else %}
-            <li class="active">{{bradcbs.name}}</li>
-          {% endif %}
-        {% endfor %}
-      </ul>
+  <div class="talent-gr">
+    <div class="article-category">
+        <div class="content rel-imp pb-0">
+          <ul class="breadcrumb mt-15 mb-0" itemscope itemtype="http://schema.org/BreadcrumbList">
+            {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
     </div>
-</div>
-<!-- Trending articles Starts here -->
-{% if top_article_list %}
-<div class="trending-articles talent-gr">
-    <div class="content-box pt-10">
-    <div class="slide-container"> 
-        <ul class="article-slider">
-          {% for topArtList in top_article_list %}
-            {% if topArtList.0 %}
-              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 %}
-            {% endif %}
-            {% if topArtList.1 %}
-              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 %}
-            {% endif %}
-            {% if topArtList.1 %}
-              {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 %}
-            {% endif %}
-          {% endfor %}
-        </ul>
+    <!-- Trending articles Starts here -->
+    {% if top_article_list %}
+    <div class="trending-articles">
+        <div class="content-box pt-10">
+        <div class="slide-container"> 
+            <ul class="article-slider">
+              {% for topArtList in top_article_list %}
+                {% if topArtList.0 %}
+                  {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 %}
+                {% endif %}
+                {% if topArtList.1 %}
+                  {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 %}
+                {% endif %}
+                {% if topArtList.1 %}
+                  {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 %}
+                {% endif %}
+              {% endfor %}
+            </ul>
+        </div>
+        </div>
     </div>
-    </div>
-</div>
+</div><!-- gradient ends widget ends here -->
 {% endif %}
 <!-- Trending articles Ends here -->
 <!-- Starts of talent-economy list -->
