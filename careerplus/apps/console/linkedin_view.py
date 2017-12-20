@@ -1045,6 +1045,10 @@ class InterNationalAssignmentOrderItemView(View):
                         "writer_name": assign_to.name,
                         "subject": "Your service has been initiated",
                         "writer_email": assign_to.email,
+                        "type_flow": obj.product.type_flow,
+                        "delivery_service": obj.delivery_service,
+                        "delivery_service_slug": obj.delivery_service.slug if obj.delivery_service else '',
+                        "delivery_service_name": obj.delivery_service.name if obj.delivery_service else '',
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'
                     if 63 not in email_sets:
