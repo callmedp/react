@@ -167,7 +167,10 @@ var showArticleOnScroll = (function(){
                 $('.cls_ajax_article').each(function(index,item){
                     if(isScrolledIntoView(item)) {
                         if(upDateUrl($(item).data('url'))){
-                            firePageView();    
+                            setTimeout(function(){
+                                firePageView();   
+                            },100);
+                             
                         }
                         return false;
                     }
