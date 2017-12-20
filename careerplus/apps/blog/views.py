@@ -534,6 +534,7 @@ class BlogDetailAjaxView(View, BlogMixin):
                 data = {
                     'article_detail': detail_article,
                     'url': page_obj.object_list[0].get_absolute_url(),
+                    'title': page_obj.object_list[0].display_name,
                 }
 
                 return HttpResponse(json.dumps(data), content_type="application/json")
