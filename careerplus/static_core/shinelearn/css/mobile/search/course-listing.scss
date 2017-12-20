@@ -1,0 +1,51 @@
+@import '../library/variables';
+@import '../library/mixin';
+
+/* Share Button Start From Here */
+@import '../components/share';
+
+/* Share Button Start From Here */
+@import '../components/form-items';
+
+/* Rating */
+@import '../components/rating';
+
+/* Share Button Start From Here */
+@import '../components/tags';
+
+/* Course icon CSS */
+@import '../components/course-list';
+
+/* Course icon CSS */
+@import '../components/right-navbar';
+
+.ui-widget.ui-widget-content {
+	@include border-radius (4px);
+	z-index: 9999;
+	box-shadow: $box-shadow;
+	max-height: 200px;
+	overflow: scroll;
+	
+
+	li {
+		padding: 5px 10px;
+		color: $txt-grey-666;
+		border-bottom: 1px solid $border-grey-f2;
+
+		.form-control:focus {
+			border: 1px solid #ccc !important;
+		}
+	}
+}
+
+.filter-pd {
+	position: relative;
+	padding-right: 30px;
+
+	a {
+		position: absolute;
+		top: 5px;
+		right: 0;
+	}
+
+}

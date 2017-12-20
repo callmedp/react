@@ -1,5 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static custom_filters compress %}
+{% load static compress %}
 
 {% if search_type == "func_area" %}
     {% block django_meta %}
@@ -22,11 +23,11 @@ Search Result Page - Shine Learning
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/users/login.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/search/course-listing.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/common/auto-suggest.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/search/filter.css" %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/users/login.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/course-listing.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/auto-suggest.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/filter.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}

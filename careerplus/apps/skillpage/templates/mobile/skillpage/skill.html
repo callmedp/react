@@ -13,10 +13,9 @@
 {% block css_section %}
 {{ block.super }}
     {% compress css %}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/skill/skill.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
-     <link href="{% static 'shinelearn/css/mobile/shop/course-detail.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/skill/skill.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 {% block header %}

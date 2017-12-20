@@ -47,9 +47,10 @@ function GA(){
         that.fireGaEvent( $(this).data('category'), $(this).data('action'), $(this).data('label'), 0, true);
     };
     
-    that.sendVirtualPage = function(event){
-        var event_id = event || trackingId;
-        gtag('event', 'page_view',{'send_to': event_id});
+    that.sendVirtualPage = function(obj){
+        var event_id = obj.event || trackingId,
+        pageTitle = obj.pageTitle || document.title;
+        gtag('event', 'page_view',{'send_to': event_id,'page_title':pageTitle,'page_location':top.window.location.href,'page_path':top.window.location.pathname});
     };
 
     that.customDimension = function(name, value) {

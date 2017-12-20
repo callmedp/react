@@ -528,12 +528,12 @@ class BlogDetailAjaxView(View, BlogMixin):
                 detail_article = render_to_string('include/detail-article-list.html',
                     {"page_obj": page_obj,
                     "slug": self.blog.slug,
-                    "SITEDOMAIN": settings.SITE_DOMAIN,
-                    "main_article": main_objs[0]})
+                    "SITEDOMAIN": settings.SITE_DOMAIN, })
 
                 data = {
                     'article_detail': detail_article,
                     'url': page_obj.object_list[0].get_absolute_url(),
+                    'title': page_obj.object_list[0].display_name,
                 }
 
                 return HttpResponse(json.dumps(data), content_type="application/json")

@@ -1,0 +1,68 @@
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+header {
+  .breadcrumb {
+    padding: 0 0 10px 0;
+    list-style: none;
+    font-size: $font-size+1;
+    margin-top: 35px;
+    /*background-color: rgba(0,0,0,0.4);*/
+    display: table;
+    border-radius: 2px;
+
+
+    > li {
+      display: inline-block;
+
+      + li:before {
+        // [converter] Workaround for https://github.com/sass/libsass/issues/1115
+        $nbsp: "\00a0";
+        content: "-"; // Unicode space added since inline-block means non-collapsing white-space
+        padding: 0 5px;
+        color: #ababab;
+      }
+    }
+
+    a, a:hover {
+      color: #ababab;
+    }
+
+    > .active {
+      color: #ababab;
+    }
+  }
+}
+
+
+.breadcrumb {
+  padding: 2px 5px;
+  list-style: none;
+  font-size: $font-size+1;
+  margin-top: 35px;
+  // background-color: rgba(0,0,0,0.4);
+  display: table;
+  border-radius: 2px;
+
+
+  > li {
+    display: inline-block;
+
+    + li:before {
+      // [converter] Workaround for https://github.com/sass/libsass/issues/1115
+      $nbsp: "\00a0";
+      content: "-"; // Unicode space added since inline-block means non-collapsing white-space
+      padding: 0 5px;
+      color: $grey-color;
+    }
+  }
+
+  a, a:hover {
+    color: $grey-color;
+  }
+
+  > .active {
+    color: $grey-color;
+  }
+}

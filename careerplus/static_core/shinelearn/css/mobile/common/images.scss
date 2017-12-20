@@ -1,0 +1,22 @@
+@import '../library/variables';
+@import '../library/mixin';
+
+
+[class^="icon-"] {
+	background-image: url($image-path);
+}
+
+.fill-star, 
+.unfill-star, 
+.countries sup,
+.smk_accordion .accordion_in .acc_head .acc_icon_expand,
+.call-us .ui-block-a span,
+.call-us .ui-block-b span,
+.call-us .ui-block-c span,
+.define-flow li span:before,
+.suggest-list li span,
+.level-control:after,
+.payment-summary .list-item li .item:before,
+.search-icon-tab, .icon-loc, .mail-iconStrock {
+	background-image: url($image-path);
+}
