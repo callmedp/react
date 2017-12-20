@@ -3,7 +3,8 @@ import datetime
 from decimal import Decimal
 
 from django.utils import timezone
-
+from django.db.models import Sum
+            
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -280,4 +281,26 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         else:
             return Response(
                 {"status": 0, "msg": "there is no items in order"},
+                status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmailLTValueApiView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, format=None):
+        email = request.data.get('candidate_email', '')
+
+        if email:
+            ltv = {'ltv_price' : '0'}
+            email = email.lower().strip()
+            
+            if candidate_id:
+                ltv = Order.objects.filter(
+                    candidate_id=candidate_id,
+                    status=1).aggregate(ltv_price=Sum('total_incl_tax'))
+            ltv = str(ltv.get('ltv_price')) if ltv.get('ltv_price') else '0'
+        else:
+            return Response(
+                {"status": "FAIL", "msg": "Bad Parameters Provided"},
                 status=status.HTTP_400_BAD_REQUEST)
