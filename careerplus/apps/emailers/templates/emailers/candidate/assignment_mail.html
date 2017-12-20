@@ -26,12 +26,12 @@
           I am {{ writer_name }} from Shine Resume Services. I will be working with you to create a profile that highlights your accomplishments and capabilities and helps you meet your career objectives. Below is an outline of our document development process: <br><br>
         {% elif type_flow == 3 %}
           I am {{ writer_name }} from Shine learning. In next 2 days, I will share an email with you with resume assessment report and my suggestions. In case you have any questions post sharing of the resume assessment report, please feel free to get in touch with me via email.<br><br>
-        {% elif type_flow == 8 %}
+        {% elif type_flow == 8 or type_flow == 4 %}
           I am {{ writer_name }} from Shine Resume Services. I will be working with you to create a profile that highlights your accomplishments and capabilities.<br><br>
         {% endif %}
 
 			<ul style="margin:0px;">
-              {% if type_flow == 8 or type_flow == 1 or type_flow == 13 or type_flow == 12 %}
+              {% if type_flow == 8 or type_flow == 1 or type_flow == 13 or type_flow == 12 or type_flow == 4 %}
                 {% if delivery_service and delivery_service_slug == 'super-express' %}
                     <li style="padding-bottom: 7px;">
                         You will get a call from me within 15 hours for Super Express delivery on your resume. Request you to be available for the call, so the resume can be processed as per timelines. The resume would then be prepared by me and delivered to you within the next 24 hours. 
