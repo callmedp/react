@@ -40,6 +40,13 @@ class IndexColumn(models.Model):
         help_text='provide full url with valid protocol https:// or http://')
     name = models.CharField(max_length=255)
 
+    ranking = models.IntegerField(
+        default=0,
+        help_text='determine ranking indexer url')
+
+    class Meta:
+        ordering = ['ranking']
+
     def __str__(self):
         return '%s' % self.name
 
