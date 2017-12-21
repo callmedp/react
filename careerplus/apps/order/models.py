@@ -155,7 +155,7 @@ class Order(AbstractAutoDate):
         if self.candidate_id:
             ltv = Order.objects.filter(
                 candidate_id=self.candidate_id,
-                status=1).exclude(pk=self.pk).aggregate(ltv_price=Sum('total_incl_tax'))
+                status__in=[1,2,3]).exclude(pk=self.pk).aggregate(ltv_price=Sum('total_incl_tax'))
         return str(ltv.get('ltv_price')) if ltv.get('ltv_price') else '0'
         
 class OrderItem(AbstractAutoDate):

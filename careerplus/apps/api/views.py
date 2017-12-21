@@ -1,5 +1,6 @@
 import logging
 import datetime
+import requests
 from decimal import Decimal
 
 from django.utils import timezone
@@ -294,12 +295,19 @@ class EmailLTValueApiView(APIView):
         if email:
             ltv = {'ltv_price' : '0'}
             email = email.lower().strip()
-            
+            candidate_id = ShineCandidateDetail().get_shine_id(email=email)
             if candidate_id:
                 ltv = Order.objects.filter(
                     candidate_id=candidate_id,
-                    status=1).aggregate(ltv_price=Sum('total_incl_tax'))
-            ltv = str(ltv.get('ltv_price')) if ltv.get('ltv_price') else '0'
+                    status__in=[1,2,3]).aggregate(ltv_price=Sum('total_incl_tax'))
+                ltv = str(ltv.get('ltv_price')) if ltv.get('ltv_price') else '0'
+                return Response(
+                    {"status": "SUCCESS", "ltv": ltv},
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {"status": "FAIL", "msg": "Email Doesn't Exists"},
+                    status=status.HTTP_400_BAD_REQUEST)    
         else:
             return Response(
                 {"status": "FAIL", "msg": "Bad Parameters Provided"},
