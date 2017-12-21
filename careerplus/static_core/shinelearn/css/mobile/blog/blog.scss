@@ -1,0 +1,605 @@
+@import '../library/variables';
+@import '../library/mixin';
+
+/* Share Button Start From Here */
+@import '../components/share';
+
+/* Tabbing Start From Here */
+@import '../components/tabbing';
+
+/* Form items Start From Here */
+@import '../components/form-items';
+
+/* Related articles Start From Here */
+@import '../components/related-articles';
+
+/* Breadcrumb Start From Here */
+@import '../components/breadcrumb';
+
+/* Color Start From Here */
+@import '../components/color';
+
+/* Ratting Start From Here */
+@import '../components/rating';
+
+/* Blog landing page */
+.trending-articles {
+  background-color: $bg-blue-254;
+
+  .caption-bg-txt {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: transparent;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0+0,0.65+100 */ /* FF3.6-15 */
+    background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); /* Chrome10-25,Safari5.1-6 */ /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 ); /* IE6-9 */
+    padding: 20px;
+
+    .caption-heading {
+      font-size: 12px;
+      color: $txt-white;
+      text-transform: uppercase;
+      font-weight: 600;
+      position: absolute;
+      top: 5px;
+      left: 10px;
+    }
+  }
+
+ .heading {
+    @include opacity(.6);
+    color: $txt-white;
+    font-size: 100%;
+    font-weight: 600;
+    margin-bottom: 0;
+    margin-top: 10px;
+  }
+
+    li {
+      @include box (280px, 177px);
+      background-color: $bg-grey-777;
+      position: relative;
+
+      img {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+      }
+
+      a {
+        display: block;
+
+        h2 {
+          color: $txt-white;
+          font-size: 80%;
+          text-transform: uppercase;
+          position: absolute;
+          top: 2px;
+          left: 10px;
+          font-weight: 600;
+        }
+
+        .bottom-text {
+          position: absolute;
+          bottom: 5px;
+          font-size: 115%;
+          left: 10px;
+          color: $txt-white;
+          font-weight: 600;
+
+          p{
+            line-height: 20px;
+          }
+
+        }
+      }
+    }
+}
+
+.editor {
+  position: relative;
+  line-height: 18px;
+
+  div {
+    position: absolute;
+    right: 5px;
+    top: 0;
+  }
+}
+
+.blog-heading {
+  color: $txt-grey-999;
+  font-size: 86%;
+  margin-bottom: 10px;
+  margin-top: -5px;
+  font-weight: 600;
+}
+
+
+.box-panel {
+  @extend %white-box;
+
+  a {
+    color: $txt-grey-333;
+  }
+
+  h2 {
+    color: $txt-blue-1f3;
+    font-size: 100%;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 100%;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  h4 {
+    font-size: 100%;
+    color: $txt-grey-333;
+    margin-top: 0;
+    font-weight: 600;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  .media {
+    border-bottom: 1px solid $border-grey-f5;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+  }
+}
+
+.view-forward {
+  color: $txt-grey-999;
+  display: inline-block;
+  margin-top: 3px;
+}
+
+.bottom-btn-wrap {
+  position: fixed;
+  bottom: 0;
+  z-index: 2;
+  padding: 10px;
+}
+
+.blog-author {
+  width: 100%;
+  margin-top: 5px;
+}
+
+article {
+  line-height: 1.5;
+  font-size: 100%;
+  color: $txt-grey-333;
+
+  h1 {
+    color: $txt-grey-333;
+    font-weight: 600;
+    font-size: 130%;
+  }
+}
+
+.trending-articles {
+  .slick-initialized .slick-slide {
+    width: 280px;
+    margin-right: 15px;
+  }
+}
+
+
+
+// Article CSS Starts here
+.main-head {
+  @include border-radius(3px);
+  color: $txt-white;
+  background-color: rgba(0,0,0, .5);
+  border: 1px solid rgba(255,255,255, .5);
+  padding: 1px 4px;
+  text-transform: uppercase;
+  font-size: 11px;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.talent-gr-50 {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3b6fc2+0,1c8bae+50,1097a6+100&0.5+0,0.5+100 */
+background: -moz-linear-gradient(-45deg, rgba(59,111,194,0.5) 0%, rgba(28,139,174,0.5) 50%, rgba(16,151,166,0.5) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, rgba(59,111,194,0.5) 0%,rgba(28,139,174,0.5) 50%,rgba(16,151,166,0.5) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, rgba(59,111,194,0.5) 0%,rgba(28,139,174,0.5) 50%,rgba(16,151,166,0.5) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#803b6fc2', endColorstr='#801097a6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+
+.talent-gr {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3b6fc2+0,1c8bae+77,1097a6+100 */
+background: rgb(59,111,194); /* Old browsers */
+background: -moz-linear-gradient(-45deg, rgba(59,111,194,1) 0%, rgba(28,139,174,1) 77%, rgba(16,151,166,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, rgba(59,111,194,1) 0%,rgba(28,139,174,1) 77%,rgba(16,151,166,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, rgba(59,111,194,1) 0%,rgba(28,139,174,1) 77%,rgba(16,151,166,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b6fc2', endColorstr='#1097a6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  
+  .trending-articles {
+    background-color: transparent;
+  }
+
+}
+
+.talent-gr-nav {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3b6fc2+0,1c8bae+77,1097a6+100 */
+  background: #3b6fc2;
+}
+
+.talent-gr li {
+  height: 195px;
+}
+
+.talent-gr .slick-initialized .slick-slide {
+ width: 278px;
+}
+
+.talent-economy {
+  @include border-radius(3px);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.talent-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  color: $txt-white;;
+  padding: 15px;
+  font-size: 13px;
+}
+
+.talent-content h1 {
+  color: $txt-white;;
+  margin-bottom: 5px;
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: 0;
+}
+
+.semi-head {
+  font-size: -imp(20px);
+  font-weight: 600;
+  color: $txt-blue-1f3;
+}
+
+.article-tag {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: $txt-grey-999;
+}
+
+.article-list:last-child {
+  border-bottom: 0 none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.contributors {
+  li {
+    background-color: $bg-white;
+    width: 130px;
+    display: block;
+    text-align: center;
+    -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  .head {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .post {
+    font-size: 11px;
+    color: $txt-grey-999;
+    text-align: center;
+    height: 25px;
+    
+    span {
+      display: block;
+    }
+
+    sup {
+      height: 1px;
+      width: 20px;
+      display: inline-block;
+      background-color: $txt-grey-999;
+      margin-bottom: 4px;
+    }
+  }
+}
+
+.bg-grey {
+  background-color: #f6f6f6;
+}
+
+.take-me {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 18px;
+  border-bottom: 2px solid #eaf8ff;
+  position: relative;
+
+  .line {
+    width: 50px;
+    height: 2px;
+    position: absolute;
+    left: 0;
+    background-color: #62b2d6;
+    bottom: -2px;
+
+    sup {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 6px 6px 0 0;
+      border-color: #62b1d6 transparent transparent transparent;
+      left: 0;
+    }
+  }
+}
+
+.take-list {
+  margin: 0 -10px;
+
+  li {
+    float: left;
+    padding: 10px;
+    width: 50%;
+
+    .list-box {
+      border: 1px solid #f1f1f1;
+    }
+
+    .title {
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      padding: 15px 0;
+
+      a {
+        color: #2f5ea6;
+      }
+    }
+  }
+}
+
+
+.article-category {
+  position: relative;
+
+  .content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    padding: 15px;
+
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+
+  img {
+    opacity: .2;
+  }
+
+  .breadcrumb {
+      color: $txt-white;
+
+      >li {
+        color: $txt-white;
+
+        a {
+          color: $txt-white;
+        }
+      }
+
+      >li+li {
+        &:before {
+          color: $txt-white;
+        }
+      }
+
+      .active {
+        a {
+          color: -imp(#fff);
+        }
+      }
+  }
+}
+
+.h1-head {
+  font-size: 20px;
+  font-weight: 600;
+  color: $txt-grey-333;
+  line-height: 1.2;
+}
+
+.spacer {
+  padding: 0 5px;
+}
+
+
+blockquote {
+  background-color: #ecf6f5;
+  border-left: 5px #2fc2e3 solid;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 15px;
+  font-size: 15px;
+  color: $txt-grey-333;
+}
+
+
+.article-comment {
+  border-bottom: -imp(0 none );
+
+  li {
+    border-bottom: 1px solid #f2f2f2;
+    padding-bottom: 15px;
+
+    &:last-child {
+      border-bottom: 0 none;
+      padding-bottom: 0;
+    }
+  }
+}
+
+#js_comments {
+  display: none;
+}
+
+
+.author-item {
+  position: relative;
+  padding-left: 110px;
+  
+  .author-img {
+    @include square (90px);
+    @include border-radius (100%);
+    display: block;
+    left: 0;
+    position: absolute;
+
+    img {
+      @include square (100%);
+      height: auto;
+      max-width: 100%;
+    }
+  }/* author-img ends here */
+
+  .author-detail {
+    h2, h1 {
+      display: inline-block;
+      color: $txt-grey-333;
+      font-weight: 600;
+
+         sup {
+          @extend %sub-line;
+          display: block;
+          margin-top: 5px;
+          width: 45px;
+        }
+    }
+  } /* author-detail ends here */
+
+  ul {
+    li {
+      margin-right: 5px;
+      display: inline-block;
+    }
+  }
+}
+
+/* Popular Courses Satrts here */
+.popular-course {
+
+  li {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid $border-grey-f5;
+
+      &:last-child {
+      border-bottom: 0 none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+}/* Popular Courses edsn here */
+
+.italic {
+  font-style: italic;
+}
+
+.clearfix:after { 
+  content: ''; 
+  clear: both; 
+  display: table; 
+} 
+
+.rel-imp { 
+  position: relative !important; 
+} 
+ 
+
+ .is-hidden { 
+  padding: 0 !important; 
+  margin: 0; 
+  width: 100% !important; 
+}
+
+.minh-185 {
+  min-height: 185px;
+
+  @media only screen and (width: 320px)  {
+    min-height: 220px;
+  }
+}
+
+.mw-full {
+  max-width: 100%;
+}
+
+.contributor-body {
+  min-height: 110px;
+  padding-top: 10px;
+}
+
+
+.no-shadow {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none; 
+}
+
+.contributors.slick-slider .slick-track {
+  display: -webkit-box; 
+  display: -webkit-flex; 
+  display: -moz-box; 
+  display: -ms-flexbox; 
+  display: flex; 
+}
+
+.contributors.slick-slider li {
+  -webkit-box-pack: justify; 
+  -webkit-justify-content: space-between; 
+     -moz-box-pack: justify; 
+      -ms-flex-pack: justify; 
+          justify-content: space-between; 
+  -webkit-flex-wrap: wrap; 
+      -ms-flex-wrap: wrap; 
+          flex-wrap: wrap; 
+  height: auto; 
+}

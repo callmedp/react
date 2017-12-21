@@ -1,0 +1,22 @@
+.filter-menu {
+	background-color: $bg-grey-fc;
+	box-shadow: $box-shadow-2;
+
+	.icon-back {
+		background-position: -196px -23px;
+		margin-right: 10px;
+	}
+}
+
+.filter-item {
+	li {
+		border-bottom: 1px solid $border-grey-f2;
+		a {
+			display: block;
+			padding-top: 12px;
+			padding-bottom: 12px;
+			font-size: 90%;
+			color: $txt-grey-333;
+		}
+	}
+}

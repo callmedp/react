@@ -8,15 +8,13 @@
     {% block css_section %}
         {{block.super}}
         {% compress css %}
-        <link type="text/css" href="{% static "/shinelearn/css/dashboard/dashboard.css" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static "/shinelearn/css/dashboard/dashboard.scss" %}" rel="stylesheet">
         {% endcompress %}
-        {% compress css inline %}
         <style type="text/css">
             .error{
                 color: red;
             }
         </style>
-        {% endcompress %}
     {% endblock css_section %}
     
     <!-- main section start -->
