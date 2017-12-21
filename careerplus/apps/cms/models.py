@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django.db import models
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
@@ -112,7 +114,7 @@ class Widget(AbstractCommonModel):
             data_dict.update({
                 'indexer_heading': self.iw.heading,
             })
-            data_dict['column_headings'] = dict(self.iw.columnheading_set.values_list('column', 'name'))
+            data_dict['column_headings'] = OrderedDict(self.iw.columnheading_set.values_list('column', 'name'))
             data_dict['column_data'] = {}
             max_row = 3
             data_dict['max_row'] = max_row
@@ -122,7 +124,7 @@ class Widget(AbstractCommonModel):
                 queryset = self.iw.indexcolumn_set.filter(column=key)
                 if queryset.count() > max_row:
                     flag = True
-                data_dict['column_data'].update({key: dict(queryset.values_list('name', 'url'))})
+                data_dict['column_data'].update({key: OrderedDict(queryset.values_list('name', 'url'))})
             data_dict['view_more_index'] = flag
 
         return data_dict
