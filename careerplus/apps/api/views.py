@@ -291,18 +291,21 @@ class EmailLTValueApiView(APIView):
 
     def post(self, request, format=None):
         email = request.data.get('candidate_email', '')
+        candidate_id = request.data.get('candidate_id', '')
 
-        if email:
+        if email or candidate_id:
             ltv = {'ltv_price' : '0'}
-            email = email.lower().strip()
-            candidate_id = ShineCandidateDetail().get_shine_id(email=email)
+            if not candidate_id:
+                email = email.lower().strip()
+                candidate_id = ShineCandidateDetail().get_shine_id(email=email)
+            
             if candidate_id:
                 ltv = Order.objects.filter(
                     candidate_id=candidate_id,
                     status__in=[1,2,3]).aggregate(ltv_price=Sum('total_incl_tax'))
                 ltv = str(ltv.get('ltv_price')) if ltv.get('ltv_price') else '0'
                 return Response(
-                    {"status": "SUCCESS", "ltv": ltv},
+                    {"status": "SUCCESS", "ltv_price": ltv},
                     status=status.HTTP_200_OK)
             else:
                 return Response(
