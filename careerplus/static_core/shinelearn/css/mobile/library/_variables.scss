@@ -71,11 +71,12 @@ $error: #f34a38;
 
 
 // images
-$path:        '/static/shinelearn/images/mobile/common/';
-$image-path:         $path + 'sprites.svg';
-$dropdown-default:   $path + 'dropdown.svg';
-$dropdown-white:   $path + 'dropdown-white.svg';
-$dropdown-black:   $path + 'dropdown-black.svg';
+
+$fullpath:        $path + 'images/mobile/common/';
+$image-path:         $fullpath + 'sprites.svg';
+$dropdown-default:   $fullpath + 'dropdown.svg';
+$dropdown-white:   $fullpath + 'dropdown-white.svg';
+$dropdown-black:   $fullpath + 'dropdown-black.svg';
 
 // border radius
 $global-radius: 3px;
