@@ -116,7 +116,7 @@ class Widget(AbstractCommonModel):
             })
             data_dict['column_headings'] = OrderedDict(self.iw.columnheading_set.values_list('column', 'name'))
             data_dict['column_data'] = {}
-            max_row = 3
+            max_row = 4
             data_dict['max_row'] = max_row
             flag = False
 
