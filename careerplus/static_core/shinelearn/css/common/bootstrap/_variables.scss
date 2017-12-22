@@ -878,9 +878,9 @@ $hr-border:                   $gray-lighter !default;
 // created by sachin
 
 $font-family:  'Open Sans', sans-serif;
-$imagePath : '/static/shinelearn/';
-$sprite: url(/static/shinelearn/images/sprite.png) no-repeat;
-$logo: url(/static/shinelearn/images/logo.png) no-repeat;
+$imagePath : $path;
+$sprite: url($path + 'images/sprite.png') no-repeat;
+$logo: url($path + 'images/logo.png') no-repeat;
 $black-color: #000;
 $white-color: #fff;
 $primary-color: #333;
