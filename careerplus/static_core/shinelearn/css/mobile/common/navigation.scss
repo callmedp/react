@@ -46,7 +46,7 @@ nav {
         @include box(21px, 21px, inline-block);
         margin-right: 12px;
         position: relative;
-        top: 2px;
+        top: 4px;
       }
     }
   }
@@ -237,6 +237,10 @@ nav {
 
   &-sample {
     background-position: -192px -150px;
+  }
+
+  &-talentEco {
+    background-position: -143px -346px;
   }
 }
 
