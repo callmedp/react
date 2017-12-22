@@ -7,8 +7,8 @@ from .models import IndexerWidget, ColumnHeading,\
 class ColumnHeadingAdmin(admin.TabularInline):
     model = ColumnHeading
     raw_id_fields = ('indexer',)
-    extra = 2
-    max_num = 2
+    extra = 3
+    max_num = 3
 
 
 class IndexColumnAdmin(admin.StackedInline):
