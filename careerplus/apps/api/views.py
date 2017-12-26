@@ -293,6 +293,7 @@ class EmailLTValueApiView(APIView):
         email = request.data.get('candidate_email', '')
         c_id = request.data.get('candidate_id', '')
         name = ''
+        candidate_id = None
         if email or c_id:
             ltv = Decimal(0)
             if not c_id:
