@@ -1,0 +1,26 @@
+.content-box {
+  .form-control {
+    border: 0 none;
+    border-bottom: 1px solid $border-grey-c1;
+    padding: 0;
+  }
+
+  .code {
+    width: 18%;
+
+    select {
+      @include border-radius(0);
+      border: 0 none;
+      border-bottom: 1px solid #c1c1c1;
+      color: $txt-grey-666;
+    }
+  }
+  .number {
+    width: 77%;
+    margin-left: 15px;
+  }
+}
+
+.w-50 {
+  width: 47% !important;
+}

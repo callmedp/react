@@ -4,27 +4,8 @@
 {% block css_section %}
 {{ block.super }}
     {% compress css %}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/users/login.css' %}" rel="stylesheet">
-    {% endcompress %}
-    {% compress css inline %}
-    <style>
-        .error.form-control {
-            border-color: #f34a38;
-            color: #f34a38;
-        }
-        .error {
-            border-color: #f34a38;
-            color: #f34a38;
-        }
-        .form-group label.error {
-            font-size: 85%;
-            padding-top: 3px;
-            color: #f34a38;
-            display: block;
-            padding-bottom: 0;
-        }
-    </style>
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/users/login.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 

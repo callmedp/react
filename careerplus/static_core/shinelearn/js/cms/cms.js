@@ -204,7 +204,10 @@ $(function() {
         window.open(href, '_blank');
     });
 
-
+    $('.toggle-index').click(function(){
+        $('.display-more-index').toggle();
+        $('.toggle-index').html($('.toggle-index').text() == 'View less' ? 'View all' : 'View less');
+    });
 
     $("#cms_comment_form").validate({
         rules: {

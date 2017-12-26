@@ -20,10 +20,10 @@
     {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
         {% compress css %}
-        <link href="{% static 'shinelearn/css/mobile/common/global.css' %}" rel="stylesheet">
-        <link href="{% static 'shinelearn/css/mobile/common/icons.css' %}" rel="stylesheet">
-        <link href="{% static 'shinelearn/css/mobile/common/navigation.css' %}" rel="stylesheet">
-        <link href="{% static 'shinelearn/css/mobile/common/images.css' %}" rel="stylesheet" >
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/navigation.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
         {% endcompress %}
     {% endblock css_section %}
     {% block banner_ads %}
@@ -41,6 +41,15 @@
         });
         </script>
     {% endblock banner_ads %}
+        {% block marketing_pixel %}
+            <!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-M323HB');</script>
+            <!-- End Google Tag Manager -->
+        {% endblock marketing_pixel %}
     {% endblock head %}
     {{ JS_SETTINGS|safe }}
     {% block GA %}
@@ -116,9 +125,7 @@
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         {% endcompress %}
-        {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-          <script type="text/javascript">MyGA.SendEvent('itm','Popular Course','{{request.GET.itm_content}}','click');</script>
-        {%endif%}
+        
         {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''
             src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'

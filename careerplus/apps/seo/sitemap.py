@@ -7,7 +7,7 @@ from shop.models import Product, Category, ProductCategory
 from cms.models import Page
 from blog.models import Blog, Category as BlogCategory, Author
 
-EXCULDE_CATEGORY = [247, 176, 170, 145, 139, 87, 147, 132, 76, 73, 69, 65, 61]
+EXCULDE_CATEGORY = [247, 176, 170, 145, 139, 87, 147, 132, 76, 73, 69, 65, 61, 249]
 
 class CustomSitemap(Sitemap):
 

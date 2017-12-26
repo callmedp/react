@@ -1,0 +1,40 @@
+
+.error {
+  color: $error;
+  font-size: 11px;
+  
+  .form-control {
+    border-color: $error;
+    color: $error;
+  }
+
+  .mgs {
+    font-size: 85%;
+    padding-top: 3px;
+    color: $error;
+    display: block;
+    padding-bottom: 0;
+  }
+}
+
+.mgs {
+  display: none;
+}
+
+.error-txt {
+  display: none; 
+}
+
+.error-txt{
+  color: $error;
+  font-size: 11px;
+}
+
+
+.form-group label.error {
+    font-size: 11px;
+    padding-top: 3px;
+    color: #f34a38;
+    display: block;
+    padding-bottom: 0;
+}

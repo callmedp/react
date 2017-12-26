@@ -14,11 +14,11 @@
 
 {% block css_section %}
     {{ block.super }}
-    {% compress css %}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/blog/blog.css' %}" rel="stylesheet">
-    {% endcompress css %}
+    {%compress css%}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
+    {%endcompress%}
     
 {% endblock css_section %}
 
@@ -44,7 +44,6 @@
                                                     <span class="editor fs-12 pull-left">{{art.created_by.name}}, {{art.publish_date.date}}</span>
                                                     <span class="view-forward text-white mr-10 fs-12 pull-right"><figure class="icon-view"></figure> {{art.no_views}}</span>
                                                 </div>
-                                                
                                                 
                                             </div>
                                         </a>
