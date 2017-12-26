@@ -88,6 +88,8 @@ class OrderItemDetailSerializer(ModelSerializer):
             'id',
             'cost_price',
             'product',
+            'quantity',
+            'selling_price',
             'parent',
             'variation',
             'addon',
@@ -96,7 +98,7 @@ class OrderItemDetailSerializer(ModelSerializer):
 
     def get_product1(self, obj):
         try:
-            return obj.product.pk
+            return obj.product.name
         except:
             pass
         return ''
@@ -148,7 +150,6 @@ class OrderListHistorySerializer(ModelSerializer):
             'created',
             'status',
             'transaction_id',
-            # 'payment_date',
             'crm_sales_id',
             'total_incl_tax',
             'total_excl_tax',

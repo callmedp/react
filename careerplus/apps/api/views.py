@@ -1,9 +1,6 @@
 import logging
 import datetime
-from decimal import Decimal
-
 from django.utils import timezone
-from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,7 +16,6 @@ from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon
 from core.api_mixin import ShineCandidateDetail
-# from order.mixins import OrderMixin
 from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
@@ -289,6 +285,7 @@ class OrderHistoryAPIView(ListAPIView):
     serializer_class = OrderListHistorySerializer
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
+    # permission_classes = []
 
     def get_queryset(self, *args, **kwargs):
         candidate_id = self.request.GET.get("candidate_id", None)
@@ -297,5 +294,5 @@ class OrderHistoryAPIView(ListAPIView):
             return queryset_list.none()
         else:
             queryset_list = queryset_list.filter(
-                Q(candidate_id=candidate_id))
+                candidate_id=candidate_id, status=1)
             return queryset_list
