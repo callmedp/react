@@ -141,6 +141,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                 'product', 'product__vendor').order_by('-created')
             # m_prod = m_prod[0] if len(m_prod) else None
             if len(m_prod):
+                m_prod = m_prod[:2]
                 for parent in m_prod:
                     product_dict = dict()
                     product_dict['m_prod'] = parent
@@ -163,8 +164,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                     parent_li.price_excl_tax = product_price
                     parent_li.save()
 
-                    if not parent_li.no_process:
-                        total_price += parent_li.price_excl_tax
+                    total_price += parent_li.price_excl_tax
                     for li in addons:
                         product_price = li.product.get_price()
                         li.price_excl_tax = product_price
