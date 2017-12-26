@@ -105,30 +105,33 @@ class OrderItemDetailSerializer(ModelSerializer):
 
     def get_variation1(self, obj):
         try:
-            parent_ois = obj.order.orderitems.filter(parent=None)
-            for parent_oi in parent_ois:
-                variations = obj.order.orderitems.filter(parent=parent_oi, is_variation=True)
-                return VariationSerializer(variations, many=True).data
+            if obj.parent:
+                parent_ois = obj.order.orderitems.filter(parent=None)
+                for parent_oi in parent_ois:
+                    variations = obj.order.orderitems.filter(parent=parent_oi, is_variation=True)
+                    return VariationSerializer(variations, many=True).data
         except:
             pass
         return ''
 
     def get_addon1(self, obj):
         try:
-            parent_ois = obj.order.orderitems.filter(parent=None)
-            for parent_oi in parent_ois:
-                addons = obj.order.orderitems.filter(parent=parent_oi, is_addon=True)
-                return AddonSerializer(addons, many=True).data
+            if obj.parent:
+                parent_ois = obj.order.orderitems.filter(parent=None)
+                for parent_oi in parent_ois:
+                    addons = obj.order.orderitems.filter(parent=parent_oi, is_addon=True)
+                    return AddonSerializer(addons, many=True).data
         except:
             pass
         return ''
 
     def get_combo1(self, obj):
         try:
-            parent_ois = obj.order.orderitems.filter(parent=None)
-            for parent_oi in parent_ois:
-                combos = obj.order.orderitems.filter(parent=parent_oi, is_combo=True)
-                return ComboSerializer(combos, many=True).data
+            if obj.parent:
+                parent_ois = obj.order.orderitems.filter(parent=None)
+                for parent_oi in parent_ois:
+                    combos = obj.order.orderitems.filter(parent=parent_oi, is_combo=True)
+                    return ComboSerializer(combos, many=True).data
         except:
             pass
         return ''
