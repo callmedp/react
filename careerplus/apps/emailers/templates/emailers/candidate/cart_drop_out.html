@@ -49,6 +49,7 @@
                         <td>
                           {{prod.product_name }}
                         </td>
+                        <td>{{prod.variations.0.product.get_price}}</td>
                       </tr>
                       {% for addon in prod.addons %}
                         <tr>
@@ -56,12 +57,7 @@
                             <td>{{addon.product.get_price}}</td>
                         </tr>
                       {% endfor %}
-                      {% for var in prod.variations %}
-                        <tr>
-                            <td>- {{var.product.name}}</td>
-                            <td>{{var.product.get_price}}</td>
-                        </tr>
-                      {% endfor %}
+
                   {% elif prod.m_prod.product.is_course %}
                         <tr>
                           <td>
@@ -76,6 +72,12 @@
                           </td>
                           <td>{{prod.m_prod.product.get_price}}</td>
                         </tr>
+                        {% for var in prod.variations %}
+                            <tr>
+                                <td>- {{var.product.name}}</td>
+                                <td>{{var.product.get_price}}</td>
+                            </tr>
+                          {% endfor %}
 
                           {% for addon in prod.addons %}
                             <tr>
@@ -84,12 +86,7 @@
                             </tr>
                           {% endfor %}
 
-                          {% for var in prod.variations %}
-                            <tr>
-                                <td>- {{var.product.name}}</td>
-                                <td>{{var.product.get_price}}</td>
-                            </tr>
-                          {% endfor %}
+
                   {% endif %}
               {% endfor %}
               <tr>
