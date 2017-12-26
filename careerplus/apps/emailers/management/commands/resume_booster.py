@@ -52,6 +52,7 @@ def booster():
             last_oi_status = oi.oi_status
             oi.oi_status = 4
             oi.last_oi_status = 6
+            oi.closed_on = timezone.now()
             oi.save()
             oi.orderitemoperation_set.create(
                 oi_status=62,
@@ -122,6 +123,7 @@ def booster():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 4
                 oi.last_oi_status = 6
+                oi.closed_on = timezone.now()
                 oi.save()
                 oi.orderitemoperation_set.create(
                     oi_status=62,
