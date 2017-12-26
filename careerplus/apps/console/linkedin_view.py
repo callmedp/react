@@ -260,25 +260,25 @@ class ChangeDraftView(DetailView):
             q_resp = QuizResponse.objects.get(oi=ord_obj)
             org_obj = Organization.objects.filter(draft=self.object)
             edu_obj = Education.objects.filter(draft=self.object)
-            ord_assign_to = ord_obj.assigned_to.get_short_name()
+            ord_assign_to = ord_obj.assigned_to.get_short_name() if ord_obj.assigned_to else ord_obj.assigned_to
             req_assign_to = request.user.get_short_name()
-
-            if org_obj.assigned_by.get_short_name() != req_assign_to:
-                return HttpResponseForbidden()
-            elif ord_assign_to != req_assign_to:
-                return HttpResponseForbidden()
 
             if not org_obj.count():
                 Organization.objects.create(draft=self.object)
+
             if not edu_obj.count():
                 Education.objects.create(draft=self.object)
+
             if not q_resp.submitted:
                 messages.error(self.request, "First Submit Councelling Form")
                 context = self.get_context_data(object=self.object)
                 return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
+            if req_assign_to != ord_assign_to:
+                return HttpResponseForbidden()
+
         except Exception as e:
-            logging.getLogger('error_log').error("Change draft:",str(e))
+            logging.getLogger('error_log').error("Change draft:", str(e))
 
         return super(ChangeDraftView, self).get(request, args, **kwargs)
 
