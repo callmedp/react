@@ -150,7 +150,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                     product_dict['variations'] = crt_obj.lineitems.filter(
                         parent=parent,
                         parent_deleted=True).select_related('product')
-                    product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
+                    product_name = parent.product.heading if parent.product.heading else parent.product.name
                     product_dict['product_name'] = product_name
                     last_cart_items.append(product_dict)
 
