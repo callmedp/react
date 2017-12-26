@@ -44,7 +44,7 @@
                 <td><strong>Price (in Rs.)</strong></td>
               </tr>
               {% for prod in products %}
-                  {% if prod.m_prod.product.product_class.name == 'course' and prod.variations %}
+                  {% if prod.m_prod.product.is_course and prod.variations %}
                       <tr>
                         <td>
                           {{prod.product_name }}
@@ -58,18 +58,18 @@
                       {% endfor %}
                       {% for var in prod.variations %}
                         <tr>
-                            <td>{{var.product.name}}</td>
+                            <td>- {{var.product.name}}</td>
                             <td>{{var.product.get_price}}</td>
                         </tr>
                       {% endfor %}
-                  {% elif prod.m_prod.product.product_class.name == 'course' %}
+                  {% elif prod.m_prod.product.is_course %}
                         <tr>
                           <td>
                             {{prod.product_name }}
                           </td>
                           <td>{{prod.m_prod.product.get_price}}</td>
                         </tr>
-                  {% elif prod.m_prod.product.product_class.name == 'service' or prod.m_prod.product.product_class.name == 'resume' %}
+                  {% elif prod.m_prod.product.is_writing or prod.m_prod.product.is_service %}
                         <tr>
                           <td>
                             {{prod.product_name }}
@@ -79,14 +79,14 @@
 
                           {% for addon in prod.addons %}
                             <tr>
-                                <td>{{addon.product.name}}</td>
+                                <td>- {{addon.product.name}}</td>
                                 <td>{{addon.product.get_price}}</td>
                             </tr>
                           {% endfor %}
 
                           {% for var in prod.variations %}
                             <tr>
-                                <td>{{var.product.name}}</td>
+                                <td>- {{var.product.name}}</td>
                                 <td>{{var.product.get_price}}</td>
                             </tr>
                           {% endfor %}

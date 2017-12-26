@@ -193,6 +193,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token.decode())
                 try:
+                    print(data)
                     SendMail().send(to_email, mail_type, data)
                     # m_prod.send_email = True
                     # m_prod.save()
