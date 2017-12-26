@@ -291,11 +291,11 @@ class EmailLTValueApiView(APIView):
 
     def post(self, request, format=None):
         email = request.data.get('candidate_email', '')
-        candidate_id = request.data.get('candidate_id', '')
+        c_id = request.data.get('candidate_id', '')
         name = ''
-        if email or candidate_id:
+        if email or c_id:
             ltv = Decimal(0)
-            if not candidate_id:
+            if not c_id:
                 email = email.lower().strip()
                 candidate_response = ShineCandidateDetail().get_candidate_detail(email=email)
                 if candidate_response:
@@ -324,7 +324,7 @@ class EmailLTValueApiView(APIView):
                     status=status.HTTP_200_OK)
             else:
                 return Response(
-                    {"status": "FAIL", "msg": "Email Doesn't Exists"},
+                    {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                     status=status.HTTP_400_BAD_REQUEST)    
         else:
             return Response(
