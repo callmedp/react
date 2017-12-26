@@ -149,15 +149,6 @@ class Order(AbstractAutoDate):
         return currency_dict.get(self.currency)
 
 
-    def get_ltv(self):
-        from django.db.models import Sum
-        ltv = {'ltv_price' : '0'}
-        if self.candidate_id:
-            ltv = Order.objects.filter(
-                candidate_id=self.candidate_id,
-                status__in=[1,2,3]).exclude(pk=self.pk).aggregate(ltv_price=Sum('total_incl_tax'))
-        return str(ltv.get('ltv_price')) if ltv.get('ltv_price') else '0'
-        
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
         _('CP OrderItem'),

@@ -15,7 +15,7 @@ from rest_framework.permissions import (
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 from users.tasks import user_register
-from order.models import Order
+from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon
@@ -292,20 +292,35 @@ class EmailLTValueApiView(APIView):
     def post(self, request, format=None):
         email = request.data.get('candidate_email', '')
         candidate_id = request.data.get('candidate_id', '')
-
+        name = ''
         if email or candidate_id:
-            ltv = {'ltv_price' : '0'}
+            ltv = Decimal(0)
             if not candidate_id:
                 email = email.lower().strip()
-                candidate_id = ShineCandidateDetail().get_shine_id(email=email)
-            
+                candidate_response = ShineCandidateDetail().get_candidate_detail(email=email)
+                if candidate_response:
+                    personal_detail = candidate_response.get('personal_detail')[0] if candidate_response.get('personal_detail') else None
+                    if personal_detail:
+                        candidate_id = personal_detail.get('id')
+                        name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')  
             if candidate_id:
-                ltv = Order.objects.filter(
+                ltv_pks = Order.objects.filter(
                     candidate_id=candidate_id,
-                    status__in=[1,2,3]).aggregate(ltv_price=Sum('total_incl_tax'))
-                ltv = str(ltv.get('ltv_price')) if ltv.get('ltv_price') else '0'
+                    status=3).values_list('pk', flat=True)
+                if ltv_pks:
+                    ltv_order_sum = Order.objects.filter(
+                        pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
+                    ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
+                    rf_ois = OrderItem.objects.filter(
+                        order__in=ltv_pks,
+                        oi_status=163).values_list('order', flat=True)
+                    rf_sum = RefundRequest.objects.filter(
+                        order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
+                    if rf_sum.get('rf_price'):
+                        ltv = ltv - rf_sum.get('rf_price')
+
                 return Response(
-                    {"status": "SUCCESS", "ltv_price": ltv},
+                    {"status": "SUCCESS", "ltv_price": str(ltv), "name": name},
                     status=status.HTTP_200_OK)
             else:
                 return Response(
