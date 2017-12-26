@@ -204,10 +204,13 @@ class DownloadBoosterResume(View):
             email, oi_pk, valid = TokenExpiry().decode(token)
             if valid:
                 oi = OrderItem.objects.get(pk=oi_pk)
-
                 if oi.oi_draft:
                     resume = oi.oi_draft
-                    file_path = resume.path
+                elif oi.oi_resume:
+                    resume = oi.oi_resume
+
+                if resume:
+                    file_path = settings.RESUME_DIR + resume.name
                     filename = resume.name
                     extn = filename.split('.')[-1]
                     newfilename = 'resume_' + oi.order.first_name + '.' + extn
@@ -223,11 +226,15 @@ class DownloadBoosterResume(View):
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (newfilename)
                     return response
                 else:
+                    logging.getLogger(
+                        'error_log').error("candidate booster resume not found")
                     raise Exception("Resume not found.")
         except:
             messages.add_message(
                 request, messages.ERROR,
                 "Sorry, the document is currently unavailable.")
+            logging.getLogger(
+                        'error_log').error("candidate booster resume not found")
             response = HttpResponseRedirect(
                 request.META.get('HTTP_REFERER', '/'))
             return response

@@ -1,8 +1,15 @@
-function openCommentBox(article_id) {
+function openCommentBox(article_id, visibility=1) {
     if (article_id){
         $('#total_comment' + article_id).addClass('disabled').removeAttr("onclick");
+
+        var _arguments = article_id;
+
+        if (visibility == 2) {
+            _arguments += '&visibility=2';
+        }
+
         $.ajax({
-            url: '/article/show-comment-box/?art_id=' + article_id,
+            url: '/article/show-comment-box/?art_id=' + _arguments,
             dataType: 'html',
             success: function(html) {
                 var id = '#comment-box' + article_id;
@@ -18,12 +25,19 @@ function openCommentBox(article_id) {
     }
 };
 
-function loadMoreComment(article_id) {
+function loadMoreComment(article_id,visibility=1) {
     if (article_id){
         $('#comment_load_more' + article_id).addClass('disabled').removeAttr("onclick");
         var formData = $("#loadform" + article_id).serialize();
+
+        var _arguments = '';
+
+        if (visibility == 2) {
+            _arguments = '?visibility=2';
+        }
+
         $.ajax({
-            url: '/article/load-more-comment/',
+            url: '/article/load-more-comment/'+_arguments,
             type: "GET",
             data : formData,
             dataType: 'html',
@@ -44,6 +58,7 @@ function commentSubmit(article_id, login_status){
 
         if (login_status == 0){
             $('#login-model').modal('show');
+            window.event.preventDefault();
         }
         else if (login_status == 1){
             $('#id_comment' + article_id).attr({
@@ -95,50 +110,138 @@ $(function(){
     });
 
 
-    $(document).ready(function() {
-        var win = $(window);
-        let prev_page = 0;
+    /*var win = $(window),
+    ajaxCalled = false;
+    let prev_page = 0,
 
-        win.scroll(function() {
-            if ( win.scrollTop() >= ($(document).height() - win.height()) * 0.8) {
-                page = $("#pg_id").val();
-                slug = $("#pg_slug").val();
-                if (page != undefined & page != prev_page){
-                    prev_page = page;
-                    data = "?page="+ page+ "&slug=" + slug;
-                    $.ajax({
-                        url: "/article/ajax/article-detail-loading/" + data,
-                        type: "GET",
-                        dataType: "json",
-                        // dataType: "html",
-                        success: function(data) {
-                            var article_url = data.url;
-                            $("#load_more").remove();
-                            $('#related-container').append(data.article_detail);
-                            ga('send', 'pageview');
-                        },
-                        failure: function(response){
-                            //alert("Something went wrong.")
-                        }
-                    });
-                }
-                
+
+    win.scroll(function() {
+        if ( win.scrollTop() <= $('#related-container').offset().top - 150) {
+            page = $("#pg_id").val();
+            slug = $("#pg_slug").val();
+            if (page != undefined & page != prev_page){
+                prev_page = page;
+                data = "?page="+ page+ "&slug=" + slug;
+                $.ajax({
+                    url: "/article/ajax/article-detail-loading/" + data,
+                    type: "GET",
+                    dataType: "json",
+                    // dataType: "html",
+                    success: function(data) {
+                        var article_url = data.url;
+                        $("#load_more").remove();
+                        $('#related-container').append(data.article_detail);
+                        ga('send', 'pageview');
+                    },
+                    failure: function(response){
+                        //alert("Something went wrong.")
+                    }
+                });
             }
-        });
-
-        // $(document).on("scroll", function(event) {
-        //     var scrollPos = $(document).scrollTop() + 50;
-        //     $('.scroll-page').each(function () {
-        //         var currLink = $(this);
-        //         if (currLink.offset().top <= scrollPos && currLink.offset().top + currLink.outerHeight() > scrollPos) {
-        //             MyGA.sendVirtualPage('page path');
-        //             history.pushState(null, null, url);
-        //         }
-        //     });
-        // });
-    });
+            
+        }
+    });*/
 
 });
+
+
+var showArticleOnScroll = (function(){
+
+    var ajaxCalled = false,
+    prev_page = 0,
+    ajaxOffSetDistance  = 600,
+    urlUpdateOffset = 100,
+    defaultUrl = top.window.location.pathname;
+    defaultTitle = document.title;
+
+    function onScroll() {
+        if($('#id_ajax_article').length < 1){
+            return;
+        };
+
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > $('#id_ajax_article').offset().top - ajaxOffSetDistance) {
+               makeAjax();
+            };
+            
+            if($('.cls_ajax_article').length) {
+                $('.cls_ajax_article').each(function(index,item){
+                    if(isScrolledIntoView(item)) {
+                        if(upDateUrl($(item).data('url'),$(item).data('title'))){
+                            firePageView($(item).data('title'));
+                        }
+                        return false;
+                    }
+                });
+
+                if($(window).scrollTop() + window.innerHeight < $('.cls_ajax_article').first().offset().top) {
+                    if(upDateUrl(defaultUrl,defaultTitle)){
+                        firePageView(defaultTitle);    
+                    }
+                };
+            };
+        });
+    };
+
+    function isScrolledIntoView(element) {
+        var top_of_element = $(element).offset().top;
+        var bottom_of_element = $(element).offset().top + $(element).outerHeight();
+        var bottom_of_screen = $(window).scrollTop() + window.innerHeight;
+        var top_of_screen = $(window).scrollTop() + 54 /*navbar height */;
+
+        if((bottom_of_screen > top_of_element) && (top_of_screen < bottom_of_element)){
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    function firePageView(pageTitle){
+        var obj = {};
+        obj.pageTitle = pageTitle;
+        MyGA.sendVirtualPage(obj);
+    };
+
+    function makeAjax() {
+        page = $("#pg_id").val();
+        slug = $("#pg_slug").val();
+        if(!ajaxCalled){
+            if (page != undefined & page != prev_page){
+                prev_page = page;
+                data = "?page="+ page+ "&slug=" + slug;
+                ajaxCalled = true;
+                $.ajax({
+                    url: "/article/ajax/article-detail-loading/" + data,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#load_more").remove();
+                        var dynamicDiv = $('<div/>',{'class' : 'cls_ajax_article','html' : data.article_detail,'data-url':data.url,'data-title':data.title});
+                        $('#related-container').append(dynamicDiv);
+                        ajaxCalled = false;
+                    },
+                    failure: function(response){}
+                });
+            }
+        }
+    };
+
+    
+    function upDateUrl(urlPath) {
+        var urlPath = urlPath,
+        ret = false;
+        if(urlPath != '' && top.window.location.pathname != urlPath) {
+            window.history.pushState({"html":'',"pageTitle":''},"", urlPath);
+            ret = true;
+        }
+        return ret;
+    };
+
+    return {
+        scroll : onScroll
+    }
+
+})();
 
 
 

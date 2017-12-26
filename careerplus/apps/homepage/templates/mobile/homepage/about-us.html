@@ -5,12 +5,9 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static 'shinelearn/css/mobile/homepage/checkbox.css' %}" rel="stylesheet" >
-    <link href="{% static 'shinelearn/css/mobile/homepage/contact.css' %}" rel="stylesheet" >
-    <link href="{% static 'shinelearn/css/mobile/common/slick.css' %}" rel="stylesheet" >
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/contact.scss' %}" rel="stylesheet" >
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     {% endcompress css %}
-        
-            
 {% endblock css_section %}
 
 {% block header %}
@@ -48,16 +45,16 @@
 <div class="body-wrapper">
             
 <div class="content-box">
-      <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.</p>
+<p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.</p>
 
-      <p>Shine Learning uses an algorithm that not only predicts emerging skill sets but also recommends courses to its users after analyzing their resume and application history. Shine Learning strives to bring the best courses from vendors across the globe, completely, unbiased. It’s one of a kind platform that equips users with skills and helps them find a job.</p>
+<p>Shine Learning uses an algorithm that not only predicts emerging skill sets but also recommends courses to its users after analyzing their resume and application history. Shine Learning strives to bring the best courses from vendors across the globe, completely, unbiased. It’s one of a kind platform that equips users with skills and helps them find a job. </p>
 
-      <p>Our courses are designed in line with hiring trends and have high acceptance in the market. These certifications come with flexible study options; giving an edge to professionals who can work and learn at the same time.</p>
+<p>Our courses are designed in line with hiring trends and have high acceptance in the market. These certifications come with flexible study options; giving an edge to professionals who can work and learn at the same time.</p>
 </div>
 
 <div class="whyusabt">
     <h2>Why Us?</h2>
-    Reasons which makes us India's largest career skills site:
+    <strong>Reasons which makes us India's largest career skills site.</strong>
     <ul>
         <li>Variety of courses from leading providers</li>
         <li>Industry recognized certifications</li>
@@ -72,14 +69,21 @@
   <div class="slide-container">
       <ul class="slide-provide">
         <li>
+            <span class="icon-certificateBig"></span>
+            <h2>Professional Certifications</h2>
+            Choose from a large bouquet of courses / certifications to enhance and authorize your skills and knowledge. Boost your career with several options of courses to choose from.
+        </li>
+
+        <li>
+            <span class="icon-careerAd"></span>
+            <h2>Career Advice</h2>
+            Get career direction and guidance by expert’s help to choose and boost up your career path?
+        </li>
+
+        <li>
             <span class="icon-resume"></span>
             <h2>Resume writing</h2>
             Our customer focused and quality conscious expert writers will give you superior quality, professional resume after discussing the same with you. This will highlight your work experience, skills, industry, domain and education.
-        </li>
-        <li>
-            <span class="icon-certificateBig"></span>
-            <h2>Certifications</h2>
-            Choose from a large bouquet of courses / certifications to enhance and authorize your skills and knowledge. Boost your career with several options of courses to choose from.
         </li>
         <li>
             <span class="icon-linkpro"></span>
@@ -92,11 +96,6 @@
             We let you use our collection of large number of free resume formats and templates to give you a picture of how your resume should look like.
         </li>
 
-        <li>
-            <span class="icon-careerAd"></span>
-            <h2>Career Advice</h2>
-            Get career direction and guidance by expert’s help to choose and boost up your career path?
-        </li>
       </ul>
   </div>
 </div>
@@ -123,9 +122,6 @@
   <div class="are-partner-bx">
         <img src="{% static 'shinelearn/images/mobile/homepage/p5.jpg' %}" width="111" height="23" alt=""/> Digital Vidya is an IIT Delhi alumni startup based in New Delhi, India. Digital Vidya is Asia’s leading Digital Marketing &amp; Data Analytics training company and the first to launch Social Media Marketing Workshop Series in India. Digital Vidya also offers customized Digital Marketing &amp; Analytics Training Programs for corporations to scale up their businesses. Digital Vidya is Google &amp; Microsoft India’s official training partner to train their agencies &amp; partners correspondingly.</div>
 </div>
-
-
-
 </div>
 
 {% endblock container %}

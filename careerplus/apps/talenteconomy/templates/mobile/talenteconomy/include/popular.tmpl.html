@@ -1,0 +1,37 @@
+<div class="box-panel {% if page != 'talenteconomy-article-details' %}row{% endif %} mt-30">
+    <h2 class="take-me pb-0 mt-10"><span class="line"><sup></sup></span>Popular Courses</h2>
+    <ul class="mt-20 popular-course">
+      {% for popularCourses in popular_courses %}
+      <li>
+        <a href="{{popularCourses.url}}?itm_source=TE&itm_medium=PopularCourses&itm_campaign={{page}}&itm_content={{popularCourses.name.split|join:"-"}}" title="{% if popularCourses.display_name %} {{popularCourses.display_name}} {% else %} {{popularCourses.name}} {% endif %}">
+          <h3 class="pb-0 blue-link">
+            {% if popularCourses.display_name %}
+              {{popularCourses.display_name}}
+            {% else %}
+              {{popularCourses.name}}
+            {% endif %}
+          </h3>
+          <div class="rating block ml-0 fs-12 pb-5">
+          {% for star in popularCourses.star %}
+            {% if star == '*' %}
+              <sup class="fill-star"></sup>
+            {% endif %}
+            {% if star == '+' %}
+              <sup class="fill-star"></sup>
+            {% endif %}
+            {% if star == '-' %}
+              <sup class="unfill-star"></sup>
+            {% endif %}
+            {% endfor %}
+            <strong>{{popularCourses.avg_rating_exact|floatformat:"0"}}/5</strong> 
+          </div>
+
+
+          <div class="fs-12 pb-5 inline-block mr-10 unbold"><figure class="icon-jobs"></figure>{{popularCourses.num_jobs}} Jobs available</div>
+          <div class="fs-12 inline-block unbold"><figure class="icon-bag"></figure>{{popularCourses.buy_count}} people bought</div>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="clearfix"></div>
+  </div>

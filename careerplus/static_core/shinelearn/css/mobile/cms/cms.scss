@@ -1,0 +1,75 @@
+@import '../../path';
+@import '../library/variables';
+@import '../library/mixin';
+
+/* Share Button Start From Here */
+@import '../components/share';
+
+/* Tabbing Start From Here */
+@import '../components/tabbing';
+
+/* Form items Start From Here */
+@import '../components/form-items';
+
+/* Bullets Start From Here */
+@import '../components/bullet';
+
+/* Related articles Start From Here */
+@import '../components/related-articles';
+
+/* Right Nav Bar CSS */
+@import '../components/right-navbar';
+
+/* Blog landing page */
+.download-wrap {
+  background-color: $bg-grey-fc;
+  height: 140px;
+
+  .download-pdf {
+  	background-color: $bg-black;
+  	position: relative;
+
+  	.wrap {
+  		height: 100%;
+  		position: absolute;
+  		width: 100%;
+  		text-align: center;
+  		color: $txt-white;
+  		z-index: 9;
+
+  		.table {
+  			height: 100%
+  		}
+  	}
+
+  	.table-cell {
+  		width: 1000px;
+  		height: 100%;
+  		display: table-cell;
+  		vertical-align: middle;
+
+  		span {
+  			@include border-radius (4px);
+  			@include square (45px, inline-block);
+  			background-color: $bg-blue;
+  			position: relative;
+  			z-index: 1;
+
+  			.icon-download {
+  				@include icon-block (22px, 22px, -247px 0);
+  				position: absolute;
+  				top: 50%;
+  				left: 50%;
+  				margin: -11px 0 0 -11px;
+  			}
+  		}
+  	}
+
+  	img {
+		width: 100%;
+		display: block;
+		opacity: .4;
+	}
+  }
+}
+

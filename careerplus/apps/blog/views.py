@@ -528,12 +528,12 @@ class BlogDetailAjaxView(View, BlogMixin):
                 detail_article = render_to_string('include/detail-article-list.html',
                     {"page_obj": page_obj,
                     "slug": self.blog.slug,
-                    "SITEDOMAIN": settings.SITE_DOMAIN,
-                    "main_article": main_objs[0]})
+                    "SITEDOMAIN": settings.SITE_DOMAIN, })
 
                 data = {
                     'article_detail': detail_article,
                     'url': page_obj.object_list[0].get_absolute_url(),
+                    'title': page_obj.object_list[0].display_name,
                 }
 
                 return HttpResponse(json.dumps(data), content_type="application/json")
@@ -558,6 +558,11 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
                 self.article = Blog.objects.get(id=self.art_id)
             except:
                 return ''
+            visibility = int(request.GET.get('visibility',1))
+            if visibility == 2:
+                self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
+            self.visibility = visibility
+
             return super(self.__class__, self).get(request, args, **kwargs)
         else:
             return HttpResponseForbidden()
@@ -574,8 +579,12 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
             "page_obj": self.article,
         }
 
-        comment_list = render_to_string('include/article-load-comment.html',
-            comment_load_context)
+        if self.visibility == 2:
+            comment_list = render_to_string('talenteconomy/include/article-load-comment.html',
+                comment_load_context)
+        else:
+            comment_list = render_to_string('include/article-load-comment.html',
+                comment_load_context)
 
         if self.request.session.get('candidate_id'):
             login_status = 1
@@ -607,6 +616,10 @@ class LoadMoreCommentView(TemplateView, LoadCommentMixin):
                 self.article = Blog.objects.get(slug=self.slug)
             except:
                 return ''
+            visibility = int(request.GET.get('visibility',1))
+            if visibility == 2:
+                self.template_name = 'talenteconomy/include/article-load-comment.html'
+            self.visibility = visibility
             return super(self.__class__, self).get(request, args, **kwargs)
         else:
             return HttpResponseForbidden()

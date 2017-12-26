@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% load thumbnail compress %}
 
 {% block django_meta %}
@@ -16,8 +16,8 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -100,13 +100,15 @@
       {% endfor %}  
   </div><!-- box panel ends here -->
 
-  
-  {% include './include/authorSlide.tmpl.html' with authors=authors %}
-
+  {% if popular_courses %}
+      {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-category' %}
+  {% endif %}
 
   {% if categories %}
     {% include './include/category.tmpl.html' with categories=categories %}
   {% endif %}
+
+ {% include './include/authorSlide.tmpl.html' with authors=authors %}
 
 </section><!-- End of talent-economy list -->
 </div>

@@ -147,7 +147,10 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow=8).exclude(oi_status__in=[4,45,46,47,48, 161, 162, 163])
+        queryset = queryset.filter(
+            order__status=1,
+            no_process=False,
+            product__type_flow=8, oi_status__in=[5, 3, 42])
         for query in queryset:
             try:
                 query.quizresponse
@@ -1056,6 +1059,10 @@ class InterNationalAssignmentOrderItemView(View):
                         "writer_name": assign_to.name,
                         "subject": "Your service has been initiated",
                         "writer_email": assign_to.email,
+                        "type_flow": obj.product.type_flow,
+                        "delivery_service": obj.delivery_service,
+                        "delivery_service_slug": obj.delivery_service.slug if obj.delivery_service else '',
+                        "delivery_service_name": obj.delivery_service.name if obj.delivery_service else '',
                     })
                     mail_type = 'ALLOCATED_TO_WRITER'
                     if 63 not in email_sets:
@@ -1135,8 +1142,7 @@ class CreateDrftObject(TemplateView):
                     quiz_rsp.oi = order_item
                     quiz_rsp.save()
 
-                order_item.oi_status = 49
-                order_item.last_oi_status = last_oi_status
+                order_item.oi_status = 2
                 order_item.oio_linkedin = draft_obj
                 order_item.save()
                 order_item.orderitemoperation_set.create(

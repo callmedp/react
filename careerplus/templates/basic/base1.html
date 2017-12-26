@@ -21,8 +21,8 @@
     {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         {% compress css %}
-        <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
         {% endcompress %}
     {% endblock css_section %}
 
@@ -39,41 +39,13 @@
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              {% if request.GET.itm_campaign or request.GET.itm_campaign or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-                
+              {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
                 gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
               {% else%}
                 gtag('config', 'UA-3537905-41');
               {%endif%}
               
               gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
-
-              
-              {%comment%}
-                gtag('config', 'UA-3537905-41', {
-                  'custom_map': {
-                    'dimension1': 'itm_source',
-                    'dimension2': 'itm_medium',
-                    'dimension3': 'itm_campaign',
-                    'dimension4': 'itm_content'
-                  }
-                });
-                {% if request.GET.itm_campaign %}
-                  gtag('event', 'src', {'itm_source': '{{request.GET.itm_source}}'});
-                {% endif %}
-
-                {% if request.GET.itm_medium %}
-                  gtag('event', 'med', {'itm_medium': '{{request.GET.itm_medium}}'});
-                {% endif %}
-
-                {% if request.GET.itm_campaign %}
-                  gtag('event', 'cmp', {'itm_campaign': '{{request.GET.itm_campaign}}'});
-                {% endif %}
-
-                {% if request.GET.itm_content %}
-                  gtag('event', 'con', {'itm_content': '{{request.GET.itm_content}}'});
-                {% endif %}
-              {%endcomment%}
             </script>
         {% endblock GA %}
     {% block banner_ads %}
@@ -92,6 +64,15 @@
         </script>
     {% endblock banner_ads %}
    {{ JS_SETTINGS|safe }}
+        {% block marketing_pixel %}
+            <!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-M323HB');</script>
+            <!-- End Google Tag Manager -->
+        {% endblock marketing_pixel %}
 
    </head>
   
@@ -154,6 +135,7 @@
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+    <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}
     <script>
         $('.nav-tabs > li > a').hover(function() {
@@ -162,7 +144,10 @@
         $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
           });
+        
+      
     </script>
+
     {% endblock js_section %}
 
     {% block johukum %}

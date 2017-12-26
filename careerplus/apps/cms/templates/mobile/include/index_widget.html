@@ -1,25 +1,29 @@
 {% load static look_up_tags %}
+
 <div class="box row">
     <p class="fs-16">{{indexer_heading}}</p>
 
-    <!-- tab container starts here -->
-    <div class="tab-container cms mt-10">
-        <ul class="tabs p-0">
-            {% for key, value in column_data.items %}
-            <li><a {% if forloop.first %}class="current"{% endif %} role="button" data-tab="tab-{{ forloop.counter }}">{{ column_headings|get_value:key }}</a></li>
-            {% endfor %}
-        </ul>
+    <!-- Accordion Index widget’s Starts here  -->
+    <div class="smk_accordion">
+        <div class="accordion_example1 faq-wrap row mt-20 ">
 
-        <!-- Tab content Satrts here -->
-        {% for key, value in column_data.items %}
-        <div id="tab-{{ forloop.counter }}" class="tab-content {% if forloop.first %}current{% endif %} row pb-0">
-            <ul class="bullet">
-                {% for k, v in value.items %}
-                <li><a href="{{v}}">{{k}}</a></li>
-                {% endfor %}
-            </ul>
-            <div class="clearfix"></div>
-        </div><!-- Tab content ends here -->
-        {% endfor %}
-    </div><!-- Tab container -->
+          {% for key, value in column_data.items %}
+              <!-- Section 1 -->
+              <div class="accordion_in {% if forloop.first %}acc_active{% endif %}">
+                <div class="acc_head">{{ column_headings|get_value:key }}</div>
+                <div class="acc_content">
+                  <ul class="bullet">
+                    {% for k, v in value.items %}
+                        <li><a href="{{v}}">{{k}}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+          {% endfor %}
+
+          
+        </div>
+    </div>
+    <!-- Accordion Index widget Ends here  -->
+
 </div><!-- box ends here -->

@@ -120,7 +120,7 @@ class CounsellingSubmit(TemplateView):
                     orderitem.oi_status = 42
                     orderitem.save()
                     orderitem.orderitemoperation_set.create(
-                        oi_status=orderitem.oi_status,
+                        oi_status=42,
                         last_oi_status=last_oi_status,
                         assigned_to=orderitem.assigned_to)
                 return HttpResponseRedirect(reverse('console:linkedin-inbox'))
@@ -196,7 +196,7 @@ class CounsellingForm(TemplateView):
                     orderitem.oi_status = 42
                     orderitem.save()
                     orderitem.orderitemoperation_set.create(
-                        oi_status=orderitem.oi_status,
+                        oi_status=42,
                         last_oi_status=last_oi_status,
                         assigned_to=orderitem.assigned_to)
                 return HttpResponseRedirect(reverse('dashboard:dashboard'))

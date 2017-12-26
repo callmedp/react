@@ -52,8 +52,8 @@
 
             {% elif obj.product.type_flow == 8 %}
 
-                {% if obj.oi_status == 49 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="{% url 'counselling_form' obj.pk %}">Complete form</a></p>
+                {% if obj.oi_status == 2 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% elif obj.oi_status == 45 and obj.draft_counter %}
                     <p><strong>Status:</strong> Modifications requested</p>
 
@@ -159,7 +159,7 @@
                 {% if obj.oi_status == 2 %}
                 <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
-                    {{obj.get_user_oi_status}}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% endif %}
 
             {% elif obj.product.type_flow == 9 %}

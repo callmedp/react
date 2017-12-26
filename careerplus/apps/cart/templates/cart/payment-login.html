@@ -12,13 +12,14 @@
 {% block css_section %}
     {{block.super}}
     {% compress css %}
-    <link type="text/css" href="{% static 'shinelearn/css/cart/payment.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
+    {% endcompress %}
+    
     <style type="text/css">
         .error{
             color:red;
         }
     </style>
-    {% endcompress %}
 {% endblock css_section %}
 
 {% block navigation %}

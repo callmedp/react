@@ -114,6 +114,7 @@ def add_server_lead_task(query_dict):
 
 @task(name="create_lead_crm")
 def create_lead_crm(pk=None):
+    flag = False
     try:
         data_dict = {}
         lead = UserQuries.objects.get(pk=pk)
@@ -139,4 +140,7 @@ def create_lead_crm(pk=None):
             lead.lead_created = True
             lead.save()
     except Exception as e:
+        print (str(e))
         logging.getLogger('error_log').error("%s" % str(e))
+
+    return flag

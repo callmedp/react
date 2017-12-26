@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress%}
 {% load thumbnail compress %}
 
 {% block django_meta %}
@@ -16,8 +16,8 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -77,13 +77,13 @@
           <p class="fs-12 italic">{{author.about|striptags|safe|truncatechars:140}}</p>
           <ul class="mt-5">
             {% if author.fb_url %}
-              <li class="icon-fbGrey"><a href="{{author.fb_url}}">facebook</a></li>
+              <li><a href="{{author.fb_url}}" target="_blank" class="icon-fbGrey">facebook</a></li>
             {% endif %}
             {% if author.twitter_url %}
-              <li class="icon-twGrey"><a href="{{author.twitter_url}}">twitter</a></li>
+              <li><a href="{{author.twitter_url}}" target="_blank" class="icon-twGrey">twitter</a></li>
             {% endif %}
             {% if author.linkedin_url %}
-            <li class="icon-linkedinGrey"><a href="{{author.linkedin_url}}">linkedin</a></li>
+            <li><a href="{{author.linkedin_url}}" target="_blank" class="icon-linkedinGrey">linkedin</a></li>
             {% endif %}
           </ul>
         </div>
@@ -103,8 +103,7 @@
   </section><!-- End of talent-economy list -->
 
 </div>
-        
-<link rel="stylesheet" href="css/images.css">
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet">
 {% endblock container %}
 
 
