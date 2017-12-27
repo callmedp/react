@@ -16,68 +16,124 @@ class PaymentSerializer(ModelSerializer):
         ]
 
 
+class ParentSerializer(ModelSerializer):
+    productname = SerializerMethodField('get_product_name')
+    productid = SerializerMethodField('get_prd_parent_id')
+
+    class Meta:
+        model = OrderItem
+        fields = [
+            'id',
+            'productname',
+            'productid',
+            'quantity',  # unit as quantity
+            'selling_price',  # price as selling_price
+        ]
+
+    def get_product_name(self, obj):
+        try:
+            return obj.product.name
+        except:
+            pass
+        return ''
+
+    def get_prd_parent_id(self, obj):
+        try:
+            return obj.product.id
+        except:
+            pass
+        return ''
+
+
 class VariationSerializer(ModelSerializer):
-    variation_name = SerializerMethodField('get_variation_prd1')
+    variation_name = SerializerMethodField('get_variation_product_name')
+    productid = SerializerMethodField('get_variation_product_id')
 
     class Meta:
         model = OrderItem
         fields = [
             'id',
             'variation_name',
+            'productid',
             'quantity',  # unit as quantity
             'selling_price',  # price as selling_price
         ]
 
-    def get_variation_prd1(self, obj):
+    def get_variation_product_name(self, obj):
         try:
             return obj.product.name
+        except:
+            pass
+        return ''
+
+    def get_variation_product_id(self, obj):
+        try:
+            return obj.product.id
         except:
             pass
         return ''
 
 
 class AddonSerializer(ModelSerializer):
-    addon_name = SerializerMethodField('get_addon_prd1')
+    addon_name = SerializerMethodField('get_addon_product_name')
+    productid = SerializerMethodField('get_addon_product_id')
 
     class Meta:
         model = OrderItem
         fields = [
             'id',
             'addon_name',
+            'productid',
             'quantity',
             'selling_price'
         ]
 
-    def get_addon_prd1(self, obj):
+    def get_addon_product_name(self, obj):
         try:
             return obj.product.name
+        except:
+            pass
+        return ''
+
+    def get_addon_product_id(self, obj):
+        try:
+            return obj.product.id
         except:
             pass
         return ''
 
 
 class ComboSerializer(ModelSerializer):
-    combo_name = SerializerMethodField('get_combo_prd1')
+    combo_name = SerializerMethodField('get_combo_product_name')
+    productid = SerializerMethodField('get_combo_product_id')
 
     class Meta:
         model = OrderItem
         fields = [
             'id',
             'combo_name',
+            'productid',
             'quantity',
             'selling_price'
         ]
 
-    def get_combo_prd1(self, obj):
+    def get_combo_product_name(self, obj):
         try:
             return obj.product.name
         except:
             pass
         return ''
 
+    def get_combo_product_id(self, obj):
+        try:
+            return obj.product.id
+        except:
+            pass
+        return ''
+
 
 class OrderItemDetailSerializer(ModelSerializer):
-    product = SerializerMethodField('get_product1')
+    parent = SerializerMethodField('get_parent1')
     variation = SerializerMethodField('get_variation1')
     addon = SerializerMethodField('get_addon1')
     combo = SerializerMethodField('get_combo1')
@@ -85,53 +141,43 @@ class OrderItemDetailSerializer(ModelSerializer):
     class Meta:
         model = OrderItem
         fields = [
-            'id',
-            'cost_price',
-            'product',
-            'quantity',
-            'selling_price',
             'parent',
             'variation',
             'addon',
             'combo',
         ]
 
-    def get_product1(self, obj):
+    def get_parent1(self, obj):
         try:
-            return obj.product.name
+            v = obj.order.orderitems.filter(parent=None)
+            return ParentSerializer(v, many=True).data
         except:
             pass
         return ''
 
     def get_variation1(self, obj):
         try:
-            if obj.parent:
-                parent_ois = obj.order.orderitems.filter(parent=None)
-                for parent_oi in parent_ois:
-                    variations = obj.order.orderitems.filter(parent=parent_oi, is_variation=True)
-                    return VariationSerializer(variations, many=True).data
+            variations = obj.order.orderitems.filter(
+                parent=obj, no_process=False, is_variation=True)
+            return VariationSerializer(variations, many=True).data
         except:
             pass
         return ''
 
     def get_addon1(self, obj):
         try:
-            if obj.parent:
-                parent_ois = obj.order.orderitems.filter(parent=None)
-                for parent_oi in parent_ois:
-                    addons = obj.order.orderitems.filter(parent=parent_oi, is_addon=True)
-                    return AddonSerializer(addons, many=True).data
+            addons = obj.order.orderitems.filter(
+                parent=obj, no_process=False, is_addon=True)
+            return AddonSerializer(addons, many=True).data
         except:
             pass
         return ''
 
     def get_combo1(self, obj):
         try:
-            if obj.parent:
-                parent_ois = obj.order.orderitems.filter(parent=None)
-                for parent_oi in parent_ois:
-                    combos = obj.order.orderitems.filter(parent=parent_oi, is_combo=True)
-                    return ComboSerializer(combos, many=True).data
+            combos = obj.order.orderitems.filter(
+                parent=obj, no_process=False, is_combo=True)
+            return ComboSerializer(combos, many=True).data
         except:
             pass
         return ''
@@ -160,7 +206,7 @@ class OrderListHistorySerializer(ModelSerializer):
         ]
 
     def get_orderitems1(self, obj):
-        orderitems = obj.orderitems.all()
+        orderitems = obj.orderitems.filter(parent=None)
         if orderitems:
             return OrderItemDetailSerializer(orderitems, many=True).data
 
