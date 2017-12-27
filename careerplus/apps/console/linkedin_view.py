@@ -265,7 +265,7 @@ class ChangeDraftView(DetailView):
             req_assign_to = request.user.get_short_name()
             flag = (req_assign_to == ord_assign_to)
 
-            if request.user.is_superuser or flag:
+            if request.user.is_superuser or flag or ord_obj.assigned_to is None:
                 if not org_obj.count():
                     Organization.objects.create(draft=self.object)
 
