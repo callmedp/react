@@ -304,6 +304,8 @@ class EmailLTValueApiView(APIView):
                     if personal_detail:
                         candidate_id = personal_detail.get('id')
                         name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')  
+            else:
+                candidate_id = c_id
             if candidate_id:
                 ltv_pks = Order.objects.filter(
                     candidate_id=candidate_id,
