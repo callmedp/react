@@ -66,7 +66,7 @@ class OrderListView(ListView, PaginationMixin):
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
         self.status = request.GET.get('status', -1)
@@ -101,11 +101,17 @@ class OrderListView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(number__icontains=self.query) |
-                    Q(email__icontains=self.query) |
-                    Q(mobile__icontains=self.query) |
-                    Q(id__icontains=self.query))
+                txns = PaymentTxn.objects.filter(txn__iexact=self.query)
+                if txns.exists():
+                    order_ids = list(txns.values_list('order__id', flat=True))
+                    queryset = queryset.filter(id__in=order_ids)
+                else:
+                    queryset = queryset.filter(
+                        Q(number__icontains=self.query) |
+                        Q(email__icontains=self.query) |
+                        Q(mobile__icontains=self.query) |
+                        Q(id__icontains=self.query))
+
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
