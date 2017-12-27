@@ -83,7 +83,7 @@ class AddToCartView(View, CartMixin):
                     cart_obj = Cart.objects.get(pk=cart_pk)
                 except Exception as e:
                     cart_obj = None
-
+                logging.getLogger('info_log').info("Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
                 if cart_obj and (candidate_id == cart_obj.owner_id):
                     first_name = request.session.get('first_name', '')
                     last_name = request.session.get('last_name', '')
