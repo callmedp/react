@@ -255,6 +255,7 @@ class ChangeDraftView(DetailView):
 
     def get(self, request, *args, **kwargs):
         try:
+            flag = False
             self.object = self.get_object()
             ord_obj = OrderItem.objects.get(oio_linkedin=self.object)
             q_resp = QuizResponse.objects.get(oi=ord_obj)
@@ -262,19 +263,21 @@ class ChangeDraftView(DetailView):
             edu_obj = Education.objects.filter(draft=self.object)
             ord_assign_to = ord_obj.assigned_to.get_short_name() if ord_obj.assigned_to else ord_obj.assigned_to
             req_assign_to = request.user.get_short_name()
+            flag = (req_assign_to == ord_assign_to)
 
-            if not org_obj.count():
-                Organization.objects.create(draft=self.object)
+            if request.user.is_superuser or flag:
+                if not org_obj.count():
+                    Organization.objects.create(draft=self.object)
 
-            if not edu_obj.count():
-                Education.objects.create(draft=self.object)
+                if not edu_obj.count():
+                    Education.objects.create(draft=self.object)
 
-            if not q_resp.submitted:
-                messages.error(self.request, "First Submit Councelling Form")
-                context = self.get_context_data(object=self.object)
-                return HttpResponseRedirect(reverse('console:linkedin-inbox'))
+                if not q_resp.submitted:
+                    messages.error(self.request, "First Submit Councelling Form")
+                    context = self.get_context_data(object=self.object)
+                    return HttpResponseRedirect(reverse('console:linkedin-inbox'))
 
-            if req_assign_to != ord_assign_to:
+            elif req_assign_to != ord_assign_to:
                 return HttpResponseForbidden()
 
         except Exception as e:
