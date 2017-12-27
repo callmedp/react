@@ -1,8 +1,16 @@
+# In-built python
 import logging
 import json
 from decimal import Decimal
-from celery.decorators import task
+
+# Django imports
 from django.conf import settings
+from django.utils import timezone
+
+# Third party imports
+from celery.decorators import task
+
+# Local imports
 from cart.models import Cart
 from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
@@ -121,7 +129,6 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
 @task(name="cart_drop_out_mail")
 def cart_drop_out_mail(pk=None, cnd_email=None):
     mail_type = 'CART_DROP_OUT'
-    cart_id = None
     cart_objs = Cart.objects.filter(
         status=2,
         shipping_done=False,
@@ -129,17 +136,16 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
         owner_id__isnull=False, pk=pk).exclude(owner_id__exact='')
     count = 0
     for crt_obj in cart_objs:
-        # try:
-        cart_id = crt_obj.owner_id
-        data = {}
-        last_cart_items = []
-        to_email = []
-        total_price = Decimal(0)
-        if crt_obj:
+        # send mail only if user has not edited cart in the last 45 minutes
+        if crt_obj.modified < (timezone.now() - timezone.timedelta(minutes=45)):
+            cart_id = crt_obj.owner_id
+            data = {}
+            last_cart_items = []
+            to_email = []
+            total_price = Decimal(0)
             m_prod = crt_obj.lineitems.filter(
                 parent=None).select_related(
                 'product', 'product__vendor').order_by('-created')
-            # m_prod = m_prod[0] if len(m_prod) else None
             if len(m_prod):
                 m_prod = m_prod[:2]
                 for parent in m_prod:
@@ -193,15 +199,10 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token.decode())
                 try:
-                    print(data)
                     SendMail().send(to_email, mail_type, data)
-                    # m_prod.send_email = True
-                    # m_prod.save()
                     count += 1
                 except Exception as e:
                     logging.getLogger('email_log').error(
                         "{}-{}-{}".format(
                             str(to_email), str(mail_type), str(e)))
-        # except Exception as e:
-        #     logging.getLogger('error_log').error(str(e))
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
