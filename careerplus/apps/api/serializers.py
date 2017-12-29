@@ -133,6 +133,7 @@ class ComboSerializer(ModelSerializer):
 
 
 class OrderItemDetailSerializer(ModelSerializer):
+    prdid = SerializerMethodField('get_parentprdid')
     parent = SerializerMethodField('get_parent1')
     variation = SerializerMethodField('get_variation1')
     addon = SerializerMethodField('get_addon1')
@@ -141,11 +142,15 @@ class OrderItemDetailSerializer(ModelSerializer):
     class Meta:
         model = OrderItem
         fields = [
+            'prdid',
             'parent',
             'variation',
             'addon',
             'combo',
         ]
+
+    def get_parentprdid(self, obj):
+        return obj.product.id
 
     def get_parent1(self, obj):
         try:
@@ -184,6 +189,7 @@ class OrderItemDetailSerializer(ModelSerializer):
 
 
 class OrderListHistorySerializer(ModelSerializer):
+    status = SerializerMethodField('get_order_status')
     orderitems = SerializerMethodField('get_orderitems1')
     transaction_id = SerializerMethodField('get_txn')
 
@@ -204,6 +210,10 @@ class OrderListHistorySerializer(ModelSerializer):
             'total_excl_tax',
             'orderitems',
         ]
+
+    def get_order_status(self, obj):
+        if obj.status == 1:
+            return 'Paid'
 
     def get_orderitems1(self, obj):
         orderitems = obj.orderitems.filter(parent=None)
