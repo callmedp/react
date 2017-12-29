@@ -53,6 +53,7 @@ class VariationSerializer(ModelSerializer):
         model = OrderItem
         fields = [
             'id',
+            'parent',
             'variation_name',
             'productid',
             'quantity',  # unit as quantity
@@ -82,6 +83,7 @@ class AddonSerializer(ModelSerializer):
         model = OrderItem
         fields = [
             'id',
+            'parent',
             'addon_name',
             'productid',
             'quantity',
@@ -111,6 +113,7 @@ class ComboSerializer(ModelSerializer):
         model = OrderItem
         fields = [
             'id',
+            'parent',
             'combo_name',
             'productid',
             'quantity',
@@ -214,6 +217,10 @@ class OrderListHistorySerializer(ModelSerializer):
     def get_order_status(self, obj):
         if obj.status == 1:
             return 'Paid'
+        elif obj.status == 2:
+            return "InProcess"
+        elif obj.status == 3:
+            return "Closed"
 
     def get_orderitems1(self, obj):
         orderitems = obj.orderitems.filter(parent=None)

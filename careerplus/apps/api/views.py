@@ -294,5 +294,5 @@ class OrderHistoryAPIView(ListAPIView):
             return queryset_list.none()
         else:
             queryset_list = queryset_list.filter(
-                candidate_id=candidate_id, status=1)
+                candidate_id=candidate_id, status__in=[1, 2, 3])
             return queryset_list
