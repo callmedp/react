@@ -288,11 +288,13 @@ class OrderHistoryAPIView(ListAPIView):
     # permission_classes = []
 
     def get_queryset(self, *args, **kwargs):
+        email = self.request.GET.get("email", None)
         candidate_id = self.request.GET.get("candidate_id", None)
         queryset_list = Order.objects.all()
-        if not candidate_id:
+        if not email and not candidate_id:
             return queryset_list.none()
         else:
             queryset_list = queryset_list.filter(
-                candidate_id=candidate_id, status__in=[1, 2, 3])
+                candidate_id=candidate_id,
+                email=email, status__in=[1, 2, 3]).distinct()
             return queryset_list
