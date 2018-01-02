@@ -309,7 +309,7 @@ class EmailLTValueApiView(APIView):
             if candidate_id:
                 ltv_pks = Order.objects.filter(
                     candidate_id=candidate_id,
-                    status=3).values_list('pk', flat=True)
+                    status__in=[1,2,3]).values_list('pk', flat=True)
                 if ltv_pks:
                     ltv_order_sum = Order.objects.filter(
                         pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
