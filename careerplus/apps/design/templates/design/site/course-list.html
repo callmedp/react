@@ -1,0 +1,1220 @@
+{% extends "basic/base.html" %}
+{% load static humanize thumbnail compress %}
+    {% block django_meta %}
+        {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+    {% endblock canonical_url %}
+
+    
+    {% block title %}
+       Career Guidance & Advice – Articles @ Learning.Shine
+    {% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/category/category.scss' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+
+{% block container %}
+<header>
+  <div class="container-fluid">
+    <div class="row rel">
+    <a href="#" class="cp_logo"></a>
+    <img src="{% static 'shinelearn/images/cp-header.jpg' %}" alt="" class="img-responsive" />
+      <div class="col-sm-12 cpheader">
+        <strong>India's largest e learning platform</strong>
+          Join the club of 4mn learners with <h1>our partners</h1> like Skillsoft, ACCA etc
+        <a href="#">Why you should you buy?</a>
+      </div>
+    </div>
+  </div>
+</header><!-- /header -->
+
+<section class="container-fluid grey-bg">
+  <div class="row">
+    <div class="container">
+  <!-- Courses and Certifications Row starts here -->
+  <div class="row">
+    <div class="courses_box">
+      <h2>Courses and Certifications</h2>
+      <div class="panel" id="accordion" role="tablist" aria-multiselectable="true">
+        <!-- courses 1 -->
+        <div class="panel col-sm-3" role="tab" id="headingOne">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <span class="ccbgcol">
+                <img src="{% static 'shinelearn/images/sale.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Sales And Marketing</strong></span>
+          </a>
+        </div><!-- / courses 1 -->
+
+        <!-- courses 2 -->
+        <div class="panel col-sm-3" role="tab" id="headingTwo">
+           <a class="cc_box collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <span class="ccbgcol bgcol2">
+                <img src="{% static 'shinelearn/images/operation.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Operation Management</strong></span>
+          </a>
+        </div><!-- / courses 2 -->
+
+        <!-- courses 3 -->
+        <div class="panel col-sm-3" role="tab" id="headingThree">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+            <span class="ccbgcol bgcol3">
+              <img src="{% static 'shinelearn/images/finance.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Banking And Finance</strong></span>
+          </a>
+        </div><!-- / courses 3 -->
+
+        <!-- courses 4 -->
+        <div class="panel col-sm-3" role="tab" id="headingFour">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+            <span class="ccbgcol bgcol4">
+                <img src="{% static 'shinelearn/images/information.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Information Technology</strong></span>
+          </a>
+        </div><!-- / courses 4 -->
+
+        <!-- courses Dropdown 1 box -->
+        <div id="collapseOne" class="panel-collapse collapse col-md-12 course_nav arrow1" role="tabpanel" aria-labelledby="headingOne">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#nav1_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#nav1_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#nav1_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#nav1_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#nav1_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav1_1" role="tabpanel">
+                <strong>Online Couses</strong>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+
+                <strong class="mt15">Online Couses</strong>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav1_2" role="tabpanel">
+                <strong>Online Couses</strong>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+
+                <strong class="mt15">Online Couses</strong>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+            <div class="tab-pane" id="nav1_3" role="tabpanel">
+                <strong>Online Couses</strong>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+
+                <strong class="mt15">Online Couses</strong>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+            <div class="tab-pane" id="nav1_4" role="tabpanel">
+                <strong>Online Couses</strong>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#" class="viewall">View all courses</a>
+
+                <strong class="mt15">Online Couses</strong>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+            <div class="tab-pane" id="nav1_5" role="tabpanel">
+                <strong>Online Couses</strong>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+
+                <strong class="mt15">Online Couses</strong>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 1 box -->
+
+        <!-- courses Dropdown 2 box -->
+        <div id="collapseTwo" class="panel-collapse collapse col-sm-12 course_nav arrow2" role="tabpanel" aria-labelledby="headingTwo">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav2_1" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_2" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_3" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_4" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_5" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 2 box -->
+
+        <!-- courses Dropdown 3 box -->
+        <div id="collapseThree" class="panel-collapse collapse col-sm-12 course_nav arrow3" role="tabpanel" aria-labelledby="headingThree">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav2_1" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_2" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_3" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_4" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_5" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 3 box -->
+
+        <!-- courses Dropdown 4 box -->
+        <div id="collapseFour" class="panel-collapse collapse col-sm-12 course_nav arrow4" role="tabpanel" aria-labelledby="collapseFour">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav2_1" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_2" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_3" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_4" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_5" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 4 box -->
+
+        <!-- courses 5 -->
+        <div class="panel col-sm-3" role="tab" id="headingFive">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+            <span class="ccbgcol bgcol4">
+                <img src="{% static 'shinelearn/images/hr.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Human Resource </strong></span>
+          </a>
+        </div><!-- / courses 5 -->
+
+        <!-- courses 6 -->
+        <div class="panel col-sm-3" role="tab" id="headingSix">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+            <span class="ccbgcol bgcol4">
+                <img src="{% static 'shinelearn/images/management.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Management</strong></span>
+          </a>
+        </div><!-- / courses 6 -->
+
+        <!-- courses 7 -->
+        <div class="panel col-sm-3" role="tab" id="headingSeven">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+            <span class="ccbgcol bgcol4">
+                <img src="{% static 'shinelearn/images/mass.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Mass Communication</strong></span>
+          </a>
+        </div><!-- / courses 7 -->
+
+        <!-- courses 8 -->
+        <div class="panel col-sm-3" role="tab" id="headingEight">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+            <span class="ccbgcol bgcol4">
+                <img src="{% static 'shinelearn/images/personal.png' %}" alt="" class="img-responsive">
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Personal Development</strong></span>
+          </a>
+        </div><!-- / courses 8 -->
+
+        <!-- courses Dropdown 5 box -->
+        <div id="collapseFive" class="panel-collapse collapse col-sm-12 course_nav arrow1" role="tabpanel" aria-labelledby="collapseFive">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav2_1" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_2" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_3" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_4" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_5" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 5 box -->
+
+        <!-- courses Dropdown 6 box -->
+        <div id="collapseSix" class="panel-collapse collapse col-sm-12 course_nav arrow2" role="tabpanel" aria-labelledby="collapseSix">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav2_1" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_2" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_3" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_4" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_5" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 6 box -->
+
+        <!-- courses Dropdown 7 box -->
+        <div id="collapseSeven" class="panel-collapse collapse col-sm-12 course_nav arrow3" role="tabpanel" aria-labelledby="collapseSeven">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav2_1" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_2" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_3" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_4" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_5" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 7 box -->
+
+        <!-- courses Dropdown 7 box -->
+        <div id="collapseEight" class="panel-collapse collapse col-sm-12 course_nav arrow4" role="tabpanel" aria-labelledby="collapseEight">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3" role="tablist">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_1" role="tab">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_2" role="tab">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_3" role="tab">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_4" role="tab">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav2_5" role="tab">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active" id="nav2_1" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_2" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_3" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_4" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+
+            <div class="tab-pane" id="nav2_5" role="tabpanel">
+              <strong>Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+
+              <strong class="mt15">Online Couses</strong>
+              <a href="#">AON Hewitt HR certifications</a>
+              <a href="#">ICFL Training Programs</a>
+              <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+              <a href="#">Govt of India- Vskills certification</a>
+              <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / Tabs nav panes -->
+        </div><!-- /courses dropdown 7 box -->
+      </div> <!-- accordin panel end here -->
+    </div><!-- courses box ends here -->
+  </div><!-- Courses and Certifications Row ends here -->
+
+  <!-- Vendors Row starts here -->
+  <div class="row">
+    <div class="courses_box">
+      <h2>Our Vendors</h2>
+      <!-- accordion wrap starts here -->
+      <div class="panel" id="accordion" role="tablist" aria-multiselectable="true">
+        
+        <!-- Vendors 1 -->
+        <div class="panel col-sm-3" role="tab" id="headingTwenty1">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseTwenty1" aria-expanded="true" aria-controls="collapseTwenty1">
+            <span class="vendor-box">
+                <img src="{% static 'shinelearn/images/vendor-1.jpg'%}" alt="" class="img-responsive" />
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">ACCA</strong></span>
+          </a>
+        </div>
+        <!-- / Vendors 1 -->
+
+        <!-- Vendors 2 -->
+        <div class="panel col-sm-3" role="tab" id="headingTwenty2">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseTwenty2" aria-expanded="true" aria-controls="collapseTwenty2">
+            <span class="vendor-box">
+                <img src="{% static 'shinelearn/images/vendor-2.jpg'%}" alt="" class="img-responsive" />
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">GetCertoGO</strong></span>
+          </a>
+        </div>
+        <!-- / Vendors 2 -->
+
+        <!-- Vendors 3 -->
+        <div class="panel col-sm-3" role="tab" id="headingTwenty3">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseTwenty3" aria-expanded="true" aria-controls="collapseTwenty3">
+            <span class="vendor-box">
+                <img src="{% static 'shinelearn/images/vendor-3.jpg'%}" alt="" class="img-responsive" />
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">Skilsoft</strong></span>
+          </a>
+        </div>
+        <!-- / Vendors 3 -->
+
+        <!-- Vendors 4 -->
+        <div class="panel col-sm-3" role="tab" id="headingTwenty4">
+          <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseTwenty4" aria-expanded="true" aria-controls="collapseTwenty4">
+            <span class="vendor-box">
+                <img src="{% static 'shinelearn/images/vendor-4.jpg'%}" alt="" class="img-responsive" />
+            </span>
+            <span class="cc_heading"><strong class="cc_tpbdr">V Skill</strong></span>
+          </a>
+        </div>
+        <!-- / Vendors 4 -->
+
+        <!-- Vendors drop down links 1 box -->
+        <div id="collapseTwenty1" class="panel-collapse collapse col-md-12 course_nav vendors_nav arrow1" role="tabpanel" aria-labelledby="headingTwenty1">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3">
+            <li class="nav-item">
+              <a class="nav-link" href="#">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active">
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / tab-content -->
+        </div><!-- / Vendors 1 box -->
+
+        <!-- Vendors drop down links 2 box -->
+        <div id="collapseTwenty2" class="panel-collapse collapse col-md-12 course_nav vendors_nav arrow2" role="tabpanel" aria-labelledby="headingTwenty2">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3">
+            <li class="nav-item">
+              <a class="nav-link" href="#">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active">
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / tab-content -->
+        </div><!-- / Vendors 2 box -->
+
+        <!-- Vendors drop down links 2 box -->
+        <div id="collapseTwenty3" class="panel-collapse collapse col-md-12 course_nav vendors_nav arrow3" role="tabpanel" aria-labelledby="headingTwenty3">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3">
+            <li class="nav-item">
+              <a class="nav-link" href="#">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active">
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / tab-content -->
+        </div><!-- / Vendors 2 box -->
+
+        <!-- Vendors drop down links 2 box -->
+        <div id="collapseTwenty4" class="panel-collapse collapse col-md-12 course_nav vendors_nav arrow4" role="tabpanel" aria-labelledby="headingTwenty4">
+          <!-- tabs nav -->
+          <ul class="nav nav-tabs col-md-5 col-lg-4 col-xl-3">
+            <li class="nav-item">
+              <a class="nav-link" href="#">GetCertGo certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">AON Hewitt HR certifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Govt of India- Vskills certification</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">ICFL Training Programs</a>
+            </li>
+          </ul><!-- / tabs nav -->
+
+          <!-- Tabs nav panes -->
+          <div class="tab-content col-md-7 col-lg-8 col-xl-9">
+            <div class="tab-pane active">
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#">ICFL Training Programs</a>
+                <a href="#">AON Hewitt HR certifications</a>
+                <a href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a>
+                <a href="#">Govt of India- Vskills certification</a>
+                <a href="#" class="viewall">View all courses</a>
+            </div>
+          </div><!-- / tab-content -->
+        </div><!-- / Vendors 2 box -->
+
+      </div><!-- accordion wrap ends here -->
+    </div><!-- / courses_box -->
+  </div><!-- Row ends here -->
+</div><!-- main container ends here -->
+  </div><!-- / ROW -->
+</section><!-- container fluid ends here -->
+
+<!-- Why Shine Career Plus starts here  -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="why_scp"> <h2>Why Shine Career Plus?</h2>
+      <ul>
+        <li>
+          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-1.png'%}" alt="" /></span>
+          Our experts will guide you through the variety of courses suited for your profile
+        </li>
+        <li>
+          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-2.png'%}" alt="" /></span>
+          Invest in your career and get a jump in your salary
+        </li>
+        <li>
+          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-3.png'%}" alt="" /></span>
+          We bridge the gap between education and employment with a free 1 month featured profile on shine.com
+        </li>
+      </ul><!-- / UL -->
+    </div><!-- / Why Shine -->
+  </div><!-- / ROW -->
+</section><!-- Why Shine Career Plus ends here  -->
+
+
+<!-- Testimonials  strats here -->
+<section class="container">
+  <div class="row">
+    <div class="testimonials"> 
+      <h2>Testimonials</h2>
+      <ul>
+        <li>
+          <div class="box-sh">
+          I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.<strong>"SP Shree Kumar"</strong>
+          </div>
+        </li>
+        <li><div class="box-sh">
+          I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.<strong>"SP Shree Kumar"</strong>
+          </div></li>
+        <li><div class="box-sh">
+          I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.<strong>"SP Shree Kumar"</strong>
+          </div></li>
+      </ul><!-- / UL -->
+    </div><!-- / testimonials -->
+  </div><!-- ROW -->
+</section><!-- / Container -->
+<!-- Testimonials  ends here -->
+
+{% endblock container %}
+  
+
+{% block js_section %}
+   {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/category/cata.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

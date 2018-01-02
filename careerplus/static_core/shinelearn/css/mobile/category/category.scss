@@ -1,0 +1,192 @@
+@import '../library/variables';
+@import '../library/mixin';
+
+.course-banner {
+  position: relative;
+  background-color: $bg-blue-254;
+
+  .content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    padding: 40px 15px 15px;
+    
+    @media only screen and (max-width: 320px) {
+    	padding-top: 25px;
+    }
+
+    .head {
+      font-size: $font-size + 2;
+      font-weight: 600;
+      color: $txt-white;
+      padding-bottom: 5px;
+    }
+    .sub-haed {
+    	font-size: $font-size - 2;
+    	color: $txt-white;
+      	padding-bottom: 0px;
+    }
+
+    .callToAction a {
+    	@include border-radius (20px);
+    	color: $txt-white;
+    	font-size: $font-size - 2;
+    	display: table;
+    	border: 1px solid #fff;
+    	padding: 8px 15px;
+    	margin: 10px auto 0 auto;
+
+    	&:before {
+			content: ""; 
+			display: inline-block; 
+			vertical-align: middle; 
+			margin: 0 15px 0 0;
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 5.5px 0 5.5px 8px;
+			border-color: transparent transparent transparent #fff;
+		}
+    }
+  }
+
+  img {
+    opacity: .2;
+  }
+}
+
+.courses-certificate {
+
+	h2 {
+		text-align: center;
+	}
+
+	ul {
+		margin: 0 -10px;
+
+		li {
+			width: 50%;
+			display: inline-block;
+			padding: 10px;
+			text-align: center;
+			vertical-align: top;
+
+			.box-shadow {
+				box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.1);
+				padding: 15px;
+				display: block;
+
+				.img-box {
+					height: 110px;
+					display: table-cell;
+					vertical-align: middle;
+				}
+
+				.cc_heading {
+					font-size: $font-size - 2;
+					display: table-cell;
+					border-top: 1px solid $border-grey-f5;
+					height: 45px;
+					vertical-align: middle;
+					width: 1000px;
+					padding: 15px 15px 0;
+					line-height: 16px;
+					font-weight: 600;
+				}
+			}
+		}
+	}
+}
+
+.vendors {
+
+	.box-shadow {
+		.img-box {
+			height: 90px !important;
+		}
+	}
+}
+
+
+
+.grey-bg {
+	background-color: $bg-grey-f5;
+}
+/* start of why_scp */
+.why_scp {
+	display: block; 
+	text-align: center; 
+	background: #678eb7; 
+	padding: 30px 0;
+	color: $txt-white; 
+	font-size: 14px;
+
+	h2 {
+		font-size: 21px;
+		color: $txt-white;
+		text-align: center;
+	}
+	
+	ul { 
+		list-style-type: none; 
+		margin: 50px 0 0 0; 
+		overflow: hidden; 
+	
+		li { 
+			display: block;
+			vertical-align: top;
+			padding: 0 30px;
+			margin-bottom: 50px;
+		
+			&:last-child { 
+				margin-bottom: 0;
+			}
+			
+			.scp_icon { 
+				display: block;
+				height: 90px;
+				margin:0 auto 10px auto;
+			}
+		}
+	}
+}/* end of why_scp */
+
+
+.testimonials {
+	display: block; 
+	padding: 40px 15px 40px; 
+	color: #666; 
+	font-size: 14px;
+
+	ul { 
+		list-style-type: none; 
+		margin: 10px 0 0 0; 
+		overflow: hidden;
+		padding: 0;
+
+		li { 
+			display: inline-block;
+			vertical-align: top; 
+			background: $bg-white; 
+			margin-bottom: 20px;
+
+			&:last-child {
+				margin-bottom: 0;
+			} 
+
+			.box-sh {
+				box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.1);
+				padding: 30px;
+			}
+
+			strong {
+				display: block; 
+				font-weight: 600; 
+				font-style: italic; 
+				margin-top: 10px;
+			}
+		}
+	}
+
+} 

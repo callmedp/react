@@ -1,0 +1,211 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+
+    
+    {% block title %}
+       Courses listing
+    {% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {%compress css%}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/category/category.scss' %}" rel="stylesheet">
+    {%endcompress%}
+    
+{% endblock css_section %}
+
+<!-- main section start -->
+{% block container %}
+<!-- starts of body wrapper -->
+<div class="body-wrapper">
+  <!-- Category banner Starts here -->
+  <div class="course-banner">
+      <div class="content text-center">
+        <p class="head">India's largest e learning platform</p>
+        <p class="sub-haed">Join the club of 4mn learners with our partners <br />like Skillsoft, ACCA etc</p>
+        <p class="callToAction"><a href="#">Why you should you buy?</a></p>
+      </div>
+      <img src="{% static 'shinelearn/images/mobile/common/category-img.png' %}" class="img-responsive">
+  </div><!-- Category banner Ends here -->
+
+  <!-- courses and categoery starts here -->
+  <section class="courses-certificate pb-30">
+    <div class="content-box">
+      <h2>Courses and Certificate</h2>
+      <ul>
+        <li>
+          <a class="box-shadow" href="#">
+            <span class="img-box">
+              <img src="/media/static/shinelearn/images/sale.png" alt="" class="img-responsive">
+            </span>
+            <p class="pb-0 row"><span class="cc_heading">Sales and Marketing</span></p>
+          </a>
+        </li>
+
+        <li>
+          <a class="box-shadow" href="#">
+            <span class="img-box">
+              <img src="/media/static/shinelearn/images/operation.png" alt="" class="img-responsive">
+            </span>
+            <p class="pb-0 row">
+              <span class="cc_heading">Opertation Management</span>
+            </p>
+          </a>
+        </li>
+
+        <li>
+          <a class="box-shadow" href="#">
+            <span class="img-box">
+              <img src="/media/static/shinelearn/images/finance.png" alt="" class="img-responsive">
+            </span>
+            <p class="pb-0 row"><span class="cc_heading"> Banking and finance</span></p>
+          </a>
+        </li>
+
+        <li>
+          <a class="box-shadow" href="#">
+            <span class="img-box">
+              <img src="/media/static/shinelearn/images/information.png" alt="" class="img-responsive">
+            </span>
+            <p class="pb-0 row">
+              <span class="cc_heading">Information technology</span>
+            </p>
+          </a>
+        </li>
+
+        <li>
+          <a class="box-shadow" href="#">
+            <span class="img-box">
+              <img src="/media/static/shinelearn/images/hr.png" alt="" class="img-responsive">
+            </span>
+            <p class="pb-0 row">
+              <span class="cc_heading">Human resource</span>
+            </p>
+          </a>
+        </li>
+
+        <li>
+          <a class="box-shadow" href="#">
+            <span class="img-box">
+              <img src="/media/static/shinelearn/images/management.png" alt="" class="img-responsive">
+            </span>
+            <p class="pb-0 row">
+              <span class="cc_heading">Management</span>
+            </p>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="clearfix"></div>
+  </section><!-- courses and categoery ends here -->
+
+  <!-- courses and categoery starts here -->
+  <section class="courses-certificate vendors pb-30">
+    <div class="content-box">
+      <h2>Our vendors</h2>
+      <ul>
+
+        <li>
+          <a class="box-shadow">
+              <span class="img-box">
+                <img src="/media/static/shinelearn/images/vendor-1.jpg" alt="" class="img-responsive">
+              </span>
+              <p class="pb-0 row">
+                <span class="cc_heading">ACCA</span>
+              </p>
+          </a>
+        </li>
+
+        <li>
+          <a class="box-shadow">
+              <span class="img-box">
+                <img src="/media/static/shinelearn/images/vendor-2.jpg" alt="" class="img-responsive">
+              </span>
+            <p class="pb-0 row">
+              <span class="cc_heading">GetCertGo</span>
+            </p>
+          </a>
+        </li>
+
+
+        <li>
+          <a class="box-shadow">
+              <span class="img-box">
+                <img src="/media/static/shinelearn/images/vendor-3.jpg" alt="" class="img-responsive">
+              </span>
+              <p class="pb-0 row">
+                <span class="cc_heading">Softskills</span>
+              </p>
+          </a>
+        </li>
+
+        <li>
+          <a class="box-shadow">
+              <span class="img-box">
+                <img src="/media/static/shinelearn/images/vendor-4.jpg" alt="" class="img-responsive">
+              </span>
+              <p class="pb-0 row">
+                <span class="cc_heading">V Skills</span>
+              </p>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="clearfix"></div>
+  </section><!-- courses and categoery ends here -->
+
+  <!-- Why shine learning starts here -->
+  <section class="why_scp">
+    <div class="content-box">
+      <h2>Why Shine Learning?</h2>
+      <ul>
+        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-1.png" alt=""></span>
+            Our experts will guide you through the variety of courses suited for your profile
+        </li>
+
+        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-2.png" alt=""></span>
+            Invest in your career and get a jump in your salary
+        </li>
+
+        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-3.png" alt=""></span>
+            We bridge the gap between education and employment with a free 1 month featured profile on shine.com
+        </li>
+      </ul>
+    </div><!-- end of content box -->
+  </section><!-- Why shine learning ends here -->
+
+  <!-- Testimonials Course Starts here -->
+  <div class="testimonials">
+    <h2 class="mb-0 text-center">Testimonials</h2>
+    <div class="slide-container">
+        <ul class="review-slide">
+            <li>
+              I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.
+              <p><strong>- "SP Shree Kumar"</strong></p>
+            </li>
+
+            <li>
+              I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.
+              <p><strong>- "SP Shree Kumar"</strong></p>
+            </li>
+        </ul>
+    </div>
+  </div><!-- Testimonials Course ends here -->
+</div><!-- ends of body wrapper -->
+
+
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script src="{% static 'shinelearn/js/blog/blog-landing.js' %}"></script>
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
