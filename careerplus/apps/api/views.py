@@ -293,9 +293,13 @@ class OrderHistoryAPIView(ListAPIView):
         queryset_list = Order.objects.all()
         if not email and not candidate_id:
             return queryset_list.none()
-        else:
+        elif candidate_id:
             queryset_list = queryset_list.filter(
                 candidate_id=candidate_id,
+                status__in=[1, 2, 3]).distinct()
+            return queryset_list
+        elif email:
+            queryset_list = queryset_list.filter(
                 email=email,
                 status__in=[1, 2, 3]).distinct()
             return queryset_list
