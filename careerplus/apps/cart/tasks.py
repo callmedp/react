@@ -1,8 +1,16 @@
+# In-built python
 import logging
 import json
 from decimal import Decimal
-from celery.decorators import task
+
+# Django imports
 from django.conf import settings
+from django.utils import timezone
+
+# Third party imports
+from celery.decorators import task
+
+# Local imports
 from cart.models import Cart
 from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
@@ -121,83 +129,80 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
 @task(name="cart_drop_out_mail")
 def cart_drop_out_mail(pk=None, cnd_email=None):
     mail_type = 'CART_DROP_OUT'
-    cart_id = None
     cart_objs = Cart.objects.filter(
         status=2,
         shipping_done=False,
         payment_page=False,
         owner_id__isnull=False, pk=pk).exclude(owner_id__exact='')
     count = 0
-    for cart_obj in cart_objs:
-        try:
-            crt_obj = cart_obj
-            cart_id = cart_obj.owner_id
+    for crt_obj in cart_objs:
+        # send mail only if user has not edited cart in the last 45 minutes
+        if crt_obj.modified < (timezone.now() - timezone.timedelta(minutes=45)):
+            cart_id = crt_obj.owner_id
             data = {}
-            toemail = ''
             last_cart_items = []
             to_email = []
             total_price = Decimal(0)
-            if crt_obj:
-                m_prod = crt_obj.lineitems.filter(
-                    parent=None, send_email=False).select_related(
-                    'product', 'product__vendor').order_by('-created')
-                m_prod = m_prod[0] if len(m_prod) else None
-                if m_prod:
-                    data['m_prod'] = m_prod
-                    data['addons'] = crt_obj.lineitems.filter(
-                        parent=m_prod,
+            m_prod = crt_obj.lineitems.filter(
+                parent=None).select_related(
+                'product', 'product__vendor').order_by('-created')
+            if len(m_prod):
+                m_prod = m_prod[:2]
+                for parent in m_prod:
+                    product_dict = dict()
+                    product_dict['m_prod'] = parent
+                    product_dict['addons'] = crt_obj.lineitems.filter(
+                        parent=parent,
                         parent_deleted=False).select_related('product')
-                    data['variations'] = crt_obj.lineitems.filter(
-                        parent=m_prod,
+                    product_dict['variations'] = crt_obj.lineitems.filter(
+                        parent=parent,
                         parent_deleted=True).select_related('product')
-                    last_cart_items.append(data)
-                    for last_cart_item in last_cart_items:
-                        parent_li = last_cart_item.get('m_prod')
-                        addons = last_cart_item.get('addons')
-                        variations = last_cart_item.get('variations')
-                        product_price = parent_li.product.get_price()
-                        parent_li.price_incl_tax = product_price
-                        parent_li.save()
+                    product_name = parent.product.heading if parent.product.heading else parent.product.name
+                    product_dict['product_name'] = product_name
+                    last_cart_items.append(product_dict)
 
-                        if parent_li.no_process == False:
-                            total_price += parent_li.price_incl_tax
-                        for li in addons:
-                            product_price = li.product.get_price()
-                            li.price_incl_tax = product_price
-                            li.save()
-                            total_price += li.price_incl_tax
-                        for li in variations:
-                            product_price = li.product.get_price()
-                            li.price_incl_tax = product_price
-                            li.save()
-                            total_price += li.price_incl_tax
-                    data['total'] = round(total_price, 2)
-                    product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
-                    data['subject'] = '{} is ready to checkout'.format(
-                        product_name)
-                    data['product'] = product_name
-                    if cart_id and (cnd_email or m_prod.cart.email):
-                        toemail = cnd_email or m_prod.cart.email
-                        to_email.append(toemail)
-                    else:
-                        logging.getLogger('error_log').error(
-                            "Error in getting response from Shine for id:",
-                            m_prod.cart.owner_id)
-                        continue
+                data['products'] = last_cart_items
+                for last_cart_item in last_cart_items:
+                    parent_li = last_cart_item.get('m_prod')
+                    addons = last_cart_item.get('addons')
+                    variations = last_cart_item.get('variations')
+                    product_price = parent_li.product.get_price()
+                    parent_li.price_excl_tax = product_price
+                    parent_li.save()
 
-                    token = AutoLogin().encode(toemail, cart_id, days=None)
-                    data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                        token.decode())
-                    try:
-                        SendMail().send(to_email, mail_type, data)
-                        m_prod.send_email = True
-                        m_prod.save()
-                        count += 1
-                    except Exception as e:
-                        logging.getLogger('email_log').error(
-                            "{}-{}-{}".format(
-                                str(to_email), str(mail_type), str(e)))
-        except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+                    total_price += parent_li.price_excl_tax
+                    for li in addons:
+                        product_price = li.product.get_price()
+                        li.price_excl_tax = product_price
+                        li.save()
+                        total_price += li.price_excl_tax
+                    for li in variations:
+                        product_price = li.product.get_price()
+                        li.price_excl_tax = product_price
+                        li.save()
+                        total_price += li.price_excl_tax
+                data['total'] = round(total_price, 2)
+
+                data['subject'] = '{} is ready to checkout'.format(
+                    product_name)
+                data['product'] = product_name
+                if cart_id and (cnd_email or crt_obj.email):
+                    toemail = cnd_email or crt_obj.email
+                    to_email.append(toemail)
+                else:
+                    logging.getLogger('error_log').error(
+                        "Candidate details not present in cart id:", crt_obj.id)
+                    continue
+
+                token = AutoLogin().encode(toemail, cart_id, days=None)
+                data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                    token.decode())
+                try:
+                    SendMail().send(to_email, mail_type, data)
+                    count += 1
+                except Exception as e:
+                    logging.getLogger('email_log').error(
+                        "{}-{}-{}".format(
+                            str(to_email), str(mail_type), str(e)))
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))

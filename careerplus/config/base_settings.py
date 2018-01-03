@@ -217,9 +217,9 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser'
+        'rest_framework.permissions.IsAuthenticated'
     ],
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 100,
 }
 
 OAUTH2_PROVIDER = {
@@ -499,7 +499,7 @@ VENDOR_GROUP_LIST = ['VENDOR', 'STUDY_MATE']
 PRODUCT_GROUP_LIST = ['PRODUCT']
 OPERATION_GROUP_LIST = ['OPERATION', 'OPS_HEAD']
 SEO_GROUP_LIST = ['SEO']
-WRITING_GROUP_LIST = ['WRITER', 'WRITER_HEAD']
+WRITING_GROUP_LIST = ['Writer', 'WRITER HEADS']
 BLOG_WRITER_GROUP_LIST = ['BLOG_WRITER']
 
 #BLOGGER#

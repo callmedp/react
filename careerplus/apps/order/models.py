@@ -288,6 +288,7 @@ class OrderItem(AbstractAutoDate):
             ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
             ("can_show_linkedin_inbox_queue", "Can View Linkedin Inbox Queue"),
             ("can_show_linkedin_writer_draft", "Can View Linkedin Writer Draft"),
+            ("can_show_linkedin_counselling_form", "Can View Linkedin Counselling Form"),
 
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),

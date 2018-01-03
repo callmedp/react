@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
 
 from . import views
 
@@ -56,4 +57,8 @@ urlpatterns = [
 
     url(r'^order/markedpaid/$',
         views.MarkedPaidOrderView.as_view(), name='order-markedpaid'),
+
+    url(r'^get-ltv/$',
+        csrf_exempt(views.GetLTVAjaxView.as_view()), name='bulk-ltv-view'),
+
 ]

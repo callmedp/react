@@ -1,7 +1,9 @@
 import json
 import logging
 import datetime
+from django.db.models import Sum
 
+from decimal import Decimal
 from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
@@ -15,7 +17,7 @@ from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem, RefundRequest
 from console.order_form import FileUploadForm, VendorFileUploadForm
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
@@ -641,3 +643,43 @@ class MarkedPaidOrderView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
+
+
+class GetLTVAjaxView(View):
+    
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        return_list = []
+            
+        if request.is_ajax() and request.user.is_authenticated():
+            o_list = request.POST.getlist('order_list[]')
+            data = {"status": 1}
+            results = {order:"0" for order in o_list }
+            order_list = Order.objects.filter(pk__in=o_list)
+            order_dict = {str(order.pk): order.candidate_id for order in order_list}
+            candidate_list = order_list.values_list('candidate_id', flat=True).distinct()
+            candidate_dict = {}
+            for candidate in candidate_list:
+                ltv = Decimal(0)
+                ltv_pks = Order.objects.filter(
+                    candidate_id=candidate,
+                    status__in=[1,2,3]).values_list('pk', flat=True)
+                if ltv_pks:
+                    ltv_order_sum = Order.objects.filter(
+                        pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
+                    ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
+                    rf_ois = OrderItem.objects.filter(
+                        order__in=ltv_pks,
+                        oi_status=163).values_list('order', flat=True)
+                    rf_sum = RefundRequest.objects.filter(
+                        order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
+                    if rf_sum.get('rf_price'):
+                        ltv = ltv - rf_sum.get('rf_price')
+
+                candidate_dict[candidate] = str(ltv)
+            for k,v  in results.items():
+                if order_dict.get(k):
+                    results[k] = candidate_dict.get(order_dict.get(k), "0")         
+            for order in o_list:
+                data.update({order:results.get(order,"0")})
+        return HttpResponse(json.dumps(data), content_type="application/json")

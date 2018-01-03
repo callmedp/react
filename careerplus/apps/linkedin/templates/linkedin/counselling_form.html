@@ -1,84 +1,143 @@
+{% extends "console/base_console.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<body>
-<h2>Linkedin Counselling Form Updation</h2>
-	<form method="post" id="counselling_form" 
-	action="{% url "counselling-form" orderitem.pk %}">
-		{% csrf_token %}
-	  <ol>
-		<li>
-			<p class="question">{{ques_dict.q1}}</p>                        
-			<textarea rows="5" cols="50" class="js-answer" 
-			name="q1">{{quiz_resp.anser1}}</textarea>
-			<p class='submit-error' style="color:red;"></p>        
-		</li>
-		<li>
-			<p class="question">{{ques_dict.q2}}</p>                        
-			<textarea class="js-answer " rows="5" cols="50" class="js-answer"
-			name="q2">{{quiz_resp.anser2}}</textarea>
-			<p class='submit-error' style="color:red;"></p>         
-		</li>
-		<li>
-			<p class="question">{{ques_dict.q3}}</p>                        
-			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
-			name="q3">{{quiz_resp.anser3}}</textarea>
-			<p class='submit-error' style="color:red;"></p>         
-		</li>
-		<li>
-			<p class="question1">{{ques_dict.q4}}</p>                        
-			<textarea  class="js-answer" rows="5" cols="50" class="js-answer"
-			name="q4">{{quiz_resp.anser4}}</textarea>
-			<p class='submit-error' style="color:red;"></p>         
-		</li>
-		<li>
-			<p class="question">{{ques_dict.q5}}</p>                        
-			<textarea class="js-answer" rows="5" cols="50" class="js-answer"
-			name="q5">{{quiz_resp.anser5}}</textarea>
-			<p class='submit-error' style="color:red;"></p>         
-		</li>  
-	 </ol>
-         	<button type="submit" name="save" class="grp-button grp-default js-click" 
-         	style="width: 150px;float: left;height:44px" value="save">Save</button>
-            {% if not flag  %}
-                 <button type="submit" name="submit" class="grp-button grp-default js-submit" 
-                 style="width:150px;float:right;background-image: linear-gradient(#FF8D00,#FF2300);height:44px" value="submit" id="admin-counselling-form">Submit</button>
-            {% endif %}                   
-	<!--<button type="submit">submit</button>-->
-	</form>
-</body>
+{% load humanize %}
 
-	<script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
-	<script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
-	<script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+{% block title %}
+  <title>Admin Counselling Form</title>
+{% endblock title %}
+{% block css_block %}
+  {{ block.super }}
+  <!-- Switchery -->
+  <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}"
+  rel="stylesheet" type="text/css">            
+{% endblock css_block %}
 
-	<script type="text/javascript">
-	$().ready(function() {
-		$('#admin-counselling-form').click(function() {
-			var element = 'submit-error';
-	    	$("#counselling_form").validate({
-	        	submitHandler: function(form) {
-	        		form.submit();
-	        },
-	        rules: {
-	            q1:{ required:true,},
-	            q2: { required:true,},
-	            q3:{ required:true,},
-	            q4: { required:true,},
-	            q5:{ required:true,},        
-	        },
-	        messages:{
-	            q1:{ required:"This field is required",},
-	            q2:{ required:"This field is required",},
-	            q3:{ required:"This field is required",},
-	            q4:{ required:"This field is required",},
-	            q5:{ required:"This field is required",},   
-	        },
-	        errorPlacement: function(error, element) {
-	            element.siblings(".submit-error").text('This field is required');
-	        }
-	    });
-	});
-});
-</script>
-</html>
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3> 
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Linkedin Counselling Form Updation</h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <form class="form-horizontal form-label-left" method="POST" action="{% url "counselling-form" orderitem.pk %}" id="counselling_form" novalidate>
+            <style type="text/css">
+                li.parsley-required {
+                   color: red;  
+                } 
+              </style>
+              {% csrf_token %}
+              <ol>
+                  <li>
+                    <p class="question">{{ques_dict.q1}}</p>                        
+                    <textarea rows="5" cols="50" class="js-answer" style="margin: 0px; width: 447px; height: 110px;"
+                    name="q1" required="">{{quiz_resp.anser1}}</textarea>        
+                  </li>
+                  <li>
+                    <p class="question">{{ques_dict.q2}}</p>                        
+                    <textarea class="js-answer " rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                    name="q2" required="">{{quiz_resp.anser2}}</textarea>         
+                  </li>
+                  <li>
+                    <p class="question">{{ques_dict.q3}}</p>                        
+                    <textarea  class="js-answer" rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                    name="q3" required="">{{quiz_resp.anser3}}</textarea>         
+                  </li>
+                  <li>
+                    <p class="question1">{{ques_dict.q4}}</p>                        
+                    <textarea  class="js-answer" rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                    name="q4" required="">{{quiz_resp.anser4}}</textarea>         
+                  </li>
+                  <li>
+                    <p class="question">{{ques_dict.q5}}</p>                        
+                    <textarea class="js-answer" rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                    name="q5" required="">{{quiz_resp.anser5}}</textarea>         
+                  </li>
+              </ol>
+              <div class="ln_solid"></div>
+              <div class="form-group">
+                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                  <button type="submit" class="btn btn-success" value="save" 
+                  name="save">
+                    Save
+                  </button>
+                  {% if not flag  %}
+                  <button type="submit" class="btn btn-success" value="submit" 
+                  name="submit" id="admin-counselling-form">
+                  Submit
+                  </button>
+                  {% endif %}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" 
+    src="{% static "packages/parsleyjs/parsley.min.js" %}">
+  </script>
+  <!-- jQuery Tags Input -->
+  <script type="text/javascript" 
+    src="{% static "packages/jquery.tagsinput/src/jquery.tagsinput.js" %}">
+  </script>  
+  <!-- Switchery -->
+  <script type="text/javascript" 
+    src="{% static "packages/switchery/dist/switchery.min.js" %}">
+  </script>
+  <script type="text/javascript" 
+    src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}">
+  </script>
+  <script type="text/javascript">
+  $(function () {
+    $('#admin-counselling-form').click(function() {
+      $('#counselling_form').parsley().on('field:validated', function() {
+        var ok = $('.parsley-error').length === 0;
+      })
+      .on('counselling_form:submit', function() {
+        return false; // Don't submit form for this demo
+      });
+    });  
+  });
+  </script>
+{% endblock js_block %}
