@@ -17,13 +17,14 @@
     }
 
     .head {
-      font-size: $font-size + 2;
+      font-size: $font-size + 4;
       font-weight: 600;
       color: $txt-white;
       padding-bottom: 5px;
+      margin: 0;
     }
     .sub-haed {
-    	font-size: $font-size - 2;
+    	font-size: $font-size - 1;
     	color: $txt-white;
       	padding-bottom: 0px;
     }
@@ -57,10 +58,54 @@
 }
 
 .courses-certificate {
+	background-color: #f3f8fa;
+
+	.smk_accordion {
+		border-bottom: -imp(0);
+	}
+
+	.accordion_in {
+		background-color: $bg-white;
+		box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.1);
+		border-top: -imp(0 none);
+		margin-bottom: -imp(15px);
+
+		.acc_head {
+			height: 55px;
+			padding-left: -imp(0);
+			overflow: hidden;
+
+			.media {
+				height: 55px;
+			}
+
+			.img-box {
+				display: inline-block;
+				width: 70px;
+				position: relative;
+				top: -10px;
+			}
+		}
+
+		.acc_content {
+			border-bottom: 0 none;
+			background-color: -imp(#fff);
+
+			ul {
+				padding: 0;
+				li {
+					list-style-type: none;
+				}
+			}
+		}
+	}
 
 	h2 {
 		text-align: center;
 	}
+}
+
+.vendors {
 
 	ul {
 		margin: 0 -10px;
@@ -73,14 +118,15 @@
 			vertical-align: top;
 
 			.box-shadow {
+				background-color: $bg-white;
 				box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.1);
 				padding: 15px;
 				display: block;
 
 				.img-box {
-					height: 110px;
+					height: 90px !important;
 					display: table-cell;
-					vertical-align: middle;
+    				vertical-align: middle;
 				}
 
 				.cc_heading {
@@ -97,15 +143,7 @@
 			}
 		}
 	}
-}
 
-.vendors {
-
-	.box-shadow {
-		.img-box {
-			height: 90px !important;
-		}
-	}
 }
 
 

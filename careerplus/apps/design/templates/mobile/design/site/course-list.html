@@ -4,7 +4,6 @@
 {% block django_meta %}
         {% include 'meta/meta.html' %}
     {%  endblock django_meta %}
-
     
     {% block title %}
        Courses listing
@@ -15,6 +14,7 @@
     {%compress css%}
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/category/category.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     {%endcompress%}
     
 {% endblock css_section %}
@@ -26,86 +26,170 @@
   <!-- Category banner Starts here -->
   <div class="course-banner">
       <div class="content text-center">
-        <p class="head">India's largest e learning platform</p>
+        <h1 class="head">India's largest e learning platform</h1>
         <p class="sub-haed">Join the club of 4mn learners with our partners <br />like Skillsoft, ACCA etc</p>
-        <p class="callToAction"><a href="#">Why you should you buy?</a></p>
+        <!-- <p class="callToAction"><a href="#">Why you should you buy?</a></p> -->
       </div>
-      <img src="{% static 'shinelearn/images/mobile/common/category-img.png' %}" class="img-responsive">
+      <img src="{% static 'shinelearn/images/mobile/common/category-img.jpg' %}" class="img-responsive">
   </div><!-- Category banner Ends here -->
 
   <!-- courses and categoery starts here -->
-  <section class="courses-certificate pb-30">
+  <section class="courses-certificate">
     <div class="content-box">
       <h2>Courses and Certificate</h2>
-      <ul>
-        <li>
-          <a class="box-shadow" href="#">
-            <span class="img-box">
-              <img src="/media/static/shinelearn/images/sale.png" alt="" class="img-responsive">
-            </span>
-            <p class="pb-0 row"><span class="cc_heading">Sales and Marketing</span></p>
-          </a>
-        </li>
+      <!-- Accordion Choose and Download Resume Format Starts here  -->
+      <div class="accordion_example1 row mt-20">
+        <!-- Accordin -1 -->
+        <div class="accordion_in">
+          <div class="acc_head blue-link">
+            <div class="media">
+                <div class="media-left">
+                  <span class="img-box">
+                  <img src="/media/static/shinelearn/images/sale.png" alt="" class="img-responsive"></span>
+                </div>
+              <div class="media-body pt-5">Sales and Marketing</div>
+            </div><!-- media ends here -->
+          </div><!-- Accordin head ends here -->
 
-        <li>
-          <a class="box-shadow" href="#">
-            <span class="img-box">
-              <img src="/media/static/shinelearn/images/operation.png" alt="" class="img-responsive">
-            </span>
-            <p class="pb-0 row">
-              <span class="cc_heading">Opertation Management</span>
-            </p>
-          </a>
-        </li>
+          <div class="acc_content">
+            <ul>
+              <li><a href="#" role="tab">Digital Marketing</a></li>
+              <li><a href="#" role="tab">Sales</a></li>
+              <li><a href="#" role="tab">Retail</a></li>
+              <li><a href="#" role="tab">Product marketing</a></li>
+              <li><a href="#" role="tab">Service Marketing</a></li>
+            </ul>
+            <p class="text-right pb-0"><a href="#">View all courses</a></p>
+          </div><!-- / acc_content -->
+        </div><!-- / Accordin -1 -->
 
-        <li>
-          <a class="box-shadow" href="#">
-            <span class="img-box">
-              <img src="/media/static/shinelearn/images/finance.png" alt="" class="img-responsive">
-            </span>
-            <p class="pb-0 row"><span class="cc_heading"> Banking and finance</span></p>
-          </a>
-        </li>
+        <!-- Accordin -2 -->
+        <div class="accordion_in">
+          <div class="acc_head blue-link">
+            <div class="media">
+                <div class="media-left">
+                  <span class="img-box">
+                  <img src="/media/static/shinelearn/images/operation.png" alt="" class="img-responsive"></span>
+                </div>
+              <div class="media-body pt-5">Opertation Management </div>
+            </div><!-- media ends here -->
+          </div><!-- Accordin head ends here -->
 
-        <li>
-          <a class="box-shadow" href="#">
-            <span class="img-box">
-              <img src="/media/static/shinelearn/images/information.png" alt="" class="img-responsive">
-            </span>
-            <p class="pb-0 row">
-              <span class="cc_heading">Information technology</span>
-            </p>
-          </a>
-        </li>
+          <div class="acc_content">
+            <ul>
+              <li><a href="#" role="tab">Digital Marketing</a></li>
+              <li><a href="#" role="tab">Sales</a></li>
+              <li><a href="#" role="tab">Retail</a></li>
+              <li><a href="#" role="tab">Product marketing</a></li>
+              <li><a href="#" role="tab">Service Marketing</a></li>
+            </ul>
+            <p class="text-right pb-0"><a href="#">View all courses</a></p>
+          </div><!-- / acc_content -->
+        </div><!-- / Accordin -2 -->
 
-        <li>
-          <a class="box-shadow" href="#">
-            <span class="img-box">
-              <img src="/media/static/shinelearn/images/hr.png" alt="" class="img-responsive">
-            </span>
-            <p class="pb-0 row">
-              <span class="cc_heading">Human resource</span>
-            </p>
-          </a>
-        </li>
+        <!-- Accordin -3 -->
+        <div class="accordion_in">
+          <div class="acc_head blue-link">
+            <div class="media">
+                <div class="media-left">
+                  <span class="img-box">
+                  <img src="/media/static/shinelearn/images/finance.png" alt="" class="img-responsive"></span>
+                </div>
+              <div class="media-body pt-5">Banking and finance</div>
+            </div><!-- media ends here -->
+          </div><!-- Accordin head ends here -->
 
-        <li>
-          <a class="box-shadow" href="#">
-            <span class="img-box">
-              <img src="/media/static/shinelearn/images/management.png" alt="" class="img-responsive">
-            </span>
-            <p class="pb-0 row">
-              <span class="cc_heading">Management</span>
-            </p>
-          </a>
-        </li>
-      </ul>
-    </div>
+          <div class="acc_content">
+            <ul>
+              <li><a href="#" role="tab">Digital Marketing</a></li>
+              <li><a href="#" role="tab">Sales</a></li>
+              <li><a href="#" role="tab">Retail</a></li>
+              <li><a href="#" role="tab">Product marketing</a></li>
+              <li><a href="#" role="tab">Service Marketing</a></li>
+            </ul>
+            <p class="text-right pb-0"><a href="#">View all courses</a></p>
+          </div><!-- / acc_content -->
+        </div><!-- / Accordin -3 -->
+
+        <!-- Accordin -4 -->
+        <div class="accordion_in">
+          <div class="acc_head blue-link">
+            <div class="media">
+                <div class="media-left">
+                  <span class="img-box">
+                  <img src="/media/static/shinelearn/images/information.png" alt="" class="img-responsive"></span>
+                </div>
+              <div class="media-body pt-5">Information technology</div>
+            </div><!-- media ends here -->
+          </div><!-- Accordin head ends here -->
+
+          <div class="acc_content">
+            <ul>
+              <li><a href="#" role="tab">Digital Marketing</a></li>
+              <li><a href="#" role="tab">Sales</a></li>
+              <li><a href="#" role="tab">Retail</a></li>
+              <li><a href="#" role="tab">Product marketing</a></li>
+              <li><a href="#" role="tab">Service Marketing</a></li>
+            </ul>
+            <p class="text-right pb-0"><a href="#">View all courses</a></p>
+          </div><!-- / acc_content -->
+        </div><!-- / Accordin -4 -->
+
+        <!-- Accordin -5 -->
+        <div class="accordion_in">
+          <div class="acc_head blue-link">
+            <div class="media">
+                <div class="media-left">
+                  <span class="img-box">
+                  <img src="/media/static/shinelearn/images/hr.png" alt="" class="img-responsive"></span>
+                </div>
+              <div class="media-body pt-5">Human resource</div>
+            </div><!-- media ends here -->
+          </div><!-- Accordin head ends here -->
+
+          <div class="acc_content">
+            <ul>
+              <li><a href="#" role="tab">Digital Marketing</a></li>
+              <li><a href="#" role="tab">Sales</a></li>
+              <li><a href="#" role="tab">Retail</a></li>
+              <li><a href="#" role="tab">Product marketing</a></li>
+              <li><a href="#" role="tab">Service Marketing</a></li>
+            </ul>
+            <p class="text-right pb-0"><a href="#">View all courses</a></p>
+          </div><!-- / acc_content -->
+        </div><!-- / Accordin -5 -->
+
+        <!-- Accordin -6 -->
+        <div class="accordion_in">
+          <div class="acc_head blue-link">
+            <div class="media">
+                <div class="media-left">
+                  <span class="img-box">
+                  <img src="/media/static/shinelearn/images/management.png" alt="" class="img-responsive"></span>
+                </div>
+              <div class="media-body pt-5">Management</div>
+            </div><!-- media ends here -->
+          </div><!-- Accordin head ends here -->
+
+          <div class="acc_content">
+            <ul>
+              <li><a href="#" role="tab">Digital Marketing</a></li>
+              <li><a href="#" role="tab">Sales</a></li>
+              <li><a href="#" role="tab">Retail</a></li>
+              <li><a href="#" role="tab">Product marketing</a></li>
+              <li><a href="#" role="tab">Service Marketing</a></li>
+            </ul>
+            <p class="text-right pb-0"><a href="#">View all courses</a></p>
+          </div><!-- / acc_content -->
+        </div><!-- / Accordin -6 -->
+      </div><!-- Accordion Choose and Download Resume Format Ends here  -->
+    </div><!-- / content-box-->
+
     <div class="clearfix"></div>
   </section><!-- courses and categoery ends here -->
 
   <!-- courses and categoery starts here -->
-  <section class="courses-certificate vendors pb-30">
+  <section class="vendors pb-30">
     <div class="content-box">
       <h2>Our vendors</h2>
       <ul>
@@ -205,7 +289,16 @@
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static 'shinelearn/js/blog/blog-landing.js' %}"></script>
+    <script type="text/javascript">
+      jQuery(document).ready(function($){ 
+        $(".accordion_example1").smk_Accordion({
+          showIcon: true, //boolean
+          animation: true, //boolean
+          closeAble: true, //boolean
+          slideSpeed: 200 //integer, miliseconds
+        });
+      });
+    </script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}
