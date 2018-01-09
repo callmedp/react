@@ -154,13 +154,15 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         variations = data.get('variations', [])
                         combos = data.get('combos', [])
                         product = Product.objects.get(id=parent_id)
+
                         p_oi = order.orderitems.create(
                             product=product,
                             title=product.get_name,
                             partner=product.vendor
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-
+                        if product.type_flow == 8:
+                            p_oi.oi_status = 2
                         if product.type_product == 3:
                             p_oi.is_combo = True
                             p_oi.no_process = True
@@ -173,6 +175,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                     parent=p_oi,
                                     is_combo=True
                                 )
+                                if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                                    oi.oi_status = 2
                                 oi.upc = str(order.pk) + "_" + str(oi.pk)
                                 oi.save()
 
@@ -200,6 +204,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 parent=p_oi,
                                 is_variation=True,
                             )
+                            if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                                oi.oi_status = 2
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             cost_price = var.get('price')
                             oi.cost_price = cost_price
@@ -221,6 +227,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 parent=p_oi,
                                 is_addon=True,
                             )
+                            if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                                oi.oi_status = 2
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             cost_price = addon.get('price')
                             oi.cost_price = cost_price
