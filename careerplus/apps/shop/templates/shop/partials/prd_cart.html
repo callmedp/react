@@ -13,7 +13,7 @@
   <div class="box-panel enrol-cart">
      <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
-     {{sqs.pPinb|floatformat}} {% endif %}/- <small>(+taxes)</small></strong>
+     {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
 
     
     {% if selected_var or sqs.pPfinb %}
@@ -23,9 +23,9 @@
 
         <small id="id_percentage-off" percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}">
             {% if selected_var.fake_inr_price > var_list.0.inr_price %}
-                {{get_fakeprice.1}}% off
+              {{get_fakeprice.1}}% off
             {% elif sqs.pPfinb > sqs.pPinb %}
-                {{get_fakeprice.1|floatformat}}% off
+              {{get_fakeprice.1|floatformat}}% off
             {% endif %}
         </small>
     {% endif %}
