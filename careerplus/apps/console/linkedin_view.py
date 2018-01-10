@@ -193,10 +193,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
         if self.writer:
             queryset = queryset.filter(assigned_to=self.writer)
 
-
         if self.draft_level != -1:
             queryset = queryset.filter(draft_counter=self.draft_level)
-
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
@@ -208,8 +206,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:",str(e))
-
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'delivery_service').order_by('-modified')
 
@@ -326,7 +323,57 @@ class ChangeDraftView(DetailView):
                 org_formset = OrganizationFormset(request.POST, instance=self.get_object())
                 edu_formset = EducationFormset(request.POST, instance=self.get_object())
                 draft_form = DraftForm(request.POST, instance=self.get_object())
-                if draft_form.is_valid() and org_formset.is_valid() and edu_formset.is_valid():
+                if request.POST.get('submit') == 'submit':
+                    if draft_form.is_valid() and org_formset.is_valid() and edu_formset.is_valid():
+                        draft_obj = draft_form.save()
+                        for form in org_formset.forms:
+                            org_obj = form.save(commit=False)
+                            org_obj.draft = draft_obj
+                            org_obj.save()
+
+                        for form in org_formset.deleted_forms:
+                            form.instance.delete()
+
+                        for form in edu_formset.forms:
+                            edu_obj = form.save(commit=False)
+                            edu_obj.draft = draft_obj
+                            edu_obj.save()
+
+                        for form in edu_formset.deleted_forms:
+                            form.instance.delete()
+                        # for update oi status
+                        last_status = ord_obj.oi_status
+                        ord_obj.oi_status = 45  # pending Approval
+                        ord_obj.last_oi_status = last_status
+                        ord_obj.draft_added_on = timezone.now()
+                        ord_obj.save()
+                        ord_obj.orderitemoperation_set.create(
+                            linkedin=draft_obj,
+                            draft_counter=ord_obj.draft_counter + 1,
+                            oi_status=44,
+                            last_oi_status=last_status,
+                            assigned_to=ord_obj.assigned_to,
+                            added_by=request.user)
+                        ord_obj.orderitemoperation_set.create(
+                            oi_status=ord_obj.oi_status,
+                            last_oi_status=44,
+                            assigned_to=ord_obj.assigned_to,
+                            added_by=request.user)
+
+                        messages.success(self.request, "Draft Saved Successfully")
+                        return HttpResponseRedirect(
+                            reverse('console:linkedin-inbox'))
+                    else:
+                        self.object = self.get_object()
+                        context = super(ChangeDraftView, self).get_context_data(
+                            **kwargs)
+                        context['form'] = draft_form
+                        context['org_formset'] = org_formset
+                        context['edu_formset'] = edu_formset
+                        messages.add_message(
+                            request, messages.ERROR, 'Draft not saved ')
+                        return render(request, self.template_name, context)
+                elif request.POST.get('save') == 'save':
                     draft_obj = draft_form.save()
                     for form in org_formset.forms:
                         org_obj = form.save(commit=False)
@@ -343,42 +390,14 @@ class ChangeDraftView(DetailView):
 
                     for form in edu_formset.deleted_forms:
                         form.instance.delete()
-                    # for update oi status
-                    last_status = ord_obj.oi_status
-                    ord_obj.oi_status = 45  # pending Approval
-                    ord_obj.last_oi_status = last_status
-                    ord_obj.draft_added_on = timezone.now()
-                    ord_obj.save()
-                    ord_obj.orderitemoperation_set.create(
-                        linkedin=draft_obj,
-                        draft_counter=ord_obj.draft_counter + 1,
-                        oi_status=44,
-                        last_oi_status=last_status,
-                        assigned_to=ord_obj.assigned_to,
-                        added_by=request.user)
-                    ord_obj.orderitemoperation_set.create(
-                        oi_status=ord_obj.oi_status,
-                        last_oi_status=44,
-                        assigned_to=ord_obj.assigned_to,
-                        added_by=request.user)
-
                     messages.success(self.request, "Draft Saved Successfully")
                     return HttpResponseRedirect(
                         reverse('console:linkedin-inbox'))
-                else:
-                    self.object = self.get_object()
-                    context = super(ChangeDraftView, self).get_context_data(
-                        **kwargs)
-                    context['form'] = draft_form
-                    context['org_formset'] = org_formset
-                    context['edu_formset'] = edu_formset
-                    messages.add_message(
-                        request, messages.ERROR, 'Draft not saved ')
-                    return render(request, self.template_name, context)
 
             else:
                 context = super(ChangeDraftView, self).get_context_data(**kwargs)
-                messages.error(self.request, "Draft does not exist with this order", 'error')
+                messages.error(
+                    self.request, "Draft does not exist with this order", 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -467,7 +486,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery date:",str(e))
+            logging.getLogger('error_log').error("Delivery date:%s", str(e))
 
         if self.writer:
             queryset = queryset.filter(
@@ -476,7 +495,6 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         if self.draft_level != -1:
             queryset = queryset.filter(
                 draft_counter=self.draft_level)
-
 
         try:
             if self.delivery_type:
@@ -489,7 +507,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:", str(e))
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -562,7 +580,6 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
                 Q(order__mobile__icontains=self.query) |
                 Q(order__email__icontains=self.query))
 
-
         try:
             if self.modified:
                 date_range = self.modified.split('-')
@@ -596,7 +613,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:", str(e))
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -653,7 +670,9 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinApprovalVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=45, product__type_flow__in=[8]).exclude(oi_status=9)
+        queryset = queryset.filter(
+            order__status=1, oi_status=45,
+            product__type_flow__in=[8]).exclude(oi_status=9)
         if self.query:
             queryset = queryset.filter(
                 Q(id__icontains=self.query) |
@@ -661,7 +680,6 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
                 Q(order__number__icontains=self.query) |
                 Q(order__mobile__icontains=self.query) |
                 Q(order__email__icontains=self.query))
-
 
         try:
             if self.modified:
@@ -696,7 +714,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:", str(e))
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -783,7 +801,6 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
                 Q(order__mobile__icontains=self.query) |
                 Q(order__email__icontains=self.query))
 
-
         try:
             if self.payment_date:
                 date_range = self.payment_date.split('-')
@@ -797,8 +814,6 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
                     order__payment_date__range=[start_date, end_date])
         except Exception as e:
             logging.getLogger('error_log').error("Payment date:", str(e))
-
-
 
         try:
             if self.modified:
@@ -894,7 +909,6 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
                     modified__range=[start_date, end_date])
         except Exception as e:
             logging.getLogger('error_log').error("Delivery date:", str(e))
-
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
@@ -1087,7 +1101,7 @@ class InterNationalAssignmentOrderItemView(View):
                 messages.add_message(request, messages.SUCCESS, display_message)
                 return HttpResponseRedirect(reverse('console:queue-' + queue_name))
             except Exception as e:
-                logging.getLogger('error_log').error("INternational assignment:",str(e))
+                logging.getLogger('error_log').error("INternational assignment:%s", str(e))
                 messages.add_message(request, messages.ERROR, str(e))
                 return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 

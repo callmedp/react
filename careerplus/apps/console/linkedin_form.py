@@ -69,68 +69,88 @@ class DraftForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DraftForm, self).__init__(*args, **kwargs)
         # there's a `fields` property now
-        self.fields['candidate_name'].required = True
-        self.fields['headline'].required = True
-        self.fields['summary'].required = True
-        self.fields['profile_photo'].required = True
-        self.fields['recommendation'].required = True
-        self.fields['follow_company'].required = True
-        self.fields['join_group'].required = True
-        self.fields['public_url'].required = True
-        self.fields['key_skills'].required = True
+        if self.data.get('save') == 'save':
+            self.fields['candidate_name'].required = False
+            self.fields['headline'].required = False
+            self.fields['summary'].required = False
+            self.fields['profile_photo'].required = False
+            self.fields['recommendation'].required = False
+            self.fields['follow_company'].required = False
+            self.fields['join_group'].required = False
+            self.fields['public_url'].required = False
+            self.fields['key_skills'].required = False
+        elif self.data.get('submit') == 'submit':
+            self.fields['candidate_name'].required = True
+            self.fields['headline'].required = True
+            self.fields['summary'].required = True
+            self.fields['profile_photo'].required = True
+            self.fields['recommendation'].required = True
+            self.fields['follow_company'].required = True
+            self.fields['join_group'].required = True
+            self.fields['public_url'].required = True
+            self.fields['key_skills'].required = True
 
     def clean_candidate_name(self):
-        name = self.cleaned_data.get('candidate_name', '')
-        if name == '':
-            raise forms.ValidationError("This field is required.")
-        return name
+        candidate_name = self.cleaned_data.get('candidate_name', '')
+        if self.data.get('submit'):
+            if candidate_name == '':
+                raise forms.ValidationError("This field is required.")
+        return candidate_name
 
     def clean_headline(self):
-        name = self.cleaned_data.get('headline', '')
-        if name == '':
-            raise forms.ValidationError("This field is required.")
-        return name
+        headline = self.cleaned_data.get('headline', '')
+        if self.data.get('submit'):
+            if headline == '':
+                raise forms.ValidationError("This field is required.")
+        return headline
 
     def clean_summary(self):
         summary = self.cleaned_data.get('summary', '')
-        if summary == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if summary == '':
+                raise forms.ValidationError("This field is required.")
         return summary
 
     def clean_profile_photo(self):
         profile_photo = self.cleaned_data.get('profile_photo', '')
-        if profile_photo == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if profile_photo == '':
+                raise forms.ValidationError("This field is required.")
         return profile_photo
 
     def clean_recommendation(self):
         recommendation = self.cleaned_data.get('recommendation', '')
-        if recommendation == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if recommendation == '':
+                raise forms.ValidationError("This field is required.")
         return recommendation
 
     def clean_follow_company(self):
         follow_company = self.cleaned_data.get('follow_company', '')
-        if follow_company == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if follow_company == '':
+                raise forms.ValidationError("This field is required.")
         return follow_company
 
     def clean_join_group(self):
         join_group = self.cleaned_data.get('join_group', '')
-        if join_group == '':
-            raise forms.ValidationError("This field1 is required.")
+        if self.data.get('submit'):
+            if join_group == '':
+                raise forms.ValidationError("This field1 is required.")
         return join_group
 
     def clean_public_url(self):
         public_url = self.cleaned_data.get('public_url', '')
-        if public_url == '':
-            raise forms.ValidationError("This field1 is required.")
+        if self.data.get('submit'):
+            if public_url == '':
+                raise forms.ValidationError("This field1 is required.")
         return public_url
 
     def clean_key_skills(self):
         key_skills = self.cleaned_data.get('key_skills', '')
-        if key_skills == '':
-            raise forms.ValidationError("This field1 is required.")
+        if self.data.get('submit'):
+            if key_skills == '':
+                raise forms.ValidationError("This field1 is required.")
         return key_skills
 
     def save(self, commit=True):
@@ -174,24 +194,31 @@ class OrganizationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OrganizationForm, self).__init__(*args, **kwargs)
         # there's a `fields` property now
-        self.fields['org_name'].widget.attrs.update({'required':'required'})
-        self.fields['title'].widget.attrs.update({'required':'required'})
-        self.fields['work_to'].required = False
-        self.fields['work_from'].required = False
-        self.fields['org_desc'].required = False
-        # self.fields['work_to'].widget.attrs.update({'required':'required'})
-        # self.fields['org_current'].widget.attrs.update({'required':'required'})
+        if self.data.get('submit') == 'submit':
+            self.fields['org_name'].required = True
+            self.fields['title'].required = True
+            self.fields['work_to'].required = False
+            self.fields['work_from'].required = False
+            self.fields['org_desc'].required = False
+        if self.data.get('save') == 'save':
+            self.fields['org_name'].required = False
+            self.fields['title'].required = False
+            self.fields['work_to'].required = False
+            self.fields['work_from'].required = False
+            self.fields['org_desc'].required = False
 
     def clean_org_name(self):
         org_name = self.cleaned_data.get('org_name', '')
-        if org_name == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if org_name == '':
+                raise forms.ValidationError("This field is required.")
         return org_name
 
     def clean_title(self):
         title = self.cleaned_data.get('title', '')
-        if title == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if title == '':
+                raise forms.ValidationError("This field is required.")
         return title
 
     # def clean_org_desc(self):
@@ -268,42 +295,55 @@ class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
         fields = ['school_name', 'degree', 'field', 'level', 'edu_desc', 'study_from', 'study_to', 'edu_current']
-        
+
     def __init__(self, *args, **kwargs):
         super(EducationForm, self).__init__(*args, **kwargs)
-        self.fields['school_name'].widget.attrs.update({'required': 'required'})
-        self.fields['degree'].widget.attrs.update({'required': 'required'})
-        self.fields['field'].widget.attrs.update({'required': 'required'})
-        self.fields['level'].widget.attrs.update({'required': 'required'})
-        self.fields['study_to'].required = False
-        self.fields['study_from'].required = False
-        self.fields['edu_desc'].required = False
-        self.fields['edu_current'].required = False
-        # self.fields['study_to'].widget.attrs.update({'required':'required'})
-        # self.fields['edu_current'].widget.attrs.update({'required':'required'})
+        if self.data.get('submit') == 'submit':
+            self.fields['school_name'].widget.attrs.update({'required': 'required'})
+            self.fields['degree'].widget.attrs.update({'required': 'required'})
+            self.fields['field'].widget.attrs.update({'required': 'required'})
+            self.fields['level'].widget.attrs.update({'required': 'required'})
+            self.fields['study_to'].required = False
+            self.fields['study_from'].required = False
+            self.fields['edu_desc'].required = False
+            self.fields['edu_current'].required = False
+        elif self.data.get('save') == 'save':
+            # self.fields['school_name'].widget.attrs.update({'required': False})
+            self.fields['school_name'].required = False
+            self.fields['degree'].required = False
+            self.fields['field'].required = False
+            self.fields['level'].required = False
+            self.fields['study_to'].required = False
+            self.fields['study_from'].required = False
+            self.fields['edu_desc'].required = False
+            self.fields['edu_current'].required = False
 
     def clean_school_name(self):
         school_name = self.cleaned_data.get('school_name', '')
-        if school_name == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if school_name == '':
+                raise forms.ValidationError("This field is required.")
         return school_name
 
     def clean_degree(self):
         degree = self.cleaned_data.get('degree', '')
-        if degree == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if degree == '':
+                raise forms.ValidationError("This field is required.")
         return degree
 
     def clean_field(self):
         field = self.cleaned_data.get('field', '')
-        if field == '':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if field == '':
+                raise forms.ValidationError("This field is required.")
         return field
 
     def clean_level(self):
         level = self.cleaned_data.get('level', '')
-        if level == 'NA':
-            raise forms.ValidationError("This field is required.")
+        if self.data.get('submit'):
+            if level == 'NA':
+                raise forms.ValidationError("This field is required.")
         return level
 
     # def clean_edu_desc(self):
@@ -460,17 +500,18 @@ class OrganizationInlineFormSet(forms.BaseInlineFormSet):
         super(OrganizationInlineFormSet, self).clean()
         for form in self.forms:
             form.empty_permitted = False
-        
+
         if any(self.errors):
             return
         return
+
 
 class EducationInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
         super(EducationInlineFormSet, self).clean()
         for form in self.forms:
             form.empty_permitted = False
-        
+
         if any(self.errors):
             return
         return
