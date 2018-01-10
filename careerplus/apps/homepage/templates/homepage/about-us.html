@@ -200,5 +200,25 @@
 
 {% endblock main_container %}
 
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
+    <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
+    {% endcompress %}
+    <script type="text/javascript">
+        var funcAreaSet = {{ func_area_set|safe }},
+            skillsSet = {{ skills_set|safe }},
+            prefetchedFuncArea = '{{ recmnd_func_area }}',
+            prefetchedSkills = '{{ recmnd_skills }}';
+        $('#id_q').typeahead({
+            local: ['ITIL E-Learning Professional', 'Job Search Guidance With Job Thought Report', 'Business Communication Specialist ', 'CompTIA Linux+ ', 'Big Data - The Engineering Perspective', 'Stress Reduction', 'Cloudera Administrator Training for Apache Hadoop with Certification ', 'Vskills Certified GIMP Designer ', 'Certified ERP Manager ', 'PMI Agile Certified Practitioner', 'Certified Web Analytics Professional Course ']
+        });
+    </script>
+    {% compress js inline %}
+    {% endcompress %}
+{% endblock js_section %}
+
 {% block johukum %}
 {% endblock johukum %}
