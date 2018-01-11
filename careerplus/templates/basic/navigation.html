@@ -219,9 +219,9 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
           <a>
-          <form action="" class="search">
-            <input class="inputTags-list key_press_js_search form-control input-sm" data-rulesid="01" data-selecttype="multiple" id="id_q" maxlength="64" name="q" placeholder="Search" type="text" required="">
-            <button type="submit" onclick="redirectToSearch()" class="search-icon"></button>
+          <form action="" class="search searchNavBar cls_search">
+            <input class="inputTags-list key_press_js_search form-control input-sm" data-selecttype="multiple"  maxlength="64" name="q" placeholder="Search" type="text" required="">
+            <button type="submit" class="search-icon"></button>
           </form>
           </a>
         </li>
@@ -263,3 +263,6 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+<script type="text/javascript">
+var qSearch = {{ search_context|safe }} ;
+</script>
