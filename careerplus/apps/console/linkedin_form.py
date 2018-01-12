@@ -275,7 +275,7 @@ class EducationForm(forms.ModelForm):
 
     level = forms.ChoiceField(
         choices=LEVEL,
-        widget=forms.Select(attrs={'class': 'form-control'}))
+        widget=forms.Select(attrs={'class': 'form-control rmv-required'}))
 
     edu_desc = forms.CharField(
         widget=forms.Textarea(
