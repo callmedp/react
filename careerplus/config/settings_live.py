@@ -95,7 +95,7 @@ CACHES = {
     },
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://172.22.65.131:6379/0",
+        "LOCATION": "redis://172.22.65.131:6379/3",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},

@@ -55,3 +55,14 @@ ROUNDONE_PRODUCT_ID = 2129
 
 ### LINKEDIN SETTINGS
 REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
+
+
+###### STORAGE SETTINGS #############
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_CREDENTIALS = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
+COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
+GS_BUCKET_NAME = 'learning-media-staging-189607'
+GS_PROJECT_ID = 'shine-staging-189607'
+GCP_STATIC_BUCKET = 'learning-static-staging-189607'
+# GS_AUTO_CREATE_BUCKET = True
+STATIC_URL = 'http://learning-static-staging-189607.storage.googleapis.com/'

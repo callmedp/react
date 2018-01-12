@@ -58,7 +58,8 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'haystack',
     'celery',
-    'compressor'
+    'compressor',
+    'storages'
 ]
 
 # Apps specific for this project go here.
