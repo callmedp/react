@@ -19,48 +19,48 @@ class DraftForm(forms.ModelForm):
     candidate_name = forms.CharField(
         label=("Name*:"), max_length=85,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     headline = forms.CharField(
         label=("Headline*:"), max_length=120,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     summary = forms.CharField(
         max_length=2000, widget=forms.Textarea(
-            attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control rmv-required'}))
 
     profile_photo = forms.CharField(
         label=("Profile Photo"), max_length=2000,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     recommendation = forms.CharField(
         label=("Recommendations"), max_length=2000,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     follow_company = forms.CharField(
         label=("Follow companies"), max_length=2000,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     join_group = forms.CharField(
         label=("Join Group"), max_length=2000,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     public_url = forms.CharField(
         label=("Public Url"), max_length=2000,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     key_skills = forms.CharField(
         label=("Key Skills"),
         help_text='comma separated skills, e.g. java, python; ...',
         max_length=2000,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12 rmv-required'}))
 
     class Meta:
         model = Draft
@@ -164,12 +164,12 @@ class OrganizationForm(forms.ModelForm):
     org_name = forms.CharField(
         label=("Company Name*:"), max_length=85,
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control rmv-required'}))
 
     title = forms.CharField(
         label=("Title*:"), max_length=85,
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control rmv-required'}))
 
     org_desc = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form-control'}))
@@ -194,9 +194,11 @@ class OrganizationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OrganizationForm, self).__init__(*args, **kwargs)
         # there's a `fields` property now
+        self.fields['org_name'].widget.attrs.update({'required': 'required'})
+        self.fields['title'].widget.attrs.update({'required': 'required'})
         if self.data.get('submit') == 'submit':
-            self.fields['org_name'].required = True
-            self.fields['title'].required = True
+            self.fields['org_name'].widget.attrs.update({'required': 'required'})
+            self.fields['title'].widget.attrs.update({'required': 'required'})
             self.fields['work_to'].required = False
             self.fields['work_from'].required = False
             self.fields['org_desc'].required = False
@@ -259,17 +261,17 @@ class EducationForm(forms.ModelForm):
     school_name = forms.CharField(
         label=("Name*:"), max_length=85,
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control rmv-required'}))
 
     degree = forms.CharField(
         label=("Degree*:"), max_length=85,
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control rmv-required'}))
 
     field = forms.CharField(
         label=("Field Of Study*:"), max_length=85,
         widget=forms.TextInput(
-            attrs={'class': 'form-control'}))
+            attrs={'class': 'form-control rmv-required'}))
 
     level = forms.ChoiceField(
         choices=LEVEL,
@@ -298,6 +300,10 @@ class EducationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EducationForm, self).__init__(*args, **kwargs)
+        self.fields['school_name'].widget.attrs.update({'required': 'required'})
+        self.fields['degree'].widget.attrs.update({'required': 'required'})
+        self.fields['field'].widget.attrs.update({'required': 'required'})
+        self.fields['level'].widget.attrs.update({'required': 'required'})
         if self.data.get('submit') == 'submit':
             self.fields['school_name'].widget.attrs.update({'required': 'required'})
             self.fields['degree'].widget.attrs.update({'required': 'required'})

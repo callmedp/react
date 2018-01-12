@@ -308,6 +308,8 @@ class ChangeDraftView(DetailView):
 
     def post(self, request, *args, **kwargs):
         try:
+            self.object = self.get_object()
+            context = super(ChangeDraftView, self).get_context_data(**kwargs)
             draft_obj = Draft.objects.get(pk=kwargs.get('pk'))
             ord_obj = OrderItem.objects.get(oio_linkedin=draft_obj)
             if ord_obj:
@@ -320,9 +322,12 @@ class ChangeDraftView(DetailView):
                     Draft, Education,
                     form=EducationForm, formset=OrganizationInlineFormSet,
                     can_delete=True, extra=1)
-                org_formset = OrganizationFormset(request.POST, instance=self.get_object())
-                edu_formset = EducationFormset(request.POST, instance=self.get_object())
-                draft_form = DraftForm(request.POST, instance=self.get_object())
+                org_formset = OrganizationFormset(
+                    request.POST, instance=self.get_object())
+                edu_formset = EducationFormset(
+                    request.POST, instance=self.get_object())
+                draft_form = DraftForm(
+                    request.POST, instance=self.get_object())
                 if request.POST.get('submit') == 'submit':
                     if draft_form.is_valid() and org_formset.is_valid() and edu_formset.is_valid():
                         draft_obj = draft_form.save()
@@ -360,13 +365,11 @@ class ChangeDraftView(DetailView):
                             assigned_to=ord_obj.assigned_to,
                             added_by=request.user)
 
-                        messages.success(self.request, "Draft Saved Successfully")
+                        messages.success(
+                            self.request, "Draft Saved Successfully")
                         return HttpResponseRedirect(
                             reverse('console:linkedin-inbox'))
                     else:
-                        self.object = self.get_object()
-                        context = super(ChangeDraftView, self).get_context_data(
-                            **kwargs)
                         context['form'] = draft_form
                         context['org_formset'] = org_formset
                         context['edu_formset'] = edu_formset
@@ -395,7 +398,6 @@ class ChangeDraftView(DetailView):
                         reverse('console:linkedin-inbox'))
 
             else:
-                context = super(ChangeDraftView, self).get_context_data(**kwargs)
                 messages.error(
                     self.request, "Draft does not exist with this order", 'error')
                 return render(request, self.template_name, context)

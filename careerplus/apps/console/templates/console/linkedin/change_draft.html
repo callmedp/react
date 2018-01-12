@@ -244,6 +244,7 @@
   </script>
   <script type="text/javascript">
   function clicked() {
+    $('.rmv-required').removeAttr('required')
     var check = confirm('Do you wish to Save the changes made - Y/N ?')
     if (check) {
         $("#linkedin-draft-form").submit();
