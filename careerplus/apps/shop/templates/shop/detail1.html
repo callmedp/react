@@ -109,7 +109,8 @@
                     </li>
                     <li>
                     <figure class="bought-icon"></figure>
-                    <span><strong>&nbsp;{{prd_num_bought}}</strong>&nbsp;people bought</span>
+                    <span>
+                    {% if prd_num_bought %}<strong>&nbsp;{{prd_num_bought}}</strong>{% else %}<strong>&nbsp;10</strong>{% endif %}&nbsp;people bought</span>
                     </li>
                     {% if prd_service == 'course' %}
                   

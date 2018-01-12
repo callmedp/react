@@ -66,8 +66,8 @@ function update_variation_price(req_price, actual_price){
         actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
         // current price updation
         sum_price = req_price + sum_price;
-        var show_price = 'Rs. ' + sum_price.toString() + '/-';
-        $('#total-price').text(show_price);
+        var show_price = 'Rs. ' + sum_price.toString() + '/- ' + '<small>(+taxes)</small>';
+        $('#total-price').html(show_price);
         $("#total-price").attr("sum-price", sum_price);
 
         // actual price updation
@@ -107,8 +107,8 @@ function updateCheckedPrice(this_obj){
 
             // current price update
             sum_price = fbt_price + sum_price;
-            var show_price = 'Rs. ' + sum_price.toString() + '/-';
-            $('#total-price').text(show_price);
+            var show_price = 'Rs. ' + sum_price.toString() + '/- ' + '<small>(+taxes)</small>';
+            $('#total-price').html(show_price);
             $("#total-price").attr("sum-price", sum_price);
 
             // actual price update
@@ -154,8 +154,8 @@ function updateUnCheckedPrice(this_obj){
 
             // current price update
             sum_price = sum_price - fbt_price;
-            var show_price = 'Rs. ' + sum_price.toString() + '/-';
-            $('#total-price').text(show_price);
+            var show_price = 'Rs. ' + sum_price.toString() + '/- ' + '<small>(+taxes)</small>';
+            $('#total-price').html(show_price);
             $("#total-price").attr("sum-price", sum_price);
 
             // actual price update
@@ -264,8 +264,8 @@ $(document).ready(function() {
                 actual_price =  parseFloat($(this).attr('actual-price'));
 
                 // update current price
-                var str_price = 'Rs. ' + var_price.toString() + '/-';
-                $('#total-price').text(str_price);
+                var str_price = 'Rs. ' + var_price.toString() + '/- ' + '<small>(+taxes)</small>';
+                $('#total-price').html(str_price);
                 $('#total-price').attr("sum-price", var_price);
 
                 if (actual_price > var_price){
