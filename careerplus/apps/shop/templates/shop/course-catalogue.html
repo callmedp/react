@@ -1,0 +1,832 @@
+{% extends "basic/base1.html" %}
+{% load static meta compress %}
+
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+ 
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+        <link type="text/css" charset="utf-8" href="{% static 'shinelearn/css/product/category.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+    
+
+{% block main_container %}
+    {% block page_heading %}
+
+    <!-- header start-->
+    <header class="category-header">
+        <img src="{% static 'shinelearn/images/cp-header.jpg' %}" alt="Shine Learning" class="img-responsive" />
+          <div class="category-heading">
+            <h1>India's largest e learning platform</h1>
+              Join the club of 4mn learners with our partners like Skillsoft, ACCA etc
+            <!-- <a title="Why you should you buy?" href="#">Why you should you buy?</a> -->
+          </div>
+    </header><!-- header end -->
+
+    {% endblock page_heading %}
+
+    {% block section1 %}
+        <!-- main section start -->
+        <section class="container">
+
+            <!-- page content body start -->
+            <div class="row">
+
+            <!-- Courses and Certifications start -->
+            <div class="courses_box">
+              <h2>Courses and Certifications</h2>
+              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <!-- panel start here -->
+                <div class="panel">
+                  <!-- courses 1 -->
+                <div class="panel col-sm-3" role="tab" id="headingOne">
+                  <a title="Sales And Marketing" class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <figure>
+                        <img src="images/sale.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>
+                      Sales And Marketing
+                    </h3>
+                  </a>
+                </div><!-- / courses 1 -->
+
+                <!-- courses 2 -->
+                <div class="panel col-sm-3" role="tab" id="headingTwo">
+                   <a title="Operation Management" class="cc_box collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <figure>
+                        <img src="images/operation.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Operation Management</h3>
+                  </a>
+                </div><!-- / courses 2 -->
+
+                <!-- courses 3 -->
+                <div class="panel col-sm-3" role="tab" id="headingThree">
+                  <a title="Banking And Finance" class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                    <figure>
+                      <img src="images/finance.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Banking And Finance</h3>
+                  </a>
+                </div><!-- / courses 3 -->
+
+                <!-- courses 4 -->
+                <div class="panel col-sm-3" role="tab" id="headingFour">
+                  <a title="Information Technology" class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                    <figure>
+                        <img src="images/information.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Information Technology</h3>
+                  </a>
+                </div><!-- / courses 4 -->
+
+                <!-- courses Dropdown 1 box -->
+                <div id="collapseOne" class="panel-collapse collapse col-md-12 course_nav arrow1" role="tabpanel" aria-labelledby="headingOne">
+                   <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav1_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav1_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav1_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav1_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav1_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav1_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav1_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav1_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav1_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav1_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 1 box -->
+
+                <!-- courses Dropdown 2 box -->
+                <div id="collapseTwo" class="panel-collapse collapse col-sm-12 course_nav arrow2" role="tabpanel" aria-labelledby="headingTwo">
+                  <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav2_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav2_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav2_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav2_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav2_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav2_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav2_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav2_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav2_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav2_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 2 box -->
+
+                <!-- courses Dropdown 3 box -->
+                <div id="collapseThree" class="panel-collapse collapse col-sm-12 course_nav arrow3" role="tabpanel" aria-labelledby="headingThree">
+                  <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav3_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav3_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav3_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav3_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav3_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav3_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav3_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav3_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav3_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav3_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 3 box -->
+
+                <!-- courses Dropdown 4 box -->
+                <div id="collapseFour" class="panel-collapse collapse col-sm-12 course_nav arrow4" role="tabpanel" aria-labelledby="collapseFour">
+                  <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav4_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav4_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav4_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav4_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav4_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav4_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav4_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav4_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav4_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav4_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 4 box -->
+
+                <!-- courses 5 -->
+                <div class="panel col-sm-3" role="tab" id="headingFive">
+                  <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                    <figure>
+                        <img src="images/hr.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Human Resource </h3>
+                  </a>
+                </div><!-- / courses 5 -->
+
+                <!-- courses 6 -->
+                <div class="panel col-sm-3" role="tab" id="headingSix">
+                  <a title="Management" class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+                    <figure>
+                        <img src="images/management.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Management</h3>
+                  </a>
+                </div><!-- / courses 6 -->
+
+                <!-- courses 7 -->
+                <div title="Mass Communication" class="panel col-sm-3" role="tab" id="headingSeven">
+                  <a class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                    <figure>
+                        <img src="images/mass.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Mass Communication</h3>
+                  </a>
+                </div><!-- / courses 7 -->
+
+                <!-- courses 8 -->
+                <div class="panel col-sm-3" role="tab" id="headingEight">
+                  <a title="Personal Development" class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                    <figure>
+                        <img src="images/personal.png" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Personal Development</h3>
+                  </a>
+                </div><!-- / courses 8 -->
+
+                <!-- courses Dropdown 5 box -->
+                <div id="collapseFive" class="panel-collapse collapse col-sm-12 course_nav arrow1" role="tabpanel" aria-labelledby="collapseFive">
+                  <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav5_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav5_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav5_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav5_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav5_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav5_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav5_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav5_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav5_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav5_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 5 box -->
+
+                <!-- courses Dropdown 6 box -->
+                <div id="collapseSix" class="panel-collapse collapse col-sm-12 course_nav arrow2" role="tabpanel" aria-labelledby="collapseSix">
+                  <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav6_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav6_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav6_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav6_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a href="https://google.co.in/#nav6_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav6_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav6_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav6_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav6_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav6_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 6 box -->
+
+                <!-- courses Dropdown 7 box -->
+                <div id="collapseSeven" class="panel-collapse collapse col-sm-12 course_nav arrow3" role="tabpanel" aria-labelledby="collapseSeven">
+                  <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav7_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav7_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav7_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav7_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav7_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav7_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a title="shine learning" href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav7_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a title="shine learning" href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav7_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a title="shine learning" href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav7_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a title="shine learning" href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav7_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a title="shine learning" href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 7 box -->
+
+                <!-- courses Dropdown 8 box -->
+                <div id="collapseEight" class="panel-collapse collapse col-sm-12 course_nav arrow4" role="tabpanel" aria-labelledby="collapseEight">
+                  <!-- tabs nav -->
+                  <ul class="nav nav-tabs col-sm-3" role="tablist">
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav8_1" role="tab">Digital Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav8_2" role="tab">Sales</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav8_3" role="tab">Retail</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav8_4" role="tab">Product Marketing</a>
+                    </li>
+                    <li class="nav-link">
+                      <a title="shine learning" href="https://google.co.in/#nav8_5" role="tab">Service Marketing</a>
+                    </li>
+                  </ul><!-- / tabs nav -->
+                  <!-- Tabs nav panes -->
+                  <div class="tab-content col-sm-9">
+                    <div class="tab-pane active" id="nav8_1" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                      </ul>
+                      <a title="shine learning" href="#" class="viewall">View all courses</a>
+                    </div>
+
+                    <div class="tab-pane" id="nav8_2" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav8_3" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav8_4" role="tabpanel">
+                      <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        </ul>
+                      <a href="#" class="viewall">View all courses</a>
+                    </div>
+                    <div class="tab-pane" id="nav8_5" role="tabpanel">
+                       <ul>
+                        <li><a title="shine learning" href="#">AON Hewitt HR certifications</a></li>
+                        <li><a title="shine learning" href="#">ICFL Training Programs</a></li>
+                        <li><a title="shine learning" href="#">Classroom Training for ACCA IFRS from Gold approved Learning Provider</a></li>
+                        <li><a title="shine learning" href="#">Govt of India- Vskills certification</a></li>
+                        </ul>
+                      <a title="shine learning" href="#" class="viewall">View all courses</a>
+                    </div>
+                  </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 8 box -->
+
+                </div>
+                <!-- panel end here -->
+              </div> 
+              <!-- accordin panel end here -->
+
+            </div>       
+            <!-- Courses and Certifications end -->
+
+            <!-- our vendors start -->
+            <div class="vendors_box">
+              <h2>Our Vendors</h2>
+              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <!-- panel start here -->
+                <div class="panel">
+                  <!-- vendor 1 -->
+                <div class="panel col-sm-3" role="tab" id="headingOne">
+                  <a class="vc_box" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="collapseOne">
+                    <figure>
+                        <img src="images/vendor-1.jpg" alt="" class="img-responsive">
+                    </figure>
+                    <h3>ACCA</h3>
+                  </a>
+                </div>
+
+                <!-- vendor 2 -->
+                <div class="panel col-sm-3" role="tab" id="headingTwo">
+                   <a class="vc_box collapsed" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">
+                    <figure>
+                        <img src="images/vendor-2.jpg" alt="" class="img-responsive">
+                    </figure>
+                    <h3>GetCertoGO</h3>
+                  </a>
+                </div>
+
+                <!-- vendor 3 -->
+                <div class="panel col-sm-3" role="tab" id="headingThree">
+                  <a class="vc_box" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="collapseThree">
+                    <figure>
+                      <img src="images/vendor-3.jpg" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>Skilsoft</h3>
+                  </a>
+                </div>
+
+                <!-- vendor 4 -->
+                <div class="panel col-sm-3" role="tab" id="headingFour">
+                  <a class="vc_box" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="collapseFour">
+                    <figure>
+                        <img src="images/vendor-4.jpg" alt="Shine Learning" class="img-responsive">
+                    </figure>
+                    <h3>V Skill</h3>
+                  </a>
+                </div>
+
+                </div>
+                <!-- panel end here -->
+              </div> 
+              <!-- accordin panel end here -->
+
+            </div>  
+            <!-- our vendors end -->
+
+          </div>
+        </section>
+    {% endblock section1 %}
+
+    {% block section2 %}
+        <!-- Why Shine learning starts here  -->
+        <section class="container-fluid">
+          <div class="row">
+            <div class="why_scp"> <h2>Why Shine Learning?</h2>
+              <ul>
+                <li>
+                  <span class="scp_icon"><img src="{% static 'shinelearn/images/why-1.png' %}" alt="Shine Learning" /></span>
+                  Our experts will guide you through the variety of courses suited for your profile
+                </li>
+                <li>
+                  <span class="scp_icon"><img src="{% static 'shinelearn/images/why-2.png' %}" alt="Shine Learning" /></span>
+                  Invest in your career and get a jump in your salary
+                </li>
+                <li>
+                  <span class="scp_icon"><img src="{% static 'shinelearn/images/why-3.png' %}" alt="Shine Learning" /></span>
+                  We bridge the gap between education and employment with a free 1 month featured profile on shine.com
+                </li>
+              </ul><!-- / UL -->
+            </div><!-- / Why Shine -->
+          </div><!-- / ROW -->
+        </section><!-- Why Shine learning ends here  -->
+    {% endblock section2 %}
+
+    {% block section3 %}
+        <!-- Testimonials  strats here -->
+        <section class="container">
+          <div class="row">
+            <div class="testimonials mt30"> 
+              <h2>Testimonials</h2>
+              <ul>
+                <li class="col-sm-4">
+                  <div class="box-sh">
+                  I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.<strong>"SP Shree Kumar"</strong>
+                  </div>
+                </li>
+                <li class="col-sm-4"><div class="box-sh">
+                  I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.<strong>"SP Shree Kumar"</strong>
+                  </div></li>
+                <li class="col-sm-4"><div class="box-sh">
+                  I experienced a good interaction with the writer. The content of the resume is also very concise and short which contains all the relevant info. Format is also simple and neat. If all put together is up to the mark.<strong>"SP Shree Kumar"</strong>
+                  </div></li>
+              </ul><!-- / UL -->
+            </div>
+            <!-- / testimonials -->
+
+
+            </div>
+            <!-- page content body end -->
+
+        </section>
+        <!-- main section end -->
+    {% endblock section3 %}
+
+{% endblock main_container %}
+
+
+{% block js_section %}
+  {{block.super}}
+    {% compress js %}
+        <script type="text/javascript">
+            $('.nav-tabs > li > a').hover(function() {
+                $(this).tab('show');
+            });
+            $('.dropdown').hover(function(){ 
+                $('.dropdown-toggle', this).trigger('click'); 
+            });
+        </script>
+        <script type="text/javascript">
+            hash = window.location.hash
+            $("a[href=#{hash}]").click()
+        </script>
+        <script type="text/javascript">
+            $(function() {
+                $(document).click(function (event) {
+                    $('.course_nav').collapse('hide');
+                });
+            });
+        </script>
+    {% endcompress%}
+{% endblock js_section %}

@@ -25,7 +25,7 @@ class TopTrendingAdmin(admin.ModelAdmin):
 
 
 class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user_id', 'user_name', 'rating', 'designation', 'company']
+    list_display = ['id', 'user_id', 'user_name', 'rating', 'page', 'designation', 'company']
     search_fields = ('id', 'user_id', 'user_name', 'designation', 'company')
 
 
