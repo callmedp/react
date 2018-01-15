@@ -9,9 +9,18 @@
 }
 
 .cms {
-  .bullet li {
-    @extend %half-width;
-    float: left;
-    padding: 10px 5px;
+  .bullet {
+    padding-left: 15px;
+
+    li {
+      @extend %half-width;
+      float: left;
+      padding-right: 5px;
+      // padding: 10px 5px;
+      list-style-position: outside;
+      min-height: 45px;
+      padding-bottom: 0;
+    }
   }
+
 }

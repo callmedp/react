@@ -45,14 +45,27 @@
     border: 1px solid $grey-e5;
 
     li {
-      @extend %half-width;
-      margin: 0 -1px;
+      width: 1000px;
+      display: table-cell;
+      vertical-align: middle;
+      margin: 0;
       text-align: center;
+      background-color: $grey-e5;
+      border-right: 1px solid $border-grey-c1;
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+      &:last-child {
+        border-right: 0 none;
+      }
 
       a {
-        background-color: $grey-e5;
         display: block;
         color: $txt-grey-333;
+        font-size: 80%;
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 16px;
       }
     }
 
