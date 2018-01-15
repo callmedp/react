@@ -43,6 +43,7 @@ sqlparse==0.2.3
 tinycss==0.4
 tinycss2==0.5
 Unidecode==0.4.21
+urllib3==1.22
 WeasyPrint==0.39
 webencodings==0.5.1
 # prefix in css
