@@ -66,4 +66,4 @@ GS_BUCKET_NAME = 'learning-media-staging-189607'
 GS_PROJECT_ID = 'shine-staging-189607'
 GCP_STATIC_BUCKET = 'learning-static-staging-189607'
 # GS_AUTO_CREATE_BUCKET = True
-STATIC_URL = 'http://learning-static-staging-189607.storage.googleapis.com/'
+STATIC_URL = 'https://learning-static-staging-189607.storage.googleapis.com/'

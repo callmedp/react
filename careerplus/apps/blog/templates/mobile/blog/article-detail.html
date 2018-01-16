@@ -16,9 +16,9 @@
 {% block css_section %}
     {{ block.super }}
     {%compress css%}
-    <link type="text/scss" href="{% static "shinelearn/css/mobile/common/checkbox.scss" %}" rel="stylesheet">
-    <link type="text/scss" href="{% static "shinelearn/css/mobile/common/slick.scss" %}" rel="stylesheet">
-    <link type="text/scss" href="{% static "shinelearn/css/mobile/blog/blog.scss" %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
     {%endcompress%}
 
     <style type="text/css">
@@ -37,7 +37,7 @@
     <header class="w100fl he-auto">
     
     
-        <img src="{% static "shinelearn/images/mobile/common/header-back-img.png" %}">
+        <img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">
         
         <!-- header menu Icon Starts here -->
         <div class="main-menu w100fl">
@@ -86,9 +86,9 @@
 
 {% block js_section %}
     {{block.super}}
-    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-    <script src="{% static "shinelearn/js/blog/blog-detail.js" %}"></script>
-    <script src="{% static "shinelearn/js/mobile/blog/blog.js" %}"></script>
+    <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/blog/blog.js' %}"></script>
     <script type="text/javascript">
         showArticleOnScroll.scroll(); /* for calling infinite articles */
     </script>

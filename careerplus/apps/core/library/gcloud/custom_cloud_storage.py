@@ -17,18 +17,19 @@ class GCPStaticStorage(GoogleCloudStorage):
             "compressor.storage.CompressorFileStorage")()
 
     def url(self, name):
-        temp_url = super(GCPStaticStorage, self).url(name)
-        temp_url_parsed = parse.urlparse(temp_url)
-        base_url_parsed = parse.urlparse(self.local_storage.base_url)
-        temp_url_parsed = temp_url_parsed._replace(scheme=base_url_parsed.scheme)
-        temp_url_parsed = temp_url_parsed._replace(netloc=base_url_parsed.netloc)
-        temp_url_parsed_path = list(os.path.split(temp_url_parsed.path))
-        temp_url_parsed_path = os.path.join(*[
-            path_component if path_component != '/' + self.bucket_name else '/' for
-            path_component in temp_url_parsed_path])
-        temp_url_parsed = temp_url_parsed._replace(path=temp_url_parsed_path)
-        public_url = parse.urlunparse(temp_url_parsed)
-        return public_url
+        # temp_url = super(GCPStaticStorage, self).url(name)
+        # temp_url_parsed = parse.urlparse(temp_url)
+        # base_url_parsed = parse.urlparse(self.local_storage.base_url)
+        # temp_url_parsed = temp_url_parsed._replace(scheme=base_url_parsed.scheme)
+        # temp_url_parsed = temp_url_parsed._replace(netloc=base_url_parsed.netloc)
+        # temp_url_parsed_path = list(os.path.split(temp_url_parsed.path))
+        # temp_url_parsed_path = os.path.join(*[
+        #     path_component if path_component != '/' + self.bucket_name else '/' for
+        #     path_component in temp_url_parsed_path])
+        # temp_url_parsed = temp_url_parsed._replace(path=temp_url_parsed_path)
+        # public_url = parse.urlunparse(temp_url_parsed)
+        # return public_url
+        return settings.STATIC_URL + name
 
     def save(self, name, content, max_length=None):
         self.local_storage._save(name, content)
