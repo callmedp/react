@@ -366,7 +366,7 @@ class ChangeDraftView(DetailView):
                             added_by=request.user)
 
                         messages.success(
-                            self.request, "Draft Saved Successfully")
+                            self.request, "Draft Submitted successfully")
                         return HttpResponseRedirect(
                             reverse('console:linkedin-inbox'))
                     else:
