@@ -7,7 +7,7 @@ from django.conf import settings
 
 class GCPStaticStorage(GoogleCloudStorage):
     """
-    S3 storage backend that saves the files locally, too.
+    GCP storage backend that saves the files locally, too.
     """
     bucket_name = settings.GCP_STATIC_BUCKET
 
@@ -36,10 +36,10 @@ class GCPStaticStorage(GoogleCloudStorage):
         super(GCPStaticStorage, self).save(name, self.local_storage._open(name))
         return name
 
-#
-# class GCPMediaStorage(GoogleCloudStorage):
-#     """
-#     S3 storage backend that saves the files locally, too.
-#     """
-#     bucket_name = settings.GCP_STATIC_BUCKET
-#
+
+class GCPMediaStorage(GoogleCloudStorage):
+    """
+    GCP storage backend
+    """
+    bucket_name = settings.GCP_MEDIA_BUCKET
+
