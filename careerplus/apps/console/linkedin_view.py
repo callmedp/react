@@ -1141,3 +1141,27 @@ class CreateDrftObject(TemplateView):
         return HttpResponseRedirect(
             reverse('console:linkedin-inbox')
         )
+
+
+@method_decorator(permission_required('order.can_view_counselling_form_in_approval_queue', login_url='/console/login/'), name='dispatch')
+class ListCounsellingFormView(TemplateView):
+    template_name = "console/linkedin/list_counsellingform.html"
+
+    def get(self, request, *args, **kwargs):
+        return super(ListCounsellingFormView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ListCounsellingFormView, self).get_context_data(**kwargs)
+        try:
+            orderitem = OrderItem.objects.get(pk=kwargs.get('ord_pk', ''))
+        except:
+            orderitem = None
+        try:
+            quiz_resp = orderitem.quizresponse
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % (str(e)))
+
+        context = {
+            'quiz_resp': quiz_resp if quiz_resp else None,
+        }
+        return context
