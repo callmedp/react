@@ -14,7 +14,7 @@
     {{ block.super }}
     {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
-        <link type="text/scss" href="{% static "shinelearn/css/mobile/payment/payment.scss" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
     {% compress css inline %}
         <style>
@@ -199,7 +199,7 @@
     {{block.super}}
 
     {% compress js %}
-        <script src="{% static "shinelearn/js/mobile/payment/thank-you.js" %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/payment/thank-you.js' %}"></script>
     {% endcompress %}
 
     {% block johukum %}
