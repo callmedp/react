@@ -9,6 +9,7 @@ from django.http import (Http404,
     HttpResponsePermanentRedirect,
 )
 from django.urls import reverse
+from django.core.cache import cache
 from django.utils.http import urlquote
 from django.views.generic import (
     ListView,
@@ -33,6 +34,7 @@ from homepage.models import Testimonial
 from review.models import Review
 
 from .models import Product
+from .mixins import CourseCatalogueMixin
 
 
 class ProductInformationMixin(object):
@@ -553,7 +555,7 @@ class ProductReviewListView(ListView, ProductInformationMixin):
         return context
 
 
-class CourseCatalogueView(TemplateView, MetadataMixin):
+class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
     template_name = 'shop/course-catalogue.html'
     use_title_tag = False
     use_og = True
@@ -571,12 +573,17 @@ class CourseCatalogueView(TemplateView, MetadataMixin):
         return 'https://learning.shine.com'
 
     def get_testimonials(self):
-        testimonials = Testimonial.objects.filter(page=3, is_active=True)
+        testimonials = Testimonial.objects.filter(
+            page=3, is_active=True)
         testimonials = testimonials[: 3]
         return {"testimonials": testimonials}
 
     def get_context_data(self, **kwargs):
         context = super(CourseCatalogueView, self).get_context_data(**kwargs)
-        context.update(self.get_testimonials())
         context['meta'] = self.get_meta()
+        context.update(self.get_testimonials())
+        if cache.get('course_catalogue'):
+            context['course_dict'] = cache.get('course_catalogue')
+        else:
+            context['course_dict'] = self.get_course_catalogue_context()
         return context

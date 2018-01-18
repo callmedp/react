@@ -24,6 +24,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = [
         'name', 'modified', 'type_level']
     search_fields = ('name',)
+    list_filter = ('type_level', )
 
 
 class AttributeAdmin(admin.ModelAdmin):

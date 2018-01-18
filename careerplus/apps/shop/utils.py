@@ -13,6 +13,7 @@ from decimal import Decimal
 from django.contrib import messages
 from shop.choices import PRODUCT_VENDOR_CHOICES
 
+
 def _attribute_text_field(attribute):
     return forms.CharField(
         label=attribute.display_name,

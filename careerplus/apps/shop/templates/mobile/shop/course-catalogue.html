@@ -1,0 +1,171 @@
+{% extends "mobile/basic/base.html" %}
+{% load static %}
+{% load shop_tags %}
+{% load static compress %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+    
+    {% block title %}
+       Courses listing
+    {% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {%compress css%}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/category/category.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
+    {%endcompress%}
+    
+{% endblock css_section %}
+
+{% block main_container %}
+<!-- main section start -->
+<!-- starts of body wrapper -->
+<div class="body-wrapper">
+
+  {% block header %}
+  <!-- Category banner Starts here -->
+  <div class="course-banner">
+      <div class="content text-center">
+        <h1 class="head">India's largest e learning platform</h1>
+        <p class="sub-haed">Join the club of 4mn learners with our partners <br />like Skillsoft, ACCA etc</p>
+        <!-- <p class="callToAction"><a href="#">Why you should you buy?</a></p> -->
+      </div>
+      <img src="{% static 'shinelearn/images/mobile/common/category-img.jpg' %}" class="img-responsive">
+  </div><!-- Category banner Ends here -->
+  {% endblock header %}
+
+  {% block section1 %}
+  <!-- courses and categoery starts here -->
+  <section class="courses-certificate">
+    <div class="content-box">
+      <h2>Courses and Certificate</h2>
+      <!-- Accordion Choose and Download Resume Format Starts here  -->
+      <div class="accordion_example1 row mt-20">
+        {% for fa in course_dict.course_fa_list|slice:": 6" %}
+        <!-- Accordin -1 -->
+        <div class="accordion_in">
+          <div class="acc_head blue-link">
+            <div class="media">
+                <div class="media-left">
+                  <span class="img-box">
+                  <img src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
+                    {% endif %}" alt="" class="img-responsive"></span>
+                </div>
+              <div class="media-body pt-5"><h3>{{fa.name}}</h3></div>
+            </div><!-- media ends here -->
+          </div><!-- Accordin head ends here -->
+
+          <div class="acc_content">
+            <ul>
+              {% with skill_list=fa.pk|get_value:course_dict %}
+              {% for skill in  skill_list %}
+                <li><a href="{{skill.url}}" role="tab">{{skill.name}}</a></li>
+              {% endfor %}
+              {% endwith %}
+            </ul>
+            <p class="text-right pb-0"><a href="{{fa.url}}">View all courses</a></p>
+          </div><!-- / acc_content -->
+        </div><!-- / Accordin -1 -->
+        {% endfor %}
+
+      </div><!-- Accordion Choose and Download Resume Format Ends here  -->
+    </div><!-- / content-box-->
+
+    <div class="clearfix"></div>
+  </section><!-- courses and categoery ends here -->
+  {% endblock section1 %}
+
+  {% block section2 %}
+    {% if course_dict.vendor_list %}
+    <!-- courses and categoery starts here -->
+    <section class="vendors pb-30">
+      <div class="content-box">
+        <h2>Our vendors</h2>
+        <ul>
+          {% for vendor in course_dict.vendor_list %}
+          <li>
+            <a class="box-shadow">
+                <span class="img-box">
+                  <img src="{{vendor.image}}" alt="" class="img-responsive">
+                </span>
+                <p class="pb-0 row">
+                  <span class="cc_heading">{{vendor.name}}</span>
+                </p>
+            </a>
+          </li>
+          {% endfor %}
+
+        </ul>
+      </div>
+      <div class="clearfix"></div>
+    </section><!-- courses and categoery ends here -->
+    {% endif %}
+  {% endblock section2 %}
+
+  {% block section3 %}
+  <!-- Why shine learning starts here -->
+  <section class="why_scp">
+    <div class="content-box">
+      <h2>Why Shine Learning?</h2>
+      <ul>
+        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-1.png" alt=""></span>
+            Our experts will guide you through the variety of courses suited for your profile
+        </li>
+
+        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-2.png" alt=""></span>
+            Invest in your career and get a jump in your salary
+        </li>
+
+        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-3.png" alt=""></span>
+            We bridge the gap between education and employment with a free 1 month featured profile on shine.com
+        </li>
+      </ul>
+    </div><!-- end of content box -->
+  </section><!-- Why shine learning ends here -->
+  {% endblock section3 %}
+
+  {% block section4 %}
+    {% if testimonials %}
+      <!-- Testimonials Course Starts here -->
+      <div class="testimonials">
+        <h2 class="mb-0 text-center">Testimonials</h2>
+        <div class="slide-container">
+            <ul class="review-slide">
+                {% for te in testimonials %}
+                <li>
+                  {{te.review|safe}}
+                  <p><strong>- "{{te.user_name}}"</strong></p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+      </div><!-- Testimonials Course ends here -->
+    {% endif %}
+  {% endblock section4 %}
+
+</div><!-- ends of body wrapper -->
+
+
+
+{% endblock main_container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript">
+      jQuery(document).ready(function($){ 
+        $(".accordion_example1").smk_Accordion({
+          showIcon: true, //boolean
+          animation: true, //boolean
+          closeAble: true, //boolean
+          slideSpeed: 200 //integer, miliseconds
+        });
+      });
+    </script>
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
