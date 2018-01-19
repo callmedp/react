@@ -21,22 +21,20 @@
     
 {% endblock css_section %}
 
-{% block main_container %}
+{% block container %}
 <!-- main section start -->
 <!-- starts of body wrapper -->
 <div class="body-wrapper">
 
-  {% block header %}
   <!-- Category banner Starts here -->
   <div class="course-banner">
       <div class="content text-center">
-        <h1 class="head">India's largest e learning platform</h1>
+        <h1 class="head">India's largest e-learning platform</h1>
         <p class="sub-haed">Join the club of 4mn learners with our partners <br />like Skillsoft, ACCA etc</p>
         <!-- <p class="callToAction"><a href="#">Why you should you buy?</a></p> -->
       </div>
       <img src="{% static 'shinelearn/images/mobile/common/category-img.jpg' %}" class="img-responsive">
   </div><!-- Category banner Ends here -->
-  {% endblock header %}
 
   {% block section1 %}
   <!-- courses and categoery starts here -->
@@ -151,7 +149,7 @@
 
 
 
-{% endblock main_container %}
+{% endblock container %}
 
 
 {% block js_section %}
