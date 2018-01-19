@@ -16,7 +16,6 @@ class AutoLogin(object):
         ciph = XOR.new(settings.ENCODE_SALT)
         return base64.b64encode(ciph.encrypt(b))
 
-
     def decode(self, token):
         token = base64.b64decode(token)
         ciph = XOR.new(settings.ENCODE_SALT)
