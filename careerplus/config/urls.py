@@ -102,7 +102,7 @@ urlpatterns += [
     url(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
 
-    url(r'^online-courses.html/$',
+    url(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),
     
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
