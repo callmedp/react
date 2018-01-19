@@ -16,6 +16,7 @@ from django.views.generic import (
     TemplateView,
     View
 )
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from geolocation.models import Country
 from django.db.models import Q
@@ -570,7 +571,7 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
         Courses under Finance, IT, Analytics, Marketing and more'
     
     def get_meta_url(self, context):
-        return 'https://learning.shine.com'
+        return settings.MAIN_DOMAIN_PREFIX
 
     def get_testimonials(self):
         testimonials = Testimonial.objects.filter(
