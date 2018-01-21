@@ -58,12 +58,15 @@ REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 
 
 ###### STORAGE SETTINGS #############
-DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'learning--misc-staging-189607'
 #GS_CREDENTIALS = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
+PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivateMediaStorage'
 COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
-GCP_MEDIA_BUCKET = 'learning-media-staging-189607'
+GCP_PRIVATE_MEDIA_BUCKET = 'learning-media-staging-189607'
 GS_PROJECT_ID = 'shine-staging-189607'
 GCP_STATIC_BUCKET = 'learning-static-staging-189607'
 # GS_AUTO_CREATE_BUCKET = True
 STATIC_URL = 'https://learning-static-staging-189607.storage.googleapis.com/'
+MEDIA_URL = 'https://learning--misc-staging-189607.storage.googleapis.com/'

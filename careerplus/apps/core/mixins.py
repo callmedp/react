@@ -13,6 +13,7 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 # from django.http import HttpResponse
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 from weasyprint import HTML
 
@@ -258,16 +259,20 @@ class InvoiceGenerate(object):
                 full_path = 'order/%s/' % str(order.pk)
                 file_name = 'invoice-' + str(order.number) + '-'\
                     + timezone.now().strftime('%Y%m%d') + '.pdf'
-                if not os.path.exists(settings.INVOICE_DIR + full_path):
-                    os.makedirs(settings.INVOICE_DIR +  full_path)
-                dest = open(
-                    settings.INVOICE_DIR + full_path + file_name, 'wb')
+                # if not os.path.exists(settings.INVOICE_DIR + full_path):
+                #     os.makedirs(settings.INVOICE_DIR +  full_path)
+                # dest = open(
+                #     settings.INVOICE_DIR + full_path + file_name, 'wb')
+                # if not GCPPrivateMediaStorage().exists(full_path):
+
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-                for chunk in pdf_file.chunks():
-                    dest.write(chunk)
-                dest.close()
+                # for chunk in pdf_file.chunks():
+                #     dest.write(chunk)
+                # dest.close()
+
+                GCPPrivateMediaStorage().save(settings.INVOICE_DIR + full_path + file_name, pdf_file)
                 order.invoice = full_path + file_name
                 order.save()
                 return order, order.invoice

@@ -1,10 +1,14 @@
 import os
 from urllib import parse
 from django.core.files.storage import get_storage_class
-from storages.backends.gcloud import GoogleCloudStorage
-from django.conf import settings
+from storages.backends.gcloud import GoogleCloudStorage, GoogleCloudFile
 
 from google.cloud import storage
+
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.deconstruct import deconstructible
+from django.conf import settings
+
 
 class GCPStaticStorage(GoogleCloudStorage):
     """
@@ -38,44 +42,60 @@ class GCPStaticStorage(GoogleCloudStorage):
         return name
 
 
-class GCPMediaStorage(GoogleCloudStorage):
-    """
-    GCP storage backend
-    """
-    bucket_name = settings.GCP_MEDIA_BUCKET
+@deconstructible
+class GCPPrivateMediaStorage(GoogleCloudStorage):
+    bucket_name = settings.GCP_PRIVATE_MEDIA_BUCKET
 
-    def url(self, name):
-        return settings.MEDIA_URL + name
+    def _open(self, name, mode='rb'):
+        # name = self._normalize_name(clean_name(name))
+        file_object = GoogleCloudFile(name, mode, self)
+        if not file_object.blob:
+            raise IOError(u'File does not exist: %s' % name)
+        return file_object
 
+    def _save(self, name, content):
+        content.name = name
+        file = GoogleCloudFile(name, 'rw', self)
+        file.blob.upload_from_file(
+            content, size=content.size,
+            content_type=file.mime_type)
+        return name
 
-# class GoogleCloudResumeUploader(object):
+    def exists(self, name):
+        if not name:
+            try:
+                self.bucket
+                return True
+            except ImproperlyConfigured:
+                return False
+        return bool(self.bucket.get_blob(name))
+
 #
-#     GCP_SECRET_FILE = settings.GCP_SECRET_FILE
-#     GCP_BUCKET = settings.GCP_MEDIA_BUCKET
+# class GoogleCloudMediaUploader(object):
+#
 #     BASE_UPLOAD_PATH = settings.GCP_UPLOADS_DIR
 #
-#     def __init__(self, file, resume_id, candidate_id, base_upload_path=None):
+#     def __init__(self, file, base_upload_path=None):
 #         # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.GCP_SECRET_FILE
 #         self.storage_client = storage.Client()
-#         self.bucket = self.storage_client.bucket(self.GCP_BUCKET)
-#
-#         self.resume, self.resume_id, self.resume_name = resume, str(resume_id), str(resume)
-#         self.candidate_id = str(candidate_id)
-#
-#         self.BASE_UPLOAD_PATH = base_upload_path or self.BASE_UPLOAD_PATH
+#         # self.bucket = self.storage_client.bucket(settings.GCP_PRIVATE_MEDIA_BUCKET)
+#         self.bucket = GCPPrivateMediaStorage()
+#         self.file = file
+#         self.BASE_UPLOAD_PATH = base_upload_path() if base_upload_path else self.BASE_UPLOAD_PATH
 #
 #     def upload(self):
-#         path_info = FilePathGenerator(self.resume_id, self.candidate_id, self.resume_name, self.BASE_UPLOAD_PATH).generate_file_path_info()
-#         self.store_on_gcp(path_info['complete_path'])
-#         return path_info
+#         # temporary_file = StringFile(
+#         #     name=self.resume.name,
+#         #     mime_type=self.resume.content_type,
+#         # )
+#         # temporary_file = self.bucket.open(self.file.name, 'wb')
 #
-#     def store_on_gcp(self, complete_path):
-#         temporary_file = StringFile(
-#                 name = self.resume.name,
-#                 mime_type = self.resume.content_type,
-#             )
-#
-#         map(lambda chunk: temporary_file.write(chunk, append_mode = True), self.resume.chunks())
-#
-#         self.blob = self.bucket.blob(complete_path)
-#         self.blob.upload_from_file(temporary_file)
+#         # map(lambda chunk: temporary_file.write(chunk, append_mode=True), self.file.chunks())
+#         self.bucket.save(self.file.name, self.file)
+#         # self.blob = self.bucket.blob(complete_path)
+#         # self.blob.upload_from_file(temporary_file)
+#         # return self.BASE_UPLOAD_PATH
+
+
+
+
