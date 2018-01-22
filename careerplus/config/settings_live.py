@@ -1,12 +1,28 @@
 from .settings import *
 
+DJANGO_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sites',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'collectfaster',       # Needed here before staticfiles
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+
 DEBUG = False
 IS_LIVE = True
 STATIC_URL = 'https://origin-static3.shine.com/static/'
 MEDIA_URL = 'https://origin-static3.shine.com/'
 DOWNLOAD_URL = 'https://origin-static3.shine.com/download/'
 DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'download')
-RESUME_DIR = '/shineresume/ResumeServices/'
+#RESUME_DIR = '/shineresume/ResumeServices/'
+INVOICE_DIR = 'invoice/'   # Cloud path
+RESUME_DIR = 'resume/'  # Cloud path
 CELERY_ALWAYS_EAGER = False
 
 ########## DOMAIN SETTINGS ######################

@@ -38,6 +38,17 @@ DATABASES = {
 }
 
 # Apps specific for this project go here.
+DJANGO_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sites',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    # 'collectfaster',       # Needed here before staticfiles
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 if DEBUG:

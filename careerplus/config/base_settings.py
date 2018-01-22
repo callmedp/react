@@ -41,7 +41,6 @@ DJANGO_APPS = [
     'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'collectfaster',       # Needed here before staticfiles
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 ]
