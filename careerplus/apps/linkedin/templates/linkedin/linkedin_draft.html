@@ -92,12 +92,14 @@
             <li class="bdrtp"><h3>Education Details</h3>
             {%if current_edu %}
               <ul>
-                <li class="wd1">School</li>
+                <li class="wd1">Education Level</li>
                 {% if  current_edu.level == 0 %}
                     <li class="wd2">School</li>    
                 {% else %}
                     <li class="wd2">College</li>
                 {% endif %}
+                <li class="wd1">{% if current_edu.level == 0 %} School {% else %} College {% endif %} Name</li>
+                <li class="wd2">{{current_edu.school_name}}</li>
                 <li class="wd1">Degree</li>
                 <li class="wd2">{{current_edu.degree}}</li>
                 <li class="wd1">Description</li>
@@ -116,6 +118,8 @@
                 {% else %}
                     <li class="wd2">College</li>
                 {% endif %}
+                <li class="wd1">{% if edu.level == 0 %} School {% else %} College {% endif %} Name</li>
+                <li class="wd2">{{edu.school_name}}</li>
                 <li class="wd1">Degree</li>
                 <li class="wd2">{{edu.degree}}</li>
                 <li class="wd1">Description</li>
