@@ -4,7 +4,6 @@ import json
 import urllib.parse
 
 from django.shortcuts import render
-from wsgiref.util import FileWrapper
 from django.http import (
     HttpResponse,
     HttpResponseRedirect,)
@@ -15,6 +14,7 @@ from django.conf import settings
 
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from order.models import OrderItem
 
 from emailers.tasks import send_email_task
@@ -217,7 +217,7 @@ class DownloadBoosterResume(View):
 
                     path = file_path
                     try:
-                        fsock = FileWrapper(open(path, 'rb'))
+                        fsock = GCPPrivateMediaStorage().open(file_path)
                     except IOError:
                         raise Exception("Resume not found.")
 

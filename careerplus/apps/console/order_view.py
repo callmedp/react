@@ -31,6 +31,7 @@ from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
 from order.functions import send_email
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 from .decorators import (
     Decorate,
@@ -2267,7 +2268,7 @@ class ConsoleResumeDownloadView(View):
             next_url = request.GET.get('next', None)
             if file:
                 file_path = settings.RESUME_DIR + file
-                fsock = FileWrapper(open(file_path, 'rb'))
+                fsock = GCPPrivateMediaStorage().open(file_path)
                 filename = file.split('/')[-1]
                 response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                 response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
