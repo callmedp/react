@@ -68,3 +68,8 @@ class GCPPrivateMediaStorage(GoogleCloudStorage):
         return bool(self.bucket.get_blob(name))
 
 
+@deconstructible
+class GCPInvoiceStorage(GCPPrivateMediaStorage):
+    bucket_name = settings.GCP_INVOICE_BUCKET
+
+

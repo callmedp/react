@@ -22,7 +22,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.base import ContentFile
 
 # from console.decorators import Decorate, stop_browser_cache
-from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
 from order.models import Order, OrderItem
 from review.models import Review
 from emailers.email import SendMail
@@ -739,7 +739,7 @@ class DashboardInvoiceDownload(View):
                     order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
                 if invoice:
                     file_path = settings.INVOICE_DIR + invoice.name
-                    fsock = GCPPrivateMediaStorage().open(file_path)
+                    fsock = GCPInvoiceStorage().open(file_path)
                     filename = invoice.name.split('/')[-1]
                     response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
