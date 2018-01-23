@@ -246,6 +246,14 @@ urlpatterns += [
     url(r'^queue/orderitem/assignment/$',
         order_view.AssignmentOrderItemView.as_view(),
         name='assignment-orderitem-view'),
+
+    url(r'^queue/review/review-to-moderate/$',
+        order_view.ReviewModerateListView.as_view(),
+        name='review-to-moderate'),
+
+    url(r'^queue/review/(?P<pk>\d+)/change/$',
+        order_view.ReviewModerateView.as_view(),
+        name='review-moderate-update'),
 ]
 
 # refunf flow

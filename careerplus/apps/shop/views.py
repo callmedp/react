@@ -260,7 +260,7 @@ class ProductInformationMixin(object):
         try:
             review_list = Review.objects.filter(
                 content_type__id=product_type.id,
-                object_id=product.pk)
+                object_id=product.pk, status=1)
             rv_total = len(review_list)
             per_page = 5
             rv_paginator = Paginator(review_list, per_page)

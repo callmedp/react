@@ -87,7 +87,9 @@ class SkillPageView(DetailView, SkillPageMixin):
         prd_obj = ContentType.objects.get_for_model(Product)
         all_results = products
         prod_reviews = Review.objects.filter(
-            object_id__in=prod_id_list, content_type=prd_obj)
+            object_id__in=prod_id_list,
+            content_type=prd_obj,
+            status=1)
 
         prod_page = Paginator(all_results, 5)
 

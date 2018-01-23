@@ -7,6 +7,7 @@ from order.choices import STATUS_CHOICES
 from shop.models import DeliveryService
 # from cart.choices import DELIVERY_TYPE
 from order.choices import OI_OPS_STATUS
+from review.models import Review, STATUS_CHOICES
 
 User = get_user_model()
 
@@ -346,3 +347,56 @@ class AssignmentActionForm(forms.Form):
         self.fields['assign_to'].required = True
         self.fields['assign_to'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['assign_to'].queryset = users
+
+
+class ReviewActionForm(forms.Form):
+    ACTION_STATUS = (
+        (-1, "Select Action"),
+        (0, "Mark Required Moderation"),
+        (1, "Mark Approved"),
+        (2, "Mark Rejected"),
+    )
+
+    action = forms.ChoiceField(
+        choices=ACTION_STATUS, initial=-1, required=True, widget=forms.Select(attrs={
+            'class': 'form-control col-md-7 col-xs-12',
+            'required': True}))
+
+
+class ReviewFilterForm(forms.Form):
+    FILTER_STATUS = (
+        (-1, "Select Action"),
+        (0, "Required Moderation"),
+        (1, "Approved"),
+        (2, "Rejected"),
+    )
+    filter_status = forms.ChoiceField(
+        choices=FILTER_STATUS, initial=-1, required=True, widget=forms.Select(attrs={
+            'class': 'form-control col-md-7 col-xs-12',
+            'required': True}))
+
+
+class ReviewUpdateForm(forms.ModelForm):
+
+    content = forms.CharField(
+        label=("Review Content*:"), max_length=200,
+        required=True, widget=forms.Textarea(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+    status = forms.ChoiceField(
+        choices=STATUS_CHOICES,
+        required=True, widget=forms.Select(attrs={
+            'class': 'form-control col-md-7 col-xs-12',
+            'required': True}))
+
+    class Meta:
+        model = Review
+        fields = ['content_type', 'user_email', 'content', 'average_rating', 'status']
+
+    def __init__(self, *args, **kwargs):
+        super(ReviewUpdateForm, self).__init__(*args, **kwargs)
+        from django.utils.html import strip_tags
+        obj = kwargs.get('instance')
+        self.initial['content'] = strip_tags(obj.content)
+        self.fields['content_type'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['user_email'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['average_rating'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
