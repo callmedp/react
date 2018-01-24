@@ -1116,23 +1116,27 @@ class ProfileCredentialDownload(View):
     def get(self, request, *args, **kwargs):
         session_usr = request.session.get('candidate_id')
         oi = kwargs.get('oi', '')
-        profile_credentials = InternationalProfileCredential.objects.filter(oi=oi)
-        ord_candidate = profile_credentials.first()
-        if ord_candidate and (session_usr == ord_candidate):
-            try:
-                context_dict = {
-                    'pagesize': 'A4',
-                    'profile_credentials': profile_credentials,
-                }
-                template = get_template('console/order/profile-update-credentials.html')
-                context = Context(context_dict)
-                html = template.render(context)
-                pdf_file = HTML(string=html).write_pdf()
-                http_response = HttpResponse(pdf_file, content_type='application/pdf')
-                http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
-                return http_response
-            except Exception as e:
-                logging.getLogger('error_log').error("Profile download:", str(e))
+        orderitem = OrderItem.objects.get(pk=oi)
+        profile_credentials = InternationalProfileCredential.objects.filter(
+            oi=oi)
+        if session_usr == orderitem.order.candidate_id:
+            if profile_credentials:
+                try:
+                    context_dict = {
+                        'pagesize': 'A4',
+                        'profile_credentials': profile_credentials,
+                    }
+                    template = get_template('console/order/profile-update-credentials.html')
+                    context = Context(context_dict)
+                    html = template.render(context)
+                    pdf_file = HTML(string=html).write_pdf()
+                    http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                    http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
+                    return http_response
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                        "Profile download:%s", str(e))
+            return HttpResponseRedirect('/dashboard/')
         else:
             return HttpResponseRedirect('/login/')
 
