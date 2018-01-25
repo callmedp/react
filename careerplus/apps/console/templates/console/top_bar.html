@@ -47,6 +47,28 @@
             </li>
           </ul>
         </li>
+
+        
+        <li class="">
+          <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <strong><small>Generate Invoice</small></strong>
+            <span class=" fa fa-angle-down"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-usermenu pull-right">
+            {% if not user_invoice %}
+            <li><a href="javascript:;">
+              <span class="message" style="color:red">
+                You have no invoice for last month.
+              </span>
+            </a></li>
+            {% else %}
+              <li><a href="">
+                  Generate Invoice
+              </a></li>
+            {% endif %}
+          </ul>
+        </li>
+
       </ul>
     </nav>
   </div>

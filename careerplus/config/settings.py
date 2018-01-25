@@ -19,6 +19,7 @@ else:
 
 # Database
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careerplus1',
@@ -27,6 +28,16 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+
+    # learing2 db
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'careerplus',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '172.22.65.33',
+    #     'PORT': '3306',
+    # },
 
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',

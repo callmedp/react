@@ -5,6 +5,9 @@ from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
 from django.utils import timezone
 
+from .choices import WRITER_TYPE
+from .functions import get_upload_path_user_invoice
+
 
 class UserManager(BaseUserManager):
 
@@ -95,6 +98,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    pan_no = models.CharField(
+        max_length=100, null=True, blank=True)
+    gstin = models.CharField(
+        max_length=255, null=True, blank=True)
+    address = models.TextField()
+    writer_type = models.PositiveIntegerField(
+        choices=WRITER_TYPE,
+        default=0)
+    po_number = models.CharField(
+        max_length=255, null=True, blank=True)
+    valid_from = models.DateField(null=True, blank=True)
+    valid_to = models.DateField(null=True, blank=True)
+    user_invoice = models.FileField(
+        upload_to=get_upload_path_user_invoice,
+        max_length=255,
+        blank=True, null=True)
+    invoice_date = models.DateField(null=True, blank=True)
 
 
 # class UserEmail(models.Model):

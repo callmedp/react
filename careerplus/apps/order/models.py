@@ -249,6 +249,9 @@ class OrderItem(AbstractAutoDate):
         related_name='oi_assigned',
         null=True, blank=True)
 
+    assigned_date = models.DateTimeField(
+        null=True, blank=True)
+
     assigned_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='oi_assigned_by',

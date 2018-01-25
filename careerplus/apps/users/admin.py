@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.forms import UserChangeForm
 
-from users.models import User
+from users.models import User, UserProfile
 
 
 class UserCreationForm(forms.ModelForm):
@@ -56,6 +56,11 @@ class UserChangeForm(UserChangeForm):
         model = User
 
 
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    fk_name = 'user'
+
+
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
@@ -84,6 +89,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions')
+    inlines = [UserProfileInline, ]
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)

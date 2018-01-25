@@ -14,7 +14,7 @@ def update_product_buy_count():
     orderitems = OrderItem.objects.filter(
         order__status__in=[1, 3],
         buy_count_updated=False).exclude(
-        product=None).select_related('product')
+        product=None)
 
     updated = 0
     for oi in orderitems:
