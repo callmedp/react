@@ -36,18 +36,18 @@
 
     {% endblock css_section %}
     {% block GA %}
-        <!--<script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>-->
-        <!--<script>-->
-          <!--window.dataLayer = window.dataLayer || [];-->
-          <!--function gtag(){dataLayer.push(arguments);}-->
-          <!--gtag('js', new Date());-->
-          <!--{% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}-->
-              <!--gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });-->
-          <!--{% else%}-->
-              <!--gtag('config', 'UA-3537905-41');-->
-          <!--{%endif%}-->
-          <!--gtag('config', 'UA-3537905-1',{'group':'mainProfile'});-->
-        <!--</script>-->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+              gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
+          {% else%}
+              gtag('config', 'UA-3537905-41');
+          {%endif%}
+          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+        </script>
     {% endblock GA %}
     {% block banner_ads %}
         <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
@@ -65,11 +65,11 @@
     {% endblock banner_ads %}
     {% block marketing_pixel %}
         <!-- Google Tag Manager -->
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-M323HB');</script>
+        <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
+        <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
+        <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
+        <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
+        <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
         <!-- End Google Tag Manager -->
     {% endblock marketing_pixel %}
    {{ JS_SETTINGS|safe }}
