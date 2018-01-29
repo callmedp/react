@@ -1,6 +1,7 @@
 from django.conf.urls import url
-from .views import DesignPage
+from .views import DesignPage, FrontDesignPage
 
 urlpatterns = [
-    url(r'^(?P<html>[a-z\-\.1-90\_]+)$', DesignPage.as_view(), name='test'),
+    url(r'^console/(?P<html>[a-z\-\.1-90\_]+)$', DesignPage.as_view(), name='test'),
+    url(r'^site/(?P<html>[a-z\-\.1-90\_]+)$', FrontDesignPage.as_view(), name='test'),
 ]

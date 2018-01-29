@@ -1,3 +1,4 @@
+/*
 function redirectToSearch(e) {
     var $q = $('#id_q');
     if ($q.val()) {
@@ -10,9 +11,10 @@ function redirectToSearch(e) {
         $q.closest('div').find('.error-txt').html('Please enter a query');
         return false;
     }
-}
+};
+*/
 
-jQuery(document).ready(function($) {
+$(document).ready(function($) {
     
     $('#tags1').inputTags({
         placeholder: prefetchedFuncArea ? '': "Select Functional Area",
@@ -85,12 +87,12 @@ jQuery(document).ready(function($) {
       });
 
 
-    $('.key_press_js_search').keypress(function (e) {
+    /*$('.key_press_js_search').keypress(function (e) {
         if (e.which == 13) {
             redirectToSearch();
             return false; 
         }
-    });
+    });*/
     
     $('.js_advance_search').on('click', function (e) {
         e.preventDefault();
@@ -123,4 +125,9 @@ jQuery(document).ready(function($) {
             }
     });
     $('.tt-query').css('background-color','#fff');
+
+
+    
+
+
 });

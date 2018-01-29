@@ -28,7 +28,7 @@ from users.views import (
     RegistrationApiView, LoginApiView, LogoutApiView)
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
-from shop.views import ProductDetailView
+from shop.views import ProductDetailView, CourseCatalogueView
 from users.views import LinkedinCallbackView
 from search.views import FuncAreaPageView
 from blog import views as blog_view
@@ -101,6 +101,9 @@ urlpatterns += [
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
     url(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
+
+    url(r'^online-courses.html$',
+        CourseCatalogueView.as_view(), name='course-catalogoue'),
     
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
@@ -125,7 +128,7 @@ urlpatterns += [
     url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
     url(r'^payment/', include('payment.urls', namespace='payment')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
-    # url(r'^design/', include('design.urls', namespace='design')),
+    url(r'^design/', include('design.urls', namespace='design')),
     url(r'^ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
     url(r'^ckeditor/bbrowse/', login_required(ckeditor_views.browse), name='ckeditor_browse'),
     url(r'^search/', include('search.urls', namespace='search')),

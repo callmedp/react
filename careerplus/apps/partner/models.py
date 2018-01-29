@@ -25,7 +25,7 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         _('Slug'), unique=True,
         max_length=100, help_text=_('Unique slug'))
     email = models.EmailField(
-        _('Email'), 
+        _('Email'),
         max_length=255, help_text=_('Email Address'))
     mobile = models.CharField(
         _('Mobile Number'), blank=True,
@@ -73,6 +73,8 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         through_fields=('vendee', 'employee'),
         verbose_name=_('Vendor Hierarchy'),
         blank=True)
+
+    priority = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = _('Vendor')
