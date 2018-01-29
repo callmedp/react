@@ -571,7 +571,7 @@ class DashboardInboxLoadmoreView(View):
         if request.is_ajax() and candidate_id:
             try:
                 page = int(request.POST.get('page', 1))
-                last_month_from = int(request.POST.get('last_month_form', 3))
+                last_month_from = int(request.POST.get('last_month_from', 3))
                 select_type = int(request.POST.get('select_type', 0))
                 orderitem_list = DashboardInfo().get_inbox_list(
                     candidate_id=candidate_id, request=request,
@@ -591,7 +591,7 @@ class DashboardInboxFilterView(View):
         candidate_id = request.session.get('candidate_id', None)
         if request.is_ajax() and candidate_id:
             try:
-                last_month_from = int(request.POST.get('last_month_form', 3))
+                last_month_from = int(request.POST.get('last_month_from', 3))
                 select_type = int(request.POST.get('select_type', 0))
                 orderitem_list = DashboardInfo().get_inbox_list(
                     candidate_id=candidate_id, request=request,
