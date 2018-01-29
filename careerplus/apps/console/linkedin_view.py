@@ -43,6 +43,7 @@ from order.models import OrderItem, Order, InternationalProfileCredential
 
 from emailers.sms import SendSMS
 from django.conf import settings
+from .mixins import ActionUserMixin
 
 
 @method_decorator(permission_required('order.can_show_linkedin_inbox_queue', login_url='/console/login/'), name='dispatch')
@@ -1062,52 +1063,27 @@ class InterNationalAssignmentOrderItemView(View):
         if user_pk:
             try:
                 User = get_user_model()
-                assign_to = User.objects.get(pk=user_pk)
+                writer = User.objects.get(pk=user_pk)
                 orderitem_objs = OrderItem.objects.filter(id__in=selected_id)
-                for obj in orderitem_objs:
-                    obj.assigned_to = assign_to
-                    obj.assigned_by = request.user
-                    obj.save()
-                    # mail to user about writer information
-                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
-                    to_emails = [obj.order.email]
-
-                    data = {}
-                    data.update({
-                        "username": obj.order.first_name,
-                        "writer_name": assign_to.name,
-                        "subject": "Your service has been initiated",
-                        "writer_email": assign_to.email,
-                        "type_flow": obj.product.type_flow,
-                        "delivery_service": obj.delivery_service,
-                        "delivery_service_slug": obj.delivery_service.slug if obj.delivery_service else '',
-                        "delivery_service_name": obj.delivery_service.name if obj.delivery_service else '',
-                    })
-                    mail_type = 'ALLOCATED_TO_WRITER'
-                    if 63 not in email_sets:
-                        send_email_task.delay(to_emails, mail_type, data, status=63, oi=obj.pk)
-                    if obj.delivery_service and (obj.delivery_service.slug == 'super-express'):
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=data)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=1,
-                        last_oi_status=obj.oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user
-                    )
+                ActionUserMixin().assign_orderitem(
+                    orderitem_list=orderitem_objs,
+                    assigned_to=writer,
+                    user=request.user,
+                    data={})
 
                 display_message = str(len(orderitem_objs)) + ' orderitems are Assigned.'
-                messages.add_message(request, messages.SUCCESS, display_message)
-                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+                messages.add_message(
+                    request, messages.SUCCESS, display_message)
+                return HttpResponseRedirect(
+                    reverse('console:queue-' + queue_name))
             except Exception as e:
-                logging.getLogger('error_log').error("INternational assignment:%s", str(e))
+                logging.getLogger('error_log').error("International assignment:%s", str(e))
                 messages.add_message(request, messages.ERROR, str(e))
-                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+                return HttpResponseRedirect(
+                    reverse('console:queue-' + queue_name))
 
-        messages.add_message(request, messages.ERROR, "Please select valid assignment.")
+        messages.add_message(
+            request, messages.ERROR, "Please select valid assignment.")
         return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
 
@@ -1184,3 +1160,27 @@ class CreateDrftObject(TemplateView):
         return HttpResponseRedirect(
             reverse('console:linkedin-inbox')
         )
+
+
+@method_decorator(permission_required('order.can_view_counselling_form_in_approval_queue', login_url='/console/login/'), name='dispatch')
+class ListCounsellingFormView(TemplateView):
+    template_name = "console/linkedin/list_counsellingform.html"
+
+    def get(self, request, *args, **kwargs):
+        return super(ListCounsellingFormView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ListCounsellingFormView, self).get_context_data(**kwargs)
+        try:
+            orderitem = OrderItem.objects.get(pk=kwargs.get('ord_pk', ''))
+        except:
+            orderitem = None
+        try:
+            quiz_resp = orderitem.quizresponse
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % (str(e)))
+
+        context = {
+            'quiz_resp': quiz_resp if quiz_resp else None,
+        }
+        return context
