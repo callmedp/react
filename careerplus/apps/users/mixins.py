@@ -43,12 +43,12 @@ class WriterInvoiceMixin(object):
         if user and user.userprofile and not error:
             if user.name and not error:
                 writer_name = user.name
-            else:
+            elif not error:
                 error = msg
 
             if user.userprofile.pan_no and not error:
                 writer_pan = user.userprofile.pan_no
-            else:
+            elif not error:
                 error = msg
 
             if user.userprofile.gstin and not error:
@@ -58,17 +58,17 @@ class WriterInvoiceMixin(object):
 
             if user.userprofile.address and not error:
                 writer_address = user.userprofile.address
-            else:
+            elif not error:
                 error = msg
 
             if user.userprofile.writer_type and not error:
                 writer_group = user.userprofile.writer_type
-            else:
-                msg = error
+            elif not error:
+                error = msg
 
             if user.userprofile.po_number and not error:
                 writer_po_number = user.userprofile.po_number
-            else:
+            elif not error:
                 error = msg
 
             valid_from = user.userprofile.valid_from
@@ -76,7 +76,7 @@ class WriterInvoiceMixin(object):
             if valid_from and valid_to and valid_from < valid_to \
                 and invoice_date and invoice_date < valid_to:
                 pass
-            else:
+            elif not error:
                 error = 'Update writer Po Number validity'
 
             data.update({

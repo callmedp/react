@@ -20,24 +20,24 @@ else:
 # Database
 DATABASES = {
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'careerplus1',
-    #     'USER': 'root',
-    #     'PASSWORD': 'root',
-    #     'HOST': '',
-    #     'PORT': '',
-    # },
-
-    # learing2 db
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careerplus',
+        'NAME': 'careerplus1',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '172.22.65.33',
-        'PORT': '3306',
+        'HOST': '',
+        'PORT': '',
     },
+
+    # learing2 db
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'careerplus',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '172.22.65.33',
+    #     'PORT': '3306',
+    # },
 
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
@@ -243,7 +243,7 @@ CP_VENDOR_ID = '12345'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/live_prod',  # prdt
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     },
 }
