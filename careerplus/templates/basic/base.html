@@ -50,27 +50,27 @@
         <!--</script>-->
     {% endblock GA %}
     {% block banner_ads %}
-        <!--<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>-->
-        <!--<script>-->
-        <!--var googletag = googletag || {};-->
-        <!--googletag.cmd = googletag.cmd || [];-->
-        <!--</script>-->
-        <!--<script>-->
-        <!--googletag.cmd.push(function() {-->
-        <!--googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());-->
-        <!--googletag.pubads().enableSingleRequest();-->
-        <!--googletag.enableServices();-->
-        <!--});-->
-        <!--</script>-->
+        <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+        <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+        </script>
+        <script>
+        googletag.cmd.push(function() {
+        googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+        });
+        </script>
     {% endblock banner_ads %}
     {% block marketing_pixel %}
-        <!--&lt;!&ndash; Google Tag Manager &ndash;&gt;-->
-        <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
-        <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
-        <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
-        <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
-        <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
-        <!--&lt;!&ndash; End Google Tag Manager &ndash;&gt;-->
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-M323HB');</script>
+        <!-- End Google Tag Manager -->
     {% endblock marketing_pixel %}
    {{ JS_SETTINGS|safe }}
    </head>
@@ -129,18 +129,18 @@
 {% endblock js_section %}
 
 {% block johukum %}
-    <!--<script type='text/javascript' id='spd-busns-spt' async=''-->
-        <!--src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  -->
-        <!--data-client='324ed0abb0694b0c66a6daecb178352d'>-->
-    <!--</script>-->
+    <script type='text/javascript' id='spd-busns-spt' async=''
+        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
+        data-client='324ed0abb0694b0c66a6daecb178352d'>
+    </script>
 {% endblock johukum %}
 {% block banner_ads_bottom %}
-    <!--&lt;!&ndash; /1198510/ShineLearning_1x1_desktop &ndash;&gt;-->
-    <!--<div id='div-gpt-ad-1509431221932-0'>-->
-    <!--<script>-->
-    <!--googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });-->
-    <!--</script>-->
-    <!--</div>-->
+    <!-- /1198510/ShineLearning_1x1_desktop -->
+    <div id='div-gpt-ad-1509431221932-0'>
+    <script>
+    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });
+    </script>
+    </div>
 {% endblock banner_ads_bottom %}
 </body>
 </html>
