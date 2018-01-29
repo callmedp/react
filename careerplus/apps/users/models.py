@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
 from django.utils import timezone
+from django.db.models.signals import post_save
 
 from .choices import WRITER_TYPE
 from .functions import get_upload_path_user_invoice
@@ -74,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         if self.name:
-            return self.name + '  (' + str(self.email) +')'
+            return self.name + '  (' + str(self.email) + ')'
         return "%s" % str(self.email)
 
     def get_short_name(self):
@@ -102,7 +103,7 @@ class UserProfile(models.Model):
         max_length=100, null=True, blank=True)
     gstin = models.CharField(
         max_length=255, null=True, blank=True)
-    address = models.TextField()
+    address = models.TextField(null=True, blank=True)
     writer_type = models.PositiveIntegerField(
         choices=WRITER_TYPE,
         default=0)
@@ -115,6 +116,22 @@ class UserProfile(models.Model):
         max_length=255,
         blank=True, null=True)
     invoice_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        if self.user.name:
+            return self.user.name + ' (' + str(self.user.email) +')'
+        return "%s" % str(self.user.email)
+
+
+def create_user_profile(sender, instance, created, **kwargs):
+    # when user is created
+    # if created:
+    # this code run on every save of user object 
+    try:
+        UserProfile.objects.get_or_create(user=instance)
+    except:
+        pass
+post_save.connect(create_user_profile, sender=User)
 
 
 # class UserEmail(models.Model):

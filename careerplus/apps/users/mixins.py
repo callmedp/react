@@ -1,11 +1,14 @@
 import requests
 import json
 import logging
+import os
 import datetime
 
 from django.contrib.gis.geoip import GeoIP
 from django.conf import settings
+from django.utils import timezone
 from shine.core import ShineCandidateDetail
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from geolocation.models import Country
 from order.models import OrderItem
@@ -28,7 +31,68 @@ class WriterInvoiceMixin(object):
         item_list = []
         error = ''
         data = {'item_list': item_list, "error": error}
-        if user and invoice_date:
+        msg = 'Few writer mandatory fields are not available\
+            for invoice generation please contact support'
+
+        if not user:
+            error = "Provide proper writer"
+
+        if not invoice_date:
+            error = 'Provide invoice date'
+
+        if user and user.userprofile and not error:
+            if user.name and not error:
+                writer_name = user.name
+            else:
+                error = msg
+
+            if user.userprofile.pan_no and not error:
+                writer_pan = user.userprofile.pan_no
+            else:
+                error = msg
+
+            if user.userprofile.gstin and not error:
+                writer_gstin = user.userprofile.gstin
+            else:
+                writer_gstin = ''  # optional
+
+            if user.userprofile.address and not error:
+                writer_address = user.userprofile.address
+            else:
+                error = msg
+
+            if user.userprofile.writer_type and not error:
+                writer_group = user.userprofile.writer_type
+            else:
+                msg = error
+
+            if user.userprofile.po_number and not error:
+                writer_po_number = user.userprofile.po_number
+            else:
+                error = msg
+
+            valid_from = user.userprofile.valid_from
+            valid_to = user.userprofile.valid_to
+            if valid_from and valid_to and valid_from < valid_to \
+                and invoice_date and invoice_date < valid_to:
+                pass
+            else:
+                error = 'Update writer Po Number validity'
+
+            data.update({
+                "writer_name": writer_name,
+                "writer_pan": writer_pan,
+                "writer_gstin": writer_gstin,
+                "writer_address": writer_address,
+                "writer_group": writer_group,
+                "writer_po_number": writer_po_number,
+                "error": error
+            })
+
+        elif not error:
+            error = msg
+
+        if user and invoice_date and not error:
             orderitems = OrderItem.objetcs.filter(
                 order__status__in=[1, 3],
                 product__type_flow__in=[1, 8, 12, 13],
@@ -328,8 +392,7 @@ class WriterInvoiceMixin(object):
                         }
                         item_list.append(d_dict)
                         total_sum += amount
-        else:
-            error = 'provide user and invoice date'
+        
         data.update({
             "error": error,
         })
@@ -345,7 +408,54 @@ class WriterInvoiceMixin(object):
             invoice_date = prev_month
 
         if user:
-            data = self.get_context_writer_invoice(user=user, invoice_date=invoice_date)
+            data = self.get_context_writer_invoice(
+                user=user, invoice_date=invoice_date)
+
+    def save_writer_invoice_pdf(self, user=None, invoice_date=None):
+        data = {}
+        import ipdb; ipdb.set_trace()
+        try:
+            if not user:
+                try:
+                    user = self.request.user
+                except:
+                   pass
+
+            if not invoice_date:
+                today_date = datetime.datetime.now().date()
+                today_date = today_date.replace(day=1)
+                prev_month = today_date - datetime.timedelta(days=1)
+                invoice_date = prev_month
+
+            data = self.get_context_writer_invoice(
+                user=user, invoice_date=invoice_date)
+            error = data.get("error", "")
+
+            if not error:
+                pdf_file = self.generate_pdf(
+                    context_dict=data,
+                    template_src='invoice/writer_invoice.html')
+                full_path = "user/{user_pk}/{month}_{year}/".format(
+                    user_pk=user.pk, month=invoice_date.month,
+                    year=invoice_date.year)
+                file_name = 'invoice-' + str(user.name) + '-'\
+                    + timezone.now().strftime('%d%m%Y') + '.pdf'
+                if not os.path.exists(settings.INVOICE_DIR + full_path):
+                    os.makedirs(settings.INVOICE_DIR + full_path)
+                dest = open(
+                    settings.INVOICE_DIR + full_path + file_name, 'wb')
+                pdf_file = SimpleUploadedFile(
+                    file_name, pdf_file,
+                    content_type='application/pdf')
+                for chunk in pdf_file.chunks():
+                    dest.write(chunk)
+                dest.close()
+                user.userprofile.invoice = full_path + file_name
+                user.save()
+                return data
+        except Exception as e:
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+        return data
 
 
 class RegistrationLoginApi(object):
