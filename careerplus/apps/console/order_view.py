@@ -7,7 +7,9 @@ import textwrap
 
 from io import StringIO
 from wsgiref.util import FileWrapper
-from django.views.generic import TemplateView, ListView, DetailView, View
+from django.contrib.contenttypes.models import ContentType
+from django.views.generic import (
+    TemplateView, ListView, DetailView, View, UpdateView)
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
@@ -22,7 +24,7 @@ from django.utils import timezone
 
 from geolocation.models import Country
 from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
-from shop.models import DeliveryService
+from shop.models import DeliveryService, Product
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
@@ -31,10 +33,12 @@ from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
 from order.functions import send_email
+from review.models import Review
 
 from .decorators import (
     Decorate,
     stop_browser_cache,
+    check_group
 )
 from .welcome_form import WelcomeCallActionForm
 from .order_form import (
@@ -45,7 +49,10 @@ from .order_form import (
     OrderFilterForm,
     OIFilterForm,
     OIActionForm,
-    AssignmentActionForm,)
+    AssignmentActionForm,
+    ReviewActionForm,
+    ReviewFilterForm,
+    ReviewUpdateForm,)
 from .mixins import ActionUserMixin
 
 
@@ -2276,3 +2283,104 @@ class ConsoleResumeDownloadView(View):
             logging.getLogger('error_log').error("%s" % str(e))
                        
         return HttpResponseRedirect(next_url)
+
+
+@Decorate(check_group([settings.WRITING_GROUP_LIST]))
+class ReviewModerateListView(ListView, PaginationMixin):
+
+    context_object_name = 'review_list'
+    template_name = 'console/order/review-moderation-list.html'
+    model = Review
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        self.status = -1
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.status = request.GET.get('filter_status', -1)
+        return super(self.__class__, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        paginator = Paginator(context['review_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "action_form": ReviewActionForm(),
+            'filter_form': ReviewFilterForm(),
+            "messages": alert,
+        })
+        return context
+
+    def post(self, request, *args, **kwargs):
+        try:
+            review_list = request.POST.getlist('table_records', [])
+            action_type = int(request.POST.get('action_type', '0'))
+            if action_type == -1:
+                messages.add_message(
+                    request, messages.ERROR,
+                    'Please select valid action first')
+            elif action_type == 0:
+                Review.objects.filter(id__in=review_list).update(status=0)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    str(len(review_list)) + ' Review are required moderation.')
+            elif action_type == 1:
+                Review.objects.filter(id__in=review_list).update(status=1)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    str(len(review_list)) + ' Review are approved.')
+            elif action_type == 2:
+                Review.objects.filter(id__in=review_list).update(status=2)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    str(len(review_list)) + ' Review rejeted.')
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, str(e))
+
+        return HttpResponseRedirect(reverse('console:review-to-moderate'))
+
+    def get_queryset(self):
+        queryset = super(self.__class__, self).get_queryset()
+        prd_obj = ContentType.objects.get_for_model(Product)
+        queryset = Review.objects.filter(content_type=prd_obj)
+        try:
+            if self.query:
+                queryset = queryset.filter(
+                    Q(object_id__icontains=self.query) |
+                    Q(user_email__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+
+        try:
+            if int(self.status) != -1:
+                queryset = queryset.filter(status=self.status)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+        return queryset
+
+
+@Decorate(check_group([settings.WRITING_GROUP_LIST]))
+class ReviewModerateView(UpdateView):
+    model = Review
+    template_name = 'console/order/review-moderation-update.html'
+    success_url = "/console/queue/review/review-to-moderate/"
+    http_method_names = [u'get', u'post']
+    form_class = ReviewUpdateForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(self.__class__, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context

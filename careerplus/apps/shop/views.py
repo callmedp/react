@@ -265,9 +265,27 @@ class ProductInformationMixin(object):
         product_type = ContentType.objects.get(
             app_label='shop', model='product')
         try:
+            prd_list = []
+            if product.type_product in [0, 2, 4, 5]:
+                prd_list = [product.pk]
+            elif product.type_product == 1:
+                prd_id = product.variation.filter(
+                    siblingproduct__active=True,
+                    active=True).values_list('id', flat=True)
+                prd_list = list(prd_id)
+                prd_list.append(product.pk)
+            elif product.type_product == 3:
+                prd_id = product.childs.filter(
+                    childrenproduct__active=True,
+                    active=True).values_list('id', flat=True)
+                prd_list = list(prd_id)
+                prd_list.append(product.pk)
+            # review_list = Review.objects.filter(
+            #     content_type__id=product_type.id,
+            #     object_id=product.pk, status=1)
             review_list = Review.objects.filter(
                 content_type__id=product_type.id,
-                object_id=product.pk)
+                object_id__in=prd_list, status=1)
             rv_total = len(review_list)
             per_page = 5
             rv_paginator = Paginator(review_list, per_page)
