@@ -307,6 +307,9 @@ urlpatterns += [
 from . import linkedin_view
 
 urlpatterns += [
+    url(r'^counselling-listing/(?P<ord_pk>[-\w]+)/$',
+        linkedin_view.ListCounsellingFormView.as_view(), name='counselling-list'),
+
     url(r'^linkedin/inbox/$',
         linkedin_view.LinkedinQueueView.as_view(),
         name='linkedin-inbox'),

@@ -1,0 +1,398 @@
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
+
+body {
+	background: #f5f5f5;
+}
+
+.category-header {
+	font-size: $font-size+3; 
+	font-weight: 400; 
+	color: $white-bg; 
+	text-align: center; 
+	position: relative;
+
+	.category-heading {
+		position: absolute; 
+		left: 0; 
+		top: 35%; 
+		right: 0; 
+		bottom: 0;
+		font-size: $font-size+3;
+		color: $white-color;
+
+		h1 { 
+			font-size: $font-size+19; 
+			font-weight: $font-weight; 
+			color: $white-color; 
+			display: block; 
+			margin: 0 auto 5px auto; 
+			padding: 0; 
+			text-align: center; 
+			width: 50%; 
+			line-height: 36px;
+		}
+
+		a {
+			color: $white-color; 
+			font-weight: $font-weight+100;  
+			font-size: $font-size+3; 
+			display: table; 
+			border-radius: 25px; 
+			border: 1px solid $white-color; 
+			padding: 10px 20px; 
+			margin: 20px auto 0 auto; 
+			text-decoration: none;
+
+			&:before {
+				content: ""; 
+				display: inline-block; 
+				vertical-align: middle; 
+				margin: 0 15px 0 0;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 8.5px 0 8.5px 14px;
+				border-color: transparent transparent transparent $white-color;
+			}
+		}
+	}
+}
+
+/* Starts courses_box */
+.courses_box {
+	display: block; 
+	padding: 50px 0;
+
+	.panel {
+		background-color: transparent;
+		box-shadow: none;
+	}
+
+	h2 {
+		font-size: $font-size+19; 
+		font-weight: $font-weight; 
+		color: $primary-color; 
+		margin: 0 auto 30px auto; 
+		display: block; 
+		text-align: center;
+	}
+
+	.cc_box {
+		display: inline-block; 
+		background: $white-bg; 
+		position: relative;
+		padding-top: 15px;
+		text-align: center;
+		margin-bottom: 30px;
+
+		figure {
+			display: block;
+			width: 70%;
+			margin: 0 auto;
+			min-height: 182px;
+		}		
+
+		h3 {
+			font-size: $font-size+3; 
+			color: $primary-color; 
+			display: block; 
+			font-weight: $font-weight+100; 
+			vertical-align: middle; 
+			margin: auto;
+			text-align: center;
+			border-top: 1px solid $border-color;
+			padding: 15px 5px;
+		}
+
+		&:focus {
+			box-shadow: 0 0px 20px 0px rgba(0, 0, 0, 0.3);
+		}
+	}
+}
+
+.course_nav {
+     background: $white-bg;
+     box-shadow: 0 0px 20px 0px rgba(0, 0, 0, 0.2);
+     margin:-10px 0 40px 15px;
+     width: 97.5%;
+     padding: 10px;
+     position: relative;
+     // min-height: 220px;
+	 
+	 &:after{
+	     position: absolute;
+	     top: -20px;
+	     left: 10%;
+	     content: "";
+	     width: 0;
+	     height: 0;
+	     border-left: 20px solid transparent;
+	     border-right: 20px solid transparent;
+	     border-bottom: 20px solid #fff;
+	}	
+
+	.nav-tabs {
+		border-bottom: none;
+
+		li {
+			a {
+				padding: 9px 15px;
+			}
+		}
+	}
+
+	.nav-tabs > li.active > a, 
+	.nav-tabs > li.active > a:hover, 
+	.nav-tabs > li.active > a:focus {
+		background: $grey-bg;
+		border: 1px solid transparent;
+		cursor: pointer;
+	}
+
+	.nav-link {
+		position: relative;
+		float: none;
+
+		a {
+			color: $primary-color;
+		}
+
+		&:hover {
+			cursor: pointer;
+		}
+
+		&.active {
+			background-color: $grey-bg;
+
+			&:after {
+				content: "";
+			    width: 0;
+			    height: 0;
+			    border-top: 20px solid transparent;
+			    border-left: 15px solid $grey-bg;
+			    border-bottom: 20px solid transparent;
+			    float: right;
+			    margin: -39px -15px 0 0
+			}
+		}
+	}
+
+	.tab-content {
+		display: inline-block;
+		min-height: 190px;
+
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+
+			li {
+				display: block;
+				padding: 8px;
+
+				a {
+					color: $secondary-color;
+					font-size: $font-size+2;
+				}
+			}
+		}		
+	}
+
+	.viewall {
+		font-size: $font-size+3;
+		color: $anchor-color;
+		position: absolute;
+		bottom: 0;
+		right: 15px;
+	}
+}
+ 
+.mg1 { left: 0; }
+.mg2 { left: 25.5%; }
+.mg3 { left: 51.5%; }
+.mg4 { left: 77%; }
+
+.arrow1:after {left: 10%;}
+.arrow2:after {left: 35%;}
+.arrow3:after {left: 60%;}
+.arrow4:after {left: 85%;}
+
+.arrow5:after {left: 10%;}
+.arrow6:after {left: 35%;}
+.arrow7:after {left: 60%;}
+.arrow8:after {left: 85%;}
+
+.arrow2_1:after {left: 7%;}
+.arrow2_2:after {left: 27%;}
+.arrow2_3:after {left: 48%;}
+.arrow2_4:after {left: 68%;}
+.arrow2_5:after {left: 89%;}
+
+
+/* Starts our vendors */
+.vendors_box {
+	display: block; 
+	padding: 50px 0;
+	clear: both;
+	margin-top: 20px;
+
+	.panel {
+		background-color: transparent;
+		box-shadow: none;
+	}
+
+	h2 {
+		font-size: $font-size+19; 
+		font-weight: $font-weight; 
+		color: $primary-color; 
+		margin: 0 auto 30px auto; 
+		display: block; 
+		text-align: center;
+	}
+
+	.vc_box {
+		display: block; 
+		background: $white-bg; 
+		position: relative;
+		padding-top: 15px;
+		text-align: center;
+		margin-bottom: 30px;
+
+		figure {
+			display: block;
+			margin: 0 auto;
+
+			img {
+				margin: 20px auto;
+			}
+		}		
+
+		h3 {
+			font-size: $font-size+3; 
+			color: $primary-color; 
+			display: block; 
+			font-weight: $font-weight+100; 
+			vertical-align: middle; 
+			margin: auto;
+			text-align: center;
+			border-top: 1px solid $border-color;
+			padding: 15px 5px;
+		}
+	}
+}
+
+// .tob_boxes {min-height:185px; background: #fff; box-shadow: 0 0px 20px 0px rgba(0, 0, 0, 0.2); margin: 50px 0 0 0; padding: 20px; font-size: 13px; line-height: 20px; color: #666;}
+// .tob_boxes h2 {font-size: 20px; font-weight: 400; color: #337ab7; margin: 0 0 15px 0; display: block;}
+// .tob_boxes ul { color: #666; margin: 0 0 0 15px; padding: 0; list-style-type: circle; }
+// .tob_boxes li { margin-bottom: 7px; }
+
+/* start of why_scp */
+.why_scp {
+	display: block; 
+	text-align: center; 
+	background: #678eb7; 
+	padding: 30px 0;
+	color: $white-color; 
+	font-size: $font-size-base;
+	clear: both;
+	margin-top: 40px;
+
+	h2 {
+		font-size: 30px; 
+		font-weight: 300; 
+		color: $white-color; 
+		margin: 0 auto; 
+		display: block; 
+		text-align: center;
+	}
+	
+	ul { 
+		list-style-type: none; 
+		margin: 50px 0 0 0; 
+		overflow: hidden; 
+	
+		li { 
+			display: inline-block; 
+			width: 29%; 
+			padding: 0 5%; 
+			vertical-align: top; 
+			border-left: 1px solid #fff; 
+			overflow: hidden; 
+			min-height: 180px;
+		
+			&:first-child { 
+				border-left: none;
+			}
+			
+			.scp_icon { 
+				display: block;
+				height: 90px;
+				margin:0 auto 10px auto;
+			}
+		}
+	}
+}/* end of why_scp */
+
+
+/* Starts testimonials */
+.testimonials {
+	display: block; 
+	padding: 50px 0; 
+	color: $secondary-color; 
+	font-size: $font-size-base;
+
+	h2 {
+		font-size: 30px; 
+		font-weight: 300; 
+		color: $primary-color; 
+		margin: 0 auto; 
+		display: block; 
+		text-align: center;
+	}
+
+	ul { list-style-type: none; 
+		margin: 40px 0 0 0; 
+		overflow: hidden;
+		padding: 0;
+
+		li { 
+			display: block; 
+			vertical-align: top; 
+			margin-bottom: 20px;
+
+			&:last-child {
+				margin-bottom: 0;
+			} 
+
+			.box-sh {
+				box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.1);
+				padding: 30px;
+				background: $white-bg
+			}
+
+			strong {
+				display: block; 
+				font-weight: 600; 
+				font-style: italic; 
+				margin-top: 10px;
+			}
+		}
+	}
+} 
+
+.panel-pr {
+	position: relative;
+	display: block;
+
+	.course_nav {
+		position: absolute;
+		top: 280px;
+		left: 0;
+	}	
+
+	.panel-mg {
+		margin-bottom: 220px;
+	}
+}
+

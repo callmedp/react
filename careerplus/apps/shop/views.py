@@ -9,16 +9,21 @@ from django.http import (Http404,
     HttpResponsePermanentRedirect,
 )
 from django.urls import reverse
+from django.core.cache import cache
 from django.utils.http import urlquote
 from django.views.generic import (
     ListView,
     TemplateView,
     View
 )
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from geolocation.models import Country
 from django.db.models import Q
+
 from haystack.query import SearchQuerySet
+from meta.views import MetadataMixin
+
 from console.decorators import (
     Decorate,
     stop_browser_cache,)
@@ -26,9 +31,11 @@ from cart.mixins import CartMixin
 from core.library.haystack.query import SQS
 from search.helpers import get_recommendations
 from search.choices import STUDY_MODE
-from .models import Product
+from homepage.models import Testimonial
 from review.models import Review
-from crmapi.models import UserQuries
+
+from .models import Product
+from .mixins import CourseCatalogueMixin
 
 
 class ProductInformationMixin(object):
@@ -146,7 +153,7 @@ class ProductInformationMixin(object):
 
     def get_jobs_url(self, product):
         job_url = 'https://www.shine.com/job-search/{}-jobs'.format(product.slug)\
-         if product.slug else None
+        if product.slug else None
         return job_url
 
     def solar_faq(self, product):
@@ -567,34 +574,35 @@ class ProductReviewListView(ListView, ProductInformationMixin):
         return context
 
 
-# class LeadView(View):
-#     http_method_names = [u'post', ]
+class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
+    template_name = 'shop/course-catalogue.html'
+    use_title_tag = False
+    use_og = True
+    use_twitter = False
+    
+    def get_meta_title(self, context):
+        return 'Online Courses and Certifications - Shine Learning'
 
-#     def post(self, request, *args, **kwargs):
-#         if request.is_ajax():
-#             query_dict = {}
-#             name = request.POST.get('name', '').strip()
-#             country_code = request.POST.get('country_code')
-#             mobile = request.POST.get('mobile', '').strip()
-#             message = request.POST.get('message', '').strip()
-#             product = request.POST.get('product', '').strip()
-#             lead_source = request.POST.get('lead_source', '').strip()
+    def get_meta_description(self, context):
+        return 'Join India\'s Largest E-Learning Online \
+        Courses and Education Platform. Get Certifications in Top \
+        Courses under Finance, IT, Analytics, Marketing and more'
+    
+    def get_meta_url(self, context):
+        return settings.MAIN_DOMAIN_PREFIX
 
-#             try:
-#                 country_obj = Country.objects.get(phone=country_code)
-#             except:
-#                 country_obj = Country.objects.get(phone='91')
+    def get_testimonials(self):
+        testimonials = Testimonial.objects.filter(
+            page=3, is_active=True)
+        testimonials = testimonials[: 3]
+        return {"testimonials": testimonials}
 
-#             query_dict = {
-#                 "name": name,
-#                 "country": country_obj,
-#                 "phn_number": mobile,
-#                 "message": message,
-#                 'product': product,
-#                 'lead_source': lead_source,
-#             }
-#             query_obj = UserQuries(**query_dict)
-#             query_obj.save()
-#             data = {'status': 1}
-#             return HttpResponse(json.dumps(data), content_type="application/json")
-#         return HttpResponseForbidden()
+    def get_context_data(self, **kwargs):
+        context = super(CourseCatalogueView, self).get_context_data(**kwargs)
+        context['meta'] = self.get_meta()
+        context.update(self.get_testimonials())
+        if cache.get('course_catalogue'):
+            context['course_dict'] = cache.get('course_catalogue')
+        else:
+            context['course_dict'] = self.get_course_catalogue_context()
+        return context
