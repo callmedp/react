@@ -25,7 +25,10 @@
               <li role="presentation"><a href="/courses/personal-development/21/#courses8" aria-controls="courses8" role="tab">Personal Development</a></li>
               <li role="presentation"><a href="/courses/law/23/#courses9" aria-controls="courses9" role="tab">Law</a></li>
              <!--  <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'other-online' 5 %}#courses10" aria-controls="courses9" role="tab">Other Online Courses</a></li> -->
+             <hr>
+             <li role="presentation"><a href="{% url "course-catalogoue" %}">Course Catalogue</a></li>
             </ul>
+
 
             <!-- Tab panes -->
             <div class="tab-content">
@@ -130,7 +133,7 @@
           </div>
         </li>
         <li class="dropdown jobs-dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hidden-sm">Job Assistance</span> Services</a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hidden-md">Job Assistance</span> Services</a>
           <ul class="dropdown-menu">
             <li><a href="/services/resume-writing/entry-level-freshers-8/pd-1921">Resume Writing</a></li>
             <li><a href="/services/international-resume-2/entry-level-freshers-5/pd-2553">International Resume</a></li>
@@ -217,6 +220,14 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a>
+          <form action="" class="search searchNavBar cls_search">
+            <input class="inputTags-list key_press_js_search form-control input-sm" data-selecttype="multiple"  maxlength="64" name="q" placeholder="Search" type="text" required="">
+            <button type="submit" class="search-icon"></button>
+          </form>
+          </a>
+        </li>
         <li class="dropdown call-dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="call-icon"></span></a>
           <ul class="dropdown-menu">
@@ -255,3 +266,6 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+<script type="text/javascript">
+var qSearch = {{ search_context|safe|default:"[]"}} ;
+</script>

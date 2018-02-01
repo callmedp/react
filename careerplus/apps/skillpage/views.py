@@ -1,3 +1,4 @@
+import json
 from django.http import (
     Http404, HttpResponse,
     HttpResponseRedirect,
@@ -69,9 +70,26 @@ class SkillPageView(DetailView, SkillPageMixin):
         prd_list = []
         prd_text = None
         meta_desc = None
+        prod_id_list = []
         try:
             products = SQS().filter(pCtg=self.pk)
-            prod_id_list = [pv.id for pv in products]
+            for prd in products:
+                if prd.pTP == 1:
+                    prd_vars = json.loads(prd.pVrs)
+                    var_lists = prd_vars.get('var_list')
+                    for var_lst in var_lists:
+                        prod_id_list.append(var_lst.get('id'))
+                    prod_id_list.append(prd.id)
+                if prd.pTP == 3:
+                    prd_cmbs = json.loads(prd.pCmbs)
+                    combo_lists = prd_cmbs.get('combo_list')
+                    for combo_lst in combo_lists:
+                        prod_id_list.append(combo_lst.get('pk'))
+                    prod_id_list.append(prd.id)
+                if prd.pTP in [0, 2, 4, 5]:
+                    prod_id_list.append(prd.id)
+
+            # prod_id_list = [pv.id for pv in products]
             vendor_list = [pv.pPv for pv in products]
             vendor_list = list(set(vendor_list))
 
@@ -87,7 +105,9 @@ class SkillPageView(DetailView, SkillPageMixin):
         prd_obj = ContentType.objects.get_for_model(Product)
         all_results = products
         prod_reviews = Review.objects.filter(
-            object_id__in=prod_id_list, content_type=prd_obj)
+            object_id__in=prod_id_list,
+            content_type=prd_obj,
+            status=1)
 
         prod_page = Paginator(all_results, 5)
 

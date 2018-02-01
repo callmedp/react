@@ -1,0 +1,217 @@
+{% extends "basic/base1.html" %}
+{% load static humanize thumbnail compress %}
+{% load shop_tags %}
+
+    {% block django_meta %}
+        {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+    {% endblock canonical_url %}
+
+    
+    {% block title %}
+       Online Courses and Certifications : Free Online Education
+    {% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/category/course_category.scss' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+
+
+{% block main_container %}
+
+    {% block page_heading %}
+    <!-- header start-->
+    <header class="category-header">
+        <img src="{% static "shinelearn/images/cp-header.jpg" %}" alt="Shine Learning" class="img-responsive" />
+          <div class="category-heading">
+            <h1>India's largest e-learning platform</h1>
+              Join the club of 4mn learners with our partners like Skillsoft, ACCA etc
+            <!-- <a title="Why you should you buy?" href="#">Why you should you buy?</a> -->
+          </div>
+    </header><!-- header end -->
+    {% endblock page_heading %}
+
+{% block section1 %}
+    <!-- main section start -->
+    <section class="container">
+
+        <!-- page content body start -->
+        <div class="row">
+
+        <!-- Courses and Certifications start -->
+        <div class="courses_box">
+          <h2>Courses and Certifications</h2>
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <!-- panel start here -->
+            <div class="">
+
+            {% for fa in course_dict.course_fa_list %}
+            <!-- courses 1 -->
+            <div class="panel-pr">
+                <div class="panel col-sm-3" role="tab" id="headingOne{{fa.pk}}">
+                    <a title="{{fa.name}}" class="cc_box cls_showPanel"  href="javascript:void(0)" aria-expanded="true" data-controls="collapseOne{{fa.pk}}">
+                        <figure>
+                            <img src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
+                            {% endif %}" alt="{{fa.name}}.png" class="img-responsive">
+                        </figure>
+                        <h3>
+                            {{fa.name}}
+                        </h3>
+                    </a>
+                    <!-- courses Dropdown 1 box -->
+                </div><!-- / courses 1 -->
+
+                <div id="collapseOne{{fa.pk}}" class="panel-collapse cls_showPanelChild collapse col-md-12 course_nav arrow{{forloop.counter}}" role="tabpanel" aria-labelledby="headingOne{{fa.pk}}">
+                    <ul class="nav nav-tabs col-sm-3" role="tablist">
+                        {% with skill_list=fa.pk|get_value:course_dict %}
+                            {% for skill in  skill_list %}
+                                <li class="nav-link">
+                                    <a href="{{skill.url}}#nav{{fa.pk}}_{{skill.pk}}" role="tab">{{skill.name}}</a>
+                                </li>
+                            {% endfor %}
+                        {% endwith %}
+                    </ul><!-- / tabs nav -->
+                    <!-- Tabs nav panes -->
+                    <div class="tab-content col-sm-9">
+                        {% with skill_list=fa.pk|get_value:course_dict %}
+                            {% for skill in  skill_list %}
+                                <div class="tab-pane {% if forloop.counter == 1 %}active{% endif %}" id="nav{{fa.pk}}_{{skill.pk}}" role="tabpanel">
+                                    <ul>
+                                        {% with product_list=skill.pk|get_value:course_dict %}
+                                            {% for pd in product_list %}
+                                                <li><a title="shine learning" href="{{pd.url}}">{{pd.name}}</a></li>
+                                            {% endfor %}
+                                        {% endwith %}
+                                    </ul>
+                                    <a href="{{fa.url}}" class="viewall">View all courses</a>
+                                </div>
+                            {% endfor %}
+                        {% endwith %}
+                    </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 1 box -->
+            </div>
+              {% if forloop.counter == 4 %}
+                  <div class="clearfix"></div>
+              {% endif %}
+          {% endfor %}
+
+            </div>
+            <!-- panel end here -->
+          </div> 
+          <!-- accordin panel end here -->
+
+        </div>       
+        <!-- Courses and Certifications end -->
+
+        {% if course_dict.vendor_list %}
+        <!-- our vendors start -->
+        <div class="vendors_box">
+          <h2>Our Vendors</h2>
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <!-- panel start here -->
+            <div class="panel">
+
+            {% for vendor in course_dict.vendor_list %}
+            <!-- vendor 1 -->
+            <div class="panel col-sm-3" role="tab" id="headingOne">
+              <a class="vc_box" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="collapseOne">
+                <figure>
+                    <img src="{{vendor.image}}" alt="" class="img-responsive">
+                </figure>
+                <h3>{{vendor.name}}</h3>
+              </a>
+            </div>
+            {% endfor %}
+
+            </div>
+            <!-- panel end here -->
+          </div> 
+          <!-- accordin panel end here -->
+
+        </div>  
+        <!-- our vendors end -->
+        {% endif %}
+
+      </div>
+    </section>
+{% endblock section1 %}
+
+{% block section2 %}
+<!-- Why Shine Career Plus starts here  -->
+<section class="container-fluid">
+  <div class="row">
+    <div class="why_scp"> <h2>Why Shine Learning?</h2>
+      <ul>
+        <li>
+          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-1.png'%}" alt="" /></span>
+          Our experts will guide you through the variety of courses suited for your profile
+        </li>
+        <li>
+          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-2.png'%}" alt="" /></span>
+          Invest in your career and get a jump in your salary
+        </li>
+        <li>
+          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-3.png'%}" alt="" /></span>
+          We bridge the gap between education and employment with a free 1 month featured profile on shine.com
+        </li>
+      </ul><!-- / UL -->
+    </div><!-- / Why Shine -->
+  </div><!-- / ROW -->
+</section><!-- Why Shine Career Plus ends here  -->
+{% endblock section2 %}
+
+
+{% block section3 %}
+    {% if testimonials %}
+    <!-- Testimonials  strats here -->
+    <section class="container">
+      <div class="row">
+        <div class="testimonials mt30"> 
+          <h2>Testimonials</h2>
+          <ul>
+            {% for te in testimonials %}
+                <li class="col-sm-4">
+                  <div class="box-sh">
+                    {{te.review|safe}}
+                  <strong>"{{te.user_name}}"</strong>
+                  </div>
+                </li>
+            {% endfor %}
+
+          </ul><!-- / UL -->
+        </div>
+        <!-- / testimonials -->
+
+        </div>
+        <!-- page content body end -->
+
+    </section>
+    <!-- section end -->
+    {% endif %}
+{% endblock section3 %}
+
+{% endblock main_container %}
+  
+
+{% block js_section %}
+   {{ block.super }}
+    {% compress js %}
+
+    <script type="text/javascript">
+      $(function() {
+        $(document).click(function (event) {
+          $('.course_nav').collapse('hide');
+        });
+      });
+    </script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}

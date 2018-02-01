@@ -23,6 +23,7 @@
         {% compress css %}
         <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
         <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
         {% endcompress %}
     {% endblock css_section %}
 
@@ -33,7 +34,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
         {% block GA %}
-             Global site tag (gtag.js) - Google Analytics
+             <!--Global site tag (gtag.js) - Google Analytics-->
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
             <script>
               window.dataLayer = window.dataLayer || [];
@@ -134,6 +135,7 @@
     <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
     <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}

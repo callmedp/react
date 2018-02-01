@@ -60,12 +60,12 @@ BG_CHOICES = tuple(BG_COLOR.items())
 
 DURATION_DICT = {
     'D0': '0-1 month',
-    'D1': '1- 3 month',
-    'D2': '3-6 month',
+    'D1': '1-3 months',
+    'D2': '3-6 months',
     'D3': '9 months',
     'D4': '9-12 months',
-    'D5': '1 -2 years',
-    'D6': '2 -3 years',
+    'D5': '1-2 years',
+    'D6': '2-3 years',
     'D7': '3+ years',
 }
 

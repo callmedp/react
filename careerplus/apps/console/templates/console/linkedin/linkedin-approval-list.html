@@ -219,6 +219,7 @@
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
+                    <th class="column-title">View Counselling Form</th>
                     <th class="column-title">Draft</th>
                     <th class="column-title">Review Order</th>
                     <th class="column-title">Approve / Reject Draft</th>
@@ -265,6 +266,9 @@
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
+                      {% if obj.quizresponse.submitted %}
+                      <td><a href="{% url 'console:counselling-list' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Counselling Form</button></a></td>
+                      {% endif %}
                       <td><a href="{% url 'console-linkedin-draft' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
                       <td><a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.id %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
 

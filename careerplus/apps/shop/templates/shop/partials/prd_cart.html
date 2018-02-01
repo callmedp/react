@@ -1,3 +1,5 @@
+{% load static %}
+
 <!--hidden form -->
 <div style="display: none">
     <form role="form" method="POST" id="cartForm" > {% csrf_token %}
@@ -50,6 +52,19 @@
     
   <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
   {% endcomment %}
+
+  <!-- check free sample start -->
+    <div class="free-sample">
+      <span class="sample-pic"></span>
+      <strong>Check free samples</strong>
+      <ul>
+        <li><a href="#">Resume Format</a></li>
+        <li><a href="#">Cover Letter Format</a></li>
+        <li><a href="#">Resignation Letter Format</a></li>
+        <li><a href="#">Resume Format for Freshers</a></li>
+        <li><a href="#">Resume Format for Experienced Professionals</a></li>
+      </ul>
+    </div>
      
   </div>
 <!-- right fixed content end -->
