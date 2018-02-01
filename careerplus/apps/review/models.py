@@ -103,3 +103,20 @@ class Review(AbstractAutoDate):
         return remarks
 
 
+class DetailPageWidget(AbstractAutoDate):
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='comma(,) comma separated e.g. 123,145, ...')
+    name = models.CharField(max_length=255)
+    url = models.CharField(
+        max_length=2048, null=True,
+        blank=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return '%s' % self.name
