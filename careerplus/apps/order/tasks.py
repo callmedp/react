@@ -287,6 +287,7 @@ def process_mailer(pk=None):
                     'email': oi.order.email,
                     'candidateid': oi.order.email,
                     'mobile': oi.order.mobile,
+                    'parent_name': oi.parent.product.name if oi.parent else None
                 })
                 if oi.product.type_flow in [1, 12, 13]:
                     data.update({
