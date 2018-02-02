@@ -16,8 +16,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 DEBUG = False
 IS_LIVE = True
-STATIC_URL = 'https://origin-static3.shine.com/static/'
-MEDIA_URL = 'https://origin-static3.shine.com/'
+
 DOWNLOAD_URL = 'https://origin-static3.shine.com/download/'
 DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'download')
 #RESUME_DIR = '/shineresume/ResumeServices/'
@@ -858,3 +857,21 @@ ROUNDONE_API_DICT = {
     'interaction_result_url': ROUNDONE_API_BASEURL + "/applicant/view-interaction-result",
     'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
 }
+
+###### STORAGE SETTINGS #############
+DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
+GS_BUCKET_NAME = 'learning-media-189607'
+
+PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivateMediaStorage'
+GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-189607'
+
+COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
+GS_PROJECT_ID = 'shine-staging-189607'
+GCP_STATIC_BUCKET = 'learning-static-189607'
+
+INVOICE_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPInvoiceStorage'
+GCP_INVOICE_BUCKET = 'learning-invoices-189607'
+
+# GS_AUTO_CREATE_BUCKET = True
+STATIC_URL = 'https://{}.storage.googleapis.com/'.format(GCP_STATIC_BUCKET)
+MEDIA_URL = 'https://{}.storage.googleapis.com/'.format(GS_BUCKET_NAME)

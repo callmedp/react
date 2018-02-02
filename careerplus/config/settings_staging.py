@@ -73,8 +73,6 @@ REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 
 
 ###### STORAGE SETTINGS #############
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
-
 DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
 GS_BUCKET_NAME = 'learning-media-staging-189607'
 

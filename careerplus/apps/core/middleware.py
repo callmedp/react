@@ -73,7 +73,7 @@ class TrackingMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        dict_data = {}        
+        dict_data = {}
         full_url = request.build_absolute_uri()
         decode_url = urllib.parse.unquote(full_url)
         query = urllib.parse.urlsplit(decode_url).query

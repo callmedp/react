@@ -43,6 +43,7 @@ from order.models import OrderItem, Order, InternationalProfileCredential
 
 from emailers.sms import SendSMS
 from django.conf import settings
+from .mixins import ActionUserMixin
 
 
 @method_decorator(permission_required('order.can_show_linkedin_inbox_queue', login_url='/console/login/'), name='dispatch')
@@ -193,10 +194,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
         if self.writer:
             queryset = queryset.filter(assigned_to=self.writer)
 
-
         if self.draft_level != -1:
             queryset = queryset.filter(draft_counter=self.draft_level)
-
         try:
             if self.delivery_type:
                 delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
@@ -208,8 +207,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:",str(e))
-
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'delivery_service').order_by('-modified')
 
@@ -311,6 +309,8 @@ class ChangeDraftView(DetailView):
 
     def post(self, request, *args, **kwargs):
         try:
+            self.object = self.get_object()
+            context = super(ChangeDraftView, self).get_context_data(**kwargs)
             draft_obj = Draft.objects.get(pk=kwargs.get('pk'))
             ord_obj = OrderItem.objects.get(oio_linkedin=draft_obj)
             if ord_obj:
@@ -323,10 +323,61 @@ class ChangeDraftView(DetailView):
                     Draft, Education,
                     form=EducationForm, formset=OrganizationInlineFormSet,
                     can_delete=True, extra=1)
-                org_formset = OrganizationFormset(request.POST, instance=self.get_object())
-                edu_formset = EducationFormset(request.POST, instance=self.get_object())
-                draft_form = DraftForm(request.POST, instance=self.get_object())
-                if draft_form.is_valid() and org_formset.is_valid() and edu_formset.is_valid():
+                org_formset = OrganizationFormset(
+                    request.POST, instance=self.get_object())
+                edu_formset = EducationFormset(
+                    request.POST, instance=self.get_object())
+                draft_form = DraftForm(
+                    request.POST, instance=self.get_object())
+                if request.POST.get('submit') == 'submit':
+                    if draft_form.is_valid() and org_formset.is_valid() and edu_formset.is_valid():
+                        draft_obj = draft_form.save()
+                        for form in org_formset.forms:
+                            org_obj = form.save(commit=False)
+                            org_obj.draft = draft_obj
+                            org_obj.save()
+
+                        for form in org_formset.deleted_forms:
+                            form.instance.delete()
+
+                        for form in edu_formset.forms:
+                            edu_obj = form.save(commit=False)
+                            edu_obj.draft = draft_obj
+                            edu_obj.save()
+
+                        for form in edu_formset.deleted_forms:
+                            form.instance.delete()
+                        # for update oi status
+                        last_status = ord_obj.oi_status
+                        ord_obj.oi_status = 45  # pending Approval
+                        ord_obj.last_oi_status = last_status
+                        ord_obj.draft_added_on = timezone.now()
+                        ord_obj.save()
+                        ord_obj.orderitemoperation_set.create(
+                            linkedin=draft_obj,
+                            draft_counter=ord_obj.draft_counter + 1,
+                            oi_status=44,
+                            last_oi_status=last_status,
+                            assigned_to=ord_obj.assigned_to,
+                            added_by=request.user)
+                        ord_obj.orderitemoperation_set.create(
+                            oi_status=ord_obj.oi_status,
+                            last_oi_status=44,
+                            assigned_to=ord_obj.assigned_to,
+                            added_by=request.user)
+
+                        messages.success(
+                            self.request, "Draft Submitted successfully")
+                        return HttpResponseRedirect(
+                            reverse('console:linkedin-inbox'))
+                    else:
+                        context['form'] = draft_form
+                        context['org_formset'] = org_formset
+                        context['edu_formset'] = edu_formset
+                        messages.add_message(
+                            request, messages.ERROR, 'Draft not saved ')
+                        return render(request, self.template_name, context)
+                elif request.POST.get('save') == 'save':
                     draft_obj = draft_form.save()
                     for form in org_formset.forms:
                         org_obj = form.save(commit=False)
@@ -343,42 +394,13 @@ class ChangeDraftView(DetailView):
 
                     for form in edu_formset.deleted_forms:
                         form.instance.delete()
-                    # for update oi status
-                    last_status = ord_obj.oi_status
-                    ord_obj.oi_status = 45  # pending Approval
-                    ord_obj.last_oi_status = last_status
-                    ord_obj.draft_added_on = timezone.now()
-                    ord_obj.save()
-                    ord_obj.orderitemoperation_set.create(
-                        linkedin=draft_obj,
-                        draft_counter=ord_obj.draft_counter + 1,
-                        oi_status=44,
-                        last_oi_status=last_status,
-                        assigned_to=ord_obj.assigned_to,
-                        added_by=request.user)
-                    ord_obj.orderitemoperation_set.create(
-                        oi_status=ord_obj.oi_status,
-                        last_oi_status=44,
-                        assigned_to=ord_obj.assigned_to,
-                        added_by=request.user)
-
                     messages.success(self.request, "Draft Saved Successfully")
                     return HttpResponseRedirect(
                         reverse('console:linkedin-inbox'))
-                else:
-                    self.object = self.get_object()
-                    context = super(ChangeDraftView, self).get_context_data(
-                        **kwargs)
-                    context['form'] = draft_form
-                    context['org_formset'] = org_formset
-                    context['edu_formset'] = edu_formset
-                    messages.add_message(
-                        request, messages.ERROR, 'Draft not saved ')
-                    return render(request, self.template_name, context)
 
             else:
-                context = super(ChangeDraftView, self).get_context_data(**kwargs)
-                messages.error(self.request, "Draft does not exist with this order", 'error')
+                messages.error(
+                    self.request, "Draft does not exist with this order", 'error')
                 return render(request, self.template_name, context)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -467,7 +489,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery date:",str(e))
+            logging.getLogger('error_log').error("Delivery date:%s", str(e))
 
         if self.writer:
             queryset = queryset.filter(
@@ -476,7 +498,6 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         if self.draft_level != -1:
             queryset = queryset.filter(
                 draft_counter=self.draft_level)
-
 
         try:
             if self.delivery_type:
@@ -489,7 +510,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:", str(e))
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -562,7 +583,6 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
                 Q(order__mobile__icontains=self.query) |
                 Q(order__email__icontains=self.query))
 
-
         try:
             if self.modified:
                 date_range = self.modified.split('-')
@@ -596,7 +616,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:", str(e))
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -653,7 +673,9 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(LinkedinApprovalVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, oi_status=45, product__type_flow__in=[8]).exclude(oi_status=9)
+        queryset = queryset.filter(
+            order__status=1, oi_status=45,
+            product__type_flow__in=[8]).exclude(oi_status=9)
         if self.query:
             queryset = queryset.filter(
                 Q(id__icontains=self.query) |
@@ -661,7 +683,6 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
                 Q(order__number__icontains=self.query) |
                 Q(order__mobile__icontains=self.query) |
                 Q(order__email__icontains=self.query))
-
 
         try:
             if self.modified:
@@ -696,7 +717,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
                     queryset = queryset.filter(
                         delivery_service=self.delivery_type)
         except Exception as e:
-            logging.getLogger('error_log').error("Delivery type:", str(e))
+            logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
 
@@ -783,7 +804,6 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
                 Q(order__mobile__icontains=self.query) |
                 Q(order__email__icontains=self.query))
 
-
         try:
             if self.payment_date:
                 date_range = self.payment_date.split('-')
@@ -797,8 +817,6 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
                     order__payment_date__range=[start_date, end_date])
         except Exception as e:
             logging.getLogger('error_log').error("Payment date:", str(e))
-
-
 
         try:
             if self.modified:
@@ -894,7 +912,6 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
                     modified__range=[start_date, end_date])
         except Exception as e:
             logging.getLogger('error_log').error("Delivery date:", str(e))
-
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
@@ -1046,52 +1063,27 @@ class InterNationalAssignmentOrderItemView(View):
         if user_pk:
             try:
                 User = get_user_model()
-                assign_to = User.objects.get(pk=user_pk)
+                writer = User.objects.get(pk=user_pk)
                 orderitem_objs = OrderItem.objects.filter(id__in=selected_id)
-                for obj in orderitem_objs:
-                    obj.assigned_to = assign_to
-                    obj.assigned_by = request.user
-                    obj.save()
-                    # mail to user about writer information
-                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
-                    to_emails = [obj.order.email]
-
-                    data = {}
-                    data.update({
-                        "username": obj.order.first_name,
-                        "writer_name": assign_to.name,
-                        "subject": "Your service has been initiated",
-                        "writer_email": assign_to.email,
-                        "type_flow": obj.product.type_flow,
-                        "delivery_service": obj.delivery_service,
-                        "delivery_service_slug": obj.delivery_service.slug if obj.delivery_service else '',
-                        "delivery_service_name": obj.delivery_service.name if obj.delivery_service else '',
-                    })
-                    mail_type = 'ALLOCATED_TO_WRITER'
-                    if 63 not in email_sets:
-                        send_email_task.delay(to_emails, mail_type, data, status=63, oi=obj.pk)
-                    if obj.delivery_service and (obj.delivery_service.slug == 'super-express'):
-                        try:
-                            SendSMS().send(sms_type=mail_type, data=data)
-                        except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=1,
-                        last_oi_status=obj.oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user
-                    )
+                ActionUserMixin().assign_orderitem(
+                    orderitem_list=orderitem_objs,
+                    assigned_to=writer,
+                    user=request.user,
+                    data={})
 
                 display_message = str(len(orderitem_objs)) + ' orderitems are Assigned.'
-                messages.add_message(request, messages.SUCCESS, display_message)
-                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+                messages.add_message(
+                    request, messages.SUCCESS, display_message)
+                return HttpResponseRedirect(
+                    reverse('console:queue-' + queue_name))
             except Exception as e:
-                logging.getLogger('error_log').error("INternational assignment:",str(e))
+                logging.getLogger('error_log').error("International assignment:%s", str(e))
                 messages.add_message(request, messages.ERROR, str(e))
-                return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+                return HttpResponseRedirect(
+                    reverse('console:queue-' + queue_name))
 
-        messages.add_message(request, messages.ERROR, "Please select valid assignment.")
+        messages.add_message(
+            request, messages.ERROR, "Please select valid assignment.")
         return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
 
@@ -1100,23 +1092,27 @@ class ProfileCredentialDownload(View):
     def get(self, request, *args, **kwargs):
         session_usr = request.session.get('candidate_id')
         oi = kwargs.get('oi', '')
-        profile_credentials = InternationalProfileCredential.objects.filter(oi=oi)
-        ord_candidate = profile_credentials.first()
-        if ord_candidate and (session_usr == ord_candidate):
-            try:
-                context_dict = {
-                    'pagesize': 'A4',
-                    'profile_credentials': profile_credentials,
-                }
-                template = get_template('console/order/profile-update-credentials.html')
-                context = Context(context_dict)
-                html = template.render(context)
-                pdf_file = HTML(string=html).write_pdf()
-                http_response = HttpResponse(pdf_file, content_type='application/pdf')
-                http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
-                return http_response
-            except Exception as e:
-                logging.getLogger('error_log').error("Profile download:", str(e))
+        orderitem = OrderItem.objects.get(pk=oi)
+        profile_credentials = InternationalProfileCredential.objects.filter(
+            oi=oi)
+        if session_usr == orderitem.order.candidate_id:
+            if profile_credentials:
+                try:
+                    context_dict = {
+                        'pagesize': 'A4',
+                        'profile_credentials': profile_credentials,
+                    }
+                    template = get_template('console/order/profile-update-credentials.html')
+                    context = Context(context_dict)
+                    html = template.render(context)
+                    pdf_file = HTML(string=html).write_pdf()
+                    http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                    http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'
+                    return http_response
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                        "Profile download:%s", str(e))
+            return HttpResponseRedirect('/dashboard/')
         else:
             return HttpResponseRedirect('/login/')
 
@@ -1144,15 +1140,16 @@ class CreateDrftObject(TemplateView):
                     quiz_rsp = QuizResponse()
                     quiz_rsp.oi = order_item
                     quiz_rsp.save()
-
-                order_item.oi_status = 2
-                order_item.last_oi_status = last_oi_status
+                if not order_item.oi_resume:
+                    order_item.oi_status = 2
+                    order_item.last_oi_status = last_oi_status
+                    order_item.orderitemoperation_set.create(
+                        oi_status=order_item.oi_status,
+                        last_oi_status=last_oi_status,
+                    )
                 order_item.oio_linkedin = draft_obj
                 order_item.save()
-                order_item.orderitemoperation_set.create(
-                    oi_status=order_item.oi_status,
-                    last_oi_status=last_oi_status,
-                )
+
                 return HttpResponseRedirect(
                     reverse(
                         'console:change-draft',
@@ -1164,3 +1161,27 @@ class CreateDrftObject(TemplateView):
         return HttpResponseRedirect(
             reverse('console:linkedin-inbox')
         )
+
+
+@method_decorator(permission_required('order.can_view_counselling_form_in_approval_queue', login_url='/console/login/'), name='dispatch')
+class ListCounsellingFormView(TemplateView):
+    template_name = "console/linkedin/list_counsellingform.html"
+
+    def get(self, request, *args, **kwargs):
+        return super(ListCounsellingFormView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ListCounsellingFormView, self).get_context_data(**kwargs)
+        try:
+            orderitem = OrderItem.objects.get(pk=kwargs.get('ord_pk', ''))
+        except:
+            orderitem = None
+        try:
+            quiz_resp = orderitem.quizresponse
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % (str(e)))
+
+        context = {
+            'quiz_resp': quiz_resp if quiz_resp else None,
+        }
+        return context

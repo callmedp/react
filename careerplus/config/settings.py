@@ -27,6 +27,7 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shinecp',
