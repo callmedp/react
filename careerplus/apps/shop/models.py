@@ -1310,7 +1310,6 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_exp(self):
         # for code return
-        import ipdb; ipdb.set_trace()
         if self.is_writing:
             return getattr(self.attr, R_ATTR_DICT.get('EXP')).code \
                 if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
