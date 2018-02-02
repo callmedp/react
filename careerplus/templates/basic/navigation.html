@@ -25,8 +25,8 @@
               <li role="presentation"><a href="/courses/personal-development/21/#courses8" aria-controls="courses8" role="tab">Personal Development</a></li>
               <li role="presentation"><a href="/courses/law/23/#courses9" aria-controls="courses9" role="tab">Law</a></li>
              <!--  <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'other-online' 5 %}#courses10" aria-controls="courses9" role="tab">Other Online Courses</a></li> -->
-             <hr>
-             <li role="presentation"><a href="{% url "course-catalogoue" %}">Course Catalogue</a></li>
+             <li role="presentation"><a href="{% url "course-catalogoue" %}#courses10" aria-controls="courses10" role="tab">Course Catalogue</a></li>
+             
             </ul>
 
 
@@ -121,6 +121,17 @@
                 <li><a tabindex="-1" href="/courses/law/23/">View all products</a></li>
               </ul>
               </div>
+
+              <div role="tabpanel" class="tab-pane" id="courses10">
+                <ul>
+                <li><a href="{% url "course-catalogoue" %}">
+                  <img src="{% static "shinelearn/images/course-catalogue.jpg" %}" alt="course catalogue">
+                </a>
+                </li>
+                <li><a tabindex="-1" href="{% url "course-catalogoue" %}">View all courses</a></li>
+              </ul>
+              </div>
+              
                 <!-- <div role="tabpanel" class="tab-pane" id="courses9">
                 <ul>
                 <li><a href="{% url 'search:search_listing' %}?q=GetCertGo+Certification">GetCertGo Certification</a></li>

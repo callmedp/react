@@ -578,7 +578,7 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
     template_name = 'shop/course-catalogue.html'
     use_title_tag = False
     use_og = True
-    use_twitter = False
+    use_twitter = True
     
     def get_meta_title(self, context):
         return 'Online Courses and Certifications - Shine Learning'
