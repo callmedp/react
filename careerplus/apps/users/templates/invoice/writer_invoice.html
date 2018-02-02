@@ -95,6 +95,7 @@
       <td colspan="4" style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0; text-align: center;"><strong><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Total</span></strong></td>
       <td colspan="2" style="padding:0; border-bottom: solid 1px #000; text-align: center;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{total}}</span></td>
     </tr>
+    {% if incentive or penalty %}
     <tr>
       <td colspan="4" style="padding:0; border-bottom: solid 1px #000; border-right: solid 1px #000; margin:0; text-align: center;"><strong>
         <span style="display: block; margin:0; padding:3px 0 3px 5px; ">
@@ -115,6 +116,7 @@
         </span>
       </td>
     </tr>
+    {% endif %}
     <tr>
       <td colspan="4" style="padding:0;border-right: solid 1px #000; margin:0; text-align: center;"><strong><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Total Payable</span></strong></td>
       <td colspan="2" style="padding:0; text-align: center;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{total_payable}}</span></td>
