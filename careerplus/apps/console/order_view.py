@@ -2284,7 +2284,7 @@ class ConsoleResumeDownloadView(View):
         return HttpResponseRedirect(next_url)
 
 
-@Decorate(check_group([settings.WRITING_GROUP_LIST]))
+@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
 class ReviewModerateListView(ListView, PaginationMixin):
 
     context_object_name = 'review_list'
@@ -2365,7 +2365,7 @@ class ReviewModerateListView(ListView, PaginationMixin):
         return queryset
 
 
-@Decorate(check_group([settings.WRITING_GROUP_LIST]))
+@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
 class ReviewModerateView(UpdateView):
     model = Review
     template_name = 'console/order/review-moderation-update.html'
