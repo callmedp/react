@@ -347,7 +347,6 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-
         try:
             if self.modified:
                 date_range = self.modified.split('-')
