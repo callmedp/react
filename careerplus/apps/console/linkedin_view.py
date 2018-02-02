@@ -1140,15 +1140,16 @@ class CreateDrftObject(TemplateView):
                     quiz_rsp = QuizResponse()
                     quiz_rsp.oi = order_item
                     quiz_rsp.save()
-
-                order_item.oi_status = 2
-                order_item.last_oi_status = last_oi_status
+                if not order_item.oi_resume:
+                    order_item.oi_status = 2
+                    order_item.last_oi_status = last_oi_status
+                    order_item.orderitemoperation_set.create(
+                        oi_status=order_item.oi_status,
+                        last_oi_status=last_oi_status,
+                    )
                 order_item.oio_linkedin = draft_obj
                 order_item.save()
-                order_item.orderitemoperation_set.create(
-                    oi_status=order_item.oi_status,
-                    last_oi_status=last_oi_status,
-                )
+
                 return HttpResponseRedirect(
                     reverse(
                         'console:change-draft',
