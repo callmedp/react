@@ -29,6 +29,14 @@
     <!-- header start-->
     <header class="category-header">
         <div class="container">
+          {% block breadcrumb %}
+            <ol class="breadcrumb mt-30">
+              <li><a href='/'>Home
+              </a></li>
+              <li class="active">Course Catalogue</li>
+                
+            </ol>
+          {% endblock breadcrumb %}
           <div class="category-heading">
             <h1>India's largest e-learning platform</h1>
               Join the club of 4mn learners with our partners like Skillsoft, ACCA etc
