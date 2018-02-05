@@ -61,11 +61,11 @@
             <ul>
               {% with skill_list=fa.pk|get_value:course_dict %}
               {% for skill in  skill_list %}
-                <li><a href="{{skill.url}}" role="tab">{{skill.name}}</a></li>
+                <li><a title="{{skill.name}}" href="{{skill.url}}" role="tab">{{skill.name}}</a></li>
               {% endfor %}
               {% endwith %}
             </ul>
-            <p class="text-right pb-0"><a href="{{fa.url}}">View all courses</a></p>
+            <p class="text-right pb-0"><a title="View all {{fa.name}} courses" href="{{fa.url}}">View all courses</a></p>
           </div><!-- / acc_content -->
         </div><!-- / Accordin -1 -->
         {% endfor %}
