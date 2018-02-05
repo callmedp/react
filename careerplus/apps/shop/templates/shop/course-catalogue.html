@@ -73,7 +73,7 @@
                         {% with skill_list=fa.pk|get_value:course_dict %}
                             {% for skill in  skill_list %}
                                 <li class="nav-link">
-                                    <a href="{{skill.url}}#nav{{fa.pk}}_{{skill.pk}}" role="tab">{{skill.name}}</a>
+                                    <a title="{{skill.name}}" href="{{skill.url}}#nav{{fa.pk}}_{{skill.pk}}" role="tab">{{skill.name}}</a>
                                 </li>
                             {% endfor %}
                         {% endwith %}
@@ -86,11 +86,11 @@
                                     <ul>
                                         {% with product_list=skill.pk|get_value:course_dict %}
                                             {% for pd in product_list %}
-                                                <li><a title="shine learning" href="{{pd.url}}">{{pd.name}}</a></li>
+                                                <li><a title="{{pd.name}}" href="{{pd.url}}">{{pd.name}}</a></li>
                                             {% endfor %}
                                         {% endwith %}
                                     </ul>
-                                    <a href="{{fa.url}}" class="viewall">View all courses</a>
+                                    <a title="View all {{fa.name}} courses" href="{{fa.url}}" class="viewall">View all courses</a>
                                 </div>
                             {% endfor %}
                         {% endwith %}
