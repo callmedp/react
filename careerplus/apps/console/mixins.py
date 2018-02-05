@@ -73,7 +73,7 @@ class ActionUserMixin(object):
                     "writer_email": assigned_to.email,
                     "subject": "Your service has been initiated",
                     "type_flow": obj.product.type_flow,
-                    'delivery_service': obj.delivery_service,
+                    'delivery_service': True if obj.delivery_service else False,
                     'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
                     'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                 })
@@ -151,7 +151,7 @@ class ActionUserMixin(object):
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
-                            'delivery_service': oi.delivery_service,
+                            'delivery_service': True if oi.delivery_service else False,
                             'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
                             'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
@@ -193,7 +193,7 @@ class ActionUserMixin(object):
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
-                            'delivery_service': oi.delivery_service,
+                            'delivery_service': True if oi.delivery_service else False,
                             'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
                             'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
@@ -235,7 +235,7 @@ class ActionUserMixin(object):
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
-                            'delivery_service': oi.delivery_service,
+                            'delivery_service': True if oi.delivery_service else False,
                             'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
                             'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
