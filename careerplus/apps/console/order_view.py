@@ -2295,13 +2295,14 @@ class ReviewModerateListView(ListView, PaginationMixin):
     def __init__(self):
         self.page = 1
         self.paginated_by = 50
-        self.query = ''
+        self.query, self.created = '', ''
         self.status = -1
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.status = request.GET.get('filter_status', -1)
+        self.created = request.GET.get('created', '')
         return super(self.__class__, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2309,10 +2310,14 @@ class ReviewModerateListView(ListView, PaginationMixin):
         paginator = Paginator(context['review_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        initial = {
+            "created": self.created,
+            "status": self.status
+        }
         context.update({
             "query": self.query,
             "action_form": ReviewActionForm(),
-            'filter_form': ReviewFilterForm(),
+            'filter_form': ReviewFilterForm(initial),
             "messages": alert,
         })
         return context
@@ -2360,6 +2365,20 @@ class ReviewModerateListView(ListView, PaginationMixin):
         try:
             if int(self.status) != -1:
                 queryset = queryset.filter(status=self.status)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+
+        try:
+            if self.created:
+                date_range = self.created.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    created__range=[start_date, end_date])
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
         return queryset

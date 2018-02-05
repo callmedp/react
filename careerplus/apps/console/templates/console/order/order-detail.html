@@ -152,7 +152,7 @@
                         <th>
                             <h2><small>Order items operations/actions:</small></h2>
                             <table class="table table-bordered table-responsive">
-                               <th>How Old</th>
+                               <th>Date & Time</th>
                                <th>Action</th>
                                <th>Added By / Assigned</th>
                                <th>Download Document</th>
@@ -201,7 +201,7 @@
                               <table class="table table-bordered table-responsive">
                                   {% for op in obj.get_oi_operations %}
                                     <tr>
-                                      <td>{{op.created|naturaltime}}</td>
+                                      <td>{{op.created}}</td>
                                       <td>{{op.get_oi_status}}</td>
                                       <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
                                       <td>

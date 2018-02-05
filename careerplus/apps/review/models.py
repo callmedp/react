@@ -39,7 +39,7 @@ class Review(AbstractAutoDate):
         verbose_name=_("User ID"),)
 
     content = RichTextField(
-        max_length=1024,
+        max_length=1500,
         verbose_name=_('Content'),
         blank=True,
     )

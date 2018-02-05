@@ -375,6 +375,14 @@ class ReviewFilterForm(forms.Form):
             'class': 'form-control col-md-7 col-xs-12',
             'required': True}))
 
+    created = forms.CharField(
+        label=("Added On:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
 
 class ReviewUpdateForm(forms.ModelForm):
 
@@ -393,6 +401,11 @@ class ReviewUpdateForm(forms.ModelForm):
         required=True, widget=forms.TextInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    created = forms.CharField(
+        label=("Created Date:"), required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Review
         exclude = ['extra_content_type', 'extra_object_id', 'extra_item', 'object_id', 'user_name', 'user_id']
@@ -406,4 +419,5 @@ class ReviewUpdateForm(forms.ModelForm):
         self.initial['reviewed_item'] = '{} - {}'.format(obj.reviewed_item.name, obj.object_id)
         self.fields['reviewed_item'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['user_email'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.initial['created'] = obj.created.strftime("%b. %e, %Y %H:%I %P")
         self.fields['average_rating'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
