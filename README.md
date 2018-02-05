@@ -85,3 +85,17 @@ upload_FA('/tmp/Courses-FA.csv')
 
 CREATE USER 'root'@'10.24.8.130';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'10.24.8.130' IDENTIFIED BY 'root';
+
+
+
+
+
+
+
+
+
+
+
+
+
+

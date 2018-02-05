@@ -18,7 +18,6 @@
       </li>
       </ul>
     {% endif %}
-
     {% if request.user|has_group:USER_QUERY_GROUP_LIST %} 
       <h3>User Query</h3>
         
@@ -140,6 +139,18 @@
             </li>
             
           {% endif %}
+        </ul>
+    {% endif %}
+
+    {% if perms.review.can_change_review_queue %}
+        <h3>REVIEW MODERATIONS</h3>
+   
+        <ul class="nav side-menu"> 
+          <li><a><i class="fa fa-edit"></i> Review Moderations <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:review-to-moderate' %}">Review</a></li>
+            </ul>
+          </li>
         </ul>
     {% endif %}
       <h3>Orders</h3>

@@ -54,51 +54,48 @@
             {% for fa in course_dict.course_fa_list %}
             <!-- courses 1 -->
             <div class="panel-pr">
-            <div class="panel col-sm-3" role="tab" id="headingOne{{fa.pk}}">
-              <a title="{{fa.name}}" class="cc_box" data-toggle="collapse" data-parent="#accordion" href="#collapseOne{{fa.pk}}" aria-expanded="true" aria-controls="collapseOne{{fa.pk}}">
-                <figure>
-                    <img src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
-                    {% endif %}" alt="{{fa.name}}.png" class="img-responsive">
-                </figure>
-                <h3>
-                  {{fa.name}}
-                </h3>
-              </a>
-              <!-- courses Dropdown 1 box -->
-            </div><!-- / courses 1 -->
+                <div class="panel col-sm-3" role="tab" id="headingOne{{fa.pk}}">
+                    <a title="{{fa.name}}" class="cc_box cls_showPanel"  href="javascript:void(0)" aria-expanded="true" data-controls="collapseOne{{fa.pk}}">
+                        <figure>
+                            <img src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
+                            {% endif %}" alt="{{fa.name}}.png" class="img-responsive">
+                        </figure>
+                        <h3>
+                            {{fa.name}}
+                        </h3>
+                    </a>
+                    <!-- courses Dropdown 1 box -->
+                </div><!-- / courses 1 -->
 
-            <div id="collapseOne{{fa.pk}}" class="panel-collapse collapse col-md-12 course_nav arrow{{forloop.counter}}" role="tabpanel" aria-labelledby="headingOne{{fa.pk}}">
-               <!-- tabs nav -->
-              <ul class="nav nav-tabs col-sm-3" role="tablist">
-                {% with skill_list=fa.pk|get_value:course_dict %}
-                    {% for skill in  skill_list %}
-                    <li class="nav-link">
-                      <a href="{{skill.url}}#nav{{fa.pk}}_{{skill.pk}}" role="tab">{{skill.name}}</a>
-                    </li>
-                    {% endfor %}
-                {% endwith %}
-
-              </ul><!-- / tabs nav -->
-              <!-- Tabs nav panes -->
-              <div class="tab-content col-sm-9">
-                {% with skill_list=fa.pk|get_value:course_dict %}
-                {% for skill in  skill_list %}
-                    <div class="tab-pane {% if forloop.counter == 1 %}active{% endif %}" id="nav{{fa.pk}}_{{skill.pk}}" role="tabpanel">
-                      <ul>
-                        {% with product_list=skill.pk|get_value:course_dict %}
-                        {% for pd in product_list %}
-                        <li><a title="shine learning" href="{{pd.url}}">{{pd.name}}</a></li>
-                        {% endfor %}
+                <div id="collapseOne{{fa.pk}}" class="panel-collapse cls_showPanelChild collapse col-md-12 course_nav arrow{{forloop.counter}}" role="tabpanel" aria-labelledby="headingOne{{fa.pk}}">
+                    <ul class="nav nav-tabs col-sm-3" role="tablist">
+                        {% with skill_list=fa.pk|get_value:course_dict %}
+                            {% for skill in  skill_list %}
+                                <li class="nav-link">
+                                    <a href="{{skill.url}}#nav{{fa.pk}}_{{skill.pk}}" role="tab">{{skill.name}}</a>
+                                </li>
+                            {% endfor %}
                         {% endwith %}
-
-                      </ul>
-                      <a href="{{fa.url}}" class="viewall">View all courses</a>
-                    </div>
-                {% endfor %}
-                {% endwith %}
-              </div><!-- / Tabs nav panes -->
-            </div><!-- /courses dropdown 1 box -->
-          </div>
+                    </ul><!-- / tabs nav -->
+                    <!-- Tabs nav panes -->
+                    <div class="tab-content col-sm-9">
+                        {% with skill_list=fa.pk|get_value:course_dict %}
+                            {% for skill in  skill_list %}
+                                <div class="tab-pane {% if forloop.counter == 1 %}active{% endif %}" id="nav{{fa.pk}}_{{skill.pk}}" role="tabpanel">
+                                    <ul>
+                                        {% with product_list=skill.pk|get_value:course_dict %}
+                                            {% for pd in product_list %}
+                                                <li><a title="shine learning" href="{{pd.url}}">{{pd.name}}</a></li>
+                                            {% endfor %}
+                                        {% endwith %}
+                                    </ul>
+                                    <a href="{{fa.url}}" class="viewall">View all courses</a>
+                                </div>
+                            {% endfor %}
+                        {% endwith %}
+                    </div><!-- / Tabs nav panes -->
+                </div><!-- /courses dropdown 1 box -->
+            </div>
               {% if forloop.counter == 4 %}
                   <div class="clearfix"></div>
               {% endif %}
@@ -211,19 +208,6 @@
         $(document).click(function (event) {
           $('.course_nav').collapse('hide');
         });
-      });
-    </script>
-
-    <script type="text/javascript">
-      $('.panel').click(function(){
-        var doubleClicked = true;
-        if($(this).hasClass('panel-mg')){
-            doubleClicked = false;
-        };
-        $('.panel').removeClass('panel-mg');
-        if(doubleClicked){
-          $(this).addClass('panel-mg');
-        }
       });
     </script>
     {% endcompress %}

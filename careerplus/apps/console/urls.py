@@ -246,6 +246,14 @@ urlpatterns += [
     url(r'^queue/orderitem/assignment/$',
         order_view.AssignmentOrderItemView.as_view(),
         name='assignment-orderitem-view'),
+
+    url(r'^queue/review/review-to-moderate/$',
+        order_view.ReviewModerateListView.as_view(),
+        name='review-to-moderate'),
+
+    url(r'^queue/review/(?P<pk>\d+)/change/$',
+        order_view.ReviewModerateView.as_view(),
+        name='review-moderate-update'),
 ]
 
 # refunf flow
@@ -299,6 +307,9 @@ urlpatterns += [
 from . import linkedin_view
 
 urlpatterns += [
+    url(r'^counselling-listing/(?P<ord_pk>[-\w]+)/$',
+        linkedin_view.ListCounsellingFormView.as_view(), name='counselling-list'),
+
     url(r'^linkedin/inbox/$',
         linkedin_view.LinkedinQueueView.as_view(),
         name='linkedin-inbox'),

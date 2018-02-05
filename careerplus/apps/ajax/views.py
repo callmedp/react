@@ -6,6 +6,7 @@ from django.db.models import Sum
 from decimal import Decimal
 from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
+from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
@@ -161,10 +162,14 @@ class AjaxReviewLoadMoreView(TemplateView):
         slug = self.request.GET.get('slug', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            prod_id_list = SQS().filter(pCtg=slug).only('id').values_list('id', flat=True)
-            # page_obj = Category.objects.get(slug=slug, active=True)
-            # prod_id_list = page_obj.product_set.values_list('id', flat=True)
-            prod_reviews = Review.objects.filter(id__in=prod_id_list)
+            prod_id_list = SQS().filter(
+                pCtg=slug).only('id').values_list('id', flat=True)
+            product_obj = ContentType.objects.get(
+                app_label='shop', model='product')
+            prod_reviews = Review.objects.filter(
+                object_id__in=prod_id_list,
+                content_type=product_obj,
+                status=1)
             paginator = Paginator(prod_reviews, 4)
             try:
                 page_reviews = paginator.page(page)
@@ -631,6 +636,7 @@ class MarkedPaidOrderView(View):
 
                     # send email through process mailers
                     process_mailer.apply_async((obj.pk,), countdown=900)
+                    # process_mailer(obj.pk)
 
                     # roundone order
                     roundone_product(order=obj)
