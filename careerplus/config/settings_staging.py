@@ -87,5 +87,5 @@ INVOICE_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPInvoiceStora
 GCP_INVOICE_BUCKET = 'learning-invoices-staging-189607'
 
 # GS_AUTO_CREATE_BUCKET = True
-STATIC_URL = 'https://learning-static-staging-189607.storage.googleapis.com/'
-MEDIA_URL = 'https://learning--misc-staging-189607.storage.googleapis.com/'
+STATIC_URL = 'https://{}.storage.googleapis.com/'.format(GCP_STATIC_BUCKET)
+MEDIA_URL = 'https://{}.storage.googleapis.com/'.format(GS_BUCKET_NAME)
