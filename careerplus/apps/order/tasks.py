@@ -46,6 +46,7 @@ def pending_item_email(pk=None):
                 'product_name': oi.product.name,
                 'product_url': oi.product.get_url(),
                 'mobile': oi.order.mobile,
+                'parent_name': oi.parent.product.name if oi.parent else None
             })
             email_sets = list(oi.emailorderitemoperation_set.all().values_list(
                 'email_oi_status', flat=True).distinct())
