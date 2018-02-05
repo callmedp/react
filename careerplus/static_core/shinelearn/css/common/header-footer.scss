@@ -328,6 +328,12 @@ datalist {
 				}
 			}
 		}
+		
+		div {
+			&:last-child {
+				width: 0;
+			}
+		}
 	}
 }
 
