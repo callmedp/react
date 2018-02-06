@@ -632,6 +632,7 @@ class WriterInvoiceMixin(object):
                 error = 'No invoice for last month(no item is closed)'
 
         except Exception as e:
+            error = 'something went wrong, try again later.'
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
         if error:
             data.update({"error": error, })
