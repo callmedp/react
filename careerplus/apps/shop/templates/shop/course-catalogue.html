@@ -4,6 +4,12 @@
 
     {% block django_meta %}
         {% include 'meta/meta.html' %}
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:domain" content="{{ SITE_DOMAIN }}">
+        <meta name="twitter:site" content="@shinelearning">
+        <meta name="twitter:title" content="{{meta_title}}">
+        <meta name="twitter:url" content="{{meta_url}}">
+        <meta name="twitter:description" content="{{meta_desc}}" />
     {%  endblock django_meta %}
     {% block canonical_url %}
       <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">

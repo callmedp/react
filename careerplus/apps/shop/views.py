@@ -576,20 +576,20 @@ class ProductReviewListView(ListView, ProductInformationMixin):
 
 class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
     template_name = 'shop/course-catalogue.html'
-    use_title_tag = False
+    use_title_tag = True
     use_og = True
     use_twitter = True
+    twitter_site = True
+    twitter_card = True
     
-    def get_meta_title(self, context):
-        return 'Online Courses and Certifications - Shine Learning'
+    def get_meta_title(self, context=None):
+        return 'Online Courses and Certifications : Free Online Education'
 
-    def get_meta_description(self, context):
-        return 'Join India\'s Largest E-Learning Online \
-        Courses and Education Platform. Get Certifications in Top \
-        Courses under Finance, IT, Analytics, Marketing and more'
+    def get_meta_description(self, context=None):
+        return 'Join India\'s Largest E-Learning Online Courses and Education Platform. Get Certifications in Top Courses under Finance, IT, Analytics, Marketing and more'
     
-    def get_meta_url(self, context):
-        return settings.MAIN_DOMAIN_PREFIX
+    def get_meta_url(self, context=None):
+        return settings.MAIN_DOMAIN_PREFIX + '/online-courses.html'
 
     def get_testimonials(self):
         testimonials = Testimonial.objects.filter(
@@ -599,10 +599,15 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
 
     def get_context_data(self, **kwargs):
         context = super(CourseCatalogueView, self).get_context_data(**kwargs)
-        context['meta'] = self.get_meta()
+        context['meta'] = self.get_meta(context=context)
         context.update(self.get_testimonials())
         if cache.get('course_catalogue'):
             context['course_dict'] = cache.get('course_catalogue')
         else:
             context['course_dict'] = self.get_course_catalogue_context()
+        context.update({
+            "meta_url": self.get_meta_url(),
+            "meta_title": self.get_meta_title(),
+            "meta_desc": self.get_meta_description(),
+        })
         return context
