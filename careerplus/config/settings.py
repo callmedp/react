@@ -294,6 +294,11 @@ COMPRESS_PRECOMPILERS = (
    ('text/scss', 'sass --scss {infile} {outfile}'),
 )
 
+# Addon List For writer Invoice
+VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
+COVER_LETTER_PRODUCT_LIST = [83, ]
+SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
+
 try:
     from .settings_local import *
 except:
