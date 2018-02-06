@@ -433,13 +433,13 @@ def server_error(request):
     return response
 
 
-class GenerateWriterInvoiceView(View, WriterInvoiceMixin):
+class GenerateWriterInvoiceView(View):
 
     def get(self, request, *args, **kwargs):
         try:
             user = request.user
             if user.is_authenticated():
-                data = self.save_writer_invoice_pdf(
+                data = WriterInvoiceMixin().save_writer_invoice_pdf(
                     user=user)
                 if data.get('error'):
                     messages.add_message(
