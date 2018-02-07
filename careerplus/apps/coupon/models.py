@@ -4,17 +4,16 @@ from django.conf import settings
 from django.db import IntegrityError
 from django.db import models
 from django.dispatch import Signal
+from django.core.validators import validate_comma_separated_integer_list
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
 from seo.models import AbstractAutoDate
 
 from .choices import (
-    COUPON_TYPES,
-    CODE_LENGTH,
-    CODE_CHARS,
-    SEGMENTED_CODES,
-    SEGMENT_LENGTH,
-    SEGMENT_SEPARATOR,
+    COUPON_TYPES, CODE_LENGTH, CODE_CHARS,
+    SEGMENTED_CODES, SEGMENT_LENGTH, SEGMENT_SEPARATOR,
+    SITE_CHOICES, COUPON_SCOPE_CHOICES
 )
 
 
@@ -80,6 +79,23 @@ class Coupon(AbstractAutoDate):
         verbose_name=_("Campaign"),
         blank=True, null=True, related_name='coupons')
     active = models.BooleanField(default=True)
+
+    site = models.PositiveIntegerField(
+        _("Site"), choices=SITE_CHOICES, default=0)
+
+    coupon_scope = models.PositiveIntegerField(
+        _("Coupon Scope"), choices=COUPON_SCOPE_CHOICES, default=0)
+
+    products = models.ManyToManyField(
+        "shop.Product",
+        verbose_name=_('Coupon Products'),
+        related_name='couponproducts',
+        blank=True)
+
+    source = models.CharField(
+        max_length=255,
+        validators=[validate_comma_separated_integer_list],
+        blank=True)
     
     objects = CouponManager()
 
