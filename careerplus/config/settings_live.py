@@ -1,5 +1,9 @@
 from .settings import *
 
+DEBUG = False
+IS_LIVE = True
+
+######## APPS SETTINGS ###############
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -13,9 +17,8 @@ DJANGO_APPS = [
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-
-DEBUG = False
-IS_LIVE = True
+####### WSGI SETTINGS ############
+WSGI_APPLICATION = 'careerplus.config.wsgi_live.application'
 
 DOWNLOAD_URL = 'https://origin-static3.shine.com/download/'
 DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'download')
@@ -27,7 +30,6 @@ CELERY_ALWAYS_EAGER = False
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
-SITEMAP_CACHING_TIME = 86400
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
@@ -73,6 +75,7 @@ CCAVENUE_MOBILE_WORKING_KEY = 'A5BD19BE780D68E36598D8FB051CF66C'
 
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
+########## DATABASE SETTINGS #################
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -84,6 +87,8 @@ DATABASES = {
     }
 }
 
+##### Cache Setting #####################
+SITEMAP_CACHING_TIME = 86400
 CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",

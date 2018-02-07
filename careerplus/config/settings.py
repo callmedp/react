@@ -4,20 +4,14 @@ from .celery import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 IS_LIVE = False
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+
 ALLOWED_HOSTS = ['*']
-SITE_ID = 1
-MOBILE_ADSERVER_ENCODE_KEY = 'el!bomen!h$'
-ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
 
-if IS_LIVE:
-    SITEMAP_CACHING_TIME = 86400
-else:
-    SITEMAP_CACHING_TIME = 1
 
-# Database
+####### CACHE SETTINGS ##############
+SITEMAP_CACHING_TIME = 1
+
+#### Database SETTINGS ##############
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -38,7 +32,7 @@ DATABASES = {
     },
 }
 
-# Apps specific for this project go here.
+######### Apps specific for this project go here. ###########
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,20 +46,21 @@ DJANGO_APPS = [
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-if DEBUG:
-    DEV_APPS = [
-        'debug_toolbar'
-    ]
-    INSTALLED_APPS += DEV_APPS
-    DEV_MIDDLEWARE = [
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    ]
-    MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+DEV_APPS = [
+    'debug_toolbar'
+]
+INSTALLED_APPS += DEV_APPS
 
-if not IS_LIVE:
-    WSGI_APPLICATION = 'careerplus.config.wsgi.application'
-else:
-    WSGI_APPLICATION = 'careerplus.config.wsgi_live.application'
+
+####### MIDDLEWARE SETTINGS #####################
+DEV_MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+
+
+####### WSGI SETTINGS ############
+WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
 
 INTERNAL_IPS = ('127.0.0.1',)

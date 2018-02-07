@@ -1,5 +1,33 @@
 from .settings import *
 
+DEBUG = True
+IS_LIVE = False
+
+ALLOWED_HOSTS = ['*']
+
+######## DATABASE SETTINGS ###########
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'careerplus1',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+
+    'oldDB': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shinecp',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+}
+
+
+####### APPS SETTIMGS #################
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -12,6 +40,22 @@ DJANGO_APPS = [
     'django.contrib.humanize',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+if DEBUG:
+    DEV_APPS = [
+        'debug_toolbar'
+    ]
+    INSTALLED_APPS += DEV_APPS
+
+######### MIDDLEWARE SETTINGS ######
+if DEBUG:
+    DEV_MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
+    MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+
+
+########## WSGI SETTINGS #################
+WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
 INVOICE_DIR = 'invoice/'   # Cloud path
 RESUME_DIR = 'resume/'  # Cloud path
@@ -46,6 +90,12 @@ CCAVENUE_MOBILE_ACCESS_CODE = 'AVYX74EK04AB50XYBA'
 CCAVENUE_MOBILE_WORKING_KEY = 'A081DDE3B5B50F269F8980EB2ADEC9F3'
 
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+
+
+
+###### CACHE SETTINGS #################
+SITEMAP_CACHING_TIME = 86400
+
 
 
 SESSION_COOKIE_SECURE = True
