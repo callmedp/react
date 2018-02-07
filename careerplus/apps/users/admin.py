@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.forms import UserChangeForm
+from django.contrib.admin import helpers
 
 from users.models import User, UserProfile
 
@@ -62,6 +63,13 @@ class UserProfileInline(admin.StackedInline):
 
 
 class UserAdmin(BaseUserAdmin):
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super(UserAdmin, self).get_inline_instances(
+            request, obj)
+
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
