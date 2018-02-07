@@ -1,0 +1,1845 @@
+{% load humanize search_tags compress %}
+{% load static compress %}
+<!doctype html>
+<html amp lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% if meta.title %}{{ meta.title }}{% endif %}</title>
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    {% include 'meta/meta.html' %}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+
+<style amp-custom>
+
+  *, *:before, *:after {
+    box-sizing: border-box;
+  }
+
+  html {
+  height: 100%; 
+}
+
+body {
+  color: #333;
+  display: block;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  height: 100%; }
+
+figure {
+  margin: 0; }
+
+p {
+  padding-bottom: 10px;
+  line-height: 1.5em; }
+
+/*img {
+  @include box(100%, auto, block);
+}*/
+a {
+  color: #2f5ea6;
+  text-decoration: none; }
+
+li {
+  list-style: none; }
+
+ul, ol {
+  list-style: none; }
+
+h1 {
+  color: #fff;
+  font-size: 2em;
+  font-weight: 400; }
+
+h3 {
+  font-size: 115%;
+  font-weight: 600; }
+
+h4, h5 {
+  color: #fff;
+  font-weight: 400;
+  margin-top: 20px; }
+
+h5 {
+  font-size: .875em; }
+
+hr {
+  border: 0 none;
+  border-top: 1px solid #ddd;
+  margin: 10px 0 15px; 
+}
+
+
+em,h1,h2,h3,h4,h5,h6,i,li,p,table,td,th,tr,ul{
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-weight:400;
+    text-shadow:none;
+    text-decoration:none
+}
+
+figure {
+    margin: 0;
+}
+  ul{
+      list-style:none
+  }
+  a{
+      color:#2f5ea6;
+      text-decoration:none
+  }
+
+  .pull-right {
+      float: right;
+  }
+
+  ..pull-left {
+      float: left;
+  }
+  .text-right{
+      text-align:right
+  }
+  .text-center{
+      text-align:center
+  }
+
+  .he-auto {
+    height: auto!important;
+  }
+  .w100fl {
+      width: 100%;
+  }
+
+  .pull-left, .w100fl {
+      float: left;
+  }
+
+  .clearfix {
+    clear: both;
+  }
+
+  .input-group .form-control, 
+  .input-group-addon, 
+  .input-group-btn, 
+  .detail-wrap .provided-by, 
+  .detail-wrap .select-provider {
+    display: table-cell;
+}
+
+.mb-10 {
+    margin-bottom: 10px!important;
+}
+
+.c6 {
+    color: #666!important;
+}
+
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.pb-0 {
+    padding-bottom: 0!important;
+}
+
+
+.fs-10 {
+    font-size: 10px;
+    line-height: 1;
+}
+
+.btn, .btn-sm {
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 1.6;
+    margin-bottom: 0;
+    padding: 10px 12px;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.btn-yellow {
+    background-color: #ffcf26;
+    color: #333;
+}
+
+.btn-outline {
+    border: 1px solid #2f5ea6;
+    color: #2f5ea6;
+}
+
+.fs-11 {
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+.main-heading, h2, h2 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 25px;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: 0 none;
+    border-top: 1px solid #ddd;
+    margin: 10px 0 15px;
+}
+
+  header {
+      height: 50px;
+      width: 100%;
+      position: relative;
+      z-index: 9;
+      background-color: #2f5ea6;
+      padding: 15px;
+  }
+
+  header amp-img {
+    position: absolute !important;
+    right: 0;
+    top: 0;
+    width: auto;
+    height: 100%;
+    opacity: 0.15;
+  }
+
+.main-menu {
+    position: relative;
+    z-index: 1;
+}
+
+[class^="icon-"] {
+    background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+    display: block;
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.sprite {
+    background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+    display: block;
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icon-cart {
+    background-position: -3px -46px;
+    width: 18px;
+    height: 18px;
+    display: block;
+    margin-left: 25px;
+    position: relative;
+    overflow: visible;
+    text-indent: -1000px;
+}
+
+.icon-cart span {
+    display: block;
+    height: 15px;
+    width: 15px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    position: absolute;
+    background-color: #fecd2f;
+    color: #000;
+    line-height: 15px;
+    text-align: center;
+    left: -7px;
+    top: -10px;
+    text-indent: 0px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+.icon-bar {
+    background-position: 0 0;
+    width: 20px;
+    height: 20px;
+}
+
+
+
+.heading-back {
+  font-size: 1.250em;
+  color: #fff;
+  font-weight: 600;
+  margin: 15px 0 0;
+  line-height: 26px; 
+}
+
+
+.detail-wrap {
+  position: relative;
+  display: table;
+  width: 100%;
+}
+
+.detail-wrap .provided-by {
+  -webkit-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+  background-color: #fff;
+  position: relative;
+  height: 55px;
+  bottom: -15px;
+  padding: 5px 8px;
+  width: 65%; 
+}
+
+.detail-wrap .provided-by a {
+  line-height: 14px !important;
+  display: block;
+  font-weight: 700; 
+}
+
+.detail-wrap .provided-by p {
+  font-size: 11px; 
+}
+
+.detail-wrap .provided-by figure {
+  width: 45px;
+  height: 22px;
+  vertical-align: middle;
+  padding-right: 3px; 
+}
+
+.detail-wrap .provided-by figure span {
+  display: block;
+  width: 45px;
+  height: 22px; 
+}
+
+.detail-wrap .provided-by figure span img {
+  opacity: 1;
+  position: relative;
+  width: 100%;
+  height: auto; 
+}
+
+.detail-wrap .provided-by:after {
+  display: block;
+  width: 8px;
+  height: 5px;
+  background-image: url({% static 'shinelearn/images/mobile/common/cruve-1.png'%});
+  left: -5px; 
+}
+
+.detail-wrap .provided-by:before {
+  display: block;
+  width: 8px;
+  height: 5px;
+  background-image: url({% static 'shinelearn/images/mobile/common/cruve-2.png'%});
+  right: -5px; 
+}
+
+.detail-wrap .provided-by:after, .detail-wrap .provided-by:before {
+    position: absolute;
+    display: block;
+    content: "";
+    bottom: 0;
+}
+
+.detail-wrap .select-provider {
+  padding-left: 15px;
+  position: relative;
+  width: 35%; 
+}
+
+.detail-wrap .select-provider .form-control {
+  background-image: url({% static 'shinelearn/images/mobile/common/dropdown-black.svg'%});
+  background-color: #fff;
+  position: absolute;
+  right: 0;
+  width: 90%;
+  top: 16px;
+  font-size: 12px;
+  color: #333;
+  background-position: right 0;
+  background-repeat: no-repeat;
+  line-height: 25px;
+  height: 31px;
+  overflow: hidden;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+@media (max-width: 320px) {
+  
+  .detail-wrap .select-provider .form-control {
+    padding-right: 15px; 
+  } 
+}
+
+.media-right, .media-body, .media-left {
+  display: table-cell;
+  vertical-align: top; 
+}
+
+.body-wrapper {
+  width: 100%;
+  padding: 0 0 65px;
+  clear: both; 
+}
+
+.content-box {
+    padding: 15px;
+}
+
+.rating-wrap {
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.rating {
+    color: #666;
+    margin: 0 5px;
+    margin-left: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    display: inline-block;
+}
+
+.rating .fill-star {
+    background-position: -35px -110px;
+    background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+}
+
+.rating .unfill-star {
+    background-position: -50px -110px;
+    background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+}
+
+.rating sup {
+    display: inline-block;
+    width: 13px;
+    height: 12px;
+    position: relative;
+    top: 5px;
+}
+
+.jobs-icon-wrap {
+  font-size: 12px;
+}
+
+.jobs-icon-wrap li {
+  display: inline-block;
+  margin: 0 14px; 
+}
+
+.jobs-icon-wrap li:first-child {
+  margin-left: 0;
+}
+
+.jobs-icon-wrap li:last-child {
+    margin-right: 0; 
+}
+
+@media (max-width: 320px) {
+  .jobs-icon-wrap li {
+    margin: 0 8px; 
+  } 
+}
+
+.icon-comments {
+    background-position: -64px -112px;
+    width: 13px;
+    height: 12px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+}
+
+.icon-jobs {
+    background-position: -81px -111px;
+    width: 14px;
+    height: 12px;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+.icon-bag {
+  background-position: -181px -106px;
+  width: 12px;
+  height: 15px;
+  display: inline-block;
+  margin-right: 4px;
+  position: relative;
+  top: 2px; 
+}
+
+.container {
+    padding: 15px 0;
+}
+
+.enrol-now { border-bottom: 1px solid #c1c1c1; border-top: 1px solid #c1c1c1; }
+.enrol-now ul { margin: 0 -5px; }
+.enrol-now ul li { display: inline-block; vertical-align: middle; width: 37.33%; margin: 0 -2px; padding: 0 5px; }
+.enrol-now ul li:first-child {width: 25.77%; }
+.enrol-now ul li:last-child {margin-right: 0; }
+
+.content-box {
+    padding: 15px;
+}
+
+.free-sample {
+  padding: 20px;
+  display: block;
+  background: #fff;
+  margin: 30px 0 0 0; 
+}
+
+.free-sample strong {
+  font-size: 16px;
+  font-weight: 600;
+  display: block; 
+}
+
+.free-sample ul {
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+  list-style-type: none;
+  margin: 10px 0 0 0;
+  padding: 0; 
+}
+
+.free-sample ul li {
+  display: block;
+  margin-bottom: 8px; 
+}
+
+.free-sample ul li a {
+  line-height: 16px; 
+}
+
+.free-sample .sample-pic {
+  background: url(../images/sprite.png) no-repeat -715px -309px;
+  width: 84px;
+  height: 110px;
+  display: inline-block;
+  float: right;
+  margin: 5px -10px 0 0; 
+}
+
+amp-accordion {
+  border-top: 1px solid #e0e0e0;
+}
+
+amp-accordion>section {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.i-amphtml-accordion-content {
+  padding: 0 15px 15px;
+  background-color: #f6f7f9;
+}
+
+.i-amphtml-accordion-header {
+    cursor: pointer;
+    background-color: #f6f7f9;
+    padding-right: 20px;
+    border: 0 none;
+    padding: 10px 15px;
+    font-size: 1.125rem;
+    color: #333;
+    font-weight: 700;
+    position: relative;
+}
+
+.i-amphtml-accordion-header::after {
+  background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+  content: '';
+  background-position: -38px -201px;
+  width: 13px;
+  height: 7px;
+  display: block;
+  margin-top: -4px;
+  position: absolute;
+  right: 10px;
+  top: 50%; 
+}
+
+.ui-grid-a {
+    float: left;
+    width: auto;
+    margin: 0;
+}
+
+.ui-block-a, .ui-block-b, .ui-block-c {
+    float: left;
+    padding: 5px;
+}
+
+.ui-block-a, .ui-block-b, .ui-block-c {
+    width: 50%;
+}
+
+/* current element like this */
+/* Base for label styling */
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+  position: absolute;
+  left: -9999px; }
+
+/* Base for label styling */
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  display: block; }
+
+/* checkbox aspect */
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0px;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #c1c1c1;
+  background-color: transparent;
+  display: block; }
+
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+  top: 2px; }
+
+/* checked mark aspect */
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  width: 9px;
+  height: 8px;
+  font-size: 16px;
+  color: #666;
+  background: url({% static 'shinelearn/images/mobile/common/sprites.svg'%}) no-repeat 1px -200px;
+  -webkit-transition: all .2s;
+  -o-transition: all .2s;
+  -moz-transition: all .2s;
+  transition: all .2s; }
+
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+  top: 7px; }
+
+/* checked mark aspect changes */
+[type="checkbox"]:not(:checked) + label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+     -moz-transform: scale(0);
+      -ms-transform: scale(0);
+       -o-transform: scale(0);
+          transform: scale(0); }
+
+[type="checkbox"]:checked + label:before {
+  opacity: 1;
+  -webkit-transform: scale(1);
+     -moz-transform: scale(1);
+      -ms-transform: scale(1);
+       -o-transform: scale(1);
+          transform: scale(1);
+  border: 1px solid #a5a5a5; }
+
+/* disabled checkbox */
+[type="checkbox"]:disabled:not(:checked) + label:before,
+[type="checkbox"]:disabled:checked + label:before {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  border-color: #f5f5f5;
+  background-color: #f5f5f5; }
+
+[type="checkbox"]:disabled:checked + label:after {
+  color: #999; }
+
+[type="checkbox"]:disabled + label {
+  color: #aaa; }
+
+/* accessibility */
+[type="checkbox"]:checked:focus + label:before,
+[type="checkbox"]:not(:checked):focus + label:before {
+  border: 1px dotted blue; }
+
+/* hover style just for information */
+label:hover:before {
+  border: 1px solid #2f5ea6; }
+
+.right-navbar {
+  /* checked mark aspect */ }
+  .right-navbar [type="checkbox"]:not(:checked) + label,
+  .right-navbar [type="checkbox"]:checked + label {
+    width: 100%;
+    display: block;
+    padding-left: 0; }
+  .right-navbar [type="checkbox"]:not(:checked) + label:before, .right-navbar [type="checkbox"]:checked + label:before {
+    top: 50%;
+    right: 0;
+    left: auto;
+    margin-top: -7px; }
+  .right-navbar [type="checkbox"]:not(:checked) + label:after,
+  .right-navbar [type="checkbox"]:checked + label:after {
+    top: 18px;
+    right: 4px;
+    left: auto; }
+
+.select-product {
+  /* checkbox aspect */
+  /* checked mark aspect */ }
+  .select-product [type="checkbox"]:not(:checked) + label,
+  .select-product [type="checkbox"]:checked + label,
+  .select-product [type="radio"]:not(:checked) + label,
+  .select-product [type="radio"]:checked + label {
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #c1c1c1;
+    padding: 10px 10px 10px !important;
+    width: 1000px;
+    display: table-cell;
+    vertical-align: middle;
+    height: 115px; }
+  .select-product [type="checkbox"]:checked + label,
+  .select-product [type="radio"]:checked + label {
+    border: 1px solid #2f5ea6;
+    border-bottom: 19px solid #2f5ea6;
+    -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); }
+  .select-product p {
+    line-height: 1.3em; }
+  .select-product [type="checkbox"]:not(:checked) + label:before,
+  .select-product [type="checkbox"]:checked + label:before,
+  .select-product [type="radio"]:not(:checked) + label:before,
+  .select-product [type="radio"]:checked + label:before {
+    border: 0 none;
+    bottom: 5px;
+    top: auto;
+    right: 10px;
+    left: auto; }
+  .select-product [type="checkbox"]:not(:checked) + label:after,
+  .select-product [type="checkbox"]:checked + label:after,
+  .select-product [type="radio"]:not(:checked) + label:after,
+  .select-product [type="radio"]:checked + label:after {
+    top: auto;
+    bottom: -13px;
+    right: auto;
+    left: 50%;
+    margin-left: -6px;
+    width: 12px;
+    height: 9px;
+    background: url({% static 'shinelearn/images/mobile/common/sprites.svg'%}) no-repeat -88px -201px;
+    z-index: 999; }
+  .select-product .table td {
+    padding: 5px 0; }
+
+.course [type="checkbox"]:not(:checked) + label,
+.course [type="checkbox"]:checked + label {
+  padding: 5px; }
+
+#sidebar-countries [type="checkbox"]:not(:checked) + label:after,
+#sidebar-countries [type="checkbox"]:checked + label:after {
+  top: 23px; }
+
+.tnc [type="checkbox"]:not(:checked) + label:after,
+.tnc [type="checkbox"]:checked + label:after {
+  top: 7px !important; }
+
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+  position: absolute;
+  left: -9999px; }
+
+[type="radio"]:checked + label,
+[type="radio"]:not(:checked) + label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  line-height: 20px;
+  display: inline-block;
+  color: #666; }
+
+[type="radio"]:checked + label:before,
+[type="radio"]:not(:checked) + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 100%;
+          border-radius: 100%;
+  background: #fff; }
+
+[type="radio"]:checked + label:after,
+[type="radio"]:not(:checked) + label:after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: #F87DA9;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  -webkit-border-radius: 100%;
+          border-radius: 100%;
+  -webkit-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+
+[type="radio"]:not(:checked) + label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  -moz-transform: scale(0);
+   -ms-transform: scale(0);
+    -o-transform: scale(0);
+       transform: scale(0); }
+
+[type="radio"]:checked + label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+   -ms-transform: scale(1);
+    -o-transform: scale(1);
+       transform: scale(1); 
+  }
+
+
+  .i-amphtml-notbuilt, 
+  [layout]:not(.i-amphtml-element) {
+    color: #333 !important;
+  }
+
+  footer {
+    background-color: #ebebeb;
+    bottom: 0;
+    font-size: 80%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #666;
+  }
+
+  .pb-60 {
+      padding-bottom: 60px!important;
+  }
+
+.stick_bottom {
+  position: fixed;
+  bottom: 0;
+  z-index: 999;
+  background-color: #fff;
+  -webkit-box-shadow: 0 -2px 4px 1px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0 -2px 4px 1px rgba(0,0,0,0.1);
+  box-shadow: 0 -2px 4px 1px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.call-us .ui-grid-a {
+    width: 100%;
+    margin: 0;
+}
+
+.block-3 .ui-block-a, .block-3 .ui-block-b, .block-3 .ui-block-c {
+    width: 33.33%;
+    padding: 15px 10px;
+    color: #fff;
+    height: 50px;
+    float: left;
+}
+
+.call-us .ui-block-a a, .call-us .ui-block-b a, .call-us .ui-block-c a {
+    color: #fff;
+}
+
+.call-us .ui-block-a {
+    background-color: #3f8bff;
+    font-size: 1em;
+}
+
+.call-us .ui-block-b {
+    background-color: #5b9cff;
+}
+
+.call-us .ui-block-c {
+    background-color: #3f8bff;
+}
+
+
+.call-us .ui-block-a span {
+  background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+  background-position: -47px -216px;
+  width: 16px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 5px;
+  position: relative;
+  top: 1px;
+}
+
+.call-us .ui-block-b span {
+  background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+  background-position: 0 -215px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 5px;
+  position: relative;
+  top: 3px;
+}
+
+.call-us .ui-block-c span {
+  background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+  background-position: -22px -216px;
+  width: 20px;
+  height: 15px;
+  display: inline-block;
+  margin-right: 5px;
+  position: relative;
+  top: 3px;
+}
+
+.box {
+    padding: 15px;
+}
+
+.box {
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+    background-color: #fff;
+}
+
+.i-amphtml-slide-item-show {
+  margin-right: 15px;
+}
+
+amp-sidebar {
+  min-width: 280px !important;
+}
+
+.login_wrap {
+    background-color: #1564b2;
+    background-repeat: no-repeat;
+    color: #fff;
+    position: relative;
+    height: 90px;
+}
+
+.w100fl {
+    width: 100%;
+}
+
+.login_content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    display: 100%;
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+}
+
+.user_details {
+    display: table-cell;
+    height: 90px;
+    width: 1000px;
+    padding: 0 15px;
+    vertical-align: middle;
+}
+
+.media-left {
+    padding-right: 15px;
+}
+
+.user_details span {
+    display: block;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.login_wrap span img {
+    width: 100%;
+}
+
+.user_details .btn {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    margin-right: 8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 14px;
+    border-color: #fff;
+    color: #fff;
+}
+
+.btn-outline {
+    border: 1px solid #2f5ea6;
+    color: #2f5ea6;
+}
+
+.login_wrap>img {
+    opacity: 0.05;
+    width: 100%;
+    height: 100%;
+}
+
+h3 {
+    font-size: 115%;
+    font-weight: 600;
+}
+
+.mt-10 {
+    margin-top: 10px!important;
+}
+
+amp-sidebar {
+  background-color: #fff;
+}
+
+/* current element like this */
+#main-sidebar {
+  overflow: scroll; }
+
+nav {
+  border-bottom: 1px solid #f2f2f2;
+  position: relative; }
+  nav:last-child {
+    border-bottom: 0 none; }
+
+.sb-menu {
+  /* Apply to <ul> or <ol>. */
+  font-size: 14px;
+  font-weight: 400;
+  list-style-type: none;
+  margin: 0;
+  padding: 15px 0 0;
+  clear: left; }
+  .sb-menu:last-child {
+    border-bottom: 0 none; }
+  .sb-menu li {
+    width: 100%;
+    padding: 0;
+    margin: 0; }
+    .sb-menu li a {
+      width: 100%;
+      color: #666;
+      /* Makes links full width. */
+      display: inline-block;
+      padding: 10px 15px;
+      /* Creates an even padding the same size as your font. */
+      position: relative; }
+      .sb-menu li a span {
+        display: inline-block;
+        height: 21px;
+        width: 21px;
+        margin-right: 12px;
+        position: relative;
+        top: 4px; }
+  .sb-menu > li:first-child {
+    border-top: none;
+    /* Removes top border from first list item.. */ }
+  .sb-menu > li:last-child {
+    border-bottom: none;
+    /* Removed bottom border from last list item. */ }
+
+.sb-menu li a:hover {
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.05);
+  /* Will lighten any background colour you set. */ }
+
+.login_wrap {
+  background-color: #1564b2;
+  background-repeat: no-repeat;
+  color: #fff;
+  position: relative;
+  height: 90px; }
+  .login_wrap > img {
+    opacity: 0.05;
+    width: 100%;
+    height: 100%; }
+  .login_wrap span img {
+    -webkit-border-radius: 100%;
+            border-radius: 100%;
+    width: 100%; }
+  .login_wrap p a {
+    color: #fff; }
+
+.login_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  display: 100%;
+  height: 100%;
+  width: 100%;
+  font-size: 0.875em; }
+
+.user_details {
+  display: table-cell;
+  height: 90px;
+  width: 1000px;
+  padding: 0 15px;
+  vertical-align: middle; }
+  .user_details a img {
+    display: block;
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%; }
+  .user_details span {
+    display: block;
+    height: 50px;
+    width: 50px; }
+  .user_details .btn {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    margin-right: 8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 14px;
+    border-color: #fff;
+    color: #fff; }
+
+.level-one, .level-two {
+  position: absolute;
+  top: 0;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  display: none; }
+  .level-one ul, .level-two ul {
+    padding: 10px 0; }
+
+.level-one {
+  left: 0;
+  z-index: 9; }
+
+.level-two {
+  z-index: 10;
+  font-size: 12px; }
+
+.backthis {
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  background-color: #1976d2;
+  text-align: center;
+  color: #fff !important;
+  font-weight: 700; }
+  .backthis:hover, .backthis:focus {
+    background-color: #1976d2 !important; }
+
+.veiw-nav {
+  display: block;
+  -webkit-transition: all 300ms ease;
+  -o-transition: all 300ms ease;
+  -moz-transition: all 300ms ease;
+  transition: all 300ms ease; }
+
+.level-control {
+  position: relative; }
+  .level-control:after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    background-repeat: no-repeat;
+    background-position: -184px -71px;
+    width: 7px;
+    height: 14px; }
+
+.sb-menu li a.backthis {
+  color: #fff !important;
+  padding: 15px; }
+
+.icon-home {
+  background-position: -44px -150px; }
+
+.icon-home-search {
+  background-position: -66px -150px; }
+
+.icon-rec-course {
+  background-position: -87px -150px; }
+
+.icon-dashboard {
+  background-position: -108px -150px; }
+
+.icon-career {
+  background-position: -129px -150px; }
+
+.icon-all-courses {
+  background-position: -150px -150px; }
+
+.icon-job {
+  background-position: -171px -150px; }
+
+.icon-sample {
+  background-position: -192px -150px; }
+  .icon-talentEco {
+    background-position: -143px -346px;
+}
+
+.dashboard {
+  margin-top: 10px !important;
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  padding-bottom: 10px !important; }
+  .dashboard ul {
+    padding-left: 35px; }
+    .dashboard ul li a {
+      color: #999;
+      padding-top: 10px;
+      padding-bottom: 10px; 
+    }
+
+.right-navbar, .cms-right {
+    padding: 0 15px 15px;
+}
+
+
+.right-navbar h2, .cms-right h2 {
+  padding: 15px 0 10px;
+  border-bottom: 1px solid #c1c1c1;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.right-navbar ul, .cms-right ul {
+    margin-top: 10px;
+}
+
+.right-navbar ul li, .cms-right ul li {
+    margin-bottom: 10px;
+}
+
+.underline li {
+    border-bottom: 1px solid #c1c1c1;
+    padding-bottom: 10px;
+}
+
+.underline li span {
+    height: 40px;
+    display: block;
+}
+
+.underline li span img {
+    height: 100%;
+}
+
+
+
+
+</style>
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+
+  </head>
+  <body>
+
+    <!-- /. header --> 
+    <header class="he-auto">
+        <amp-img src="{% static 'shinelearn/images/mobile/shop/header-img-3.png' %}" alt="Welcome" height="146" width="360"></amp-img>
+        <!-- header main-menu Icon Starts here -->
+        <div class="main-menu">
+            <div class="pull-left">
+                <a on="tap:sidebar-left.toggle" tabindex="0" class="icon-bar pull-left" role="button"></a>
+            </div>
+
+            <div class="pull-right"> 
+               <a class="icon-cart" href="{% url "cart:cart-product-list" %}">cart <span id="cart-counter-id">{{cart_count}}</span></a>
+            </div><!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+        <div class="clearfix"></div>
+        <h1 class="heading-back pb-0">{{prd_H1}}</h1>
+        {% include "shop/partials/packagediv.html" %}
+    </header><!-- /. header -->
+
+    <div class="body-wrapper">
+        <section class="content-box">
+            <div class="rating-wrap">
+                {% if prd_num_rating %}
+                <div class="rating">
+                  <sup class="fill-star sprite"></sup>
+                  {{prd_rating}}/5
+                </div><!-- end of star rating -->
+                {% endif %}
+                <ul class="inline-block fs-12 jobs-icon-wrap">
+                    <li>
+                        <figure class="icon-comments"></figure>
+                        {% if prd_num_rating %}
+                        <a href="javascript:void(0);">{{prd_num_rating}}</a>
+                        {% else %}
+                        <span class="fs-11">Be the first to review</span>
+                        {% endif %}
+                    </li>
+                    {% if prd_num_jobs %}
+                        <li>
+                            <figure class="icon-bag"></figure>
+                            <strong>{{prd_num_jobs}} Jobs</strong>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <figure class="icon-jobs"></figure>
+                        <strong>
+                            {{prd_num_bought}}
+                        </strong> bought
+                    </li>
+                    {% if prd_cert %}
+                        <li>
+                            <figure class="icon-certificate"></figure>
+                        </li>
+                    {% endif  %}
+                </ul>
+            </div><!-- end of icons wrapper -->
+        
+        <hr class="row">
+        <article class="mt-20">
+        {% if prd_about %}
+            <h2>Overview</h2>
+            <style>
+                .morecontent span {
+                      display: none;
+                  }
+                  .morelink {
+                      display: block;
+                  }
+            </style>
+            <p class="more">
+                {{prd_about|safe}}
+            </p>
+            <!--<p><a href="#">know more</a></p>-->
+        {% endif %}
+        
+            {% include "shop/partials/prd_cart.html" %}
+            {% include "shop/partials/product_child.html" %}
+            {% include "shop/partials/frequentlybought.html" %}
+            
+            <!-- Select products container Satrts here  -->
+            {% include "shop/partials/product_variations.html" %}
+
+            <!-- Select products container ends here -->
+            <div class="container mb-30">
+              <!-- AMP Accordion begin -->
+              <amp-accordion class="row">
+                {% if prd_desc %}
+                <section expanded>
+                  <div class="acc_head">About Product</div>
+                  {{prd_desc|safe}}
+                </section><!--./ section -->
+                {% endif %}
+
+                {% if prd_uget %}
+                <section>
+                  <div class="acc_head">What’ll you get
+                    <div class="acc_icon_expand sprite"></div>
+                  </div>
+                  {{prd_uget|safe}}
+                </section><!--./ section -->
+                {% endif %}
+                
+                <section>
+                  {% include "mobile/shop/partials/delivery_flow.html" %}
+                </section><!--./ section -->
+
+                <section>
+                  {% include "mobile/shop/partials/program_structure.html" %}
+                </section><!--./ section -->
+              </amp-accordion><!-- /. AMP Accordion begin -->
+
+              <!-- Accordion FAQ’s Starts here  -->
+              <amp-accordion class="row">
+                <section>
+                {% include "shop/partials/faq.html" %}
+                </section><!--./ section -->
+              </amp-accordion><!-- /. AMP Accordion FAQ’s Ends here -->
+            </div><!-- end of container -->
+
+            <div class="container">
+              <h2>Reviews</h2>
+
+              <div class="box row">
+                <amp-carousel class="carousel1"
+                layout="responsive"
+                height="175"
+                width="500"
+                type="slides">
+                
+                <div class="slide">
+                  <amp-rating class="rating inline-block">
+                    <sup class="fill-star"></sup>
+                    <sup class="fill-star"></sup>
+                    <sup class="fill-star"></sup>
+                    <sup class="unfill-star"></sup>
+                    <sup class="unfill-star"></sup>
+                  </amp-rating>
+
+                  <amp-fit-text layout="responsive"
+                    width="500"
+                    height="150"> 
+                    Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
+                  </amp-fit-text>
+                </div>
+
+                <div class="slide">
+                  <amp-rating class="rating inline-block">
+                    <sup class="fill-star"></sup>
+                    <sup class="fill-star"></sup>
+                    <sup class="fill-star"></sup>
+                    <sup class="fill-star"></sup>
+                    <sup class="unfill-star"></sup>
+                  </amp-rating>
+
+                  <amp-fit-text layout="responsive"
+                    width="500"
+                    height="150"> 
+                    Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
+                  </amp-fit-text>
+                </div>
+
+                <div class="slide">
+                  <amp-rating class="rating inline-block">
+                    <sup class="fill-star"></sup>
+                    <sup class="fill-star"></sup>
+                    <sup class="unfill-star"></sup>
+                    <sup class="unfill-star"></sup>
+                    <sup class="unfill-star"></sup>
+                  </amp-rating>
+
+                  <amp-fit-text layout="responsive"
+                    width="500"
+                    height="150"> 
+                    Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
+                  </amp-fit-text>
+                </div>              
+              </amp-carousel>
+              </div>
+            </div>
+
+
+                {% include "shop/partials/reviews.html" %}
+            </article>
+        </section><!-- end of section here -->
+    </div><!-- body wrapper ends here -->
+
+    {% include "shop/partials/call_us.html" %}
+
+    {% include 'basic/footer.html' %}
+
+    <amp-sidebar id="sidebar-left" layout="nodisplay" side="left">
+      <!-- <div role="button" aria-label="close sidebar" on="tap:sidebar1.toggle" tabindex="0" class="close-sidebar">✕</div> -->
+
+      <div class="login_wrap non_login w100fl">
+          <div class="login_content">
+              <div class="user_details">
+                  <div class="media">
+                      <div class="media-left">
+                          <span><img src="{% static 'shinelearn/images/user-loggedin.jpg' %}"></span>
+                      </div>
+                      <div class="media-body rel">
+                          <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>
+                          <div class="mt-10">
+                              {% if not request.session.candidate_id %}
+                              <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+                              <a href="{% url 'register' %}" class="btn btn-outline">Register</a>
+                              {% else %}
+                              <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+                              {% endif %}
+                          </div>
+                      </div>
+                  </div>
+              </div><!-- User after login Ends here -->
+          </div><img src="{% static 'shinelearn/images/mobile/common/nonlogin.jpg' %}">
+      </div><!-- Login widgets Ends here -->
+
+      <nav>
+            <ul class="sb-menu">
+
+                <li><a href="/"><span class="icon-home"></span>Home</a></li>
+                <!-- <li> <a href="#"><span class="icon-home-search"></span>Search</a></li> -->
+                <li>
+                    <a href="#" class="level-control"><span class="icon-all-courses"></span>All Courses</a>
+                    <div class="level-one">
+                        <a href="#" class="backthis" data-index="0"><i class="icon-back pull-left"></i>  All Courses</a>
+
+                        <ul>
+                            <li>
+                                <a href="#" class="level-control">Sales & Marketing</a>
+                                <div class="level-two">
+                                    <a href="/courses/sales-and-marketing/17/" class="backthis"><i class="icon-back pull-left"></i>Sales & Marketing</a>
+                                    <ul>
+                                        <li><a href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a></li>
+                                        <li><a href="/courses/sales-and-marketing/sales/18/">Sales</a></li>
+                                        <li><a href="/courses/sales-and-marketing/retail/35/ ">  Retail </a></li>
+                                        <li><a href="/courses/sales-and-marketing/product-marketing/24/">Product Marketing</a></li>
+                                        <li><a href="/courses/sales-and-marketing/service-marketing/30/">Service Marketing</a></li>
+                                        <li><a href="/courses/sales-and-marketing/17/#courses1">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control">Operation Management</a>
+                                <div class="level-two">
+                                    <a href="/courses/operation-management/19/#courses2" class="backthis"><i class="icon-back pull-left"></i>Operation Management</a>
+                                    <ul>
+                                        <li><a href="/courses/operation-management/six-sigma/193/">Six Sigma</a></li>
+                                        <li><a href="/courses/operation-management/project-management/123/">Project Management </a></li>
+                                        <li><a href="/courses/operation-management/logistics-and-supply-chain/135/">Logistic and Supply Chain</a></li>
+                                        <li><a href="/courses/operation-management/service-quality/316/">Service Quality</a></li>
+                                        <li><a href="/courses/operation-management/production/39/">Production </a></li>
+                                        <li><a href="/courses/operation-management/customer-care/37/">Customer Care</a></li>
+                                        <li><a href="/courses/operation-management/19/#courses2">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control">Banking & Finance</a>
+                                <div class="level-two">
+                                    <a href="/courses/banking-and-finance/20/#courses3" class="backthis"><i class="icon-back pull-left"></i> Banking & Finance</a>
+                                    <ul>
+                                        <li><a href="/courses/banking-finance/advanced-accounting/114/">Advanced Accounting</a></li>
+                                        <li><a href="/courses/banking-finance/banking/113/">Banking</a></li>
+                                        <li><a href="/courses/banking-finance/risk-management/95/">Risk Management</a></li>
+                                        <li><a href="/courses/banking-finance/stock-market-trading/94/">Stock Market Training</a></li>
+                                        <li><a href="/courses/banking-finance/financial-reporting-and-management/103/">Finanacial Reporting and Management</a></li>
+                                        <li><a href="/courses/banking-finance/commercial-operation/112/">Commercial Operation </a></li>
+                                        <li><a href="/courses/banking-finance/investment-banking/100/">Investment Banking </a></li>
+                                        <li><a href="/courses/banking-finance/accounting-fundamental/115/">Accounting Fundamental </a></li>
+                                        <li><a href="/courses/banking-finance/financial-analyst/104/">Finanacial Analyst </a></li>
+                                        <li><a href="/courses/banking-and-finance/20/#courses3">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Information Technology </a>
+                                <div class="level-two">
+                                    <a href="/courses/it-information-technology/22/#courses4" class="backthis"><i class="icon-back pull-left"></i> Information Technology</a>
+                                    <ul>
+                                        <li><a href="/courses/it-information-technology/big-data/84/">Big Data </a></li>
+                                        <li><a href="/courses/operation-management/project-management/123/">project management </a></li>
+                                        <li><a href="/courses/it-information-technology/it-software/53/ ">IT Software</a></li>
+                                        <li><a href="/courses/it-information-technology/graphic-design/54/">Graphic Design </a></li>
+                                        <li><a href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a></li>
+                                        <li><a href="/courses/it-information-technology/ms-skills/98/">MS Skills</a></li>
+                                        <li><a href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
+                                        <li><a href="/courses/it-information-technology/database-development/83/">Database Development </a></li>
+                                        <li><a href="/courses/it-information-technology/it-development-interface-learning/119/">IT Development Interface Learning</a></li>
+                                        <li><a href="/courses/it-information-technology/22/#courses4">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Human Resources</a>
+                                <div class="level-two">
+                                    <a href="/courses/hr-human-resource/25/#courses5" class="backthis"><i class="icon-back pull-left"></i>Human Resources</a>
+                                    <ul>
+                                        <li><a href="/courses/hr-human-resource/talent-acquisition/93/">Talent Aquistion </a></li>
+                                        <li><a href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
+                                        <li><a href="/courses/hr-human-resource/training-and-development/91/">Training &map; Development </a></li>
+                                        <li><a href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
+                                        <li><a href="/courses/hr-human-resource/25/#courses5">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Management</a>
+                                <div class="level-two">
+                                    <a href="/courses/management/27/#courses6" class="backthis"><i class="icon-back pull-left"></i>Management</a>
+                                    <ul>
+                                        <li><a href="/courses/management/general-management/102/">General Management </a></li>
+                                        <li><a href="/courses/management/business-analyst/58/">Business Analyst </a></li>
+                                        <li><a href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
+                                        <li><a href="/courses/management/27/#courses6">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Mass Communication</a>
+                                <div class="level-two">
+                                    <a href="/courses/mass-communication/29/#courses7" class="backthis"><i class="icon-back pull-left"></i>Mass Communication</a>
+                                    <ul>
+                                        <li><a href="/courses/mass-communication/content/46/">Content</a></li>
+                                        <li><a href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
+                                        <li><a href="/courses/mass-communication/editor/106/">Editor </a></li>
+                                        <li><a href="/courses/mass-communication/journalism/99/">Journalism </a></li>
+                                        <li><a tabindex="-1" href="/courses/mass-communication/29/#courses7">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Personal Development</a>
+                                <div class="level-two">
+                                    <a href="https://mlearning.shine.com/courses/personal-development/21/#courses8" class="backthis"><i class="icon-back pull-left"></i>Personal Development</a>
+                                    <ul>
+                                        <li><a href="/courses/personal-development/language-learning/40/">Language Learning</a></li>
+                                        <li><a href="/courses/personal-development/leadership/41/">Leadership </a></li>
+                                        <li><a href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
+                                        <li><a href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
+                                        <li><a href="/courses/personal-development/communication-development/36/    ">Communication Development</a></li>
+                                        <li><a tabindex="-1" href="/courses/personal-development/21/#courses8">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <a href="#" class="level-control" >Law</a>
+                                <div class="level-two">
+                                    <a href="/courses/law/23/#courses9" class="backthis"><i class="icon-back pull-left"></i>Law</a>
+                                    <ul>
+                                        <li><a href="/courses/law/cyber-law/107/">Cyber Law</a></li>
+                                        <li><a href="/courses/law/criminal-law/108/">Criminal Law </a></li>
+                                        <li><a href="/courses/law/company-law/111/">Company Law</a></li>
+                                        <li><a tabindex="-1" href="/courses/law/23/#courses9">View all products</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+
+                            <hr>
+                            <li>
+                                <a href="{% url "course-catalogoue" %}">Course Catalogue</a>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="level-control"><span class="icon-job"></span>Job Assistance Services</a>
+                    <div class="level-one">
+                        <a href="#" class="backthis" data-index="0"><i class="icon-back pull-left"></i> Job Assistance Services</a>
+                        <ul>
+                            <li><a href="/services/resume-writing/entry-level-freshers-8/pd-1921">Resume Writing</a></li>
+                            <li><a href="/services/international-resume-2/entry-level-freshers-5/pd-2553">International Resume</a></li>
+                            <li><a href="/services/visual-resume/entry-level-freshers-4/pd-2052">Visual Resume</a></li>
+                            <li><a href="/services/resume-critique/freshers-and-experienced-professionals/pd-1495">Resume Critique</a></li>
+                            <li><a href="/services/linkedin-profile/entry-level-freshers-2/pd-1926">LinkedIn Profile</a></li>
+                            <li><a href="/services/profile-update/featured-profile-10/pd-1939">Profile Update</a></li>
+                              <li><a href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
+                            <li><a href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li>
+                            <li><a href="/services/job-referral-2/job-referrals-pack/pd-2129">Job referral</a></li>
+                        </ul>
+                    </div>
+                </li>
+{#                <li><a href="#"><span class="icon-career"></span>Career Guidance</a></li>#}
+                <li><a href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine"><span class="icon-talentEco"></span>Talent Economy</a></li>
+                <li><a href="/cms/resume-format/1/"><span class="icon-sample"></span>Free samples</a></li>
+
+                {% if request.session.candidate_id %}
+                <li class="dashboard c9 fs-12">
+                    <a href="{% url "dashboard:dashboard" %}"><span class="icon-dashboard"></span>Dashboard</a>
+                    <ul>
+                        <li><a href="{% url "dashboard:dashboard" %}">Inbox</a></li>
+                        <li><a href="{% url "dashboard:dashboard-myorder" %}">My Order</a></li>
+                        <li><a href="{% url "dashboard:dashboard-mywallet" %}">My Wallet</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% comment %}
+                {% if request.session.candidate_id %}
+                    <li><a href="{% url "dashboard:dashboard" %}"><span class="icon-dashboard"></span>Dashboard</a></li>
+
+                    <li><a href="{% url "dashboard:dashboard-myorder" %}"><span class="icon-dashboard"></span>My Order</a></li>
+
+                    <li><a href="{% url "dashboard:dashboard-mywallet" %}"><span class="icon-dashboard"></span>My Wallet</a></li>
+                {% endif %}
+                {% endcomment %}
+
+                <li><a href="{% url "blog:blog-landing"%}">Blog</a></li>
+                <li><a href="/about-us">About us</a></li>
+                <li><a href="/contact-us">Contact us</a></li>
+            </ul>
+        </nav><!-- Main Menu list Ends here -->
+    </amp-sidebar>
+
+
+
+    <amp-sidebar id="sidebar-right" layout="nodisplay" side="right">
+    {% if prd_service == 'course' and pop %}
+        <div class="sidebar" id="sidebar-secondary">
+            <div class="right-navbar pt-0">
+                <h2 class="mb-0">Other providers</h2>
+                <ul class="underline">
+                {% for provider in pop_list|slice:"0:4" %}
+                    <li>
+                        <a href="{{provider.url}}" for="test1">
+                            <span>
+                                <img src="{{provider.vendor.image.url}}" style="z-index: 10;">
+                                {{provider.vendor}}
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% elif product.pk == 1941 %}
+        <!-- Other packages start here -->
+    <div class="sidebar" id="sidebar-secondary">
+      <div class="right-navbar packages pt-0">
+        <h2 class="mb-0">Other packages</h2>
+        <ul class="underline">
+            <li>
+                <a href="/services/profile-update/featured-profile-10/pd-1939" class="blue-link pb-0">
+                    <strong>
+                        90 days
+                    </strong>
+                </a>
+            </li>
+            <li>
+                <a href="/services/profile-update/featured-profile-8/pd-1942" class="blue-link pb-0">
+                    <strong>
+                        180 days
+                    </strong>
+                </a>
+            </li>
+        </ul>
+      </div>
+    </div><!-- Other packages ends here -->
+    {% elif product.pk == 1939 %}
+        <!-- Other packages start here -->
+    <div class="sidebar" id="sidebar-secondary">
+      <div class="right-navbar packages pt-0">
+        <h2 class="mb-0">Other packages</h2>
+        <ul class="underline">
+            <li>
+                <a href="/services/profile-update/featured-profile-9/pd-1941" class="blue-link pb-0">
+                    <strong>
+                        30 days
+                    </strong>
+                </a>
+            </li>
+            <li>
+                <a href="/services/profile-update/featured-profile-8/pd-1942" class="blue-link pb-0">
+                    <strong>
+                        180 days
+                    </strong>
+                </a>
+            </li>
+        </ul>
+      </div>
+    </div><!-- Other packages ends here -->
+    {% elif product.pk == 1942 %}
+        <!-- Other packages start here -->
+    <div class="sidebar" id="sidebar-secondary">
+      <div class="right-navbar packages pt-0">
+        <h2 class="mb-0">Other packages</h2>
+        <ul class="underline">
+            <li>
+                <a href="/services/profile-update/featured-profile-9/pd-1941" class="blue-link pb-0">
+                    <strong>
+                        30 days
+                    </strong>
+                </a>
+            </li>
+            <li>
+                <a href="/services/profile-update/featured-profile-10/pd-1939" class="blue-link pb-0">
+                    <strong>
+                        90 days
+                    </strong>
+                </a>
+            </li>
+        </ul>
+      </div>
+    </div><!-- Other packages ends here -->
+    
+    {% else %}
+    <!-- Other packages start here -->
+    <div class="sidebar" id="sidebar-secondary">
+      <div class="right-navbar packages pt-0">
+        <h2 class="mb-0">Other packages</h2>
+        <ul class="underline">
+        {% for package in pop_list|slice:"0:4"  %}
+            <li>
+                <a href="{{package.url}}" class="blue-link pb-0">
+                {% if package.experience %} 
+                    <strong>
+                        {{package.experience|get_choice_display:"EXP_DICT"}}
+                    </strong>
+                {% endif %}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div><!-- Other packages ends here -->
+    {% endif %}
+
+    {% if prd_service == 'resume' and var_list %}
+        <!-- Select countries (optional) start here -->
+        <div class="sidebar" id="sidebar-countries">
+            <div class="right-navbar packages pt-0">
+                <ul class="underline">
+                {% for country in var_list %}
+                    <li id="element_checked">
+                        <input {% if country.id in selected_products %}checked{% endif %}
+                        value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
+                        <label for="{{country.label}} ">
+                            <p class="pb-0" id="text_val">{{country.label}}</p>
+                        </label>
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="bottom-btn">
+                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center" 
+                    id="done_click">
+                        DONE
+                    </a>
+                </div>
+            </div>
+        </div><!-- Select countries (optional) ends here -->
+    {% endif %}
+    </amp-sidebar>
+
+
+
+
+  </body>
+</html>

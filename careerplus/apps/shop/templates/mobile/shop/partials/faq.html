@@ -1,20 +1,15 @@
 {% if faq %}
     <!-- Accordion FAQ’s Starts here  -->
-    <div class="accordion_example1 faq-wrap row mt-40">
-        <h2>FAQ’s</h2>
         <!-- Section 1 -->
         {% for ques in faq_list %}
-            <div class="accordion_in">
-                <div class="acc_head">
-                    {{ques.question}}
-                </div>
-                <div class="acc_content">
-                    <p>
-                        {{ques.answer|safe}}
-                    </p>
-                </div>
+            <div class="acc_head">
+                {{ques.question}}
+            </div>
+            <div class="acc_content">
+                <p>
+                    {{ques.answer|safe}}
+                </p>
             </div>
         {% endfor %}
-    </div>
     <!-- Accordion FAQ’s Ends here  -->
 {% endif %}
