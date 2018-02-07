@@ -330,7 +330,7 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '%(processName)s %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+            'format': '%(processName)s %(name)-50s %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
         },
         'simple': {
             'format': '[%(asctime)s] %(levelname)s %(message)s',
@@ -350,62 +350,62 @@ LOGGING = {
             'facility': 'local7',
             'formatter': 'simple'
         },
-        'debug_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'debug', 'debug.log')
-        },
-        'info_handler': {
-            'level': 'INFO',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'info', 'info.log')
-        },
-        'error_handler': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'error', 'error.log')
-        },
-        'email_handler': {
-            'level': 'INFO',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'email', 'email.log')
-        },
-        'sms_handler': {
-            'level': 'INFO',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'sms', 'sms.log')
-        },
-        'payment_handler': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'payment', 'error.log')
-        },
-        'cron_handler': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'error', 'cron.log')
-        },
-        'cashback_handler': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
-            'formatter': 'verbose',
-            'address': os.path.join(SYSLOG_ADDRESS, 'error', 'cashback.log')
-        },
+        # 'debug_handler': {
+        #     'level': 'DEBUG',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'debug', 'debug.log')
+        # },
+        # 'info_handler': {
+        #     'level': 'INFO',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'info', 'info.log')
+        # },
+        # 'error_handler': {
+        #     'level': 'ERROR',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'error', 'error.log')
+        # },
+        # 'email_handler': {
+        #     'level': 'INFO',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'email', 'email.log')
+        # },
+        # 'sms_handler': {
+        #     'level': 'INFO',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'sms', 'sms.log')
+        # },
+        # 'payment_handler': {
+        #     'level': 'ERROR',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'payment', 'error.log')
+        # },
+        # 'cron_handler': {
+        #     'level': 'ERROR',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'error', 'cron.log')
+        # },
+        # 'cashback_handler': {
+        #     'level': 'ERROR',
+        #     'class': 'logging.handlers.SysLogHandler',
+        #     'facility': 'local7',
+        #     'formatter': 'verbose',
+        #     'address': os.path.join(SYSLOG_ADDRESS, 'error', 'cashback.log')
+        # },
         'syslog': {
          'level': 'DEBUG',
          'class': 'logging.handlers.SysLogHandler',
@@ -422,48 +422,48 @@ LOGGING = {
             'disabled': False
         },
         'django.request': {
-            'handlers': ['mail_admins', 'error_handler'],
+            'handlers': ['mail_admins', 'syslog'],
             'level': 'ERROR',
             'propagate': True,
         },
         'debug_log': {
-            'handlers': ['debug_handler'],
+            'handlers': ['syslog'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'info_log': {
-            'handlers': ['info_handler'],
+            'handlers': ['syslog'],
             'level': 'INFO',
             'propagate': True,
         },
         'error_log': {
-            'handlers': ['error_handler'],
+            'handlers': ['syslog'],
             'level': 'ERROR',
             'propagate': True,
         },
         'email_log': {
-            'handlers': ['email_handler', ],
+            'handlers': ['syslog', ],
             'level': 'INFO',
             'propagate': True,
         },
         'sms_log': {
-            'handlers': ['sms_handler', ],
+            'handlers': ['syslog', ],
             'level': 'INFO',
             'propagate': True,
         },
         'payment_log': {
-            'handlers': ['payment_handler', ],
-            'level': 'ERROR',
+            'handlers': ['syslog', ],
+            'level': 'INFO',
             'propagate': True,
         },
         'cron_log': {
-            'handlers': ['cron_handler', ],
-            'level': 'ERROR',
+            'handlers': ['syslog', ],
+            'level': 'INFO',
             'propagate': True,
         },
         'cashback_log': {
-            'handlers': ['cashback_handler', ],
-            'level': 'ERROR',
+            'handlers': ['syslog', ],
+            'level': 'INFO',
             'propagate': True,
         },
     },
